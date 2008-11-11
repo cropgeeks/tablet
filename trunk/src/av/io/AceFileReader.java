@@ -4,12 +4,15 @@ import java.io.*;
 import java.util.*;
 
 import av.data.*;
+import av.data.cache.*;
 
 public class AceFileReader
 {
 	private boolean useAscii;
 	private InputStream is;
 	private BufferedReader in;
+
+	private IDataCache dataCache;
 
 	// Stores each line as it is read
 	private String str;
@@ -19,6 +22,7 @@ public class AceFileReader
 	// Data structures used as the file is read
 	private DNATable dnaTable = new DNATable();
 
+	private Assembly assembly;
 	private Contig contig;
 	private Consensus consensus;
 	private Read read;
@@ -28,11 +32,15 @@ public class AceFileReader
 	{
 		this.is = is;
 		this.useAscii = useAscii;
+
+		assembly = new Assembly();
 	}
 
 	void read()
 		throws Exception
 	{
+		dataCache = FileCache.createWritableCache(new File("cache.dat"));
+
 		if (useAscii)
 			in = new BufferedReader(new InputStreamReader(is, "ASCII"));	// ISO8859_1
 		else
@@ -50,6 +58,9 @@ public class AceFileReader
 			else if (str.startsWith("RD "))
 				processRead();
 
+//			else if (str.startsWith("QA "))
+//				processReadQualities();
+
 			else if (str.startsWith("CO "))
 				processContig();
 
@@ -60,7 +71,9 @@ public class AceFileReader
 				expectedReads = Integer.parseInt(str.split(" ")[2]);
 
 			else if (str.startsWith("BS "))
-				processBaseSegment();
+			{
+//				processBaseSegment();
+			}
 
 			// Currently not doing anything with these tags
 			else if (str.startsWith("CT{"))
@@ -79,16 +92,15 @@ public class AceFileReader
 
 		}
 
-		System.out.println("final read: " + read.getName());
-		System.out.println("final vect: " + contig.getReads().get(contig.getReads().size()-1).getName());
-
 		in.close();
+		dataCache.close();
+
+		assembly.setDataCache(dataCache);
 
 
 		// Post file-read processing
-
-//		// TODO: Needs to be done on all contigs
-//		Collections.sort(contig.getReads());
+		for (Contig contig: assembly.getContigs())
+			Collections.sort(contig.getReads());
 	}
 
 	private void processContig()
@@ -103,7 +115,9 @@ public class AceFileReader
 		boolean complemented = (CO[5].charAt(0) == 'C');
 
 		contig = new Contig(name, complemented, readCount);
-		System.out.println("CONTIG: " + name);
+		assembly.getContigs().add(contig);
+
+		System.out.println("Processing " + contig.getName() + " with " + readCount + " reads");
 
 
 		// Reference sequence (immediately follows CO line)
@@ -112,11 +126,9 @@ public class AceFileReader
 			ref.append(str);
 
 		consensus = new Consensus();
-		long s = System.currentTimeMillis();
 		consensus.setData(ref.toString());
-		long e = System.currentTimeMillis();
 
-		System.out.println("con data in " + (e-s));
+		System.out.println("Consensus length: " + consensus.length() + " bases");
 	}
 
 	private void processBaseQualities()
@@ -139,10 +151,12 @@ public class AceFileReader
 		boolean complemented = (AF[2].charAt(0) == 'C');
 		int position = Integer.parseInt(AF[3]);
 
-		read = new Read(name, complemented, position);
-		contig.getReads().add(read);
+		// Store the read's name in the cache; but only store the returned
+		// lookup ID for that name in the read
+		int id = dataCache.setName(name);
 
-//		System.out.println("Read: " + read.getName() + " - " + read.getComplemented() + " - " + read.getPosition());
+		read = new Read(id, complemented, position-1);
+		contig.getReads().add(read);
 	}
 
 	private void processBaseSegment()
@@ -176,6 +190,21 @@ public class AceFileReader
 			seq.append(str);
 
 		read.setData(seq.toString());
+	}
+
+	private void processReadQualities()
+		throws Exception
+	{
+		// QA <qual clipping start> <qual clipping end> <align clipping start> <align clipping end>
+		String[] QA = str.split(" ");
+
+		int qa_start = Integer.parseInt(QA[1]);
+		int qa_end = Integer.parseInt(QA[2]);
+
+		int al_start = Integer.parseInt(QA[3]);
+		int al_end = Integer.parseInt(QA[4]);
+
+		read.setQAData(qa_start, qa_end, al_start, al_end);
 	}
 
 	private void processConsesusTag()
