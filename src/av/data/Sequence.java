@@ -2,16 +2,7 @@ package av.data;
 
 public abstract class Sequence
 {
-	protected byte[] name;
 	protected byte[] data;
-
-
-	public String getName()
-		{ return new String(name); }
-
-
-	public String toString()
-		{ return new String(name); }
 
 	/**
 	 * Returns the length of this sequence.

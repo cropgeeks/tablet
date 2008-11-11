@@ -4,7 +4,13 @@ import java.util.*;
 
 public class Read extends Sequence implements Comparable<Read>
 {
+	// The lookup ID for this read's name (which is stored elsewhere)
+	private int id;
+
+	// Is the read complemented or uncomplemented
 	private boolean complemented;
+
+	// The position of the beginning of the read, in terms of consensus bases
 	private int position;
 
 	private int qa_start, qa_end;
@@ -14,9 +20,9 @@ public class Read extends Sequence implements Comparable<Read>
 	{
 	}
 
-	public Read(String name, boolean complemented, int position)
+	public Read(int id, boolean complemented, int position)
 	{
-		this.name = name.getBytes();
+		this.id = id;
 		this.complemented = complemented;
 		this.position = position;
 	}
@@ -33,6 +39,14 @@ public class Read extends Sequence implements Comparable<Read>
 
 //	public void setPosition(int position)
 //		{ this.position = position; }
+
+	public void setQAData(int qa_start, int qa_end, int al_start, int al_end)
+	{
+		this.qa_start = qa_start;
+		this.qa_end = qa_end;
+		this.al_start = al_start;
+		this.al_end = al_end;
+	}
 
 
 	public int compareTo(Read other)
