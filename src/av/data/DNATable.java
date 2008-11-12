@@ -5,21 +5,27 @@ import java.util.*;
 public class DNATable
 {
 	public static final byte UNKNOWN = 0;
+
+	// These are encoded as ATCG (obviously), but also codes for when the base
+	// in a read is different (d) from the same base in the consensus
+
 	public static final byte PAD = 1;	// *
+	public static final byte dPAD = 2;
 
-	// These are encoded as ATCG (obviously), but also codes for when the
-	// same nucleotide (in a read) is NOT (n) the same base as the consensus
-	public static final byte A  = 2;
-	public static final byte nA = 3;
+	public static final byte A  = 3;
+	public static final byte dA = 4;
 
-	public static final byte T  = 4;
-	public static final byte nT = 5;
+	public static final byte T  = 5;
+	public static final byte dT = 6;
 
-	public static final byte C  = 6;
-	public static final byte nC = 7;
+	public static final byte C  = 7;
+	public static final byte dC = 8;
 
-	public static final byte G  = 8;
-	public static final byte nG = 9;
+	public static final byte G  = 9;
+	public static final byte dG = 10;
+
+	public static final byte N = 11;
+	public static final byte dN = 12;
 
 	public DNATable()
 	{
@@ -42,6 +48,9 @@ public class DNATable
 			case 'G': return G;
 			case 'g': return G;
 
+			case 'N': return N;
+			case 'n': return N;
+
 			case '*': return PAD;
 
 			default: return UNKNOWN;
@@ -53,15 +62,18 @@ public class DNATable
 		switch (code)
 		{
 			case A:  return "A";
-			case nA: return "A";
+			case dA: return "A";
 			case T:  return "T";
-			case nT: return "T";
+			case dT: return "T";
 			case C:  return "C";
-			case nC: return "C";
+			case dC: return "C";
 			case G:  return "G";
-			case nG: return "G";
+			case dG: return "G";
+			case N:  return "N";
+			case dN: return "N";
 
 			case PAD: return "*";
+			case dPAD: return "*";
 
 			default: return "?";
 		}
