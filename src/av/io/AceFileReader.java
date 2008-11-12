@@ -1,6 +1,7 @@
 package av.io;
 
 import java.io.*;
+import java.lang.management.*;
 import java.util.*;
 
 import av.data.*;
@@ -17,37 +18,35 @@ public class AceFileReader
 	// Stores each line as it is read
 	private String str;
 
-	private int expectedReads = 0;
-
 	// Data structures used as the file is read
 	private DNATable dnaTable = new DNATable();
 
-	private Assembly assembly;
+	private Assembly assembly = new Assembly();
 	private Contig contig;
 	private Consensus consensus;
 	private Read read;
+
+	private int expectedReads = 0;
+	private int currentReadInContig = 0;
 
 	AceFileReader(InputStream is, boolean useAscii)
 		throws Exception
 	{
 		this.is = is;
 		this.useAscii = useAscii;
-
-		assembly = new Assembly();
 	}
 
-	void read()
+	Assembly readAssembly()
 		throws Exception
 	{
-		dataCache = FileCache.createWritableCache(new File("cache.dat"));
+		File cacheFile = new File("cache.dat");
+
+		dataCache = FileCache.createWritableCache(cacheFile);
 
 		if (useAscii)
 			in = new BufferedReader(new InputStreamReader(is, "ASCII"));	// ISO8859_1
 		else
 			in = new BufferedReader(new InputStreamReader(is));
-
-		int lines = 0;
-		long s = System.currentTimeMillis();
 
 		// Scan for contigs
 		while ((str = in.readLine()) != null)
@@ -82,25 +81,19 @@ public class AceFileReader
 				while ((str = in.readLine()) != null && !str.startsWith("}"));
 			else if (str.startsWith("WA{"))
 				while ((str = in.readLine()) != null && !str.startsWith("}"));
-
-			if (++lines % 1000000 == 0)
-			{
-				long e = System.currentTimeMillis();
-				System.out.println(lines + " (" + (e-s) + "ms)");
-				s = System.currentTimeMillis();
-			}
-
 		}
 
 		in.close();
 		dataCache.close();
 
-		assembly.setDataCache(dataCache);
-
 
 		// Post file-read processing
 		for (Contig contig: assembly.getContigs())
 			Collections.sort(contig.getReads());
+
+
+		assembly.setDataCache(FileCache.createReadableCache(cacheFile));
+		return assembly;
 	}
 
 	private void processContig()
@@ -127,8 +120,11 @@ public class AceFileReader
 
 		consensus = new Consensus();
 		consensus.setData(ref.toString());
+		contig.setConsensusSequence(consensus);
 
 		System.out.println("Consensus length: " + consensus.length() + " bases");
+
+		currentReadInContig = 0;
 	}
 
 	private void processBaseQualities()
@@ -189,7 +185,11 @@ public class AceFileReader
 		while ((str = in.readLine()) != null && str.length() > 0)
 			seq.append(str);
 
+		// Fetch the (expected) read for this location
+		Read read = contig.getReads().get(currentReadInContig);
 		read.setData(seq.toString());
+
+		currentReadInContig++;
 	}
 
 	private void processReadQualities()

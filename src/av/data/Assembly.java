@@ -21,4 +21,13 @@ public class Assembly
 	{
 		return contigs;
 	}
+
+
+	public void print()
+	{
+		System.out.println("Assembly:");
+
+		for (Contig contig: contigs)
+			contig.print(cache);
+	}
 }

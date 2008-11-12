@@ -14,7 +14,7 @@ public class Consensus extends Sequence
 		throws Exception
 	{
 		bq = new byte[data.length];
-		String[] tokens = qualities.split(" ");
+		String[] tokens = qualities.trim().split(" ");
 
 		for (int t = 0, i = 0; t < tokens.length; t++, i++)
 		{
@@ -29,12 +29,19 @@ public class Consensus extends Sequence
 		}
 	}
 
-	public void print()
+
+	void print()
 	{
+		System.out.println();
+		System.out.println("Consensus:");
+		System.out.println("  length: " + data.length);
+
 		for (int i = 0; i < data.length; i++)
 		{
 			System.out.print(DNATable.getDNA(data[i]));
-			System.out.println("\t" + bq[i]);
+			System.out.print(bq[i] + " ");
 		}
+
+		System.out.println();
 	}
 }
