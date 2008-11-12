@@ -2,6 +2,8 @@ package av.data;
 
 import java.util.*;
 
+import av.data.cache.*;
+
 public class Read extends Sequence implements Comparable<Read>
 {
 	// The lookup ID for this read's name (which is stored elsewhere)
@@ -48,7 +50,6 @@ public class Read extends Sequence implements Comparable<Read>
 		this.al_end = al_end;
 	}
 
-
 	public int compareTo(Read other)
 	{
 		if (position < other.position)
@@ -57,5 +58,19 @@ public class Read extends Sequence implements Comparable<Read>
 			return 0;
 		else
 			return 1;
+	}
+
+
+	void print(IDataCache cache)
+	{
+		System.out.println();
+		System.out.println("Read " + id + ": " + cache.getName(id));
+		System.out.print("  length: " + data.length);
+		System.out.print(", position: " + position);
+		System.out.println(", complemented: " + complemented);
+
+		for (int i = 0; i < data.length; i++)
+			System.out.print(DNATable.getDNA(data[i]));
+		System.out.println();
 	}
 }

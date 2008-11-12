@@ -4,6 +4,8 @@ import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 
+import av.data.*;
+
 public class TestReader
 {
 	public static void main(String[] args)
@@ -58,11 +60,12 @@ public class TestReader
 
 		long s = System.currentTimeMillis();
 		AceFileReader reader = new AceFileReader(is, true);
-		reader.read();
+		Assembly assembly = reader.readAssembly();
 		long e = System.currentTimeMillis();
 
 		System.out.println("\nRead time: " + ((e-s)/1000f) + "s");
 
-//		javax.swing.JOptionPane.showMessageDialog(null, "done");
+		System.out.println();
+//		assembly.print();
 	}
 }
