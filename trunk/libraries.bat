@@ -3,4 +3,4 @@
 SET lib=lib
 
 SET avcp=%lib%\
-REM SET avcp=%avcp%;%lib%\derby.jar
+SET avcp=%avcp%;%lib%\scri-commons.jar
