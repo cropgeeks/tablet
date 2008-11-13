@@ -6,7 +6,7 @@ import av.data.cache.*;
 
 public class Assembly
 {
-	private IDataCache cache;
+	private IReadCache cache;
 
 	private Vector<Contig> contigs = new Vector<Contig>();
 
@@ -14,7 +14,7 @@ public class Assembly
 	{
 	}
 
-	public void setDataCache(IDataCache cache)
+	public void setReadCache(IReadCache cache)
 		{ this.cache = cache; }
 
 	public Vector<Contig> getContigs()

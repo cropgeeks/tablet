@@ -61,7 +61,7 @@ public class Read extends Sequence implements Comparable<Read>
 	}
 
 
-	void print(IDataCache cache)
+	void print(IReadCache cache)
 	{
 		System.out.println();
 		System.out.println("Read " + id + ": " + cache.getName(id));

@@ -65,6 +65,14 @@ public class TestReader
 
 		System.out.println("\nRead time: " + ((e-s)/1000f) + "s");
 
+		s = System.currentTimeMillis();
+		PostImportOperations pio = new PostImportOperations(assembly);
+		pio.sortReads();
+		pio.compareBases();
+		e = System.currentTimeMillis();
+
+		System.out.println("Post time: " + ((e-s)/1000f) + "s");
+
 		System.out.println();
 //		assembly.print();
 	}

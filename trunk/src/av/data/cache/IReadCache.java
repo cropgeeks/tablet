@@ -1,6 +1,6 @@
 package av.data.cache;
 
-public interface IDataCache
+public interface IReadCache
 {
 	public String getName(int id);
 

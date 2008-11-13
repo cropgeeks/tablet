@@ -36,6 +36,9 @@ public class Contig
 //	public void setComplemented(boolean complemented)
 //		{ this.complemented = complemented; }
 
+	public Consensus getConsensus()
+		{ return consensus; }
+
 	public Vector<Read> getReads()
 		{ return reads; }
 
@@ -43,7 +46,7 @@ public class Contig
 		{ this.consensus = consensus; }
 
 
-	void print(IDataCache cache)
+	void print(IReadCache cache)
 	{
 		System.out.println();
 		System.out.println("Contig " + name + " (" + complemented + ")");
