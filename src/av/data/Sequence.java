@@ -11,6 +11,9 @@ public abstract class Sequence
 	public int length()
 		{ return data.length; }
 
+	public byte[] getData()
+		{ return data; }
+
 	/**
 	 * Sets this sequence object to be the same as the sequence string passed
 	 * in, using the DNA table to perform the appropriate dna->byte translation

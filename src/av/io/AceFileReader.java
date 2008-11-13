@@ -13,7 +13,7 @@ public class AceFileReader
 	private InputStream is;
 	private BufferedReader in;
 
-	private IDataCache dataCache;
+	private IReadCache readCache;
 
 	// Stores each line as it is read
 	private String str;
@@ -41,7 +41,7 @@ public class AceFileReader
 	{
 		File cacheFile = new File("cache.dat");
 
-		dataCache = FileCache.createWritableCache(cacheFile);
+		readCache = FileCache.createWritableCache(cacheFile);
 
 		if (useAscii)
 			in = new BufferedReader(new InputStreamReader(is, "ASCII"));	// ISO8859_1
@@ -84,15 +84,9 @@ public class AceFileReader
 		}
 
 		in.close();
-		dataCache.close();
+		readCache.close();
 
-
-		// Post file-read processing
-		for (Contig contig: assembly.getContigs())
-			Collections.sort(contig.getReads());
-
-
-		assembly.setDataCache(FileCache.createReadableCache(cacheFile));
+		assembly.setReadCache(FileCache.createReadableCache(cacheFile));
 		return assembly;
 	}
 
@@ -149,7 +143,7 @@ public class AceFileReader
 
 		// Store the read's name in the cache; but only store the returned
 		// lookup ID for that name in the read
-		int id = dataCache.setName(name);
+		int id = readCache.setName(name);
 
 		read = new Read(id, complemented, position-1);
 		contig.getReads().add(read);

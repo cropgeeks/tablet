@@ -8,7 +8,7 @@ import java.io.*;
  * using the same number of bytes, allowing for random read-back from any
  * location with a fixed access time.
  */
-public class FileCache implements IDataCache
+public class FileCache implements IReadCache
 {
 	// TODO: FileCache: This class needs to be made to work properly with
 	// unicode character streams
