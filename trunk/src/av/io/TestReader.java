@@ -8,15 +8,19 @@ import av.data.*;
 
 public class TestReader
 {
+	private Assembly assembly;
+
 	public static void main(String[] args)
 		throws Exception
 	{
-		new TestReader(new File(args[0]));
+		new TestReader(args[0]);
 	}
 
-	TestReader(File file)
+	public TestReader(String filename)
 		throws Exception
 	{
+		File file = new File(filename);
+
 		// Try various ways of opening the file...
 		InputStream is = null;
 
@@ -60,7 +64,7 @@ public class TestReader
 
 		long s = System.currentTimeMillis();
 		AceFileReader reader = new AceFileReader(is, true);
-		Assembly assembly = reader.readAssembly();
+		assembly = reader.readAssembly();
 		long e = System.currentTimeMillis();
 
 		System.out.println("\nRead time: " + ((e-s)/1000f) + "s");
@@ -75,5 +79,10 @@ public class TestReader
 
 		System.out.println();
 //		assembly.print();
+	}
+
+	public Assembly getAssembly()
+	{
+		return assembly;
 	}
 }

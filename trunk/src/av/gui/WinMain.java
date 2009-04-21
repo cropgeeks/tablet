@@ -4,12 +4,33 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import av.data.*;
+import av.io.*;
+import av.gui.viewer.*;
+
 import scri.commons.gui.*;
 
 public class WinMain extends JFrame
 {
-	WinMain()
+	private Assembly assembly;
+
+	WinMain(String filename)
 	{
+		// Load in the data
+		try
+		{
+			TestReader reader = new TestReader(filename);
+			assembly = reader.getAssembly();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.exit(0);
+		}
+
+
+
+
 		setTitle("Assembly Viewer");
 //		setIconImage(Icons.getIcon("AV").getImage());
 

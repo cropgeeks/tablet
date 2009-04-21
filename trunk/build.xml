@@ -1,17 +1,24 @@
 <project name="AssemblyViewer" default="compile" basedir=".">
 
-	<property name="src" location="src"/>
-	<property name="lib" location="lib"/>
-	<property name="classes" location="classes"/>
-	
+	<property name="src"       location="src"/>
+	<property name="lib"       location="lib"/>
+	<property name="lib-devel" location="lib-devel"/>
+	<property name="classes"   location="classes"/>
+
 	<target name="init">
 	</target>
 
 	<path id="project.classpath">
-		<fileset dir="${lib}">
-			<include name="**/*.jar"/>
-		</fileset>
+		<pathelement path="${classes}"/>
+		<fileset dir="${lib}"/>
+		<fileset dir="${lib-devel}"/>
 	</path>
+
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset dir="${classes}" includes="**/*"/>
+		</delete>
+	</target>
 
 	<target name="compile" depends="init">
 		<javac srcdir="${src}" destdir="${classes}" target="1.5">
@@ -19,11 +26,15 @@
 			<exclude name="**/package-info.java"/>
 		</javac>
 	</target>
-	
-	<target name="clean">
-		<delete includeemptydirs="true">
-			<fileset dir="${classes}" includes="**/*"/>
-		</delete>
+
+	<target name="test" depends="compile">
+		<junit printsummary="on" haltonerror="true" haltonfailure="true" dir="." fork="true">
+			<classpath refid="project.classpath"/>
+			<formatter type="plain" usefile="false"/>
+			<batchtest>
+				<fileset dir="${classes}" includes="**/*Test.class"/>
+			</batchtest>
+		</junit>
 	</target>
-	
+
 </project>

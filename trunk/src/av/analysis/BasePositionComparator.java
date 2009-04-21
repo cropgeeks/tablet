@@ -20,6 +20,8 @@ public class BasePositionComparator
 
 	public void doComparisons()
 	{
+/*		byte UNKNOWN = DNATable.UNKNOWN;
+
 		long count = 0;
 
 		for (Contig contig: assembly.getContigs())
@@ -46,8 +48,9 @@ public class BasePositionComparator
 						// The DNATable encodes its states so that A and dA are
 						// only ever 1 byte apart, meaning we can change quickly
 						// by just incrementing the value by one
-						if (cData[c] != rData[r])
+						if (cData[c] != rData[r] && rData[r] > UNKNOWN)
 							rData[r]++;
+
 					}
 					catch (ArrayIndexOutOfBoundsException e)
 					{
@@ -56,12 +59,13 @@ public class BasePositionComparator
 						// (and must therefore be different from it)
 						rData[r]++;
 					}
-				}
 
-				count++;
+					count++;
+				}
 			}
 		}
 
 		System.out.println("Ran " + count + " base comparisons");
+*/
 	}
 }

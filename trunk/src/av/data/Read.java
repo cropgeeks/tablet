@@ -15,8 +15,8 @@ public class Read extends Sequence implements Comparable<Read>
 	// The position of the beginning of the read, in terms of consensus bases
 	private int position;
 
-	private int qa_start, qa_end;
-	private int al_start, al_end;
+//	private int qa_start, qa_end;
+//	private int al_start, al_end;
 
 	public Read()
 	{
@@ -44,10 +44,10 @@ public class Read extends Sequence implements Comparable<Read>
 
 	public void setQAData(int qa_start, int qa_end, int al_start, int al_end)
 	{
-		this.qa_start = qa_start;
-		this.qa_end = qa_end;
-		this.al_start = al_start;
-		this.al_end = al_end;
+//		this.qa_start = qa_start;
+//		this.qa_end = qa_end;
+//		this.al_start = al_start;
+//		this.al_end = al_end;
 	}
 
 	public int compareTo(Read other)
@@ -65,12 +65,12 @@ public class Read extends Sequence implements Comparable<Read>
 	{
 		System.out.println();
 		System.out.println("Read " + id + ": " + cache.getName(id));
-		System.out.print("  length: " + data.length);
+		System.out.print("  length: " + length());
 		System.out.print(", position: " + position);
 		System.out.println(", complemented: " + complemented);
 
-		for (int i = 0; i < data.length; i++)
-			System.out.print(DNATable.getDNA(data[i]));
+		super.print();
+
 		System.out.println();
 	}
 }

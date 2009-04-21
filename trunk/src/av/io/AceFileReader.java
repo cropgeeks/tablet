@@ -19,8 +19,6 @@ public class AceFileReader
 	private String str;
 
 	// Data structures used as the file is read
-	private DNATable dnaTable = new DNATable();
-
 	private Assembly assembly = new Assembly();
 	private Contig contig;
 	private Consensus consensus;
@@ -147,6 +145,9 @@ public class AceFileReader
 
 		read = new Read(id, complemented, position-1);
 		contig.getReads().add(read);
+
+		if (id % 100000 == 0)
+			System.out.println(" read id for contig: " + id);
 	}
 
 	private void processBaseSegment()
@@ -184,6 +185,9 @@ public class AceFileReader
 		read.setData(seq.toString());
 
 		currentReadInContig++;
+
+		if (currentReadInContig % 100000 == 0)
+			System.out.println(" reads for this contig: " + currentReadInContig);
 	}
 
 	private void processReadQualities()
