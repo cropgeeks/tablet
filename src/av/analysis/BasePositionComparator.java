@@ -32,7 +32,7 @@ public class BasePositionComparator
 			for (Read read: contig.getReads())
 			{
 				// Index start position within the consensus sequence
-				int c = read.getPosition();
+				int c = read.getStartPosition();
 				int length = read.length();
 
 				for (int r = 0; r < length; r++, c++)

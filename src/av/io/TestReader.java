@@ -73,6 +73,7 @@ public class TestReader
 		PostImportOperations pio = new PostImportOperations(assembly);
 		pio.sortReads();
 		pio.compareBases();
+		pio.createPackSet();
 		e = System.currentTimeMillis();
 
 		System.out.println("Post time: " + ((e-s)/1000f) + "s");

@@ -29,4 +29,12 @@ class PostImportOperations
 		BasePositionComparator comp = new BasePositionComparator(assembly);
 		comp.doComparisons();
 	}
+
+	void createPackSet()
+	{
+		for (Contig contig: assembly.getContigs())
+		{
+			PackSet packSet = new PackSet(contig.getReads());
+		}
+	}
 }
