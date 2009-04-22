@@ -53,7 +53,7 @@ public class AssemblyViewer
 
 		System.out.println("Memory used: " + nf.format(freeMem/1024f/1024f) + "MB");
 
-		winMain.setVisible(true);
+//		winMain.setVisible(true);
 	}
 
 	private void shutdown()

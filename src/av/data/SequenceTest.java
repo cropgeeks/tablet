@@ -12,7 +12,7 @@ public class SequenceTest extends TestCase
 	public void testSequenceStorage()
 		throws Exception
 	{
-		for (int i = 1; i <= 500; i++)
+		for (int i = 1; i <= 60; i++)
 		{
 			Consensus c = new Consensus();
 
@@ -21,6 +21,7 @@ public class SequenceTest extends TestCase
 				sb.append(rndNucleotide());
 
 			String str1 = sb.toString();
+			System.out.println(str1);
 			c.setData(str1);
 
 			String str2 = c.toString();

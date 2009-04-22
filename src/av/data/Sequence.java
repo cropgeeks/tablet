@@ -45,9 +45,6 @@ public abstract class Sequence
 			return (2 * data.length);
 	}
 
-//	public byte[] getData()
-//		{ return data; }
-
 	/**
 	 * Sets this sequence object to be the same as the sequence string passed
 	 * in, using the DNA table to perform the appropriate dna->byte translation
@@ -79,56 +76,64 @@ public abstract class Sequence
 		}
 	}
 
-	byte getStateAt(int index)
+	/**
+	 * Returns the byte code stored at the given index location, where index is
+	 * a position from 0 to (length-1) of the sequence.
+	 */
+	public byte getStateAt(int index)
 	{
-		// index is the base position, i is where it maps to
-		int i = index / 2;
-
-		byte n1 = (byte) ((data[i] >> 4) & 0xF);
-		byte n2 = (byte) (data[i] & 0xF);
-
 		if (index % 2 == 0)
-			return n1;
+			return (byte) ((data[index/2] >> 4) & 0xF);
+
 		else
-			return n2;
+			return (byte) (data[index/2] & 0xF);
+	}
+
+	public void setStateAt(int index, byte state)
+	{
+		// TODO: Is there a way to set, eg, n2 without having to read n1 or a
+		// way to set n1 without having to read n2?
+
+		// Set n1 (nibble1, lhs)
+		if (index % 2 == 0)
+		{
+			byte n2 = getStateAt(index+1);
+			data[index/2] = (byte) ((state << 4) | n2);
+		}
+
+		// Set n2 (nibber2, rhs)
+		else
+		{
+			byte n1 = getStateAt(index);
+			data[index/2] = (byte) ((n1 << 4) | state);
+		}
 	}
 
 	private byte getState(char dnaCode)
 	{
 		switch (dnaCode)
 		{
-			case 'A': return A;
-			case 'a': return A;
-			case 'T': return T;
-			case 't': return T;
-			case 'C': return C;
-			case 'c': return C;
-			case 'G': return G;
-			case 'g': return G;
-			case 'N': return N;
-			case 'n': return N;
+			case 'A': return A;  case 'a': return A;
+			case 'T': return T;  case 't': return T;
+			case 'C': return C;  case 'c': return C;
+			case 'G': return G;  case 'g': return G;
+			case 'N': return N;  case 'n': return N;
 			case '*': return P;
 
 			default: return UNKNOWN;
 		}
 	}
 
-	private String getDNA(byte code)
+	private String getDNA(byte state)
 	{
-		switch (code)
+		switch (state)
 		{
-			case A:  return "A";
-			case dA: return "A";
-			case T:  return "T";
-			case dT: return "T";
-			case C:  return "C";
-			case dC: return "C";
-			case G:  return "G";
-			case dG: return "G";
-			case N:  return "N";
-			case dN: return "N";
-			case P: return "*";
-			case dP: return "*";
+			case A:  return "A";  case dA: return "A";
+			case T:  return "T";  case dT: return "T";
+			case C:  return "C";  case dC: return "C";
+			case G:  return "G";  case dG: return "G";
+			case N:  return "N";  case dN: return "N";
+			case P: return "*";   case dP: return "*";
 
 			default: return "?";
 		}
@@ -150,8 +155,6 @@ public abstract class Sequence
 	public String toString()
 	{
 		int length = length();
-
-		System.out.println("length is " + length);
 
 		StringBuffer sb = new StringBuffer(length);
 
