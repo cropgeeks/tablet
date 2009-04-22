@@ -36,8 +36,11 @@ public class Read extends Sequence implements Comparable<Read>
 //	public void setComplemented(boolean complemented)
 //		{ this.complemented = complemented; }
 
-	public int getPosition()
+	public int getStartPosition()
 		{ return position; }
+
+	public int getEndPosition()
+		{ return position + length() -1; }
 
 //	public void setPosition(int position)
 //		{ this.position = position; }
