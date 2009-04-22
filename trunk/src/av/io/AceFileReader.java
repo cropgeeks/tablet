@@ -166,6 +166,10 @@ public class AceFileReader
 
 		// If held in the consensus...HOW? hashtable or array? either will require
 		// a lot of memory for pointers to the actual reads
+
+		// 21/04/2009 - array of integers, one int per base of the consensus
+		// sequence. each int is the cache ID of the read that is best for that
+		// position. Consensus sequence isn't very long so memory less of an issue
 	}
 
 	private void processRead()
