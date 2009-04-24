@@ -2,15 +2,15 @@ package av.data;
 
 import java.util.*;
 
-public class PackSet implements Iterable<Pack>
+class PackSet implements Iterable<Pack>, IReadManager
 {
 	private Vector<Pack> packs = new Vector<Pack>();
 
-	public PackSet()
+	PackSet()
 	{
 	}
 
-	public PackSet(Vector<Read> reads)
+	PackSet(Vector<Read> reads)
 	{
 		createPackSet(reads);
 	}
@@ -59,5 +59,16 @@ public class PackSet implements Iterable<Pack>
 		}
 
 		System.out.println("Added " + readCount + " reads over " + packs.size() + " pack lines");
+	}
+
+	/**
+	 * Returns a byte array containing sequence information (or -1 for no data)
+	 * for the given line between the points start and end.
+	 */
+	public byte[] getValues(int line, int start, int end)
+	{
+		Pack pack = packs.get(line);
+
+		return pack.getValues(start, end);
 	}
 }

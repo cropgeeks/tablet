@@ -9,7 +9,6 @@ import av.data.*;
 class ConsensusCanvas extends JPanel
 {
 	Consensus sequence;
-//	byte[] data;
 
 	// Width and height of the canvas
 	int canvasW, canvasH;
@@ -36,12 +35,14 @@ class ConsensusCanvas extends JPanel
 	ConsensusCanvas()
 	{
 		setOpaque(false);
+		setBackground(Color.red);
+
+		setPreferredSize(new Dimension(0, 50));
 	}
 
 	void setConsensusSequence(Consensus sequence)
 	{
 		this.sequence = sequence;
-//		data = sequence.getData();
 	}
 
 	// Compute canvas related dimensions that only change if the data or the
@@ -68,5 +69,15 @@ class ConsensusCanvas extends JPanel
 		super.paintComponent(graphics);
 
 		Graphics2D g = (Graphics2D) graphics;
+
+		if (sequence == null)
+			return;
+
+//		byte[] data = sequence.getSequence();
+
+//		for (int i = 0; i < data.length; i++)
+//		{
+//			g.drawString("" + data[i], i*20, 15);
+//		}
 	}
 }

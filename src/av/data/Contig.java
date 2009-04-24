@@ -10,7 +10,12 @@ public class Contig
 	private boolean complemented;
 
 	private Consensus consensus;
+
 	private Vector<Read> reads;
+	// Starting and ending indices of the leftmost and rightmost reads
+	private int lhsOffset, rhsOffset;
+
+	private PackSet packSet;
 
 	public Contig()
 	{
@@ -45,6 +50,48 @@ public class Contig
 	public void setConsensusSequence(Consensus consensus)
 		{ this.consensus = consensus; }
 
+	public void determineOffsets()
+	{
+		// Set the rhsOffset to the final index position in the consensus seq
+		rhsOffset = consensus.length() - 1;
+
+		// Now scan all the reads and see if any of them extend beyond the lhs
+		// or the rhs of the consensus...
+		for (Read read: reads)
+		{
+			if (read.getStartPosition() < lhsOffset)
+				lhsOffset = read.getStartPosition();
+			if (read.getEndPosition() > rhsOffset)
+				rhsOffset = read.getEndPosition();
+		}
+	}
+
+	public void createPackSet()
+	{
+		packSet = new PackSet(reads);
+	}
+
+	/**
+	 * Returns the width of this contig, that is, the total number of
+	 * nucleotides that span from the beginning of the left most read to the end
+	 * of the right most read, including any gaps inbetween. In most cases,
+	 * the width will probably be equal to the length of the consensus sequence
+	 * but if any reads extend before or after the consensus, they will affect
+	 * the overall width.
+	 */
+	public int getWidth()
+	{
+		return rhsOffset - lhsOffset + 1;
+	}
+
+	/**
+	 * Returns the height of this contig, that is, the total number of lines of
+	 * data from top to bottom, including reads, but excluding the consensus.
+	 */
+	public int getHeight()
+	{
+		return packSet.size();
+	}
 
 	void print(IReadCache cache)
 	{
