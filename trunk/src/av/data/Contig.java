@@ -93,6 +93,11 @@ public class Contig
 		return packSet.size();
 	}
 
+	public IReadManager getReadManager()
+	{
+		return packSet;
+	}
+
 	void print(IReadCache cache)
 	{
 		System.out.println();
