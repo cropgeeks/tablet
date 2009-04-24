@@ -3,7 +3,6 @@ package av.gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.lang.management.*;
 import javax.swing.*;
 
 import scri.commons.gui.*;
@@ -48,12 +47,7 @@ public class AssemblyViewer
 
 		TaskDialog.initialize(winMain, "Assembly Viewer");
 
-		long freeMem = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
-		java.text.NumberFormat nf = java.text.NumberFormat.getInstance();
-
-		System.out.println("Memory used: " + nf.format(freeMem/1024f/1024f) + "MB");
-
-//		winMain.setVisible(true);
+		winMain.setVisible(true);
 	}
 
 	private void shutdown()

@@ -21,7 +21,10 @@ class PostImportOperations
 	void sortReads()
 	{
 		for (Contig contig: assembly.getContigs())
+		{
 			Collections.sort(contig.getReads());
+			contig.determineOffsets();
+		}
 	}
 
 	void compareBases()
@@ -33,8 +36,6 @@ class PostImportOperations
 	void createPackSet()
 	{
 		for (Contig contig: assembly.getContigs())
-		{
-			PackSet packSet = new PackSet(contig.getReads());
-		}
+			contig.createPackSet();
 	}
 }

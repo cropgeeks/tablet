@@ -166,6 +166,16 @@ public abstract class Sequence
 
 		return sb.toString();
 	}
+
+	public byte[] getSequence()
+	{
+		byte[] array = new byte[length()];
+
+		for (int i = 0; i < array.length; i++)
+			array[i] = getStateAt(i);
+
+		return array;
+	}
 }
 
 /*

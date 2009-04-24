@@ -2,6 +2,7 @@ package av.gui;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.lang.management.*;
 import javax.swing.*;
 
 import av.data.*;
@@ -14,6 +15,8 @@ public class WinMain extends JFrame
 {
 	private Assembly assembly;
 
+	private AssemblyPanel assemblyPanel;
+
 	WinMain(String filename)
 	{
 		// Load in the data
@@ -21,6 +24,11 @@ public class WinMain extends JFrame
 		{
 			TestReader reader = new TestReader(filename);
 			assembly = reader.getAssembly();
+
+			long freeMem = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
+			java.text.NumberFormat nf = java.text.NumberFormat.getInstance();
+
+			System.out.println("Memory used: " + nf.format(freeMem/1024f/1024f) + "MB\n");
 		}
 		catch (Exception e)
 		{
@@ -28,7 +36,10 @@ public class WinMain extends JFrame
 			System.exit(0);
 		}
 
+		assemblyPanel = new AssemblyPanel(this);
+		add(assemblyPanel);
 
+		assemblyPanel.setAssembly(assembly);
 
 
 		setTitle("Assembly Viewer");
