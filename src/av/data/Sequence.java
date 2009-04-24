@@ -97,14 +97,14 @@ public abstract class Sequence
 		// Set n1 (nibble1, lhs)
 		if (index % 2 == 0)
 		{
-			byte n2 = getStateAt(index+1);
+			byte n2 = (byte) (data[index/2] & 0xF);
 			data[index/2] = (byte) ((state << 4) | n2);
 		}
 
 		// Set n2 (nibber2, rhs)
 		else
 		{
-			byte n1 = getStateAt(index);
+			byte n1 = (byte) ((data[index/2] >> 4) & 0xF);
 			data[index/2] = (byte) ((n1 << 4) | state);
 		}
 	}
