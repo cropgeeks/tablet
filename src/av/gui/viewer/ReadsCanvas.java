@@ -9,6 +9,7 @@ import av.data.*;
 class ReadsCanvas extends JPanel
 {
 	private Contig contig;
+	private IReadManager reads;
 
 	// Width and height of the canvas
 	int canvasW, canvasH;
@@ -28,7 +29,7 @@ class ReadsCanvas extends JPanel
 
 	// Starting and ending indices of the bases that will be drawn during the
 	// next repaint operation
-	private int xIndexStart, xIndexEnd;
+	private int xS, xE, yS, yE;
 
 	// Holds the current dimensions of the canvas in an AWT friendly format
 	private Dimension dimension = new Dimension();
@@ -41,6 +42,7 @@ class ReadsCanvas extends JPanel
 	void setContig(Contig contig)
 	{
 		this.contig = contig;
+		reads = contig.getReadManager();
 
 		computeDimensions(5, 5);
 	}
@@ -98,7 +100,46 @@ class ReadsCanvas extends JPanel
 
 		Graphics2D g = (Graphics2D) graphics;
 
-		g.setColor(Color.red);
+
+		// Index positions within the dataset that we'll start drawing from
+		xS = pX1 / ntW;
+		yS = pY1 / ntH;
+
+		// The end indices are calculated as the:
+		//   (the start index) + (the number that can be drawn on screen)
+		// with a check to set the end index to the last value in the array if
+		// the calculated index would go out of bounds
+		xE = xS + ntOnScreenX;
+		if (xE >= ntOnCanvasX)
+			xE = ntOnCanvasX-1;
+
+		yE = yS + ntOnScreenY;
+		if (yE >= ntOnCanvasY)
+			yE = ntOnCanvasY-1;
+
+
+		System.out.println("X: " + xS + "->" + xE);
+		System.out.println("Y: " + yS + "->" + yE);
+		System.out.println();
+
+
+		// For each row...
+		for (int row = yS, y = (ntH*yS); row <= yE; row++, y += ntH)
+		{
+			byte[] data = reads.getValues(row, xS, xE);
+
+			for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
+			{
+				if (data[i] == -1)
+					g.fillRect(x, y, ntW, ntH);
+				else
+					g.drawString("" + data[i], x, y);
+			}
+		}
+
+
+
+/*		g.setColor(Color.red);
 		g.fillRect(0, 0, getWidth(), getHeight());
 
 		g.setColor(Color.white);
@@ -113,5 +154,6 @@ class ReadsCanvas extends JPanel
 				if (cI % 50 == 0 && cJ % 50 == 0)
 					g.fillRect(i, j, ntW, ntH);
 			}
+*/
 	}
 }
