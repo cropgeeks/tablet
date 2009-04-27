@@ -31,6 +31,32 @@ public class SequenceTest extends TestCase
 		}
 	}
 
+	public void testSettingChanges()
+	{
+		System.out.println();
+
+		Consensus c = new Consensus();
+
+		StringBuffer sb = new StringBuffer(10);
+		for (int s = 0; s < 10; s++)
+			sb.append(rndNucleotide());
+
+		String str1 = sb.toString();
+		System.out.println(str1);
+		c.setData(str1);
+
+		for (int i = 0; i < c.length(); i++)
+		{
+			byte b = c.getStateAt(i);
+			c.setStateAt(i, b);
+		}
+
+		String str2 = c.toString();
+		System.out.println(str2);
+
+		assertEquals(str1, str2);
+	}
+
 	private String rndNucleotide()
 	{
 		switch ((int) (Math.random() * 5))

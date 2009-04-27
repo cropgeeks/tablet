@@ -7,4 +7,6 @@ public interface IReadManager
 	 * for the given line between the points start and end.
 	 */
 	public byte[] getValues(int line, int start, int end);
+
+	public int size();
 }

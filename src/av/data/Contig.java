@@ -16,6 +16,9 @@ public class Contig
 	private int lhsOffset, rhsOffset;
 
 	private PackSet packSet;
+	private StackSet stackSet;
+
+	private IReadManager readManager;
 
 	public Contig()
 	{
@@ -69,6 +72,10 @@ public class Contig
 	public void createPackSet()
 	{
 		packSet = new PackSet(reads);
+		stackSet = new StackSet(reads);
+
+		readManager = packSet;
+	//	readManager = stackSet;
 	}
 
 	/**
@@ -90,12 +97,12 @@ public class Contig
 	 */
 	public int getHeight()
 	{
-		return packSet.size();
+		return readManager.size();
 	}
 
 	public IReadManager getReadManager()
 	{
-		return packSet;
+		return readManager;
 	}
 
 	void print(IReadCache cache)
