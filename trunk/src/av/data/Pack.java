@@ -9,7 +9,7 @@ import java.util.*;
  */
 class Pack
 {
-	private LinkedList<Read> reads = new LinkedList<Read>();
+	private Vector<Read> reads = new Vector<Read>();
 
 	private int positionS;
 	private int positionE;
@@ -72,8 +72,11 @@ class Pack
 		int index = start;
 
 		// Search for reads that are within the current window (start<->end)
+		int count = 0;
 		for (Read read: reads)
 		{
+			count++;
+
 			if (read.getEndPosition() < start)
 				continue;
 			if (read.getStartPosition() > end)
@@ -81,8 +84,6 @@ class Pack
 
 			int readS = read.getStartPosition();
 			int readE = read.getEndPosition();
-
-			int readLength = read.length();
 
 			// Fill in any blanks between the current position and the start of
 			// this read
@@ -93,6 +94,8 @@ class Pack
 			for (; index <= end && index <= readE; index++, dataI++)
 				data[dataI] = read.getStateAt(index-readS);
 		}
+
+		System.out.println("count=" + count);
 
 		// If no more reads are within the window, fill in any blanks between
 		// the final read and the end of the array

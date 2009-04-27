@@ -44,7 +44,7 @@ class ReadsCanvas extends JPanel
 		this.contig = contig;
 		reads = contig.getReadManager();
 
-		computeDimensions(5, 5);
+		computeDimensions(10, 10);
 	}
 
 	// Compute canvas related dimensions that only change if the data or the
@@ -133,7 +133,26 @@ class ReadsCanvas extends JPanel
 				if (data[i] == -1)
 					g.fillRect(x, y, ntW, ntH);
 				else
-					g.drawString("" + data[i], x, y);
+				{
+					switch (data[i])
+					{
+						case Sequence.P:  g.drawString("*", x+4, y+10); break;
+						case Sequence.dP: g.drawString("*", x+4, y+10); break;
+						case Sequence.A:  g.drawString("A", x+4, y+10); break;
+						case Sequence.dA: g.drawString("A", x+4, y+10); break;
+						case Sequence.T:  g.drawString("T", x+4, y+10); break;
+						case Sequence.dT: g.drawString("T", x+4, y+10); break;
+						case Sequence.C:  g.drawString("C", x+4, y+10); break;
+						case Sequence.dC: g.drawString("C", x+4, y+10); break;
+						case Sequence.G:  g.drawString("G", x+4, y+10); break;
+						case Sequence.dG: g.drawString("G", x+4, y+10); break;
+						case Sequence.N:  g.drawString("N", x+4, y+10); break;
+						case Sequence.dN: g.drawString("N", x+4, y+10); break;
+					}
+
+
+					g.drawRect(x, y, ntW, ntH);
+				}
 			}
 		}
 
