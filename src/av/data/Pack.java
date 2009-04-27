@@ -61,9 +61,71 @@ class Pack
 	 */
 	byte[] getValues(int start, int end)
 	{
-		// TODO: binary (or skip-25) searching to the correct start position
-		// TODO: but this would only be suitable with array/vector storage!
+		int read = -1;
 
+		// Binary search to find the first read that appears within the window
+		int L = 0, M = 0, R = reads.size()-1;
+
+		while (R >= L)
+		{
+			M = (L+R) / 2;
+
+			int windowed = reads.get(M).compareToWindow(start, end);
+
+			// If this read is within the window
+			if (windowed == 0)
+			{
+				read = M;
+				break;
+			}
+
+			// LHS of the window
+			if (windowed == -1)
+				L = M + 1;
+			// RHS of the window
+			else
+				R = M - 1;
+		}
+
+		// If no suitable read was found, just return an array of -1s
+		if (read == -1)
+		{
+			byte[] data = new byte[end-start+1];
+			for (int i = 0; i < data.length; i++)
+				data[i] = -1;
+
+			return data;
+		}
+
+		// Search left from this read to find the left-most read that appears in
+		// the window (as the binary search will only find the first read that
+		// appears anywhere in it).
+		for (read = read-1; read >= 0; read--)
+			if (reads.get(read).compareToWindow(start, end) == -1)
+				break;
+
+		return getValues(read+1, start, end);
+
+/*		for (Read read: reads)
+		{
+			count++;
+
+			if (read.getEndPosition() < start)
+				continue;
+			else
+				break;
+		}
+
+		return getValues(count, start, end);
+*/
+	}
+
+	/**
+	 * Creates and fills an array with all reads that fit within the given
+	 * window start and end positions (starting from the index fromRead).
+	 */
+	private byte[] getValues(int fromRead, int start, int end)
+	{
 		byte[] data = new byte[end-start+1];
 
 		// Tracking index within the data array
@@ -71,31 +133,26 @@ class Pack
 		// Tracking index on the start->end scale
 		int index = start;
 
-		// Search for reads that are within the current window (start<->end)
-		int count = 0;
-		for (Read read: reads)
-		{
-			count++;
+		ListIterator<Read> itor = reads.listIterator(fromRead);
 
-			if (read.getEndPosition() < start)
-				continue;
+		while (itor.hasNext())
+		{
+			Read read = itor.next();
+
 			if (read.getStartPosition() > end)
 				break;
 
 			int readS = read.getStartPosition();
 			int readE = read.getEndPosition();
 
-			// Fill in any blanks between the current position and the start of
-			// this read
+			// Fill in any blanks between the current index the next read
 			for (; index < readS; index++, dataI++)
 				data[dataI] = -1;
 
-			// Fill in any read data
+			// Fill in the read data
 			for (; index <= end && index <= readE; index++, dataI++)
 				data[dataI] = read.getStateAt(index-readS);
 		}
-
-		System.out.println("count=" + count);
 
 		// If no more reads are within the window, fill in any blanks between
 		// the final read and the end of the array

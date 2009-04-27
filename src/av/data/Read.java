@@ -63,6 +63,25 @@ public class Read extends Sequence implements Comparable<Read>
 			return 1;
 	}
 
+	/**
+	 * Returns an integer representing the inclusion state of this read when
+	 * compared against the given start and end values for a "window". The
+	 * methods returns -1 if this read is to the left of it, 0 if any part of
+	 * the read is within the window, and 1 if the read is to the right of it.
+	 */
+	int compareToWindow(int start, int end)
+	{
+		// RHS of the window...
+		if (position > end)
+			return 1;
+
+		// LHS of the window...
+		if (getEndPosition() < start)
+			return -1;
+
+		// Otherwise must be within the window
+		return 0;
+	}
 
 	void print(IReadCache cache)
 	{
