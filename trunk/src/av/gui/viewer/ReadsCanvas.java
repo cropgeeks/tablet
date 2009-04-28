@@ -2,6 +2,7 @@ package av.gui.viewer;
 
 import java.awt.*;
 import java.awt.image.*;
+import java.util.*;
 import javax.swing.*;
 
 import av.data.*;
@@ -9,8 +10,8 @@ import av.gui.viewer.colors.*;
 
 class ReadsCanvas extends JPanel
 {
-	private Contig contig;
-	private IReadManager reads;
+	Contig contig;
+	IReadManager reads;
 
 	// Color scheme in use
 	ColorScheme colors;
@@ -41,9 +42,16 @@ class ReadsCanvas extends JPanel
 	// Holds the current dimensions of the canvas in an AWT friendly format
 	private Dimension dimension = new Dimension();
 
-	ReadsCanvas()
+	// A list of renderers that will perform further drawing once the main
+	// canvas has been drawn
+	LinkedList<IOverlayRenderer> overlays = new LinkedList<IOverlayRenderer>();
+
+
+	ReadsCanvas(AssemblyPanel aPanel)
 	{
 		setOpaque(false);
+
+		new ReadsCanvasMouseListener(aPanel, this);
 	}
 
 	void setContig(Contig contig)
@@ -53,7 +61,7 @@ class ReadsCanvas extends JPanel
 		reads  = contig.getReadManager();
 		offset = contig.getConsensusOffset();
 
-		computeDimensions(5, 10);
+		computeDimensions(7, 9);
 	}
 
 	// Compute canvas related dimensions that only change if the data or the
@@ -146,6 +154,16 @@ class ReadsCanvas extends JPanel
 				if (data[i] != -1)
 					g.drawImage(colors.getImage(data[i]), x, y, null);
 			}
+		}
+
+
+		try
+		{
+			for (IOverlayRenderer renderer: overlays)
+				renderer.render(g);
+		}
+		catch (ConcurrentModificationException e) {
+			repaint();
 		}
 	}
 }
