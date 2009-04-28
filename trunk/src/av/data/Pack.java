@@ -105,19 +105,6 @@ class Pack
 				break;
 
 		return getValues(read+1, start, end);
-
-/*		for (Read read: reads)
-		{
-			count++;
-
-			if (read.getEndPosition() < start)
-				continue;
-			else
-				break;
-		}
-
-		return getValues(count, start, end);
-*/
 	}
 
 	/**

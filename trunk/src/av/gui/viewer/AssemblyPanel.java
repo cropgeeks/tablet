@@ -28,6 +28,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 
 		setLayout(new BorderLayout());
+		setBorder(BorderFactory.createTitledBorder("Assembly Panel:"));
 		add(consensusPanel, BorderLayout.NORTH);
 		add(sp);
 
@@ -35,8 +36,9 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 	private void createControls()
 	{
-		consensusCanvas = new ConsensusCanvas();
 		readsCanvas = new ReadsCanvas();
+		consensusCanvas = new ConsensusCanvas(readsCanvas);
+
 
 		sp = new JScrollPane();
 		viewport = sp.getViewport();
@@ -53,8 +55,8 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		this.assembly = assembly;
 
 		contig = assembly.getContigs().get(0);
-		consensusCanvas.setConsensusSequence(contig.getConsensus());
 
+		consensusCanvas.setContig(contig);
 		readsCanvas.setContig(contig);
 	}
 
@@ -64,5 +66,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		// the new dimensions of the canvas being passed to it (window size
 		// changes will cause scrollbar movement events)
 		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
+
+		consensusCanvas.repaint();
 	}
 }

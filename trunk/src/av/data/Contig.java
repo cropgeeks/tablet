@@ -78,6 +78,11 @@ public class Contig
 	//	readManager = stackSet;
 	}
 
+	public int getConsensusOffset()
+	{
+		return lhsOffset;
+	}
+
 	/**
 	 * Returns the width of this contig, that is, the total number of
 	 * nucleotides that span from the beginning of the left most read to the end
