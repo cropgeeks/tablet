@@ -149,8 +149,30 @@ class Pack
 		return data;
 	}
 
-	Read getReadAt(int nucleotidePosition)
+	Read getReadAt(int position)
 	{
+		int read = -1;
+
+		// Binary search to find the read that contains the nucleotide position
+		int L = 0, M = 0, R = reads.size()-1;
+
+		while (R >= L)
+		{
+			M = (L+R) / 2;
+
+			// Position is to the left of this read
+			if (position < reads.get(M).getStartPosition())
+				R = M - 1;
+
+			// Position is to the right of this read
+			else if (position > reads.get(M).getEndPosition())
+				L = M + 1;
+
+			// Position must be within this read
+			else
+				return reads.get(M);
+		}
+
 		return null;
 	}
 }

@@ -74,6 +74,9 @@ class PackSet implements Iterable<Pack>, IReadManager
 
 	public Read getReadAt(int line, int nucleotidePosition)
 	{
+		if (line < 0 || line >= packs.size())
+			return null;
+
 		Pack pack = packs.get(line);
 
 		return pack.getReadAt(nucleotidePosition);

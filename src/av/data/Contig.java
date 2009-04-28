@@ -74,8 +74,8 @@ public class Contig
 		packSet = new PackSet(reads);
 		stackSet = new StackSet(reads);
 
-//		readManager = packSet;
-		readManager = stackSet;
+		readManager = packSet;
+//		readManager = stackSet;
 	}
 
 	public int getConsensusOffset()
