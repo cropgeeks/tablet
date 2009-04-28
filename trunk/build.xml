@@ -5,6 +5,8 @@
 	<property name="lib-devel" location="lib-devel"/>
 	<property name="classes"   location="classes"/>
 
+	<property name="av.jar" value="${lib}/av.jar"/>
+
 	<target name="init">
 	</target>
 
@@ -35,6 +37,17 @@
 				<fileset dir="${classes}" includes="**/*Test.class"/>
 			</batchtest>
 		</junit>
+	</target>
+
+	<target name="jar" depends="clean, compile">
+		<jar jarfile="${av.jar}">
+			<fileset dir="${classes}"/>
+			<manifest>
+				<attribute name="Main-Class" value="av.gui.AssemblyViewer"/>
+				<attribute name="Class-Path"
+					value="scri-commons.jar"/>
+			</manifest>
+		</jar>
 	</target>
 
 </project>
