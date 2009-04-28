@@ -148,4 +148,9 @@ class Pack
 
 		return data;
 	}
+
+	Read getReadAt(int nucleotidePosition)
+	{
+		return null;
+	}
 }

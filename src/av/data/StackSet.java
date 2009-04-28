@@ -54,4 +54,21 @@ class StackSet implements IReadManager
 
 		return data;
 	}
+
+	public Read getReadAt(int line, int nucleotidePosition)
+	{
+		if (line < 0 || line >= stack.size())
+			return null;
+
+		Read read = stack.get(line);
+
+		// Check to see if the nucleotide position falls within this read's zone
+		if (nucleotidePosition >= read.getStartPosition() &&
+			nucleotidePosition <= read.getEndPosition())
+		{
+			return read;
+		}
+
+		return null;
+	}
 }

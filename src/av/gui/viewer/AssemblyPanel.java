@@ -36,7 +36,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 	private void createControls()
 	{
-		readsCanvas = new ReadsCanvas();
+		readsCanvas = new ReadsCanvas(this);
 		consensusCanvas = new ConsensusCanvas(readsCanvas);
 
 

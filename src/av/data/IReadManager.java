@@ -9,4 +9,6 @@ public interface IReadManager
 	public byte[] getValues(int line, int start, int end);
 
 	public int size();
+
+	public Read getReadAt(int line, int nucleotidePosition);
 }
