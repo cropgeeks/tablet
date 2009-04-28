@@ -8,60 +8,25 @@ import av.data.*;
 
 class ConsensusCanvas extends JPanel
 {
-	Consensus sequence;
+	private Contig contig;
+	private Consensus consensus;
 
-	// Width and height of the canvas
-	int canvasW, canvasH;
-	// The total number of bases in the sequence
-	int xBaseTotal;
-	// The number of bases that fit on the current screen?
-	int xBaseCount;
-	// Width and height of the "box" a single base is drawn in
-	int baseW, baseH;
+	private ReadsCanvas rCanvas;
 
-	// These are the x and y pixel positions on the canvas that currently appear
-	// in the top left corner of the current view
-	int pX1, pY1;
-	// And bottom right hand corner
-	int pX2, pY2;
-
-	// Starting and ending indices of the bases that will be drawn during the
-	// next repaint operation
-	private int xIndexStart, xIndexEnd;
-
-	// Holds the current dimensions of the canvas in an AWT friendly format
-	private Dimension dimension = new Dimension();
-
-	ConsensusCanvas()
+	ConsensusCanvas(ReadsCanvas rCanvas)
 	{
+		this.rCanvas = rCanvas;
+
 		setOpaque(false);
 		setBackground(Color.red);
 
-		setPreferredSize(new Dimension(0, 50));
+		setPreferredSize(new Dimension(0, 25));
 	}
 
-	void setConsensusSequence(Consensus sequence)
+	void setContig(Contig contig)
 	{
-		this.sequence = sequence;
-	}
-
-	// Compute canvas related dimensions that only change if the data or the
-	// box-drawing size needs to be changed
-	void computeDimensions(int sizeX, int sizeY)
-	{
-		Font font = new Font("Monospaced", Font.PLAIN, sizeY);
-		FontMetrics fm = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)
-			.getGraphics().getFontMetrics(font);
-
-		baseW = sizeX*2;
-		baseH = fm.getHeight();
-
-		xBaseTotal = sequence.length();
-
-		canvasW = (xBaseTotal * baseW);
-		canvasH = baseH;
-
-		setSize(dimension = new Dimension(canvasW, canvasH));
+		this.contig = contig;
+		consensus = contig.getConsensus();
 	}
 
 	public void paintComponent(Graphics graphics)
@@ -70,14 +35,48 @@ class ConsensusCanvas extends JPanel
 
 		Graphics2D g = (Graphics2D) graphics;
 
-		if (sequence == null)
+		if (contig == null)
 			return;
 
-//		byte[] data = sequence.getSequence();
+		int ntW = rCanvas.ntW;
+		int ntH = rCanvas.ntH;
+		int xS = rCanvas.xS;
+		int xE = rCanvas.xE;
 
-//		for (int i = 0; i < data.length; i++)
-//		{
-//			g.drawString("" + data[i], i*20, 15);
-//		}
+		g.translate(-rCanvas.pX1 + 1, 0); // +1 for edge of display
+
+
+		int offset = contig.getConsensusOffset();
+		System.out.println("offset is " + offset);
+
+		System.out.println("Drawing " + xS + " to " + xE);
+
+		byte[] data = consensus.getRange(xS, xE);
+
+
+		int y = 0;
+		for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
+		{
+			if (data[i] != -1)
+			{
+				switch (data[i])
+				{
+					case Sequence.P:  g.drawString("*", x+2, y+12); break;
+					case Sequence.dP: g.drawString("*", x+2, y+12); break;
+					case Sequence.A:  g.drawString("A", x+2, y+12); break;
+					case Sequence.dA: g.drawString("A", x+2, y+12); break;
+					case Sequence.T:  g.drawString("T", x+2, y+12); break;
+					case Sequence.dT: g.drawString("T", x+2, y+12); break;
+					case Sequence.C:  g.drawString("C", x+2, y+12); break;
+					case Sequence.dC: g.drawString("C", x+2, y+12); break;
+					case Sequence.G:  g.drawString("G", x+2, y+12); break;
+					case Sequence.dG: g.drawString("G", x+2, y+12); break;
+					case Sequence.N:  g.drawString("N", x+2, y+12); break;
+					case Sequence.dN: g.drawString("N", x+2, y+12); break;
+				}
+
+				g.drawRect(x, y, ntW, ntH);
+			}
+		}
 	}
 }

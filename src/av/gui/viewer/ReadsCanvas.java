@@ -29,7 +29,7 @@ class ReadsCanvas extends JPanel
 
 	// Starting and ending indices of the bases that will be drawn during the
 	// next repaint operation
-	private int xS, xE, yS, yE;
+	int xS, xE, yS, yE;
 
 	// Holds the current dimensions of the canvas in an AWT friendly format
 	private Dimension dimension = new Dimension();
@@ -102,6 +102,7 @@ class ReadsCanvas extends JPanel
 
 
 		// Index positions within the dataset that we'll start drawing from
+		int offset = contig.getConsensusOffset();
 		xS = pX1 / ntW;
 		yS = pY1 / ntH;
 
@@ -130,24 +131,23 @@ class ReadsCanvas extends JPanel
 
 			for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
 			{
-				if (data[i] == -1)
-					g.fillRect(x, y, ntW, ntH);
-				else
+				if (data[i] != -1)
 				{
 					switch (data[i])
 					{
-						case Sequence.P:  g.drawString("*", x+2, y+12); break;
-						case Sequence.dP: g.drawString("*", x+2, y+12); break;
-						case Sequence.A:  g.drawString("A", x+2, y+12); break;
-						case Sequence.dA: g.drawString("A", x+2, y+12); break;
-						case Sequence.T:  g.drawString("T", x+2, y+12); break;
-						case Sequence.dT: g.drawString("T", x+2, y+12); break;
-						case Sequence.C:  g.drawString("C", x+2, y+12); break;
-						case Sequence.dC: g.drawString("C", x+2, y+12); break;
-						case Sequence.G:  g.drawString("G", x+2, y+12); break;
-						case Sequence.dG: g.drawString("G", x+2, y+12); break;
-						case Sequence.N:  g.drawString("N", x+2, y+12); break;
-						case Sequence.dN: g.drawString("N", x+2, y+12); break;
+						case Sequence.A:  g.setColor(Color.black); g.drawString("A", x+2, y+12); break;
+						case Sequence.T:  g.setColor(Color.black); g.drawString("T", x+2, y+12); break;
+						case Sequence.C:  g.setColor(Color.black); g.drawString("C", x+2, y+12); break;
+						case Sequence.G:  g.setColor(Color.black); g.drawString("G", x+2, y+12); break;
+						case Sequence.N:  g.setColor(Color.black); g.drawString("N", x+2, y+12); break;
+						case Sequence.P:  g.setColor(Color.black); g.drawString("*", x+2, y+12); break;
+
+						case Sequence.dA: g.setColor(Color.red); g.drawString("A", x+2, y+12); break;
+						case Sequence.dT: g.setColor(Color.red); g.drawString("T", x+2, y+12); break;
+						case Sequence.dC: g.setColor(Color.red); g.drawString("C", x+2, y+12); break;
+						case Sequence.dG: g.setColor(Color.red); g.drawString("G", x+2, y+12); break;
+						case Sequence.dN: g.setColor(Color.red); g.drawString("N", x+2, y+12); break;
+						case Sequence.dP: g.setColor(Color.red); g.drawString("*", x+2, y+12); break;
 					}
 
 					g.drawRect(x, y, ntW, ntH);
