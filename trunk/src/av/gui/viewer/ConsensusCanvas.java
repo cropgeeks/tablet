@@ -5,6 +5,7 @@ import java.awt.image.*;
 import javax.swing.*;
 
 import av.data.*;
+import av.gui.viewer.colors.*;
 
 class ConsensusCanvas extends JPanel
 {
@@ -43,6 +44,8 @@ class ConsensusCanvas extends JPanel
 		int xS = rCanvas.xS;
 		int xE = rCanvas.xE;
 
+		ColorScheme colors = rCanvas.colors;
+
 		g.translate(-rCanvas.pX1 + 1, 0); // +1 for edge of display
 
 
@@ -58,25 +61,7 @@ class ConsensusCanvas extends JPanel
 		for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
 		{
 			if (data[i] != -1)
-			{
-				switch (data[i])
-				{
-					case Sequence.P:  g.drawString("*", x+2, y+12); break;
-					case Sequence.dP: g.drawString("*", x+2, y+12); break;
-					case Sequence.A:  g.drawString("A", x+2, y+12); break;
-					case Sequence.dA: g.drawString("A", x+2, y+12); break;
-					case Sequence.T:  g.drawString("T", x+2, y+12); break;
-					case Sequence.dT: g.drawString("T", x+2, y+12); break;
-					case Sequence.C:  g.drawString("C", x+2, y+12); break;
-					case Sequence.dC: g.drawString("C", x+2, y+12); break;
-					case Sequence.G:  g.drawString("G", x+2, y+12); break;
-					case Sequence.dG: g.drawString("G", x+2, y+12); break;
-					case Sequence.N:  g.drawString("N", x+2, y+12); break;
-					case Sequence.dN: g.drawString("N", x+2, y+12); break;
-				}
-
-				g.drawRect(x, y, ntW, ntH);
-			}
+				g.drawImage(colors.getImage(data[i]), x, y, null);
 		}
 	}
 }

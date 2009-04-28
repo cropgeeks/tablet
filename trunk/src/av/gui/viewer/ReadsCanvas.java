@@ -5,11 +5,15 @@ import java.awt.image.*;
 import javax.swing.*;
 
 import av.data.*;
+import av.gui.viewer.colors.*;
 
 class ReadsCanvas extends JPanel
 {
 	private Contig contig;
 	private IReadManager reads;
+
+	// Color scheme in use
+	ColorScheme colors;
 
 	// Width and height of the canvas
 	int canvasW, canvasH;
@@ -73,6 +77,8 @@ class ReadsCanvas extends JPanel
 		System.out.println("Canvas size: " + canvasW + "x" + canvasH);
 
 		setSize(dimension = new Dimension(canvasW, canvasH));
+
+		updateColorScheme();
 	}
 
 	// Compute real-time variables, that change as the viewpoint is moved across
@@ -93,6 +99,11 @@ class ReadsCanvas extends JPanel
 
 	public Dimension getPreferredSize()
 		{ return dimension; }
+
+	private void updateColorScheme()
+	{
+		colors = new StandardColorScheme(contig, ntW, ntH);
+	}
 
 	public void paintComponent(Graphics graphics)
 	{
@@ -133,24 +144,7 @@ class ReadsCanvas extends JPanel
 			{
 				if (data[i] != -1)
 				{
-					switch (data[i])
-					{
-						case Sequence.A:  g.setColor(Color.black); g.drawString("A", x+2, y+12); break;
-						case Sequence.T:  g.setColor(Color.black); g.drawString("T", x+2, y+12); break;
-						case Sequence.C:  g.setColor(Color.black); g.drawString("C", x+2, y+12); break;
-						case Sequence.G:  g.setColor(Color.black); g.drawString("G", x+2, y+12); break;
-						case Sequence.N:  g.setColor(Color.black); g.drawString("N", x+2, y+12); break;
-						case Sequence.P:  g.setColor(Color.black); g.drawString("*", x+2, y+12); break;
-
-						case Sequence.dA: g.setColor(Color.red); g.drawString("A", x+2, y+12); break;
-						case Sequence.dT: g.setColor(Color.red); g.drawString("T", x+2, y+12); break;
-						case Sequence.dC: g.setColor(Color.red); g.drawString("C", x+2, y+12); break;
-						case Sequence.dG: g.setColor(Color.red); g.drawString("G", x+2, y+12); break;
-						case Sequence.dN: g.setColor(Color.red); g.drawString("N", x+2, y+12); break;
-						case Sequence.dP: g.setColor(Color.red); g.drawString("*", x+2, y+12); break;
-					}
-
-					g.drawRect(x, y, ntW, ntH);
+					g.drawImage(colors.getImage(data[i]), x, y, null);
 				}
 			}
 		}
