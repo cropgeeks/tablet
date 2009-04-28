@@ -25,6 +25,9 @@ class ReadsCanvas extends JPanel
 	// And the total number of nucleotides that span the entire canvas
 	int ntOnCanvasX, ntOnCanvasY;
 
+	// The LHS offset (difference) between the left-most read and the consensus
+	int offset;
+
 	// These are the x and y pixel positions on the canvas that currently appear
 	// in the top left corner of the current view
 	int pX1, pY1;
@@ -46,7 +49,9 @@ class ReadsCanvas extends JPanel
 	void setContig(Contig contig)
 	{
 		this.contig = contig;
-		reads = contig.getReadManager();
+
+		reads  = contig.getReadManager();
+		offset = contig.getConsensusOffset();
 
 		computeDimensions(5, 10);
 	}
@@ -108,12 +113,9 @@ class ReadsCanvas extends JPanel
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
-
 		Graphics2D g = (Graphics2D) graphics;
 
-
 		// Index positions within the dataset that we'll start drawing from
-		int offset = contig.getConsensusOffset();
 		xS = pX1 / ntW;
 		yS = pY1 / ntH;
 
@@ -129,7 +131,6 @@ class ReadsCanvas extends JPanel
 		if (yE >= ntOnCanvasY)
 			yE = ntOnCanvasY-1;
 
-
 		System.out.println("X: " + xS + "->" + xE);
 		System.out.println("Y: " + yS + "->" + yE);
 		System.out.println();
@@ -138,34 +139,13 @@ class ReadsCanvas extends JPanel
 		// For each row...
 		for (int row = yS, y = (ntH*yS); row <= yE; row++, y += ntH)
 		{
-			byte[] data = reads.getValues(row, xS, xE);
+			byte[] data = reads.getValues(row, xS-offset, xE-offset);
 
 			for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
 			{
 				if (data[i] != -1)
-				{
 					g.drawImage(colors.getImage(data[i]), x, y, null);
-				}
 			}
 		}
-
-
-
-/*		g.setColor(Color.red);
-		g.fillRect(0, 0, getWidth(), getHeight());
-
-		g.setColor(Color.white);
-		g.fillRect(0, 0, canvasW, canvasH);
-
-		g.setColor(Color.black);
-		for (int i = 0, cI=0; i < canvasW; i += ntW, cI++)
-			for (int j = 0, cJ=0; j < canvasH; j += ntH, cJ++)
-			{
-				g.drawRect(i, j, ntW, ntH);
-
-				if (cI % 50 == 0 && cJ % 50 == 0)
-					g.fillRect(i, j, ntW, ntH);
-			}
-*/
 	}
 }

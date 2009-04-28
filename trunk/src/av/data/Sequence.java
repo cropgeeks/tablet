@@ -177,15 +177,3 @@ public abstract class Sequence
 		return array;
 	}
 }
-
-/*
- 		byte fh = 15;
-		byte sh = 7;
-		byte result = (byte)((fh << 4) | sh);
-//		System.out.println("byte: " + result);
-
-		fh = (byte) ((result >> 4) & 0xf);
-		sh = (byte) (result & 0xf);
-//		System.out.println("FH: " + fh);
-//		System.out.println("SH: " + sh);
-*/

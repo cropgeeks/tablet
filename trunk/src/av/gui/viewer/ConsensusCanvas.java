@@ -14,12 +14,14 @@ class ConsensusCanvas extends JPanel
 
 	private ReadsCanvas rCanvas;
 
+	// The LHS offset (difference) between the left-most read and the consensus
+	int offset;
+
 	ConsensusCanvas(ReadsCanvas rCanvas)
 	{
 		this.rCanvas = rCanvas;
 
 		setOpaque(false);
-		setBackground(Color.red);
 
 		setPreferredSize(new Dimension(0, 25));
 	}
@@ -27,13 +29,14 @@ class ConsensusCanvas extends JPanel
 	void setContig(Contig contig)
 	{
 		this.contig = contig;
+
 		consensus = contig.getConsensus();
+		offset = contig.getConsensusOffset();
 	}
 
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
-
 		Graphics2D g = (Graphics2D) graphics;
 
 		if (contig == null)
@@ -49,12 +52,9 @@ class ConsensusCanvas extends JPanel
 		g.translate(-rCanvas.pX1 + 1, 0); // +1 for edge of display
 
 
-		int offset = contig.getConsensusOffset();
-		System.out.println("offset is " + offset);
-
 		System.out.println("Drawing " + xS + " to " + xE);
 
-		byte[] data = consensus.getRange(xS, xE);
+		byte[] data = consensus.getRange(xS-offset, xE-offset);
 
 
 		int y = 0;
