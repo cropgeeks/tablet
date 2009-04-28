@@ -48,6 +48,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		vBar.addAdjustmentListener(this);
 
 		sp.setViewportView(readsCanvas);
+		sp.getViewport().setBackground(Color.white);
 	}
 
 	public void setAssembly(Assembly assembly)

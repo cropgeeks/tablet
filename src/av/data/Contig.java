@@ -80,7 +80,7 @@ public class Contig
 
 	public int getConsensusOffset()
 	{
-		return lhsOffset;
+		return -lhsOffset;
 	}
 
 	/**
