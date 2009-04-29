@@ -16,6 +16,11 @@ public class Prefs extends XMLPreferences
 	public static int guiWinMainY = 0;
 	public static boolean guiWinMainMaximized = false;
 
+	// Link the x/y zoom sliders?
+	public static boolean visLinkSliders = true;
+	// Which is an option only visible when advanced zoom controls are used
+	public static boolean visAdvancedZoom = false;
+
 	static void setDefaults()
 	{
 

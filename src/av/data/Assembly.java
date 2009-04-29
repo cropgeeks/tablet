@@ -22,6 +22,10 @@ public class Assembly
 		return contigs;
 	}
 
+	public String getReadName(Read read)
+	{
+		return cache.getName(read.getID());
+	}
 
 	public void print()
 	{
