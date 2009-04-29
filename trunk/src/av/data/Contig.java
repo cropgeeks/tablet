@@ -76,15 +76,10 @@ public class Contig
 	{
 		packSet = new PackSet(reads);
 		stackSet = new StackSet(reads);
-
-		readManager = packSet;
-//		readManager = stackSet;
 	}
 
 	public int getConsensusOffset()
-	{
-		return -lhsOffset;
-	}
+		{ return -lhsOffset; }
 
 	/**
 	 * Returns the width of this contig, that is, the total number of
@@ -95,23 +90,20 @@ public class Contig
 	 * the overall width.
 	 */
 	public int getWidth()
-	{
-		return rhsOffset - lhsOffset + 1;
-	}
+		{ return rhsOffset - lhsOffset + 1; }
 
 	/**
 	 * Returns the height of this contig, that is, the total number of lines of
 	 * data from top to bottom, including reads, but excluding the consensus.
 	 */
 	public int getHeight()
-	{
-		return readManager.size();
-	}
+		{ return readManager.size(); }
 
-	public IReadManager getReadManager()
-	{
-		return readManager;
-	}
+	public IReadManager getPackSetManager()
+		{ return (readManager = packSet); }
+
+	public IReadManager getStackSetManager()
+		{ return (readManager = stackSet); }
 
 	void print(IReadCache cache)
 	{

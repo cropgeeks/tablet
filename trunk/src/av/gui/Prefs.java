@@ -16,6 +16,9 @@ public class Prefs extends XMLPreferences
 	public static int guiWinMainY = 0;
 	public static boolean guiWinMainMaximized = false;
 
+	// Display reads in packed or stacked form?
+	public static int visReadLayout = 1;
+
 	// Link the x/y zoom sliders?
 	public static boolean visLinkSliders = true;
 	// Which is an option only visible when advanced zoom controls are used

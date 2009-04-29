@@ -6,6 +6,7 @@ import java.util.*;
 import javax.swing.*;
 
 import av.data.*;
+import av.gui.*;
 import av.gui.viewer.colors.*;
 
 class ReadsCanvas extends JPanel
@@ -60,7 +61,14 @@ class ReadsCanvas extends JPanel
 
 		if (contig != null)
 		{
-			reads  = contig.getReadManager();
+			System.out.println("Prefs.visReadLayout=" + Prefs.visReadLayout);
+
+			switch (Prefs.visReadLayout)
+			{
+				case 1: reads = contig.getPackSetManager();  break;
+				case 2: reads = contig.getStackSetManager(); break;
+			}
+
 			offset = contig.getConsensusOffset();
 		}
 	}

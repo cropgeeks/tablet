@@ -90,6 +90,13 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		consensusCanvas.repaint();
 	}
 
+	// Moves the scroll bars by the given amount in the x and y directions
+	void moveBy(int x, int y)
+	{
+		hBar.setValue(hBar.getValue() + x);
+		vBar.setValue(vBar.getValue() + y);
+	}
+
 	void computePanelSizes()
 	{
 		int zoomX = statusPanel.getZoomX();

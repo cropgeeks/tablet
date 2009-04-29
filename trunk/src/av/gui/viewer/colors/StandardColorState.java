@@ -20,6 +20,12 @@ class StandardColorState extends ColorState
 		Rectangle2D.Float r = new Rectangle2D.Float(0, 0, w, h);
 		g.fill(r);
 
+		if (highlight)
+		{
+			g.setPaint(new Color(255, 255, 255, 130));
+			g.fillRect(0, 0, w, h);
+		}
+
 		Font font = g.getFont().deriveFont(Font.PLAIN, h-3);
 		g.setFont(font);
 		FontMetrics fm = g.getFontMetrics();
@@ -27,19 +33,13 @@ class StandardColorState extends ColorState
 		Rectangle2D bounds = fm.getStringBounds(text, g);
 
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//		if (highlight)
-//			g.setColor(Color.red);
-//		else
+		if (highlight)
+			g.setColor(Color.red);
+		else
 			g.setColor(Color.black);
 		g.drawString(text,
 			(int)((float)w/2-bounds.getWidth()/2),
 			h - fm.getMaxDescent());
-
-//		if (highlight == false)
-//		{
-//			g.setPaint(new Color(20, 20, 20, 200));
-//			g.fillRect(0, 0, w, h);
-//		}
 
 		g.dispose();
 	}
