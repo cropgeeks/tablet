@@ -61,7 +61,7 @@ class ReadsCanvas extends JPanel
 		reads  = contig.getReadManager();
 		offset = contig.getConsensusOffset();
 
-		computeDimensions(7, 9);
+		computeDimensions(8, 8);
 	}
 
 	// Compute canvas related dimensions that only change if the data or the
@@ -75,22 +75,13 @@ class ReadsCanvas extends JPanel
 		ntW = sizeX*2;
 		ntH = fm.getHeight();
 
-		System.out.println("ntW=" + ntW);
-		System.out.println("ntH=" + ntH);
-
 		ntOnCanvasX = contig.getWidth();
 		ntOnCanvasY = contig.getHeight();
-
-		System.out.println("ntOnCanvasX=" + ntOnCanvasX);
-		System.out.println("ntOnCanvasY=" + ntOnCanvasY);
 
 		canvasW = (ntOnCanvasX * ntW);
 		canvasH = (ntOnCanvasY * ntH);
 
-		System.out.println("Canvas size: " + canvasW + "x" + canvasH);
-
 		setSize(dimension = new Dimension(canvasW, canvasH));
-
 		updateColorScheme();
 	}
 

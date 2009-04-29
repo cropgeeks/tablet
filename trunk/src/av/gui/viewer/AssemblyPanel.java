@@ -14,6 +14,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 	private ConsensusCanvas consensusCanvas;
 	private ReadsCanvas readsCanvas;
+	NBStatusPanel statusPanel;
 
 	private JScrollPane sp;
 	private JScrollBar hBar, vBar;
@@ -26,19 +27,25 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		JPanel consensusPanel = new JPanel(new BorderLayout());
 		consensusPanel.add(consensusCanvas);
 
-
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createTitledBorder("Assembly Panel:"));
-		add(consensusPanel, BorderLayout.NORTH);
-		add(sp);
 
+		JPanel topPanel = new JPanel(new BorderLayout());
+		topPanel.add(consensusPanel, BorderLayout.NORTH);
+
+		JPanel centerPanel = new JPanel(new BorderLayout());
+		centerPanel.add(sp);
+
+		add(topPanel, BorderLayout.NORTH);
+		add(centerPanel, BorderLayout.CENTER);
+		add(statusPanel, BorderLayout.SOUTH);
 	}
 
 	private void createControls()
 	{
 		readsCanvas = new ReadsCanvas(this);
 		consensusCanvas = new ConsensusCanvas(readsCanvas);
-
+		statusPanel = new NBStatusPanel(this);
 
 		sp = new JScrollPane();
 		viewport = sp.getViewport();
@@ -69,5 +76,18 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
 
 		consensusCanvas.repaint();
+	}
+
+	void computePanelSizes()
+	{
+		int zoomX = statusPanel.getZoomX();
+		int zoomY = statusPanel.getZoomY();
+
+		readsCanvas.computeDimensions(zoomX, zoomY);
+	}
+
+	Assembly getAssembly()
+	{
+		return assembly;
 	}
 }

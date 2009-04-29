@@ -27,6 +27,7 @@ class ReadsCanvasMouseListener extends MouseInputAdapter
 	{
 		readOutliner.read = null;
 
+		aPanel.statusPanel.setLabels(null, null, null);
 		rCanvas.repaint();
 	}
 
@@ -40,8 +41,7 @@ class ReadsCanvasMouseListener extends MouseInputAdapter
 		// And find the new one
 		Read readNew = rCanvas.reads.getReadAt(yIndex, xIndex);
 
-		readOutliner.read = readNew;
-		readOutliner.lineIndex = yIndex;
+		readOutliner.setRead(readNew, yIndex);
 
 		// Only repaint if the new one is not the same as the old one
 		if (readOld != readNew)
@@ -52,25 +52,38 @@ class ReadsCanvasMouseListener extends MouseInputAdapter
 	private class ReadOutliner implements IOverlayRenderer
 	{
 		Read read;
+		String readName;
 
-		int xReadS, xReadE;
+		int readS, readE;
 		int lineIndex;
+
+		void setRead(Read read, int lineIndex)
+		{
+			this.read = read;
+			this.lineIndex = lineIndex;
+
+			if (read != null)
+			{
+				readS = read.getStartPosition();
+				readE = read.getEndPosition();
+
+				readName = aPanel.getAssembly().getReadName(read);
+				aPanel.statusPanel.setLabels(readName, (readS+1) + "-" + (readE+1), null);
+			}
+			else
+				aPanel.statusPanel.setLabels(null, null, null);
+		}
 
 		public void render(Graphics2D g)
 		{
 			if (read == null)
 				return;
 
-			int xReadS = read.getStartPosition();
-			int xReadE = read.getEndPosition();
-
 			int offset = rCanvas.offset * rCanvas.ntW;
 
 			int y  = lineIndex * rCanvas.ntH;
-			int xS = xReadS * rCanvas.ntW + offset;
-			int xE = xReadE * rCanvas.ntW + rCanvas.ntW + offset;
-
-			System.out.println("START: " + xReadS);
+			int xS = readS * rCanvas.ntW + offset;
+			int xE = readE * rCanvas.ntW + rCanvas.ntW + offset;
 
 			g.setColor(Color.red);
 			g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);

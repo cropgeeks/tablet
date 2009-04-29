@@ -45,7 +45,8 @@
 			<manifest>
 				<attribute name="Main-Class" value="av.gui.AssemblyViewer"/>
 				<attribute name="Class-Path"
-					value="scri-commons.jar"/>
+					value="scri-commons.jar
+						swing-layout-1.0.3.jar"/>
 			</manifest>
 		</jar>
 	</target>
