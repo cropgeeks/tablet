@@ -2,14 +2,19 @@ package av.gui.viewer;
 
 import java.awt.*;
 import java.awt.event.*;
+import javax.swing.*;
 import javax.swing.event.*;
 
 import av.data.*;
+import av.gui.*;
 
 class ReadsCanvasMouseListener extends MouseInputAdapter
 {
 	private AssemblyPanel aPanel;
 	private ReadsCanvas rCanvas;
+
+	// Deals with navigation issues
+	private NavigationHandler nHandler = new NavigationHandler();
 
 	private ReadOutliner readOutliner = new ReadOutliner();
 
@@ -29,6 +34,39 @@ class ReadsCanvasMouseListener extends MouseInputAdapter
 
 		aPanel.statusPanel.setLabels(null, null, null);
 		rCanvas.repaint();
+	}
+
+	public void mouseClicked(MouseEvent e)
+	{
+		if (e.getClickCount() == 2)
+		{
+			System.out.println("click");
+
+			// Toggle the layout type
+			if (Prefs.visReadLayout == 1)
+				Prefs.visReadLayout = 2;
+			else if (Prefs.visReadLayout == 2)
+				Prefs.visReadLayout = 1;
+
+			// Force the panel to update and redraw
+			aPanel.setContig(rCanvas.contig);
+		}
+	}
+
+	public void mousePressed(MouseEvent e)
+	{
+		if (SwingUtilities.isLeftMouseButton(e))
+			nHandler.mousePressed(e);
+	}
+
+	public void mouseReleased(MouseEvent e)
+	{
+		nHandler.mouseReleased(e);
+	}
+
+	public void mouseDragged(MouseEvent e)
+	{
+		nHandler.mouseDragged(e);
 	}
 
 	public void mouseMoved(MouseEvent e)
@@ -51,7 +89,39 @@ class ReadsCanvasMouseListener extends MouseInputAdapter
 			aPanel.repaint();
 	}
 
-	// Simple class to draw an outline around a specified read.
+	/** Inner class to handle navigation mouse events (dragging the canvas etc). */
+	private class NavigationHandler
+	{
+		private Point dragPoint;
+
+		void mousePressed(MouseEvent e)
+		{
+			dragPoint = e.getPoint();
+		}
+
+		void mouseReleased(MouseEvent e)
+		{
+			// Reset any dragging variables
+			dragPoint = null;
+			rCanvas.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
+		}
+
+		void mouseDragged(MouseEvent e)
+		{
+			// Dragging the canvas...
+			if (dragPoint != null)
+			{
+				rCanvas.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+				int diffX = dragPoint.x - e.getPoint().x;
+				int diffY = dragPoint.y - e.getPoint().y;
+
+				aPanel.moveBy(diffX, diffY);
+			}
+		}
+	}
+
+	// Inner class to draw an outline around a specified read.
 	private class ReadOutliner implements IOverlayRenderer
 	{
 		Read read;
