@@ -58,16 +58,20 @@ class ReadsCanvas extends JPanel
 	{
 		this.contig = contig;
 
-		reads  = contig.getReadManager();
-		offset = contig.getConsensusOffset();
-
-		computeDimensions(8, 8);
+		if (contig != null)
+		{
+			reads  = contig.getReadManager();
+			offset = contig.getConsensusOffset();
+		}
 	}
 
 	// Compute canvas related dimensions that only change if the data or the
 	// box-drawing size needs to be changed
 	void computeDimensions(int sizeX, int sizeY)
 	{
+		if (contig == null)
+			return;
+
 		Font font = new Font("Monospaced", Font.PLAIN, sizeY);
 		FontMetrics fm = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)
 			.getGraphics().getFontMetrics(font);
@@ -113,6 +117,9 @@ class ReadsCanvas extends JPanel
 	{
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
+
+		if (contig == null)
+			return;
 
 		// Index positions within the dataset that we'll start drawing from
 		xS = pX1 / ntW;

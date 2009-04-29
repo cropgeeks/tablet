@@ -30,8 +30,11 @@ class ConsensusCanvas extends JPanel
 	{
 		this.contig = contig;
 
-		consensus = contig.getConsensus();
-		offset = contig.getConsensusOffset();
+		if (contig != null)
+		{
+			consensus = contig.getConsensus();
+			offset = contig.getConsensusOffset();
+		}
 	}
 
 	public void paintComponent(Graphics graphics)
