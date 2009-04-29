@@ -35,6 +35,9 @@ public class Contig
 	public String getName()
 		{ return name; }
 
+	public String toString()
+		{ return name; }
+
 //	public void setName(String name)
 //		{ this.name = name; }
 
@@ -74,8 +77,8 @@ public class Contig
 		packSet = new PackSet(reads);
 		stackSet = new StackSet(reads);
 
-//		readManager = packSet;
-		readManager = stackSet;
+		readManager = packSet;
+//		readManager = stackSet;
 	}
 
 	public int getConsensusOffset()

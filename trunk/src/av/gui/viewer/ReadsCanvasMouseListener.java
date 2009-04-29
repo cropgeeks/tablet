@@ -33,6 +33,9 @@ class ReadsCanvasMouseListener extends MouseInputAdapter
 
 	public void mouseMoved(MouseEvent e)
 	{
+		if (rCanvas.contig == null)
+			return;
+
 		int xIndex = (e.getX() / rCanvas.ntW) - rCanvas.offset;
 		int yIndex = (e.getY() / rCanvas.ntH);
 

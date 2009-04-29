@@ -12,6 +12,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	private Assembly assembly;
 	private Contig contig;
 
+	private ContigPanel contigPanel;
 	private ConsensusCanvas consensusCanvas;
 	private ReadsCanvas readsCanvas;
 	NBStatusPanel statusPanel;
@@ -27,8 +28,8 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		JPanel consensusPanel = new JPanel(new BorderLayout());
 		consensusPanel.add(consensusCanvas);
 
-		setLayout(new BorderLayout());
-		setBorder(BorderFactory.createTitledBorder("Assembly Panel:"));
+		setLayout(new BorderLayout(5, 5));
+		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		JPanel topPanel = new JPanel(new BorderLayout());
 		topPanel.add(consensusPanel, BorderLayout.NORTH);
@@ -36,13 +37,18 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		JPanel centerPanel = new JPanel(new BorderLayout());
 		centerPanel.add(sp);
 
-		add(topPanel, BorderLayout.NORTH);
-		add(centerPanel, BorderLayout.CENTER);
-		add(statusPanel, BorderLayout.SOUTH);
+		JPanel visPanel = new JPanel(new BorderLayout());
+		visPanel.add(topPanel, BorderLayout.NORTH);
+		visPanel.add(centerPanel, BorderLayout.CENTER);
+		visPanel.add(statusPanel, BorderLayout.SOUTH);
+
+		add(visPanel);
+		add(contigPanel, BorderLayout.WEST);
 	}
 
 	private void createControls()
 	{
+		contigPanel = new ContigPanel(this);
 		readsCanvas = new ReadsCanvas(this);
 		consensusCanvas = new ConsensusCanvas(readsCanvas);
 		statusPanel = new NBStatusPanel(this);
@@ -61,11 +67,17 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	public void setAssembly(Assembly assembly)
 	{
 		this.assembly = assembly;
+		contigPanel.setAssembly(assembly);
+	}
 
-		contig = assembly.getContigs().get(0);
+	void setContig(Contig contig)
+	{
+		this.contig = contig;
 
 		consensusCanvas.setContig(contig);
 		readsCanvas.setContig(contig);
+
+		computePanelSizes();
 	}
 
 	public void adjustmentValueChanged(AdjustmentEvent e)
