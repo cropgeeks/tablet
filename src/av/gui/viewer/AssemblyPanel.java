@@ -13,6 +13,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	private Contig contig;
 
 	private ContigPanel contigPanel;
+	private OverviewCanvas overviewCanvas;
 	private ConsensusCanvas consensusCanvas;
 	private ReadsCanvas readsCanvas;
 	NBStatusPanel statusPanel;
@@ -31,8 +32,9 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		setLayout(new BorderLayout(5, 5));
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-		JPanel topPanel = new JPanel(new BorderLayout());
-		topPanel.add(consensusPanel, BorderLayout.NORTH);
+		JPanel topPanel = new JPanel(new BorderLayout(5, 5));
+		topPanel.add(overviewCanvas, BorderLayout.NORTH);
+		topPanel.add(consensusPanel, BorderLayout.CENTER);
 
 		JPanel centerPanel = new JPanel(new BorderLayout());
 		centerPanel.add(sp);
@@ -50,6 +52,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	{
 		contigPanel = new ContigPanel(this);
 		readsCanvas = new ReadsCanvas(this);
+		overviewCanvas = new OverviewCanvas(this, readsCanvas);
 		consensusCanvas = new ConsensusCanvas(readsCanvas);
 		statusPanel = new NBStatusPanel(this);
 
