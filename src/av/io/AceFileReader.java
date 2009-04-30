@@ -65,7 +65,7 @@ public class AceFileReader
 				processBaseQualities();
 
 			else if (str.startsWith("AS "))
-				expectedReads = Integer.parseInt(str.split(" ")[2]);
+				expectedReads = Integer.parseInt(str.split("\\s+")[2]);
 
 			else if (str.startsWith("BS "))
 			{
