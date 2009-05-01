@@ -19,7 +19,6 @@ class OverviewCanvas extends JPanel
 	private int w, h;
 
 	private float bX, bY, bW, bH;
-//	private float x1, y1, x2, y2;
 
 	OverviewCanvas(AssemblyPanel aPanel, ReadsCanvas rCanvas)
 	{
@@ -27,7 +26,7 @@ class OverviewCanvas extends JPanel
 		this.rCanvas = rCanvas;
 
 		setLayout(new BorderLayout());
-		setPreferredSize(new Dimension(0, 50));
+		setPreferredSize(new Dimension(0, 75));
 		add(canvas);
 
 		addComponentListener(new ComponentAdapter() {
@@ -70,7 +69,7 @@ class OverviewCanvas extends JPanel
 		if (bufferFactory == null)
 			return;
 
-		// Work out the x/y position for the outline box
+		// Work out the x1/y2 position for the outline box
 		bX = bufferFactory.xScale * xIndex;
 		bY = bufferFactory.yScale * yIndex;
 
@@ -99,6 +98,39 @@ class OverviewCanvas extends JPanel
 		Canvas2D()
 		{
 			setOpaque(false);
+
+			addMouseListener(new MouseAdapter()
+			{
+				public void mouseClicked(MouseEvent e)
+					{ processMouse(e); }
+
+				public void mousePressed(MouseEvent e)
+					{ processMouse(e); }
+
+				public void mouseReleased(MouseEvent e)
+					{ processMouse(e); }
+			});
+
+			addMouseMotionListener(new MouseMotionAdapter()
+			{
+				public void mouseDragged(MouseEvent e)
+					{ processMouse(e); }
+			});
+		}
+
+		private void processMouse(MouseEvent e)
+		{
+			if (aPanel == null)
+				return;
+
+			int x = e.getX() - (int) (bW / 2f);
+			int y = e.getY() - (int) (bH / 2f);
+
+			// Compute mouse position (and adjust by wid/hgt of rectangle)
+			int rowIndex = (int) (y / bufferFactory.yScale);
+			int colIndex = (int) (x / bufferFactory.xScale);
+
+			aPanel.moveToPosition(rowIndex, colIndex, false);
 		}
 
 		public void paintComponent(Graphics graphics)
@@ -180,7 +212,7 @@ class OverviewCanvas extends JPanel
 				for (int x = 0; x < w && !killMe; x++)
 				{
 					// Working out where each pixel maps to in the data...
-					int dataX = (int) (x * xScale);
+					int dataX = (int) (x * xScale) - rCanvas.offset;
 					int dataY = (int) (y * yScale);
 
 					// Then drawing that data (or not)
