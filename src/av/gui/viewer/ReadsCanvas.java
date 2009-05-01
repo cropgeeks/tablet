@@ -11,6 +11,8 @@ import av.gui.viewer.colors.*;
 
 class ReadsCanvas extends JPanel
 {
+	private AssemblyPanel aPanel;
+
 	Contig contig;
 	IReadManager reads;
 
@@ -50,6 +52,8 @@ class ReadsCanvas extends JPanel
 
 	ReadsCanvas(AssemblyPanel aPanel)
 	{
+		this.aPanel = aPanel;
+
 		setOpaque(false);
 
 		new ReadsCanvasMouseListener(aPanel, this);
@@ -61,8 +65,6 @@ class ReadsCanvas extends JPanel
 
 		if (contig != null)
 		{
-			System.out.println("Prefs.visReadLayout=" + Prefs.visReadLayout);
-
 			switch (Prefs.visReadLayout)
 			{
 				case 1: reads = contig.getPackSetManager();  break;
@@ -73,9 +75,12 @@ class ReadsCanvas extends JPanel
 		}
 	}
 
+	public Dimension getPreferredSize()
+		{ return dimension; }
+
 	// Compute canvas related dimensions that only change if the data or the
 	// box-drawing size needs to be changed
-	void computeDimensions(int sizeX, int sizeY)
+	void setDimensions(int sizeX, int sizeY)
 	{
 		if (contig == null)
 			return;
@@ -101,20 +106,26 @@ class ReadsCanvas extends JPanel
 	// the canvas
 	void computeForRedraw(Dimension viewSize, Point viewPosition)
 	{
+		if (contig == null)
+			return;
+
 		ntOnScreenX = 1 + (int) ((float) viewSize.getWidth()  / ntW);
 		ntOnScreenY = 1 + (int) ((float) viewSize.getHeight() / ntH);
 
 		pX1 = viewPosition.x;
-		pY1 = viewPosition.y;
-
 		pX2 = pX1 + viewSize.width;
+
+		pY1 = viewPosition.y;
 		pY2 = pY1 + viewSize.height;
 
+		updateOverview();
 		repaint();
 	}
 
-	public Dimension getPreferredSize()
-		{ return dimension; }
+	void updateOverview()
+	{
+		aPanel.updateOverview((pX1/ntW), ntOnScreenX, (pY1/ntH), ntOnScreenY);
+	}
 
 	private void updateColorScheme()
 	{
