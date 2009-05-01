@@ -143,8 +143,8 @@ class OverviewCanvas extends JPanel
 
 			// Paint the image of the alignment
 			g.drawImage(image, 0, 0, null);
-			g.setPaint(new Color(255, 255, 255, 50));
-			g.fillRect(0, 0, w, h);
+	//		g.setPaint(new Color(255, 255, 255, 50));
+	//		g.fillRect(0, 0, w, h);
 
 			// Then draw the tracking rectangle
 			g.setPaint(new Color(0, 0, 255, 50));
@@ -206,23 +206,66 @@ class OverviewCanvas extends JPanel
 			g.fillRect(0, 0, w, h);
 
 
-			// Loop over every pixel that makes up the overview...
-			for (int y = 0; y < h && !killMe; y++)
+			if (true)
 			{
-				for (int x = 0; x < w && !killMe; x++)
+				// Loop over every pixel that makes up the overview...
+				for (int y = 0; y < h && !killMe; y++)
 				{
-					// Working out where each pixel maps to in the data...
-					int dataX = (int) (x * xScale) - rCanvas.offset;
 					int dataY = (int) (y * yScale);
 
-					// Then drawing that data (or not)
-					Read read = reads.getReadAt(dataY, dataX);
-					if (read != null)
+					for (int x = 0; x < w && !killMe; x++)
 					{
-						byte b = read.getStateAt(dataX-read.getStartPosition());
+						// Working out where each pixel maps to in the data...
+						int dataX = (int) (x * xScale) - rCanvas.offset;
 
-						g.setColor(rCanvas.colors.getColor(b));
-						g.drawLine(x, y, x, y);
+						// Then drawing that data (or not)
+						Read read = reads.getReadAt(dataY, dataX);
+						if (read != null)
+						{
+							byte b = read.getStateAt(dataX-read.getStartPosition());
+
+							g.setColor(rCanvas.colors.getColor(b));
+							g.drawLine(x, y, x, y);
+						}
+					}
+				}
+			}
+			else
+			{
+				// Loop over every pixel that makes up the overview...
+				for (int y = 0; y < h && !killMe; y++)
+				{
+					int dataY = (int) (y * yScale);
+
+					for (int x = 0; x < w && !killMe; x++)
+					{
+						// Working out where each pixel maps to in the data...
+						// Each overview pixel maps to a window of data (x1 to x2)
+						int dataX1 = (int) (x * xScale) - rCanvas.offset;
+						int dataX2 = dataX1 + (int) xScale;
+
+						// Determine the percentage of actual data in this window
+						byte[] data = reads.getValues(dataY, dataX1, dataX2);
+
+						float dataCount = 0;
+						for (int i = 0; i < data.length; i++)
+							if (data[i] != -1)
+								dataCount++;
+
+						float percent = dataCount / (float)data.length;
+
+						// Draw the lower 10% in red
+						if (percent > 0 && percent < 0.1f)
+						{
+							g.setColor(new Color(255, 0, 0, 100));
+							g.drawLine(x, y, x, y);
+						}
+						// And the rest in shades of blue
+						else if (percent > 0)
+						{
+							g.setColor(new Color(0, 0, 255, (int)(255*(percent))));
+							g.drawLine(x, y, x, y);
+						}
 					}
 				}
 			}
