@@ -112,6 +112,31 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		vBar.setValue(vBar.getValue() + y);
 	}
 
+	// Jumps to a position relative to the given row and column
+	public void moveToPosition(int rowIndex, int colIndex, boolean centre)
+	{
+		// If 'centre' is true, offset by half the screen
+		int offset = 0;
+
+		if (rowIndex != -1)
+		{
+			if (centre)
+				offset = ((readsCanvas.ntOnScreenY * readsCanvas.ntH) / 2) - readsCanvas.ntH;
+
+			int y = rowIndex * readsCanvas.ntH - offset;
+			vBar.setValue(y);
+		}
+
+		if (colIndex != -1)
+		{
+			if (centre)
+				offset = ((readsCanvas.ntOnScreenX * readsCanvas.ntW) / 2) - readsCanvas.ntW;
+
+			int x = colIndex * readsCanvas.ntW - offset;
+			hBar.setValue(x);
+		}
+	}
+
 	void computePanelSizes()
 	{
 		int zoomX = statusPanel.getZoomX();

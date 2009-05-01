@@ -124,7 +124,10 @@ class ReadsCanvas extends JPanel
 
 	void updateOverview()
 	{
-		aPanel.updateOverview((pX1/ntW), ntOnScreenX, (pY1/ntH), ntOnScreenY);
+		int xS = (pX1/ntW);
+		int yS = (pY1/ntH);
+
+		aPanel.updateOverview(xS, ntOnScreenX, yS, ntOnScreenY);
 	}
 
 	private void updateColorScheme()
