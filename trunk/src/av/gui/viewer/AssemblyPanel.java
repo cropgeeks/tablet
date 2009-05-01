@@ -73,6 +73,11 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		contigPanel.setAssembly(assembly);
 	}
 
+	Assembly getAssembly()
+	{
+		return assembly;
+	}
+
 	void setContig(Contig contig)
 	{
 		this.contig = contig;
@@ -81,6 +86,8 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		readsCanvas.setContig(contig);
 
 		computePanelSizes();
+
+		overviewCanvas.createImage();
 	}
 
 	public void adjustmentValueChanged(AdjustmentEvent e)
@@ -91,6 +98,11 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
 
 		consensusCanvas.repaint();
+	}
+
+	void updateOverview(int xIndex, int xNum, int yIndex, int yNum)
+	{
+		overviewCanvas.updateOverview(xIndex, xNum, yIndex, yNum);
 	}
 
 	// Moves the scroll bars by the given amount in the x and y directions
@@ -105,11 +117,6 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		int zoomX = statusPanel.getZoomX();
 		int zoomY = statusPanel.getZoomY();
 
-		readsCanvas.computeDimensions(zoomX, zoomY);
-	}
-
-	Assembly getAssembly()
-	{
-		return assembly;
+		readsCanvas.setDimensions(zoomX, zoomY);
 	}
 }
