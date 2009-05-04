@@ -32,6 +32,28 @@ public class Consensus extends Sequence
 		System.out.println("scan count: " + i);
 	}
 
+	public byte[] getBaseQualityRange(int start, int end)
+	{
+		byte[] data = new byte[end-start+1];
+
+		int i = 0, d = 0;
+		int length = bq.length;
+
+		// Pre sequence data
+		for (i = start; i < 0 && i <= end; i++, d++)
+			data[d] = -1;
+
+		// Sequence data
+		for (i = i; i <= end && i < length; i++, d++)
+			data[d] = bq[i];
+
+		// Post sequence data
+		for (i = i; i <= end; i++, d++)
+			data[d] = -1;
+
+		return data;
+	}
+
 	/**
 	 * Returns an array of data for this sequence starting at start and ending
 	 * at end, but including any indices that may be outside of this sequence's
