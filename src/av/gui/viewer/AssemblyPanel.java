@@ -26,15 +26,15 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	{
 		createControls();
 
-		JPanel consensusPanel = new JPanel(new BorderLayout());
-		consensusPanel.add(consensusCanvas);
-
 		setLayout(new BorderLayout(5, 5));
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
+//		JPanel consensusPanel = new JPanel(new BorderLayout());
+//		consensusPanel.add(consensusCanvas);
+
 		JPanel topPanel = new JPanel(new BorderLayout(5, 5));
 		topPanel.add(overviewCanvas, BorderLayout.NORTH);
-		topPanel.add(consensusPanel, BorderLayout.CENTER);
+		topPanel.add(consensusCanvas, BorderLayout.CENTER);
 
 		JPanel centerPanel = new JPanel(new BorderLayout());
 		centerPanel.add(sp);
@@ -86,7 +86,6 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		readsCanvas.setContig(contig);
 
 		computePanelSizes();
-
 		overviewCanvas.createImage();
 	}
 
@@ -96,13 +95,13 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		// the new dimensions of the canvas being passed to it (window size
 		// changes will cause scrollbar movement events)
 		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
-
-		consensusCanvas.repaint();
 	}
 
 	void updateOverview(int xIndex, int xNum, int yIndex, int yNum)
 	{
 		overviewCanvas.updateOverview(xIndex, xNum, yIndex, yNum);
+
+		consensusCanvas.repaint();
 	}
 
 	// Moves the scroll bars by the given amount in the x and y directions
@@ -143,5 +142,6 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		int zoomY = statusPanel.getZoomY();
 
 		readsCanvas.setDimensions(zoomX, zoomY);
+		consensusCanvas.setDimensions();
 	}
 }
