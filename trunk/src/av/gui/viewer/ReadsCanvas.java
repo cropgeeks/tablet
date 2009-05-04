@@ -143,6 +143,12 @@ class ReadsCanvas extends JPanel
 		if (contig == null)
 			return;
 
+		g.setColor(new Color(240, 240, 255));
+		g.fillRect(0, 0, offset*ntW, getHeight());
+
+		int cLength = offset + contig.getConsensus().length();
+		g.fillRect(cLength*ntW, 0, canvasW-(cLength*ntW), getHeight());
+
 		// Index positions within the dataset that we'll start drawing from
 		xS = pX1 / ntW;
 		yS = pY1 / ntH;
