@@ -10,7 +10,7 @@ import scri.commons.gui.*;
 public class Tablet
 {
 	private static File prefsFile = new File(
-		System.getProperty("user.home"), ".assemblyviewer.xml");
+		System.getProperty("user.home"), ".tablet.xml");
 	private static Prefs prefs = new Prefs();
 
 	public static WinMain winMain;
@@ -45,7 +45,7 @@ public class Tablet
 			}
 		});
 
-		TaskDialog.initialize(winMain, "Assembly Viewer");
+		TaskDialog.initialize(winMain, "Tablet");
 
 		winMain.setVisible(true);
 	}
