@@ -1,11 +1,11 @@
-package av.gui.viewer;
+package tablet.gui.viewer;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import javax.swing.*;
 
-import av.data.*;
+import tablet.data.*;
 
 class OverviewCanvas extends JPanel
 {

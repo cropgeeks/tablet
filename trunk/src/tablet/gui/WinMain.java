@@ -1,13 +1,13 @@
-package av.gui;
+package tablet.gui;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.lang.management.*;
 import javax.swing.*;
 
-import av.data.*;
-import av.io.*;
-import av.gui.viewer.*;
+import tablet.data.*;
+import tablet.io.*;
+import tablet.gui.viewer.*;
 
 import scri.commons.gui.*;
 

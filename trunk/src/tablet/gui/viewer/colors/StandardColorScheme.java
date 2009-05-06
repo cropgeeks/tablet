@@ -1,10 +1,10 @@
-package av.gui.viewer.colors;
+package tablet.gui.viewer.colors;
 
 import java.awt.*;
 import java.awt.image.*;
 import java.util.*;
 
-import av.data.*;
+import tablet.data.*;
 
 public class StandardColorScheme extends ColorScheme
 {

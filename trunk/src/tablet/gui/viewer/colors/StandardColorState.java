@@ -1,4 +1,4 @@
-package av.gui.viewer.colors;
+package tablet.gui.viewer.colors;
 
 import java.awt.*;
 import java.awt.geom.*;

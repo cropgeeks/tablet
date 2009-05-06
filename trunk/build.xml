@@ -1,11 +1,11 @@
-<project name="AssemblyViewer" default="compile" basedir=".">
+<project name="Tablet" default="compile" basedir=".">
 
 	<property name="src"       location="src"/>
 	<property name="lib"       location="lib"/>
 	<property name="lib-devel" location="lib-devel"/>
 	<property name="classes"   location="classes"/>
 
-	<property name="av.jar" value="${lib}/av.jar"/>
+	<property name="tablet.jar" value="${lib}/tablet.jar"/>
 
 	<target name="init">
 	</target>
@@ -40,10 +40,10 @@
 	</target>
 
 	<target name="jar" depends="clean, compile">
-		<jar jarfile="${av.jar}">
+		<jar jarfile="${tablet.jar}">
 			<fileset dir="${classes}"/>
 			<manifest>
-				<attribute name="Main-Class" value="av.gui.AssemblyViewer"/>
+				<attribute name="Main-Class" value="tablet.gui.Tablet"/>
 				<attribute name="Class-Path"
 					value="scri-commons.jar
 						swing-layout-1.0.3.jar"/>

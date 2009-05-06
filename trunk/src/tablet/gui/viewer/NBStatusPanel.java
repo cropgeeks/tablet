@@ -1,4 +1,4 @@
-package av.gui.viewer;
+package tablet.gui.viewer;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -6,7 +6,7 @@ import java.text.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-import av.gui.*;
+import tablet.gui.*;
 
 class NBStatusPanel extends JPanel implements ActionListener, ChangeListener
 {

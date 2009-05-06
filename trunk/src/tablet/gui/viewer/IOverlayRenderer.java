@@ -1,4 +1,4 @@
-package av.gui.viewer;
+package tablet.gui.viewer;
 
 import java.awt.*;
 

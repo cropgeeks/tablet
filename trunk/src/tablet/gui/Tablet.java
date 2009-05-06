@@ -1,4 +1,4 @@
-package av.gui;
+package tablet.gui;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -7,7 +7,7 @@ import javax.swing.*;
 
 import scri.commons.gui.*;
 
-public class AssemblyViewer
+public class Tablet
 {
 	private static File prefsFile = new File(
 		System.getProperty("user.home"), ".assemblyviewer.xml");
@@ -21,10 +21,10 @@ public class AssemblyViewer
 		Prefs.setDefaults();
 		prefs.loadPreferences(prefsFile, Prefs.class);
 
-		new AssemblyViewer(args[0]);
+		new Tablet(args[0]);
 	}
 
-	AssemblyViewer(String filename)
+	Tablet(String filename)
 	{
 		try
 		{

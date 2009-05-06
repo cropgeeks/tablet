@@ -1,13 +1,13 @@
-package av.gui.viewer;
+package tablet.gui.viewer;
 
 import java.awt.*;
 import java.awt.image.*;
 import java.util.*;
 import javax.swing.*;
 
-import av.data.*;
-import av.gui.*;
-import av.gui.viewer.colors.*;
+import tablet.data.*;
+import tablet.gui.*;
+import tablet.gui.viewer.colors.*;
 
 class ReadsCanvas extends JPanel
 {

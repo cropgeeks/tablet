@@ -1,9 +1,9 @@
-package av.gui.viewer.colors;
+package tablet.gui.viewer.colors;
 
 import java.awt.*;
 import java.awt.image.*;
 
-import av.data.*;
+import tablet.data.*;
 
 public abstract class ColorScheme
 {
