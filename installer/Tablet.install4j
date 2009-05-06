@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.2.2" transformSequenceNumber="2">
   <directoryPresets config=".." />
-  <application name="Assembly Viewer" distributionSourceDir="" applicationId="9483-2571-4596-9336" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" missingFilesStrategy="warn" shortName="AssemblyViewer" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="0.09.04.28" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+  <application name="Tablet" distributionSourceDir="" applicationId="9483-2571-4596-9336" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" missingFilesStrategy="warn" shortName="Tablet" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="0.09.05.06" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -27,8 +27,8 @@
     <components />
   </files>
   <launchers>
-    <launcher name="av" id="20" external="false" excludeFromMenu="false" menuName="Assembly Viewer" icnsFile="" pngIcon16File="" pngIcon32File="" macServiceDependencies="" swtApp="false" fileset="">
-      <executable name="av" type="1" iconSet="false" iconFile="" executableDir="." redirectStderr="false" stderrFile="error.log" redirectStdout="false" stdoutFile="output.log" failOnStderrOutput="true" executableMode="2" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false">
+    <launcher name="tablet" id="20" external="false" excludeFromMenu="false" menuName="Tablet" icnsFile="" pngIcon16File="" pngIcon32File="" macServiceDependencies="" swtApp="false" fileset="">
+      <executable name="tablet" type="1" iconSet="false" iconFile="" executableDir="." redirectStderr="false" stderrFile="error.log" redirectStdout="false" stdoutFile="output.log" failOnStderrOutput="true" executableMode="2" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" />
       </executable>
       <splashScreen show="false" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="" java6SplashScreen="false">
@@ -37,9 +37,9 @@
           <versionLine x="20" y="40" text="version ${compiler:sys.version}" font="Arial" fontSize="8" fontColor="0,0,0" fontWeight="500" />
         </text>
       </splashScreen>
-      <java mainClass="av.gui.AssemblyViewer" vmParameters="-Xmx1024m" arguments="" allowVMPassthroughParameters="true" preferredVM="">
+      <java mainClass="tablet.gui.Tablet" vmParameters="-Xmx1024m" arguments="" allowVMPassthroughParameters="true" preferredVM="">
         <classPath>
-          <archive location="lib/av.jar" failOnError="false" />
+          <archive location="lib/tablet.jar" failOnError="false" />
         </classPath>
         <nativeLibraryDirectories />
       </java>
@@ -294,7 +294,7 @@
     </applications>
   </installerGui>
   <mediaSets>
-    <win32Archive name="Windows Archive" id="21" mediaFileName="" installDir="AssemblyViewer" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.6.0_13" manualJREEntry="false">
+    <win32Archive name="Windows Archive" id="21" mediaFileName="" installDir="Tablet" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.6.0_13" manualJREEntry="false">
       <excludedLaunchers />
       <excludedComponents />
       <excludedBeans />
