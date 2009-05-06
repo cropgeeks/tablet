@@ -14,6 +14,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 	private ContigPanel contigPanel;
 	private OverviewCanvas overviewCanvas;
+	private ScaleCanvas scaleCanvas;
 	private ConsensusCanvas consensusCanvas;
 	private ReadsCanvas readsCanvas;
 	NBStatusPanel statusPanel;
@@ -29,17 +30,18 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		setLayout(new BorderLayout(5, 5));
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-//		JPanel consensusPanel = new JPanel(new BorderLayout());
-//		consensusPanel.add(consensusCanvas);
+		JPanel consensusPanel = new JPanel(new BorderLayout(5, 5));
+		consensusPanel.add(consensusCanvas);
+		consensusPanel.add(scaleCanvas, BorderLayout.SOUTH);
 
 		JPanel topPanel = new JPanel(new BorderLayout(5, 5));
 		topPanel.add(overviewCanvas, BorderLayout.NORTH);
-		topPanel.add(consensusCanvas, BorderLayout.CENTER);
+		topPanel.add(consensusPanel, BorderLayout.CENTER);
 
 		JPanel centerPanel = new JPanel(new BorderLayout());
 		centerPanel.add(sp);
 
-		JPanel visPanel = new JPanel(new BorderLayout());
+		JPanel visPanel = new JPanel(new BorderLayout(5, 5));
 		visPanel.add(topPanel, BorderLayout.NORTH);
 		visPanel.add(centerPanel, BorderLayout.CENTER);
 		visPanel.add(statusPanel, BorderLayout.SOUTH);
@@ -54,6 +56,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		readsCanvas = new ReadsCanvas(this);
 		overviewCanvas = new OverviewCanvas(this, readsCanvas);
 		consensusCanvas = new ConsensusCanvas(readsCanvas);
+		scaleCanvas = new ScaleCanvas(readsCanvas);
 		statusPanel = new NBStatusPanel(this);
 
 		sp = new JScrollPane();
@@ -83,6 +86,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		this.contig = contig;
 
 		consensusCanvas.setContig(contig);
+		scaleCanvas.setContig(contig);
 		readsCanvas.setContig(contig);
 
 		computePanelSizes();
@@ -100,8 +104,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	void updateOverview(int xIndex, int xNum, int yIndex, int yNum)
 	{
 		overviewCanvas.updateOverview(xIndex, xNum, yIndex, yNum);
-
-		consensusCanvas.repaint();
+		repaint();
 	}
 
 	// Moves the scroll bars by the given amount in the x and y directions
