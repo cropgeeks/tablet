@@ -42,7 +42,7 @@ public class WinMain extends JFrame
 		assemblyPanel.setAssembly(assembly);
 
 
-		setTitle("Assembly Viewer");
+		setTitle("Tablet");
 //		setIconImage(Icons.getIcon("AV").getImage());
 
 		setSize(Prefs.guiWinMainWidth, Prefs.guiWinMainHeight);
