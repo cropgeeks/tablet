@@ -1,11 +1,11 @@
-package av.gui.viewer;
+package tablet.gui.viewer;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import av.data.*;
-import av.gui.*;
+import tablet.data.*;
+import tablet.gui.*;
 
 public class AssemblyPanel extends JPanel implements AdjustmentListener
 {

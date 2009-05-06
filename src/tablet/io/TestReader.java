@@ -1,10 +1,10 @@
-package av.io;
+package tablet.io;
 
 import java.io.*;
 import java.util.*;
 import java.util.zip.*;
 
-import av.data.*;
+import tablet.data.*;
 
 public class TestReader
 {

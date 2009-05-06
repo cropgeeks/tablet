@@ -1,12 +1,12 @@
-package av.gui.viewer;
+package tablet.gui.viewer;
 
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-import av.data.*;
-import av.gui.*;
+import tablet.data.*;
+import tablet.gui.*;
 
 class ReadsCanvasMouseListener extends MouseInputAdapter
 {

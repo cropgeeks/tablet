@@ -1,4 +1,4 @@
-package av.data;
+package tablet.data;
 
 import junit.framework.*;
 

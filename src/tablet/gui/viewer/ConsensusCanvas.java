@@ -1,11 +1,11 @@
-package av.gui.viewer;
+package tablet.gui.viewer;
 
 import java.awt.*;
 import java.awt.image.*;
 import javax.swing.*;
 
-import av.data.*;
-import av.gui.viewer.colors.*;
+import tablet.data.*;
+import tablet.gui.viewer.colors.*;
 
 class ConsensusCanvas extends JPanel
 {

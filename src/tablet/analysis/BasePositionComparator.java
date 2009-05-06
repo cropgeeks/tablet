@@ -1,6 +1,6 @@
-package av.analysis;
+package tablet.analysis;
 
-import av.data.*;
+import tablet.data.*;
 
 /**
  * Given an assembly, this class will compare every read in each contig against
