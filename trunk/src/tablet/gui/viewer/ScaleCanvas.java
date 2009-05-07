@@ -1,6 +1,7 @@
 package tablet.gui.viewer;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.*;
 import java.text.*;
 import javax.swing.*;
@@ -29,6 +30,27 @@ class ScaleCanvas extends JPanel
 	{
 		setOpaque(false);
 		setPreferredSize(new Dimension(0, h));
+
+		// Simple mouse listeners to update the base position on mouse overs
+		addMouseListener(new MouseAdapter()
+		{
+			public void mouseExited(MouseEvent e)
+			{
+				setMouseBase(null);
+			}
+		});
+
+		addMouseMotionListener(new MouseMotionAdapter()
+		{
+			public void mouseMoved(MouseEvent e)
+			{
+				if (rCanvas.contig == null)
+					return;
+
+				int xIndex = (e.getX() / rCanvas.ntW) - rCanvas.offset;
+				setMouseBase(xIndex);
+			}
+		});
 	}
 
 	void setAssemblyPanel(AssemblyPanel aPanel)
