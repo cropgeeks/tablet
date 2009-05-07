@@ -37,6 +37,7 @@ class ConsensusCanvas extends JPanel
 	void setAssemblyPanel(AssemblyPanel aPanel)
 	{
 		rCanvas = aPanel.readsCanvas;
+		new ConsensusCanvasML(aPanel);
 	}
 
 	void setContig(Contig contig)

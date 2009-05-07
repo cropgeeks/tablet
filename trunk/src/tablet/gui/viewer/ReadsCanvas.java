@@ -58,7 +58,7 @@ class ReadsCanvas extends JPanel
 	void setAssemblyPanel(AssemblyPanel aPanel)
 	{
 		this.aPanel = aPanel;
-		new ReadsCanvasMouseListener(aPanel);
+		new ReadsCanvasML(aPanel);
 	}
 
 	void setContig(Contig contig)

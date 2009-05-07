@@ -8,7 +8,7 @@ import javax.swing.event.*;
 import tablet.data.*;
 import tablet.gui.*;
 
-class ReadsCanvasMouseListener extends MouseInputAdapter
+class ReadsCanvasML extends MouseInputAdapter
 {
 	private AssemblyPanel aPanel;
 	private ReadsCanvas rCanvas;
@@ -19,7 +19,7 @@ class ReadsCanvasMouseListener extends MouseInputAdapter
 
 	private ReadOutliner readOutliner = new ReadOutliner();
 
-	ReadsCanvasMouseListener(AssemblyPanel aPanel)
+	ReadsCanvasML(AssemblyPanel aPanel)
 	{
 		this.aPanel = aPanel;
 		rCanvas = aPanel.readsCanvas;
@@ -43,8 +43,6 @@ class ReadsCanvasMouseListener extends MouseInputAdapter
 	{
 		if (e.getClickCount() == 2)
 		{
-			System.out.println("click");
-
 			// Toggle the layout type
 			if (Prefs.visReadLayout == 1)
 				Prefs.visReadLayout = 2;
