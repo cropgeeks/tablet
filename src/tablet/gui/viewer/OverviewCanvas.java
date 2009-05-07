@@ -20,11 +20,8 @@ class OverviewCanvas extends JPanel
 
 	private float bX, bY, bW, bH;
 
-	OverviewCanvas(AssemblyPanel aPanel, ReadsCanvas rCanvas)
+	OverviewCanvas()
 	{
-		this.aPanel = aPanel;
-		this.rCanvas = rCanvas;
-
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(0, 75));
 		add(canvas);
@@ -34,6 +31,12 @@ class OverviewCanvas extends JPanel
 				createImage();
 			}
 		});
+	}
+
+	void setAssemblyPanel(AssemblyPanel aPanel)
+	{
+		this.aPanel = aPanel;
+		rCanvas = aPanel.readsCanvas;
 	}
 
 	void createImage()

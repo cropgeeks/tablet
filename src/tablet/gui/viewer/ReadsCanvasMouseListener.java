@@ -12,16 +12,18 @@ class ReadsCanvasMouseListener extends MouseInputAdapter
 {
 	private AssemblyPanel aPanel;
 	private ReadsCanvas rCanvas;
+	private ScaleCanvas sCanvas;
 
 	// Deals with navigation issues
 	private NavigationHandler nHandler = new NavigationHandler();
 
 	private ReadOutliner readOutliner = new ReadOutliner();
 
-	ReadsCanvasMouseListener(AssemblyPanel aPanel, ReadsCanvas rCanvas)
+	ReadsCanvasMouseListener(AssemblyPanel aPanel)
 	{
 		this.aPanel = aPanel;
-		this.rCanvas = rCanvas;
+		rCanvas = aPanel.readsCanvas;
+		sCanvas = aPanel.scaleCanvas;
 
 		rCanvas.addMouseListener(this);
 		rCanvas.addMouseMotionListener(this);
@@ -33,6 +35,7 @@ class ReadsCanvasMouseListener extends MouseInputAdapter
 		readOutliner.read = null;
 
 		aPanel.statusPanel.setLabels(null, null, null);
+		sCanvas.setMouseBase(null);
 		rCanvas.repaint();
 	}
 
@@ -76,6 +79,8 @@ class ReadsCanvasMouseListener extends MouseInputAdapter
 
 		int xIndex = (e.getX() / rCanvas.ntW) - rCanvas.offset;
 		int yIndex = (e.getY() / rCanvas.ntH);
+
+		sCanvas.setMouseBase(xIndex);
 
 		// Track the previously outlined read
 		Read readOld = readOutliner.read;

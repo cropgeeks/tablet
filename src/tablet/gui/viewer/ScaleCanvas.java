@@ -16,15 +16,24 @@ class ScaleCanvas extends JPanel
 	private Consensus consensus;
 	private ReadsCanvas rCanvas;
 
+	private int h = 22;
+
+	// The data index position (0 indexed) of the base under the mouse
+	// May be negative too
+	private Integer mouseBase;
+
 	// The LHS offset (difference) between the left-most read and the consensus
 	int offset;
 
-	ScaleCanvas(ReadsCanvas rCanvas)
+	ScaleCanvas()
 	{
-		this.rCanvas = rCanvas;
-
 		setOpaque(false);
-		setPreferredSize(new Dimension(0, 20));
+		setPreferredSize(new Dimension(0, h));
+	}
+
+	void setAssemblyPanel(AssemblyPanel aPanel)
+	{
+		rCanvas = aPanel.readsCanvas;
 	}
 
 	void setContig(Contig contig)
@@ -36,6 +45,12 @@ class ScaleCanvas extends JPanel
 			consensus = contig.getConsensus();
 			offset = contig.getConsensusOffset();
 		}
+	}
+
+	void setMouseBase(Integer mouseBase)
+	{
+		this.mouseBase = mouseBase;
+		repaint();
 	}
 
 	public void paintComponent(Graphics graphics)
@@ -51,8 +66,6 @@ class ScaleCanvas extends JPanel
 		int xS = rCanvas.xS;
 		int xE = rCanvas.xE;
 
-		g.setColor(new Color(167, 166, 170));
-
 		g.translate(-rCanvas.pX1 + 1, 0); // +1 for edge of display
 
 		// Determine rhs of canvas
@@ -61,22 +74,43 @@ class ScaleCanvas extends JPanel
 		if (x2 > rCanvas.canvasW)
 			x2 = rCanvas.canvasW;
 
-		g.drawLine(x1, 0, x1, getHeight());
+		g.setColor(new Color(167, 166, 170));
+		g.drawLine(x1, 0, x1, h);
 		g.drawLine(x1, 3, x2-1, 3);
-		g.drawLine(x2-1, 0, x2-1, getHeight());
+		g.drawLine(x2-1, 0, x2-1, h);
 
 		// Draw ticks at intervals of 5 and 25 bases
 		for (int i = xS; i <= xE; i++)
 		{
-			if ((i+1) % 5 == 0)
+			if ((i-offset+1) % 25 == 0)
+				g.drawLine(i*ntW+(ntW/2), 0, i*ntW+(ntW/2), 8);
+
+			else if ((i-offset+1) % 5 == 0)
 				g.drawLine(i*ntW+(ntW/2), 3, i*ntW+(ntW/2), 8);
-			if ((i+1) % 25 == 0)
-				g.drawLine(i*ntW+(ntW/2), 3, i*ntW+(ntW/2), 12);
 		}
 
 		g.setColor(Color.red);
-		g.drawString(d.format(xS+1-offset), x1+5, 15);
-		g.drawString(d.format(xE+1-offset), x2-25, 15);
+		g.drawString(d.format(xS+1-offset), x1+5, 20);
+		g.drawString(d.format(xE+1-offset), x2-25, 20);
+
+		if (mouseBase != null)
+		{
+			String str = d.format(mouseBase+1) + " ("
+				+ d.format(mouseBase+1) + ")";
+			int strWidth = g.getFontMetrics().stringWidth(str);
+
+			g.setColor(Color.red);
+
+			int tick = (mouseBase+offset) * ntW + (ntW/2);
+			g.drawLine(tick, 0, tick, 3);
+
+			// Work out where to start drawing: base position + 1/2 a base
+			int x = (mouseBase+offset) * ntW + (ntW/2);
+
+			int pos = getPosition(x, strWidth);
+
+			g.drawString(str, pos, 20);
+		}
 	}
 
 	// Computes the best position to draw a string onscreen, assuming an optimum

@@ -22,10 +22,8 @@ class ConsensusCanvas extends JPanel
 
 	private Dimension dimension = new Dimension();
 
-	ConsensusCanvas(ReadsCanvas rCanvas)
+	ConsensusCanvas()
 	{
-		this.rCanvas = rCanvas;
-
 		setOpaque(false);
 
 		// Set up the base quality colours
@@ -34,6 +32,11 @@ class ConsensusCanvas extends JPanel
 
 		c1 = new int[] { col1.getRed(), col1.getGreen(), col1.getBlue() };
 		c2 = new int[] { col2.getRed(), col2.getGreen(), col2.getBlue() };
+	}
+
+	void setAssemblyPanel(AssemblyPanel aPanel)
+	{
+		rCanvas = aPanel.readsCanvas;
 	}
 
 	void setContig(Contig contig)
