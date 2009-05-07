@@ -115,7 +115,10 @@ class ReadsCanvas extends JPanel
 		ntOnScreenY = 1 + (int) ((float) viewSize.getHeight() / ntH);
 
 		pX1 = viewPosition.x;
-		pX2 = pX1 + viewSize.width;
+		pX2 = pX1 + viewSize.width -1;
+		// Adjust for canvases that are smaller than the window size
+		if (pX2 > canvasW)
+			pX2 = canvasW;
 
 		pY1 = viewPosition.y;
 		pY2 = pY1 + viewSize.height;

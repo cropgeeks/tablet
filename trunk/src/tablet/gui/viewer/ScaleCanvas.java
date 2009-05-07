@@ -61,25 +61,26 @@ class ScaleCanvas extends JPanel
 		if (contig == null)
 			return;
 
-		int ntW = rCanvas.ntW;
-		int ntH = rCanvas.ntH;
-		int xS = rCanvas.xS;
-		int xE = rCanvas.xE;
-
 		g.translate(-rCanvas.pX1 + 1, 0); // +1 for edge of display
 
-		// Determine rhs of canvas
+
+		int ntW = rCanvas.ntW;
+		int ntH = rCanvas.ntH;
+
+		// Determine lhs and rhs of canvas
 		int x1 = rCanvas.pX1;
 		int x2 = rCanvas.pX2;
-		if (x2 > rCanvas.canvasW)
-			x2 = rCanvas.canvasW;
 
+		int xS = x1 / ntW;
+		int xE = x2 / ntW;
+
+		// Draw the scale bar
 		g.setColor(new Color(167, 166, 170));
 		g.drawLine(x1, 0, x1, h);
 		g.drawLine(x1, 3, x2-1, 3);
 		g.drawLine(x2-1, 0, x2-1, h);
 
-		// Draw ticks at intervals of 5 and 25 bases
+		// And ticks at intervals of 5 and 25 bases
 		for (int i = xS; i <= xE; i++)
 		{
 			if ((i-offset+1) % 25 == 0)
@@ -90,27 +91,47 @@ class ScaleCanvas extends JPanel
 		}
 
 		g.setColor(Color.red);
-		g.drawString(d.format(xS+1-offset), x1+5, 20);
-		g.drawString(d.format(xE+1-offset), x2-25, 20);
 
+		int mouseBaseS = 0, mouseBaseE =  0;
+
+		// REMINDER: mouseBase = base pos under mouse (0 indexed on consensus)
 		if (mouseBase != null)
 		{
-			String str = d.format(mouseBase+1) + " ("
-				+ d.format(mouseBase+1) + ")";
-			int strWidth = g.getFontMetrics().stringWidth(str);
-
-			g.setColor(Color.red);
-
-			int tick = (mouseBase+offset) * ntW + (ntW/2);
-			g.drawLine(tick, 0, tick, 3);
+			// If the mouse is beyond the edge of the data, don't do anything
+			if (mouseBase+offset+1 > rCanvas.ntOnCanvasX)
+				return;
 
 			// Work out where to start drawing: base position + 1/2 a base
 			int x = (mouseBase+offset) * ntW + (ntW/2);
+			// Draw a tick there
+			g.drawLine(x, 0, x, 3);
 
+			// Then format, centre and draw the message
+			String str = d.format(mouseBase+1) + " (#)";
+
+			int strWidth = g.getFontMetrics().stringWidth(str);
 			int pos = getPosition(x, strWidth);
-
 			g.drawString(str, pos, 20);
+
+			mouseBaseS = pos;
+			mouseBaseE = pos+strWidth-1;
 		}
+
+		// Attempt to mark the base position on the LHS of the canvas
+		String lhsStr = d.format(xS+1-offset);
+		int strWidth  = g.getFontMetrics().stringWidth(lhsStr);
+		int pos = getPosition(x1, strWidth);;
+
+		if (mouseBase == null || mouseBaseS > pos+strWidth-1)
+			g.drawString(lhsStr, pos, 20);
+
+		// Attempt to mark the base position on the RHS of the canvas
+		String rhsStr = d.format(xE+1-offset);
+		strWidth  = g.getFontMetrics().stringWidth(rhsStr);
+		pos = getPosition(x2, strWidth);
+
+		if (mouseBase == null || mouseBaseE < pos)
+			g.drawString(rhsStr, pos, 20);
 	}
 
 	// Computes the best position to draw a string onscreen, assuming an optimum
@@ -124,10 +145,10 @@ class ScaleCanvas extends JPanel
 
 		// If we're offscreen to the left, adjust...
 		if (leftPos < rCanvas.pX1)
-			leftPos = rCanvas.pX1+1;
+			leftPos = rCanvas.pX1+3;
 		// Similarly if we're offscreen to the right...
 		if (rghtPos > rCanvas.pX2)
-			leftPos = rCanvas.pX2-strWidth-1;
+			leftPos = rCanvas.pX2-strWidth-3;
 
 		return leftPos;
 	}
