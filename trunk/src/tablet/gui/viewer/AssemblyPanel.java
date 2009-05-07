@@ -12,11 +12,11 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	private Assembly assembly;
 	private Contig contig;
 
-	private ContigPanel contigPanel;
-	private OverviewCanvas overviewCanvas;
-	private ScaleCanvas scaleCanvas;
-	private ConsensusCanvas consensusCanvas;
-	private ReadsCanvas readsCanvas;
+	ContigPanel contigPanel;
+	OverviewCanvas overviewCanvas;
+	ScaleCanvas scaleCanvas;
+	ConsensusCanvas consensusCanvas;
+	ReadsCanvas readsCanvas;
 	NBStatusPanel statusPanel;
 
 	private JScrollPane sp;
@@ -53,11 +53,17 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	private void createControls()
 	{
 		contigPanel = new ContigPanel(this);
-		readsCanvas = new ReadsCanvas(this);
-		overviewCanvas = new OverviewCanvas(this, readsCanvas);
-		consensusCanvas = new ConsensusCanvas(readsCanvas);
-		scaleCanvas = new ScaleCanvas(readsCanvas);
 		statusPanel = new NBStatusPanel(this);
+
+		readsCanvas = new ReadsCanvas();
+		overviewCanvas = new OverviewCanvas();
+		consensusCanvas = new ConsensusCanvas();
+		scaleCanvas = new ScaleCanvas();
+
+		readsCanvas.setAssemblyPanel(this);
+		overviewCanvas.setAssemblyPanel(this);
+		consensusCanvas.setAssemblyPanel(this);
+		scaleCanvas.setAssemblyPanel(this);
 
 		sp = new JScrollPane();
 		viewport = sp.getViewport();

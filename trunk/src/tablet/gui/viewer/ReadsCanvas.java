@@ -50,13 +50,15 @@ class ReadsCanvas extends JPanel
 	LinkedList<IOverlayRenderer> overlays = new LinkedList<IOverlayRenderer>();
 
 
-	ReadsCanvas(AssemblyPanel aPanel)
+	ReadsCanvas()
+	{
+		setOpaque(false);
+	}
+
+	void setAssemblyPanel(AssemblyPanel aPanel)
 	{
 		this.aPanel = aPanel;
-
-		setOpaque(false);
-
-		new ReadsCanvasMouseListener(aPanel, this);
+		new ReadsCanvasMouseListener(aPanel);
 	}
 
 	void setContig(Contig contig)
