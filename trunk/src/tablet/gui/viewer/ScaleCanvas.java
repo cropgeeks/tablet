@@ -86,23 +86,27 @@ class ScaleCanvas extends JPanel
 		if (contig == null)
 			return;
 
-		g.translate(-rCanvas.pX1 + 1, 0); // +1 for edge of display
-
-		int ntW = rCanvas.ntW;
-		int ntH = rCanvas.ntH;
-
 		// Determine lhs and rhs of canvas
 		int x1 = rCanvas.pX1;
 		int x2 = rCanvas.pX2;
+		int width = (x2-x1+1);
 
+		// Clip to only draw what's needed (mainly ignoring what would appear
+		// above the vertical scrollbar of the reads canvas)
+		g.setClip(1, 0, width, h);
+		g.translate(1-x1, 0);
+
+
+		int ntW = rCanvas.ntW;
+		int ntH = rCanvas.ntH;
 		int xS = x1 / ntW;
 		int xE = x2 / ntW;
 
 		// Draw the scale bar
 		g.setColor(new Color(167, 166, 170));
 		g.drawLine(x1, 0, x1, h);
-		g.drawLine(x1, 3, x2-1, 3);
-		g.drawLine(x2-1, 0, x2-1, h);
+		g.drawLine(x1, 3, x2, 3);
+		g.drawLine(x2, 0, x2, h);
 
 		// And ticks at intervals of 5 and 25 bases
 		for (int i = xS; i <= xE; i++)

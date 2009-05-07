@@ -20,16 +20,46 @@ class OverviewCanvas extends JPanel
 
 	private float bX, bY, bW, bH;
 
+	private boolean basicView = true;
+
 	OverviewCanvas()
 	{
 		setLayout(new BorderLayout());
 		setPreferredSize(new Dimension(0, 75));
 		add(canvas);
 
+		// Resize listener (resized = time to redraw)
 		addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {
 				createImage();
 			}
+		});
+
+		// Mouse listener for the canvas
+		canvas.addMouseListener(new MouseAdapter()
+		{
+			public void mouseClicked(MouseEvent e)
+			{
+				if (e.getClickCount() == 2)
+				{
+					basicView = !basicView;
+					createImage();
+				}
+				else
+					canvas.processMouse(e);
+			}
+
+			public void mousePressed(MouseEvent e)
+				{ canvas.processMouse(e); }
+
+			public void mouseReleased(MouseEvent e)
+				{ canvas.processMouse(e); }
+		});
+
+		canvas.addMouseMotionListener(new MouseMotionAdapter()
+		{
+			public void mouseDragged(MouseEvent e)
+				{ canvas.processMouse(e); }
 		});
 	}
 
@@ -101,24 +131,6 @@ class OverviewCanvas extends JPanel
 		Canvas2D()
 		{
 			setOpaque(false);
-
-			addMouseListener(new MouseAdapter()
-			{
-				public void mouseClicked(MouseEvent e)
-					{ processMouse(e); }
-
-				public void mousePressed(MouseEvent e)
-					{ processMouse(e); }
-
-				public void mouseReleased(MouseEvent e)
-					{ processMouse(e); }
-			});
-
-			addMouseMotionListener(new MouseMotionAdapter()
-			{
-				public void mouseDragged(MouseEvent e)
-					{ processMouse(e); }
-			});
 		}
 
 		private void processMouse(MouseEvent e)
@@ -209,7 +221,7 @@ class OverviewCanvas extends JPanel
 			g.fillRect(0, 0, w, h);
 
 
-			if (true)
+			if (basicView)
 			{
 				// Loop over every pixel that makes up the overview...
 				for (int y = 0; y < h && !killMe; y++)
