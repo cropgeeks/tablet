@@ -49,8 +49,11 @@ class ScaleCanvas extends JPanel
 
 	void setMouseBase(Integer mouseBase)
 	{
-		this.mouseBase = mouseBase;
-		repaint();
+		if (this.mouseBase != mouseBase)
+		{
+			this.mouseBase = mouseBase;
+			repaint();
+		}
 	}
 
 	public void paintComponent(Graphics graphics)
@@ -62,7 +65,6 @@ class ScaleCanvas extends JPanel
 			return;
 
 		g.translate(-rCanvas.pX1 + 1, 0); // +1 for edge of display
-
 
 		int ntW = rCanvas.ntW;
 		int ntH = rCanvas.ntH;
@@ -104,7 +106,7 @@ class ScaleCanvas extends JPanel
 			// Work out where to start drawing: base position + 1/2 a base
 			int x = (mouseBase+offset) * ntW + (ntW/2);
 			// Draw a tick there
-			g.drawLine(x, 0, x, 3);
+			g.drawLine(x, 0, x, 8);
 
 			// Then format, centre and draw the message
 			String str = d.format(mouseBase+1) + " (#)";
