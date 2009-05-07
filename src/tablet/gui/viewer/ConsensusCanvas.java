@@ -70,15 +70,23 @@ class ConsensusCanvas extends JPanel
 		if (contig == null)
 			return;
 
+		// Determine lhs and rhs of canvas
+		int x1 = rCanvas.pX1;
+		int x2 = rCanvas.pX2;
+		int width = (x2-x1+1);
+
+		// Clip to only draw what's needed (mainly ignoring what would appear
+		// above the vertical scrollbar of the reads canvas)
+		g.setClip(1, 0, width, getHeight());
+		g.translate(1-x1, 0);
+
+
 		int ntW = rCanvas.ntW;
 		int ntH = rCanvas.ntH;
 		int xS = rCanvas.xS;
 		int xE = rCanvas.xE;
 
 		ColorScheme colors = rCanvas.colors;
-
-		g.translate(-rCanvas.pX1 + 1, 0); // +1 for edge of display
-
 
 		// Draw the quality scores
 		byte[] bq = consensus.getBaseQualityRange(xS-offset, xE-offset);
