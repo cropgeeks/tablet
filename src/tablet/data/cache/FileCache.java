@@ -15,7 +15,7 @@ public class FileCache implements IReadCache
 	// TODO: FileCache: This class needs to be made to work properly with
 	// unicode character streams
 
-	private CacheIndex index = new CacheIndex();
+	private FileCacheIndex index = new FileCacheIndex();
 
 	// Used while writing to the cache
 	private BufferedOutputStream out;
