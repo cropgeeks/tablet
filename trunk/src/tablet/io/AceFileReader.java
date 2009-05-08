@@ -137,17 +137,18 @@ public class AceFileReader
 		String[] AF = str.split(" ");
 
 		String name = new String(AF[1]);
-		boolean complemented = (AF[2].charAt(0) == 'C');
+		boolean isComplemented = (AF[2].charAt(0) == 'C');
 		int position = Integer.parseInt(AF[3]);
 
 		// Store the read's name in the cache; but only store the returned
 		// lookup ID for that name in the read
-		int id = readCache.setName(name);
+		ReadMetaData rmd = new ReadMetaData(name, isComplemented);
+		int id = readCache.setReadMetaData(rmd);
 
-		read = new Read(id, complemented, position-1);
+		read = new Read(id, position-1);
 		contig.getReads().add(read);
 
-		if (id % 100000 == 0)
+		if (id % 100000 == 0 && id != 0)
 			System.out.println(" read id for contig: " + id);
 	}
 

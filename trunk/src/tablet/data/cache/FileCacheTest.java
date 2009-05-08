@@ -4,6 +4,8 @@ import java.io.*;
 
 import junit.framework.*;
 
+import tablet.data.*;
+
 public class FileCacheTest extends TestCase
 {
 	public static void main(String[] args)
@@ -23,21 +25,26 @@ public class FileCacheTest extends TestCase
 		{
 			String name = "NAME_" + i;
 
-			cache.setName(name);
+			cache.setReadMetaData(new ReadMetaData(name, i % 2 == 0));
 		}
 
 		cache.close();
 
 		cache = cache.createReadableCache(cacheFile, indexFile);
 
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < 10; i++)
 		{
+			ReadMetaData rmd = cache.getReadMetaData(i);
+
 			String expected = "NAME_" + i;
-			String fromFile = cache.getName(i);
-
-			System.out.println("Expected: " + expected + ", read: " + fromFile);
-
+			String fromFile = rmd.getName();
 			assertEquals(expected, fromFile);
+
+			boolean isComplemented = (i % 2 == 0);
+			boolean isFromFile     = rmd.isComplemented();
+			assertEquals(isComplemented, isFromFile);
+
+			System.out.println(fromFile + ", " + isFromFile);
 		}
 	}
 }

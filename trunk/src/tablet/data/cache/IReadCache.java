@@ -1,10 +1,12 @@
 package tablet.data.cache;
 
+import tablet.data.*;
+
 public interface IReadCache
 {
-	public String getName(int id);
+	public ReadMetaData getReadMetaData(int id);
 
-	public int setName(String name)
+	public int setReadMetaData(ReadMetaData readMetaData)
 		throws Exception;
 
 	public void close()

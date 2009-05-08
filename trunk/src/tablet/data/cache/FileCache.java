@@ -2,6 +2,8 @@ package tablet.data.cache;
 
 import java.io.*;
 
+import tablet.data.*;
+
 /**
  * Concrete implementation of the IDataCache interface that stores its data in
  * a binary file on disk. Each element written to the file is always written
@@ -63,7 +65,7 @@ public class FileCache implements IReadCache
 		index.close();
 	}
 
-	public String getName(int id)
+	public ReadMetaData getReadMetaData(int id)
 	{
 		try
 		{
@@ -75,10 +77,14 @@ public class FileCache implements IReadCache
 
 			// Make an array of this length
 			byte[] array = new byte[length];
-			// Then read its data from the file
+			// Then read its name from the file
 			rnd.read(array);
+			String name = new String(array, "UTF8");
 
-			return new String(array, "UTF8");
+			// Then C or U
+			boolean isComplemented = rnd.readBoolean();
+
+			return new ReadMetaData(name, isComplemented);
 		}
 		catch (Exception e)
 		{
@@ -87,19 +93,26 @@ public class FileCache implements IReadCache
 		}
 	}
 
-	public int setName(String name)
+	public int setReadMetaData(ReadMetaData readMetaData)
 		throws Exception
 	{
 		// Update the index to mark the next position as in use by this Read
 		index.setNextSeekPosition(byteCount);
 
-		byte[] array = name.getBytes();
+		byte[] array = readMetaData.getName().getBytes("UTF8");
 
+		// Write the name
 		out.write(array.length);
 		out.write(array);
 
-		// Bytes written: a value for the length of the array, then the array
-		byteCount += 1 + array.length;
+		// Write a single byte for C or U
+		out.write((byte) (readMetaData.isComplemented() ? 1 : 0));
+
+		// Bytes written:
+		//  1   - BYTE, length of the name to follow
+		//  [n] - BYTES, the name itself
+		//  1   - BYTE, 0 or 1 (for C or U)
+		byteCount += (1 + array.length + 1);
 
 		return count++;
 	}
