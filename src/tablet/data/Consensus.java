@@ -27,9 +27,6 @@ public class Consensus extends Sequence
 
 			bq[i] = Byte.parseByte(tokens[t]);
 		}
-
-		System.out.println("bq.length:  " + bq.length);
-		System.out.println("scan count: " + i);
 	}
 
 	public byte[] getBaseQualityRange(int start, int end)

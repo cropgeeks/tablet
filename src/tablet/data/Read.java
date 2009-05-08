@@ -9,9 +9,6 @@ public class Read extends Sequence implements Comparable<Read>
 	// The lookup ID for this read's name (which is stored elsewhere)
 	private int id;
 
-	// Is the read complemented or uncomplemented
-	private boolean complemented;
-
 	// The position of the beginning of the read, in terms of consensus bases
 	private int position;
 
@@ -22,30 +19,20 @@ public class Read extends Sequence implements Comparable<Read>
 	{
 	}
 
-	public Read(int id, boolean complemented, int position)
+	public Read(int id, int position)
 	{
 		this.id = id;
-		this.complemented = complemented;
 		this.position = position;
 	}
 
 	int getID()
 		{ return id; }
 
-	public boolean getComplemented()
-		{ return complemented; }
-
-//	public void setComplemented(boolean complemented)
-//		{ this.complemented = complemented; }
-
 	public int getStartPosition()
 		{ return position; }
 
 	public int getEndPosition()
 		{ return position + length() -1; }
-
-//	public void setPosition(int position)
-//		{ this.position = position; }
 
 	public void setQAData(int qa_start, int qa_end, int al_start, int al_end)
 	{
@@ -88,10 +75,9 @@ public class Read extends Sequence implements Comparable<Read>
 	void print(IReadCache cache)
 	{
 		System.out.println();
-		System.out.println("Read " + id + ": " + cache.getName(id));
+		System.out.println("Read " + id + ": " + cache.getReadMetaData(id).getName());
 		System.out.print("  length: " + length());
 		System.out.print(", position: " + position);
-		System.out.println(", complemented: " + complemented);
 
 		super.print();
 

@@ -2,6 +2,7 @@ package tablet.gui.viewer;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.text.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
@@ -127,6 +128,8 @@ class ReadsCanvasML extends MouseInputAdapter
 	// Inner class to draw an outline around a specified read.
 	private class ReadOutliner implements IOverlayRenderer
 	{
+		private NumberFormat nf = NumberFormat.getInstance();
+
 		Read read;
 		String readName;
 
@@ -140,11 +143,21 @@ class ReadsCanvasML extends MouseInputAdapter
 
 			if (read != null)
 			{
+				ReadMetaData data = aPanel.getAssembly().getReadMetaData(read);
+
+				// Start and ending positions (against consensus)
 				readS = read.getStartPosition();
 				readE = read.getEndPosition();
+				int length = (readE-readS+1);
 
-				readName = aPanel.getAssembly().getReadName(read);
-				aPanel.statusPanel.setLabels(readName, (readS+1) + "-" + (readE+1), null);
+				// Name
+				String readName = data.getName();
+				// Formatted C/U plus start and end
+				String label2 = (data.isComplemented() ? "C: " : "U: ")
+					+ nf.format(readS+1) + " - " + nf.format(readE+1)
+					+ " (length: " + nf.format(length) + ")";
+
+				aPanel.statusPanel.setLabels(readName, label2, null);
 			}
 			else
 				aPanel.statusPanel.setLabels(null, null, null);
