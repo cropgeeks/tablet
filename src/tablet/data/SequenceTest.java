@@ -6,13 +6,13 @@ public class SequenceTest extends TestCase
 {
 	public static void main(String[] args)
 	{
-		org.junit.runner.JUnitCore.main("av.data.SequenceTest");
+		org.junit.runner.JUnitCore.main("tablet.data.SequenceTest");
 	}
 
 	public void testSequenceStorage()
 		throws Exception
 	{
-		for (int i = 1; i <= 60; i++)
+		for (int i = 1; i <= 10; i++)
 		{
 			Consensus c = new Consensus();
 

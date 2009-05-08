@@ -37,9 +37,10 @@ public class AceFileReader
 	Assembly readAssembly()
 		throws Exception
 	{
-		File cacheFile = new File("cache.dat");
+		File cacheFile = new File("tablet-cache.dat");
+		File indexFile = new File("tablet-index.dat");
 
-		readCache = FileCache.createWritableCache(cacheFile);
+		readCache = FileCache.createWritableCache(cacheFile, indexFile);
 
 		if (useAscii)
 			in = new BufferedReader(new InputStreamReader(is, "ASCII"));	// ISO8859_1
@@ -84,7 +85,7 @@ public class AceFileReader
 		in.close();
 		readCache.close();
 
-		assembly.setReadCache(FileCache.createReadableCache(cacheFile));
+		assembly.setReadCache(FileCache.createReadableCache(cacheFile, indexFile));
 		return assembly;
 	}
 
