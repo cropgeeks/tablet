@@ -6,7 +6,7 @@ import java.nio.*;
 /**
  * Tracks and maintains the index (on disk) to a FileCache object.
  */
-class CacheIndex
+class FileCacheIndex
 {
 	// Used while writing to the index
 	private BufferedOutputStream out;
