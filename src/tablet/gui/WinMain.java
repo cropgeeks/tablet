@@ -22,8 +22,10 @@ public class WinMain extends JFrame
 		// Load in the data
 		try
 		{
-			TestReader reader = new TestReader(filename);
-			assembly = reader.getAssembly();
+			ImportHandler ioHandler = new ImportHandler();
+
+			ioHandler.readFile(filename);
+			assembly = ioHandler.getAssembly();
 
 			long freeMem = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
 			java.text.NumberFormat nf = java.text.NumberFormat.getInstance();
