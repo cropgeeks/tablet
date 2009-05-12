@@ -7,19 +7,14 @@ import java.util.*;
 import tablet.data.*;
 import tablet.data.cache.*;
 
-public class AceFileReader
+class AceFileReader extends AssemblyReader
 {
 	private boolean useAscii;
-	private InputStream is;
 	private BufferedReader in;
-
-	private IReadCache readCache;
 
 	// Stores each line as it is read
 	private String str;
 
-	// Data structures used as the file is read
-	private Assembly assembly = new Assembly();
 	private Contig contig;
 	private Consensus consensus;
 	private Read read;
@@ -27,28 +22,29 @@ public class AceFileReader
 	private int expectedReads = 0;
 	private int currentReadInContig = 0;
 
-	AceFileReader(InputStream is, boolean useAscii)
-		throws Exception
+	AceFileReader(boolean useAscii)
 	{
-		this.is = is;
 		this.useAscii = useAscii;
 	}
 
-	Assembly readAssembly()
+	public void runJob()
 		throws Exception
 	{
-		File cacheFile = new File("tablet-cache.dat");
-		File indexFile = new File("tablet-index.dat");
-
-		readCache = FileCache.createWritableCache(cacheFile, indexFile);
-
 		if (useAscii)
 			in = new BufferedReader(new InputStreamReader(is, "ASCII"));	// ISO8859_1
 		else
 			in = new BufferedReader(new InputStreamReader(is));
 
+		// Read and check for the header
+		str = in.readLine();
+		if (str.startsWith("AS "))
+			expectedReads = Integer.parseInt(str.split("\\s+")[2]);
+		else
+			throw new ReadException(ReadException.UNKNOWN_FORMAT);
+
+
 		// Scan for contigs
-		while ((str = in.readLine()) != null)
+		while ((str = in.readLine()) != null && okToRead)
 		{
 			if (str.startsWith("AF "))
 				processReadLocation();
@@ -65,9 +61,6 @@ public class AceFileReader
 			else if (str.startsWith("BQ"))
 				processBaseQualities();
 
-			else if (str.startsWith("AS "))
-				expectedReads = Integer.parseInt(str.split("\\s+")[2]);
-
 			else if (str.startsWith("BS "))
 			{
 //				processBaseSegment();
@@ -83,10 +76,6 @@ public class AceFileReader
 		}
 
 		in.close();
-		readCache.close();
-
-		assembly.setReadCache(FileCache.createReadableCache(cacheFile, indexFile));
-		return assembly;
 	}
 
 	private void processContig()
