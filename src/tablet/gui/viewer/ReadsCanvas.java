@@ -13,6 +13,9 @@ class ReadsCanvas extends JPanel
 {
 	private AssemblyPanel aPanel;
 
+	private BufferedImage buffer;
+	private boolean updateBuffer = true;
+
 	Contig contig;
 	IReadManager reads;
 
@@ -40,7 +43,7 @@ class ReadsCanvas extends JPanel
 
 	// Starting and ending indices of the bases that will be drawn during the
 	// next repaint operation
-	int xS, xE, yS, yE;
+	int xS, xE;
 
 	// Holds the current dimensions of the canvas in an AWT friendly format
 	private Dimension dimension = new Dimension();
@@ -101,7 +104,9 @@ class ReadsCanvas extends JPanel
 		canvasH = (ntOnCanvasY * ntH);
 
 		setSize(dimension = new Dimension(canvasW, canvasH));
+
 		updateColorScheme();
+		updateBuffer = true;
 	}
 
 	// Compute real-time variables, that change as the viewpoint is moved across
@@ -124,6 +129,8 @@ class ReadsCanvas extends JPanel
 		pY2 = pY1 + viewSize.height;
 
 		updateOverview();
+		updateBuffer = true;
+
 		repaint();
 	}
 
@@ -148,15 +155,48 @@ class ReadsCanvas extends JPanel
 		if (contig == null)
 			return;
 
+		long s = System.nanoTime();
+
+		if (updateBuffer)
+			paintBuffer();
+
+		g.drawImage(buffer, pX1, pY1, null);
+
+		try
+		{
+			for (IOverlayRenderer renderer: overlays)
+				renderer.render(g);
+		}
+		catch (ConcurrentModificationException e) {
+			repaint();
+		}
+
+		long e = System.nanoTime();
+		System.out.println("Render time: " + ((e-s)/1000000f) + "ms");
+	}
+
+	private void paintBuffer()
+	{
+		updateBuffer();
+
+		Graphics2D g = buffer.createGraphics();
+
+		// Clear the background
+		g.setColor(Color.white);
+		g.fillRect(0, 0, buffer.getWidth(), buffer.getHeight());
+
+		g.translate(-pX1, -pY1);
+
+		// Calculate and draw the blue/gray background for offset regions
 		g.setColor(new Color(240, 240, 255));
 		g.fillRect(0, 0, offset*ntW, getHeight());
-
 		int cLength = offset + contig.getConsensus().length();
 		g.fillRect(cLength*ntW, 0, canvasW-(cLength*ntW), getHeight());
 
+
 		// Index positions within the dataset that we'll start drawing from
 		xS = pX1 / ntW;
-		yS = pY1 / ntH;
+		int yS = pY1 / ntH;
 
 		// The end indices are calculated as the:
 		//   (the start index) + (the number that can be drawn on screen)
@@ -166,13 +206,9 @@ class ReadsCanvas extends JPanel
 		if (xE >= ntOnCanvasX)
 			xE = ntOnCanvasX-1;
 
-		yE = yS + ntOnScreenY;
+		int yE = yS + ntOnScreenY;
 		if (yE >= ntOnCanvasY)
 			yE = ntOnCanvasY-1;
-
-		System.out.println("X: " + xS + "->" + xE);
-		System.out.println("Y: " + yS + "->" + yE);
-		System.out.println();
 
 
 		// For each row...
@@ -187,14 +223,19 @@ class ReadsCanvas extends JPanel
 			}
 		}
 
+		g.dispose();
+		updateBuffer = false;
+	}
 
-		try
-		{
-			for (IOverlayRenderer renderer: overlays)
-				renderer.render(g);
-		}
-		catch (ConcurrentModificationException e) {
-			repaint();
-		}
+	private void updateBuffer()
+	{
+		// Work out the width and height needed
+		int w = pX2-pX1+1;
+		int h = pY2-pY1+1;
+
+		// Only make a new buffer if we really really need to, as this has
+		// a noticeable effect on performance because of the time it takes
+		if (buffer == null || buffer.getWidth() != w || buffer.getHeight() != h)
+			buffer = (BufferedImage) createImage(w, h);
 	}
 }

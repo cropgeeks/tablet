@@ -59,7 +59,6 @@ public class Consensus extends Sequence
 	public byte[] getRange(int start, int end)
 	{
 		byte[] data = new byte[end-start+1];
-		System.out.println("length is " + data.length);
 
 		int i = 0, d = 0;
 		int length = length();
