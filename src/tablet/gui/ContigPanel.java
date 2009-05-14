@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.table.*;
 
 import tablet.data.*;
 import tablet.gui.viewer.*;
@@ -12,32 +13,34 @@ class ContigPanel extends JPanel implements ListSelectionListener
 {
 	private AssemblyPanel aPanel;
 
-	private DefaultListModel model;
-	private JList list;
+	private ContigTableModel model;
+	private JTable table;
 
 	ContigPanel(AssemblyPanel aPanel)
 	{
 		this.aPanel = aPanel;
 
-		model = new DefaultListModel();
-		list = new JList(model);
-		list.addListSelectionListener(this);
-		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table = new JTable();
+		table.getTableHeader().setReorderingAllowed(false);
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getSelectionModel().addListSelectionListener(this);
 
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createTitledBorder("Contigs:"));
-		add(new JScrollPane(list));
+		add(new JScrollPane(table));
 	}
 
 	void setAssembly(Assembly assembly)
 	{
-		model.clear();
+		table.setModel(new DefaultTableModel());
 
 		if (assembly == null)
 			return;
 
-		for (Contig contig: assembly.getContigs())
-			model.addElement(contig);
+		model = new ContigTableModel(assembly, table);
+
+		table.setModel(model);
+		table.setRowSorter(new TableRowSorter<ContigTableModel>(model));
 	}
 
 	public void valueChanged(ListSelectionEvent e)
@@ -45,6 +48,20 @@ class ContigPanel extends JPanel implements ListSelectionListener
 		if (e.getValueIsAdjusting())
 			return;
 
-		aPanel.setContig((Contig) list.getSelectedValue());
+		int row = table.getSelectedRow();
+
+		if (row == -1)
+		{
+			// TODO: Update winMain with blank RHS split pane instead
+			aPanel.setContig(null);
+		}
+		else
+		{
+			// Convert from view->model (deals with user-sorted table)
+			row = table.convertRowIndexToModel(row);
+
+			// Then pull the contig out of the model and set...
+			aPanel.setContig((Contig) model.getValueAt(row, 0));
+		}
 	}
 }
