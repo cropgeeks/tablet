@@ -1,8 +1,8 @@
 package tablet.gui;
 
 import java.awt.*;
+import java.awt.dnd.*;
 import java.awt.event.*;
-import java.lang.management.*;
 import javax.swing.*;
 
 import tablet.data.*;
@@ -13,35 +13,21 @@ import scri.commons.gui.*;
 
 public class WinMain extends JFrame
 {
-	private Assembly assembly;
+	private Commands commands = new Commands(this);
 
 	private AssemblyPanel assemblyPanel;
 
+	private Assembly assembly;
+
 	WinMain(String filename)
 	{
-		// Load in the data
-		try
-		{
-			ImportHandler ioHandler = new ImportHandler();
 
-			ioHandler.readFile(filename);
-			assembly = ioHandler.getAssembly();
-
-			long freeMem = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
-			java.text.NumberFormat nf = java.text.NumberFormat.getInstance();
-
-			System.out.println("Memory used: " + nf.format(freeMem/1024f/1024f) + "MB\n");
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			System.exit(0);
-		}
 
 		assemblyPanel = new AssemblyPanel(this);
 		add(assemblyPanel);
 
-		assemblyPanel.setAssembly(assembly);
+		FileDropAdapter dropAdapter = new FileDropAdapter(this);
+		setDropTarget(new DropTarget(assemblyPanel, dropAdapter));
 
 
 		setTitle("Tablet");
@@ -105,5 +91,13 @@ public class WinMain extends JFrame
 	{
 		WindowEvent evt = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
 		processWindowEvent(evt);
+	}
+
+	Commands getCommands()
+		{ return commands; }
+
+	void setAssembly(Assembly assembly)
+	{
+		assemblyPanel.setAssembly(assembly);
 	}
 }

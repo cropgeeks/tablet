@@ -21,10 +21,13 @@ public class Tablet
 		Prefs.setDefaults();
 		prefs.loadPreferences(prefsFile, Prefs.class);
 
-		new Tablet(args[0]);
+		if (args.length == 1)
+			new Tablet(args[0]);
+		else
+			new Tablet(null);
 	}
 
-	Tablet(String filename)
+	Tablet(final String filename)
 	{
 		try
 		{
@@ -36,6 +39,13 @@ public class Tablet
 
 		winMain.addWindowListener(new WindowAdapter()
 		{
+			public void windowOpened(WindowEvent e)
+			{
+				// Do we want to open an initial project?
+				if (filename != null)
+					winMain.getCommands().fileOpen(filename);
+			}
+
 			public void windowClosing(WindowEvent e)
 			{
 				if (winMain.okToExit() == false)
