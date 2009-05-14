@@ -16,6 +16,9 @@ public class Prefs extends XMLPreferences
 	public static int guiWinMainY = 0;
 	public static boolean guiWinMainMaximized = false;
 
+	// The location of the main splits pane divider
+	public static int guiSplitterLocation = 150;
+
 	// Display reads in packed or stacked form?
 	public static int visReadLayout = 1;
 

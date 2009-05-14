@@ -45,7 +45,8 @@
 			<manifest>
 				<attribute name="Main-Class" value="tablet.gui.Tablet"/>
 				<attribute name="Class-Path"
-					value="scri-commons.jar
+					value="office-2.0.jar
+						scri-commons.jar
 						swing-layout-1.0.3.jar"/>
 			</manifest>
 		</jar>
