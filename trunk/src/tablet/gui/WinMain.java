@@ -3,6 +3,7 @@ package tablet.gui;
 import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
+import java.beans.*;
 import javax.swing.*;
 
 import tablet.data.*;
@@ -16,19 +17,13 @@ public class WinMain extends JFrame
 	private Commands commands = new Commands(this);
 
 	private AssemblyPanel assemblyPanel;
+	private ContigPanel contigPanel;
 
 	private Assembly assembly;
 
 	WinMain(String filename)
 	{
-
-
-		assemblyPanel = new AssemblyPanel(this);
-		add(assemblyPanel);
-
-		FileDropAdapter dropAdapter = new FileDropAdapter(this);
-		setDropTarget(new DropTarget(assemblyPanel, dropAdapter));
-
+		createControls();
 
 		setTitle("Tablet");
 //		setIconImage(Icons.getIcon("AV").getImage());
@@ -51,6 +46,28 @@ public class WinMain extends JFrame
 			setExtendedState(Frame.MAXIMIZED_BOTH);
 
 		addListeners();
+	}
+
+	private void createControls()
+	{
+		assemblyPanel = new AssemblyPanel(this);
+		contigPanel = new ContigPanel(assemblyPanel);
+
+		FileDropAdapter dropAdapter = new FileDropAdapter(this);
+		setDropTarget(new DropTarget(assemblyPanel, dropAdapter));
+
+		final JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		splitter.setDividerLocation(Prefs.guiSplitterLocation);
+		splitter.setLeftComponent(contigPanel);
+		splitter.setRightComponent(assemblyPanel);
+
+		splitter.addPropertyChangeListener(new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent e) {
+				Prefs.guiSplitterLocation = splitter.getDividerLocation();
+			}
+		});
+
+		add(splitter);
 	}
 
 	private void addListeners()
@@ -82,6 +99,8 @@ public class WinMain extends JFrame
 		});
 	}
 
+
+
 	boolean okToExit()
 	{
 		return true;
@@ -99,5 +118,6 @@ public class WinMain extends JFrame
 	void setAssembly(Assembly assembly)
 	{
 		assemblyPanel.setAssembly(assembly);
+		contigPanel.setAssembly(assembly);
 	}
 }

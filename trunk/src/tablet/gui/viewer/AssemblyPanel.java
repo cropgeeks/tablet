@@ -12,7 +12,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	private Assembly assembly;
 	private Contig contig;
 
-	ContigPanel contigPanel;
+
 	OverviewCanvas overviewCanvas;
 	ScaleCanvas scaleCanvas;
 	ConsensusCanvas consensusCanvas;
@@ -47,12 +47,10 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		visPanel.add(statusPanel, BorderLayout.SOUTH);
 
 		add(visPanel);
-		add(contigPanel, BorderLayout.WEST);
 	}
 
 	private void createControls()
 	{
-		contigPanel = new ContigPanel(this);
 		statusPanel = new NBStatusPanel(this);
 
 		readsCanvas = new ReadsCanvas();
@@ -79,7 +77,6 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	public void setAssembly(Assembly assembly)
 	{
 		this.assembly = assembly;
-		contigPanel.setAssembly(assembly);
 	}
 
 	Assembly getAssembly()
@@ -87,7 +84,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		return assembly;
 	}
 
-	void setContig(Contig contig)
+	public void setContig(Contig contig)
 	{
 		this.contig = contig;
 
