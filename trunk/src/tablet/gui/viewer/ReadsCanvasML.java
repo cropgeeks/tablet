@@ -158,9 +158,13 @@ class ReadsCanvasML extends MouseInputAdapter
 					+ " (length: " + nf.format(length) + ")";
 
 				aPanel.statusPanel.setLabels(readName, label2, null);
+				rCanvas.setToolTipText(readName);
 			}
 			else
+			{
 				aPanel.statusPanel.setLabels(null, null, null);
+				rCanvas.setToolTipText(null);
+			}
 		}
 
 		public void render(Graphics2D g)
