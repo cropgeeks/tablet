@@ -6,7 +6,7 @@ import java.awt.image.*;
 
 class StandardColorState extends ColorState
 {
-	StandardColorState(String text, Color c, int w, int h, boolean highlight)
+	StandardColorState(String text, Color c, int w, int h, boolean useAlpha, boolean isDeltaBase)
 	{
 		super(c, w, h);
 
@@ -20,14 +20,17 @@ class StandardColorState extends ColorState
 		Rectangle2D.Float r = new Rectangle2D.Float(0, 0, w, h);
 		g.fill(r);
 
-		// Overlay for bases that are different from the consensus
-		if (highlight)
-			g.setPaint(new Color(255, 255, 255, 130));
-		// Overlay for bases that are identical to the consensus
-		else
-			g.setPaint(new Color(20, 20, 20, StandardColorScheme.alpha));
+		if (useAlpha)
+		{
+			// Overlay for bases that are different from the consensus
+			if (isDeltaBase)
+				g.setPaint(new Color(255, 255, 255, 130));
+			// Overlay for bases that are identical to the consensus
+			else
+				g.setPaint(new Color(20, 20, 20, StandardColorScheme.alpha));
 
-		g.fillRect(0, 0, w, h);
+			g.fillRect(0, 0, w, h);
+		}
 
 		Font font = g.getFont().deriveFont(Font.PLAIN, h-3);
 		g.setFont(font);
@@ -36,7 +39,7 @@ class StandardColorState extends ColorState
 		Rectangle2D bounds = fm.getStringBounds(text, g);
 
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		if (highlight)
+		if (isDeltaBase)
 			g.setColor(Color.red);
 		else
 			g.setColor(Color.black);
