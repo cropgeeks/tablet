@@ -25,9 +25,8 @@ public class WinMain extends JFrame
 	{
 		createControls();
 
-		setTitle("Tablet");
-//		setIconImage(Icons.getIcon("AV").getImage());
-
+		setTitle(RB.getString("gui.WinMain.title"));
+		setIconImage(Icons.getIcon("APPICON").getImage());
 		setSize(Prefs.guiWinMainWidth, Prefs.guiWinMainHeight);
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -120,6 +119,7 @@ public class WinMain extends JFrame
 		assemblyPanel.setAssembly(assembly);
 		contigPanel.setAssembly(assembly);
 
-		setTitle("Tablet - " + assembly.getName());
+		String title = RB.getString("gui.WinMain.title");
+		setTitle(title + " - " + assembly.getName());
 	}
 }
