@@ -45,8 +45,9 @@ public class ImportHandler
 		if (ok)
 		{
 			assembly = reader.getAssembly();
-			readCache.close();
+			assembly.setName(file.getName());
 
+			readCache.close();
 			assembly.setReadCache(
 				FileCache.createReadableCache(cacheFile, indexFile));
 		}

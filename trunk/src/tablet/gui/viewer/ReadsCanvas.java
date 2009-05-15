@@ -183,7 +183,8 @@ class ReadsCanvas extends JPanel
 		Graphics2D g = buffer.createGraphics();
 
 		// Clear the background
-		g.setColor(Color.white);
+		int bgValue = 255 - StandardColorScheme.alpha;
+		g.setColor(new Color(bgValue, bgValue, bgValue));
 		g.fillRect(0, 0, buffer.getWidth(), buffer.getHeight());
 
 		g.translate(-pX1, -pY1);

@@ -7,8 +7,9 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import tablet.gui.*;
+import tablet.gui.viewer.colors.*;
 
-class NBStatusPanel extends JPanel implements ActionListener, ChangeListener
+class NBStatusPanel extends JPanel implements ChangeListener
 {
 	private DecimalFormat d1 = new DecimalFormat("0.0");
 	private DecimalFormat d3 = new DecimalFormat("0.000");
@@ -28,15 +29,12 @@ class NBStatusPanel extends JPanel implements ActionListener, ChangeListener
 		output3.setForeground(Color.red);
 		output3.setText(" ");
 
-		sliderX.addChangeListener(this);
-		sliderX.setBackground((Color)UIManager.get("Panel.background"));
-		sliderY.addChangeListener(this);
-		sliderY.setBackground((Color)UIManager.get("Panel.background"));
-		checkLink.addActionListener(this);
-		checkLink.setBackground((Color)UIManager.get("Panel.background"));
+		sliderHighlight.addChangeListener(this);
+		sliderHighlight.setBackground((Color)UIManager.get("Panel.background"));
+		sliderZoom.addChangeListener(this);
+		sliderZoom.setBackground((Color)UIManager.get("Panel.background"));
 
 		setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
-		setControlStates();
 		setForMainUse();
 	}
 
@@ -62,63 +60,25 @@ class NBStatusPanel extends JPanel implements ActionListener, ChangeListener
 			output3.setText(" ");
 	}
 
-	// Toggles the state of the slider controls based on whether or not advanced
-	// zoom has been turned on or off (which hides/changes text on the controls)
-	public static void setControlStates()
-	{
-//		Prefs.visAdvancedZoom = false;
-
-		if (Prefs.visAdvancedZoom)
-			verticalLabel.setText("Vertical zoom:");
-		else
-		{
-			verticalLabel.setText("Zoom:");
-			Prefs.visLinkSliders = true;
-		}
-
-		horizontalLabel.setVisible(Prefs.visAdvancedZoom);
-		sliderX.setVisible(Prefs.visAdvancedZoom);
-		checkLink.setVisible(Prefs.visAdvancedZoom);
-		checkLink.setSelected(Prefs.visLinkSliders);
-	}
-
-	public void actionPerformed(ActionEvent e)
-	{
-		Prefs.visLinkSliders = checkLink.isSelected();
-
-		if (Prefs.visLinkSliders)
-			sliderX.setValue(sliderY.getValue());
-	}
-
 	public void stateChanged(ChangeEvent e)
 	{
-		// Only force an update once (if linked, both sliders generate events,
-		// remove the changeListener on the *other* slider first)
-
 		// Horizontal slider events...
-		if (e.getSource() == sliderX && Prefs.visLinkSliders)
+		if (e.getSource() == sliderHighlight)
 		{
-			sliderY.removeChangeListener(this);
-			sliderY.setValue(sliderX.getValue());
-			sliderY.addChangeListener(this);
+			StandardColorScheme.alpha = sliderHighlight.getValue();
+			aPanel.computePanelSizes();
+			aPanel.repaint();
 		}
 
-		// Vertical slider events...
-		else if (e.getSource() == sliderY && Prefs.visLinkSliders)
-		{
-			sliderX.removeChangeListener(this);
-			sliderX.setValue(sliderY.getValue());
-			sliderX.addChangeListener(this);
-		}
-
-		aPanel.computePanelSizes();
+		else if (e.getSource() == sliderZoom)
+			aPanel.computePanelSizes();
 	}
 
-	int getZoomX()
-		{ return sliderX.getValue(); }
+	int getHighlight()
+		{ return sliderHighlight.getValue(); }
 
-	int getZoomY()
-		{ return sliderY.getValue(); }
+	int getZoom()
+		{ return sliderZoom.getValue(); }
 
 
     /** This method is called from within the constructor to
@@ -136,11 +96,10 @@ class NBStatusPanel extends JPanel implements ActionListener, ChangeListener
         output2 = new javax.swing.JLabel();
         label3 = new javax.swing.JLabel();
         output3 = new javax.swing.JLabel();
-        horizontalLabel = new javax.swing.JLabel();
-        sliderX = new javax.swing.JSlider();
-        checkLink = new javax.swing.JCheckBox();
-        verticalLabel = new javax.swing.JLabel();
-        sliderY = new javax.swing.JSlider();
+        highlightLabel = new javax.swing.JLabel();
+        sliderHighlight = new javax.swing.JSlider();
+        zoomLabel = new javax.swing.JLabel();
+        sliderZoom = new javax.swing.JSlider();
 
         label1.setText("Label 1:");
 
@@ -154,25 +113,22 @@ class NBStatusPanel extends JPanel implements ActionListener, ChangeListener
 
         output3.setText("<>");
 
-        horizontalLabel.setLabelFor(sliderX);
-        horizontalLabel.setText("Horizontal zoom:");
+        highlightLabel.setLabelFor(sliderHighlight);
+        highlightLabel.setText("Variant highlighting:");
 
-        sliderX.setMaximum(25);
-        sliderX.setMinimum(1);
-        sliderX.setPaintTicks(true);
-        sliderX.setSnapToTicks(true);
-        sliderX.setValue(7);
+        sliderHighlight.setMaximum(200);
+        sliderHighlight.setPaintTicks(true);
+        sliderHighlight.setSnapToTicks(true);
+        sliderHighlight.setValue(0);
 
-        checkLink.setText("Link");
+        zoomLabel.setLabelFor(sliderZoom);
+        zoomLabel.setText("Zoom:");
 
-        verticalLabel.setLabelFor(sliderY);
-        verticalLabel.setText("Vertical zoom:");
-
-        sliderY.setMaximum(25);
-        sliderY.setMinimum(1);
-        sliderY.setPaintTicks(true);
-        sliderY.setSnapToTicks(true);
-        sliderY.setValue(7);
+        sliderZoom.setMaximum(25);
+        sliderZoom.setMinimum(1);
+        sliderZoom.setPaintTicks(true);
+        sliderZoom.setSnapToTicks(true);
+        sliderZoom.setValue(7);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -189,61 +145,55 @@ class NBStatusPanel extends JPanel implements ActionListener, ChangeListener
                     .add(output3)
                     .add(output2)
                     .add(output1))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 112, Short.MAX_VALUE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 153, Short.MAX_VALUE)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
-                    .add(horizontalLabel)
-                    .add(sliderX, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 155, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(checkLink)
+                    .add(highlightLabel)
+                    .add(sliderHighlight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 155, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
-                    .add(sliderY, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 155, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(verticalLabel))
+                    .add(sliderZoom, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 155, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                    .add(zoomLabel))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                        .add(layout.createSequentialGroup()
-                            .add(label1)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                            .add(label2)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                            .add(label3))
-                        .add(layout.createSequentialGroup()
-                            .add(output1)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                            .add(output2)
-                            .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                            .add(output3)))
+                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
                     .add(layout.createSequentialGroup()
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(horizontalLabel)
-                            .add(verticalLabel))
+                        .add(highlightLabel)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                            .add(sliderX, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                            .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                                .add(sliderY, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                                .add(checkLink)))))
-                .addContainerGap())
+                        .add(sliderHighlight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(layout.createSequentialGroup()
+                        .add(zoomLabel)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(sliderZoom, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(layout.createSequentialGroup()
+                        .add(label1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(label2)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(label3))
+                    .add(layout.createSequentialGroup()
+                        .add(output1)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(output2)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(output3)))
+                .addContainerGap(22, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private static javax.swing.JCheckBox checkLink;
-    private static javax.swing.JLabel horizontalLabel;
+    private static javax.swing.JLabel highlightLabel;
     private javax.swing.JLabel label1;
     private javax.swing.JLabel label2;
     private javax.swing.JLabel label3;
     javax.swing.JLabel output1;
     javax.swing.JLabel output2;
     javax.swing.JLabel output3;
-    private static javax.swing.JSlider sliderX;
-    private static javax.swing.JSlider sliderY;
-    private static javax.swing.JLabel verticalLabel;
+    private static javax.swing.JSlider sliderHighlight;
+    private static javax.swing.JSlider sliderZoom;
+    private static javax.swing.JLabel zoomLabel;
     // End of variables declaration//GEN-END:variables
 }

@@ -119,5 +119,7 @@ public class WinMain extends JFrame
 	{
 		assemblyPanel.setAssembly(assembly);
 		contigPanel.setAssembly(assembly);
+
+		setTitle("Tablet - " + assembly.getName());
 	}
 }

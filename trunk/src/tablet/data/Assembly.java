@@ -6,6 +6,7 @@ import tablet.data.cache.*;
 
 public class Assembly
 {
+	private String name;
 	private IReadCache cache;
 
 	private Vector<Contig> contigs = new Vector<Contig>();
@@ -13,6 +14,12 @@ public class Assembly
 	public Assembly()
 	{
 	}
+
+	public void setName(String name)
+		{ this.name = name; }
+
+	public String getName()
+		{ return name; }
 
 	public void setReadCache(IReadCache cache)
 		{ this.cache = cache; }
