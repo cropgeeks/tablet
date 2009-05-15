@@ -86,7 +86,7 @@ class ConsensusCanvas extends JPanel
 		int xS = rCanvas.xS;
 		int xE = rCanvas.xE;
 
-		ColorScheme colors = rCanvas.colorsCS;
+		ColorScheme colors = rCanvas.colors;
 
 		// Draw the quality scores
 		byte[] bq = consensus.getBaseQualityRange(xS-offset, xE-offset);
@@ -117,6 +117,6 @@ class ConsensusCanvas extends JPanel
 		// Draw the consensus sequence
 		for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
 			if (data[i] != -1)
-				g.drawImage(colors.getImage(data[i]), x, y, null);
+				g.drawImage(colors.getConsensusImage(data[i]), x, y, null);
 	}
 }
