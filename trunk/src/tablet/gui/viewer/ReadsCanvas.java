@@ -104,6 +104,7 @@ class ReadsCanvas extends JPanel
 		canvasH = (ntOnCanvasY * ntH);
 
 		setSize(dimension = new Dimension(canvasW, canvasH));
+		aPanel.setScrollbarAdjustmentValues(ntW, ntH);
 
 		updateColorScheme();
 		updateBuffer = true;

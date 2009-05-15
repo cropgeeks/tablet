@@ -104,6 +104,14 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
 	}
 
+	void setScrollbarAdjustmentValues(int xIncrement, int yIncrement)
+	{
+		hBar.setUnitIncrement(xIncrement);
+		hBar.setBlockIncrement(xIncrement);
+		vBar.setUnitIncrement(yIncrement);
+		vBar.setBlockIncrement(yIncrement);
+	}
+
 	void updateOverview(int xIndex, int xNum, int yIndex, int yNum)
 	{
 		overviewCanvas.updateOverview(xIndex, xNum, yIndex, yNum);
