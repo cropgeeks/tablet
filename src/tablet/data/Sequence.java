@@ -9,20 +9,22 @@ public abstract class Sequence
 	// eg, b): consensus=A, and read=T would encode the read as dT
 
 	public static final byte NOTUSED = 0;
-	public static final byte UNKNOWN = 1;
 
-	public static final byte P  = 2;	// P = pad (*)
-	public static final byte dP = 3;
-	public static final byte A  = 4;
-	public static final byte dA = 5;
-	public static final byte T  = 6;
-	public static final byte dT = 7;
-	public static final byte C  = 8;
-	public static final byte dC = 9;
-	public static final byte G  = 10;
-	public static final byte dG = 11;
-	public static final byte N  = 12;
-	public static final byte dN = 13;
+	public static final byte UNKNOWN = 1;
+	public static final byte dUKNOWN = 2;
+
+	public static final byte P  = 3;	// P = pad (*)
+	public static final byte dP = 4;
+	public static final byte A  = 5;
+	public static final byte dA = 6;
+	public static final byte T  = 7;
+	public static final byte dT = 8;
+	public static final byte C  = 9;
+	public static final byte dC = 10;
+	public static final byte G  = 11;
+	public static final byte dG = 12;
+	public static final byte N  = 13;
+	public static final byte dN = 14;
 
 	// Stores the actual DNA states, using one byte for every two states
 	private byte[] data;
