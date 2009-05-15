@@ -10,6 +10,8 @@ public class StandardColorScheme extends ColorScheme
 {
 	private Vector<ColorState> states = new Vector<ColorState>();
 
+	public static int alpha = 0;
+
 	public StandardColorScheme(Contig contig, int w, int h)
 	{
 		super(contig);

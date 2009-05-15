@@ -35,12 +35,18 @@ class ContigPanel extends JPanel implements ListSelectionListener
 		table.setModel(new DefaultTableModel());
 
 		if (assembly == null)
+		{
+			setBorder(BorderFactory.createTitledBorder("Contigs:"));
 			return;
+		}
 
 		model = new ContigTableModel(assembly, table);
 
 		table.setModel(model);
 		table.setRowSorter(new TableRowSorter<ContigTableModel>(model));
+
+		String title = "Contigs (" + assembly.getContigs().size() + "):";
+		setBorder(BorderFactory.createTitledBorder(title));
 	}
 
 	public void valueChanged(ListSelectionEvent e)

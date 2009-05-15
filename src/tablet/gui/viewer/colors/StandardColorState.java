@@ -20,11 +20,14 @@ class StandardColorState extends ColorState
 		Rectangle2D.Float r = new Rectangle2D.Float(0, 0, w, h);
 		g.fill(r);
 
+		// Overlay for bases that are different from the consensus
 		if (highlight)
-		{
 			g.setPaint(new Color(255, 255, 255, 130));
-			g.fillRect(0, 0, w, h);
-		}
+		// Overlay for bases that are identical to the consensus
+		else
+			g.setPaint(new Color(20, 20, 20, StandardColorScheme.alpha));
+
+		g.fillRect(0, 0, w, h);
 
 		Font font = g.getFont().deriveFont(Font.PLAIN, h-3);
 		g.setFont(font);

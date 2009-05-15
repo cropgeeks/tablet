@@ -152,10 +152,9 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 	void computePanelSizes()
 	{
-		int zoomX = statusPanel.getZoomX();
-		int zoomY = statusPanel.getZoomY();
+		int zoom = statusPanel.getZoom();
 
-		readsCanvas.setDimensions(zoomX, zoomY);
+		readsCanvas.setDimensions(zoom, zoom);
 		consensusCanvas.setDimensions();
 	}
 }
