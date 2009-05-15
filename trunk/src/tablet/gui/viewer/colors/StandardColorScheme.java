@@ -8,63 +8,84 @@ import tablet.data.*;
 
 public class StandardColorScheme extends ColorScheme
 {
-	private Vector<ColorState> states = new Vector<ColorState>();
+	// Holds the states needed by the reads canvas
+	private Vector<ColorState> statesRD = new Vector<ColorState>();
+	// Holds the states needed by the consensus canvas
+	private Vector<ColorState> statesCS = new Vector<ColorState>();
 
 	public static int alpha = 0;
 
-	// useEffects = true means alpha value will be applied to final image
-	//   reads canvas: useEffects = true
-	//   consensus canvas: useEfects = false
-	public StandardColorScheme(Contig contig, int w, int h, boolean useEffects)
+	public StandardColorScheme(Contig contig, int w, int h)
 	{
 		super(contig);
 
 		// Sequence.NOTUSED
-		states.add(new StandardColorState(" ", Color.lightGray, w, h, useEffects, false));
+		statesRD.add(new StandardColorState(" ", Color.lightGray, w, h, true, false));
+		statesCS.add(new StandardColorState(" ", Color.lightGray, w, h, false, false));
+
 
 		// Sequence.UNKNOWN
-		states.add(new StandardColorState("?", Color.lightGray, w, h, useEffects, false));
+		statesRD.add(new StandardColorState("?", Color.lightGray, w, h, true, false));
+		statesCS.add(new StandardColorState("?", Color.lightGray, w, h, false, false));
 		// Sequence.dUNKNOWN
-		states.add(new StandardColorState("?", Color.lightGray, w, h, useEffects, true));
+		statesRD.add(new StandardColorState("?", Color.lightGray, w, h, true, true));
+		statesCS.add(null);
 
 		// Sequence.P
-		states.add(new StandardColorState("*", Color.lightGray, w, h, useEffects, false));
+		statesRD.add(new StandardColorState("*", Color.lightGray, w, h, true, false));
+		statesCS.add(new StandardColorState("*", Color.lightGray, w, h, false, false));
 		// Sequence.dP
-		states.add(new StandardColorState("*", Color.lightGray, w, h, useEffects, true));
+		statesRD.add(new StandardColorState("*", Color.lightGray, w, h, true, true));
+		statesCS.add(null);
 
 		// Sequence.A
-		states.add(new StandardColorState("A", new Color(120, 255, 120), w, h, useEffects, false));
+		statesRD.add(new StandardColorState("A", new Color(120, 255, 120), w, h, true, false));
+		statesCS.add(new StandardColorState("A", new Color(120, 255, 120), w, h, false, false));
 		// Sequence.dA
-		states.add(new StandardColorState("A", new Color(120, 255, 120), w, h, useEffects, true));
+		statesRD.add(new StandardColorState("A", new Color(120, 255, 120), w, h, true, true));
+		statesCS.add(null);
 
 		// Sequence.T
-		states.add(new StandardColorState("T", new Color(120, 120, 255), w, h, useEffects, false));
+		statesRD.add(new StandardColorState("T", new Color(120, 120, 255), w, h, true, false));
+		statesCS.add(new StandardColorState("T", new Color(120, 120, 255), w, h, false, false));
 		// Sequence.dT
-		states.add(new StandardColorState("T", new Color(120, 120, 255), w, h, useEffects, true));
+		statesRD.add(new StandardColorState("T", new Color(120, 120, 255), w, h, true, true));
+		statesCS.add(null);
 
 		// Sequence.C
-		states.add(new StandardColorState("C", new Color(255, 160, 120), w, h, useEffects, false));
+		statesRD.add(new StandardColorState("C", new Color(255, 160, 120), w, h, true, false));
+		statesCS.add(new StandardColorState("C", new Color(255, 160, 120), w, h, false, false));
 		// Sequence.dC
-		states.add(new StandardColorState("C", new Color(255, 160, 120), w, h, useEffects, true));
+		statesRD.add(new StandardColorState("C", new Color(255, 160, 120), w, h, true, true));
+		statesCS.add(null);
 
 		// Sequence.G
-		states.add(new StandardColorState("G", new Color(255, 120, 120), w, h, useEffects, false));
+		statesRD.add(new StandardColorState("G", new Color(255, 120, 120), w, h, true, false));
+		statesCS.add(new StandardColorState("G", new Color(255, 120, 120), w, h, false, false));
 		// Sequence.dG
-		states.add(new StandardColorState("G", new Color(255, 120, 120), w, h, useEffects, true));
+		statesRD.add(new StandardColorState("G", new Color(255, 120, 120), w, h, true, true));
+		statesCS.add(null);
 
 		// Sequence.N
-		states.add(new StandardColorState("N", Color.lightGray, w, h, useEffects, false));
+		statesRD.add(new StandardColorState("N", Color.lightGray, w, h, true, false));
+		statesCS.add(new StandardColorState("N", Color.lightGray, w, h, false, false));
 		// Sequence.dN
-		states.add(new StandardColorState("N", Color.lightGray, w, h, useEffects, false));
+		statesRD.add(new StandardColorState("N", Color.lightGray, w, h, true, false));
+		statesCS.add(null);
 	}
 
 	public BufferedImage getImage(byte data)
 	{
-		return states.get(data).getImage();
+		return statesRD.get(data).getImage();
+	}
+
+	public BufferedImage getConsensusImage(byte data)
+	{
+		return statesCS.get(data).getImage();
 	}
 
 	public Color getColor(byte data)
 	{
-		return states.get(data).getColor();
+		return statesRD.get(data).getColor();
 	}
 }

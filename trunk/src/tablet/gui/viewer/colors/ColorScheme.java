@@ -18,5 +18,7 @@ public abstract class ColorScheme
 
 	public abstract BufferedImage getImage(byte data);
 
+	public abstract BufferedImage getConsensusImage(byte data);
+
 	public abstract Color getColor(byte data);
 }

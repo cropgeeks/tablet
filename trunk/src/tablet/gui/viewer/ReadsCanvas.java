@@ -19,8 +19,8 @@ class ReadsCanvas extends JPanel
 	Contig contig;
 	IReadManager reads;
 
-	// Color scheme in use (main and consensus)
-	ColorScheme colors, colorsCS;
+	// Color scheme in use
+	ColorScheme colors;
 
 	// Width and height of the canvas
 	int canvasW, canvasH;
@@ -145,8 +145,7 @@ class ReadsCanvas extends JPanel
 
 	private void updateColorScheme()
 	{
-		colors   = new StandardColorScheme(contig, ntW, ntH, true);
-		colorsCS = new StandardColorScheme(contig, ntW, ntH, false);
+		colors   = new StandardColorScheme(contig, ntW, ntH);
 	}
 
 	public void paintComponent(Graphics graphics)
