@@ -22,6 +22,7 @@ public class Tablet
 		prefs.loadPreferences(prefsFile, Prefs.class);
 
 		Icons.initialize("/res/icons", ".png");
+		RB.initialize(Prefs.localeText, "res.text.tablet");
 
 		if (args.length == 1)
 			new Tablet(args[0]);
@@ -73,7 +74,7 @@ public class Tablet
 		});
 
 
-		TaskDialog.initialize(winMain, "Tablet");
+		TaskDialog.initialize(winMain, RB.getString("gui.WinMain.Title"));
 
 		winMain.setVisible(true);
 	}

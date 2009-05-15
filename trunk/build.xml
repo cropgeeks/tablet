@@ -40,6 +40,9 @@
 	</target>
 
 	<target name="jar" depends="clean, compile">
+		<jar jarfile="${tablet-resources.jar}">
+			<zipfileset dir="${res}" prefix="res"/>
+		</jar>
 		<jar jarfile="${tablet.jar}">
 			<fileset dir="${classes}"/>
 			<manifest>
@@ -47,9 +50,23 @@
 				<attribute name="Class-Path"
 					value="office-2.0.jar
 						scri-commons.jar
-						swing-layout-1.0.3.jar"/>
+						swing-layout-1.0.3.jar
+						tablet-resources.jar"/>
 			</manifest>
 		</jar>
+	</target>
+
+	<target name="install4j" depends="jar">
+		<taskdef name="install4j"
+			classname="com.install4j.Install4JTask"
+			classpath="C:\Program Files\Install4j\bin\ant.jar"/>
+		<delete>
+			<fileset dir="installer" includes="**/*.exe"/>
+			<fileset dir="installer" includes="**/*.sh"/>
+			<fileset dir="installer" includes="**/*.dmg"/>
+		</delete>
+		<input message="Enter the version number:" addproperty="version"/>
+		<install4j projectfile="installer/tablet.install4j" release="${version}"/>
 	</target>
 
 </project>

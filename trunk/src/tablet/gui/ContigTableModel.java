@@ -6,6 +6,8 @@ import javax.swing.table.*;
 
 import tablet.data.*;
 
+import scri.commons.gui.*;
+
 /**
  * Table model class for displaying all the contigs within an assembly.
  */
@@ -21,7 +23,11 @@ class ContigTableModel extends AbstractTableModel
 		this.assembly = assembly;
 		this.table = table;
 
-		columnNames = new String[] { "Contig", "Length", "Reads" };
+		String col1 = RB.getString("gui.ContigTableModel.col1");
+		String col2 = RB.getString("gui.ContigTableModel.col2");
+		String col3 = RB.getString("gui.ContigTableModel.col3");
+
+		columnNames = new String[] { col1, col2, col3 };
 	}
 
 	public String getColumnName(int col)

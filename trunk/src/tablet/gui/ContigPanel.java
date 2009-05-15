@@ -9,6 +9,8 @@ import javax.swing.table.*;
 import tablet.data.*;
 import tablet.gui.viewer.*;
 
+import scri.commons.gui.*;
+
 class ContigPanel extends JPanel implements ListSelectionListener
 {
 	private AssemblyPanel aPanel;
@@ -26,7 +28,7 @@ class ContigPanel extends JPanel implements ListSelectionListener
 		table.getSelectionModel().addListSelectionListener(this);
 
 		setLayout(new BorderLayout());
-		setBorder(BorderFactory.createTitledBorder("Contigs:"));
+		setBorder(BorderFactory.createTitledBorder(RB.format("gui.ContigPanel.title", 0)));
 		add(new JScrollPane(table));
 	}
 
@@ -45,7 +47,7 @@ class ContigPanel extends JPanel implements ListSelectionListener
 		table.setModel(model);
 		table.setRowSorter(new TableRowSorter<ContigTableModel>(model));
 
-		String title = "Contigs (" + assembly.getContigs().size() + "):";
+		String title = RB.format("gui.ContigPanel.title", assembly.getContigs().size());
 		setBorder(BorderFactory.createTitledBorder(title));
 	}
 

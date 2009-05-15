@@ -9,6 +9,8 @@ import javax.swing.event.*;
 import tablet.gui.*;
 import tablet.gui.viewer.colors.*;
 
+import scri.commons.gui.*;
+
 class NBStatusPanel extends JPanel implements ChangeListener
 {
 	private DecimalFormat d1 = new DecimalFormat("0.0");
@@ -21,6 +23,9 @@ class NBStatusPanel extends JPanel implements ChangeListener
 		this.aPanel = aPanel;
 
 		initComponents();
+
+		RB.setText(highlightLabel, "tablet.gui.viewer.NBStatusPanel.highlightLabel");
+		RB.setText(zoomLabel, "tablet.gui.viewer.NBStatusPanel.zoomLabel");
 
 		output1.setForeground(Color.red);
 		output1.setText(" ");
