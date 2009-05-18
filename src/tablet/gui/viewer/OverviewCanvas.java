@@ -102,19 +102,19 @@ class OverviewCanvas extends JPanel
 		if (bufferFactory == null)
 			return;
 
-		// Work out the x1/y2 position for the outline box
+		// Work out the x1/y1 position for the outline box
 		bX = bufferFactory.xScale * xIndex;
 		bY = bufferFactory.yScale * yIndex;
 
 		// Work out the x2 position for the outline box
 		float x2 = bX + (xNum * bufferFactory.xScale);
 		if (xNum > rCanvas.ntOnCanvasX || x2 > canvas.getWidth())
-			x2 = canvas.getWidth();
+			x2 = canvas.getWidth()-1;
 
 		// Work out the y2 position for the outline box
 		float y2 = bY + (yNum * bufferFactory.yScale);
 		if (yNum > rCanvas.ntOnCanvasY || y2 > canvas.getHeight())
-			y2 = canvas.getHeight();
+			y2 = canvas.getHeight()-1;
 
 		bW = (x2-bX) - 1;
 		bH = (y2-bY) - 1;
@@ -163,9 +163,9 @@ class OverviewCanvas extends JPanel
 
 			// Then draw the tracking rectangle
 			g.setPaint(new Color(0, 0, 255, 50));
-			g.fillRect(Math.round(bX), Math.round(bY), Math.round(bW), Math.round(bH));
+			g.fillRect((int)bX, (int)bY, (int)bW, (int)bH);
 			g.setColor(Color.red);
-			g.drawRect(Math.round(bX), Math.round(bY), Math.round(bW), Math.round(bH));
+			g.drawRect((int)bX, (int)bY, (int)bW, (int)bH);
 		}
 	}
 

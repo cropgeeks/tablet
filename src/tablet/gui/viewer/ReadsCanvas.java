@@ -124,10 +124,10 @@ class ReadsCanvas extends JPanel
 		pX2 = pX1 + viewSize.width -1;
 		// Adjust for canvases that are smaller than the window size
 		if (pX2 > canvasW)
-			pX2 = canvasW;
+			pX2 = canvasW - 1;
 
 		pY1 = viewPosition.y;
-		pY2 = pY1 + viewSize.height;
+		pY2 = pY1 + viewSize.height - 1;
 
 		updateOverview();
 		updateBuffer = true;
@@ -178,7 +178,7 @@ class ReadsCanvas extends JPanel
 
 	private void paintBuffer()
 	{
-		updateBuffer();
+		validateBuffer();
 
 		Graphics2D g = buffer.createGraphics();
 
@@ -229,7 +229,7 @@ class ReadsCanvas extends JPanel
 		updateBuffer = false;
 	}
 
-	private void updateBuffer()
+	private void validateBuffer()
 	{
 		// Work out the width and height needed
 		int w = pX2-pX1+1;
