@@ -74,7 +74,7 @@ public class Tablet
 		});
 
 
-		TaskDialog.initialize(winMain, RB.getString("gui.WinMain.Title"));
+		TaskDialog.initialize(winMain, RB.getString("gui.WinMain.title"));
 
 		winMain.setVisible(true);
 	}

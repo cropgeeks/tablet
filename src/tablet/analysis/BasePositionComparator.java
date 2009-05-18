@@ -21,7 +21,7 @@ public class BasePositionComparator
 	// TODO: Test case
 	public void doComparisons()
 	{
-		byte UNKNOWN = Sequence.UNKNOWN;
+		byte NOTUSED = Sequence.NOTUSED;
 
 		long count = 0;
 
@@ -33,31 +33,27 @@ public class BasePositionComparator
 			{
 				// Index start position within the consensus sequence
 				int c = read.getStartPosition();
-				int length = read.length();
+				int cLength = consensus.length();
+				int rLength = read.length();
 
-				for (int r = 0; r < length; r++, c++)
+				for (int r = 0; r < rLength; r++, c++)
 				{
-					// See http://stackoverflow.com/questions/141560/should-trycatch-go-inside-or-outside-a-loop
-
-					// There's not much in it, but the try/catch does seem ever
-					// so slightly faster than a manual check for out of bounds
-
 					byte value = read.getStateAt(r);
 
-					try
-					{
-						// The DNATable encodes its states so that A and dA are
-						// only ever 1 byte apart, meaning we can change quickly
-						// by just incrementing the value by one
-						if (consensus.getStateAt(c) != value && value > UNKNOWN)
-							read.setStateAt(r, (byte)(value+1));
-					}
-					catch (ArrayIndexOutOfBoundsException e)
+					if (c < 0 || c >= cLength)
 					{
 						// Out of bounds means that this base on the read does
 						// not have a corresponding position on the consensus
 						// (and must therefore be different from it)
 						read.setStateAt(r, (byte)(value+1));
+					}
+					else
+					{
+						// The DNATable encodes its states so that A and dA are
+						// only ever 1 byte apart, meaning we can change quickly
+						// by just incrementing the value by one
+						if (consensus.getStateAt(c) != value && value > NOTUSED)
+							read.setStateAt(r, (byte)(value+1));
 					}
 
 					count++;

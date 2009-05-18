@@ -2,10 +2,12 @@
 
 	<property name="src"       location="src"/>
 	<property name="lib"       location="lib"/>
+	<property name="res"       location="res"/>
 	<property name="lib-devel" location="lib-devel"/>
 	<property name="classes"   location="classes"/>
 
 	<property name="tablet.jar" value="${lib}/tablet.jar"/>
+	<property name="tablet-resources.jar" value="${lib}/tablet-resources.jar"/>
 
 	<target name="init">
 	</target>
@@ -19,6 +21,8 @@
 	<target name="clean">
 		<delete includeemptydirs="true">
 			<fileset dir="${classes}" includes="**/*"/>
+			<fileset file="${tablet.jar}"/>
+			<fileset file="${tablet-resources.jar}"/>
 		</delete>
 	</target>
 

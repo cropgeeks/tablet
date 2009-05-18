@@ -20,8 +20,8 @@ public class StandardColorScheme extends ColorScheme
 		super(contig);
 
 		// Sequence.NOTUSED
-		statesRD.add(new StandardColorState(" ", Color.lightGray, w, h, true, false));
-		statesCS.add(new StandardColorState(" ", Color.lightGray, w, h, false, false));
+		statesRD.add(null);
+		statesCS.add(null);
 
 
 		// Sequence.UNKNOWN
@@ -70,7 +70,7 @@ public class StandardColorScheme extends ColorScheme
 		statesRD.add(new StandardColorState("N", Color.lightGray, w, h, true, false));
 		statesCS.add(new StandardColorState("N", Color.lightGray, w, h, false, false));
 		// Sequence.dN
-		statesRD.add(new StandardColorState("N", Color.lightGray, w, h, true, false));
+		statesRD.add(new StandardColorState("N", Color.lightGray, w, h, true, true));
 		statesCS.add(null);
 	}
 
