@@ -109,12 +109,12 @@ class OverviewCanvas extends JPanel
 		// Work out the x2 position for the outline box
 		float x2 = bX + (xNum * bufferFactory.xScale);
 		if (xNum > rCanvas.ntOnCanvasX || x2 > canvas.getWidth())
-			x2 = canvas.getWidth()-1;
+			x2 = canvas.getWidth();
 
 		// Work out the y2 position for the outline box
 		float y2 = bY + (yNum * bufferFactory.yScale);
 		if (yNum > rCanvas.ntOnCanvasY || y2 > canvas.getHeight())
-			y2 = canvas.getHeight()-1;
+			y2 = canvas.getHeight();
 
 		bW = (x2-bX) - 1;
 		bH = (y2-bY) - 1;
