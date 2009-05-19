@@ -5,7 +5,7 @@ import tablet.gui.*;
 abstract class SimpleJob implements ITrackableJob
 {
 	// Maximum progress bar value that we're aiming for
-	protected int maximum = -1;
+	protected int maximum = 0;
 	// Current value;
 	protected int progress = 0;
 
@@ -15,7 +15,7 @@ abstract class SimpleJob implements ITrackableJob
 		{ okToRun = false; }
 
 	public boolean isIndeterminate()
-		{ return maximum == -1; }
+		{ return maximum == 0; }
 
 	public int getMaximum()
 		{ return maximum; }
