@@ -7,22 +7,18 @@ import java.util.*;
  * of a sequence's nucleotide positions. Each pack forms one "line" of data when
  * viewed in the display.
  */
-class Pack
+public class Pack
 {
 	private Vector<Read> reads = new Vector<Read>();
 
 	private int positionS;
 	private int positionE;
 
-	Pack()
-	{
-	}
-
 	/**
 	 * Attempts to add the read to this pack. It will only be added if it does
 	 * not overlap with any reads already stored in this pack.
 	 */
-	boolean addRead(Read read)
+	public boolean addRead(Read read)
 	{
 		if (reads.size() == 0)
 		{

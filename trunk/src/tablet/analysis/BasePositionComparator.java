@@ -9,7 +9,7 @@ import tablet.data.*;
  * so that these comparisons do not have to be done in real-time when the data
  * is used for rendering.
  */
-public class BasePositionComparator
+public class BasePositionComparator extends SimpleJob
 {
 	private Assembly assembly;
 
@@ -19,11 +19,16 @@ public class BasePositionComparator
 	}
 
 	// TODO: Test case
-	public void doComparisons()
+	public void runJob(int jobIndex)
 	{
+		long s = System.currentTimeMillis();
+		long count = 0;
+
 		byte NOTUSED = Sequence.NOTUSED;
 
-		long count = 0;
+		// How many reads do we have to deal with?
+		for (Contig contig: assembly.getContigs())
+			maximum += contig.getReads().size();
 
 		for (Contig contig: assembly.getContigs())
 		{
@@ -31,12 +36,16 @@ public class BasePositionComparator
 
 			for (Read read: contig.getReads())
 			{
+				// Check for quit/cancel on the job...
+				if (okToRun == false)
+					return;
+
 				// Index start position within the consensus sequence
 				int c = read.getStartPosition();
 				int cLength = consensus.length();
 				int rLength = read.length();
 
-				for (int r = 0; r < rLength; r++, c++)
+				for (int r = 0; r < rLength; r++, c++, count++)
 				{
 					byte value = read.getStateAt(r);
 
@@ -55,12 +64,15 @@ public class BasePositionComparator
 						if (consensus.getStateAt(c) != value && value > NOTUSED)
 							read.setStateAt(r, (byte)(value+1));
 					}
-
-					count++;
 				}
+
+				progress++;
 			}
 		}
 
+		long e = System.currentTimeMillis();
+
 		System.out.println("Ran " + count + " base comparisons");
+		System.out.println("  in " + (e-s) + "ms");
 	}
 }

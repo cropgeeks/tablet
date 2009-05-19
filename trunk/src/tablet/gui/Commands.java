@@ -4,7 +4,10 @@ import java.io.*;
 import java.lang.management.*;
 
 import tablet.data.*;
+import tablet.gui.dialog.*;
 import tablet.io.*;
+
+import scri.commons.gui.*;
 
 class Commands
 {
@@ -17,24 +20,35 @@ class Commands
 
 	void fileOpen(String filename)
 	{
-		// Load in the data
-		try
+		File file = new File(filename);
+
+		ImportHandler ioHandler = new ImportHandler(filename);
+
+		String title = RB.getString("gui.Commands.fileOpen.title");
+		String label = RB.getString("gui.Commands.fileOpen.label");
+		String[] msgs = new String[] {
+			RB.format("gui.Commands.fileOpen.msg01", file.getName()),
+			RB.getString("gui.Commands.fileOpen.msg02"),
+			RB.getString("gui.Commands.fileOpen.msg03") };
+
+		// Run the job...
+		ProgressDialog dialog = new ProgressDialog(ioHandler, title, label, msgs);
+		if (dialog.jobOK() == false)
 		{
-			ImportHandler ioHandler = new ImportHandler();
+			if (dialog.getException() != null)
+			{
+				TaskDialog.error(
+					"Error opening " + filename + "\n\n" + dialog.getException(),
+					RB.getString("gui.text.close"));
+			}
 
-			ioHandler.readFile(filename);
-			Assembly assembly = ioHandler.getAssembly();
-
-			long freeMem = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
-			java.text.NumberFormat nf = java.text.NumberFormat.getInstance();
-
-			System.out.println("Memory used: " + nf.format(freeMem/1024f/1024f) + "MB\n");
-
-			winMain.setAssembly(assembly);
+			return;
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+
+		long freeMem = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
+		java.text.NumberFormat nf = java.text.NumberFormat.getInstance();
+		System.out.println("Memory used: " + nf.format(freeMem/1024f/1024f) + "MB\n");
+
+		winMain.setAssembly(ioHandler.getAssembly());
 	}
 }

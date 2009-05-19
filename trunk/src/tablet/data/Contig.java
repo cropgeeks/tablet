@@ -72,9 +72,9 @@ public class Contig
 		}
 	}
 
-	public void createPackSet()
+	public void setPackSet(PackSet packSet)
 	{
-		packSet = new PackSet(reads);
+		this.packSet = packSet;
 		stackSet = new StackSet(reads);
 	}
 
