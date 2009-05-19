@@ -1,6 +1,7 @@
 package tablet.gui.dialog;
 
 import java.awt.event.*;
+import java.text.*;
 import javax.swing.*;
 
 import tablet.gui.*;
@@ -11,6 +12,8 @@ import tablet.gui.*;
  */
 public class ProgressDialog extends JDialog
 {
+	private static DecimalFormat d = new DecimalFormat("0.00");
+
 	private NBProgressPanel nbPanel;
 
 	// Runnable object that will be active while the dialog is visible
@@ -97,15 +100,21 @@ public class ProgressDialog extends JDialog
 			Runnable r = new Runnable() {
 				public void run()
 				{
-					boolean isIndeterminate = job.isIndeterminate();
+					nbPanel.pBar.setIndeterminate(job.isIndeterminate());
 
-					if (isIndeterminate)
-						nbPanel.pBar.setIndeterminate(true);
+					int val = job.getValue();
+					int max = job.getMaximum();
+					nbPanel.pBar.setMaximum(max);
+					nbPanel.pBar.setValue(val);
+
+					// If the job doesn't know its maximum (yet), this would
+					// have caused a 0 divided by 0 which isn't pretty
+					if (max == 0)
+						nbPanel.pBar.setString(d.format(0) + "%");
 					else
 					{
-						nbPanel.pBar.setIndeterminate(false);
-						nbPanel.pBar.setMaximum(job.getMaximum());
-						nbPanel.pBar.setValue(job.getValue());
+						float value = ((float) val / (float) max) * 100;
+						nbPanel.pBar.setString(d.format(value) + "%");
 					}
 				}
 			};

@@ -30,6 +30,8 @@ public class BasePositionComparator extends SimpleJob
 		for (Contig contig: assembly.getContigs())
 			maximum += contig.getReads().size();
 
+		System.out.println("Running comparisons for " + maximum + " reads");
+
 		for (Contig contig: assembly.getContigs())
 		{
 			Consensus consensus = contig.getConsensus();

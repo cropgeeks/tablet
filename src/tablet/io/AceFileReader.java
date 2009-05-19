@@ -94,8 +94,6 @@ class AceFileReader extends AssemblyReader
 		contig = new Contig(name, complemented, readCount);
 		assembly.getContigs().add(contig);
 
-		System.out.println("Processing " + contig.getName() + " with " + readCount + " reads");
-
 
 		// Reference sequence (immediately follows CO line)
 		StringBuilder ref = new StringBuilder(baseCount);
@@ -105,8 +103,6 @@ class AceFileReader extends AssemblyReader
 		consensus = new Consensus();
 		consensus.setData(ref.toString());
 		contig.setConsensusSequence(consensus);
-
-		System.out.println("Consensus length: " + consensus.length() + " bases");
 
 		currentReadInContig = 0;
 	}
