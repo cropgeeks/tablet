@@ -19,7 +19,7 @@ class AceFileReader extends AssemblyReader
 	private Consensus consensus;
 	private Read read;
 
-	private int expectedReads = 0;
+	// The index of the current read within the current contig (being read)
 	private int currentReadInContig = 0;
 
 	AceFileReader(boolean useAscii)
@@ -27,7 +27,7 @@ class AceFileReader extends AssemblyReader
 		this.useAscii = useAscii;
 	}
 
-	public void runJob()
+	public void runJob(int jobIndex)
 		throws Exception
 	{
 		if (useAscii)
@@ -37,8 +37,10 @@ class AceFileReader extends AssemblyReader
 
 		// Read and check for the header
 		str = in.readLine();
+
+		// Set the expected number of reads (x2 as each read is found twice)
 		if (str.startsWith("AS "))
-			expectedReads = Integer.parseInt(str.split("\\s+")[2]);
+			maximum = 2 * (Integer.parseInt(str.split("\\s+")[2]));
 		else
 			throw new ReadException(ReadException.UNKNOWN_FORMAT);
 
@@ -137,6 +139,8 @@ class AceFileReader extends AssemblyReader
 		read = new Read(id, position-1);
 		contig.getReads().add(read);
 
+		progress++;
+
 		if (id % 100000 == 0 && id != 0)
 			System.out.println(" read id for contig: " + id);
 	}
@@ -180,6 +184,7 @@ class AceFileReader extends AssemblyReader
 		read.setData(seq.toString());
 
 		currentReadInContig++;
+		progress++;
 
 		if (currentReadInContig % 100000 == 0)
 			System.out.println(" reads for this contig: " + currentReadInContig);
