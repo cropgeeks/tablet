@@ -16,6 +16,9 @@ public class WinMain extends JFrame
 {
 	private Commands commands = new Commands(this);
 
+	private JSplitPane splitter;
+	private JTabbedPane ctrlTabs;
+
 	private AssemblyPanel assemblyPanel;
 	private ContigPanel contigPanel;
 
@@ -49,20 +52,29 @@ public class WinMain extends JFrame
 
 	private void createControls()
 	{
+		ctrlTabs = new JTabbedPane();
+
 		assemblyPanel = new AssemblyPanel(this);
-		contigPanel = new ContigPanel(assemblyPanel);
+		contigPanel = new ContigPanel(assemblyPanel, ctrlTabs);
 
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(assemblyPanel, dropAdapter));
 
-		final JSplitPane splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		ctrlTabs.addTab("", contigPanel);
+		ctrlTabs.setTitleAt(0, contigPanel.getTitle(null));
+		ctrlTabs.addTab("Features", new JPanel());
+
+		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		splitter.setDividerLocation(Prefs.guiSplitterLocation);
-		splitter.setLeftComponent(contigPanel);
-		splitter.setRightComponent(assemblyPanel);
+		splitter.setOneTouchExpandable(true);
+		splitter.setLeftComponent(ctrlTabs);
+		splitter.setRightComponent(new LogoPanel(new BorderLayout()));
 
 		splitter.addPropertyChangeListener(new PropertyChangeListener() {
-			public void propertyChange(PropertyChangeEvent e) {
-				Prefs.guiSplitterLocation = splitter.getDividerLocation();
+			public void propertyChange(PropertyChangeEvent e)
+			{
+				if (splitter.getDividerLocation() != 1)
+					Prefs.guiSplitterLocation = splitter.getDividerLocation();
 			}
 		});
 
@@ -116,10 +128,37 @@ public class WinMain extends JFrame
 
 	void setAssembly(Assembly assembly)
 	{
+		int location = splitter.getDividerLocation();
+		splitter.setRightComponent(assemblyPanel);
+		splitter.setDividerLocation(location);
+
 		assemblyPanel.setAssembly(assembly);
 		contigPanel.setAssembly(assembly);
 
 		String title = RB.getString("gui.WinMain.title");
 		setTitle(assembly.getName() + " - " + title + " - " + Install4j.VERSION);
+	}
+
+	private static class LogoPanel extends JPanel
+	{
+		private static ImageIcon logo = Icons.getIcon("SCRILARGE");
+
+		LogoPanel(LayoutManager lm)
+		{
+			super(lm);
+			setBackground(Color.white);
+		}
+
+		public void paintComponent(Graphics graphics)
+		{
+			super.paintComponent(graphics);
+
+			Graphics2D g = (Graphics2D) graphics;
+
+			int w = getWidth();
+			int h = getHeight();
+
+			g.drawImage(logo.getImage(), 0, 0, w, w, null);
+		}
 	}
 }

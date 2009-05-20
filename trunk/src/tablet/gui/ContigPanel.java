@@ -14,13 +14,15 @@ import scri.commons.gui.*;
 class ContigPanel extends JPanel implements ListSelectionListener
 {
 	private AssemblyPanel aPanel;
+	private JTabbedPane ctrlTabs;
 
 	private ContigTableModel model;
 	private JTable table;
 
-	ContigPanel(AssemblyPanel aPanel)
+	ContigPanel(AssemblyPanel aPanel, JTabbedPane ctrlTabs)
 	{
 		this.aPanel = aPanel;
+		this.ctrlTabs = ctrlTabs;
 
 		table = new JTable();
 		table.getTableHeader().setReorderingAllowed(false);
@@ -28,8 +30,15 @@ class ContigPanel extends JPanel implements ListSelectionListener
 		table.getSelectionModel().addListSelectionListener(this);
 
 		setLayout(new BorderLayout());
-		setBorder(BorderFactory.createTitledBorder(RB.format("gui.ContigPanel.title", 0)));
 		add(new JScrollPane(table));
+	}
+
+	String getTitle(Assembly assembly)
+	{
+		if (assembly != null)
+			return RB.format("gui.ContigPanel.title", assembly.getContigs().size());
+		else
+			return RB.format("gui.ContigPanel.title", 0);
 	}
 
 	void setAssembly(Assembly assembly)
@@ -47,8 +56,7 @@ class ContigPanel extends JPanel implements ListSelectionListener
 		table.setModel(model);
 		table.setRowSorter(new TableRowSorter<ContigTableModel>(model));
 
-		String title = RB.format("gui.ContigPanel.title", assembly.getContigs().size());
-		setBorder(BorderFactory.createTitledBorder(title));
+		ctrlTabs.setTitleAt(0, getTitle(assembly));
 	}
 
 	public void valueChanged(ListSelectionEvent e)
