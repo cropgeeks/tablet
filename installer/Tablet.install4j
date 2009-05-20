@@ -29,7 +29,7 @@
     <components />
   </files>
   <launchers>
-    <launcher name="tablet" id="20" external="false" excludeFromMenu="false" menuName="Tablet Test" icnsFile="" pngIcon16File="../res/icons/appicon.png" pngIcon32File="../res/icons/appicon.png" macServiceDependencies="" swtApp="false" fileset="">
+    <launcher name="tablet" id="20" external="false" excludeFromMenu="false" menuName="Tablet" icnsFile="" pngIcon16File="../res/icons/appicon.png" pngIcon32File="../res/icons/appicon.png" macServiceDependencies="" swtApp="false" fileset="">
       <executable name="tablet" type="1" iconSet="true" iconFile="" executableDir="." redirectStderr="false" stderrFile="output.log" redirectStdout="false" stdoutFile="output.log" failOnStderrOutput="true" executableMode="2" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" />
       </executable>
