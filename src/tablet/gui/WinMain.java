@@ -25,7 +25,7 @@ public class WinMain extends JFrame
 	{
 		createControls();
 
-		setTitle(RB.getString("gui.WinMain.title"));
+		setTitle(RB.getString("gui.WinMain.title") + " - " + Install4j.VERSION);
 		setIconImage(Icons.getIcon("APPICON").getImage());
 		setSize(Prefs.guiWinMainWidth, Prefs.guiWinMainHeight);
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -120,6 +120,6 @@ public class WinMain extends JFrame
 		contigPanel.setAssembly(assembly);
 
 		String title = RB.getString("gui.WinMain.title");
-		setTitle(title + " - " + assembly.getName());
+		setTitle(assembly.getName() + " - " + title + " - " + Install4j.VERSION);
 	}
 }

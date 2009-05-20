@@ -24,6 +24,8 @@ public class Tablet
 		Icons.initialize("/res/icons", ".png");
 		RB.initialize(Prefs.localeText, "res.text.tablet");
 
+		Install4j.doStartUpCheck();
+
 		if (args.length == 1)
 			new Tablet(args[0]);
 		else
