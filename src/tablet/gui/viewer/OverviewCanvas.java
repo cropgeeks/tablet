@@ -18,7 +18,7 @@ class OverviewCanvas extends JPanel
 	private BufferedImage image = null;
 	private int w, h;
 
-	private float bX, bY, bW, bH;
+	private int bX1, bY1, bX2, bY2;
 
 	private boolean basicView = true;
 
@@ -102,26 +102,25 @@ class OverviewCanvas extends JPanel
 		if (bufferFactory == null)
 			return;
 
-		// Work out the x1/y1 position for the outline box
-		bX = bufferFactory.xScale * xIndex;
-		bY = bufferFactory.yScale * yIndex;
+		// Work out the x1 position for the outline box
+		bX1 = Math.round(bufferFactory.xScale * xIndex);
+		if (bX1 >= w) bX1 = w - 1;
+
+		// Work out the y1 position for the outline box
+		bY1 = Math.round(bufferFactory.yScale * yIndex);
+		if (bY1 >= h) bY1 = h - 1;
 
 		// Work out the x2 position for the outline box
-		float x2 = bX + (xNum * bufferFactory.xScale);
-		if (xNum > rCanvas.ntOnCanvasX || x2 > canvas.getWidth())
-			x2 = canvas.getWidth();
+		bX2 = bX1 + Math.round(xNum * bufferFactory.xScale);
+		if (bX2 >= w) bX2 = w - 1;
 
 		// Work out the y2 position for the outline box
-		float y2 = bY + (yNum * bufferFactory.yScale);
-		if (yNum > rCanvas.ntOnCanvasY || y2 > canvas.getHeight())
-			y2 = canvas.getHeight();
+		bY2 = bY1 + Math.round(yNum * bufferFactory.yScale);
+		if (bY2 >= h) bY2 = h - 1;
 
-		bW = (x2-bX) - 1;
-		bH = (y2-bY) - 1;
-
-		// Set the size to 1 so something still draws if the box is very small
-		if (bW < 1) bW = 1;
-		if (bH < 1) bH = 1;
+		// Tweak for a fatter outline on very large canvases
+		if (bX1 == bX2) bX2++;
+		if (bY1 == bY2) bY2++;
 
 		repaint();
 	}
@@ -138,10 +137,10 @@ class OverviewCanvas extends JPanel
 			if (aPanel == null)
 				return;
 
-			int x = e.getX() - (int) (bW / 2f);
-			int y = e.getY() - (int) (bH / 2f);
-
 			// Compute mouse position (and adjust by wid/hgt of rectangle)
+			int x = e.getX() - (int) ((bX2-bX1+1) / 2f);
+			int y = e.getY() - (int) ((bY2-bY1+1) / 2f);
+
 			int rowIndex = (int) (y / bufferFactory.yScale);
 			int colIndex = (int) (x / bufferFactory.xScale);
 
@@ -163,9 +162,9 @@ class OverviewCanvas extends JPanel
 
 			// Then draw the tracking rectangle
 			g.setPaint(new Color(0, 0, 255, 50));
-			g.fillRect((int)bX, (int)bY, (int)bW, (int)bH);
+			g.fillRect(bX1, bY1, bX2-bX1, bY2-bY1);
 			g.setColor(Color.red);
-			g.drawRect((int)bX, (int)bY, (int)bW, (int)bH);
+			g.drawRect(bX1, bY1, bX2-bX1, bY2-bY1);
 		}
 	}
 
