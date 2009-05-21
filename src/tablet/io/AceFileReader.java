@@ -22,9 +22,9 @@ class AceFileReader extends AssemblyReader
 	// The index of the current read within the current contig (being read)
 	private int currentReadInContig = 0;
 
-	// We maintain a local hashtable of contig names to help with finding a
+	// We maintain a local hashtable of contigs to help with finding a
 	// contig quickly when processing consensus tags
-	private Hashtable<String, Integer> contigHash = new Hashtable<String, Integer>();
+	private Hashtable<String, Contig> contigHash = new Hashtable<String, Contig>();
 
 	AceFileReader(boolean useAscii)
 	{
@@ -94,8 +94,8 @@ class AceFileReader extends AssemblyReader
 		boolean complemented = (CO[5].charAt(0) == 'C');
 
 		contig = new Contig(name, complemented, readCount);
-		int index = assembly.addContig(contig);
-		contigHash.put(name, index);
+		assembly.addContig(contig);
+		contigHash.put(name, contig);
 
 
 		// Reference sequence (immediately follows CO line)
@@ -204,7 +204,26 @@ class AceFileReader extends AssemblyReader
 	private void processConsesusTag()
 		throws Exception
 	{
+		// The next line of the tag should be the one with all the info on it
 		str = in.readLine();
+		String[] CT = str.split("\\s+");
+
+		// POLYMORPHIC SNPs
+		if (CT[1].equalsIgnoreCase("polymorphism"))
+		{
+			// Read the information
+			String contigName = CT[0];
+			int p1 = Integer.parseInt(CT[3]);
+			int p2 = Integer.parseInt(CT[4]);
+
+			// And assuming a contig exists with this name...
+			Contig contig = contigHash.get(contigName);
+			if (contig != null)
+				contig.getFeatures().add(new Feature(Feature.SNP, p1, p2));
+		}
+
+
+		// Read until the end of the tag
 		while ((str = in.readLine()) != null && !str.startsWith("}"));
 	}
 

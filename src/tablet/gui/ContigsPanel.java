@@ -11,15 +11,16 @@ import tablet.gui.viewer.*;
 
 import scri.commons.gui.*;
 
-class ContigPanel extends JPanel implements ListSelectionListener
+class ContigsPanel extends JPanel implements ListSelectionListener
 {
 	private AssemblyPanel aPanel;
+	private FeaturesPanel featuresPanel;
 	private JTabbedPane ctrlTabs;
 
-	private ContigTableModel model;
+	private ContigsTableModel model;
 	private JTable table;
 
-	ContigPanel(AssemblyPanel aPanel, JTabbedPane ctrlTabs)
+	ContigsPanel(AssemblyPanel aPanel, JTabbedPane ctrlTabs)
 	{
 		this.aPanel = aPanel;
 		this.ctrlTabs = ctrlTabs;
@@ -33,28 +34,30 @@ class ContigPanel extends JPanel implements ListSelectionListener
 		add(new JScrollPane(table));
 	}
 
+	void setFeaturesPanel(FeaturesPanel featuresPanel)
+		{ this.featuresPanel = featuresPanel; }
+
 	String getTitle(Assembly assembly)
 	{
 		if (assembly != null)
-			return RB.format("gui.ContigPanel.title", assembly.contigCount());
+			return RB.format("gui.ContigsPanel.title", assembly.contigCount());
 		else
-			return RB.format("gui.ContigPanel.title", 0);
+			return RB.format("gui.ContigsPanel.title", 0);
 	}
 
 	void setAssembly(Assembly assembly)
 	{
 		table.setModel(new DefaultTableModel());
-
 		if (assembly == null)
 		{
-			setBorder(BorderFactory.createTitledBorder("Contigs:"));
+			featuresPanel.setContig(null);
 			return;
 		}
 
-		model = new ContigTableModel(assembly, table);
+		model = new ContigsTableModel(assembly, table);
 
 		table.setModel(model);
-		table.setRowSorter(new TableRowSorter<ContigTableModel>(model));
+		table.setRowSorter(new TableRowSorter<ContigsTableModel>(model));
 
 		ctrlTabs.setTitleAt(0, getTitle(assembly));
 	}
@@ -70,6 +73,7 @@ class ContigPanel extends JPanel implements ListSelectionListener
 		{
 			// TODO: Update winMain with blank RHS split pane instead
 			aPanel.setContig(null);
+			featuresPanel.setContig(null);
 		}
 		else
 		{
@@ -77,7 +81,9 @@ class ContigPanel extends JPanel implements ListSelectionListener
 			row = table.convertRowIndexToModel(row);
 
 			// Then pull the contig out of the model and set...
-			aPanel.setContig((Contig) model.getValueAt(row, 0));
+			Contig contig = (Contig) model.getValueAt(row, 0);
+			aPanel.setContig(contig);
+			featuresPanel.setContig(contig);
 		}
 	}
 }

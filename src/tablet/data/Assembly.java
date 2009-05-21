@@ -30,15 +30,9 @@ public class Assembly implements Iterable<Contig>
 	public void setReadCache(IReadCache cache)
 		{ this.cache = cache; }
 
-	/**
-	 * Adds a contig to this assembly, returning the index position within the
-	 * assembly's contig list that is was added at.
-	 */
-	public int addContig(Contig contig)
-	{
-		contigs.add(contig);
-		return contigs.size()-1;
-	}
+	/* Adds a contig to this assembly. */
+	public void addContig(Contig contig)
+		{ contigs.add(contig); }
 
 	public Contig getContig(int index)
 		throws ArrayIndexOutOfBoundsException
