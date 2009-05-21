@@ -19,6 +19,8 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 	private FeaturesTableModel model;
 	private JTable table;
 
+	private Contig contig;
+
 	FeaturesPanel(AssemblyPanel aPanel, JTabbedPane ctrlTabs)
 	{
 		this.aPanel = aPanel;
@@ -35,6 +37,8 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 
 	void setContig(Contig contig)
 	{
+		this.contig = contig;
+
 		table.setModel(new DefaultTableModel());
 		if (contig == null)
 			return;
@@ -61,6 +65,9 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 		// Pull the feature out of the model
 		Feature feature = (Feature) model.getValueAt(row, 9);
 
-		aPanel.moveToPosition(-1, feature.getP1(), true);
+		int position = feature.getP1();
+		position = position + contig.getConsensusOffset();
+
+		aPanel.moveToPosition(-1, position, true);
 	}
 }

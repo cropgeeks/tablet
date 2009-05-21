@@ -58,7 +58,7 @@ class FeaturesTableModel extends AbstractTableModel
 		switch (col)
 		{
 			case 0: return feature.getType();
-			case 1: return feature.getP1();
+			case 1: return feature.getP1() + 1; // +1 back into consensus space
 
 			case 9: return feature;
 		}

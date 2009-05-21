@@ -13,7 +13,7 @@ public class Consensus extends Sequence
 	{
 		bq = new byte[length()];
 
-		String[] tokens = qualities.trim().split(" ");
+		String[] tokens = qualities.trim().split("\\s+");
 
 		int i = 0;
 		for (int t = 0; t < tokens.length; t++, i++)

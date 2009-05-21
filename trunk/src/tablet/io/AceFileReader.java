@@ -86,7 +86,7 @@ class AceFileReader extends AssemblyReader
 		throws Exception
 	{
 		// CO <contig name> <# of bases> <# of reads in contig> <# of base segments in contig> <U or C>
-		String[] CO = str.split(" ");
+		String[] CO = str.split("\\s+");
 
 		String name = new String(CO[1]);
 		int baseCount = Integer.parseInt(CO[2]);
@@ -113,9 +113,13 @@ class AceFileReader extends AssemblyReader
 	private void processBaseQualities()
 		throws Exception
 	{
+		// The extra " " is added to deal with files that don't have a space
+		// after the final BQ score on a line, eg: "50 99\n68 45" etc
+		// What we really want to read is "50 99 \n68 45"
+
 		StringBuilder bq = new StringBuilder(consensus.length());
 		while ((str = in.readLine()) != null && str.length() > 0)
-			bq.append(str);
+			bq.append(" " + str);
 
 		consensus.setBaseQualities(bq.toString().trim());
 	}
@@ -213,13 +217,30 @@ class AceFileReader extends AssemblyReader
 		{
 			// Read the information
 			String contigName = CT[0];
-			int p1 = Integer.parseInt(CT[3]);
-			int p2 = Integer.parseInt(CT[4]);
+			int p1 = Integer.parseInt(CT[3]) - 1;
+			int p2 = Integer.parseInt(CT[4]) - 1;
 
 			// And assuming a contig exists with this name...
 			Contig contig = contigHash.get(contigName);
 			if (contig != null)
 				contig.getFeatures().add(new Feature(Feature.SNP, p1, p2));
+		}
+
+		else if (CT[1].equalsIgnoreCase("comment") && CT[2].equalsIgnoreCase("gigaBayes"))
+		{
+			// Read the information
+			String contigName = CT[0];
+			int p1 = Integer.parseInt(CT[3]) - 1;
+			int p2 = Integer.parseInt(CT[4]) - 1;
+
+			str = in.readLine().trim();
+			if (str.equalsIgnoreCase("Variation type=SNP"))
+			{
+				// And assuming a contig exists with this name...
+				Contig contig = contigHash.get(contigName);
+				if (contig != null)
+					contig.getFeatures().add(new Feature(Feature.SNP, p1, p2));
+			}
 		}
 
 
