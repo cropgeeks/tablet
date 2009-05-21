@@ -9,6 +9,8 @@ import tablet.data.*;
 import tablet.data.cache.*;
 import tablet.gui.*;
 
+import scri.commons.file.*;
+
 /**
  * This is a complicated class, that presents itself as a trackable job, but in
  * reality actually lets other trackable implementations do most of the work.
@@ -84,12 +86,14 @@ public class ImportHandler implements ITrackableJob
 				FileCache.createReadableCache(cacheFile, indexFile));
 
 			// Sort the reads into order
-			System.out.println("Sorting...");
-			for (Contig contig: assembly.getContigs())
+			long s = System.currentTimeMillis();
+			System.out.print("Sorting...");
+			for (Contig contig: assembly)
 			{
 				Collections.sort(contig.getReads());
 				contig.determineOffsets();
 			}
+			System.out.println((System.currentTimeMillis()-s) + "ms");
 		}
 		else
 			throw new ReadException(ReadException.UNKNOWN_FORMAT);
@@ -99,7 +103,7 @@ public class ImportHandler implements ITrackableJob
 		throws Exception
 	{
 		// Try various ways of opening the file...
-		InputStream is = null;
+		ProgressInputStream is = null;
 
 		// 1) Is it a zip file?
 		if (is == null)
@@ -113,7 +117,9 @@ public class ImportHandler implements ITrackableJob
 				{
 					ZipEntry entry = entries.nextElement();
 					System.out.println("Zip: " + file + " (" + entry + ")");
-					is = zip.getInputStream(entry);
+					InputStream zis = zip.getInputStream(entry);
+					is = new ProgressInputStream(zis);
+					is.setSize(entry.getSize());
 					break;
 				}
 			}
@@ -121,27 +127,32 @@ public class ImportHandler implements ITrackableJob
 		}
 
 		// 2) Is it a gzip file?
-		if (is == null)
+		// TODO: 21/05/2009 - disabled until we know of a way of determining the
+		// size of the file inside the archive (to pass to the ProgressIS)
+/*		if (is == null)
 		{
 			try
 			{
-				is = new GZIPInputStream(new FileInputStream(file));
+				InputStream zis = new GZIPInputStream(new FileInputStream(file));
+				is = new ProgressInputStream(zis);
+				is.setSize(file.length());
 				System.out.println("GZip: " + file);
 			}
 			catch (Exception e) {}
 		}
-
+*/
 		// 3) Is it a normal file?
 		if (is == null)
 		{
 			System.out.println("Normal: " + file);
-			is = new FileInputStream(file);
+			is = new ProgressInputStream(new FileInputStream(file));
 		}
 
 
 		try
 		{
 			long s = System.currentTimeMillis();
+
 			reader.setParameters(readCache, is);
 
 			currentJob = reader;

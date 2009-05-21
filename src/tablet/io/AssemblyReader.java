@@ -6,6 +6,8 @@ import tablet.data.*;
 import tablet.data.cache.*;
 import tablet.gui.*;
 
+import scri.commons.file.*;
+
 abstract class AssemblyReader implements ITrackableJob
 {
 	// Data structures used as the file is read
@@ -15,15 +17,10 @@ abstract class AssemblyReader implements ITrackableJob
 	// True while this trackable job should still be running
 	protected boolean okToRead = true;
 
-	// Maximum progress bar value that we're aiming for
-	protected int maximum = 100;
-	// Current value;
-	protected int progress = 0;
-
 	// The input stream being read from
-	protected InputStream is;
+	protected ProgressInputStream is;
 
-	void setParameters(IReadCache readCache, InputStream is)
+	void setParameters(IReadCache readCache, ProgressInputStream is)
 	{
 		this.readCache = readCache;
 		this.is = is;
@@ -39,10 +36,15 @@ abstract class AssemblyReader implements ITrackableJob
 		{ return false; }
 
 	public int getMaximum()
-		{ return maximum; }
+		{ return 50000; }
 
 	public int getValue()
-		{ return progress; }
+	{
+		float bytesRead = is.getBytesRead();
+		float size = is.getSize();
+
+		return Math.round((bytesRead / size) * 50000);
+	}
 
 	public int getJobCount()
 		{ return 1; }

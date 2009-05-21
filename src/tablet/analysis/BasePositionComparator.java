@@ -27,12 +27,12 @@ public class BasePositionComparator extends SimpleJob
 		byte NOTUSED = Sequence.NOTUSED;
 
 		// How many reads do we have to deal with?
-		for (Contig contig: assembly.getContigs())
-			maximum += contig.getReads().size();
+		for (Contig contig: assembly)
+			maximum += contig.readCount();
 
 		System.out.println("Running comparisons for " + maximum + " reads");
 
-		for (Contig contig: assembly.getContigs())
+		for (Contig contig: assembly)
 		{
 			Consensus consensus = contig.getConsensus();
 

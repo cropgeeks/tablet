@@ -43,7 +43,7 @@ class ContigTableModel extends AbstractTableModel
 		if (assembly == null)
 			return 0;
 
-		return assembly.getContigs().size();
+		return assembly.contigCount();
 	}
 
 	public Class getColumnClass(int col)
@@ -56,13 +56,13 @@ class ContigTableModel extends AbstractTableModel
 
 	public Object getValueAt(int row, int col)
 	{
-		Contig contig = assembly.getContigs().get(row);
+		Contig contig = assembly.getContig(row);
 
 		switch (col)
 		{
 			case 0: return contig;
 			case 1: return contig.getConsensus().length();
-			case 2: return contig.getReads().size();
+			case 2: return contig.readCount();
 		}
 
 		return null;

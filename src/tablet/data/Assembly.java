@@ -4,7 +4,7 @@ import java.util.*;
 
 import tablet.data.cache.*;
 
-public class Assembly
+public class Assembly implements Iterable<Contig>
 {
 	private String name;
 	private IReadCache cache;
@@ -21,12 +21,29 @@ public class Assembly
 	public String getName()
 		{ return name; }
 
+	public Iterator<Contig> iterator()
+		{ return contigs.iterator(); }
+
+	public int contigCount()
+		{ return contigs.size(); }
+
 	public void setReadCache(IReadCache cache)
 		{ this.cache = cache; }
 
-	public Vector<Contig> getContigs()
+	/**
+	 * Adds a contig to this assembly, returning the index position within the
+	 * assembly's contig list that is was added at.
+	 */
+	public int addContig(Contig contig)
 	{
-		return contigs;
+		contigs.add(contig);
+		return contigs.size()-1;
+	}
+
+	public Contig getContig(int index)
+		throws ArrayIndexOutOfBoundsException
+	{
+		return contigs.get(index);
 	}
 
 	public ReadMetaData getReadMetaData(Read read)

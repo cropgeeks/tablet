@@ -46,10 +46,20 @@ public class Read extends Sequence implements Comparable<Read>
 	{
 		if (position < other.position)
 			return -1;
-		else if (position == other.position)
-			return 0;
-		else
+		else if (position > other.position)
 			return 1;
+		else
+		{
+			int length = length();
+			int oLength = other.length();
+
+			if (length == oLength)
+				return 0;
+			else if (length < oLength)
+				return -1;
+			else
+				return 1;
+		}
 	}
 
 	/**

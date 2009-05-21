@@ -22,6 +22,10 @@ class AceFileReader extends AssemblyReader
 	// The index of the current read within the current contig (being read)
 	private int currentReadInContig = 0;
 
+	// We maintain a local hashtable of contig names to help with finding a
+	// contig quickly when processing consensus tags
+	private Hashtable<String, Integer> contigHash = new Hashtable<String, Integer>();
+
 	AceFileReader(boolean useAscii)
 	{
 		this.useAscii = useAscii;
@@ -31,17 +35,15 @@ class AceFileReader extends AssemblyReader
 		throws Exception
 	{
 		if (useAscii)
-			in = new BufferedReader(new InputStreamReader(is, "ASCII"));	// ISO8859_1
+			in = new BufferedReader(new InputStreamReader(is, "ASCII")); // ISO8859_1
 		else
 			in = new BufferedReader(new InputStreamReader(is));
+
 
 		// Read and check for the header
 		str = in.readLine();
 
-		// Set the expected number of reads (x2 as each read is found twice)
-		if (str.startsWith("AS "))
-			maximum = 2 * (Integer.parseInt(str.split("\\s+")[2]));
-		else
+		if (str.startsWith("AS ") == false)
 			throw new ReadException(ReadException.UNKNOWN_FORMAT);
 
 
@@ -70,7 +72,7 @@ class AceFileReader extends AssemblyReader
 
 			// Currently not doing anything with these tags
 			else if (str.startsWith("CT{"))
-				while ((str = in.readLine()) != null && !str.startsWith("}"));
+				processConsesusTag();
 			else if (str.startsWith("RT{"))
 				while ((str = in.readLine()) != null && !str.startsWith("}"));
 			else if (str.startsWith("WA{"))
@@ -92,7 +94,8 @@ class AceFileReader extends AssemblyReader
 		boolean complemented = (CO[5].charAt(0) == 'C');
 
 		contig = new Contig(name, complemented, readCount);
-		assembly.getContigs().add(contig);
+		int index = assembly.addContig(contig);
+		contigHash.put(name, index);
 
 
 		// Reference sequence (immediately follows CO line)
@@ -121,7 +124,7 @@ class AceFileReader extends AssemblyReader
 		throws Exception
 	{
 		// AF <read name> <C or U> <padded start consensus position>
-		String[] AF = str.split(" ");
+		String[] AF = str.split("\\s+");
 
 		String name = new String(AF[1]);
 		boolean isComplemented = (AF[2].charAt(0) == 'C');
@@ -134,8 +137,6 @@ class AceFileReader extends AssemblyReader
 
 		read = new Read(id, position-1);
 		contig.getReads().add(read);
-
-		progress++;
 
 		if (id % 100000 == 0 && id != 0)
 			System.out.println(" read id for contig: " + id);
@@ -167,7 +168,7 @@ class AceFileReader extends AssemblyReader
 		throws Exception
 	{
 		// RD <read name> <# of padded bases> <# of whole read info items> <# of read tags>
-		String[] RD = str.split(" ");
+		String[] RD = str.split("\\s+");
 
 		int baseCount = Integer.parseInt(RD[2]);
 
@@ -180,7 +181,6 @@ class AceFileReader extends AssemblyReader
 		read.setData(seq.toString());
 
 		currentReadInContig++;
-		progress++;
 
 		if (currentReadInContig % 100000 == 0)
 			System.out.println(" reads for this contig: " + currentReadInContig);
@@ -190,7 +190,7 @@ class AceFileReader extends AssemblyReader
 		throws Exception
 	{
 		// QA <qual clipping start> <qual clipping end> <align clipping start> <align clipping end>
-		String[] QA = str.split(" ");
+		String[] QA = str.split("\\s+");
 
 		int qa_start = Integer.parseInt(QA[1]);
 		int qa_end = Integer.parseInt(QA[2]);
@@ -204,6 +204,7 @@ class AceFileReader extends AssemblyReader
 	private void processConsesusTag()
 		throws Exception
 	{
+		str = in.readLine();
 		while ((str = in.readLine()) != null && !str.startsWith("}"));
 	}
 
