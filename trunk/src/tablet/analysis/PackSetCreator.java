@@ -19,10 +19,10 @@ public class PackSetCreator extends SimpleJob
 		long s = System.currentTimeMillis();
 
 		// How many reads do we have to deal with?
-		for (Contig contig: assembly.getContigs())
-			maximum += contig.getReads().size();
+		for (Contig contig: assembly)
+			maximum += contig.readCount();
 
-		for (Contig contig: assembly.getContigs())
+		for (Contig contig: assembly)
 		{
 			PackSet packSet = new PackSet();
 

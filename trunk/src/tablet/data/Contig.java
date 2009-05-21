@@ -7,18 +7,20 @@ import tablet.data.cache.*;
 public class Contig
 {
 	private String name;
+	private Consensus consensus;
 	private boolean complemented;
 
-	private Consensus consensus;
-
 	private Vector<Read> reads;
+
 	// Starting and ending indices of the leftmost and rightmost reads
 	private int lhsOffset, rhsOffset;
 
+	// Objects for handling the ordering of reads (for display)
+	private IReadManager readManager;
 	private PackSet packSet;
 	private StackSet stackSet;
 
-	private IReadManager readManager;
+	private Vector<Feature> features = new Vector<Feature>();
 
 	public Contig()
 	{
@@ -50,11 +52,20 @@ public class Contig
 	public Consensus getConsensus()
 		{ return consensus; }
 
+	public void setConsensusSequence(Consensus consensus)
+		{ this.consensus = consensus; }
+
 	public Vector<Read> getReads()
 		{ return reads; }
 
-	public void setConsensusSequence(Consensus consensus)
-		{ this.consensus = consensus; }
+	public int readCount()
+		{ return reads.size(); }
+
+	public Vector<Feature> getFeatures()
+		{ return features; }
+
+	public int featureCount()
+		{ return features.size(); }
 
 	public void determineOffsets()
 	{

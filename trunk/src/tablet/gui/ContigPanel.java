@@ -36,7 +36,7 @@ class ContigPanel extends JPanel implements ListSelectionListener
 	String getTitle(Assembly assembly)
 	{
 		if (assembly != null)
-			return RB.format("gui.ContigPanel.title", assembly.getContigs().size());
+			return RB.format("gui.ContigPanel.title", assembly.contigCount());
 		else
 			return RB.format("gui.ContigPanel.title", 0);
 	}
