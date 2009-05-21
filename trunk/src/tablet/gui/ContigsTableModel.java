@@ -11,21 +11,21 @@ import scri.commons.gui.*;
 /**
  * Table model class for displaying all the contigs within an assembly.
  */
-class ContigTableModel extends AbstractTableModel
+class ContigsTableModel extends AbstractTableModel
 {
 	private Assembly assembly;
 
 	private JTable table;
 	private String[] columnNames;
 
-	ContigTableModel(Assembly assembly, JTable table)
+	ContigsTableModel(Assembly assembly, JTable table)
 	{
 		this.assembly = assembly;
 		this.table = table;
 
-		String col1 = RB.getString("gui.ContigTableModel.col1");
-		String col2 = RB.getString("gui.ContigTableModel.col2");
-		String col3 = RB.getString("gui.ContigTableModel.col3");
+		String col1 = RB.getString("gui.ContigsTableModel.col1");
+		String col2 = RB.getString("gui.ContigsTableModel.col2");
+		String col3 = RB.getString("gui.ContigsTableModel.col3");
 
 		columnNames = new String[] { col1, col2, col3 };
 	}
@@ -40,9 +40,6 @@ class ContigTableModel extends AbstractTableModel
 
 	public int getRowCount()
 	{
-		if (assembly == null)
-			return 0;
-
 		return assembly.contigCount();
 	}
 

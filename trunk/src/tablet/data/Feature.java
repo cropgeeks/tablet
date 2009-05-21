@@ -41,4 +41,13 @@ public class Feature implements Comparable<Feature>
 		else
 			return 1;
 	}
+
+	public int getType()
+		{ return type; }
+
+	public int getP1()
+		{ return p1; }
+
+	public int getP2()
+		{ return p2; }
 }

@@ -20,7 +20,8 @@ public class WinMain extends JFrame
 	private JTabbedPane ctrlTabs;
 
 	private AssemblyPanel assemblyPanel;
-	private ContigPanel contigPanel;
+	private ContigsPanel contigsPanel;
+	private FeaturesPanel featuresPanel;
 
 	private Assembly assembly;
 
@@ -55,14 +56,17 @@ public class WinMain extends JFrame
 		ctrlTabs = new JTabbedPane();
 
 		assemblyPanel = new AssemblyPanel(this);
-		contigPanel = new ContigPanel(assemblyPanel, ctrlTabs);
+		contigsPanel = new ContigsPanel(assemblyPanel, ctrlTabs);
+		featuresPanel = new FeaturesPanel(assemblyPanel, ctrlTabs);
+
+		contigsPanel.setFeaturesPanel(featuresPanel);
 
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(assemblyPanel, dropAdapter));
 
-		ctrlTabs.addTab("", contigPanel);
-		ctrlTabs.setTitleAt(0, contigPanel.getTitle(null));
-		ctrlTabs.addTab("Features", new JPanel());
+		ctrlTabs.addTab("", contigsPanel);
+		ctrlTabs.setTitleAt(0, contigsPanel.getTitle(null));
+		ctrlTabs.addTab("Features", featuresPanel);
 
 		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		splitter.setDividerLocation(Prefs.guiSplitterLocation);
@@ -133,7 +137,7 @@ public class WinMain extends JFrame
 		splitter.setDividerLocation(location);
 
 		assemblyPanel.setAssembly(assembly);
-		contigPanel.setAssembly(assembly);
+		contigsPanel.setAssembly(assembly);
 
 		String title = RB.getString("gui.WinMain.title");
 		setTitle(assembly.getName() + " - " + title + " - " + Install4j.VERSION);
