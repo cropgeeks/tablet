@@ -18,7 +18,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	OverviewCanvas overviewCanvas;
 	ScaleCanvas scaleCanvas;
 	ConsensusCanvas consensusCanvas;
-	public ReadsCanvas readsCanvas;
+	ReadsCanvas readsCanvas;
 	NBStatusPanel statusPanel;
 
 	private JScrollPane sp;

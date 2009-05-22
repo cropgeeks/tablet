@@ -14,8 +14,9 @@ import scri.commons.gui.*;
 class FeaturesPanel extends JPanel implements ListSelectionListener
 {
 	private AssemblyPanel aPanel;
-	private JTabbedPane ctrlTabs;
+	private ColumnHighlighter highlighter;
 
+	private JTabbedPane ctrlTabs;
 	private FeaturesTableModel model;
 	private JTable table;
 
@@ -30,6 +31,15 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getSelectionModel().addListSelectionListener(this);
+
+		// Additional (duplicate) table-clicked handler to catch the user
+		// re-clicking on the same row. This doesn't generate a table event, but
+		// we still want to respond to it and highlight the selection again
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				processTableSelection();
+			}
+		});
 
 		setLayout(new BorderLayout());
 		add(new JScrollPane(table));
@@ -54,6 +64,11 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 		if (e.getValueIsAdjusting())
 			return;
 
+		processTableSelection();
+	}
+
+	private void processTableSelection()
+	{
 		int row = table.getSelectedRow();
 
 		if (row == -1)
@@ -69,5 +84,6 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 		position = position + contig.getConsensusOffset();
 
 		aPanel.moveToPosition(-1, position, true);
+		highlighter = new ColumnHighlighter(aPanel, position, highlighter);
 	}
 }
