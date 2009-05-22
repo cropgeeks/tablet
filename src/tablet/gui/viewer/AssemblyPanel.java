@@ -7,12 +7,14 @@ import javax.swing.*;
 import tablet.data.*;
 import tablet.gui.*;
 
+import scri.commons.gui.*;
+
 public class AssemblyPanel extends JPanel implements AdjustmentListener
 {
 	private Assembly assembly;
 	private Contig contig;
 
-
+	private JLabel summaryLabel;
 	OverviewCanvas overviewCanvas;
 	ScaleCanvas scaleCanvas;
 	ConsensusCanvas consensusCanvas;
@@ -46,12 +48,14 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		visPanel.add(centerPanel, BorderLayout.CENTER);
 		visPanel.add(statusPanel, BorderLayout.SOUTH);
 
+		add(summaryLabel, BorderLayout.NORTH);
 		add(visPanel);
 	}
 
 	private void createControls()
 	{
 		statusPanel = new NBStatusPanel(this);
+		summaryLabel = new JLabel(" ", JLabel.CENTER);
 
 		readsCanvas = new ReadsCanvas();
 		overviewCanvas = new OverviewCanvas();
@@ -88,6 +92,15 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	{
 		this.contig = contig;
 
+		// Set the summary label at the top of the screen
+		String label = RB.format("tablet.gui.viewer.AssemblyPanel.summaryLabel",
+			contig.getName(),
+			contig.getConsensus().length(),
+			contig.getReads().size(),
+			contig.getFeatures().size());
+		summaryLabel.setText(label);
+
+		// Then pass the contig to the other components for rendering
 		consensusCanvas.setContig(contig);
 		scaleCanvas.setContig(contig);
 		readsCanvas.setContig(contig);
