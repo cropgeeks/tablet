@@ -65,8 +65,10 @@ public class WinMain extends JFrame
 		setDropTarget(new DropTarget(assemblyPanel, dropAdapter));
 
 		ctrlTabs.addTab("", contigsPanel);
-		ctrlTabs.setTitleAt(0, contigsPanel.getTitle(null));
-		ctrlTabs.addTab("Features", featuresPanel);
+		ctrlTabs.setTitleAt(0, contigsPanel.getTitle());
+		ctrlTabs.addTab("", featuresPanel);
+		ctrlTabs.setTitleAt(1, featuresPanel.getTitle());
+		ctrlTabs.setEnabledAt(1, false);
 
 		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		splitter.setDividerLocation(Prefs.guiSplitterLocation);

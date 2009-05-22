@@ -49,14 +49,31 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 	{
 		this.contig = contig;
 
-		table.setModel(new DefaultTableModel());
-		if (contig == null)
-			return;
+		// If a contig (in the main contig table) was de-selected or there are
+		// no features to actually show, disable the tab
+		if (contig == null || contig.getFeatures().size() == 0)
+		{
+			ctrlTabs.setEnabledAt(1, false);
+			ctrlTabs.setTitleAt(1, getTitle());
+		}
 
-		model = new FeaturesTableModel(contig, table);
+		else
+		{
+			ctrlTabs.setEnabledAt(1, true);
 
-		table.setModel(model);
-		table.setRowSorter(new TableRowSorter<FeaturesTableModel>(model));
+			model = new FeaturesTableModel(contig, table);
+
+			table.setModel(model);
+			table.setRowSorter(new TableRowSorter<FeaturesTableModel>(model));
+
+			String title = RB.format("gui.FeaturesPanel.title", contig.getFeatures().size());
+			ctrlTabs.setTitleAt(1, title);
+		}
+	}
+
+	String getTitle()
+	{
+		return RB.format("gui.FeaturesPanel.title", 0);
 	}
 
 	public void valueChanged(ListSelectionEvent e)

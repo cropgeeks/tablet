@@ -28,6 +28,8 @@ class OverviewCanvas extends JPanel
 		setPreferredSize(new Dimension(0, 75));
 		add(canvas);
 
+		setBorder(BorderFactory.createLineBorder(new Color(167, 166, 170)));
+
 		// Resize listener (resized = time to redraw)
 		addComponentListener(new ComponentAdapter() {
 			public void componentResized(ComponentEvent e) {

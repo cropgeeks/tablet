@@ -93,12 +93,17 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		this.contig = contig;
 
 		// Set the summary label at the top of the screen
-		String label = RB.format("tablet.gui.viewer.AssemblyPanel.summaryLabel",
-			contig.getName(),
-			contig.getConsensus().length(),
-			contig.getReads().size(),
-			contig.getFeatures().size());
-		summaryLabel.setText(label);
+		if (contig != null)
+		{
+			String label = RB.format("tablet.gui.viewer.AssemblyPanel.summaryLabel",
+				contig.getName(),
+				contig.getConsensus().length(),
+				contig.getReads().size(),
+				contig.getFeatures().size());
+			summaryLabel.setText(label);
+		}
+		else
+			summaryLabel.setText(" ");
 
 		// Then pass the contig to the other components for rendering
 		consensusCanvas.setContig(contig);
