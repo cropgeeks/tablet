@@ -74,4 +74,13 @@
 		<install4j projectfile="installer/tablet.install4j" release="${version}"/>
 	</target>
 
+	<target name="javadoc">
+		<javadoc destdir="docs/api" author="true" version="true" use="true">
+			<fileset dir="${src}" defaultexcludes="yes">
+				<include name="**/*.java"/>
+			</fileset>
+			<classpath refid="project.classpath"/>
+		</javadoc>
+	</target>
+
 </project>

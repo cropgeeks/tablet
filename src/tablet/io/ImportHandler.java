@@ -91,7 +91,7 @@ public class ImportHandler implements ITrackableJob
 			for (Contig contig: assembly)
 			{
 				Collections.sort(contig.getReads());
-				contig.determineOffsets();
+				contig.calculateOffsets();
 			}
 			System.out.println((System.currentTimeMillis()-s) + "ms");
 		}

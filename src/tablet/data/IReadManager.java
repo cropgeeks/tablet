@@ -1,5 +1,8 @@
 package tablet.data;
 
+/**
+ * An interface for accessing read data that is required for visual display.
+ */
 public interface IReadManager
 {
 	/**

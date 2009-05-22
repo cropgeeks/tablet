@@ -4,6 +4,12 @@ import java.util.*;
 
 import tablet.data.cache.*;
 
+/**
+ * A read holds sequence information for a short stretch of sequenced DNA. The
+ * Read class only holds the data and its starting position (as aligned against
+ * the consenses. All other information is stored in the read cache, with each
+ * read accessible via its unique index ID.
+ */
 public class Read extends Sequence implements Comparable<Read>
 {
 	// The lookup ID for this read's name (which is stored elsewhere)
@@ -12,13 +18,17 @@ public class Read extends Sequence implements Comparable<Read>
 	// The position of the beginning of the read, in terms of consensus bases
 	private int position;
 
-//	private int qa_start, qa_end;
-//	private int al_start, al_end;
-
+	/** Constructs a new, empty read. */
 	public Read()
 	{
 	}
 
+	/**
+	 * Constructs a read with an ID and consensus alignment position.
+	 * @param id the id for this read
+	 * @param position the position of this read when aligned against the
+	 * consensus
+	 */
 	public Read(int id, int position)
 	{
 		this.id = id;
@@ -28,12 +38,21 @@ public class Read extends Sequence implements Comparable<Read>
 	int getID()
 		{ return id; }
 
+	/**
+	 * Returns this read's starting position (aligned against the consensus).
+	 * @return this read's starting position
+	 */
 	public int getStartPosition()
 		{ return position; }
 
+	/**
+	 * Returns this read's ending position (aligned against the consensus).
+	 * @return this read's ending position
+	 */
 	public int getEndPosition()
 		{ return position + length() -1; }
 
+	/** Currently unused (Ace file format related). */
 	public void setQAData(int qa_start, int qa_end, int al_start, int al_end)
 	{
 //		this.qa_start = qa_start;
@@ -42,6 +61,11 @@ public class Read extends Sequence implements Comparable<Read>
 //		this.al_end = al_end;
 	}
 
+	/**
+	 * Compares this read against another. The sort is performed so that reads
+	 * will be ordered left-to-right by starting position, with any reads that
+	 * start at the same position sub-ordered so that shorted reads are first.
+	 */
 	public int compareTo(Read other)
 	{
 		if (position < other.position)

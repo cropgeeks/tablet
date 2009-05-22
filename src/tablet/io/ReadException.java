@@ -2,6 +2,7 @@ package tablet.io;
 
 public class ReadException extends Exception
 {
+	/** Thrown when attempting to parse a file that cannot be understood. */
 	public static final int UNKNOWN_FORMAT = 10;
 
 

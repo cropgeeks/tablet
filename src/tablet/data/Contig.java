@@ -4,6 +4,10 @@ import java.util.*;
 
 import tablet.data.cache.*;
 
+/**
+ * The contig class holds the consensus sequence along with a list of reads and
+ * features.
+ */
 public class Contig
 {
 	private String name;
@@ -22,10 +26,19 @@ public class Contig
 
 	private Vector<Feature> features = new Vector<Feature>();
 
+	/** Constructs a new, empty contig. */
 	public Contig()
 	{
 	}
 
+	/**
+	 * Constructs a contig with the given name, marks whether it is complemented
+	 * (or not) and initializes the list of reads to hold at least readCount
+	 * reads.
+	 * @param name the name for this contig
+	 * @param complemented true if the consensus sequence is complemented
+	 * @param readCount the number of reads that will be stored in this contig
+	 */
 	public Contig(String name, boolean complemented, int readCount)
 	{
 		this.name = name;
@@ -34,40 +47,63 @@ public class Contig
 		reads = new Vector<Read>(readCount);
 	}
 
+	/**
+	 * Returns the name of this contig.
+	 * @return the name of this contig
+	 */
 	public String getName()
 		{ return name; }
 
+	/**
+	 * Returns a string representation of this contig, which will be its name.
+	 * @return a string representation of this contig
+	 */
 	public String toString()
 		{ return name; }
 
-//	public void setName(String name)
-//		{ this.name = name; }
-
-	public boolean getComplemented()
-		{ return complemented; }
-
-//	public void setComplemented(boolean complemented)
-//		{ this.complemented = complemented; }
-
+	/**
+	 * Returns the consensus sequence object for this contig.
+	 * @return the consensus sequence object for this contig
+	 */
 	public Consensus getConsensus()
 		{ return consensus; }
 
+	/**
+	 * Sets the consensus sequence object for this contig.
+	 * @param consensus the consensus to be set
+	 */
 	public void setConsensusSequence(Consensus consensus)
 		{ this.consensus = consensus; }
 
+	/**
+	 * Returns the reads held by this contig as a vector.
+	 * @return the reads held by this contig as a vector
+	 */
 	public Vector<Read> getReads()
 		{ return reads; }
 
+	/**
+	 * Returns a count of the number of reads held within this contig.
+	 * @return a count of the number of reads held within this contig
+	 */
 	public int readCount()
 		{ return reads.size(); }
 
+	/**
+	 * Returns the features held by this contig as a vector.
+	 * @return the features held by this contig as a vector
+	 */
 	public Vector<Feature> getFeatures()
 		{ return features; }
 
+	/**
+	 * Returns a count of the number of features held within this contig.
+	 * @return a count of the number of features held within this contig
+	 */
 	public int featureCount()
 		{ return features.size(); }
 
-	public void determineOffsets()
+	public void calculateOffsets()
 	{
 		// Set the rhsOffset to the final index position in the consensus seq
 		rhsOffset = consensus.length() - 1;
