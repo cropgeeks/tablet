@@ -29,8 +29,9 @@ class FeaturesTableModel extends AbstractTableModel
 
 		String col1 = RB.getString("gui.FeaturesTableModel.col1");
 		String col2 = RB.getString("gui.FeaturesTableModel.col2");
+		String col3 = RB.getString("gui.FeaturesTableModel.col3");
 
-		columnNames = new String[] { col1, col2 };
+		columnNames = new String[] { col1, col2, col3 };
 	}
 
 	public String getColumnName(int col)
@@ -48,6 +49,8 @@ class FeaturesTableModel extends AbstractTableModel
 
 	public Class getColumnClass(int col)
 	{
+		if (col == 0) return String.class;
+
 		return Integer.class;
 	}
 
@@ -57,8 +60,9 @@ class FeaturesTableModel extends AbstractTableModel
 
 		switch (col)
 		{
-			case 0: return feature.getType();
+			case 0: return "SNP"; //feature.getType();
 			case 1: return feature.getP1() + 1; // +1 back into consensus space
+			case 2: return feature.getP2() + 1; // +1 back into consensus space
 
 			case 9: return feature;
 		}
