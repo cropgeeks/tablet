@@ -1,5 +1,9 @@
 package tablet.data;
 
+/**
+ * Sequence is an abstract base class for objects that need to store DNA
+ * sequence information in an efficient mannor.
+ */
 public abstract class Sequence
 {
 	// The codes that we store for each "state".
@@ -8,30 +12,46 @@ public abstract class Sequence
 	// eg, a): consensus=A, and read=A would encode the read as A
 	// eg, b): consensus=A, and read=T would encode the read as dT
 
+	/** Base is not used. **/
 	public static final byte NOTUSED = 0;
 
+	/** Base whose nucleotide is unknown. **/
 	public static final byte UNKNOWN = 1;
+	/** Base whose nucleotide is unknown, but different to the consensus. */
 	public static final byte dUKNOWN = 2;
 
-	public static final byte P  = 3;	// P = pad (*)
+	/** Base is a pad (*). */
+	public static final byte P  = 3;
+	/** Base is a pad (*), but different to the consensus. */
 	public static final byte dP = 4;
+	/** Base is an A. */
 	public static final byte A  = 5;
+	/** Base is an A, but different to the consensus. */
 	public static final byte dA = 6;
+	/** Base is an T. */
 	public static final byte T  = 7;
+	/** Base is an T, but different to the consensus. */
 	public static final byte dT = 8;
+	/** Base is an C. */
 	public static final byte C  = 9;
+	/** Base is an C, but different to the consensus. */
 	public static final byte dC = 10;
+	/** Base is an G. */
 	public static final byte G  = 11;
+	/** Base is an G, but different to the consensus. */
 	public static final byte dG = 12;
+	/** Base is an N. */
 	public static final byte N  = 13;
+	/** Base is an N, but different to the consensus. */
 	public static final byte dN = 14;
 
 	// Stores the actual DNA states, using one byte for every two states
 	private byte[] data;
 
+
 	/**
 	 * Returns the length of this sequence.
-	 * @return length the length of this sequence
+	 * @return the length of this sequence
 	 */
 	public int length()
 	{
@@ -48,9 +68,8 @@ public abstract class Sequence
 	}
 
 	/**
-	 * Sets this sequence object to be the same as the sequence string passed
-	 * in, using the DNA table to perform the appropriate dna->byte translation
-	 * required for optimum storage in memory.
+	 * Sets the DNA data for this sequence.
+	 * @param sequence the DNA string to store
 	 */
 	public void setData(String sequence)
 	{
@@ -81,6 +100,8 @@ public abstract class Sequence
 	/**
 	 * Returns the byte code stored at the given index location, where index is
 	 * a position from 0 to (length-1) of the sequence.
+	 * @param index the index position to return the byte code from
+	 * @return the byte code stored at the given index location
 	 */
 	public byte getStateAt(int index)
 	{
@@ -91,6 +112,12 @@ public abstract class Sequence
 			return (byte) (data[index/2] & 0xF);
 	}
 
+	/**
+	 * Sets the DNA at base position index to be the value of state, where state
+	 * is a value listed in the Sequence class's DNA table.
+	 * @param index the index position of the base to change
+	 * @param state the new value to store at this position
+	 */
 	public void setStateAt(int index, byte state)
 	{
 		// TODO: Is there a way to set, eg, n2 without having to read n1 or a
@@ -154,6 +181,10 @@ public abstract class Sequence
 		}
 	}
 
+	/**
+	 * Returns a string representation of this sequence.
+	 * @return a string representation of this thread
+	 */
 	public String toString()
 	{
 		int length = length();
@@ -167,15 +198,5 @@ public abstract class Sequence
 		}
 
 		return sb.toString();
-	}
-
-	public byte[] getSequence()
-	{
-		byte[] array = new byte[length()];
-
-		for (int i = 0; i < array.length; i++)
-			array[i] = getStateAt(i);
-
-		return array;
 	}
 }

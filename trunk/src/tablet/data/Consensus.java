@@ -1,13 +1,21 @@
 package tablet.data;
 
+/** The consensus sequence for a contig. */
 public class Consensus extends Sequence
 {
 	private byte[] bq;
 
+	/** Constructs a new, empty consensus sequence. */
 	public Consensus()
 	{
 	}
 
+	/**
+	 * Sets the base score qualities for this consensus. This parses a string
+	 * that is expected to contains a space separated list of scores, with NO
+	 * SCORES provided for bases that are padded.
+	 * TODO: This should really be a part of the AceFileReader class
+	 */
 	public void setBaseQualities(String qualities)
 		throws Exception
 	{
@@ -29,6 +37,14 @@ public class Consensus extends Sequence
 		}
 	}
 
+	/**
+	 * Returns an array of base quality data, starting at start and ending at
+	 * end. These values may be outside of the actual start and end values for
+	 * the consensus, in which case -1 will be returned for those positions.
+	 * @param start the starting index
+	 * @param end the ending index (inclusive)
+	 * @return an array of base quality data
+	 */
 	public byte[] getBaseQualityRange(int start, int end)
 	{
 		byte[] data = new byte[end-start+1];
@@ -52,9 +68,12 @@ public class Consensus extends Sequence
 	}
 
 	/**
-	 * Returns an array of data for this sequence starting at start and ending
-	 * at end, but including any indices that may be outside of this sequence's
-	 * data, eg, less than 0 and greater than length()
+	 * Returns an array of sequence data, starting at start and ending at end.
+	 * These values may be outside of the actual start and end values for the
+	 * consensus, in which case -1 will be returned for those positions.
+	 * @param start the starting index
+	 * @param end the ending index (inclusive)
+	 * @return an array of sequence data
 	 */
 	public byte[] getRange(int start, int end)
 	{
