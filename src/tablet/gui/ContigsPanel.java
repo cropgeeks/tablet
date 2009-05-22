@@ -37,29 +37,20 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 	void setFeaturesPanel(FeaturesPanel featuresPanel)
 		{ this.featuresPanel = featuresPanel; }
 
-	String getTitle(Assembly assembly)
+	String getTitle()
 	{
-		if (assembly != null)
-			return RB.format("gui.ContigsPanel.title", assembly.contigCount());
-		else
-			return RB.format("gui.ContigsPanel.title", 0);
+		return RB.format("gui.ContigsPanel.title", 0);
 	}
 
 	void setAssembly(Assembly assembly)
 	{
-		table.setModel(new DefaultTableModel());
-		if (assembly == null)
-		{
-			featuresPanel.setContig(null);
-			return;
-		}
-
 		model = new ContigsTableModel(assembly, table);
 
 		table.setModel(model);
 		table.setRowSorter(new TableRowSorter<ContigsTableModel>(model));
 
-		ctrlTabs.setTitleAt(0, getTitle(assembly));
+		String title = RB.format("gui.ContigsPanel.title", assembly.contigCount());
+		ctrlTabs.setTitleAt(0, title);
 	}
 
 	public void valueChanged(ListSelectionEvent e)
