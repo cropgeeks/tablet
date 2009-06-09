@@ -7,6 +7,8 @@ import javax.swing.*;
 
 import scri.commons.gui.*;
 
+import apple.dts.samplecode.osxadapter.*;
+
 public class Tablet
 {
 	private static File prefsFile = new File(
@@ -18,6 +20,9 @@ public class Tablet
 	public static void main(String[] args)
 		throws Exception
 	{
+		// OS X: This has to be set before anything else
+		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Tablet");
+
 		Prefs.setDefaults();
 		prefs.loadPreferences(prefsFile, Prefs.class);
 
@@ -52,6 +57,10 @@ public class Tablet
 				UIManager.put("OptionPane.warningIcon", Icons.getIcon("WINWARNING"));
 				UIManager.put("OptionPane.questionIcon", Icons.getIcon("WINQUESTION"));
 			}
+
+			// Keep Apple happy...
+			else if (SystemUtils.isMacOS())
+				handleOSXStupidities();
 		}
 		catch (Exception e) {}
 
@@ -87,5 +96,45 @@ public class Tablet
 		prefs.savePreferences(prefsFile, Prefs.class);
 
 		System.exit(0);
+	}
+
+	// --------------------------------------------------
+	// Methods required for better native support on OS X
+
+	private void handleOSXStupidities()
+	{
+		try
+		{
+			// Register handlers to deal with the System menu about/quit options
+//			OSXAdapter.setPreferencesHandler(this,
+//				getClass().getDeclaredMethod("osxPreferences", (Class[])null));
+//			OSXAdapter.setAboutHandler(this,
+//				getClass().getDeclaredMethod("osxAbout", (Class[])null));
+			OSXAdapter.setQuitHandler(this,
+				getClass().getDeclaredMethod("osxShutdown", (Class[])null));
+
+			// Dock the menu bar at the top of the screen
+			System.setProperty("apple.laf.useScreenMenuBar", "true");
+		}
+		catch (Exception e) {}
+	}
+
+	/** "Preferences" on the OS X system menu. */
+	public void osxPreferences()
+	{
+//		winMain.mHelp.helpPrefs();
+	}
+
+	/** "About Flapjack" on the OS X system menu. */
+	public void osxAbout()
+	{
+//		winMain.mHelp.helpAbout();
+	}
+
+	/** "Quit Flapjack" on the OS X system menu. */
+	public boolean osxShutdown()
+	{
+		shutdown();
+		return true;
 	}
 }
