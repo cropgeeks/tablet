@@ -43,14 +43,8 @@ public class Tablet
 		{
 			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-			// Use the office look for Windows (but not for Vista)
-			if (SystemUtils.isWindows() && !SystemUtils.isWindowsVista())
+			if (SystemUtils.isWindows())
 			{
-				UIManager.setLookAndFeel("org.fife.plaf.Office2003.Office2003LookAndFeel");
-
-				// Gives XP the same (nicer) grey background that Vista uses
-				UIManager.put("Panel.background", new Color(240, 240, 240));
-
 				// Overrides the JOptionPane dialogs with better icons
 				UIManager.put("OptionPane.errorIcon", Icons.getIcon("WINERROR"));
 				UIManager.put("OptionPane.informationIcon", Icons.getIcon("WININFORMATION"));
@@ -59,8 +53,11 @@ public class Tablet
 			}
 
 			// Keep Apple happy...
-			else if (SystemUtils.isMacOS())
+			if (SystemUtils.isMacOS())
 				handleOSXStupidities();
+			// And use Nimbus for all non-Apple systems
+			else
+				Nimbus.customizeNimbus();
 		}
 		catch (Exception e) {}
 
