@@ -135,7 +135,8 @@ class ScaleCanvas extends JPanel
 			g.drawLine(x, 0, x, 8);
 
 			// Then format, centre and draw the message
-			String str = d.format(mouseBase+1) + " (#)";
+			String unpadded = getUnpadded(mouseBase);
+			String str = d.format(mouseBase+1) + unpadded;
 
 			int strWidth = g.getFontMetrics().stringWidth(str);
 			int pos = getPosition(x, strWidth);
@@ -146,7 +147,7 @@ class ScaleCanvas extends JPanel
 		}
 
 		// Attempt to mark the base position on the LHS of the canvas
-		String lhsStr = d.format(xS+1-offset);
+		String lhsStr = d.format(xS+1-offset) + getUnpadded(xS-offset);
 		int strWidth  = g.getFontMetrics().stringWidth(lhsStr);
 		int pos = getPosition(x1, strWidth);;
 
@@ -154,7 +155,7 @@ class ScaleCanvas extends JPanel
 			g.drawString(lhsStr, pos, 20);
 
 		// Attempt to mark the base position on the RHS of the canvas
-		String rhsStr = d.format(xE+1-offset);
+		String rhsStr = d.format(xE+1-offset) + getUnpadded(xE-offset);
 		strWidth  = g.getFontMetrics().stringWidth(rhsStr);
 		pos = getPosition(x2, strWidth);
 
@@ -179,5 +180,19 @@ class ScaleCanvas extends JPanel
 			leftPos = rCanvas.pX2-strWidth-3;
 
 		return leftPos;
+	}
+
+	private String getUnpadded(int mouseBase)
+	{
+		// If the mouse is off the consensus, ignore unpadded positions
+		if (mouseBase < 0 || mouseBase >= consensus.length())
+			return "";
+
+		int unpadded = consensus.getUnpaddedPosition(mouseBase);
+
+		if (unpadded == -1)
+			return " (*)";
+		else
+			return " (" + d.format(unpadded+1) + ")";
 	}
 }

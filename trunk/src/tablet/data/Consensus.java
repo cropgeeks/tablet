@@ -5,9 +5,39 @@ public class Consensus extends Sequence
 {
 	private byte[] bq;
 
+	private int[] unpaddedIndices;
+
 	/** Constructs a new, empty consensus sequence. */
 	public Consensus()
 	{
+	}
+
+	public void calculateUnpaddedIndices()
+	{
+		unpaddedIndices = new int[length()];
+
+		boolean lastIndexWasPad = false;
+
+		for (int i = 0, index = 0; i < unpaddedIndices.length; i++)
+		{
+			if (getStateAt(i) != Sequence.P)
+				unpaddedIndices[i] = index++;
+
+			else
+				unpaddedIndices[i] = -1;
+		}
+	}
+
+	public int getUnpaddedPosition(int paddedPosition)
+	{
+		try
+		{
+			return unpaddedIndices[paddedPosition];
+		}
+		catch (ArrayIndexOutOfBoundsException e)
+		{
+			return -1;
+		}
 	}
 
 	/**
