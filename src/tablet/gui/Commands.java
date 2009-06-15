@@ -2,6 +2,7 @@ package tablet.gui;
 
 import java.io.*;
 import java.lang.management.*;
+import javax.swing.*;
 
 import tablet.data.*;
 import tablet.gui.dialog.*;
@@ -20,11 +21,22 @@ public class Commands
 
 	public void fileOpen(String filename)
 	{
+		// If no file was passed in then we need to prompt the user to pick one
 		if (filename == null)
 		{
-			// TODO: Prompt for file...
-			System.out.println("Opening file...");
-			return;
+			JFileChooser fc = new JFileChooser();
+			fc.setDialogTitle(RB.getString("gui.Commands.fileOpen.openDialog"));
+			fc.setCurrentDirectory(new File(Prefs.guiCurrentDir));
+
+//			FileNameExtensionFilter filter = new FileNameExtensionFilter(
+//				RB.getString("other.Filters.project"), "flapjack");
+//			fc.addChoosableFileFilter(filter);
+
+			if (fc.showOpenDialog(winMain) != JFileChooser.APPROVE_OPTION)
+				return;
+
+			Prefs.guiCurrentDir = fc.getCurrentDirectory().getPath();
+			filename = fc.getSelectedFile().getPath();
 		}
 
 		File file = new File(filename);
