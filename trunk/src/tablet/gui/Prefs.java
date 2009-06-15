@@ -31,10 +31,11 @@ public class Prefs extends XMLPreferences
 	// The location of the main splits pane divider
 	public static int guiSplitterLocation = 150;
 
+	// The last used directory location in file chooser dialogs
+	public static String guiCurrentDir = "";
+
 	// Display reads in packed or stacked form?
 	public static int visReadLayout = 1;
-
-
 
 	static void setDefaults()
 	{
