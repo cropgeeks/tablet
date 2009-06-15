@@ -4,15 +4,19 @@ import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.beans.*;
+import java.util.*;
 import javax.swing.*;
 
 import tablet.data.*;
 import tablet.io.*;
+import tablet.gui.ribbon.*;
 import tablet.gui.viewer.*;
 
 import scri.commons.gui.*;
 
-public class WinMain extends JFrame
+import org.jvnet.flamingo.ribbon.JRibbonFrame;
+
+public class WinMain extends JRibbonFrame
 {
 	private Commands commands = new Commands(this);
 
@@ -29,8 +33,14 @@ public class WinMain extends JFrame
 	{
 		createControls();
 
+		new RibbonController(this);
+
+		ArrayList<Image> images = new ArrayList<Image>(2);
+		images.add(Icons.getIcon("APPICON64").getImage());
+		images.add(Icons.getIcon("APPICON22").getImage());
+		setIconImages(images);
+
 		setTitle(RB.getString("gui.WinMain.title") + " - " + Install4j.VERSION);
-		setIconImage(Icons.getIcon("APPICON").getImage());
 		setSize(Prefs.guiWinMainWidth, Prefs.guiWinMainHeight);
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -118,18 +128,18 @@ public class WinMain extends JFrame
 
 
 
-	boolean okToExit()
+	public boolean okToExit()
 	{
 		return true;
 	}
 
-	void fileExit()
+	public void exit()
 	{
 		WindowEvent evt = new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
 		processWindowEvent(evt);
 	}
 
-	Commands getCommands()
+	public Commands getCommands()
 		{ return commands; }
 
 	void setAssembly(Assembly assembly)
@@ -165,6 +175,15 @@ public class WinMain extends JFrame
 			int h = getHeight();
 
 			g.drawImage(logo.getImage(), 0, 0, w, w, null);
+
+			String str = "Please don't distribute Tablet outside of SCRI";
+			int strWidth = g.getFontMetrics().stringWidth(str);
+
+			g.setColor(Color.lightGray);
+			g.setFont(new Font("Dialog", Font.BOLD, 14));
+			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			g.drawString(str, w/2-(strWidth/2), getHeight()/2);
 		}
 	}
 }

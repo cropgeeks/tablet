@@ -52,7 +52,8 @@
 			<manifest>
 				<attribute name="Main-Class" value="tablet.gui.Tablet"/>
 				<attribute name="Class-Path"
-					value="i4jruntime.jar
+					value="flamingo.jar
+						i4jruntime.jar
 						osxadapter.jar
 						scri-commons.jar
 						swing-layout-1.0.3.jar

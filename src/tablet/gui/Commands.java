@@ -9,7 +9,7 @@ import tablet.io.*;
 
 import scri.commons.gui.*;
 
-class Commands
+public class Commands
 {
 	private WinMain winMain;
 
@@ -18,8 +18,15 @@ class Commands
 		this.winMain = winMain;
 	}
 
-	void fileOpen(String filename)
+	public void fileOpen(String filename)
 	{
+		if (filename == null)
+		{
+			// TODO: Prompt for file...
+			System.out.println("Opening file...");
+			return;
+		}
+
 		File file = new File(filename);
 
 		ImportHandler ioHandler = new ImportHandler(filename);
