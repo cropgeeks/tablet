@@ -142,6 +142,9 @@ public class WinMain extends JRibbonFrame
 	public Commands getCommands()
 		{ return commands; }
 
+	public AssemblyPanel getAssemblyPanel()
+		{ return assemblyPanel; }
+
 	void setAssembly(Assembly assembly)
 	{
 		int location = splitter.getDividerLocation();

@@ -6,6 +6,7 @@ import javax.swing.*;
 
 import tablet.data.*;
 import tablet.gui.*;
+import tablet.gui.ribbon.*;
 
 import scri.commons.gui.*;
 
@@ -14,7 +15,6 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	private Assembly assembly;
 	private Contig contig;
 
-	private JLabel summaryLabel;
 	OverviewCanvas overviewCanvas;
 	ScaleCanvas scaleCanvas;
 	ConsensusCanvas consensusCanvas;
@@ -48,14 +48,12 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		visPanel.add(centerPanel, BorderLayout.CENTER);
 		visPanel.add(statusPanel, BorderLayout.SOUTH);
 
-		add(summaryLabel, BorderLayout.NORTH);
 		add(visPanel);
 	}
 
 	private void createControls()
 	{
 		statusPanel = new NBStatusPanel(this);
-		summaryLabel = new JLabel(" ", JLabel.CENTER);
 
 		readsCanvas = new ReadsCanvas();
 		overviewCanvas = new OverviewCanvas();
@@ -100,14 +98,10 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 				contig.getConsensus().length(),
 				contig.getReads().size(),
 				contig.getFeatures().size());
-			summaryLabel.setText(label);
-			tablet.gui.ribbon.RibbonController.setTitleLabel(label);
+			RibbonController.setTitleLabel(label);
 		}
 		else
-		{
-			summaryLabel.setText(" ");
-			tablet.gui.ribbon.RibbonController.setTitleLabel(" ");
-		}
+			RibbonController.setTitleLabel("");
 
 		// Then pass the contig to the other components for rendering
 		consensusCanvas.setContig(contig);
@@ -172,9 +166,9 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		}
 	}
 
-	void computePanelSizes()
+	public void computePanelSizes()
 	{
-		int zoom = statusPanel.getZoom();
+		int zoom = Prefs.visReadsCanvasZoom;
 
 		readsCanvas.setDimensions(zoom, zoom);
 		consensusCanvas.setDimensions();

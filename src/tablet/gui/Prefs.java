@@ -37,6 +37,11 @@ public class Prefs extends XMLPreferences
 	// Display reads in packed or stacked form?
 	public static int visReadLayout = 1;
 
+	// Current zoom level of the reads canvas
+	public static int visReadsCanvasZoom = 7;
+	// Current intensity level for the variant highlighting
+	public static int visVariantAlpha = 0;
+
 	static void setDefaults()
 	{
 
