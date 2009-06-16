@@ -32,18 +32,23 @@ class ApplicationMenu extends RibbonApplicationMenu implements ActionListener
 	{
 		this.winMain = winMain;
 
+		this.
+
 		// Primary menu options
 		iNew = RibbonController.getIcon("FILENEW32", 32);
 		mNew = new RibbonApplicationMenuEntryPrimary(iNew, "New", this,
 			CommandButtonKind.ACTION_ONLY);
+		mNew.setActionKeyTip("N");
 
 		iOpen = RibbonController.getIcon("FILEOPEN32", 32);
 		mOpen = new RibbonApplicationMenuEntryPrimary(iOpen, "Open", this,
 			CommandButtonKind.ACTION_ONLY);
+		mOpen.setActionKeyTip("O");
 
 		iClose = RibbonController.getIcon("FILECLOSE32", 32);
 		mClose = new RibbonApplicationMenuEntryPrimary(iClose, "Close", this,
 			CommandButtonKind.ACTION_ONLY);
+		mClose.setActionKeyTip("C");
 
 		addMenuEntry(mNew);
 		addMenuEntry(mOpen);
@@ -53,9 +58,11 @@ class ApplicationMenu extends RibbonApplicationMenu implements ActionListener
 		// Footer menu options
 		iOptions = RibbonController.getIcon("OPTIONS16", 16);
 		mOptions = new RibbonApplicationMenuEntryFooter(iOptions, "Tablet Options", this);
+		mOptions.setActionKeyTip("TO");
 
 		iExit = RibbonController.getIcon("EXIT16", 16);
 		mExit = new RibbonApplicationMenuEntryFooter(iExit, "Exit Tablet", this);
+		mExit.setActionKeyTip("X");
 
 		addFooterEntry(mOptions);
 		addFooterEntry(mExit);

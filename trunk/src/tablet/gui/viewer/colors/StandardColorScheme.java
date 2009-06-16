@@ -13,7 +13,7 @@ public class StandardColorScheme extends ColorScheme
 	// Holds the states needed by the consensus canvas
 	private Vector<ColorState> statesCS = new Vector<ColorState>();
 
-	public static int alpha = 0;
+//	public static int alpha = 0;
 
 	public StandardColorScheme(Contig contig, int w, int h)
 	{

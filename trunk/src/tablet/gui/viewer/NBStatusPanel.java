@@ -11,7 +11,7 @@ import tablet.gui.viewer.colors.*;
 
 import scri.commons.gui.*;
 
-class NBStatusPanel extends JPanel implements ChangeListener
+class NBStatusPanel extends JPanel
 {
 	private DecimalFormat d1 = new DecimalFormat("0.0");
 	private DecimalFormat d3 = new DecimalFormat("0.000");
@@ -24,20 +24,12 @@ class NBStatusPanel extends JPanel implements ChangeListener
 
 		initComponents();
 
-		RB.setText(highlightLabel, "tablet.gui.viewer.NBStatusPanel.highlightLabel");
-		RB.setText(zoomLabel, "tablet.gui.viewer.NBStatusPanel.zoomLabel");
-
 		output1.setForeground(Color.red);
 		output1.setText(" ");
 		output2.setForeground(Color.red);
 		output2.setText(" ");
 		output3.setForeground(Color.red);
 		output3.setText(" ");
-
-		sliderHighlight.addChangeListener(this);
-		sliderHighlight.setBackground((Color)UIManager.get("Panel.background"));
-		sliderZoom.addChangeListener(this);
-		sliderZoom.setBackground((Color)UIManager.get("Panel.background"));
 
 		setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
 		setForMainUse();
@@ -65,27 +57,6 @@ class NBStatusPanel extends JPanel implements ChangeListener
 			output3.setText(" ");
 	}
 
-	public void stateChanged(ChangeEvent e)
-	{
-		// Horizontal slider events...
-		if (e.getSource() == sliderHighlight)
-		{
-			StandardColorScheme.alpha = sliderHighlight.getValue();
-			aPanel.computePanelSizes();
-			aPanel.repaint();
-		}
-
-		else if (e.getSource() == sliderZoom)
-			aPanel.computePanelSizes();
-	}
-
-	int getHighlight()
-		{ return sliderHighlight.getValue(); }
-
-	int getZoom()
-		{ return sliderZoom.getValue(); }
-
-
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -101,10 +72,6 @@ class NBStatusPanel extends JPanel implements ChangeListener
         output2 = new javax.swing.JLabel();
         label3 = new javax.swing.JLabel();
         output3 = new javax.swing.JLabel();
-        highlightLabel = new javax.swing.JLabel();
-        sliderHighlight = new javax.swing.JSlider();
-        zoomLabel = new javax.swing.JLabel();
-        sliderZoom = new javax.swing.JSlider();
 
         label1.setText("Label 1:");
 
@@ -117,23 +84,6 @@ class NBStatusPanel extends JPanel implements ChangeListener
         label3.setText("Label 3:");
 
         output3.setText("<>");
-
-        highlightLabel.setLabelFor(sliderHighlight);
-        highlightLabel.setText("Variant highlighting:");
-
-        sliderHighlight.setMaximum(200);
-        sliderHighlight.setPaintTicks(true);
-        sliderHighlight.setSnapToTicks(true);
-        sliderHighlight.setValue(0);
-
-        zoomLabel.setLabelFor(sliderZoom);
-        zoomLabel.setText("Zoom:");
-
-        sliderZoom.setMaximum(25);
-        sliderZoom.setMinimum(1);
-        sliderZoom.setPaintTicks(true);
-        sliderZoom.setSnapToTicks(true);
-        sliderZoom.setValue(7);
 
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
         this.setLayout(layout);
@@ -150,28 +100,12 @@ class NBStatusPanel extends JPanel implements ChangeListener
                     .add(output3)
                     .add(output2)
                     .add(output1))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 153, Short.MAX_VALUE)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
-                    .add(highlightLabel)
-                    .add(sliderHighlight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 155, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.CENTER)
-                    .add(sliderZoom, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 155, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                    .add(zoomLabel))
-                .addContainerGap())
+                .addContainerGap(479, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(layout.createSequentialGroup()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.TRAILING)
-                    .add(layout.createSequentialGroup()
-                        .add(highlightLabel)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(sliderHighlight, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
-                    .add(layout.createSequentialGroup()
-                        .add(zoomLabel)
-                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                        .add(sliderZoom, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
                     .add(layout.createSequentialGroup()
                         .add(label1)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
@@ -184,21 +118,17 @@ class NBStatusPanel extends JPanel implements ChangeListener
                         .add(output2)
                         .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
                         .add(output3)))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private static javax.swing.JLabel highlightLabel;
     private javax.swing.JLabel label1;
     private javax.swing.JLabel label2;
     private javax.swing.JLabel label3;
     javax.swing.JLabel output1;
     javax.swing.JLabel output2;
     javax.swing.JLabel output3;
-    private static javax.swing.JSlider sliderHighlight;
-    private static javax.swing.JSlider sliderZoom;
-    private static javax.swing.JLabel zoomLabel;
     // End of variables declaration//GEN-END:variables
 }

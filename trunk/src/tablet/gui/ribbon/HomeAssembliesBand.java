@@ -27,6 +27,7 @@ class HomeAssembliesBand extends JRibbonBand implements ActionListener
 		Actions.homeAssembliesOpen32 = new ActionRepeatableButtonModel(bOpen32);
 		Actions.homeAssembliesOpen32.addActionListener(this);
 		bOpen32.setActionModel(Actions.homeAssembliesOpen32);
+		bOpen32.setActionKeyTip("O");
 
 		// Open an assembly (16x16 shortcut button)
 		bOpen16 = new JCommandButton("Open Assembly", RibbonController.getIcon("FILEOPEN16", 16));

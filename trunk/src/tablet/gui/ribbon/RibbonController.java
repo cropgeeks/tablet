@@ -15,26 +15,30 @@ import org.jvnet.flamingo.ribbon.*;
 public class RibbonController
 {
 	private static WinMain winMain;
+	private static JRibbon ribbon;
 
-	private static JLabel titleLabel = new JLabel("");
+	private static JLabel titleLabel = new JLabel(" ");
 
 	public RibbonController(WinMain winMain)
 	{
 		this.winMain = winMain;
+		this.ribbon = winMain.getRibbon();
 
 		RibbonTask homeTask = new RibbonTask("Home",
 			new HomeAssembliesBand(winMain),
 			new HomeVisualizationBand(winMain));
 
-		winMain.getRibbon().addTask(homeTask);
+		homeTask.setKeyTip("H");
+		ribbon.addTask(homeTask);
 
-		winMain.getRibbon().addTaskbarComponent(new JSeparator(JSeparator.VERTICAL));
-		winMain.getRibbon().addTaskbarComponent(titleLabel);
-//		winMain.getRibbon().setBorder(BorderFactory.createEmptyBorder(-24, 0, 2, 0));
+		ribbon.addTaskbarComponent(new JSeparator(JSeparator.VERTICAL));
+		ribbon.addTaskbarComponent(titleLabel);
+//		ribbon.setBorder(BorderFactory.createEmptyBorder(-24, 0, 2, 0));
 
-		winMain.getRibbon().setApplicationMenu(new ApplicationMenu(winMain));
+		ribbon.setApplicationMenu(new ApplicationMenu(winMain));
+		ribbon.setApplicationMenuKeyTip("F");
 
-		winMain.getRibbon().configureHelp(getIcon("HELP16", 16), new ActionListener() {
+		ribbon.configureHelp(getIcon("HELP16", 16), new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("help"); }
 		});
@@ -43,7 +47,7 @@ public class RibbonController
 	public static void setTitleLabel(String str)
 	{
 		titleLabel.setText(" " + str);
-		winMain.getRibbon().repaint();
+		ribbon.repaint();
 	}
 
 	static ResizableIcon getIcon(String name, int size)

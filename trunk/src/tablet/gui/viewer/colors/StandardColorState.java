@@ -4,6 +4,8 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.*;
 
+import tablet.gui.*;
+
 class StandardColorState extends ColorState
 {
 	StandardColorState(String text, Color c, int w, int h, boolean useAlpha, boolean isDeltaBase)
@@ -27,7 +29,7 @@ class StandardColorState extends ColorState
 				g.setPaint(new Color(255, 255, 255, 130));
 			// Overlay for bases that are identical to the consensus
 			else
-				g.setPaint(new Color(20, 20, 20, StandardColorScheme.alpha));
+				g.setPaint(new Color(20, 20, 20, Prefs.visVariantAlpha));
 
 			g.fillRect(0, 0, w, h);
 		}
