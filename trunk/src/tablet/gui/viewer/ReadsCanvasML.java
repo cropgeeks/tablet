@@ -18,6 +18,7 @@ class ReadsCanvasML extends MouseInputAdapter
 	// Deals with navigation issues
 	private NavigationHandler nHandler = new NavigationHandler();
 
+	private ReadsCanvasInfoPane infoPane = new ReadsCanvasInfoPane();
 	private ReadOutliner readOutliner = new ReadOutliner();
 
 	ReadsCanvasML(AssemblyPanel aPanel)
@@ -29,13 +30,16 @@ class ReadsCanvasML extends MouseInputAdapter
 		rCanvas.addMouseListener(this);
 		rCanvas.addMouseMotionListener(this);
 		rCanvas.overlays.add(readOutliner);
+		rCanvas.overlays.add(infoPane);
+
+		infoPane.setReadsCanvas(rCanvas);
 	}
 
 	public void mouseExited(MouseEvent e)
 	{
 		readOutliner.read = null;
+		infoPane.setMousePosition(null);
 
-		aPanel.statusPanel.setLabels(null, null, null);
 		sCanvas.setMouseBase(null);
 		rCanvas.repaint();
 	}
@@ -79,18 +83,15 @@ class ReadsCanvasML extends MouseInputAdapter
 		int xIndex = (e.getX() / rCanvas.ntW) - rCanvas.offset;
 		int yIndex = (e.getY() / rCanvas.ntH);
 
+		// Track the mouse position
 		sCanvas.setMouseBase(xIndex);
+		infoPane.setMousePosition(e.getPoint());
 
-		// Track the previously outlined read
-		Read readOld = readOutliner.read;
-		// And find the new one
-		Read readNew = rCanvas.reads.getReadAt(yIndex, xIndex);
+		// Track the read under the mouse (if any)
+		Read read = rCanvas.reads.getReadAt(yIndex, xIndex);
+		readOutliner.setRead(read, xIndex, yIndex);
 
-		readOutliner.setRead(readNew, yIndex);
-
-		// Only repaint if the new one is not the same as the old one
-		if (readOld != readNew)
-			aPanel.repaint();
+		aPanel.repaint();
 	}
 
 	/** Inner class to handle navigation mouse events (dragging the canvas etc). */
@@ -128,15 +129,12 @@ class ReadsCanvasML extends MouseInputAdapter
 	// Inner class to draw an outline around a specified read.
 	private class ReadOutliner implements IOverlayRenderer
 	{
-		private NumberFormat nf = NumberFormat.getInstance();
-
 		Read read;
-		String readName;
 
 		int readS, readE;
 		int lineIndex;
 
-		void setRead(Read read, int lineIndex)
+		void setRead(Read read, int colIndex, int lineIndex)
 		{
 			this.read = read;
 			this.lineIndex = lineIndex;
@@ -148,23 +146,11 @@ class ReadsCanvasML extends MouseInputAdapter
 				// Start and ending positions (against consensus)
 				readS = read.getStartPosition();
 				readE = read.getEndPosition();
-				int length = (readE-readS+1);
 
-				// Name
-				String readName = data.getName();
-				// Formatted C/U plus start and end
-				String label2 = (data.isComplemented() ? "C: " : "U: ")
-					+ nf.format(readS+1) + " - " + nf.format(readE+1)
-					+ " (length: " + nf.format(length) + ")";
-
-				aPanel.statusPanel.setLabels(readName, label2, null);
-				rCanvas.setToolTipText(readName);
+				infoPane.setData(read, data);
 			}
 			else
-			{
-				aPanel.statusPanel.setLabels(null, null, null);
-				rCanvas.setToolTipText(null);
-			}
+				infoPane.setMousePosition(null);
 		}
 
 		public void render(Graphics2D g)

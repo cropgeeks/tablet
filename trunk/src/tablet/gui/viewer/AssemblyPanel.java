@@ -19,7 +19,6 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	ScaleCanvas scaleCanvas;
 	ConsensusCanvas consensusCanvas;
 	ReadsCanvas readsCanvas;
-	NBStatusPanel statusPanel;
 
 	private JScrollPane sp;
 	private JScrollBar hBar, vBar;
@@ -30,7 +29,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		createControls();
 
 		setLayout(new BorderLayout(5, 5));
-		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		setBorder(BorderFactory.createEmptyBorder(2, 5, 0, 5));
 
 		JPanel consensusPanel = new JPanel(new BorderLayout(5, 5));
 		consensusPanel.add(consensusCanvas);
@@ -46,15 +45,12 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		JPanel visPanel = new JPanel(new BorderLayout(5, 5));
 		visPanel.add(topPanel, BorderLayout.NORTH);
 		visPanel.add(centerPanel, BorderLayout.CENTER);
-		visPanel.add(statusPanel, BorderLayout.SOUTH);
 
 		add(visPanel);
 	}
 
 	private void createControls()
 	{
-		statusPanel = new NBStatusPanel(this);
-
 		readsCanvas = new ReadsCanvas();
 		overviewCanvas = new OverviewCanvas();
 		consensusCanvas = new ConsensusCanvas();

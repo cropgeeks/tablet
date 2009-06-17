@@ -28,7 +28,6 @@ class ConsensusCanvasML extends MouseInputAdapter
 
 	public void mouseExited(MouseEvent e)
 	{
-		aPanel.statusPanel.setLabels(null, null, null);
 		sCanvas.setMouseBase(null);
 	}
 

@@ -39,7 +39,7 @@ class ReadsCanvas extends JPanel
 	// in the top left corner of the current view
 	int pX1, pY1;
 	// And bottom right hand corner
-	int pX2, pY2;
+	int pX2, pX2Max, pY2;
 
 	// Starting and ending indices of the bases that will be drawn during the
 	// next repaint operation
@@ -121,7 +121,7 @@ class ReadsCanvas extends JPanel
 		ntOnScreenY = 1 + (int) ((float) viewSize.getHeight() / ntH);
 
 		pX1 = viewPosition.x;
-		pX2 = pX1 + viewSize.width -1;
+		pX2 = pX2Max = pX1 + viewSize.width -1;
 		// Adjust for canvases that are smaller than the window size
 		if (pX2 > canvasW)
 			pX2 = canvasW - 1;
