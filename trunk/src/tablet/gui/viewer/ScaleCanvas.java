@@ -182,7 +182,7 @@ class ScaleCanvas extends JPanel
 		return leftPos;
 	}
 
-	private String getUnpadded(int mouseBase)
+	String getUnpadded(int mouseBase)
 	{
 		// If the mouse is off the consensus, ignore unpadded positions
 		if (mouseBase < 0 || mouseBase >= consensus.length())
