@@ -32,7 +32,7 @@ class ReadsCanvasML extends MouseInputAdapter
 		rCanvas.overlays.add(readOutliner);
 		rCanvas.overlays.add(infoPane);
 
-		infoPane.setReadsCanvas(rCanvas);
+		infoPane.setCanvases(sCanvas, rCanvas);
 	}
 
 	public void mouseExited(MouseEvent e)
