@@ -35,7 +35,7 @@ public class ColumnHighlighter extends Thread implements IOverlayRenderer
 
 	public void run()
 	{
-		rCanvas.overlays.add(this);
+		rCanvas.overlays.addFirst(this);
 
 		// Darken the regions around the line/marker
 		alphaEffect = 200;
