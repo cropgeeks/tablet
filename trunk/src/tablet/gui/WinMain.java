@@ -34,6 +34,7 @@ public class WinMain extends JRibbonFrame
 		createControls();
 
 		new RibbonController(this);
+		Actions.resetActions();
 
 		ArrayList<Image> images = new ArrayList<Image>(2);
 		images.add(Icons.getIcon("APPICON64").getImage());
@@ -66,7 +67,7 @@ public class WinMain extends JRibbonFrame
 		ctrlTabs = new JTabbedPane();
 
 		assemblyPanel = new AssemblyPanel(this);
-		contigsPanel = new ContigsPanel(assemblyPanel, ctrlTabs);
+		contigsPanel = new ContigsPanel(this, assemblyPanel, ctrlTabs);
 		featuresPanel = new FeaturesPanel(assemblyPanel, ctrlTabs);
 
 		contigsPanel.setFeaturesPanel(featuresPanel);
@@ -147,15 +148,23 @@ public class WinMain extends JRibbonFrame
 
 	void setAssembly(Assembly assembly)
 	{
-		int location = splitter.getDividerLocation();
-		splitter.setRightComponent(assemblyPanel);
-		splitter.setDividerLocation(location);
-
 		assemblyPanel.setAssembly(assembly);
 		contigsPanel.setAssembly(assembly);
 
 		String title = RB.getString("gui.WinMain.title");
 		setTitle(assembly.getName() + " - " + title + " - " + Install4j.VERSION);
+	}
+
+	void setAssemblyPanelVisible(boolean isVisible)
+	{
+		int location = splitter.getDividerLocation();
+
+		if (isVisible)
+			splitter.setRightComponent(assemblyPanel);
+		else
+			splitter.setRightComponent(new LogoPanel(new BorderLayout()));
+
+		splitter.setDividerLocation(location);
 	}
 
 	private static class LogoPanel extends JPanel

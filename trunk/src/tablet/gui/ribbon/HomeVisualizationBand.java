@@ -13,17 +13,21 @@ import org.jvnet.flamingo.common.*;
 import org.jvnet.flamingo.common.icon.*;
 import org.jvnet.flamingo.ribbon.*;
 
-class HomeVisualizationBand extends JRibbonBand
+public class HomeVisualizationBand extends JRibbonBand
 	implements ActionListener, ChangeListener
 {
 	private WinMain winMain;
 
+	public static JRibbonComponent zoomSliderComponent;
 	private JSlider zoomSlider;
+	public static JRibbonComponent variantSliderComponent;
 	private JSlider variantSlider;
+
+	private JCommandToggleButton bInfoPane;
 
 	HomeVisualizationBand(WinMain winMain)
 	{
-		super("Visualization", new EmptyResizableIcon(32));
+		super("Reads", new EmptyResizableIcon(32));
 
 		this.winMain = winMain;
 
@@ -34,7 +38,8 @@ class HomeVisualizationBand extends JRibbonBand
 		zoomSlider = new JSlider(1, 25, zoom);
 		zoomSlider.addChangeListener(this);
 
-		addRibbonComponent(new JRibbonComponent(RibbonController.getIcon("ZOOM16", 16), "Zoom:", zoomSlider));
+		zoomSliderComponent = new JRibbonComponent(RibbonController.getIcon("ZOOM16", 16), "Zoom:", zoomSlider);
+		addRibbonComponent(zoomSliderComponent);
 
 
 		// Determine the initial zoom level for the variant highlighting
@@ -45,7 +50,18 @@ class HomeVisualizationBand extends JRibbonBand
 		variantSlider = new JSlider(0, 200, vLevel);
 		variantSlider.addChangeListener(this);
 
-		addRibbonComponent(new JRibbonComponent(RibbonController.getIcon("VARIANT16", 16), "Variant highlighting:", variantSlider));
+		variantSliderComponent = new JRibbonComponent(RibbonController.getIcon("VARIANT16", 16), "Variant highlighting:", variantSlider);
+		addRibbonComponent(variantSliderComponent);
+
+		startGroup();
+
+		bInfoPane = new JCommandToggleButton("Info", RibbonController.getIcon("INFOPANE16", 16));
+//		Actions.homeAssembliesOpen32 = new ActionRepeatableButtonModel(bOpen32);
+//		Actions.homeAssembliesOpen32.addActionListener(this);
+//		bOpen32.setActionModel(Actions.homeAssembliesOpen32);
+//		bOpen32.setActionKeyTip("O");
+
+//		addCommandButton(bInfoPane, RibbonElementPriority.MEDIUM);
 	}
 
 	public void actionPerformed(ActionEvent e)
