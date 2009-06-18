@@ -9,14 +9,21 @@ import javax.swing.event.*;
 import tablet.data.*;
 import tablet.gui.*;
 
+import scri.commons.gui.*;
+
 class ReadsCanvasML extends MouseInputAdapter
 {
+	private boolean isOSX = SystemUtils.isMacOS();
+
 	private AssemblyPanel aPanel;
 	private ReadsCanvas rCanvas;
 	private ScaleCanvas sCanvas;
 
 	// Deals with navigation issues
 	private NavigationHandler nHandler = new NavigationHandler();
+
+	// Deals with pop-up menus
+	private ReadsCanvasMenu rCanvasMenu;
 
 	private ReadsCanvasInfoPane infoPane = new ReadsCanvasInfoPane();
 	private ReadOutliner readOutliner = new ReadOutliner();
@@ -32,7 +39,14 @@ class ReadsCanvasML extends MouseInputAdapter
 		rCanvas.overlays.add(readOutliner);
 		rCanvas.overlays.add(infoPane);
 
+		rCanvasMenu = new ReadsCanvasMenu(infoPane);
+
 		infoPane.setCanvases(sCanvas, rCanvas);
+	}
+
+	private boolean isMetaClick(MouseEvent e)
+	{
+		return isOSX && e.isMetaDown() || !isOSX && e.isControlDown();
 	}
 
 	public void mouseExited(MouseEvent e)
@@ -61,12 +75,22 @@ class ReadsCanvasML extends MouseInputAdapter
 
 	public void mousePressed(MouseEvent e)
 	{
+		trackMouse(e);
+
+		if (e.isPopupTrigger())
+			rCanvasMenu.handlePopup(e);
+
 		if (SwingUtilities.isLeftMouseButton(e))
 			nHandler.mousePressed(e);
 	}
 
 	public void mouseReleased(MouseEvent e)
 	{
+		trackMouse(e);
+
+		if (e.isPopupTrigger())
+			rCanvasMenu.handlePopup(e);
+
 		nHandler.mouseReleased(e);
 	}
 
@@ -77,9 +101,12 @@ class ReadsCanvasML extends MouseInputAdapter
 
 	public void mouseMoved(MouseEvent e)
 	{
-		if (rCanvas.contig == null)
-			return;
+		if (rCanvasMenu.isShowingMenu() == false)
+			trackMouse(e);
+	}
 
+	private void trackMouse(MouseEvent e)
+	{
 		int xIndex = (e.getX() / rCanvas.ntW) - rCanvas.offset;
 		int yIndex = (e.getY() / rCanvas.ntH);
 

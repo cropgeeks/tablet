@@ -1,6 +1,7 @@
 package tablet.gui.viewer;
 
 import java.awt.*;
+import java.awt.datatransfer.*;
 import java.awt.image.*;
 import java.text.*;
 import javax.swing.*;
@@ -87,6 +88,9 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			w = fmTitle.stringWidth(lengthData) + 20;
 	}
 
+	boolean isOverRead()
+		{ return mouse != null; }
+
 	public void render(Graphics2D g)
 	{
 		if (mouse == null)
@@ -155,5 +159,44 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			x = rCanvas.pX2Max - w - 1;
 		if (y + h >= rCanvas.pY2)
 			y = rCanvas.pY2 - h - 1;
+	}
+
+	void copyReadNameToClipboard()
+	{
+		StringSelection selection = new StringSelection(metaData.getName());
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+			selection, null);
+	}
+
+	void copyDataToClipboard()
+	{
+		String lb = System.getProperty("line.separator");
+		String seq = read.toString();
+
+		StringBuffer text = new StringBuffer(seq.length() + 500);
+		text.append(readName + lb + posData + lb + lengthData + lb);
+
+		if (metaData.isComplemented())
+			text.append("Read direction is REVERSE" + lb + lb);
+		else
+			text.append("Read direction is FORWARD" + lb + lb);
+
+		// Produce a FASTA formatted string
+		text.append(">" + metaData.getName() + lb);
+		for (int i = 0; i < seq.length(); i += 50)
+		{
+			try
+			{
+				text.append(seq.substring(i, i+50) + lb);
+			}
+			catch (Exception e)
+			{
+				text.append(seq.substring(i, seq.length()) + lb);
+			}
+		}
+
+		StringSelection selection = new StringSelection(text.toString());
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+			selection, null);
 	}
 }
