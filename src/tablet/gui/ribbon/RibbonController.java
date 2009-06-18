@@ -8,6 +8,7 @@ import tablet.gui.*;
 
 import scri.commons.gui.*;
 
+import org.jvnet.flamingo.common.*;
 import org.jvnet.flamingo.common.icon.*;
 import org.jvnet.flamingo.common.model.*;
 import org.jvnet.flamingo.ribbon.*;
@@ -56,5 +57,18 @@ public class RibbonController
 		Dimension dimension = new Dimension(size, size);
 
 		return ImageWrapperResizableIcon.getIcon(icon, dimension);
+	}
+
+	/** Associates a keyboard shortcut with a button on the ribbon. */
+	static void assignShortcut(final AbstractCommandButton button, KeyStroke ks)
+	{
+		Action action = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				button.doActionClick();
+			}
+		};
+
+		button.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "action");
+		button.getActionMap().put("action", action);
 	}
 }

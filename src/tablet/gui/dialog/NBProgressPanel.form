@@ -19,9 +19,9 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="pBar" pref="320" max="32767" attributes="0"/>
+                  <Component id="pBar" pref="364" max="32767" attributes="0"/>
                   <Component id="mainLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="msgLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="msgLabel" alignment="0" pref="364" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>

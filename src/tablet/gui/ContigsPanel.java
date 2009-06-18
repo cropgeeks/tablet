@@ -20,6 +20,7 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 
 	private ContigsTableModel model;
 	private JTable table;
+	private JScrollPane sp;
 
 	ContigsPanel(WinMain winMain, AssemblyPanel aPanel, JTabbedPane ctrlTabs)
 	{
@@ -33,7 +34,7 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 		table.getSelectionModel().addListSelectionListener(this);
 
 		setLayout(new BorderLayout());
-		add(new JScrollPane(table));
+		add(sp = new JScrollPane(table));
 	}
 
 	void setFeaturesPanel(FeaturesPanel featuresPanel)
@@ -50,6 +51,7 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 
 		table.setModel(model);
 		table.setRowSorter(new TableRowSorter<ContigsTableModel>(model));
+		sp.getVerticalScrollBar().setValue(0);
 
 		String title = RB.format("gui.ContigsPanel.title", assembly.contigCount());
 		ctrlTabs.setTitleAt(0, title);

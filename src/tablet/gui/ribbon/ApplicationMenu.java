@@ -2,6 +2,8 @@ package tablet.gui.ribbon;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
+import java.util.*;
 import javax.swing.*;
 
 import tablet.gui.*;
@@ -12,7 +14,8 @@ import org.jvnet.flamingo.common.icon.*;
 import org.jvnet.flamingo.common.model.*;
 import org.jvnet.flamingo.ribbon.*;
 
-class ApplicationMenu extends RibbonApplicationMenu implements ActionListener
+class ApplicationMenu extends RibbonApplicationMenu
+	implements ActionListener, RibbonApplicationMenuEntryPrimary.PrimaryRolloverCallback
 {
 	private WinMain winMain;
 
@@ -38,17 +41,22 @@ class ApplicationMenu extends RibbonApplicationMenu implements ActionListener
 		iNew = RibbonController.getIcon("FILENEW32", 32);
 		mNew = new RibbonApplicationMenuEntryPrimary(iNew, "New", this,
 			CommandButtonKind.ACTION_ONLY);
+		mNew.setRolloverCallback(this);
 		mNew.setActionKeyTip("N");
+		mNew.setEnabled(false);
 
 		iOpen = RibbonController.getIcon("FILEOPEN32", 32);
 		mOpen = new RibbonApplicationMenuEntryPrimary(iOpen, "Open", this,
 			CommandButtonKind.ACTION_ONLY);
+		mOpen.setRolloverCallback(this);
 		mOpen.setActionKeyTip("O");
 
 		iClose = RibbonController.getIcon("FILECLOSE32", 32);
 		mClose = new RibbonApplicationMenuEntryPrimary(iClose, "Close", this,
 			CommandButtonKind.ACTION_ONLY);
+		mClose.setRolloverCallback(this);
 		mClose.setActionKeyTip("C");
+		mClose.setEnabled(false);
 
 		addMenuEntry(mNew);
 		addMenuEntry(mOpen);
@@ -59,6 +67,7 @@ class ApplicationMenu extends RibbonApplicationMenu implements ActionListener
 		iOptions = RibbonController.getIcon("OPTIONS16", 16);
 		mOptions = new RibbonApplicationMenuEntryFooter(iOptions, "Tablet Options", this);
 		mOptions.setActionKeyTip("TO");
+		mOptions.setEnabled(false);
 
 		iExit = RibbonController.getIcon("EXIT16", 16);
 		mExit = new RibbonApplicationMenuEntryFooter(iExit, "Exit Tablet", this);
@@ -66,6 +75,43 @@ class ApplicationMenu extends RibbonApplicationMenu implements ActionListener
 
 		addFooterEntry(mOptions);
 		addFooterEntry(mExit);
+	}
+
+	// Creates the application menu's list of recently opened documents
+	public void menuEntryActivated(JPanel targetPanel)
+	{
+		targetPanel.removeAll();
+
+		JCommandButtonPanel recentPanel = new JCommandButtonPanel(CommandButtonDisplayState.MEDIUM);
+		String groupName = "Recent Documents";
+		recentPanel.addButtonGroup(groupName);
+
+		// Parse the list of recent documents
+		for (final String path: Prefs.getRecentDocuments())
+		{
+			// Ignore any that haven't been set yet
+			if (path.length() == 0)
+				continue;
+
+			File file = new File(path);
+
+			// Make the button
+			JCommandButton button = new JCommandButton(file.getName(),
+				RibbonController.getIcon("DOCUMENTS16", 16));
+			button.setHorizontalAlignment(SwingUtilities.LEFT);
+			recentPanel.addButtonToLastGroup(button);
+
+			// And give it an action
+			button.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					winMain.getCommands().fileOpen(path);
+				}
+			});
+		}
+
+		recentPanel.setMaxButtonColumns(1);
+		targetPanel.setLayout(new BorderLayout());
+		targetPanel.add(recentPanel, BorderLayout.CENTER);
 	}
 
 	public void actionPerformed(ActionEvent e)

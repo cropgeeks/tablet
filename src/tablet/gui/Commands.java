@@ -64,6 +64,8 @@ public class Commands
 			return;
 		}
 
+		Prefs.setRecentDocument(filename);
+
 		long freeMem = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed();
 		java.text.NumberFormat nf = java.text.NumberFormat.getInstance();
 		System.out.println("Memory used: " + nf.format(freeMem/1024f/1024f) + "MB\n");
