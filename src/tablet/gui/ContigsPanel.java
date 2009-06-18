@@ -13,6 +13,7 @@ import scri.commons.gui.*;
 
 class ContigsPanel extends JPanel implements ListSelectionListener
 {
+	private WinMain winMain;
 	private AssemblyPanel aPanel;
 	private FeaturesPanel featuresPanel;
 	private JTabbedPane ctrlTabs;
@@ -20,8 +21,9 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 	private ContigsTableModel model;
 	private JTable table;
 
-	ContigsPanel(AssemblyPanel aPanel, JTabbedPane ctrlTabs)
+	ContigsPanel(WinMain winMain, AssemblyPanel aPanel, JTabbedPane ctrlTabs)
 	{
+		this.winMain = winMain;
 		this.aPanel = aPanel;
 		this.ctrlTabs = ctrlTabs;
 
@@ -58,13 +60,16 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 		if (e.getValueIsAdjusting())
 			return;
 
+		Actions.resetActions();
+
 		int row = table.getSelectedRow();
 
 		if (row == -1)
 		{
-			// TODO: Update winMain with blank RHS split pane instead
 			aPanel.setContig(null);
 			featuresPanel.setContig(null);
+
+			winMain.setAssemblyPanelVisible(false);
 		}
 		else
 		{
@@ -75,6 +80,9 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 			Contig contig = (Contig) model.getValueAt(row, 0);
 			aPanel.setContig(contig);
 			featuresPanel.setContig(contig);
+
+			Actions.contigSelected();
+			winMain.setAssemblyPanelVisible(true);
 		}
 	}
 }
