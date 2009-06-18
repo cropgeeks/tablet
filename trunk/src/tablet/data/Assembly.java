@@ -82,6 +82,13 @@ public class Assembly implements Iterable<Contig>
 		return cache.getReadMetaData(read.getID());
 	}
 
+	/**
+	 * Returns a reference to the read cache being used by this assembly.
+	 * @return a reference to the read cache being used by this assembly
+	 */
+	public IReadCache getCache()
+		{ return cache; }
+
 	void print()
 	{
 		System.out.println("Assembly:");
