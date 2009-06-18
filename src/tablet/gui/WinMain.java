@@ -148,6 +148,8 @@ public class WinMain extends JRibbonFrame
 
 	void setAssembly(Assembly assembly)
 	{
+		this.assembly = assembly;
+
 		assemblyPanel.setAssembly(assembly);
 		contigsPanel.setAssembly(assembly);
 
@@ -165,6 +167,17 @@ public class WinMain extends JRibbonFrame
 			splitter.setRightComponent(new LogoPanel(new BorderLayout()));
 
 		splitter.setDividerLocation(location);
+	}
+
+	// Closes the current assembly and the cache associated with it
+	void closeAssembly()
+	{
+		try
+		{
+			if (assembly != null)
+				assembly.getCache().close();
+		}
+		catch (Exception e) { e.printStackTrace(); }
 	}
 
 	private static class LogoPanel extends JPanel

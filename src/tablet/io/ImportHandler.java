@@ -10,6 +10,7 @@ import tablet.data.cache.*;
 import tablet.gui.*;
 
 import scri.commons.file.*;
+import scri.commons.gui.*;
 
 /**
  * This is a complicated class, that presents itself as a trackable job, but in
@@ -59,10 +60,15 @@ public class ImportHandler implements ITrackableJob
 	{
 		boolean ok = false;
 
+		File cacheDir = SystemUtils.getTempUserDirectory("scri-tablet");
+
 		// Set up the read cache
-		File cacheFile = new File("tablet-cache.dat");
-		File indexFile = new File("tablet-index.dat");
+		String time = "" + System.currentTimeMillis();
+		File cacheFile = new File(cacheDir, time + "-" + file.getName() + ".cache");
+		File indexFile = new File(cacheDir, time + "-" + file.getName() + ".index");
 		readCache = FileCache.createWritableCache(cacheFile, indexFile);
+
+		System.out.println(cacheFile);
 
 		// For each file format that we understand...
 

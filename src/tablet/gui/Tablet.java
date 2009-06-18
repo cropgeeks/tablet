@@ -6,6 +6,7 @@ import java.io.*;
 import javax.swing.*;
 
 import scri.commons.gui.*;
+import scri.commons.file.*;
 
 import apple.dts.samplecode.osxadapter.*;
 
@@ -89,6 +90,12 @@ public class Tablet
 
 	private void shutdown()
 	{
+		// Attempt to remove any temp files that were in use
+		winMain.closeAssembly();
+
+		File cacheDir = SystemUtils.getTempUserDirectory("scri-tablet");
+		FileUtils.emptyDirectory(cacheDir, true);
+
 		Prefs.isFirstRun = false;
 		prefs.savePreferences(prefsFile, Prefs.class);
 
@@ -109,6 +116,8 @@ public class Tablet
 //				getClass().getDeclaredMethod("osxAbout", (Class[])null));
 			OSXAdapter.setQuitHandler(this,
 				getClass().getDeclaredMethod("osxShutdown", (Class[])null));
+			OSXAdapter.setFileHandler(this,
+				getClass().getDeclaredMethod("osxOpen", new Class[] { String.class }));
 
 			// Dock the menu bar at the top of the screen
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
@@ -133,5 +142,10 @@ public class Tablet
 	{
 		shutdown();
 		return true;
+	}
+
+	public void osxOpen(String path)
+	{
+		winMain.getCommands().fileOpen(path);
 	}
 }
