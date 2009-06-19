@@ -96,6 +96,8 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		if (mouse == null)
 			return;
 
+		rCanvas.setToolTipText(null);
+
 		calculatePosition();
 		g.translate(x, y);
 
@@ -177,9 +179,9 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		text.append(readName + lb + posData + lb + lengthData + lb);
 
 		if (metaData.isComplemented())
-			text.append("Read direction is REVERSE" + lb + lb);
-		else
 			text.append("Read direction is FORWARD" + lb + lb);
+		else
+			text.append("Read direction is REVERSE" + lb + lb);
 
 		// Produce a FASTA formatted string
 		text.append(">" + metaData.getName() + lb);

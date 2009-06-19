@@ -21,6 +21,7 @@ class ReadsCanvasML extends MouseInputAdapter
 
 	// Deals with navigation issues
 	private NavigationHandler nHandler = new NavigationHandler();
+	private NavigationHighlighter nHighlighter;
 
 	// Deals with pop-up menus
 	private ReadsCanvasMenu rCanvasMenu;
@@ -34,14 +35,17 @@ class ReadsCanvasML extends MouseInputAdapter
 		rCanvas = aPanel.readsCanvas;
 		sCanvas = aPanel.scaleCanvas;
 
+		// Create the various objects that track the mouse
+		rCanvasMenu = new ReadsCanvasMenu(infoPane);
+		nHighlighter = new NavigationHighlighter(aPanel, infoPane);
+		infoPane.setCanvases(sCanvas, rCanvas);
+
+		// Then add listeners and overlays to the canvas
 		rCanvas.addMouseListener(this);
 		rCanvas.addMouseMotionListener(this);
 		rCanvas.overlays.add(readOutliner);
+		rCanvas.overlays.add(nHighlighter);
 		rCanvas.overlays.add(infoPane);
-
-		rCanvasMenu = new ReadsCanvasMenu(infoPane);
-
-		infoPane.setCanvases(sCanvas, rCanvas);
 	}
 
 	private boolean isMetaClick(MouseEvent e)
@@ -53,6 +57,7 @@ class ReadsCanvasML extends MouseInputAdapter
 	{
 		readOutliner.read = null;
 		infoPane.setMousePosition(null);
+		nHighlighter.setMousePosition(null);
 
 		sCanvas.setMouseBase(null);
 		rCanvas.repaint();
@@ -113,6 +118,7 @@ class ReadsCanvasML extends MouseInputAdapter
 		// Track the mouse position
 		sCanvas.setMouseBase(xIndex);
 		infoPane.setMousePosition(e.getPoint());
+		nHighlighter.setMousePosition(e.getPoint());
 
 		// Track the read under the mouse (if any)
 		Read read = rCanvas.reads.getReadAt(yIndex, xIndex);
