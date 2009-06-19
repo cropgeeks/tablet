@@ -65,7 +65,18 @@ class ReadsCanvasML extends MouseInputAdapter
 
 	public void mouseClicked(MouseEvent e)
 	{
-		if (e.getClickCount() == 2)
+		if (SwingUtilities.isLeftMouseButton(e))
+		{
+			// Page left or right if the navigation arrows were clicked on
+			if (nHighlighter.isLeftActive())
+				aPanel.pageLeft();
+			else if (nHighlighter.isRightActive())
+				aPanel.pageRight();
+		}
+
+		// TODO: Move controls for this to ribbon
+		// Toggle packed/stacked
+		else if (e.getClickCount() == 2)
 		{
 			// Toggle the layout type
 			if (Prefs.visReadLayout == 1)

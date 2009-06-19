@@ -26,6 +26,9 @@ class ScaleCanvas extends JPanel
 	// The LHS offset (difference) between the left-most read and the consensus
 	int offset;
 
+	// Tracks the left most and right most bases being displayed
+	int ntL, ntR;
+
 	ScaleCanvas()
 	{
 		setOpaque(false);
@@ -150,6 +153,7 @@ class ScaleCanvas extends JPanel
 		String lhsStr = d.format(xS+1-offset) + getUnpadded(xS-offset);
 		int strWidth  = g.getFontMetrics().stringWidth(lhsStr);
 		int pos = getPosition(x1, strWidth);;
+		ntL = xS;
 
 		if (mouseBase == null || mouseBaseS > pos+strWidth-1)
 			g.drawString(lhsStr, pos, 20);
@@ -158,6 +162,7 @@ class ScaleCanvas extends JPanel
 		String rhsStr = d.format(xE+1-offset) + getUnpadded(xE-offset);
 		strWidth  = g.getFontMetrics().stringWidth(rhsStr);
 		pos = getPosition(x2, strWidth);
+		ntR = xE;
 
 		if (mouseBase == null || mouseBaseE < pos)
 			g.drawString(rhsStr, pos, 20);
