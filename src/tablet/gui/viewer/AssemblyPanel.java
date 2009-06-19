@@ -169,4 +169,20 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		readsCanvas.setDimensions(zoom, zoom);
 		consensusCanvas.setDimensions();
 	}
+
+	// Jumps the screen left by one "page"
+	void pageLeft()
+	{
+		int basesOnScreen = scaleCanvas.ntR - scaleCanvas.ntL + 1;
+		int jumpTo = scaleCanvas.ntL - (basesOnScreen);
+
+		moveToPosition(-1, jumpTo, false);
+	}
+
+	// Jumps the screen right by one "page"
+	void pageRight()
+	{
+		int jumpTo = scaleCanvas.ntR + 1;
+		moveToPosition(-1, jumpTo, false);
+	}
 }

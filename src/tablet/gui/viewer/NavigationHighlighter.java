@@ -17,6 +17,8 @@ class NavigationHighlighter implements IOverlayRenderer
 	private int imgW, imgH;
 
 	private Point mouse;
+	private boolean isLeftActive;
+	private boolean isRightActive;
 
 	public NavigationHighlighter(AssemblyPanel aPanel, ReadsCanvasInfoPane infoPane)
 	{
@@ -39,6 +41,8 @@ class NavigationHighlighter implements IOverlayRenderer
 	{
 		Composite c = g.getComposite();
 
+		isLeftActive = isRightActive = false;
+
 		// LEFT HAND NAV CONTROL...
 		// We want to show the control when the mouse is within 75 pixels of it
 //		int lhEdge = rCanvas.pX1 + 75;
@@ -55,7 +59,9 @@ class NavigationHighlighter implements IOverlayRenderer
 			else
 			{
 				rCanvas.setToolTipText("Page left by XXX bases");
+
 				infoPane.setMousePosition(null);
+				isLeftActive = true;
 			}
 
 			g.drawImage(navLeft, ix, iy, null);
@@ -78,11 +84,19 @@ class NavigationHighlighter implements IOverlayRenderer
 			else
 			{
 				rCanvas.setToolTipText("Page right by XXX bases");
+
 				infoPane.setMousePosition(null);
+				isRightActive = true;
 			}
 
 			g.drawImage(navRight, ix, iy, null);
 			g.setComposite(c);
 		}
 	}
+
+	boolean isLeftActive()
+		{ return isLeftActive; }
+
+	boolean isRightActive()
+		{ return isRightActive; }
 }
