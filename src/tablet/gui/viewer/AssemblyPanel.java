@@ -173,8 +173,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	// Jumps the screen left by one "page"
 	void pageLeft()
 	{
-		int basesOnScreen = scaleCanvas.ntR - scaleCanvas.ntL + 1;
-		int jumpTo = scaleCanvas.ntL - (basesOnScreen);
+		int jumpTo = scaleCanvas.ntL - (readsCanvas.ntOnScreenX);
 
 		moveToPosition(-1, jumpTo, false);
 	}

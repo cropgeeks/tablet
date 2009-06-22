@@ -2,6 +2,8 @@ package tablet.gui.viewer;
 
 import java.awt.*;
 
+import tablet.gui.*;
+
 import scri.commons.gui.*;
 
 /**
@@ -44,54 +46,51 @@ class NavigationHighlighter implements IOverlayRenderer
 		isLeftActive = isRightActive = false;
 
 		// LEFT HAND NAV CONTROL...
-		// We want to show the control when the mouse is within 75 pixels of it
-//		int lhEdge = rCanvas.pX1 + 75;
+		// Determine where to draw the image
+		int ix = rCanvas.pX1 + 10;
+		int iy = rCanvas.pY2 - imgH - 20;
 
-//		if (mouse.x < lhEdge)
+		// If the mouse *isn't* over the image, draw transparently
+		if (mouse == null || mouse.x > ix+imgW || mouse.x < ix || mouse.y > iy+imgH || mouse.y < iy)
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP , 0.5f));
+		else
 		{
-			// Determine where to draw the image
-			int ix = rCanvas.pX1 + 10;
-			int iy = rCanvas.pY2 - imgH - 20;
+			String tt = RB.format(
+				"tablet.gui.viewer.NavigationHighlighter.leftTooltip",
+				rCanvas.ntOnScreenX);
+			rCanvas.setToolTipText(tt);
 
-			// If the mouse *isn't* over the image, draw transparently
-			if (mouse == null || mouse.x > ix+imgW || mouse.x < ix || mouse.y > iy+imgH || mouse.y < iy)
-				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP , 0.5f));
-			else
-			{
-				rCanvas.setToolTipText("Page left by XXX bases");
-
-				infoPane.setMousePosition(null);
-				isLeftActive = true;
-			}
-
-			g.drawImage(navLeft, ix, iy, null);
-			g.setComposite(c);
+			infoPane.setMousePosition(null);
+			isLeftActive = true;
 		}
+
+		g.drawImage(navLeft, ix, iy, null);
 
 
 		// RIGHT HAND NAV CONTROL...
-//		int rhEdge = rCanvas.pX2Max - 75;
+		// Determine where to draw the image
+		ix = rCanvas.pX2Max - imgW - 10;
 
-//		if (mouse.x > rhEdge)
+		// If the mouse *isn't* over the image, draw transparently
+		if (mouse == null || mouse.x < ix || mouse.x > ix+imgW || mouse.y > iy+imgH || mouse.y < iy)
+			g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP , 0.5f));
+		else
 		{
-			// Determine where to draw the image
-			int ix = rCanvas.pX2Max - imgW - 10;
-			int iy = rCanvas.pY2 - imgH - 20;
+			String tt = RB.format(
+				"tablet.gui.viewer.NavigationHighlighter.rightTooltip",
+				rCanvas.ntOnScreenX);
+			rCanvas.setToolTipText(tt);
 
-			// If the mouse *isn't* over the image, draw transparently
-			if (mouse == null || mouse.x < ix || mouse.x > ix+imgW || mouse.y > iy+imgH || mouse.y < iy)
-				g.setComposite(AlphaComposite.getInstance(AlphaComposite.SRC_ATOP , 0.5f));
-			else
-			{
-				rCanvas.setToolTipText("Page right by XXX bases");
-
-				infoPane.setMousePosition(null);
-				isRightActive = true;
-			}
-
-			g.drawImage(navRight, ix, iy, null);
-			g.setComposite(c);
+			infoPane.setMousePosition(null);
+			isRightActive = true;
 		}
+
+		g.drawImage(navRight, ix, iy, null);
+		g.setComposite(c);
+
+		// Disable the tooltip if neither link is active
+		if (!isLeftActive && !isRightActive)
+			rCanvas.setToolTipText(null);
 	}
 
 	boolean isLeftActive()

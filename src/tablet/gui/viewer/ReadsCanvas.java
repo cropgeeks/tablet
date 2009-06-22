@@ -1,6 +1,7 @@
 package tablet.gui.viewer;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.awt.image.*;
 import java.util.*;
 import javax.swing.*;
@@ -56,6 +57,22 @@ class ReadsCanvas extends JPanel
 	ReadsCanvas()
 	{
 		setOpaque(false);
+
+		// Set up some keyboard navigation
+		Action pageLeft = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) { aPanel.pageLeft(); }
+		};
+		Action pageRight = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) { aPanel.pageRight(); }
+		};
+
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+			KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, 0), "left");
+		getActionMap().put("left", pageLeft);
+
+		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+			KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, 0), "right");
+		getActionMap().put("right", pageRight);
 	}
 
 	void setAssemblyPanel(AssemblyPanel aPanel)
