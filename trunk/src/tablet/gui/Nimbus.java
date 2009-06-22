@@ -20,6 +20,7 @@ class Nimbus
 		UIManager.put("Table[Enabled].font", FONT);
 		UIManager.put("TableHeader[Enabled].font", FONT);
 		UIManager.put("TabbedPane[Enabled].font", FONT);
+		UIManager.put("ComboBox[Enabled].font", FONT);
 
 
 		for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels())

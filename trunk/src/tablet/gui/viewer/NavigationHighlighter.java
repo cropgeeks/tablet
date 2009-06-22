@@ -56,7 +56,7 @@ class NavigationHighlighter implements IOverlayRenderer
 		else
 		{
 			String tt = RB.format(
-				"tablet.gui.viewer.NavigationHighlighter.leftTooltip",
+				"gui.viewer.NavigationHighlighter.leftTooltip",
 				rCanvas.ntOnScreenX);
 			rCanvas.setToolTipText(tt);
 
@@ -77,7 +77,7 @@ class NavigationHighlighter implements IOverlayRenderer
 		else
 		{
 			String tt = RB.format(
-				"tablet.gui.viewer.NavigationHighlighter.rightTooltip",
+				"gui.viewer.NavigationHighlighter.rightTooltip",
 				rCanvas.ntOnScreenX);
 			rCanvas.setToolTipText(tt);
 

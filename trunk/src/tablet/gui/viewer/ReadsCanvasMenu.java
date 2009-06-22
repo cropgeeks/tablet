@@ -27,15 +27,15 @@ class ReadsCanvasMenu
 		createActions();
 
 		mClipboardName = getItem(aClipboardName,
-			"tablet.gui.viewer.ReadsCanvasMenu.mClipboardName", 0, 0);
+			"gui.viewer.ReadsCanvasMenu.mClipboardName", 0, 0);
 		mClipboardData = getItem(aClipboardData,
-			"tablet.gui.viewer.ReadsCanvasMenu.mClipboardData", 0, 0);
+			"gui.viewer.ReadsCanvasMenu.mClipboardData", 0, 0);
 	}
 
 	private void createActions()
 	{
 		aClipboardName = new AbstractAction(
-			RB.getString("tablet.gui.viewer.ReadsCanvasMenu.mClipboardName"),
+			RB.getString("gui.viewer.ReadsCanvasMenu.mClipboardName"),
 			Icons.getIcon("CLIPBOARDNAME"))
 		{
 			public void actionPerformed(ActionEvent e) {
@@ -44,7 +44,7 @@ class ReadsCanvasMenu
 		};
 
 		aClipboardData = new AbstractAction(
-			RB.getString("tablet.gui.viewer.ReadsCanvasMenu.mClipboardData"),
+			RB.getString("gui.viewer.ReadsCanvasMenu.mClipboardData"),
 			Icons.getIcon("CLIPBOARD"))
 		{
 			public void actionPerformed(ActionEvent e) {
