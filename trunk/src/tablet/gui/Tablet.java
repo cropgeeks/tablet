@@ -18,6 +18,9 @@ public class Tablet
 
 	public static WinMain winMain;
 
+	// Returns value for "CTRL" under most OSs, and the "apple" key for OS X
+	public static int menuShortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
 	public static void main(String[] args)
 		throws Exception
 	{

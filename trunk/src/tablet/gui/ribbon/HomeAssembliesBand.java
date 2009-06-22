@@ -22,16 +22,14 @@ class HomeAssembliesBand extends JRibbonBand implements ActionListener
 
 		this.winMain = winMain;
 
-		// Returns value for "CTRL" under most OSs, and the "apple" key for OS X
-		int menuShortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
-
 		// Open an assembly (32x32 main button)
 		bOpen32 = new JCommandButton("Open Assembly", RibbonController.getIcon("FILEOPEN32", 32));
 		Actions.homeAssembliesOpen32 = new ActionRepeatableButtonModel(bOpen32);
 		Actions.homeAssembliesOpen32.addActionListener(this);
 		bOpen32.setActionModel(Actions.homeAssembliesOpen32);
 		bOpen32.setActionKeyTip("O");
-		RibbonController.assignShortcut(bOpen32, KeyStroke.getKeyStroke(KeyEvent.VK_O, menuShortcut));
+		RibbonController.assignShortcut(bOpen32,
+			KeyStroke.getKeyStroke(KeyEvent.VK_O, Tablet.menuShortcut));
 
 
 		// Open an assembly (16x16 shortcut button)
