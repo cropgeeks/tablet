@@ -65,7 +65,7 @@ class NavigationHighlighter implements IOverlayRenderer
 		}
 
 		g.drawImage(navLeft, ix, iy, null);
-
+		g.setComposite(c);
 
 		// RIGHT HAND NAV CONTROL...
 		// Determine where to draw the image
