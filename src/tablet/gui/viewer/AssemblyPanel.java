@@ -89,7 +89,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		// Set the summary label at the top of the screen
 		if (contig != null)
 		{
-			String label = RB.format("tablet.gui.viewer.AssemblyPanel.summaryLabel",
+			String label = RB.format("gui.viewer.AssemblyPanel.summaryLabel",
 				contig.getName(),
 				contig.getConsensus().length(),
 				contig.getReads().size(),
