@@ -35,6 +35,9 @@ public class Prefs extends XMLPreferences
 	// The last used directory location in file chooser dialogs
 	public static String guiCurrentDir = "";
 
+	// What filtering option was last in use for the contigs panel
+	public static int guiContigsFilter = 0;
+
 	// Display reads in packed or stacked form?
 	public static int visReadLayout = 1;
 

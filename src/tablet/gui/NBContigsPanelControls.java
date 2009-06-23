@@ -5,6 +5,8 @@ import javax.swing.*;
 import javax.swing.RowFilter.*;
 import javax.swing.event.*;
 
+import tablet.gui.*;
+
 import scri.commons.gui.*;
 
 class NBContigsPanelControls extends JPanel implements ActionListener, DocumentListener
@@ -17,12 +19,15 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
 
 		// NetBeans GUI setup code
 		initComponents();
+		setEnabledState(false);
 
 		// i18n text
 		RB.setText(filterLabel, "gui.NBContigsPanelControls.filterLabel");
 
 		for (int i = 0; i < 7; i++)
 			combo.addItem(RB.getString("gui.NBContigsPanelControls.combo" + i));
+
+		combo.setSelectedIndex(Prefs.guiContigsFilter);
 
 		// Event handlers
 		textField.getDocument().addDocumentListener(this);
@@ -31,9 +36,14 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
 
 	public void actionPerformed(ActionEvent e)
 	{
+		Prefs.guiContigsFilter = combo.getSelectedIndex();
+
 		textField.setText("");
 		textField.requestFocus();
 	}
+
+	void clearFilter()
+		{ textField.setText(""); }
 
 	public void changedUpdate(DocumentEvent e)
 		{ filter(); }
@@ -105,6 +115,13 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
 
 
 		panel.setTableFilter(rf);
+	}
+
+	void setEnabledState(boolean state)
+	{
+		filterLabel.setEnabled(state);
+		combo.setEnabled(state);
+		textField.setEnabled(state);
 	}
 
     /** This method is called from within the constructor to
