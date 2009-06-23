@@ -14,18 +14,46 @@ public class Actions
 
 	public static ActionRepeatableButtonModel homeAssembliesOpen16;
 	public static ActionRepeatableButtonModel homeAssembliesOpen32;
+	public static ActionRepeatableButtonModel applicationMenuSave16;
 
 	void setRibbonController(RibbonController ribbon)
 		{ this.ribbon = ribbon; }
 
-	public static void resetActions()
+	public static void closed()
 	{
+		// Application menu options
+		ApplicationMenu.mSave.setEnabled(false);
+		ApplicationMenu.mSaveAs.setEnabled(false);
+		ApplicationMenu.mClose.setEnabled(false);
+		applicationMenuSave16.setEnabled(false);
+
+		// Ribbon controls
 		HomeVisualizationBand.zoomSliderComponent.setEnabled(false);
 		HomeVisualizationBand.variantSliderComponent.setEnabled(false);
 	}
 
-	public static void contigSelected()
+	public static void openedNoContigSelected()
 	{
+		// Application menu options
+		ApplicationMenu.mSave.setEnabled(false);
+		ApplicationMenu.mSaveAs.setEnabled(false);
+		ApplicationMenu.mClose.setEnabled(true);
+		applicationMenuSave16.setEnabled(false);
+
+		// Ribbon controls
+		HomeVisualizationBand.zoomSliderComponent.setEnabled(false);
+		HomeVisualizationBand.variantSliderComponent.setEnabled(false);
+	}
+
+	public static void openedContigSelected()
+	{
+		// Application menu options
+		ApplicationMenu.mSave.setEnabled(false);
+		ApplicationMenu.mSaveAs.setEnabled(false);
+		ApplicationMenu.mClose.setEnabled(true);
+		applicationMenuSave16.setEnabled(false);
+
+		// Ribbon controls
 		HomeVisualizationBand.zoomSliderComponent.setEnabled(true);
 		HomeVisualizationBand.variantSliderComponent.setEnabled(true);
 	}
