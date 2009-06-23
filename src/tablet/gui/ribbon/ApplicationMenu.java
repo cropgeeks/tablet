@@ -14,17 +14,20 @@ import org.jvnet.flamingo.common.icon.*;
 import org.jvnet.flamingo.common.model.*;
 import org.jvnet.flamingo.ribbon.*;
 
-class ApplicationMenu extends RibbonApplicationMenu
+public class ApplicationMenu extends RibbonApplicationMenu
 	implements ActionListener, RibbonApplicationMenuEntryPrimary.PrimaryRolloverCallback
 {
 	private WinMain winMain;
 
-	private ResizableIcon iNew;
-	private RibbonApplicationMenuEntryPrimary mNew;
 	private ResizableIcon iOpen;
 	private RibbonApplicationMenuEntryPrimary mOpen;
 	private ResizableIcon iClose;
-	private RibbonApplicationMenuEntryPrimary mClose;
+	public static RibbonApplicationMenuEntryPrimary mSave;
+	public static JCommandButton bSave;
+	private ResizableIcon iSave;
+	public static RibbonApplicationMenuEntryPrimary mSaveAs;
+	private ResizableIcon iSaveAs;
+	public static RibbonApplicationMenuEntryPrimary mClose;
 
 	private ResizableIcon iOptions;
 	private RibbonApplicationMenuEntryFooter mOptions;
@@ -35,31 +38,41 @@ class ApplicationMenu extends RibbonApplicationMenu
 	{
 		this.winMain = winMain;
 
-		this.
-
 		// Primary menu options
-		iNew = RibbonController.getIcon("FILENEW32", 32);
-		mNew = new RibbonApplicationMenuEntryPrimary(iNew, "New", this,
-			CommandButtonKind.ACTION_ONLY);
-		mNew.setRolloverCallback(this);
-		mNew.setActionKeyTip("N");
-		mNew.setEnabled(false);
-
 		iOpen = RibbonController.getIcon("FILEOPEN32", 32);
 		mOpen = new RibbonApplicationMenuEntryPrimary(iOpen, "Open", this,
 			CommandButtonKind.ACTION_ONLY);
 		mOpen.setRolloverCallback(this);
 		mOpen.setActionKeyTip("O");
 
+		iSave = RibbonController.getIcon("FILESAVE32", 32);
+		mSave = new RibbonApplicationMenuEntryPrimary(iSave, "Save", this,
+			CommandButtonKind.ACTION_ONLY);
+		mSave.setRolloverCallback(this);
+		mSave.setActionKeyTip("S");
+
+		bSave = new JCommandButton("Save", RibbonController.getIcon("FILESAVE16", 16));
+		Actions.applicationMenuSave16 = new ActionRepeatableButtonModel(bSave);
+		Actions.applicationMenuSave16.addActionListener(this);
+		bSave.setActionModel(Actions.applicationMenuSave16);
+		bSave.setActionKeyTip("2");
+
+		iSaveAs = RibbonController.getIcon("FILESAVEAS32", 32);
+		mSaveAs = new RibbonApplicationMenuEntryPrimary(iSaveAs, "Save As", this,
+			CommandButtonKind.ACTION_ONLY);
+		mSaveAs.setRolloverCallback(this);
+		mSaveAs.setActionKeyTip("A");
+
 		iClose = RibbonController.getIcon("FILECLOSE32", 32);
 		mClose = new RibbonApplicationMenuEntryPrimary(iClose, "Close", this,
 			CommandButtonKind.ACTION_ONLY);
 		mClose.setRolloverCallback(this);
 		mClose.setActionKeyTip("C");
-		mClose.setEnabled(false);
 
-		addMenuEntry(mNew);
+
 		addMenuEntry(mOpen);
+		addMenuEntry(mSave);
+		addMenuEntry(mSaveAs);
 		addMenuEntry(mClose);
 
 
@@ -75,6 +88,8 @@ class ApplicationMenu extends RibbonApplicationMenu
 
 		addFooterEntry(mOptions);
 		addFooterEntry(mExit);
+
+		winMain.getRibbon().addTaskbarComponent(bSave);
 	}
 
 	// Creates the application menu's list of recently opened documents
@@ -124,6 +139,15 @@ class ApplicationMenu extends RibbonApplicationMenu
 
 		if (icon == iOpen)
 			winMain.getCommands().fileOpen(null);
+
+		else if (icon == iSave || e.getSource() == Actions.applicationMenuSave16)
+			System.out.println("Save");
+
+		else if (icon == iSaveAs)
+			System.out.println("Save As");
+
+		else if (icon == iClose)
+			winMain.closeAssembly();
 
 		else if (icon == iExit)
 		{

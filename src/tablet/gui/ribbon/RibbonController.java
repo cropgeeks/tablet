@@ -32,12 +32,12 @@ public class RibbonController
 		homeTask.setKeyTip("H");
 		ribbon.addTask(homeTask);
 
+		ribbon.setApplicationMenu(new ApplicationMenu(winMain));
+		ribbon.setApplicationMenuKeyTip("F");
+
 		ribbon.addTaskbarComponent(new JSeparator(JSeparator.VERTICAL));
 		ribbon.addTaskbarComponent(titleLabel);
 //		ribbon.setBorder(BorderFactory.createEmptyBorder(-24, 0, 2, 0));
-
-		ribbon.setApplicationMenu(new ApplicationMenu(winMain));
-		ribbon.setApplicationMenuKeyTip("F");
 
 		ribbon.configureHelp(getIcon("HELP16", 16), new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

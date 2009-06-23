@@ -58,15 +58,25 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 
 	void setAssembly(Assembly assembly)
 	{
-		model = new ContigsTableModel(assembly, table);
-		sorter = new TableRowSorter<ContigsTableModel>(model);
-
-		table.setModel(model);
-		table.setRowSorter(sorter);
-		sp.getVerticalScrollBar().setValue(0);
-
 		controls.clearFilter();
-		controls.setEnabledState(true);
+
+		if (assembly != null)
+		{
+			model = new ContigsTableModel(assembly, table);
+			sorter = new TableRowSorter<ContigsTableModel>(model);
+
+			table.setModel(model);
+			table.setRowSorter(sorter);
+			sp.getVerticalScrollBar().setValue(0);
+
+			controls.setEnabledState(true);
+		}
+		else
+		{
+			table.setModel(new DefaultTableModel());
+			table.setRowSorter(null);
+			controls.setEnabledState(false);
+		}
 
 		String title = RB.format("gui.ContigsPanel.title", table.getRowCount());
 		ctrlTabs.setTitleAt(0, title);
@@ -77,7 +87,7 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 		if (e.getValueIsAdjusting())
 			return;
 
-		Actions.resetActions();
+		Actions.openedNoContigSelected();
 
 		int row = table.getSelectedRow();
 
@@ -98,7 +108,7 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 			aPanel.setContig(contig);
 			featuresPanel.setContig(contig);
 
-			Actions.contigSelected();
+			Actions.openedContigSelected();
 			winMain.setAssemblyPanelVisible(true);
 		}
 	}

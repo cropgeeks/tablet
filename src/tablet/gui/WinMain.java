@@ -34,7 +34,6 @@ public class WinMain extends JRibbonFrame
 		createControls();
 
 		new RibbonController(this);
-		Actions.resetActions();
 
 		ArrayList<Image> images = new ArrayList<Image>(2);
 		images.add(Icons.getIcon("APPICON64").getImage());
@@ -60,6 +59,8 @@ public class WinMain extends JRibbonFrame
 			setExtendedState(Frame.MAXIMIZED_BOTH);
 
 		addListeners();
+
+		Actions.closed();
 	}
 
 	private void createControls()
@@ -155,6 +156,8 @@ public class WinMain extends JRibbonFrame
 
 		String title = RB.getString("gui.WinMain.title");
 		setTitle(assembly.getName() + " - " + title + " - " + Install4j.VERSION);
+
+		Actions.openedNoContigSelected();
 	}
 
 	void setAssemblyPanelVisible(boolean isVisible)
@@ -170,14 +173,21 @@ public class WinMain extends JRibbonFrame
 	}
 
 	// Closes the current assembly and the cache associated with it
-	void closeAssembly()
+	public void closeAssembly()
 	{
+		// TODO: What else can be closed/set to null/etc to save memory?
+		// The assemblyPanel will still have a reference to any data just now
+
 		try
 		{
 			if (assembly != null)
 				assembly.getCache().close();
 		}
 		catch (Exception e) { e.printStackTrace(); }
+
+		contigsPanel.setAssembly(null);
+
+		Actions.closed();
 	}
 
 	private static class LogoPanel extends JPanel
