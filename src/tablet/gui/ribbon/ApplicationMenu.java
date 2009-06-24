@@ -14,6 +14,8 @@ import org.jvnet.flamingo.common.icon.*;
 import org.jvnet.flamingo.common.model.*;
 import org.jvnet.flamingo.ribbon.*;
 
+import scri.commons.gui.*;
+
 public class ApplicationMenu extends RibbonApplicationMenu
 	implements ActionListener, RibbonApplicationMenuEntryPrimary.PrimaryRolloverCallback
 {
@@ -40,31 +42,39 @@ public class ApplicationMenu extends RibbonApplicationMenu
 
 		// Primary menu options
 		iOpen = RibbonController.getIcon("FILEOPEN32", 32);
-		mOpen = new RibbonApplicationMenuEntryPrimary(iOpen, "Open", this,
+		mOpen = new RibbonApplicationMenuEntryPrimary(iOpen,
+			RB.getString("gui.ribbon.ApplicationMenu.mOpen"), this,
 			CommandButtonKind.ACTION_ONLY);
 		mOpen.setRolloverCallback(this);
 		mOpen.setActionKeyTip("O");
 
 		iSave = RibbonController.getIcon("FILESAVE32", 32);
-		mSave = new RibbonApplicationMenuEntryPrimary(iSave, "Save", this,
+		mSave = new RibbonApplicationMenuEntryPrimary(iSave,
+			RB.getString("gui.ribbon.ApplicationMenu.mSave"), this,
 			CommandButtonKind.ACTION_ONLY);
 		mSave.setRolloverCallback(this);
 		mSave.setActionKeyTip("S");
 
-		bSave = new JCommandButton("Save", RibbonController.getIcon("FILESAVE16", 16));
+		bSave = new JCommandButton("",
+			RibbonController.getIcon("FILESAVE16", 16));
 		Actions.applicationMenuSave16 = new ActionRepeatableButtonModel(bSave);
 		Actions.applicationMenuSave16.addActionListener(this);
 		bSave.setActionModel(Actions.applicationMenuSave16);
 		bSave.setActionKeyTip("2");
+		bSave.setActionRichTooltip(new RichTooltip(
+			RB.format("gui.ribbon.ApplicationMenu.bSave.tooltip", Tablet.winKey),
+			RB.getString("gui.ribbon.ApplicationMenu.bSave.richtip")));
 
 		iSaveAs = RibbonController.getIcon("FILESAVEAS32", 32);
-		mSaveAs = new RibbonApplicationMenuEntryPrimary(iSaveAs, "Save As", this,
+		mSaveAs = new RibbonApplicationMenuEntryPrimary(iSaveAs,
+			RB.getString("gui.ribbon.ApplicationMenu.mSaveAs"), this,
 			CommandButtonKind.ACTION_ONLY);
 		mSaveAs.setRolloverCallback(this);
 		mSaveAs.setActionKeyTip("A");
 
 		iClose = RibbonController.getIcon("FILECLOSE32", 32);
-		mClose = new RibbonApplicationMenuEntryPrimary(iClose, "Close", this,
+		mClose = new RibbonApplicationMenuEntryPrimary(iClose,
+			RB.getString("gui.ribbon.ApplicationMenu.mClose"), this,
 			CommandButtonKind.ACTION_ONLY);
 		mClose.setRolloverCallback(this);
 		mClose.setActionKeyTip("C");
@@ -78,12 +88,14 @@ public class ApplicationMenu extends RibbonApplicationMenu
 
 		// Footer menu options
 		iOptions = RibbonController.getIcon("OPTIONS16", 16);
-		mOptions = new RibbonApplicationMenuEntryFooter(iOptions, "Tablet Options", this);
+		mOptions = new RibbonApplicationMenuEntryFooter(iOptions,
+			RB.getString("gui.ribbon.ApplicationMenu.mOptions"), this);
 		mOptions.setActionKeyTip("TO");
 		mOptions.setEnabled(false);
 
 		iExit = RibbonController.getIcon("EXIT16", 16);
-		mExit = new RibbonApplicationMenuEntryFooter(iExit, "Exit Tablet", this);
+		mExit = new RibbonApplicationMenuEntryFooter(iExit,
+			RB.getString("gui.ribbon.ApplicationMenu.mExit"), this);
 		mExit.setActionKeyTip("X");
 
 		addFooterEntry(mOptions);
