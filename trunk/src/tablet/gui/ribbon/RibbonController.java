@@ -27,7 +27,8 @@ public class RibbonController
 
 		RibbonTask homeTask = new RibbonTask("Home",
 			new HomeAssembliesBand(winMain),
-			new HomeVisualizationBand(winMain));
+			new HomeAdjustBand(winMain),
+			new HomeOptionsBand(winMain));
 
 		homeTask.setKeyTip("H");
 		ribbon.addTask(homeTask);

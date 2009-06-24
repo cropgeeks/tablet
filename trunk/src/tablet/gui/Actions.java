@@ -16,6 +16,9 @@ public class Actions
 	public static ActionRepeatableButtonModel homeAssembliesOpen32;
 	public static ActionRepeatableButtonModel applicationMenuSave16;
 
+	public static ActionToggleButtonModel homeOptionsInfoPane16;
+	public static ActionToggleButtonModel homeOptionsHidePads16;
+
 	void setRibbonController(RibbonController ribbon)
 		{ this.ribbon = ribbon; }
 
@@ -28,8 +31,11 @@ public class Actions
 		applicationMenuSave16.setEnabled(false);
 
 		// Ribbon controls
-		HomeVisualizationBand.zoomSliderComponent.setEnabled(false);
-		HomeVisualizationBand.variantSliderComponent.setEnabled(false);
+		HomeAdjustBand.zoomSliderComponent.setEnabled(false);
+		HomeAdjustBand.variantSliderComponent.setEnabled(false);
+
+		homeOptionsInfoPane16.setEnabled(false);
+		homeOptionsHidePads16.setEnabled(false);
 	}
 
 	public static void openedNoContigSelected()
@@ -41,8 +47,11 @@ public class Actions
 		applicationMenuSave16.setEnabled(false);
 
 		// Ribbon controls
-		HomeVisualizationBand.zoomSliderComponent.setEnabled(false);
-		HomeVisualizationBand.variantSliderComponent.setEnabled(false);
+		HomeAdjustBand.zoomSliderComponent.setEnabled(false);
+		HomeAdjustBand.variantSliderComponent.setEnabled(false);
+
+		homeOptionsInfoPane16.setEnabled(false);
+		homeOptionsHidePads16.setEnabled(false);
 	}
 
 	public static void openedContigSelected()
@@ -54,7 +63,10 @@ public class Actions
 		applicationMenuSave16.setEnabled(false);
 
 		// Ribbon controls
-		HomeVisualizationBand.zoomSliderComponent.setEnabled(true);
-		HomeVisualizationBand.variantSliderComponent.setEnabled(true);
+		HomeAdjustBand.zoomSliderComponent.setEnabled(true);
+		HomeAdjustBand.variantSliderComponent.setEnabled(true);
+
+		homeOptionsInfoPane16.setEnabled(true);
+		homeOptionsHidePads16.setEnabled(true);
 	}
 }

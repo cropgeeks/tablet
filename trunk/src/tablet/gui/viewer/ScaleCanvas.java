@@ -7,6 +7,7 @@ import java.text.*;
 import javax.swing.*;
 
 import tablet.data.*;
+import tablet.gui.*;
 import tablet.gui.viewer.colors.*;
 
 class ScaleCanvas extends JPanel
@@ -191,6 +192,10 @@ class ScaleCanvas extends JPanel
 	{
 		// If the mouse is off the consensus, ignore unpadded positions
 		if (mouseBase < 0 || mouseBase >= consensus.length())
+			return "";
+
+		// Or if we don't want to show unpadded values
+		if (Prefs.visHideUnpaddedValues)
 			return "";
 
 		int unpadded = consensus.getUnpaddedPosition(mouseBase);

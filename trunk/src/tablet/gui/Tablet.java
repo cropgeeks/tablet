@@ -20,6 +20,7 @@ public class Tablet
 
 	// Returns value for "CTRL" under most OSs, and the "apple" key for OS X
 	public static int menuShortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+	public static String winKey;
 
 	public static void main(String[] args)
 		throws Exception
@@ -58,10 +59,17 @@ public class Tablet
 
 			// Keep Apple happy...
 			if (SystemUtils.isMacOS())
+			{
 				handleOSXStupidities();
+				winKey = RB.getString("gui.text.cmnd");
+			}
+
 			// And use Nimbus for all non-Apple systems
 			else
+			{
 				Nimbus.customizeNimbus();
+				winKey = RB.getString("gui.text.ctrl");
+			}
 		}
 		catch (Exception e) {}
 
