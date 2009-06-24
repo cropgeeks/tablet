@@ -46,6 +46,11 @@ public class Prefs extends XMLPreferences
 	// Current intensity level for the variant highlighting
 	public static int visVariantAlpha = 0;
 
+	// Display popup info tooltips on the main canvas or not
+	public static boolean visInfoPaneActive = true;
+	// Hide the display of unpadded values (in various places) or not
+	public static boolean visHideUnpaddedValues = false;
+
 	// TODO: The scri-commons XML loading needs to support arrays
 	public static String guiRecent01 = "";
 	public static String guiRecent02 = "";

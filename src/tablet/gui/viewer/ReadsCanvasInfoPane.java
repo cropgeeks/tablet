@@ -7,6 +7,7 @@ import java.text.*;
 import javax.swing.*;
 
 import tablet.data.*;
+import tablet.gui.*;
 
 import scri.commons.gui.*;
 
@@ -74,6 +75,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		posData = "From " + nf.format(readS+1) + sCanvas.getUnpadded(readS) + " to "
 			+ nf.format(readE+1) + sCanvas.getUnpadded(readE);
 
+		// TODO: on Prefs.visHideUnpaddedValues set XXX to ""
 		lengthData = "Length: " + nf.format(read.length()) + " (XXX)";
 
 		// Name
@@ -93,10 +95,8 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 	public void render(Graphics2D g)
 	{
-		if (mouse == null)
+		if (mouse == null || Prefs.visInfoPaneActive == false)
 			return;
-
-		rCanvas.setToolTipText(null);
 
 		calculatePosition();
 		g.translate(x, y);

@@ -13,7 +13,9 @@ import org.jvnet.flamingo.common.*;
 import org.jvnet.flamingo.common.icon.*;
 import org.jvnet.flamingo.ribbon.*;
 
-public class HomeVisualizationBand extends JRibbonBand
+import scri.commons.gui.*;
+
+public class HomeAdjustBand extends JRibbonBand
 	implements ActionListener, ChangeListener
 {
 	private WinMain winMain;
@@ -23,11 +25,10 @@ public class HomeVisualizationBand extends JRibbonBand
 	public static JRibbonComponent variantSliderComponent;
 	private JSlider variantSlider;
 
-	private JCommandToggleButton bInfoPane;
-
-	HomeVisualizationBand(WinMain winMain)
+	HomeAdjustBand(WinMain winMain)
 	{
-		super("Reads", new EmptyResizableIcon(32));
+		super(RB.getString("gui.ribbon.HomeAdjustBand.title"),
+			new EmptyResizableIcon(32));
 
 		this.winMain = winMain;
 
@@ -38,8 +39,13 @@ public class HomeVisualizationBand extends JRibbonBand
 		zoomSlider = new JSlider(1, 25, zoom);
 		zoomSlider.addChangeListener(this);
 
-		zoomSliderComponent = new JRibbonComponent(RibbonController.getIcon("ZOOM16", 16), "Zoom:", zoomSlider);
-		addRibbonComponent(zoomSliderComponent);
+		zoomSliderComponent = new JRibbonComponent(
+			RibbonController.getIcon("ZOOM16", 16),
+			RB.getString("gui.ribbon.HomeAdjustBand.zoom"),
+			zoomSlider);
+		zoomSliderComponent.setRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeAdjustBand.zoom.tooltip"),
+			RB.getString("gui.ribbon.HomeAdjustBand.zoom.richtip")));
 
 
 		// Determine the initial zoom level for the variant highlighting
@@ -50,18 +56,17 @@ public class HomeVisualizationBand extends JRibbonBand
 		variantSlider = new JSlider(0, 200, vLevel);
 		variantSlider.addChangeListener(this);
 
-		variantSliderComponent = new JRibbonComponent(RibbonController.getIcon("VARIANT16", 16), "Variant highlighting:", variantSlider);
+		variantSliderComponent = new JRibbonComponent(
+			RibbonController.getIcon("VARIANT16", 16),
+			RB.getString("gui.ribbon.HomeAdjustBand.variants"),
+			variantSlider);
+		variantSliderComponent.setRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeAdjustBand.variants.tooltip"),
+			RB.getString("gui.ribbon.HomeAdjustBand.variants.richtip")));
+
+
+		addRibbonComponent(zoomSliderComponent);
 		addRibbonComponent(variantSliderComponent);
-
-		startGroup();
-
-		bInfoPane = new JCommandToggleButton("Info", RibbonController.getIcon("INFOPANE16", 16));
-//		Actions.homeAssembliesOpen32 = new ActionRepeatableButtonModel(bOpen32);
-//		Actions.homeAssembliesOpen32.addActionListener(this);
-//		bOpen32.setActionModel(Actions.homeAssembliesOpen32);
-//		bOpen32.setActionKeyTip("O");
-
-//		addCommandButton(bInfoPane, RibbonElementPriority.MEDIUM);
 	}
 
 	public void actionPerformed(ActionEvent e)
