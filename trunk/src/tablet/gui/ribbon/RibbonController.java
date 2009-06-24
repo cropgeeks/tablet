@@ -25,7 +25,8 @@ public class RibbonController
 		this.winMain = winMain;
 		this.ribbon = winMain.getRibbon();
 
-		RibbonTask homeTask = new RibbonTask("Home",
+		RibbonTask homeTask = new RibbonTask(
+			RB.getString("gui.ribbon.RibbonController.home"),
 			new HomeAssembliesBand(winMain),
 			new HomeAdjustBand(winMain),
 			new HomeOptionsBand(winMain));
@@ -38,7 +39,6 @@ public class RibbonController
 
 		ribbon.addTaskbarComponent(new JSeparator(JSeparator.VERTICAL));
 		ribbon.addTaskbarComponent(titleLabel);
-//		ribbon.setBorder(BorderFactory.createEmptyBorder(-24, 0, 2, 0));
 
 		ribbon.configureHelp(getIcon("HELP16", 16), new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
