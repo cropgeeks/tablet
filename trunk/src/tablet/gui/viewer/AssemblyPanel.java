@@ -28,23 +28,20 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	{
 		createControls();
 
-		setLayout(new BorderLayout(5, 5));
-		setBorder(BorderFactory.createEmptyBorder(2, 5, 0, 5));
+		setLayout(new BorderLayout());
+		setBorder(BorderFactory.createEmptyBorder(1, 2, 0, 2));
 
-		JPanel consensusPanel = new JPanel(new BorderLayout(5, 5));
+		JPanel consensusPanel = new JPanel(new BorderLayout(0, 5));
 		consensusPanel.add(consensusCanvas);
 		consensusPanel.add(scaleCanvas, BorderLayout.SOUTH);
 
-		JPanel topPanel = new JPanel(new BorderLayout(5, 5));
+		JPanel topPanel = new JPanel(new BorderLayout(0, 5));
 		topPanel.add(overviewCanvas, BorderLayout.NORTH);
 		topPanel.add(consensusPanel, BorderLayout.CENTER);
 
-		JPanel centerPanel = new JPanel(new BorderLayout());
-		centerPanel.add(sp);
-
-		JPanel visPanel = new JPanel(new BorderLayout(5, 5));
+		JPanel visPanel = new JPanel(new BorderLayout(0, 5));
 		visPanel.add(topPanel, BorderLayout.NORTH);
-		visPanel.add(centerPanel, BorderLayout.CENTER);
+		visPanel.add(sp, BorderLayout.CENTER);
 
 		add(visPanel);
 	}

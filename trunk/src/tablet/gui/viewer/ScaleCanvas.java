@@ -97,8 +97,8 @@ class ScaleCanvas extends JPanel
 
 		// Clip to only draw what's needed (mainly ignoring what would appear
 		// above the vertical scrollbar of the reads canvas)
-		g.setClip(1, 0, width, h);
-		g.translate(1-x1, 0);
+		g.setClip(3, 0, width, h);
+		g.translate(3-x1, 0);
 
 
 		int ntW = rCanvas.ntW;
