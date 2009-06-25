@@ -28,8 +28,8 @@ public class RibbonController
 		RibbonTask homeTask = new RibbonTask(
 			RB.getString("gui.ribbon.RibbonController.home"),
 			new HomeAssembliesBand(winMain),
-			new HomeAdjustBand(winMain),
 			new HomeStylesBand(winMain),
+			new HomeAdjustBand(winMain),
 			new HomeOptionsBand(winMain));
 
 		homeTask.setKeyTip("H");

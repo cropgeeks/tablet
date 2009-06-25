@@ -40,6 +40,12 @@ public class Prefs extends XMLPreferences
 	// What filtering option was last in use for the contigs panel
 	public static int guiContigsFilter = 0;
 
+	// What panels should be hidden (to give more space to the main canvas)
+	public static boolean guiHideOverview = false;
+	public static boolean guiHideConsensus = false;
+	public static boolean guiHideScaleBar = false;
+	public static boolean guiHideContigs = false;
+
 	// Colour scheme in use
 	public static int visColorScheme = ColorScheme.STANDARD;
 

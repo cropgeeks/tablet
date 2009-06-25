@@ -76,7 +76,7 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 		bSort = new JCommandButton(
 			RB.getString("gui.ribbon.HomeStylesBand.bSort"),
 			RibbonController.getIcon("SORT16", 16));
-		bSort.setActionKeyTip("T");
+		bSort.setActionKeyTip("SO");
 		bSort.setActionRichTooltip(new RichTooltip(
 			RB.getString("gui.ribbon.HomeStylesBand.bSort.tooltip"),
 			RB.getString("gui.ribbon.HomeStylesBand.bSort.richtip")));
