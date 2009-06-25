@@ -19,6 +19,9 @@ public class Actions
 	public static ActionToggleButtonModel homeOptionsInfoPane16;
 	public static ActionToggleButtonModel homeOptionsHidePads16;
 
+	public static ActionToggleButtonModel homeStylesStandard;
+	public static ActionToggleButtonModel homeStylesText;
+
 	void setRibbonController(RibbonController ribbon)
 		{ this.ribbon = ribbon; }
 
@@ -36,6 +39,9 @@ public class Actions
 
 		homeOptionsInfoPane16.setEnabled(false);
 		homeOptionsHidePads16.setEnabled(false);
+
+		homeStylesStandard.setEnabled(false);
+		homeStylesText.setEnabled(false);
 	}
 
 	public static void openedNoContigSelected()
@@ -52,6 +58,9 @@ public class Actions
 
 		homeOptionsInfoPane16.setEnabled(false);
 		homeOptionsHidePads16.setEnabled(false);
+
+		homeStylesStandard.setEnabled(false);
+		homeStylesText.setEnabled(false);
 	}
 
 	public static void openedContigSelected()
@@ -68,5 +77,8 @@ public class Actions
 
 		homeOptionsInfoPane16.setEnabled(true);
 		homeOptionsHidePads16.setEnabled(true);
+
+		homeStylesStandard.setEnabled(true);
+		homeStylesText.setEnabled(true);
 	}
 }

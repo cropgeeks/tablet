@@ -101,8 +101,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		scaleCanvas.setContig(contig);
 		readsCanvas.setContig(contig);
 
-		computePanelSizes();
-		overviewCanvas.createImage();
+		colorSchemeChanged();
 	}
 
 	public void adjustmentValueChanged(AdjustmentEvent e)
@@ -157,6 +156,17 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 			int x = colIndex * readsCanvas.ntW - offset;
 			hBar.setValue(x);
 		}
+	}
+
+	/**
+	 * Force the panel to recalculate/update/etc when the colour scheme changes.
+	 */
+	public void colorSchemeChanged()
+	{
+		computePanelSizes();
+		overviewCanvas.createImage();
+
+		repaint();
 	}
 
 	public void computePanelSizes()

@@ -8,6 +8,7 @@ import tablet.data.*;
 public abstract class ColorScheme
 {
 	public static final int STANDARD = 10;
+	public static final int TEXT = 20;
 
 	protected Contig contig;
 
