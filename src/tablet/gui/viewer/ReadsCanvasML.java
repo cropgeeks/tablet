@@ -76,7 +76,7 @@ class ReadsCanvasML extends MouseInputAdapter
 
 		// TODO: Move controls for this to ribbon
 		// Toggle packed/stacked
-		else if (e.getClickCount() == 2)
+		if (e.getClickCount() == 2)
 		{
 			// Toggle the layout type
 			if (Prefs.visReadLayout == 1)

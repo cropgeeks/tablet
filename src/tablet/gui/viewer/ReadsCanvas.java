@@ -162,7 +162,19 @@ class ReadsCanvas extends JPanel
 
 	private void updateColorScheme()
 	{
-		colors   = new StandardColorScheme(contig, ntW, ntH);
+		switch (Prefs.visColorScheme)
+		{
+			case ColorScheme.STANDARD:
+				colors = new StandardColorScheme(contig, ntW, ntH);
+				break;
+
+			case ColorScheme.TEXT:
+				colors = new TextColorScheme(contig, ntW, ntH);
+				break;
+
+			default:
+				colors = new StandardColorScheme(contig, ntW, ntH);
+		}
 	}
 
 	public void paintComponent(Graphics graphics)

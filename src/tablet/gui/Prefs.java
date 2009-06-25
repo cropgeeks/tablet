@@ -3,6 +3,8 @@ package tablet.gui;
 import java.awt.*;
 import java.util.*;
 
+import tablet.gui.viewer.colors.*;
+
 import scri.commons.gui.*;
 
 public class Prefs extends XMLPreferences
@@ -37,6 +39,9 @@ public class Prefs extends XMLPreferences
 
 	// What filtering option was last in use for the contigs panel
 	public static int guiContigsFilter = 0;
+
+	// Colour scheme in use
+	public static int visColorScheme = ColorScheme.STANDARD;
 
 	// Display reads in packed or stacked form?
 	public static int visReadLayout = 1;
