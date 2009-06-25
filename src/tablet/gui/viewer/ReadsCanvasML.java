@@ -73,20 +73,6 @@ class ReadsCanvasML extends MouseInputAdapter
 			else if (nHighlighter.isRightActive())
 				aPanel.pageRight();
 		}
-
-		// TODO: Move controls for this to ribbon
-		// Toggle packed/stacked
-		if (e.getClickCount() == 2)
-		{
-			// Toggle the layout type
-			if (Prefs.visReadLayout == 1)
-				Prefs.visReadLayout = 2;
-			else if (Prefs.visReadLayout == 2)
-				Prefs.visReadLayout = 1;
-
-			// Force the panel to update and redraw
-			aPanel.setContig(rCanvas.contig);
-		}
 	}
 
 	public void mousePressed(MouseEvent e)

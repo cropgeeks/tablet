@@ -99,9 +99,8 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		// Then pass the contig to the other components for rendering
 		consensusCanvas.setContig(contig);
 		scaleCanvas.setContig(contig);
-		readsCanvas.setContig(contig);
 
-		colorSchemeChanged();
+		forceRedraw();
 	}
 
 	public void adjustmentValueChanged(AdjustmentEvent e)
@@ -159,10 +158,13 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	}
 
 	/**
-	 * Force the panel to recalculate/update/etc when the colour scheme changes.
+	 * Force the panel to recalculate/update/etc when the colour scheme or the
+	 * layout manager changes.
 	 */
-	public void colorSchemeChanged()
+	public void forceRedraw()
 	{
+		readsCanvas.setContig(contig);
+
 		computePanelSizes();
 		overviewCanvas.createImage();
 
