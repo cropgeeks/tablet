@@ -13,6 +13,7 @@ import org.jvnet.flamingo.common.model.*;
 import org.jvnet.flamingo.common.*;
 import org.jvnet.flamingo.common.icon.*;
 import org.jvnet.flamingo.ribbon.*;
+import org.jvnet.flamingo.ribbon.resize.*;
 
 import scri.commons.gui.*;
 
@@ -22,6 +23,9 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 
 	private JCommandToggleButton bStandard;
 	private JCommandToggleButton bText;
+	private JCommandToggleButton bPacked;
+	private JCommandToggleButton bStacked;
+	private JCommandButton bSort;
 
 	private StyleListener styleListener = new StyleListener();
 
@@ -33,6 +37,57 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 		this.winMain = winMain;
 
 		createRibbonGallery();
+		createOptionButtons();
+
+		setResizePolicies(CoreRibbonResizePolicies.getCorePoliciesRestrictive(this));
+	}
+
+	private void createOptionButtons()
+	{
+		// Set the display to use a packed layout
+		bPacked = new JCommandToggleButton(
+			RB.getString("gui.ribbon.HomeStylesBand.bPacked"),
+			RibbonController.getIcon("PACKED16", 16));
+		Actions.homeStylesPacked = new ActionToggleButtonModel(false);
+		Actions.homeStylesPacked.setSelected(Prefs.visPacked);
+		Actions.homeStylesPacked.addActionListener(this);
+		bPacked.setActionModel(Actions.homeStylesPacked);
+		bPacked.setActionKeyTip("P");
+		bPacked.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeStylesBand.bPacked.tooltip"),
+			RB.getString("gui.ribbon.HomeStylesBand.bPacked.richtip")));
+
+		// Set the display to use a stacked layout
+		bStacked = new JCommandToggleButton(
+			RB.getString("gui.ribbon.HomeStylesBand.bStacked"),
+			RibbonController.getIcon("STACKED16", 16));
+		Actions.homeStylesStacked = new ActionToggleButtonModel(false);
+		Actions.homeStylesStacked.setSelected(!Prefs.visPacked);
+		Actions.homeStylesStacked.addActionListener(this);
+		bStacked.setActionModel(Actions.homeStylesStacked);
+		bStacked.setActionKeyTip("S");
+		bStacked.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeStylesBand.bStacked.tooltip"),
+			RB.getString("gui.ribbon.HomeStylesBand.bStacked.richtip")));
+
+		// TODO: Sort
+		bSort = new JCommandButton(
+			RB.getString("gui.ribbon.HomeStylesBand.bSort"),
+			RibbonController.getIcon("SORT16", 16));
+		bSort.setActionKeyTip("T");
+		bSort.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeStylesBand.bSort.tooltip"),
+			RB.getString("gui.ribbon.HomeStylesBand.bSort.richtip")));
+		bSort.setEnabled(false);
+
+		CommandToggleButtonGroup group = new CommandToggleButtonGroup();
+		group.add(bPacked);
+		group.add(bStacked);
+
+		startGroup();
+		addCommandButton(bPacked, RibbonElementPriority.MEDIUM);
+		addCommandButton(bStacked, RibbonElementPriority.MEDIUM);
+		addCommandButton(bSort, RibbonElementPriority.MEDIUM);
 	}
 
 	private void createRibbonGallery()
@@ -108,12 +163,24 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 			setColorScheme(ColorScheme.TEXT);
 			styleListener.previousScheme = ColorScheme.TEXT;
 		}
+
+		else if (e.getSource() == Actions.homeStylesPacked)
+		{
+			Prefs.visPacked = true;
+			winMain.getAssemblyPanel().forceRedraw();
+		}
+
+		else if (e.getSource() == Actions.homeStylesStacked)
+		{
+			Prefs.visPacked = false;
+			winMain.getAssemblyPanel().forceRedraw();
+		}
 	}
 
 	private void setColorScheme(int scheme)
 	{
 		Prefs.visColorScheme = scheme;
-		winMain.getAssemblyPanel().colorSchemeChanged();
+		winMain.getAssemblyPanel().forceRedraw();
 	}
 
 	// Tracks the mouse entering or exiting the colour scheme style buttons

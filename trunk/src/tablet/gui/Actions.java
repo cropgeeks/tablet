@@ -21,6 +21,8 @@ public class Actions
 
 	public static ActionToggleButtonModel homeStylesStandard;
 	public static ActionToggleButtonModel homeStylesText;
+	public static ActionToggleButtonModel homeStylesPacked;
+	public static ActionToggleButtonModel homeStylesStacked;
 
 	void setRibbonController(RibbonController ribbon)
 		{ this.ribbon = ribbon; }
@@ -42,6 +44,8 @@ public class Actions
 
 		homeStylesStandard.setEnabled(false);
 		homeStylesText.setEnabled(false);
+		homeStylesPacked.setEnabled(false);
+		homeStylesStacked.setEnabled(false);
 	}
 
 	public static void openedNoContigSelected()
@@ -61,6 +65,8 @@ public class Actions
 
 		homeStylesStandard.setEnabled(false);
 		homeStylesText.setEnabled(false);
+		homeStylesPacked.setEnabled(false);
+		homeStylesStacked.setEnabled(false);
 	}
 
 	public static void openedContigSelected()
@@ -80,5 +86,7 @@ public class Actions
 
 		homeStylesStandard.setEnabled(true);
 		homeStylesText.setEnabled(true);
+		homeStylesPacked.setEnabled(true);
+		homeStylesStacked.setEnabled(true);
 	}
 }

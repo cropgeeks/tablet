@@ -44,7 +44,7 @@ public class Prefs extends XMLPreferences
 	public static int visColorScheme = ColorScheme.STANDARD;
 
 	// Display reads in packed or stacked form?
-	public static int visReadLayout = 1;
+	public static boolean visPacked = true;
 
 	// Current zoom level of the reads canvas
 	public static int visReadsCanvasZoom = 7;

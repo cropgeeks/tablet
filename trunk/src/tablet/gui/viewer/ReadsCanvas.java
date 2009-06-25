@@ -87,11 +87,10 @@ class ReadsCanvas extends JPanel
 
 		if (contig != null)
 		{
-			switch (Prefs.visReadLayout)
-			{
-				case 1: reads = contig.getPackSetManager();  break;
-				case 2: reads = contig.getStackSetManager(); break;
-			}
+			if (Prefs.visPacked)
+				reads = contig.getPackSetManager();
+			else
+				reads = contig.getStackSetManager();
 
 			offset = contig.getConsensusOffset();
 		}
