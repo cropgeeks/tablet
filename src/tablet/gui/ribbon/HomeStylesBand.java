@@ -23,6 +23,8 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 
 	private JCommandToggleButton bStandard;
 	private JCommandToggleButton bText;
+
+	private CommandToggleButtonGroup group;
 	private JCommandToggleButton bPacked;
 	private JCommandToggleButton bStacked;
 	private JCommandButton bSort;
@@ -80,7 +82,7 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.HomeStylesBand.bSort.richtip")));
 		bSort.setEnabled(false);
 
-		CommandToggleButtonGroup group = new CommandToggleButtonGroup();
+		group = new CommandToggleButtonGroup();
 		group.add(bPacked);
 		group.add(bStacked);
 
@@ -143,7 +145,7 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 		galleryButtons.add(
 			new StringValuePair<List<JCommandToggleButton>>(null, styleButtons));
 		addRibbonGallery(
-			"Style", galleryButtons, counts, 3, 1, RibbonElementPriority.TOP);
+			"Style", galleryButtons, counts, 3, 2, RibbonElementPriority.TOP);
 	}
 
 
@@ -156,24 +158,36 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 		{
 			setColorScheme(ColorScheme.STANDARD);
 			styleListener.previousScheme = ColorScheme.STANDARD;
+
+			// BUG: Workaround for API allowing toggle groups to be unselected
+			Actions.homeStylesStandard.setSelected(true);
 		}
 
 		else if (e.getSource() == Actions.homeStylesText)
 		{
 			setColorScheme(ColorScheme.TEXT);
 			styleListener.previousScheme = ColorScheme.TEXT;
+
+			// BUG: Workaround for API allowing toggle groups to be unselected
+			Actions.homeStylesText.setSelected(true);
 		}
 
 		else if (e.getSource() == Actions.homeStylesPacked)
 		{
 			Prefs.visPacked = true;
 			winMain.getAssemblyPanel().forceRedraw();
+
+			// BUG: Workaround for API allowing toggle groups to be unselected
+			Actions.homeStylesPacked.setSelected(true);
 		}
 
 		else if (e.getSource() == Actions.homeStylesStacked)
 		{
 			Prefs.visPacked = false;
 			winMain.getAssemblyPanel().forceRedraw();
+
+			// BUG: Workaround for API allowing toggle groups to be unselected
+			Actions.homeStylesStacked.setSelected(true);
 		}
 	}
 
