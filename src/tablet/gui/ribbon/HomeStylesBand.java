@@ -86,7 +86,7 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 		group.add(bPacked);
 		group.add(bStacked);
 
-		startGroup();
+//		startGroup();
 		addCommandButton(bPacked, RibbonElementPriority.MEDIUM);
 		addCommandButton(bStacked, RibbonElementPriority.MEDIUM);
 		addCommandButton(bSort, RibbonElementPriority.MEDIUM);
