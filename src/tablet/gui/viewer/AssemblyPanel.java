@@ -27,6 +27,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	public AssemblyPanel(WinMain winMain)
 	{
 		createControls();
+		setVisibilities();
 
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEmptyBorder(1, 2, 0, 2));
@@ -192,5 +193,12 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	{
 		int jumpTo = scaleCanvas.ntR + 1;
 		moveToPosition(-1, jumpTo, false);
+	}
+
+	public void setVisibilities()
+	{
+		overviewCanvas.setVisible(!Prefs.guiHideOverview);
+		consensusCanvas.setVisible(!Prefs.guiHideConsensus);
+		scaleCanvas.setVisible(!Prefs.guiHideScaleBar);
 	}
 }

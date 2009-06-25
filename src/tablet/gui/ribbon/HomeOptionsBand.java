@@ -22,6 +22,11 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 	private JCommandToggleButton bInfoPane;
 	private JCommandToggleButton bHidePads;
 
+	private JCommandToggleButton bHideOverview;
+	private JCommandToggleButton bHideConsensus;
+	private JCommandToggleButton bHideScaleBar;
+	private JCommandToggleButton bHideContigs;
+
 	HomeOptionsBand(WinMain winMain)
 	{
 		super(RB.getString("gui.ribbon.HomeOptionsBand.title"),
@@ -54,22 +59,101 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.HomeOptionsBand.bHidePads.richtip")));
 
 
-		JCommandButtonStrip strip = new JCommandButtonStrip();
-		strip.add(bInfoPane);
-		strip.add(bHidePads);
+		JCommandButtonStrip optionsStrip = new JCommandButtonStrip();
+		optionsStrip.add(bInfoPane);
+		optionsStrip.add(bHidePads);
+		addFlowComponent(optionsStrip);
 
-		addFlowComponent(strip);
+
+		// Hide the overview panel
+		bHideOverview = new JCommandToggleButton("",
+			RibbonController.getIcon("HIDEOVERVIEW16", 16));
+		Actions.homeOptionsHideOverview = new ActionToggleButtonModel(false);
+		Actions.homeOptionsHideOverview.setSelected(Prefs.guiHideOverview);
+		Actions.homeOptionsHideOverview.addActionListener(this);
+		bHideOverview.setActionModel(Actions.homeOptionsHideOverview);
+		bHideOverview.setActionKeyTip("HO");
+		bHideOverview.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeOptionsBand.bHideOverview.tooltip"),
+			RB.getString("gui.ribbon.HomeOptionsBand.bHideOverview.richtip")));
+
+		// Hide the consensus canvas
+		bHideConsensus = new JCommandToggleButton("",
+			RibbonController.getIcon("HIDECONSENSUS16", 16));
+		Actions.homeOptionsHideConsensus = new ActionToggleButtonModel(false);
+		Actions.homeOptionsHideConsensus.setSelected(Prefs.guiHideConsensus);
+		Actions.homeOptionsHideConsensus.addActionListener(this);
+		bHideConsensus.setActionModel(Actions.homeOptionsHideConsensus);
+		bHideConsensus.setActionKeyTip("HC");
+		bHideConsensus.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeOptionsBand.bHideConsensus.tooltip"),
+			RB.getString("gui.ribbon.HomeOptionsBand.bHideConsensus.richtip")));
+
+		// Hide the scale bar
+		bHideScaleBar = new JCommandToggleButton("",
+			RibbonController.getIcon("HIDESCALEBAR16", 16));
+		Actions.homeOptionsHideScaleBar = new ActionToggleButtonModel(false);
+		Actions.homeOptionsHideScaleBar.setSelected(Prefs.guiHideScaleBar);
+		Actions.homeOptionsHideScaleBar.addActionListener(this);
+		bHideScaleBar.setActionModel(Actions.homeOptionsHideScaleBar);
+		bHideScaleBar.setActionKeyTip("HS");
+		bHideScaleBar.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeOptionsBand.bHideScaleBar.tooltip"),
+			RB.getString("gui.ribbon.HomeOptionsBand.bHideScaleBar.richtip")));
+
+		// Hide the contigs panel
+		bHideContigs = new JCommandToggleButton("",
+			RibbonController.getIcon("HIDECONTIGS16", 16));
+		Actions.homeOptionsHideContigs = new ActionToggleButtonModel(false);
+		Actions.homeOptionsHideContigs.setSelected(Prefs.guiHideContigs);
+		Actions.homeOptionsHideContigs.addActionListener(this);
+		bHideContigs.setActionModel(Actions.homeOptionsHideContigs);
+		bHideContigs.setActionKeyTip("HT");
+		bHideContigs.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeOptionsBand.bHideContigs.tooltip"),
+			RB.getString("gui.ribbon.HomeOptionsBand.bHideContigs.richtip")));
+
+
+		JCommandButtonStrip panelsStrip = new JCommandButtonStrip();
+		panelsStrip.add(bHideOverview);
+		panelsStrip.add(bHideConsensus);
+		panelsStrip.add(bHideScaleBar);
+		panelsStrip.add(bHideContigs);
+		addFlowComponent(panelsStrip);
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == Actions.homeOptionsInfoPane16)
+		Object source = e.getSource();
+
+		// Primary options
+		if (source == Actions.homeOptionsInfoPane16)
 			Prefs.visInfoPaneActive = !Prefs.visInfoPaneActive;
 
-		else if (e.getSource() == Actions.homeOptionsHidePads16)
+		else if (source == Actions.homeOptionsHidePads16)
 		{
 			Prefs.visHideUnpaddedValues = !Prefs.visHideUnpaddedValues;
 			winMain.repaint();
+		}
+
+		// Panel controls
+		else if (source == Actions.homeOptionsHideOverview)
+		{
+			Prefs.guiHideOverview = !Prefs.guiHideOverview;
+			winMain.getAssemblyPanel().setVisibilities();
+		}
+		else if (source == Actions.homeOptionsHideConsensus)
+		{
+			Prefs.guiHideConsensus = !Prefs.guiHideConsensus;
+			winMain.getAssemblyPanel().setVisibilities();
+		}
+		else if (source == Actions.homeOptionsHideScaleBar)
+		{
+			Prefs.guiHideScaleBar = !Prefs.guiHideScaleBar;
+			winMain.getAssemblyPanel().setVisibilities();
+		}
+		else if (source == Actions.homeOptionsHideContigs)
+		{
 		}
 	}
 }

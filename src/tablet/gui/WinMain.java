@@ -33,7 +33,9 @@ public class WinMain extends JRibbonFrame
 	{
 		createControls();
 
+		long s = System.currentTimeMillis();
 		new RibbonController(this);
+		System.out.println("Ribbon UI created in " + (System.currentTimeMillis()-s) + "ms");
 
 		ArrayList<Image> images = new ArrayList<Image>(2);
 		images.add(Icons.getIcon("APPICON64").getImage());
