@@ -10,13 +10,16 @@ import org.jvnet.flamingo.common.model.*;
 import org.jvnet.flamingo.common.*;
 import org.jvnet.flamingo.common.icon.*;
 import org.jvnet.flamingo.ribbon.*;
+import org.jvnet.flamingo.ribbon.resize.*;
 
 import scri.commons.gui.*;
 
 class HomeNavigateBand extends JRibbonBand implements ActionListener
 {
 	private WinMain winMain;
-	private JCommandButton bPageLeft, bPageRight;
+	private JCommandButton bPageLeft;
+	private JCommandButton bPageRight;
+	private JCommandButton bJumpTo;
 
 	HomeNavigateBand(WinMain winMain)
 	{
@@ -24,6 +27,8 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 			new EmptyResizableIcon(32));
 
 		this.winMain = winMain;
+
+		setResizePolicies(CoreRibbonResizePolicies.getCorePoliciesRestrictive(this));
 
 		// Page left
 		bPageLeft = new JCommandButton(
@@ -34,7 +39,7 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 		bPageLeft.setActionModel(Actions.homeNavigatePageLeft);
 		bPageLeft.setActionKeyTip("L");
 		bPageLeft.setActionRichTooltip(new RichTooltip(
-			RB.format("gui.ribbon.HomeNavigateBand.bPageLeft.tooltip"),
+			RB.getString("gui.ribbon.HomeNavigateBand.bPageLeft.tooltip"),
 			RB.getString("gui.ribbon.HomeNavigateBand.bPageLeft.richtip")));
 
 		// Page right
@@ -46,12 +51,27 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 		bPageRight.setActionModel(Actions.homeNavigatePageRight);
 		bPageRight.setActionKeyTip("R");
 		bPageRight.setActionRichTooltip(new RichTooltip(
-			RB.format("gui.ribbon.HomeNavigateBand.bPageRight.tooltip"),
+			RB.getString("gui.ribbon.HomeNavigateBand.bPageRight.tooltip"),
 			RB.getString("gui.ribbon.HomeNavigateBand.bPageRight.richtip")));
 
+		// Jump to base...
+		bJumpTo = new JCommandButton(
+			RB.getString("gui.ribbon.HomeNavigateBand.bJumpTo"),
+			RibbonController.getIcon("JUMPTO32", 32));
+		Actions.homeNavigateJumpTo = new ActionRepeatableButtonModel(bJumpTo);
+		Actions.homeNavigateJumpTo.addActionListener(this);
+		bJumpTo.setActionModel(Actions.homeNavigateJumpTo);
+		bJumpTo.setActionKeyTip("J");
+		bJumpTo.setActionRichTooltip(new RichTooltip(
+			RB.format("gui.ribbon.HomeNavigateBand.bJumpTo.tooltip", Tablet.winKey),
+			RB.getString("gui.ribbon.HomeNavigateBand.bJumpTo.richtip")));
+		RibbonController.assignShortcut(bJumpTo,
+			KeyStroke.getKeyStroke(KeyEvent.VK_J, Tablet.menuShortcut));
 
-		addCommandButton(bPageLeft, RibbonElementPriority.LOW);
-		addCommandButton(bPageRight, RibbonElementPriority.LOW);
+		addCommandButton(bPageLeft, RibbonElementPriority.MEDIUM);
+		addCommandButton(bPageRight, RibbonElementPriority.MEDIUM);
+		addCommandButton(bJumpTo, RibbonElementPriority.MEDIUM);
+
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -61,5 +81,10 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 
 		else if (e.getSource() == Actions.homeNavigatePageRight)
 			winMain.getAssemblyPanel().pageRight();
+
+		else if (e.getSource() == Actions.homeNavigateJumpTo)
+		{
+			System.out.println("jump to...");
+		}
 	}
 }
