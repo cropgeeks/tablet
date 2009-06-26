@@ -30,6 +30,7 @@ public class RibbonController
 			new HomeAssembliesBand(winMain),
 			new HomeStylesBand(winMain),
 			new HomeAdjustBand(winMain),
+			new HomeNavigateBand(winMain),
 			new HomeOptionsBand(winMain));
 
 		homeTask.setKeyTip("H");

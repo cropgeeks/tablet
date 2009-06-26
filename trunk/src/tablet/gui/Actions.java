@@ -28,6 +28,9 @@ public class Actions
 	public static ActionToggleButtonModel homeStylesPacked;
 	public static ActionToggleButtonModel homeStylesStacked;
 
+	public static ActionRepeatableButtonModel homeNavigatePageLeft;
+	public static ActionRepeatableButtonModel homeNavigatePageRight;
+
 	void setRibbonController(RibbonController ribbon)
 		{ this.ribbon = ribbon; }
 
@@ -54,6 +57,9 @@ public class Actions
 		homeStylesText.setEnabled(false);
 		homeStylesPacked.setEnabled(false);
 		homeStylesStacked.setEnabled(false);
+
+		homeNavigatePageLeft.setEnabled(false);
+		homeNavigatePageRight.setEnabled(false);
 	}
 
 	public static void openedNoContigSelected()
@@ -79,6 +85,9 @@ public class Actions
 		homeStylesText.setEnabled(false);
 		homeStylesPacked.setEnabled(false);
 		homeStylesStacked.setEnabled(false);
+
+		homeNavigatePageLeft.setEnabled(false);
+		homeNavigatePageRight.setEnabled(false);
 	}
 
 	public static void openedContigSelected()
@@ -104,5 +113,8 @@ public class Actions
 		homeStylesText.setEnabled(true);
 		homeStylesPacked.setEnabled(true);
 		homeStylesStacked.setEnabled(true);
+
+		homeNavigatePageLeft.setEnabled(true);
+		homeNavigatePageRight.setEnabled(true);
 	}
 }
