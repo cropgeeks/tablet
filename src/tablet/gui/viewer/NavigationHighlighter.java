@@ -28,8 +28,8 @@ class NavigationHighlighter implements IOverlayRenderer
 		this.infoPane = infoPane;
 		rCanvas = aPanel.readsCanvas;
 
-		navLeft = Icons.getIcon("NAVLEFT").getImage();
-		navRight = Icons.getIcon("NAVRIGHT").getImage();
+		navLeft = Icons.getIcon("NAVLEFT32").getImage();
+		navRight = Icons.getIcon("NAVRIGHT32").getImage();
 
 		// Assumption being made that the two images are the same size...
 		imgW = navLeft.getWidth(null);
