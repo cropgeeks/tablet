@@ -1,7 +1,5 @@
 package tablet.data;
 
-import java.util.*;
-
 import tablet.data.cache.*;
 
 /**

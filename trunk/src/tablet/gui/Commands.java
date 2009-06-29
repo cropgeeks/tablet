@@ -4,7 +4,6 @@ import java.io.*;
 import java.lang.management.*;
 import javax.swing.*;
 
-import tablet.data.*;
 import tablet.gui.dialog.*;
 import tablet.io.*;
 

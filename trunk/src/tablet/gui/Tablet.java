@@ -6,7 +6,6 @@ import java.io.*;
 import javax.swing.*;
 
 import scri.commons.gui.*;
-import scri.commons.file.*;
 
 import apple.dts.samplecode.osxadapter.*;
 

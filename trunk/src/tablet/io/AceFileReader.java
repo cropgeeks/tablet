@@ -1,11 +1,9 @@
 package tablet.io;
 
 import java.io.*;
-import java.lang.management.*;
 import java.util.*;
 
 import tablet.data.*;
-import tablet.data.cache.*;
 
 class AceFileReader extends AssemblyReader
 {

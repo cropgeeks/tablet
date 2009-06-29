@@ -10,7 +10,6 @@ import scri.commons.gui.*;
 
 import org.jvnet.flamingo.common.*;
 import org.jvnet.flamingo.common.icon.*;
-import org.jvnet.flamingo.common.model.*;
 import org.jvnet.flamingo.ribbon.*;
 
 public class RibbonController

@@ -3,8 +3,6 @@ package tablet.gui.viewer.colors;
 import java.awt.*;
 import java.awt.image.*;
 
-import tablet.data.*;
-
 abstract class ColorState
 {
 	// AWT representation of this color

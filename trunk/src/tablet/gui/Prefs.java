@@ -1,6 +1,5 @@
 package tablet.gui;
 
-import java.awt.*;
 import java.util.*;
 
 import tablet.gui.viewer.colors.*;

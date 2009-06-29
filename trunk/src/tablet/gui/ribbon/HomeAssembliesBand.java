@@ -1,6 +1,5 @@
 package tablet.gui.ribbon;
 
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 

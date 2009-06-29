@@ -8,7 +8,6 @@ import java.util.*;
 import javax.swing.*;
 
 import tablet.data.*;
-import tablet.io.*;
 import tablet.gui.dialog.*;
 import tablet.gui.ribbon.*;
 import tablet.gui.viewer.*;

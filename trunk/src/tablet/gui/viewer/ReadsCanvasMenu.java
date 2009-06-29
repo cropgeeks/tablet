@@ -1,10 +1,7 @@
 package tablet.gui.viewer;
 
-import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-
-import tablet.gui.*;
 
 import scri.commons.gui.*;
 

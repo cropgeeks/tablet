@@ -2,11 +2,8 @@ package tablet.gui.ribbon;
 
 import java.awt.event.*;
 import java.util.*;
-import javax.swing.*;
-import javax.swing.event.*;
 
 import tablet.gui.*;
-import tablet.gui.viewer.*;
 import tablet.gui.viewer.colors.*;
 
 import org.jvnet.flamingo.common.model.*;
