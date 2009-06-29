@@ -46,6 +46,10 @@ public class Prefs extends XMLPreferences
 	public static boolean guiHideScaleBar = false;
 	public static boolean guiHideContigs = false;
 
+	// What was that last type of jumpToBase jump performed?
+	public static boolean guiUsePaddedJumpToBases = true;
+	public static int guiJumpToBase = 1;
+
 	// Colour scheme in use
 	public static int visColorScheme = ColorScheme.STANDARD;
 

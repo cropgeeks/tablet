@@ -104,6 +104,9 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		forceRedraw();
 	}
 
+	public Contig getContig()
+		{ return contig; }
+
 	public void adjustmentValueChanged(AdjustmentEvent e)
 	{
 		// Each time the scollbars are moved, the canvas must be redrawn, with
