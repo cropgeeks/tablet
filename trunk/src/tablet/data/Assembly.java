@@ -88,12 +88,4 @@ public class Assembly implements Iterable<Contig>
 	 */
 	public IReadCache getCache()
 		{ return cache; }
-
-	void print()
-	{
-		System.out.println("Assembly:");
-
-		for (Contig contig: contigs)
-			contig.print(cache);
-	}
 }

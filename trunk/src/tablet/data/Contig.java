@@ -151,15 +151,4 @@ public class Contig
 
 	public IReadManager getStackSetManager()
 		{ return (readManager = stackSet); }
-
-	void print(IReadCache cache)
-	{
-		System.out.println();
-		System.out.println("Contig " + name + " (" + complemented + ")");
-
-		consensus.print();
-
-		for (Read read: reads)
-			read.print(cache);
-	}
 }
