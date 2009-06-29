@@ -7,6 +7,8 @@ import java.awt.*;
  */
 public class ColumnHighlighter extends Thread implements IOverlayRenderer
 {
+	private static ColumnHighlighter previous;
+
 	private AssemblyPanel aPanel;
 	private ReadsCanvas rCanvas;
 
@@ -20,7 +22,7 @@ public class ColumnHighlighter extends Thread implements IOverlayRenderer
 	 * to this object so it can ensure it has been killed before beginning the
 	 * new highlighting.
 	 */
-	public ColumnHighlighter(AssemblyPanel aPanel, int index, ColumnHighlighter previous)
+	public ColumnHighlighter(AssemblyPanel aPanel, int index)
 	{
 		this.aPanel = aPanel;
 		this.index = index;
@@ -29,6 +31,7 @@ public class ColumnHighlighter extends Thread implements IOverlayRenderer
 
 		if (previous != null)
 			previous.interrupt();
+		previous = this;
 
 		start();
 	}

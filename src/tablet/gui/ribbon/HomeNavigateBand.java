@@ -84,7 +84,10 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 
 		else if (e.getSource() == Actions.homeNavigateJumpTo)
 		{
-			System.out.println("jump to...");
+			tablet.gui.dialog.JumpToDialog d =
+				new tablet.gui.dialog.JumpToDialog(winMain);
+
+			d.setVisible(true);
 		}
 	}
 }

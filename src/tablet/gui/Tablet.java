@@ -104,8 +104,10 @@ public class Tablet
 		// Attempt to remove any temp files that were in use
 		winMain.closeAssembly();
 
-		File cacheDir = SystemUtils.getTempUserDirectory("scri-tablet");
-		FileUtils.emptyDirectory(cacheDir, true);
+		// TODO: This is wrong. With multiple instances open, any that are
+		// closed would delete (possibly) the other caches
+//		File cacheDir = SystemUtils.getTempUserDirectory("scri-tablet");
+//		FileUtils.emptyDirectory(cacheDir, true);
 
 		Prefs.isFirstRun = false;
 		prefs.savePreferences(prefsFile, Prefs.class);

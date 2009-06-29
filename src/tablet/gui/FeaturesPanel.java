@@ -101,6 +101,6 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 		position = position + contig.getConsensusOffset();
 
 		aPanel.moveToPosition(-1, position, true);
-		highlighter = new ColumnHighlighter(aPanel, position, highlighter);
+		highlighter = new ColumnHighlighter(aPanel, position);
 	}
 }
