@@ -9,6 +9,7 @@ import javax.swing.*;
 
 import tablet.data.*;
 import tablet.io.*;
+import tablet.gui.dialog.*;
 import tablet.gui.ribbon.*;
 import tablet.gui.viewer.*;
 
@@ -28,6 +29,8 @@ public class WinMain extends JRibbonFrame
 	private FeaturesPanel featuresPanel;
 
 	private Assembly assembly;
+
+	private JumpToDialog jumpToDialog;
 
 	WinMain(String filename)
 	{
@@ -148,6 +151,14 @@ public class WinMain extends JRibbonFrame
 
 	public AssemblyPanel getAssemblyPanel()
 		{ return assemblyPanel; }
+
+	public JumpToDialog getJumpToDialog()
+	{
+		if (jumpToDialog == null)
+			jumpToDialog = new JumpToDialog(this);
+
+		return jumpToDialog;
+	}
 
 	void setAssembly(Assembly assembly)
 	{
