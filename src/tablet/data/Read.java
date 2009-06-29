@@ -103,16 +103,4 @@ public class Read extends Sequence implements Comparable<Read>
 		// Otherwise must be within the window
 		return 0;
 	}
-
-	void print(IReadCache cache)
-	{
-		System.out.println();
-		System.out.println("Read " + id + ": " + cache.getReadMetaData(id).getName());
-		System.out.print("  length: " + length());
-		System.out.print(", position: " + position);
-
-		super.print();
-
-		System.out.println();
-	}
 }

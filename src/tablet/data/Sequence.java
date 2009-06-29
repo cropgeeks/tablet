@@ -12,6 +12,11 @@ public abstract class Sequence
 	// eg, a): consensus=A, and read=A would encode the read as A
 	// eg, b): consensus=A, and read=T would encode the read as dT
 
+	// TODO: Fix this...
+	// VERY IMPORTANT: The order of these definitions is used elsewhere (WITHOUT
+	// CHECKS) so they must be kept this way.
+	//   29/06/09: Used by TextColorScheme and StandardColorScheme
+
 	/** Base is not used. **/
 	public static final byte NOTUSED = 0;
 
@@ -24,14 +29,14 @@ public abstract class Sequence
 	public static final byte P  = 3;
 	/** Base is a pad (*), but different to the consensus. */
 	public static final byte dP = 4;
+	/** Base is an N. */
+	public static final byte N  = 5;
+	/** Base is an N, but different to the consensus. */
+	public static final byte dN = 6;
 	/** Base is an A. */
-	public static final byte A  = 5;
+	public static final byte A  = 7;
 	/** Base is an A, but different to the consensus. */
-	public static final byte dA = 6;
-	/** Base is an T. */
-	public static final byte T  = 7;
-	/** Base is an T, but different to the consensus. */
-	public static final byte dT = 8;
+	public static final byte dA = 8;
 	/** Base is an C. */
 	public static final byte C  = 9;
 	/** Base is an C, but different to the consensus. */
@@ -40,10 +45,11 @@ public abstract class Sequence
 	public static final byte G  = 11;
 	/** Base is an G, but different to the consensus. */
 	public static final byte dG = 12;
-	/** Base is an N. */
-	public static final byte N  = 13;
-	/** Base is an N, but different to the consensus. */
-	public static final byte dN = 14;
+	/** Base is an T. */
+	public static final byte T  = 13;
+	/** Base is an T, but different to the consensus. */
+	public static final byte dT = 14;
+
 
 	// Stores the actual DNA states, using one byte for every two states
 	private byte[] data;
@@ -142,42 +148,44 @@ public abstract class Sequence
 	{
 		switch (dnaCode)
 		{
-			case 'A': return A;  case 'a': return A;
-			case 'T': return T;  case 't': return T;
-			case 'C': return C;  case 'c': return C;
-			case 'G': return G;  case 'g': return G;
-			case 'N': return N;  case 'n': return N;
+			case 'A': return A;
+			case 'C': return C;
+			case 'G': return G;
+			case 'T': return T;
+
+			case 'N': return N;
 			case '*': return P;
+
+			case 'a': return A;
+			case 'c': return C;
+			case 'g': return G;
+			case 't': return T;
+			case 'n': return N;
 
 			default: return UNKNOWN;
 		}
 	}
 
-	private String getDNA(byte state)
+	public static String getDNA(byte state)
 	{
 		switch (state)
 		{
-			case A:  return "A";  case dA: return "A";
-			case T:  return "T";  case dT: return "T";
-			case C:  return "C";  case dC: return "C";
-			case G:  return "G";  case dG: return "G";
-			case N:  return "N";  case dN: return "N";
-			case P: return "*";   case dP: return "*";
+			case A:  return "A";
+			case C:  return "C";
+			case G:  return "G";
+			case T:  return "T";
+
+			case N:  return "N";
+			case P:  return "*";
+
+			case dP: return "*";
+			case dA: return "A";
+			case dT: return "T";
+			case dC: return "C";
+			case dG: return "G";
+			case dN: return "N";
 
 			default: return "?";
-		}
-	}
-
-	void print()
-	{
-		for (int i = 0, c = 0; i < data.length; i++, c+=2)
-		{
-			byte n1 = (byte) ((data[i] >> 4) & 0xF);
-			byte n2 = (byte) (data[i] & 0xF);
-
-			System.out.print(getDNA(n1));
-			if (n2 != NOTUSED)
-				System.out.print(getDNA(n2));
 		}
 	}
 

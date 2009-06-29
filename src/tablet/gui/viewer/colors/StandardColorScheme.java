@@ -17,6 +17,9 @@ public class StandardColorScheme extends ColorScheme
 	{
 		super(contig);
 
+		// VERY IMPORTANT: These MUST be in the same order as the sequential
+		// values within the data.Sequence class, eg, unknown, P, N, A, C, G, T
+
 		// Sequence.NOTUSED
 		statesRD.add(null);
 		statesCS.add(null);
@@ -36,18 +39,18 @@ public class StandardColorScheme extends ColorScheme
 		statesRD.add(new StandardColorState("*", Color.lightGray, w, h, true, true));
 		statesCS.add(null);
 
+		// Sequence.N
+		statesRD.add(new StandardColorState("N", Color.lightGray, w, h, true, false));
+		statesCS.add(new StandardColorState("N", Color.lightGray, w, h, false, false));
+		// Sequence.dN
+		statesRD.add(new StandardColorState("N", Color.lightGray, w, h, true, true));
+		statesCS.add(null);
+
 		// Sequence.A
 		statesRD.add(new StandardColorState("A", new Color(120, 255, 120), w, h, true, false));
 		statesCS.add(new StandardColorState("A", new Color(120, 255, 120), w, h, false, false));
 		// Sequence.dA
 		statesRD.add(new StandardColorState("A", new Color(120, 255, 120), w, h, true, true));
-		statesCS.add(null);
-
-		// Sequence.T
-		statesRD.add(new StandardColorState("T", new Color(120, 120, 255), w, h, true, false));
-		statesCS.add(new StandardColorState("T", new Color(120, 120, 255), w, h, false, false));
-		// Sequence.dT
-		statesRD.add(new StandardColorState("T", new Color(120, 120, 255), w, h, true, true));
 		statesCS.add(null);
 
 		// Sequence.C
@@ -64,11 +67,11 @@ public class StandardColorScheme extends ColorScheme
 		statesRD.add(new StandardColorState("G", new Color(255, 120, 120), w, h, true, true));
 		statesCS.add(null);
 
-		// Sequence.N
-		statesRD.add(new StandardColorState("N", Color.lightGray, w, h, true, false));
-		statesCS.add(new StandardColorState("N", Color.lightGray, w, h, false, false));
-		// Sequence.dN
-		statesRD.add(new StandardColorState("N", Color.lightGray, w, h, true, true));
+		// Sequence.T
+		statesRD.add(new StandardColorState("T", new Color(120, 120, 255), w, h, true, false));
+		statesCS.add(new StandardColorState("T", new Color(120, 120, 255), w, h, false, false));
+		// Sequence.dT
+		statesRD.add(new StandardColorState("T", new Color(120, 120, 255), w, h, true, true));
 		statesCS.add(null);
 	}
 

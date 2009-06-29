@@ -17,6 +17,9 @@ public class TextColorScheme extends ColorScheme
 	{
 		super(contig);
 
+		// VERY IMPORTANT: These MUST be in the same order as the sequential
+		// values within the data.Sequence class, eg, unknown, P, N, A, C, G, T
+
 		// Sequence.NOTUSED
 		statesRD.add(null);
 		statesCS.add(null);
@@ -36,18 +39,18 @@ public class TextColorScheme extends ColorScheme
 		statesRD.add(new TextState("*", w, h, true, true));
 		statesCS.add(null);
 
+		// Sequence.N
+		statesRD.add(new TextState("N", w, h, true, false));
+		statesCS.add(new TextState("N", w, h, false, false));
+		// Sequence.dN
+		statesRD.add(new TextState("N", w, h, true, true));
+		statesCS.add(null);
+
 		// Sequence.A
 		statesRD.add(new TextState("A", w, h, true, false));
 		statesCS.add(new TextState("A", w, h, false, false));
 		// Sequence.dA
 		statesRD.add(new TextState("A", w, h, true, true));
-		statesCS.add(null);
-
-		// Sequence.T
-		statesRD.add(new TextState("T", w, h, true, false));
-		statesCS.add(new TextState("T", w, h, false, false));
-		// Sequence.dT
-		statesRD.add(new TextState("T", w, h, true, true));
 		statesCS.add(null);
 
 		// Sequence.C
@@ -64,11 +67,11 @@ public class TextColorScheme extends ColorScheme
 		statesRD.add(new TextState("G", w, h, true, true));
 		statesCS.add(null);
 
-		// Sequence.N
-		statesRD.add(new TextState("N", w, h, true, false));
-		statesCS.add(new TextState("N", w, h, false, false));
-		// Sequence.dN
-		statesRD.add(new TextState("N", w, h, true, true));
+		// Sequence.T
+		statesRD.add(new TextState("T", w, h, true, false));
+		statesCS.add(new TextState("T", w, h, false, false));
+		// Sequence.dT
+		statesRD.add(new TextState("T", w, h, true, true));
 		statesCS.add(null);
 	}
 
