@@ -71,7 +71,7 @@ public class ColumnHighlighter extends Thread implements IOverlayRenderer
 		int x1 = index * rCanvas.ntW;
 		int x2 = x1 + rCanvas.ntW;
 
-		g.fillRect(0, 0, x1, rCanvas.canvasH);
-		g.fillRect(x2, 0, rCanvas.canvasW-x2, rCanvas.canvasH);
+		g.fillRect(0, 0, x1, rCanvas.pY2);
+		g.fillRect(x2, 0, rCanvas.pX2Max, rCanvas.pY2);
 	}
 }
