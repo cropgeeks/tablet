@@ -105,7 +105,7 @@ class AceFileReader extends AssemblyReader
 
 		consensus = new Consensus();
 		consensus.setData(ref.toString());
-		consensus.calculateUnpaddedIndices();
+		consensus.calculatePaddedMappings();
 		contig.setConsensusSequence(consensus);
 
 		currentReadInContig = 0;
