@@ -1,7 +1,5 @@
 package tablet.data;
 
-import java.util.*;
-
 /**
  * A feature is a region of interest from point p1 to p2 (inclusive) in
  * consensus space.

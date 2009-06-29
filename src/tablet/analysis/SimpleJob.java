@@ -2,7 +2,7 @@ package tablet.analysis;
 
 import tablet.gui.*;
 
-abstract class SimpleJob implements ITrackableJob
+abstract public class SimpleJob implements ITrackableJob
 {
 	// Maximum progress bar value that we're aiming for
 	protected int maximum = 0;

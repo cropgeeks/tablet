@@ -1,7 +1,5 @@
 package tablet.io;
 
-import java.io.*;
-
 import tablet.data.*;
 import tablet.data.cache.*;
 import tablet.gui.*;

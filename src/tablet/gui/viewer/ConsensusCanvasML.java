@@ -1,12 +1,7 @@
 package tablet.gui.viewer;
 
-import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
 import javax.swing.event.*;
-
-import tablet.data.*;
-import tablet.gui.*;
 
 class ConsensusCanvasML extends MouseInputAdapter
 {

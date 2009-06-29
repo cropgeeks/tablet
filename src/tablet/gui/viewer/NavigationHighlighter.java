@@ -2,8 +2,6 @@ package tablet.gui.viewer;
 
 import java.awt.*;
 
-import tablet.gui.*;
-
 import scri.commons.gui.*;
 
 /**

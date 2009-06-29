@@ -2,13 +2,11 @@ package tablet.gui.viewer;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.awt.image.*;
 import java.text.*;
 import javax.swing.*;
 
 import tablet.data.*;
 import tablet.gui.*;
-import tablet.gui.viewer.colors.*;
 
 class ScaleCanvas extends JPanel
 {

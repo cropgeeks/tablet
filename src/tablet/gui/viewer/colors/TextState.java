@@ -15,7 +15,7 @@ class TextState extends ColorState
 		if (isDeltaBase)
 			color = Color.red;
 		else
-			color = color.lightGray;
+			color = Color.lightGray;
 
 		image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = image.createGraphics();

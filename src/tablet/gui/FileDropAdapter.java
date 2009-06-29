@@ -2,7 +2,6 @@ package tablet.gui;
 
 import java.awt.datatransfer.*;
 import java.awt.dnd.*;
-import java.io.*;
 import java.util.*;
 
 class FileDropAdapter extends DropTargetAdapter

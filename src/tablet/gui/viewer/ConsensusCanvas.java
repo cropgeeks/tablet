@@ -1,7 +1,6 @@
 package tablet.gui.viewer;
 
 import java.awt.*;
-import java.awt.image.*;
 import javax.swing.*;
 
 import tablet.data.*;
