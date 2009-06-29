@@ -97,6 +97,7 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 			featuresPanel.setContig(null);
 
 			winMain.setAssemblyPanelVisible(false);
+			winMain.getJumpToDialog().setVisible(false);
 		}
 		else
 		{

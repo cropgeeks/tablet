@@ -31,6 +31,10 @@ public class Prefs extends XMLPreferences
 	public static int guiWinMainY = 0;
 	public static boolean guiWinMainMaximized = false;
 
+	// Position on screen of the JumpToDialog
+	public static int guiJumpToX = -9999;
+	public static int guiJumpToY = -9999;
+
 	// The location of the main splits pane divider
 	public static int guiSplitterLocation = 150;
 

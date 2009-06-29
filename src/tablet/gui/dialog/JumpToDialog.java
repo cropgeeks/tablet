@@ -33,20 +33,43 @@ public class JumpToDialog extends JDialog
 //		add(new TitlePanel2(), BorderLayout.NORTH);
 		add(nbPanel);
 		add(createButtons(), BorderLayout.SOUTH);
+		addListeners();
 
 		SwingUtils.addCloseHandler(this, bClose);
 
-		// Set the default button (not always the same)
+		// Set the default button
 		if (Prefs.guiUsePaddedJumpToBases)
 			getRootPane().setDefaultButton(nbPanel.bJumpPadded);
 		else
 			getRootPane().setDefaultButton(nbPanel.bJumpUnpadded);
 
-		// TODO: position
-
 		pack();
-		setLocationRelativeTo(Tablet.winMain);
 		setResizable(false);
+		setLocationRelativeTo(winMain);
+
+		// Position on screen...
+		if (Prefs.guiJumpToX != -9999 || Prefs.guiJumpToY != -9999)
+			setLocation(Prefs.guiJumpToX, Prefs.guiJumpToY);
+	}
+
+	private void addListeners()
+	{
+		// Tracks the position of the window if the user moves it
+		addComponentListener(new ComponentAdapter()
+		{
+			public void componentMoved(ComponentEvent e)
+			{
+				Prefs.guiJumpToX = getLocation().x;
+				Prefs.guiJumpToY = getLocation().y;
+			}
+		});
+
+		// Updates the button states when the window regains focus
+		addWindowFocusListener(new WindowAdapter()
+		{
+			public void windowGainedFocus(WindowEvent e)
+				{ checkControls(); }
+		});
 	}
 
 	private JPanel createButtons()
