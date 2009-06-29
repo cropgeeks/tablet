@@ -19,6 +19,10 @@ public class JumpToDialog extends JDialog
 	private JButton bClose, bHelp;
 	private NBJumpToPanel nbPanel;
 
+	// The indices within the dataset we'll ultimately try to jump to
+	private int paddedIndex = 0;
+	private int unpaddedIndex = 0;
+
 	public JumpToDialog(WinMain winMain)
 	{
 		super(
@@ -97,7 +101,7 @@ public class JumpToDialog extends JDialog
 			getRootPane().setDefaultButton(nbPanel.bJumpPadded);
 			Prefs.guiUsePaddedJumpToBases = true;
 
-			jumpToBase();
+			jumpToBase(paddedIndex);
 		}
 
 		else if (e.getSource() == nbPanel.bJumpUnpadded)
@@ -105,35 +109,24 @@ public class JumpToDialog extends JDialog
 			getRootPane().setDefaultButton(nbPanel.bJumpUnpadded);
 			Prefs.guiUsePaddedJumpToBases = false;
 
-			jumpToBase();
+			jumpToBase(unpaddedIndex);
 		}
 	}
 
-	private void jumpToBase()
+	private void jumpToBase(int index)
 	{
-		int index = Prefs.guiJumpToBase - 1;
-
-		// Move the base value relative to the start of the contig
-		Contig contig = aPanel.getContig();
-		Consensus con = contig.getConsensus();
-
-//		if (Prefs.guiUsePaddedJumpToBases == false)
-//			index = con.getUnpaddedPosition(index);
-
-		index += contig.getConsensusOffset();
-
 		aPanel.moveToPosition(-1, index, true);
 		new ColumnHighlighter(aPanel, index);
 	}
 
 	private void checkControls()
 	{
-		// 0-indexed base to (attempt to) jump to
 		int base;
 
 		try
 		{
 			base = Integer.parseInt(nbPanel.getInputText());
+			Prefs.guiJumpToBase = base;
 		}
 		catch (NumberFormatException e)
 		{
@@ -146,23 +139,17 @@ public class JumpToDialog extends JDialog
 		Contig contig = aPanel.getContig();
 		Consensus con = contig.getConsensus();
 
-		// Work out the actual index within the data for this base
-		int index = base + contig.getConsensusOffset() - 1;
-
-
-//		// Certain unpadded jump values are always invalid
-//		if (con.getUnpaddedPosition(base-1) == -1)
-//			nbPanel.bJumpUnpadded.setEnabled(false);
-//		else
-//			nbPanel.bJumpUnpadded.setEnabled(true);
-
-		// A padded jump will work, so long as it's within limits
-		if (index < 0 || index >= contig.getWidth())
+		// Work out the padded index for this base
+		paddedIndex = base + contig.getConsensusOffset() - 1;
+		if (paddedIndex < 0 || paddedIndex >= contig.getWidth())
 			nbPanel.bJumpPadded.setEnabled(false);
 		else
 			nbPanel.bJumpPadded.setEnabled(true);
 
-		Prefs.guiJumpToBase = base;
+		// Work out the unpadded index
+		unpaddedIndex = con.getPaddedPosition(base-1);
+		nbPanel.bJumpUnpadded.setEnabled(unpaddedIndex != -1);
+		unpaddedIndex += contig.getConsensusOffset();
 	}
 
 	public void changedUpdate(DocumentEvent e)
