@@ -3,40 +3,32 @@ package tablet.gui.viewer;
 import java.awt.*;
 import javax.swing.*;
 
+import tablet.analysis.*;
 import tablet.data.*;
 import tablet.gui.viewer.colors.*;
 
-class ConsensusCanvas extends JPanel
+class ProteinCanvas extends JPanel
 {
 	private Contig contig;
 	private Consensus consensus;
 	private ReadsCanvas rCanvas;
 
+	private short[] translation;
+
 	// The LHS offset (difference) between the left-most read and the consensus
 	int offset;
 
-	// Low/high colour information used to draw the base quality scores
-	private int[] c1;
-	private int[] c2;
-
 	private Dimension dimension = new Dimension();
 
-	ConsensusCanvas()
+	ProteinCanvas()
 	{
 		setOpaque(false);
 
-		// Set up the base quality colours
-		Color col1 = new Color(255, 120, 120); // low
-		Color col2 = new Color(120, 255, 120); // high
-
-		c1 = new int[] { col1.getRed(), col1.getGreen(), col1.getBlue() };
-		c2 = new int[] { col2.getRed(), col2.getGreen(), col2.getBlue() };
 	}
 
 	void setAssemblyPanel(AssemblyPanel aPanel)
 	{
 		rCanvas = aPanel.readsCanvas;
-		new ConsensusCanvasML(aPanel);
 	}
 
 	void setContig(Contig contig)
@@ -47,12 +39,22 @@ class ConsensusCanvas extends JPanel
 		{
 			consensus = contig.getConsensus();
 			offset = contig.getConsensusOffset();
+
+			try
+			{
+				ProteinTranslator pt = new ProteinTranslator(
+					consensus, ProteinTranslator.Direction.FORWARD, 1);
+				pt.runJob(0);
+
+				translation = pt.getTranslation();
+			}
+			catch (Exception e) {}
 		}
 	}
 
 	void setDimensions()
 	{
-		dimension = new Dimension(0, rCanvas.ntH/2 + 2 + rCanvas.ntH +2);
+		dimension = new Dimension(0, rCanvas.ntH);
 
 		setPreferredSize(dimension);
 		revalidate();
@@ -85,37 +87,39 @@ class ConsensusCanvas extends JPanel
 		int xS = rCanvas.xS;
 		int xE = rCanvas.xE;
 
-		ColorScheme colors = rCanvas.colors;
+		ColorScheme colors = rCanvas.proteins;
 
-		// Draw the quality scores
-		byte[] bq = consensus.getBaseQualityRange(xS-offset, xE-offset);
+		short[] data = getTranslation(translation, xS-offset, xE-offset);
+
 		int y = 0;
 
-		for (int i = 0, x = (ntW*xS); i < bq.length; i++, x += ntW)
-		{
-			if (bq[i] != -1)
-			{
-				// Determine the low/high intensity colour to use
-				float f1 = (float) (100 - bq[i]) / 100;
-				float f2 = (float) bq[i] / 100;
-
-				g.setColor(new Color(
-	          		(int) (f1 * c1[0] + f2 * c2[0]),
-          			(int) (f1 * c1[1] + f2 * c2[1]),
-          			(int) (f1 * c1[2] + f2 * c2[2])));
-
-				g.fillRect(x, y, ntW, ntH/2);
-			}
-		}
-
-
-
-		byte[] data = consensus.getRange(xS-offset, xE-offset);
-		y = rCanvas.ntH/2 + 2;
-
-		// Draw the consensus sequence
 		for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
-			if (data[i] != -1)
-				g.drawImage(colors.getConsensusImage(data[i]), x, y, null);
+		{
+			if (data[i] > 0)
+				g.drawImage(colors.getImage(data[i]), x, y, null);
+		}
+	}
+
+	// Strips out a region of a protein array to contain just the data needed
+	// to draw that region to the screen
+	private short[] getTranslation(short[] translation, int start, int end)
+	{
+		short[] data = new short[end-start+1];
+
+		int i = 0, d = 0;
+
+		// Pre protein data (ie, before consensus starts)
+		for (i = start; i < 0 && i <= end; i++, d++)
+			data[d] = -1;
+
+		// Protein data
+		for (i = i; i <= end && i < translation.length; i++, d++)
+			data[d] = translation[i];
+
+		// Post protein data (ie, after consensus ends)
+		for (i = i; i <= end; i++, d++)
+			data[d] = -1;
+
+		return data;
 	}
 }
