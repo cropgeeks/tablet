@@ -18,6 +18,14 @@ public class ProteinTranslator extends SimpleJob
 	private int readingFrame;
 	private short[] protein;
 
+	// Builds up a DNA string as we go along, eg, AC**T will eventually fill the
+	// array with A, C, and T (reading forward), or T, C, A (in reverse)
+	private	String[] seq;
+	// Index within the seq array where the next nucleotide found will go
+	private int s;
+	// The indices of the three nucleotides that make up the current codon
+	private int[] dna;
+
 	// Only needed for the unit test (stores a human readable translation)
 	private StringBuffer translation;
 
@@ -36,62 +44,96 @@ public class ProteinTranslator extends SimpleJob
 	}
 
 	public void runJob(int jobIndex)
+		throws Exception
 	{
 		int length = sequence.length();
 
 		protein = new short[length];
 		translation = new StringBuffer(length);
 
-		translateForward();
+		if (direction == Direction.FORWARD)
+			translateForward();
+		else
+			translateReverse();
 	}
 
 	private void translateForward()
+		throws Exception
 	{
-		try
+		seq = new String[3];
+		dna = new int[3];
+		int s = 0;
+
+		int length = sequence.length();
+
+		for (int i = readingFrame; i < length; i++)
 		{
-			// Builds up a DNA string as we go along, eg, AC**T will eventually
-			// fill the array with A, C, and T
-			String[] seq = new String[3];
-			int s = 0;
+			byte state = sequence.getStateAt(i);
 
-			// The indices of the three nucleotides that make up the current
-			// codon being built
-			int[] dna = new int[3];
-
-			int length = sequence.length();
-
-			for (int i = readingFrame; i < length; i++)
+			if (state >= A)
 			{
-				byte state = sequence.getStateAt(i);
+				dna[s] = i;
+				seq[s] = Sequence.getDNA(state);
 
-				if (state >= A)
-				{
-					dna[s] = i;
-					seq[s] = Sequence.getDNA(state);
+				s++;
+			}
 
-					s++;
-				}
+			// Once we have 3 nucleotides, do the translation
+			if (s == 3)
+			{
+				s = 0;
 
-				// Once we have 3 nucleotides, do the translation
-				if (s == 3)
-				{
-					s = 0;
+				int code = acids.get(seq[0] + seq[1] + seq[2]);
 
-					int code = acids.get(seq[0] + seq[1] + seq[2]);
+				// Assign the protein to the first nucleotide of the three
+				protein[dna[0]] = (short) code;
+				// Assign the protein (colour info only) to the other two
+				protein[dna[1]] = (short) code;
+				protein[dna[2]] = (short) code;
 
-					// Assign the protein to the first nucleotide of the three
-					protein[dna[0]] = (short) code;
-					// Assign the protein (colour info only) to the other two
-					protein[dna[1]] = (short) code;
-					protein[dna[2]] = (short) code;
-
-					translation.append(codes[code]);
-				}
+				translation.append(codes[code]);
 			}
 		}
-		catch (Exception e)
+	}
+
+	// Reading in reverse means using the complementary version of the actual
+	// DNA we've gathered, so if ACG is found, it is converted to TGC
+	private void translateReverse()
+		throws Exception
+	{
+		seq = new String[3];
+		dna = new int[3];
+		int s = 0;
+
+		int length = sequence.length();
+
+		for (int i = length-1-readingFrame; i >= 0; i--)
 		{
-			System.out.println(e);
+			byte state = sequence.getStateAt(i);
+
+			if (state >= A)
+			{
+				dna[s] = i;
+				seq[s] = Sequence.getComplementaryDNA(state);
+
+				s++;
+			}
+
+			// Once we have 3 nucleotides, do the translation
+			if (s == 3)
+			{
+				s = 0;
+
+				int code = acids.get(seq[0] + seq[1] + seq[2]);
+
+				// Assign the protein to the first nucleotide of the three
+				protein[dna[2]] = (short) code;
+				// Assign the protein (colour info only) to the other two
+				protein[dna[1]] = (short) code;
+				protein[dna[0]] = (short) code;
+
+				translation.append(codes[code]);
+			}
 		}
 	}
 

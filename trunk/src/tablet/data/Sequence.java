@@ -180,9 +180,32 @@ public abstract class Sequence
 
 			case dP: return "*";
 			case dA: return "A";
-			case dT: return "T";
 			case dC: return "C";
 			case dG: return "G";
+			case dT: return "T";
+			case dN: return "N";
+
+			default: return "?";
+		}
+	}
+
+	public static String getComplementaryDNA(byte state)
+	{
+		switch (state)
+		{
+			case A:  return "T";
+			case C:  return "G";
+			case G:  return "C";
+			case T:  return "A";
+
+			case N:  return "N";
+			case P:  return "*";
+
+			case dP: return "*";
+			case dT: return "A";
+			case dG: return "C";
+			case dC: return "G";
+			case dA: return "T";
 			case dN: return "N";
 
 			default: return "?";
