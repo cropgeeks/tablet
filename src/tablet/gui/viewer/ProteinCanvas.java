@@ -1,6 +1,7 @@
 package tablet.gui.viewer;
 
 import java.awt.*;
+import java.util.*;
 import javax.swing.*;
 
 import tablet.analysis.*;
@@ -13,7 +14,8 @@ class ProteinCanvas extends JPanel
 	private Consensus consensus;
 	private ReadsCanvas rCanvas;
 
-	private short[] translation;
+	private TranslationFractory factory;
+	private Vector<short[]> translations;
 
 	// The LHS offset (difference) between the left-most read and the consensus
 	int offset;
@@ -40,21 +42,22 @@ class ProteinCanvas extends JPanel
 			consensus = contig.getConsensus();
 			offset = contig.getConsensusOffset();
 
-			try
-			{
-				ProteinTranslator pt = new ProteinTranslator(
-					consensus, ProteinTranslator.Direction.FORWARD, 1);
-				pt.runJob(0);
+			// Clear the existing translations (if any)
+			translations = null;
+			repaint();
 
-				translation = pt.getTranslation();
-			}
-			catch (Exception e) {}
+			// Start a new thread to generate the translations in the background
+			if (factory != null)
+				factory.killMe = true;
+
+			factory = new TranslationFractory(consensus);
+			factory.start();
 		}
 	}
 
 	void setDimensions()
 	{
-		dimension = new Dimension(0, rCanvas.ntH);
+		dimension = new Dimension(0, (rCanvas.ntH+1)*6);
 
 		setPreferredSize(dimension);
 		revalidate();
@@ -63,12 +66,18 @@ class ProteinCanvas extends JPanel
 	public Dimension getPreferredSize()
 		{ return dimension; }
 
+	private void setTranslations(Vector<short[]> translations)
+	{
+		this.translations = translations;
+		repaint();
+	}
+
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
 
-		if (contig == null)
+		if (contig == null || translations == null)
 			return;
 
 		// Determine lhs and rhs of canvas
@@ -89,20 +98,23 @@ class ProteinCanvas extends JPanel
 
 		ColorScheme colors = rCanvas.proteins;
 
-		short[] data = getTranslation(translation, xS-offset, xE-offset);
-
-		int y = 0;
-
-		for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
+		for (int t = 0; t < translations.size(); t++)
 		{
-			if (data[i] > 0)
-				g.drawImage(colors.getImage(data[i]), x, y, null);
+			int y = (rCanvas.ntH+1) * t;
+
+			short[] data = getRegion(translations.get(t), xS-offset, xE-offset);
+
+			for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
+			{
+				if (data[i] > 0)
+					g.drawImage(colors.getImage(data[i]), x, y, null);
+			}
 		}
 	}
 
 	// Strips out a region of a protein array to contain just the data needed
 	// to draw that region to the screen
-	private short[] getTranslation(short[] translation, int start, int end)
+	private short[] getRegion(short[] translation, int start, int end)
 	{
 		short[] data = new short[end-start+1];
 
@@ -121,5 +133,52 @@ class ProteinCanvas extends JPanel
 			data[d] = -1;
 
 		return data;
+	}
+
+	/**
+	 * This class generates the DNA->Protein translations in real-time as they
+	 * are needed by the canvas. Whenever a new consensus is displayed, the
+	 * existing translations are thrown away and new ones are calculated.
+	 */
+	private class TranslationFractory extends Thread
+	{
+		private Consensus consensus;
+		private Vector<short[]> translations = new Vector<short[]>(6);
+
+		boolean killMe = false;
+
+		TranslationFractory(Consensus consensus)
+			{ this.consensus = consensus; }
+
+		public void run()
+		{
+			setPriority(Thread.MIN_PRIORITY);
+			try { Thread.sleep(250); } catch (Exception e) {}
+
+			// Forward and reverse...
+			for (int i = 0; i < 2 && !killMe; i++)
+			{
+				ProteinTranslator.Direction direction = i == 0 ?
+					ProteinTranslator.Direction.FORWARD :
+					ProteinTranslator.Direction.REVERSE;
+
+				// ...three reading frames in each direction
+				for (int j = 1; j <= 3 && !killMe; j++)
+				{
+					ProteinTranslator pt = new ProteinTranslator(
+						consensus, direction, j);
+
+					try
+					{
+						pt.runJob(0);
+						translations.add(pt.getTranslation());
+					}
+					catch (Exception e) {}
+				}
+			}
+
+			if (killMe == false)
+				setTranslations(translations);
+		}
 	}
 }

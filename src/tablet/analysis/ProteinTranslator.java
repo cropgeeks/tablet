@@ -12,6 +12,8 @@ public class ProteinTranslator extends SimpleJob
 	public static Hashtable<String, Integer> acids;
 	public static String[] codes;
 
+	static { createTranslationTable(); }
+
 	private Sequence sequence;
 
 	private Direction direction;
@@ -144,7 +146,7 @@ public class ProteinTranslator extends SimpleJob
 	String getTranslationAsString()
 		{ return translation.toString(); }
 
-	private void createTranslationTable()
+	private static void createTranslationTable()
 	{
 		acids = new Hashtable<String, Integer>();
 		codes = new String[22];
