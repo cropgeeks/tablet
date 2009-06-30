@@ -9,8 +9,8 @@ public class ProteinTranslator extends SimpleJob
 {
 	public static enum Direction { FORWARD, REVERSE };
 
-	private Hashtable<String, Integer> acids;
-	private String[] codes;
+	public static Hashtable<String, Integer> acids;
+	public static String[] codes;
 
 	private Sequence sequence;
 
@@ -40,7 +40,8 @@ public class ProteinTranslator extends SimpleJob
 		this.direction = direction;
 		this.readingFrame = readingFrame - 1;
 
-		createTranslationTable();
+		if (acids == null)
+			createTranslationTable();
 	}
 
 	public void runJob(int jobIndex)
@@ -86,10 +87,10 @@ public class ProteinTranslator extends SimpleJob
 				int code = acids.get(seq[0] + seq[1] + seq[2]);
 
 				// Assign the protein to the first nucleotide of the three
-				protein[dna[0]] = (short) code;
+				protein[dna[0]] = (short) (code + 21);
 				// Assign the protein (colour info only) to the other two
 				protein[dna[1]] = (short) code;
-				protein[dna[2]] = (short) code;
+				protein[dna[2]] = (short) (code + 21);
 
 				translation.append(codes[code]);
 			}
@@ -127,17 +128,20 @@ public class ProteinTranslator extends SimpleJob
 				int code = acids.get(seq[0] + seq[1] + seq[2]);
 
 				// Assign the protein to the first nucleotide of the three
-				protein[dna[2]] = (short) code;
+				protein[dna[2]] = (short) (code + 21);
 				// Assign the protein (colour info only) to the other two
 				protein[dna[1]] = (short) code;
-				protein[dna[0]] = (short) code;
+				protein[dna[0]] = (short) (code + 21);
 
 				translation.append(codes[code]);
 			}
 		}
 	}
 
-	String getTranslation()
+	public short[] getTranslation()
+		{ return protein; }
+
+	String getTranslationAsString()
 		{ return translation.toString(); }
 
 	private void createTranslationTable()

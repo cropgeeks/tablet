@@ -40,7 +40,7 @@ public class ProteinTranslatorTest extends TestCase
 				c, ProteinTranslator.Direction.FORWARD, 1);
 			pt.runJob(0);
 
-			String translation = pt.getTranslation();
+			String translation = pt.getTranslationAsString();
 			assertEquals(protein[i], translation);
 		}
 	}
@@ -74,7 +74,7 @@ public class ProteinTranslatorTest extends TestCase
 				c, ProteinTranslator.Direction.FORWARD, 2);
 			pt.runJob(0);
 
-			String translation = pt.getTranslation();
+			String translation = pt.getTranslationAsString();
 			assertEquals(protein[i], translation);
 		}
 	}
@@ -82,7 +82,7 @@ public class ProteinTranslatorTest extends TestCase
 	public void testTranslatingReverseFrame1Gapped()
 		throws Exception
 	{
-		// Translations verified with:
+		// Translations tested against:
 		// bioinformatics.picr.man.ac.uk/research/software/tools/sequenceconverter.html
 
 		String[] dna = new String[] {
@@ -92,7 +92,6 @@ public class ProteinTranslatorTest extends TestCase
 		};
 
 		String[] protein = new String[] {
-			"T",
 			"RPLRHATVGKAHRG.",
 			"SVGQEPSM.VGERQ",
 			"NVASVLIFFCISSLQ"
@@ -109,7 +108,7 @@ public class ProteinTranslatorTest extends TestCase
 				c, ProteinTranslator.Direction.REVERSE, 1);
 			pt.runJob(0);
 
-			String translation = pt.getTranslation();
+			String translation = pt.getTranslationAsString();
 			assertEquals(protein[i], translation);
 		}
 	}

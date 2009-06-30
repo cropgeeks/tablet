@@ -22,6 +22,7 @@ class ReadsCanvas extends JPanel
 
 	// Color scheme in use
 	ColorScheme colors;
+	ColorScheme proteins;
 
 	// Width and height of the canvas
 	int canvasW, canvasH;
@@ -165,14 +166,17 @@ class ReadsCanvas extends JPanel
 		{
 			case ColorScheme.STANDARD:
 				colors = new StandardColorScheme(contig, ntW, ntH);
+				proteins = new ProteinClassificationColorScheme(contig, ntW, ntH);
 				break;
 
 			case ColorScheme.TEXT:
 				colors = new TextColorScheme(contig, ntW, ntH);
+				proteins = new ProteinTextColorScheme(contig, ntW, ntH);
 				break;
 
 			default:
 				colors = new StandardColorScheme(contig, ntW, ntH);
+				proteins = new ProteinClassificationColorScheme(contig, ntW, ntH);
 		}
 	}
 

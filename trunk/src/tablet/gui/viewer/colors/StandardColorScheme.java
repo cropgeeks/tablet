@@ -75,17 +75,17 @@ public class StandardColorScheme extends ColorScheme
 		statesCS.add(null);
 	}
 
-	public BufferedImage getImage(byte data)
+	public BufferedImage getImage(int data)
 	{
 		return statesRD.get(data).getImage();
 	}
 
-	public BufferedImage getConsensusImage(byte data)
+	public BufferedImage getConsensusImage(int data)
 	{
 		return statesCS.get(data).getImage();
 	}
 
-	public Color getColor(byte data)
+	public Color getColor(int data)
 	{
 		return statesRD.get(data).getColor();
 	}

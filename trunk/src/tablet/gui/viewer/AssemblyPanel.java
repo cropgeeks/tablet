@@ -18,6 +18,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	OverviewCanvas overviewCanvas;
 	ScaleCanvas scaleCanvas;
 	ConsensusCanvas consensusCanvas;
+	ProteinCanvas proteinCanvas;
 	ReadsCanvas readsCanvas;
 
 	private JScrollPane sp;
@@ -34,11 +35,12 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 		JPanel consensusPanel = new JPanel(new BorderLayout(0, 5));
 		consensusPanel.add(consensusCanvas);
-		consensusPanel.add(scaleCanvas, BorderLayout.SOUTH);
+		consensusPanel.add(proteinCanvas, BorderLayout.SOUTH);
 
 		JPanel topPanel = new JPanel(new BorderLayout(0, 5));
 		topPanel.add(overviewCanvas, BorderLayout.NORTH);
 		topPanel.add(consensusPanel, BorderLayout.CENTER);
+		topPanel.add(scaleCanvas, BorderLayout.SOUTH);
 
 		JPanel visPanel = new JPanel(new BorderLayout(0, 5));
 		visPanel.add(topPanel, BorderLayout.NORTH);
@@ -53,11 +55,13 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		overviewCanvas = new OverviewCanvas();
 		consensusCanvas = new ConsensusCanvas();
 		scaleCanvas = new ScaleCanvas();
+		proteinCanvas = new ProteinCanvas();
 
 		readsCanvas.setAssemblyPanel(this);
 		overviewCanvas.setAssemblyPanel(this);
 		consensusCanvas.setAssemblyPanel(this);
 		scaleCanvas.setAssemblyPanel(this);
+		proteinCanvas.setAssemblyPanel(this);
 
 		sp = new JScrollPane();
 		viewport = sp.getViewport();
@@ -100,6 +104,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		// Then pass the contig to the other components for rendering
 		consensusCanvas.setContig(contig);
 		scaleCanvas.setContig(contig);
+		proteinCanvas.setContig(contig);
 
 		forceRedraw();
 	}
@@ -181,6 +186,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 		readsCanvas.setDimensions(zoom, zoom);
 		consensusCanvas.setDimensions();
+		proteinCanvas.setDimensions();
 	}
 
 	// Jumps the screen left by one "page"
