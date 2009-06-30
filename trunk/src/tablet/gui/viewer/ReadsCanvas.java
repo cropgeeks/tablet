@@ -162,6 +162,8 @@ class ReadsCanvas extends JPanel
 
 	private void updateColorScheme()
 	{
+		long s = System.currentTimeMillis();
+
 		switch (Prefs.visColorScheme)
 		{
 			case ColorScheme.STANDARD:
@@ -178,6 +180,8 @@ class ReadsCanvas extends JPanel
 				colors = new StandardColorScheme(contig, ntW, ntH);
 				proteins = new ProteinClassificationColorScheme(contig, ntW, ntH);
 		}
+
+		System.out.println("Scheme creation " + (System.currentTimeMillis()-s) + "ms");
 	}
 
 	public void paintComponent(Graphics graphics)
