@@ -78,4 +78,39 @@ public class ProteinTranslatorTest extends TestCase
 			assertEquals(protein[i], translation);
 		}
 	}
+
+	public void testTranslatingReverseFrame1Gapped()
+		throws Exception
+	{
+		// Translations verified with:
+		// bioinformatics.picr.man.ac.uk/research/software/tools/sequenceconverter.html
+
+		String[] dna = new String[] {
+			"CCTATCCCCTGTGTGCCTTGCCT****ACTGTTGCGTGTCTCAGCGGCCT",
+			"TGTTGTCTTTCG*CCCAC*TCACATGCTAGGTTCTTGGCC**AAC**TGA",
+			"GATTGCAGTGAGGAAATGCA*GAAAAAAA**TGAGAACTGAAGCAACATT"
+		};
+
+		String[] protein = new String[] {
+			"T",
+			"RPLRHATVGKAHRG.",
+			"SVGQEPSM.VGERQ",
+			"NVASVLIFFCISSLQ"
+		};
+
+		for (int i = 0; i < dna.length; i++)
+		{
+			Consensus c = null;
+
+			c = new Consensus();
+			c.setData(dna[i]);
+
+			ProteinTranslator pt = new ProteinTranslator(
+				c, ProteinTranslator.Direction.REVERSE, 1);
+			pt.runJob(0);
+
+			String translation = pt.getTranslation();
+			assertEquals(protein[i], translation);
+		}
+	}
 }
