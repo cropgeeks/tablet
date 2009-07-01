@@ -1,20 +1,25 @@
 package tablet.gui.viewer;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
+import tablet.gui.*;
 import tablet.gui.viewer.colors.*;
 
-class ProteinCanvas extends JPanel
+import scri.commons.gui.*;
+
+class ProteinCanvas extends JPanel implements ActionListener
 {
 	private Contig contig;
 	private Consensus consensus;
 	private ReadsCanvas rCanvas;
 
 	private TranslationFractory factory;
+	private boolean[] enabled = new boolean[6];
 	private Vector<short[]> translations;
 
 	// The LHS offset (difference) between the left-most read and the consensus
@@ -22,10 +27,17 @@ class ProteinCanvas extends JPanel
 
 	private Dimension dimension = new Dimension();
 
+	// Menu items that appear on the popup menu for this canvas
+	private JMenuItem mShowAll, mShowNone;
+	private JCheckBoxMenuItem[] mToggleTracks;
+
 	ProteinCanvas()
 	{
 		setOpaque(false);
 
+		String[] enabledStates = Prefs.visProteins.split("\\s+");
+		for (int i = 0; i < enabledStates.length; i++)
+			enabled[i] = enabledStates[i].equals("1");
 	}
 
 	void setAssemblyPanel(AssemblyPanel aPanel)
@@ -42,22 +54,32 @@ class ProteinCanvas extends JPanel
 			consensus = contig.getConsensus();
 			offset = contig.getConsensusOffset();
 
-			// Clear the existing translations (if any)
-			translations = null;
-			repaint();
-
-			// Start a new thread to generate the translations in the background
-			if (factory != null)
-				factory.killMe = true;
-
-			factory = new TranslationFractory(consensus);
-			factory.start();
+			updateTranslations();
 		}
+	}
+
+	void updateTranslations()
+	{
+		// Clear the existing translations (if any)
+		translations = null;
+		repaint();
+
+		// Start a new thread to generate the translations in the background
+		if (factory != null)
+			factory.killMe = true;
+
+		factory = new TranslationFractory(consensus);
+		factory.start();
 	}
 
 	void setDimensions()
 	{
-		dimension = new Dimension(0, (rCanvas.ntH+1)*6);
+		// How many tracks need to be shown?
+		int count = 0;
+		for (boolean b: enabled)
+			if (b) count++;
+
+		dimension = new Dimension(0, (rCanvas.ntH+1) * count);
 
 		setPreferredSize(dimension);
 		revalidate();
@@ -98,17 +120,20 @@ class ProteinCanvas extends JPanel
 
 		ColorScheme colors = rCanvas.proteins;
 
-		for (int t = 0; t < translations.size(); t++)
+		for (int t = 0, count = 0; t < translations.size(); t++)
 		{
-			int y = (rCanvas.ntH+1) * t;
+			// If this translation isn't needed, skip it...
+			if (enabled[t] == false)
+				continue;
+
+			int y = (rCanvas.ntH+1) * count;
+			count++;
 
 			short[] data = getRegion(translations.get(t), xS-offset, xE-offset);
 
 			for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
-			{
 				if (data[i] > 0)
 					g.drawImage(colors.getImage(data[i]), x, y, null);
-			}
 		}
 	}
 
@@ -156,7 +181,7 @@ class ProteinCanvas extends JPanel
 			try { Thread.sleep(250); } catch (Exception e) {}
 
 			// Forward and reverse...
-			for (int i = 0; i < 2 && !killMe; i++)
+			for (int i = 0, t = 0; i < 2 && !killMe; i++)
 			{
 				ProteinTranslator.Direction direction = i == 0 ?
 					ProteinTranslator.Direction.FORWARD :
@@ -165,20 +190,89 @@ class ProteinCanvas extends JPanel
 				// ...three reading frames in each direction
 				for (int j = 1; j <= 3 && !killMe; j++)
 				{
-					ProteinTranslator pt = new ProteinTranslator(
-						consensus, direction, j);
-
-					try
+					// Only do the translation if it needs to be shown
+					if (enabled[t++])
 					{
-						pt.runJob(0);
-						translations.add(pt.getTranslation());
+						ProteinTranslator pt = new ProteinTranslator(
+							consensus, direction, j);
+
+						try
+						{
+							pt.runJob(0);
+							translations.add(pt.getTranslation());
+						}
+						catch (Exception e) {}
 					}
-					catch (Exception e) {}
+					else
+						translations.add(null);
 				}
 			}
 
 			if (killMe == false)
 				setTranslations(translations);
 		}
+	}
+
+	// Create the popup menu items
+	private void createPopupMenuItems(JPopupMenu menu)
+	{
+		mShowAll = new JMenuItem();
+		RB.setText(mShowAll, "gui.viewer.ProteinCanvas.mShowAll");
+		mShowAll.addActionListener(this);
+		mShowNone = new JMenuItem();
+		RB.setText(mShowNone, "gui.viewer.ProteinCanvas.mShowNone");
+		mShowNone.addActionListener(this);
+
+		menu.add(mShowAll);
+		menu.add(mShowNone);
+		menu.addSeparator();
+
+		mToggleTracks = new JCheckBoxMenuItem[6];
+
+		for (int i = 0; i < 6; i++)
+		{
+			mToggleTracks[i] = new JCheckBoxMenuItem("", enabled[i]);
+			RB.setText(mToggleTracks[i],
+				"gui.viewer.ProteinCanvas.mToggle" + (i+1));
+			mToggleTracks[i].addActionListener(this);
+			menu.add(mToggleTracks[i]);
+
+			if (i == 2)
+				menu.addSeparator();
+		}
+	}
+
+	void displayProteinOptions(JComponent button)
+	{
+		int x = button.getX() - button.getWidth();
+		int y = button.getY() + button.getHeight();
+
+		JPopupMenu menu = new JPopupMenu();
+		createPopupMenuItems(menu);
+
+		menu.show(button, x, y);
+	}
+
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource() == mShowAll)
+			for (int i = 0; i < enabled.length; i++)
+				enabled[i] = true;
+
+		else if (e.getSource() == mShowNone)
+			for (int i = 0; i < enabled.length; i++)
+				enabled[i] = false;
+
+		for (int i = 0; i < 6; i++)
+			if (e.getSource() == mToggleTracks[i])
+				enabled[i] = !enabled[i];
+
+		updateTranslations();
+		setDimensions();
+
+		// Update the preferences string that tracks the enabled states
+		Prefs.visProteins = new String();
+		for (int i = 0; i < enabled.length; i++)
+			Prefs.visProteins += enabled[i] ? "1 " : "0 ";
 	}
 }
