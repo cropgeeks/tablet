@@ -162,26 +162,8 @@ class ReadsCanvas extends JPanel
 
 	private void updateColorScheme()
 	{
-		long s = System.currentTimeMillis();
-
-		switch (Prefs.visColorScheme)
-		{
-			case ColorScheme.STANDARD:
-				colors = new StandardColorScheme(contig, ntW, ntH);
-				proteins = new ProteinClassificationColorScheme(contig, ntW, ntH);
-				break;
-
-			case ColorScheme.TEXT:
-				colors = new TextColorScheme(contig, ntW, ntH);
-				proteins = new ProteinTextColorScheme(contig, ntW, ntH);
-				break;
-
-			default:
-				colors = new StandardColorScheme(contig, ntW, ntH);
-				proteins = new ProteinClassificationColorScheme(contig, ntW, ntH);
-		}
-
-		System.out.println("Scheme creation " + (System.currentTimeMillis()-s) + "ms");
+		colors = ColorScheme.getDNA(Prefs.visColorScheme, contig, ntW, ntH);
+		proteins = ColorScheme.getProtein(Prefs.visColorScheme, contig, ntW, ntH);
 	}
 
 	public void paintComponent(Graphics graphics)
