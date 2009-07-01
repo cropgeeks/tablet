@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
+import javax.swing.event.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
@@ -16,6 +17,7 @@ class ProteinCanvas extends JPanel
 {
 	private Contig contig;
 	private Consensus consensus;
+	private ScaleCanvas sCanvas;
 	private ReadsCanvas rCanvas;
 
 	private TranslationFractory factory;
@@ -40,12 +42,15 @@ class ProteinCanvas extends JPanel
 		for (int i = 0; i < enabledStates.length; i++)
 			enabled[i] = enabledStates[i].equals("1");
 
-		addMouseListener(mouseListener = new CanvasMouseListener());
+		mouseListener = new CanvasMouseListener();
+		addMouseListener(mouseListener);
+		addMouseMotionListener(mouseListener);
 	}
 
 	void setAssemblyPanel(AssemblyPanel aPanel)
 	{
 		rCanvas = aPanel.readsCanvas;
+		sCanvas = aPanel.scaleCanvas;
 	}
 
 	void setContig(Contig contig)
@@ -216,7 +221,7 @@ class ProteinCanvas extends JPanel
 		}
 	}
 
-	class CanvasMouseListener extends MouseAdapter
+	class CanvasMouseListener extends MouseInputAdapter
 		implements ActionListener
 	{
 		public void mouseReleased(MouseEvent e)
@@ -229,6 +234,41 @@ class ProteinCanvas extends JPanel
 		{
 			if (e.isPopupTrigger())
 				displayMenu(null, e);
+		}
+
+		public void mouseExited(MouseEvent e)
+		{
+			sCanvas.setMouseBase(null, null);
+		}
+
+		// Tracks the mouse over the protein canvas, showing the position and
+		// the full name of the protein under the mouse
+		public void mouseMoved(MouseEvent e)
+		{
+			int xIndex =
+				((rCanvas.pX1 + e.getX()) / rCanvas.ntW) - rCanvas.offset;
+
+			try
+			{
+				int track = e.getY() / (rCanvas.ntH+1);
+				short value = translations.get(track)[(xIndex)];
+
+				// Values greater than 21 are positions without the text
+				if (value > 21) value -= 21;
+
+				// Values equal to zero don't have a value that can be displayed
+				if (value > 0)
+				{
+					String msg = RB.getString("gui.viewer.ProteinCanvas.p" + value);
+					sCanvas.setMouseBase(xIndex, msg);
+				}
+				else
+					sCanvas.setMouseBase(xIndex, null);
+			}
+			catch (Exception exception)
+			{
+				sCanvas.setMouseBase(xIndex, null);
+			}
 		}
 
 		// Create the popup menu items

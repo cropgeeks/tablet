@@ -21,6 +21,8 @@ class ScaleCanvas extends JPanel
 	// The data index position (0 indexed) of the base under the mouse
 	// May be negative too
 	private Integer mouseBase;
+	// A custom message to be displayed in addition to the mouse position
+	private String message;
 
 	// The LHS offset (difference) between the left-most read and the consensus
 	int offset;
@@ -69,6 +71,12 @@ class ScaleCanvas extends JPanel
 			consensus = contig.getConsensus();
 			offset = contig.getConsensusOffset();
 		}
+	}
+
+	void setMouseBase(Integer mouseBase, String message)
+	{
+		this.message = message;
+		setMouseBase(mouseBase);
 	}
 
 	void setMouseBase(Integer mouseBase)
@@ -139,6 +147,9 @@ class ScaleCanvas extends JPanel
 			// Then format, centre and draw the message
 			String unpadded = getUnpadded(mouseBase);
 			String str = d.format(mouseBase+1) + unpadded;
+
+			if (message != null)
+				str += " - " + message;
 
 			int strWidth = g.getFontMetrics().stringWidth(str);
 			int pos = getPosition(x, strWidth);
