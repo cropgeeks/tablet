@@ -69,6 +69,9 @@ public class Prefs extends XMLPreferences
 	// Hide the display of unpadded values (in various places) or not
 	public static boolean visHideUnpaddedValues = false;
 
+	// Which protein translations should be shown?
+	public static String visProteins = "1 0 0 0 0 0";
+
 	// TODO: The scri-commons XML loading needs to support arrays
 	public static String guiRecent01 = "";
 	public static String guiRecent02 = "";

@@ -34,8 +34,8 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		setBorder(BorderFactory.createEmptyBorder(1, 2, 0, 2));
 
 		JPanel consensusPanel = new JPanel(new BorderLayout(0, 5));
+		consensusPanel.add(proteinCanvas, BorderLayout.NORTH);
 		consensusPanel.add(consensusCanvas);
-		consensusPanel.add(proteinCanvas, BorderLayout.SOUTH);
 
 		JPanel topPanel = new JPanel(new BorderLayout(0, 5));
 		topPanel.add(overviewCanvas, BorderLayout.NORTH);
@@ -209,5 +209,10 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		overviewCanvas.setVisible(!Prefs.guiHideOverview);
 		consensusCanvas.setVisible(!Prefs.guiHideConsensus);
 		scaleCanvas.setVisible(!Prefs.guiHideScaleBar);
+	}
+
+	public void displayProteinOptions(JComponent button)
+	{
+		proteinCanvas.displayProteinOptions(button);
 	}
 }
