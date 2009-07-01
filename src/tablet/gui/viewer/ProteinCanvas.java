@@ -12,7 +12,7 @@ import tablet.gui.viewer.colors.*;
 
 import scri.commons.gui.*;
 
-class ProteinCanvas extends JPanel implements ActionListener
+class ProteinCanvas extends JPanel
 {
 	private Contig contig;
 	private Consensus consensus;
@@ -28,6 +28,7 @@ class ProteinCanvas extends JPanel implements ActionListener
 	private Dimension dimension = new Dimension();
 
 	// Menu items that appear on the popup menu for this canvas
+	CanvasMouseListener mouseListener;
 	private JMenuItem mShowAll, mShowNone;
 	private JCheckBoxMenuItem[] mToggleTracks;
 
@@ -38,6 +39,8 @@ class ProteinCanvas extends JPanel implements ActionListener
 		String[] enabledStates = Prefs.visProteins.split("\\s+");
 		for (int i = 0; i < enabledStates.length; i++)
 			enabled[i] = enabledStates[i].equals("1");
+
+		addMouseListener(mouseListener = new CanvasMouseListener());
 	}
 
 	void setAssemblyPanel(AssemblyPanel aPanel)
@@ -213,66 +216,86 @@ class ProteinCanvas extends JPanel implements ActionListener
 		}
 	}
 
-	// Create the popup menu items
-	private void createPopupMenuItems(JPopupMenu menu)
+	class CanvasMouseListener extends MouseAdapter
+		implements ActionListener
 	{
-		mShowAll = new JMenuItem();
-		RB.setText(mShowAll, "gui.viewer.ProteinCanvas.mShowAll");
-		mShowAll.addActionListener(this);
-		mShowNone = new JMenuItem();
-		RB.setText(mShowNone, "gui.viewer.ProteinCanvas.mShowNone");
-		mShowNone.addActionListener(this);
-
-		menu.add(mShowAll);
-		menu.add(mShowNone);
-		menu.addSeparator();
-
-		mToggleTracks = new JCheckBoxMenuItem[6];
-
-		for (int i = 0; i < 6; i++)
+		public void mouseReleased(MouseEvent e)
 		{
-			mToggleTracks[i] = new JCheckBoxMenuItem("", enabled[i]);
-			RB.setText(mToggleTracks[i],
-				"gui.viewer.ProteinCanvas.mToggle" + (i+1));
-			mToggleTracks[i].addActionListener(this);
-			menu.add(mToggleTracks[i]);
-
-			if (i == 2)
-				menu.addSeparator();
+			if (e.isPopupTrigger())
+				displayMenu(null, e);
 		}
-	}
 
-	void displayProteinOptions(JComponent button)
-	{
-		int x = button.getX() - button.getWidth();
-		int y = button.getY() + button.getHeight();
+		public void mousePressed(MouseEvent e)
+		{
+			if (e.isPopupTrigger())
+				displayMenu(null, e);
+		}
 
-		JPopupMenu menu = new JPopupMenu();
-		createPopupMenuItems(menu);
+		// Create the popup menu items
+		private void createPopupMenuItems(JPopupMenu menu)
+		{
+			mShowAll = new JMenuItem();
+			RB.setText(mShowAll, "gui.viewer.ProteinCanvas.mShowAll");
+			mShowAll.addActionListener(this);
+			mShowNone = new JMenuItem();
+			RB.setText(mShowNone, "gui.viewer.ProteinCanvas.mShowNone");
+			mShowNone.addActionListener(this);
 
-		menu.show(button, x, y);
-	}
+			menu.add(mShowAll);
+			menu.add(mShowNone);
+			menu.addSeparator();
 
-	public void actionPerformed(ActionEvent e)
-	{
-		if (e.getSource() == mShowAll)
+			mToggleTracks = new JCheckBoxMenuItem[6];
+
+			for (int i = 0; i < 6; i++)
+			{
+				mToggleTracks[i] = new JCheckBoxMenuItem("", enabled[i]);
+				RB.setText(mToggleTracks[i],
+					"gui.viewer.ProteinCanvas.mToggle" + (i+1));
+				mToggleTracks[i].addActionListener(this);
+				menu.add(mToggleTracks[i]);
+
+				if (i == 2)
+					menu.addSeparator();
+			}
+		}
+
+		void displayMenu(JComponent button, MouseEvent e)
+		{
+			JPopupMenu menu = new JPopupMenu();
+			createPopupMenuItems(menu);
+
+			if (button != null)
+			{
+				int x = button.getX() - button.getWidth();
+				int y = button.getY() + button.getHeight();
+				menu.show(button, x, y);
+			}
+			else
+				menu.show(e.getComponent(), e.getX(), e.getY());
+		}
+
+		public void actionPerformed(ActionEvent e)
+		{
+			if (e.getSource() == mShowAll)
+				for (int i = 0; i < enabled.length; i++)
+					enabled[i] = true;
+
+			else if (e.getSource() == mShowNone)
+				for (int i = 0; i < enabled.length; i++)
+					enabled[i] = false;
+
+			for (int i = 0; i < 6; i++)
+				if (e.getSource() == mToggleTracks[i])
+					enabled[i] = !enabled[i];
+
+			updateTranslations();
+			setDimensions();
+
+			// Update the preferences string that tracks the enabled states
+			Prefs.visProteins = new String();
 			for (int i = 0; i < enabled.length; i++)
-				enabled[i] = true;
-
-		else if (e.getSource() == mShowNone)
-			for (int i = 0; i < enabled.length; i++)
-				enabled[i] = false;
-
-		for (int i = 0; i < 6; i++)
-			if (e.getSource() == mToggleTracks[i])
-				enabled[i] = !enabled[i];
-
-		updateTranslations();
-		setDimensions();
-
-		// Update the preferences string that tracks the enabled states
-		Prefs.visProteins = new String();
-		for (int i = 0; i < enabled.length; i++)
-			Prefs.visProteins += enabled[i] ? "1 " : "0 ";
+				Prefs.visProteins += enabled[i] ? "1 " : "0 ";
+		}
 	}
 }
