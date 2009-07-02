@@ -5,6 +5,8 @@ import java.awt.dnd.*;
 import java.awt.event.*;
 import java.beans.*;
 import java.util.*;
+import java.lang.management.*;
+import java.text.*;
 import javax.swing.*;
 
 import tablet.data.*;
@@ -130,9 +132,9 @@ public class WinMain extends JRibbonFrame
 				}
 			}
 		});
+
+		createMemoryTimer();
 	}
-
-
 
 	public boolean okToExit()
 	{
@@ -198,8 +200,33 @@ public class WinMain extends JRibbonFrame
 		catch (Exception e) { e.printStackTrace(); }
 
 		contigsPanel.setAssembly(null);
-
 		Actions.closed();
+
+		System.gc();
+	}
+
+	// Creates and registers a timer for monitoring memory usage
+	private void createMemoryTimer()
+	{
+		final DecimalFormat df = new DecimalFormat("0.00");
+		final MemoryMXBean bean = ManagementFactory.getMemoryMXBean();
+
+		// TODO: Is this reporting correctly?
+		ActionListener listener = new ActionListener() {
+			public void actionPerformed(ActionEvent evt)
+			{
+				long used = bean.getHeapMemoryUsage().getUsed()
+					+ bean.getNonHeapMemoryUsage().getUsed();
+
+				String label = RB.format("gui.WinMain.memory",
+					df.format(used/1024f/1024f));
+				RibbonController.setMemoryLabel(label);
+			}
+		};
+
+		javax.swing.Timer timer = new javax.swing.Timer(10000, listener);
+		timer.setInitialDelay(0);
+		timer.start();
 	}
 
 	private static class LogoPanel extends JPanel
