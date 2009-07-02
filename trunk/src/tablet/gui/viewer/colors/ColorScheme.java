@@ -11,10 +11,6 @@ public abstract class ColorScheme
 	public static final int STANDARD = 10;
 	public static final int TEXT = 20;
 
-	// Maintains a collection of every colour scheme created so far
-	private static Hashtable<String, ColorScheme> schemes =
-		new Hashtable<String, ColorScheme>();
-
 	protected Contig contig;
 
 	ColorScheme(Contig contig)
@@ -35,24 +31,10 @@ public abstract class ColorScheme
 		ColorScheme scheme = null;
 
 		if (type == STANDARD)
-		{
-			scheme = schemes.get("STDDNA" + w);
-			if (scheme == null)
-			{
-				scheme = new StandardColorScheme(contig, w, h);
-				schemes.put("STDDNA" + w, scheme);
-			}
-		}
+			scheme = new StandardColorScheme(contig, w, h);
 
 		else
-		{
-			scheme = schemes.get("TXTDNA" + w);
-			if (scheme == null)
-			{
-				scheme = new TextColorScheme(contig, w, h);
-				schemes.put("TXTDNA" + w, scheme);
-			}
-		}
+			scheme = new TextColorScheme(contig, w, h);
 
 		return scheme;
 	}
@@ -63,24 +45,10 @@ public abstract class ColorScheme
 		ColorScheme scheme = null;
 
 		if (type == STANDARD)
-		{
-			scheme = schemes.get("STDPRO" + w);
-			if (scheme == null)
-			{
-				scheme = new ProteinClassificationColorScheme(contig, w, h);
-				schemes.put("STDPRO" + w, scheme);
-			}
-		}
+			scheme = new ProteinClassificationColorScheme(contig, w, h);
 
 		else
-		{
-			scheme = schemes.get("TXTPRO" + w);
-			if (scheme == null)
-			{
-				scheme = new ProteinTextColorScheme(contig, w, h);
-				schemes.put("TXTPRO" + w, scheme);
-			}
-		}
+			scheme = new ProteinTextColorScheme(contig, w, h);
 
 		return scheme;
 	}
