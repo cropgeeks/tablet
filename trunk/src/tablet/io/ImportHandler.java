@@ -20,6 +20,7 @@ public class ImportHandler implements ITrackableJob
 {
 	private File file;
 	private int jobIndex = 0;
+	private boolean okToRun = true;
 
 	private ITrackableJob currentJob = null;
 	private AssemblyReader reader = null;
@@ -37,6 +38,9 @@ public class ImportHandler implements ITrackableJob
 		throws Exception
 	{
 		this.jobIndex = jobIndex;
+
+		if (okToRun == false)
+			return;
 
 		if (jobIndex == 0)
 			readFile();
@@ -81,6 +85,9 @@ public class ImportHandler implements ITrackableJob
 		{
 			// Use next reader type
 		}
+
+		if (okToRun == false)
+			return;
 
 		if (ok)
 		{
@@ -194,6 +201,8 @@ public class ImportHandler implements ITrackableJob
 
 	public void cancelJob()
 	{
+		okToRun = false;
+
 		if (currentJob != null)
 			currentJob.cancelJob();
 	}
