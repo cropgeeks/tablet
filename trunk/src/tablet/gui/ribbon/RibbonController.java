@@ -18,6 +18,7 @@ public class RibbonController
 	private static JRibbon ribbon;
 
 	private static JLabel titleLabel = new JLabel(" ");
+	private static JLabel memoryLabel = new JLabel(" ");
 
 	public RibbonController(WinMain winMain)
 	{
@@ -40,6 +41,8 @@ public class RibbonController
 
 		ribbon.addTaskbarComponent(new JSeparator(JSeparator.VERTICAL));
 		ribbon.addTaskbarComponent(titleLabel);
+		ribbon.addTaskbarComponent(new JSeparator(JSeparator.VERTICAL));
+		ribbon.addTaskbarComponent(memoryLabel);
 
 		ribbon.configureHelp(getIcon("HELP16", 16), new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -50,6 +53,12 @@ public class RibbonController
 	public static void setTitleLabel(String str)
 	{
 		titleLabel.setText(" " + str);
+		ribbon.repaint();
+	}
+
+	public static void setMemoryLabel(String str)
+	{
+		memoryLabel.setText(" " + str);
 		ribbon.repaint();
 	}
 
