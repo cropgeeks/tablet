@@ -184,18 +184,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			text.append("Read direction is REVERSE" + lb + lb);
 
 		// Produce a FASTA formatted string
-		text.append(">" + metaData.getName() + lb);
-		for (int i = 0; i < seq.length(); i += 50)
-		{
-			try
-			{
-				text.append(seq.substring(i, i+50) + lb);
-			}
-			catch (Exception e)
-			{
-				text.append(seq.substring(i, seq.length()) + lb);
-			}
-		}
+		text.append(TabletUtils.formatFASTA(metaData.getName(), seq));
 
 		StringSelection selection = new StringSelection(text.toString());
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
