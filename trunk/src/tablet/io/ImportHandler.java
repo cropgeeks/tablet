@@ -159,6 +159,7 @@ public class ImportHandler implements ITrackableJob
 		{
 			System.out.println("Normal: " + file);
 			is = new ProgressInputStream(new FileInputStream(file));
+			is.setSize(file.length());
 		}
 
 
