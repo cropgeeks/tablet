@@ -33,7 +33,7 @@ public class WinMain extends JRibbonFrame
 
 	private JumpToDialog jumpToDialog;
 
-	WinMain(String filename)
+	WinMain()
 	{
 		createControls();
 

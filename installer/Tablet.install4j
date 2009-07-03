@@ -207,7 +207,13 @@
           <screen name="" id="11" beanClass="com.install4j.runtime.beans.screens.FinishedScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="true">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.screens.FinishedScreen" />
+                <object class="com.install4j.runtime.beans.screens.FinishedScreen">
+                  <void property="bannerImageFile">
+                    <object class="com.install4j.api.beans.ExternalFile">
+                      <string>./scribanner.png</string>
+                    </object>
+                  </void>
+                </object>
               </java>
             </serializedBean>
             <condition />
@@ -344,7 +350,13 @@
           <screen name="" id="16" beanClass="com.install4j.runtime.beans.screens.UninstallSuccessScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="true">
             <serializedBean>
               <java class="java.beans.XMLDecoder">
-                <object class="com.install4j.runtime.beans.screens.UninstallSuccessScreen" />
+                <object class="com.install4j.runtime.beans.screens.UninstallSuccessScreen">
+                  <void property="bannerImageFile">
+                    <object class="com.install4j.api.beans.ExternalFile">
+                      <string>./scribanner.png</string>
+                    </object>
+                  </void>
+                </object>
               </java>
             </serializedBean>
             <condition />

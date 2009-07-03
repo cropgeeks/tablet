@@ -44,9 +44,6 @@ public class TabletUtils
 	{
 		try
 		{
-			if (true)
-			throw new Exception();
-
 			Desktop desktop = Desktop.getDesktop();
 
 			URI uri = new URI(html);
