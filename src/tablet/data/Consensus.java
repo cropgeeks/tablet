@@ -101,31 +101,12 @@ public class Consensus extends Sequence
 	}
 
 	/**
-	 * Sets the base score qualities for this consensus. This parses a string
-	 * that is expected to contains a space separated list of scores, with NO
-	 * SCORES provided for bases that are padded.
-	 * TODO: This should really be a part of the AceFileReader class
+	 * Sets the base score qualities for this consensus.
+	 * @param bq the array of base quality scores (one per base of the consensus
+	 * with -1 for bases with no score).
 	 */
-	public void setBaseQualities(String qualities)
-		throws Exception
-	{
-		bq = new byte[length()];
-
-		String[] tokens = qualities.trim().split("\\s+");
-
-		int i = 0;
-		for (int t = 0; t < tokens.length; t++, i++)
-		{
-			// Skip padded bases, because the quality string doesn't score them
-			while (getStateAt(i) == Sequence.P)
-			{
-				bq[i] = -1;
-				i++;
-			}
-
-			bq[i] = Byte.parseByte(tokens[t]);
-		}
-	}
+	public void setBaseQualities(byte[] bq)
+		{ this.bq = bq; }
 
 	/**
 	 * Returns an array of base quality data, starting at start and ending at

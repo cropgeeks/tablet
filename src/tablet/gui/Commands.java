@@ -38,7 +38,9 @@ public class Commands
 		}
 
 		File file = new File(filename);
+
 		winMain.closeAssembly();
+		System.gc();
 
 		ImportHandler ioHandler = new ImportHandler(filename);
 

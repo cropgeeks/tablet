@@ -109,7 +109,7 @@ public class ImportHandler implements ITrackableJob
 			System.out.println((System.currentTimeMillis()-s) + "ms");
 		}
 		else
-			throw new ReadException(ReadException.UNKNOWN_FORMAT);
+			throw new ReadException(ReadException.UNKNOWN_FORMAT, 0);
 	}
 
 	private boolean readFile(AssemblyReader reader)
