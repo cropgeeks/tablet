@@ -81,6 +81,9 @@ public class Tablet
 				// Do we want to open an initial project?
 				if (filename != null)
 					winMain.getCommands().fileOpen(filename);
+
+				if (Install4j.displayUpdate)
+					TabletUtils.visitURL("http://bioinf.scri.ac.uk/tablet/svn.txt");
 			}
 
 			public void windowClosing(WindowEvent e)
