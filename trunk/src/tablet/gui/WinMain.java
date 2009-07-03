@@ -80,7 +80,7 @@ public class WinMain extends JRibbonFrame
 		contigsPanel.setFeaturesPanel(featuresPanel);
 
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
-		setDropTarget(new DropTarget(assemblyPanel, dropAdapter));
+		setDropTarget(new DropTarget(this, dropAdapter));
 
 		ctrlTabs.addTab("", contigsPanel);
 		ctrlTabs.setTitleAt(0, contigsPanel.getTitle());

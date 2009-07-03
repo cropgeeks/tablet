@@ -33,16 +33,16 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEmptyBorder(1, 2, 0, 2));
 
-		JPanel consensusPanel = new JPanel(new BorderLayout(0, 5));
+		JPanel consensusPanel = new JPanel(new BorderLayout());
 		consensusPanel.add(proteinCanvas, BorderLayout.NORTH);
 		consensusPanel.add(consensusCanvas);
 
-		JPanel topPanel = new JPanel(new BorderLayout(0, 5));
+		JPanel topPanel = new JPanel(new BorderLayout());
 		topPanel.add(overviewCanvas, BorderLayout.NORTH);
 		topPanel.add(consensusPanel, BorderLayout.CENTER);
 		topPanel.add(scaleCanvas, BorderLayout.SOUTH);
 
-		JPanel visPanel = new JPanel(new BorderLayout(0, 5));
+		JPanel visPanel = new JPanel(new BorderLayout());
 		visPanel.add(topPanel, BorderLayout.NORTH);
 		visPanel.add(sp, BorderLayout.CENTER);
 

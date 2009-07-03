@@ -52,7 +52,7 @@ class ConsensusCanvas extends JPanel
 
 	void setDimensions()
 	{
-		dimension = new Dimension(0, rCanvas.ntH/2 + 2 + rCanvas.ntH +2);
+		dimension = new Dimension(0, (rCanvas.ntH/2 + 2 + rCanvas.ntH) + 5);
 
 		setPreferredSize(dimension);
 		revalidate();
