@@ -1,7 +1,10 @@
 package tablet.gui;
 
 import java.awt.*;
+import java.net.*;
 import javax.swing.*;
+
+import scri.commons.gui.*;
 
 public class TabletUtils
 {
@@ -35,5 +38,25 @@ public class TabletUtils
 		}
 
 		return text.toString();
+	}
+
+	public static void visitURL(String html)
+	{
+		try
+		{
+			if (true)
+			throw new Exception();
+
+			Desktop desktop = Desktop.getDesktop();
+
+			URI uri = new URI(html);
+			desktop.browse(uri);
+		}
+		catch (Exception e)
+		{
+			TaskDialog.error(
+				RB.format("gui.TabletUtils.urlError", html),
+				RB.getString("gui.text.close"));
+		}
 	}
 }
