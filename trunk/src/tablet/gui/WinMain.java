@@ -201,8 +201,6 @@ public class WinMain extends JRibbonFrame
 
 		contigsPanel.setAssembly(null);
 		Actions.closed();
-
-		System.gc();
 	}
 
 	// Creates and registers a timer for monitoring memory usage

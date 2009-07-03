@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import tablet.data.*;
+import static tablet.io.ReadException.*;
 
 class AceFileReader extends AssemblyReader
 {
@@ -12,6 +13,7 @@ class AceFileReader extends AssemblyReader
 
 	// Stores each line as it is read
 	private String str;
+	private int lineCount;
 
 	private Contig contig;
 	private Consensus consensus;
@@ -29,52 +31,69 @@ class AceFileReader extends AssemblyReader
 		this.useAscii = useAscii;
 	}
 
+	String readLine()
+		throws IOException
+	{
+		lineCount++;
+		return in.readLine();
+	}
+
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		if (useAscii)
-			in = new BufferedReader(new InputStreamReader(is, "ASCII")); // ISO8859_1
-		else
-			in = new BufferedReader(new InputStreamReader(is));
-
-
-		// Read and check for the header
-		str = in.readLine();
-
-		if (str.startsWith("AS ") == false)
-			throw new ReadException(ReadException.UNKNOWN_FORMAT);
-
-
-		// Scan for contigs
-		while ((str = in.readLine()) != null && okToRead)
+		try
 		{
-			if (str.startsWith("AF "))
-				processReadLocation();
+			if (useAscii)
+				in = new BufferedReader(new InputStreamReader(is, "ASCII")); // ISO8859_1
+			else
+				in = new BufferedReader(new InputStreamReader(is));
 
-			else if (str.startsWith("RD "))
-				processRead();
 
-//			else if (str.startsWith("QA "))
-//				processReadQualities();
+			// Read and check for the header
+			str = readLine();
 
-			else if (str.startsWith("CO "))
-				processContig();
+			if (str == null || str.startsWith("AS ") == false)
+				throw new ReadException(UNKNOWN_FORMAT, lineCount);
 
-			else if (str.startsWith("BQ"))
-				processBaseQualities();
-
-			else if (str.startsWith("BS "))
+			// Scan for contigs
+			while ((str = readLine()) != null && okToRead)
 			{
-//				processBaseSegment();
-			}
+				if (str.startsWith("AF "))
+					processReadLocation();
 
-			// Currently not doing anything with these tags
-			else if (str.startsWith("CT{"))
-				processConsesusTag();
-			else if (str.startsWith("RT{"))
-				while ((str = in.readLine()) != null && !str.startsWith("}"));
-			else if (str.startsWith("WA{"))
-				while ((str = in.readLine()) != null && !str.startsWith("}"));
+				else if (str.startsWith("RD "))
+					processRead();
+
+	//			else if (str.startsWith("QA "))
+	//				processReadQualities();
+
+				else if (str.startsWith("CO "))
+					processContig();
+
+				else if (str.startsWith("BQ"))
+					processBaseQualities();
+
+				else if (str.startsWith("BS "))
+				{
+	//				processBaseSegment();
+				}
+
+				// Currently not doing anything with these tags
+				else if (str.startsWith("CT{"))
+					processConsesusTag();
+				else if (str.startsWith("RT{"))
+					while ((str = readLine()) != null && !str.startsWith("}"));
+				else if (str.startsWith("WA{"))
+					while ((str = readLine()) != null && !str.startsWith("}"));
+			}
+		}
+		// Rethrow any ReadExceptions that have already been dealt with
+		catch (ReadException e) {
+			throw e;
+		}
+		// But rewrap any unexpected exceptions into a ReadException
+		catch (Exception e) {
+			throw new ReadException(e.toString(), lineCount);
 		}
 
 		in.close();
@@ -85,6 +104,9 @@ class AceFileReader extends AssemblyReader
 	{
 		// CO <contig name> <# of bases> <# of reads in contig> <# of base segments in contig> <U or C>
 		String[] CO = str.split("\\s+");
+
+		if (CO.length != 6)
+			throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
 
 		String name = new String(CO[1]);
 		int baseCount = Integer.parseInt(CO[2]);
@@ -98,7 +120,7 @@ class AceFileReader extends AssemblyReader
 
 		// Reference sequence (immediately follows CO line)
 		StringBuilder ref = new StringBuilder(baseCount);
-		while ((str = in.readLine()) != null && str.length() > 0)
+		while ((str = readLine()) != null && str.length() > 0)
 			ref.append(str);
 
 		consensus = new Consensus();
@@ -116,11 +138,26 @@ class AceFileReader extends AssemblyReader
 		// after the final BQ score on a line, eg: "50 99\n68 45" etc
 		// What we really want to read is "50 99 \n68 45"
 
-		StringBuilder bq = new StringBuilder(consensus.length());
-		while ((str = in.readLine()) != null && str.length() > 0)
-			bq.append(" " + str);
+		StringBuilder bqStr = new StringBuilder(consensus.length());
+		while ((str = readLine()) != null && str.length() > 0)
+			bqStr.append(" " + str);
 
-		consensus.setBaseQualities(bq.toString().trim());
+		String[] tokens = bqStr.toString().trim().split("\\s+");
+		byte[] bq = new byte[consensus.length()];
+
+		for (int t = 0, i = 0; t < tokens.length; t++, i++)
+		{
+			// Skip padded bases, because the quality string doesn't score them
+			while (consensus.getStateAt(i) == Sequence.P)
+			{
+				bq[i] = -1;
+				i++;
+			}
+
+			bq[i] = Byte.parseByte(tokens[t]);
+		}
+
+		consensus.setBaseQualities(bq);
 	}
 
 	private void processReadLocation()
@@ -128,6 +165,9 @@ class AceFileReader extends AssemblyReader
 	{
 		// AF <read name> <C or U> <padded start consensus position>
 		String[] AF = str.split("\\s+");
+
+		if (AF.length != 4)
+			throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
 
 		String name = new String(AF[1]);
 		boolean isComplemented = (AF[2].charAt(0) == 'C');
@@ -141,8 +181,8 @@ class AceFileReader extends AssemblyReader
 		read = new Read(id, position-1);
 		contig.getReads().add(read);
 
-		if (id % 100000 == 0 && id != 0)
-			System.out.println(" read id for contig: " + id);
+		if (id % 250000 == 0)
+			System.out.println(" reads found: " + id);
 	}
 
 	private void processBaseSegment()
@@ -173,10 +213,13 @@ class AceFileReader extends AssemblyReader
 		// RD <read name> <# of padded bases> <# of whole read info items> <# of read tags>
 		String[] RD = str.split("\\s+");
 
+		if (RD.length != 5)
+			throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
+
 		int baseCount = Integer.parseInt(RD[2]);
 
 		StringBuilder seq = new StringBuilder(baseCount);
-		while ((str = in.readLine()) != null && str.length() > 0)
+		while ((str = readLine()) != null && str.length() > 0)
 			seq.append(str);
 
 		// Fetch the (expected) read for this location
@@ -184,9 +227,6 @@ class AceFileReader extends AssemblyReader
 		read.setData(seq.toString());
 
 		currentReadInContig++;
-
-		if (currentReadInContig % 100000 == 0)
-			System.out.println(" reads for this contig: " + currentReadInContig);
 	}
 
 	private void processReadQualities()
@@ -208,7 +248,7 @@ class AceFileReader extends AssemblyReader
 		throws Exception
 	{
 		// The next line of the tag should be the one with all the info on it
-		str = in.readLine();
+		str = readLine();
 		String[] CT = str.split("\\s+");
 
 		// POLYMORPHIC SNPs
@@ -232,7 +272,7 @@ class AceFileReader extends AssemblyReader
 			int p1 = Integer.parseInt(CT[3]) - 1;
 			int p2 = Integer.parseInt(CT[4]) - 1;
 
-			str = in.readLine().trim();
+			str = readLine().trim();
 			if (str.equalsIgnoreCase("Variation type=SNP"))
 			{
 				// And assuming a contig exists with this name...
@@ -244,18 +284,18 @@ class AceFileReader extends AssemblyReader
 
 
 		// Read until the end of the tag
-		while ((str = in.readLine()) != null && !str.startsWith("}"));
+		while ((str = readLine()) != null && !str.startsWith("}"));
 	}
 
 	private void processReadTag()
 		throws Exception
 	{
-		while ((str = in.readLine()) != null && !str.startsWith("}"));
+		while ((str = readLine()) != null && !str.startsWith("}"));
 	}
 
 	private void processAssemblyTag()
 		throws Exception
 	{
-		while ((str = in.readLine()) != null && !str.startsWith("}"));
+		while ((str = readLine()) != null && !str.startsWith("}"));
 	}
 }
