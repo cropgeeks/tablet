@@ -25,8 +25,7 @@ class FileDropAdapter extends DropTargetAdapter
 
 			for (int i = 0; i < dataFlavors.length; i++)
 			{
-				if (dataFlavors[i].getRepresentationClass().equals(
-						Class.forName("java.util.List")))
+				if (dataFlavors[i].isFlavorJavaFileListType())
 				{
 					List<?> list = (List<?>) t.getTransferData(dataFlavors[i]);
 
@@ -47,14 +46,4 @@ class FileDropAdapter extends DropTargetAdapter
 		}
 		catch (Exception e) {}
 	}
-
-	/*
-	 * public void dropActionChanged(DropTargetDragEvent dtde) { }
-	 *
-	 * public void dragEnter(DropTargetDragEvent dtde) { }
-	 *
-	 * public void dragExit(DropTargetEvent dte) { }
-	 *
-	 * public void dragOver(DropTargetDragEvent dtde) { }
-	 */
 }

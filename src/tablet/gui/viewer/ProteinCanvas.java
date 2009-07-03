@@ -80,7 +80,12 @@ class ProteinCanvas extends JPanel
 		for (boolean b: enabled)
 			if (b) count++;
 
-		dimension = new Dimension(0, (rCanvas.ntH+1) * count);
+		// Because every row has a 1px gap after it, we only need to +4 for the
+		// total gap between this panel and the one below it
+		if (count > 0)
+			dimension = new Dimension(0, ((rCanvas.ntH+1) * count) + 4);
+		else
+			dimension = new Dimension(0, 0);
 
 		setPreferredSize(dimension);
 		revalidate();
