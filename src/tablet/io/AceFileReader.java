@@ -55,6 +55,13 @@ class AceFileReader extends AssemblyReader
 			if (str == null || str.startsWith("AS ") == false)
 				throw new ReadException(UNKNOWN_FORMAT, lineCount);
 
+			String[] AS = str.split("\\s+");
+			if (AS.length != 3)
+				throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
+
+			// Initialize the vector of contigs to be at least this size
+			assembly.setContigsSize(Integer.parseInt(AS[1]));
+
 			// Scan for contigs
 			while ((str = readLine()) != null && okToRead)
 			{

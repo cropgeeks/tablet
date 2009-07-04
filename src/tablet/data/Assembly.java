@@ -36,6 +36,13 @@ public class Assembly implements Iterable<Contig>
 	public String getName()
 		{ return name; }
 
+	/**
+	 * Initializes the vector of contigs to be at least this size by default.
+	 * @param size the initial size of the vector
+	 */
+	public void setContigsSize(int size)
+		{ contigs = new Vector<Contig>(size); }
+
 	public Iterator<Contig> iterator()
 		{ return contigs.iterator(); }
 
