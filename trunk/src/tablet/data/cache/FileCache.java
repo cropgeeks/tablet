@@ -24,8 +24,6 @@ public class FileCache implements IReadCache
 
 	// When writing, how many bytes have been written to the cache?
 	private long byteCount = 0;
-	// When writing, how many names have been stored in the cache?
-	private int count = 0;
 
 	private FileCache()
 	{
@@ -56,7 +54,7 @@ public class FileCache implements IReadCache
 	public void close()
 		throws IOException
 	{
-		System.out.println("Closing cache: " + count + ": " + byteCount);
+		System.out.println("Closing cache: " + byteCount);
 
 		if (out != null)
 			out.close();
@@ -85,7 +83,10 @@ public class FileCache implements IReadCache
 			// Then C or U
 			boolean isComplemented = rnd.readBoolean();
 
-			return new ReadMetaData(name, isComplemented);
+			// Unpadded length
+			int unpaddedLength = rnd.readInt();
+
+			return new ReadMetaData(name, isComplemented, unpaddedLength);
 		}
 		catch (Exception e)
 		{
@@ -94,7 +95,7 @@ public class FileCache implements IReadCache
 		}
 	}
 
-	public int setReadMetaData(ReadMetaData readMetaData)
+	public void setReadMetaData(ReadMetaData readMetaData)
 		throws Exception
 	{
 		// Update the index to mark the next position as in use by this Read
@@ -109,12 +110,15 @@ public class FileCache implements IReadCache
 		// Write a single byte for C or U
 		out.writeBoolean(readMetaData.isComplemented());
 
-		// Bytes written:
-		//  4   - INT, length of the name to follow
-		//  [n] - BYTES, the name itself
-		//  1   - BYTE, 0 or 1 (for C or U)
-		byteCount += (4 + array.length + 1);
+		// Write out its unpadded length (length minus pad characters)
+		out.writeInt(readMetaData.getUnpaddedLength());
 
-		return count++;
+		// Bytes written:
+		//   4   - INT, length of the name to follow
+		//   [n] - BYTES, the name itself
+		//   1   - BYTE, 0 or 1 (for C or U)
+		//   4   - INT, unpadded length
+		// = 9
+		byteCount += array.length + 9;
 	}
 }

@@ -230,4 +230,23 @@ public abstract class Sequence
 
 		return sb.toString();
 	}
+
+	/**
+	 * Calculates and returns the unpadded length of this sequence. Note: this
+	 * information is part of the ReadMetaData class and this method is purely
+	 * for calculation to fill that class - it shouldn't be used for any other
+	 * purpose.
+	 * @return the unpadded length of this sequence
+	 */
+	public int getUnpaddedLength()
+	{
+		int baseCount = 0;
+		int length = length();
+
+		for (int i = 0; i < length; i++)
+			if (getStateAt(i) != P)
+				baseCount++;
+
+		return baseCount;
+	}
 }

@@ -14,10 +14,13 @@ public class ReadMetaData
 	// Is the read complemented or uncomplemented
 	private boolean isComplemented;
 
-	public ReadMetaData(String name, boolean isComplemented)
+	private int unpaddedLength;
+
+	public ReadMetaData(String name, boolean isComplemented, int unpaddedLength)
 	{
 		this.name = name;
 		this.isComplemented = isComplemented;
+		this.unpaddedLength = unpaddedLength;
 	}
 
 	public String getName()
@@ -25,4 +28,7 @@ public class ReadMetaData
 
 	public boolean isComplemented()
 		{ return isComplemented; }
+
+	public int getUnpaddedLength()
+		{ return unpaddedLength; }
 }

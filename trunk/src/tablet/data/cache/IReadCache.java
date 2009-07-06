@@ -14,12 +14,10 @@ public interface IReadCache
 	public ReadMetaData getReadMetaData(int id);
 
 	/**
-	 * Adds new meta data about a read to the cache, returning a unique ID for
-	 * the read so it can be found in the cache at a later time
+	 * Adds new meta data about a read to the cache.
 	 * @param readMetaData the meta data to add
-	 * @return a unique ID for the read whose meta data was stored
 	 */
-	public int setReadMetaData(ReadMetaData readMetaData)
+	public void setReadMetaData(ReadMetaData readMetaData)
 		throws Exception;
 
 	/** Closes this cache and releases any resources it may be holding. */
