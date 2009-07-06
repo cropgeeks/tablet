@@ -18,7 +18,7 @@ public class FileCache implements IReadCache
 	private FileCacheIndex index = new FileCacheIndex();
 
 	// Used while writing to the cache
-	private BufferedOutputStream out;
+	private DataOutputStream out;
 	// Used while reading from the cache
 	private RandomAccessFile rnd;
 
@@ -36,7 +36,8 @@ public class FileCache implements IReadCache
 	{
 		FileCache fc = new FileCache();
 
-		fc.out = new BufferedOutputStream(new FileOutputStream(cacheFile));
+		fc.out = new DataOutputStream(new BufferedOutputStream(
+			new FileOutputStream(cacheFile)));
 		fc.index.createWritableIndex(indexFile);
 
 		return fc;
@@ -73,7 +74,7 @@ public class FileCache implements IReadCache
 			rnd.seek(seekTo);
 
 			// Read the length (in bytes) that the name takes up
-			int length = rnd.read();
+			int length = rnd.readInt();
 
 			// Make an array of this length
 			byte[] array = new byte[length];
@@ -102,17 +103,17 @@ public class FileCache implements IReadCache
 		byte[] array = readMetaData.getName().getBytes("UTF8");
 
 		// Write the name
-		out.write(array.length);
+		out.writeInt(array.length);
 		out.write(array);
 
 		// Write a single byte for C or U
-		out.write((byte) (readMetaData.isComplemented() ? 1 : 0));
+		out.writeBoolean(readMetaData.isComplemented());
 
 		// Bytes written:
-		//  1   - BYTE, length of the name to follow
+		//  4   - INT, length of the name to follow
 		//  [n] - BYTES, the name itself
 		//  1   - BYTE, 0 or 1 (for C or U)
-		byteCount += (1 + array.length + 1);
+		byteCount += (4 + array.length + 1);
 
 		return count++;
 	}
