@@ -19,8 +19,14 @@ class AceFileReader extends AssemblyReader
 	private Consensus consensus;
 	private Read read;
 
-	// The index of the current read within the current contig (being read)
-	private int currentReadInContig = 0;
+	// Index trackers for counting AF and RD lines as they are parsed
+	private int afIndex = 0, rdIndex = 0;
+
+	// Temp storage of U/C data until it can be added to the cache
+	private boolean[] ucCache;
+
+	// Incrementing count of the number of reads processed
+	private int readsFound = 0;
 
 	// We maintain a local hashtable of contigs to help with finding a
 	// contig quickly when processing consensus tags
@@ -124,7 +130,6 @@ class AceFileReader extends AssemblyReader
 		assembly.addContig(contig);
 		contigHash.put(name, contig);
 
-
 		// Reference sequence (immediately follows CO line)
 		StringBuilder ref = new StringBuilder(baseCount);
 		while ((str = readLine()) != null && str.length() > 0)
@@ -135,7 +140,10 @@ class AceFileReader extends AssemblyReader
 		consensus.calculatePaddedMappings();
 		contig.setConsensusSequence(consensus);
 
-		currentReadInContig = 0;
+		ucCache = new boolean[readCount];
+
+		afIndex = 0;
+		rdIndex = 0;
 	}
 
 	private void processBaseQualities()
@@ -176,20 +184,19 @@ class AceFileReader extends AssemblyReader
 		if (AF.length != 4)
 			throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
 
-		String name = new String(AF[1]);
+//		String name = new String(AF[1]);
 		boolean isComplemented = (AF[2].charAt(0) == 'C');
 		int position = Integer.parseInt(AF[3]);
 
-		// Store the read's name in the cache; but only store the returned
-		// lookup ID for that name in the read
-		ReadMetaData rmd = new ReadMetaData(name, isComplemented);
-		int id = readCache.setReadMetaData(rmd);
+		ucCache[afIndex++] = isComplemented;
 
-		read = new Read(id, position-1);
+		read = new Read(readsFound, position-1);
 		contig.getReads().add(read);
 
-		if (id % 250000 == 0)
-			System.out.println(" reads found: " + id);
+		readsFound++;
+
+		if (readsFound % 250000 == 0)
+			System.out.println(" reads found: " + readsFound);
 	}
 
 	private void processBaseSegment()
@@ -229,11 +236,16 @@ class AceFileReader extends AssemblyReader
 		while ((str = readLine()) != null && str.length() > 0)
 			seq.append(str);
 
-		// Fetch the (expected) read for this location
-		Read read = contig.getReads().get(currentReadInContig);
+		// Fetch the read for this location
+		Read read = contig.getReads().get(rdIndex);
 		read.setData(seq.toString());
 
-		currentReadInContig++;
+		// Store the metadata about the read in the cache
+		ReadMetaData rmd = new ReadMetaData(
+			RD[1], ucCache[rdIndex], read.getUnpaddedLength());
+		readCache.setReadMetaData(rmd);
+
+		rdIndex++;
 	}
 
 	private void processReadQualities()

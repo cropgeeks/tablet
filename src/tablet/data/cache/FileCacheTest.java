@@ -25,7 +25,7 @@ public class FileCacheTest extends TestCase
 		{
 			String name = "NAME_" + i;
 
-			cache.setReadMetaData(new ReadMetaData(name, i % 2 == 0));
+			cache.setReadMetaData(new ReadMetaData(name, i % 2 == 0, i));
 		}
 
 		cache.close();
