@@ -184,7 +184,6 @@ class AceFileReader extends AssemblyReader
 		if (AF.length != 4)
 			throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
 
-//		String name = new String(AF[1]);
 		boolean isComplemented = (AF[2].charAt(0) == 'C');
 		int position = Integer.parseInt(AF[3]);
 
