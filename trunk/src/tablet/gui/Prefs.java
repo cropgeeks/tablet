@@ -24,8 +24,8 @@ public class Prefs extends XMLPreferences
 	public static String localeText = "auto";
 
 	// The width, height, location and maximized status of the main window
-	public static int guiWinMainWidth = 800;
-	public static int guiWinMainHeight = 600;
+	public static int guiWinMainWidth = 1000;
+	public static int guiWinMainHeight = 700;
 	public static int guiWinMainX = 0;
 	public static int guiWinMainY = 0;
 	public static boolean guiWinMainMaximized = false;
