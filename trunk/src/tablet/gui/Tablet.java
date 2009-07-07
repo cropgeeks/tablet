@@ -6,6 +6,7 @@ import java.io.*;
 import javax.swing.*;
 
 import scri.commons.gui.*;
+import scri.commons.file.*;
 
 import apple.dts.samplecode.osxadapter.*;
 
@@ -109,10 +110,8 @@ public class Tablet
 		// Attempt to remove any temp files that were in use
 		winMain.closeAssembly();
 
-		// TODO: This is wrong. With multiple instances open, any that are
-		// closed would delete (possibly) the other caches
-//		File cacheDir = SystemUtils.getTempUserDirectory("scri-tablet");
-//		FileUtils.emptyDirectory(cacheDir, true);
+		File cacheDir = SystemUtils.getTempUserDirectory("scri-tablet");
+		FileUtils.emptyDirectory(cacheDir, true);
 
 		Prefs.isFirstRun = false;
 		prefs.savePreferences(prefsFile, Prefs.class);
