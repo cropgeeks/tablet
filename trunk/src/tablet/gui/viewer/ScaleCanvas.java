@@ -51,7 +51,7 @@ class ScaleCanvas extends JPanel
 				if (rCanvas.contig == null)
 					return;
 
-				int xIndex = (e.getX() / rCanvas.ntW) - rCanvas.offset;
+				int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) - rCanvas.offset;
 				setMouseBase(xIndex);
 			}
 		});
