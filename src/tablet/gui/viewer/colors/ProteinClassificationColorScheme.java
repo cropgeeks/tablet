@@ -15,7 +15,7 @@ public class ProteinClassificationColorScheme extends ColorScheme
 	private final static Color POLAR = new Color(179, 222, 192);
 	private final static Color BASIC = new Color(187, 191, 224);
 	private final static Color ACIDIC = new Color(248, 183, 211);
-	private final static Color STOP = new Color(105, 105, 105);
+	private final static Color STOP = new Color(255, 105, 105);
 
 	public ProteinClassificationColorScheme(Contig contig, int w, int h)
 	{
@@ -28,58 +28,31 @@ public class ProteinClassificationColorScheme extends ColorScheme
 
 		states.add(new StandardColorState("", Color.white, w, h, false, false));
 
-		// The 21 proteins as images WITH text
-		states.add(new StandardColorState(codes[1],  NONPOLAR, w, h, false, false));	// I
-		states.add(new StandardColorState(codes[2],  NONPOLAR, w, h, false, false));	// L
-		states.add(new StandardColorState(codes[3],  NONPOLAR, w, h, false, false));	// V
-		states.add(new StandardColorState(codes[4],  NONPOLAR, w, h, false, false));	// F
-		states.add(new StandardColorState(codes[5],  NONPOLAR, w, h, false, false));	// M
-		states.add(new StandardColorState(codes[6],  POLAR, w, h, false, false));		// C
-		states.add(new StandardColorState(codes[7],  NONPOLAR, w, h, false, false));	// A
-		states.add(new StandardColorState(codes[8],  POLAR, w, h, false, false));		// G
-		states.add(new StandardColorState(codes[9],  NONPOLAR, w, h, false, false));	// P
-		states.add(new StandardColorState(codes[10], POLAR, w, h, false, false));		// T
-		states.add(new StandardColorState(codes[11], POLAR, w, h, false, false));		// S
-		states.add(new StandardColorState(codes[12], POLAR, w, h, false, false));		// Y
-		states.add(new StandardColorState(codes[13], NONPOLAR, w, h, false, false));	// W
-		states.add(new StandardColorState(codes[14], POLAR, w, h, false, false));		// Q
-		states.add(new StandardColorState(codes[15], POLAR, w, h, false, false));		// N
-		states.add(new StandardColorState(codes[16], BASIC, w, h, false, false));		// H
-		states.add(new StandardColorState(codes[17], ACIDIC, w, h, false, false));		// E
-		states.add(new StandardColorState(codes[18], ACIDIC, w, h, false, false));		// D
-		states.add(new StandardColorState(codes[19], BASIC, w, h, false, false));		// K
-		states.add(new StandardColorState(codes[20], BASIC, w, h, false, false));		// R
-		states.add(new StandardColorState("\u00F8", STOP, w, h, false, false));			// . (codes[21] overridden with a nicer unicode "stop")
-
-		// The 21 proteins as images WITHOUT text
-		// We can reuse the same image for each group
-		StandardColorState nonPolar = new StandardColorState("", NONPOLAR, w, h, false, false);
-		StandardColorState polar = new StandardColorState("", POLAR, w, h, false, false);
-		StandardColorState basic = new StandardColorState("", BASIC, w, h, false, false);
-		StandardColorState acidic = new StandardColorState("", ACIDIC, w, h, false, false);
-		StandardColorState stop = new StandardColorState("", STOP, w, h, false, false);
-
-		states.add(nonPolar);
-		states.add(nonPolar);
-		states.add(nonPolar);
-		states.add(nonPolar);
-		states.add(nonPolar);
-		states.add(polar);
-		states.add(nonPolar);
-		states.add(polar);
-		states.add(nonPolar);
-		states.add(polar);
-		states.add(polar);
-		states.add(polar);
-		states.add(nonPolar);
-		states.add(polar);
-		states.add(polar);
-		states.add(basic);
-		states.add(acidic);
-		states.add(acidic);
-		states.add(basic);
-		states.add(basic);
-		states.add(stop);
+		for (int i = 0; i < 3; i++)
+		{
+			// The 21 proteins as images WITH text
+			states.add(new ProteinClassificationColorState(codes[1],  NONPOLAR, w, h, i));	// I
+			states.add(new ProteinClassificationColorState(codes[2],  NONPOLAR, w, h, i));	// L
+			states.add(new ProteinClassificationColorState(codes[3],  NONPOLAR, w, h, i));	// V
+			states.add(new ProteinClassificationColorState(codes[4],  NONPOLAR, w, h, i));	// F
+			states.add(new ProteinClassificationColorState(codes[5],  NONPOLAR, w, h, i));	// M
+			states.add(new ProteinClassificationColorState(codes[6],  POLAR, w, h, i));		// C
+			states.add(new ProteinClassificationColorState(codes[7],  NONPOLAR, w, h, i));	// A
+			states.add(new ProteinClassificationColorState(codes[8],  POLAR, w, h, i));		// G
+			states.add(new ProteinClassificationColorState(codes[9],  NONPOLAR, w, h, i));	// P
+			states.add(new ProteinClassificationColorState(codes[10], POLAR, w, h, i));		// T
+			states.add(new ProteinClassificationColorState(codes[11], POLAR, w, h, i));		// S
+			states.add(new ProteinClassificationColorState(codes[12], POLAR, w, h, i));		// Y
+			states.add(new ProteinClassificationColorState(codes[13], NONPOLAR, w, h, i));	// W
+			states.add(new ProteinClassificationColorState(codes[14], POLAR, w, h, i));		// Q
+			states.add(new ProteinClassificationColorState(codes[15], POLAR, w, h, i));		// N
+			states.add(new ProteinClassificationColorState(codes[16], BASIC, w, h, i));		// H
+			states.add(new ProteinClassificationColorState(codes[17], ACIDIC, w, h, i));	// E
+			states.add(new ProteinClassificationColorState(codes[18], ACIDIC, w, h, i));	// D
+			states.add(new ProteinClassificationColorState(codes[19], BASIC, w, h, i));		// K
+			states.add(new ProteinClassificationColorState(codes[20], BASIC, w, h, i));		// R
+			states.add(new ProteinClassificationColorState("\u25AA", STOP, w, h, i));		// . (codes[21] overridden with a nicer unicode "stop")
+		}
 	}
 
 	public BufferedImage getImage(int data)

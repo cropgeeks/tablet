@@ -92,7 +92,7 @@ public class ProteinTranslator extends SimpleJob
 				protein[dna[0]] = (short) (code + 21);
 				// Assign the protein (colour info only) to the other two
 				protein[dna[1]] = (short) code;
-				protein[dna[2]] = (short) (code + 21);
+				protein[dna[2]] = (short) (code + 42);
 
 				translation.append(codes[code]);
 			}
@@ -133,7 +133,7 @@ public class ProteinTranslator extends SimpleJob
 				protein[dna[2]] = (short) (code + 21);
 				// Assign the protein (colour info only) to the other two
 				protein[dna[1]] = (short) code;
-				protein[dna[0]] = (short) (code + 21);
+				protein[dna[0]] = (short) (code + 42);
 
 				translation.append(codes[code]);
 			}
