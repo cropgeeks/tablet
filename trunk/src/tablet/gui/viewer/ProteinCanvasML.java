@@ -66,7 +66,8 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 			// And get the data value at that point
 			short value = pCanvas.translations.get(track)[(xIndex)];
 
-			// Values greater than 21 are positions without the text
+			// Values greater than 21/42 are positions without the text
+			if (value > 42) value -= 42;
 			if (value > 21) value -= 21;
 
 			// Values equal to zero don't have a value that can be displayed
@@ -214,7 +215,7 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 
 				if (found == 3)
 				{
-					str.append(codes[translation[i] - 21]);
+					str.append(codes[translation[i] - 42]);
 					found = 0;
 				}
 			}
@@ -229,7 +230,7 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 
 				if (found == 3)
 				{
-					str.append(codes[translation[i] - 21]);
+					str.append(codes[translation[i] - 42]);
 					found = 0;
 				}
 			}
