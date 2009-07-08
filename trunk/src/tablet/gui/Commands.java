@@ -1,5 +1,6 @@
 package tablet.gui;
 
+import java.awt.*;
 import java.io.*;
 import javax.swing.*;
 
@@ -22,19 +23,9 @@ public class Commands
 		// If no file was passed in then we need to prompt the user to pick one
 		if (filename == null)
 		{
-			JFileChooser fc = new JFileChooser();
-			fc.setDialogTitle(RB.getString("gui.Commands.fileOpen.openDialog"));
-			fc.setCurrentDirectory(new File(Prefs.guiCurrentDir));
-
-//			FileNameExtensionFilter filter = new FileNameExtensionFilter(
-//				RB.getString("other.Filters.project"), "flapjack");
-//			fc.addChoosableFileFilter(filter);
-
-			if (fc.showOpenDialog(winMain) != JFileChooser.APPROVE_OPTION)
+			filename = getFilename(RB.getString("gui.Commands.fileOpen.openDialog"));
+			if (filename == null)
 				return;
-
-			Prefs.guiCurrentDir = fc.getCurrentDirectory().getPath();
-			filename = fc.getSelectedFile().getPath();
 		}
 
 		File file = new File(filename);
@@ -67,5 +58,35 @@ public class Commands
 
 		Prefs.setRecentDocument(filename);
 		winMain.setAssembly(ioHandler.getAssembly());
+	}
+
+	private String getFilename(String title)
+	{
+		// Decide on AWT or Swing dialog based on OS X or not
+		if (SystemUtils.isMacOS() == false)
+		{
+			JFileChooser fc = new JFileChooser();
+			fc.setDialogTitle(RB.getString("gui.Commands.fileOpen.openDialog"));
+			fc.setCurrentDirectory(new File(Prefs.guiCurrentDir));
+
+			if (fc.showOpenDialog(winMain) != JFileChooser.APPROVE_OPTION)
+				return null;
+
+			Prefs.guiCurrentDir = fc.getCurrentDirectory().getPath();
+			return fc.getSelectedFile().getPath();
+		}
+		else
+		{
+			FileDialog fd = new FileDialog(winMain, title, FileDialog.LOAD);
+			fd.setDirectory(Prefs.guiCurrentDir);
+			fd.setLocationRelativeTo(winMain);
+			fd.setVisible(true);
+
+			if (fd.getFile() == null)
+				return null;
+
+			Prefs.guiCurrentDir = fd.getDirectory();
+			return new File(fd.getDirectory(), fd.getFile()).getPath();
+		}
 	}
 }
