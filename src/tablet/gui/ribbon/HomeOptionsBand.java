@@ -143,6 +143,8 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		else if (source == Actions.homeOptionsHidePads16)
 		{
 			Prefs.visHideUnpaddedValues = !Prefs.visHideUnpaddedValues;
+
+			winMain.getAssemblyPanel().updateContigInformation();
 			winMain.repaint();
 		}
 

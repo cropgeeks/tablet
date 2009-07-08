@@ -84,22 +84,32 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		return assembly;
 	}
 
-	public void setContig(Contig contig)
+	public void updateContigInformation()
 	{
-		this.contig = contig;
-
 		// Set the summary label at the top of the screen
 		if (contig != null)
 		{
+			String length = contig.getConsensus().length() + " ("
+				+ contig.getConsensus().getUnpaddedLength() + ")";
+			if (Prefs.visHideUnpaddedValues)
+				length = "" + contig.getConsensus().length();
+
 			String label = RB.format("gui.viewer.AssemblyPanel.summaryLabel",
 				contig.getName(),
-				contig.getConsensus().length(),
+				length,
 				contig.getReads().size(),
 				contig.getFeatures().size());
 			RibbonController.setTitleLabel(label);
 		}
 		else
 			RibbonController.setTitleLabel("");
+	}
+
+	public void setContig(Contig contig)
+	{
+		this.contig = contig;
+
+		updateContigInformation();
 
 		// Then pass the contig to the other components for rendering
 		consensusCanvas.setContig(contig);

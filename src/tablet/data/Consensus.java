@@ -10,6 +10,8 @@ public class Consensus extends Sequence
 	// Contains info to map from an unpadded to a padded position
 	private int[] unpaddedToPadded;
 
+	private int unpaddedLength;
+
 	/** Constructs a new, empty consensus sequence. */
 	public Consensus()
 	{
@@ -24,6 +26,8 @@ public class Consensus extends Sequence
 	{
 		calculatePaddedToUnpadded();
 		calculateUnpaddedToPadded();
+
+		unpaddedLength = calculateUnpaddedLength();
 	}
 
 	// Given a padded index value (0 to length-1) what is the unpadded value at
@@ -99,6 +103,13 @@ public class Consensus extends Sequence
 			return -1;
 		}
 	}
+
+	/**
+	 * Returns the unpadded length of this consensus sequence.
+	 * @return the unpadded length of this consensus sequence
+	 */
+	public int getUnpaddedLength()
+		{ return unpaddedLength; }
 
 	/**
 	 * Sets the base score qualities for this consensus.
