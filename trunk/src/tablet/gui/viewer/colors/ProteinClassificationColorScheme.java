@@ -15,7 +15,7 @@ public class ProteinClassificationColorScheme extends ColorScheme
 	private final static Color POLAR = new Color(179, 222, 192);
 	private final static Color BASIC = new Color(187, 191, 224);
 	private final static Color ACIDIC = new Color(248, 183, 211);
-	private final static Color STOP = new Color(255, 255, 255);
+	private final static Color STOP = new Color(105, 105, 105);
 
 	public ProteinClassificationColorScheme(Contig contig, int w, int h)
 	{
@@ -49,7 +49,7 @@ public class ProteinClassificationColorScheme extends ColorScheme
 		states.add(new StandardColorState(codes[18], ACIDIC, w, h, false, false));		// D
 		states.add(new StandardColorState(codes[19], BASIC, w, h, false, false));		// K
 		states.add(new StandardColorState(codes[20], BASIC, w, h, false, false));		// R
-		states.add(new StandardColorState(codes[21], STOP, w, h, false, false));		// .
+		states.add(new StandardColorState("\u00F8", STOP, w, h, false, false));			// . (codes[21] overridden with a nicer unicode "stop")
 
 		// The 21 proteins as images WITHOUT text
 		// We can reuse the same image for each group
