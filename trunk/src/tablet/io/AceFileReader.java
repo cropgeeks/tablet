@@ -241,7 +241,7 @@ class AceFileReader extends AssemblyReader
 
 		// Store the metadata about the read in the cache
 		ReadMetaData rmd = new ReadMetaData(
-			RD[1], ucCache[rdIndex], read.getUnpaddedLength());
+			RD[1], ucCache[rdIndex], read.calculateUnpaddedLength());
 		readCache.setReadMetaData(rmd);
 
 		rdIndex++;

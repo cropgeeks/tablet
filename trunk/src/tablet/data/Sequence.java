@@ -238,7 +238,7 @@ public abstract class Sequence
 	 * purpose.
 	 * @return the unpadded length of this sequence
 	 */
-	public int getUnpaddedLength()
+	public int calculateUnpaddedLength()
 	{
 		int baseCount = 0;
 		int length = length();
