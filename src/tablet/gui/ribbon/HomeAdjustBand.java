@@ -17,7 +17,7 @@ public class HomeAdjustBand extends JRibbonBand implements ChangeListener
 	private WinMain winMain;
 
 	public static JRibbonComponent zoomSliderComponent;
-	private JSlider zoomSlider;
+	private static JSlider zoomSlider;
 	public static JRibbonComponent variantSliderComponent;
 	private JSlider variantSlider;
 
@@ -74,12 +74,31 @@ public class HomeAdjustBand extends JRibbonBand implements ChangeListener
 		createKeyboardShortcuts();
 	}
 
+	public static void zoomIn(int amount)
+	{
+		System.out.println("Zoom in " + amount);
+
+		if (zoomSlider.getValue()+amount < ZOOM_MAX)
+			zoomSlider.setValue(zoomSlider.getValue()+amount);
+		else
+			zoomSlider.setValue(ZOOM_MAX);
+	}
+
+	public static void zoomOut(int amount)
+	{
+		System.out.println("Zoom out " + amount);
+
+		if (zoomSlider.getValue()-amount > ZOOM_MIN)
+			zoomSlider.setValue(zoomSlider.getValue()-amount);
+		else
+			zoomSlider.setValue(ZOOM_MIN);
+	}
+
 	private void createKeyboardShortcuts()
 	{
 		Action zoomIn = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				if (zoomSlider.getValue() < ZOOM_MAX)
-					zoomSlider.setValue(zoomSlider.getValue()+1);
+				zoomIn(1);
 			}
 		};
 
@@ -89,8 +108,7 @@ public class HomeAdjustBand extends JRibbonBand implements ChangeListener
 
 		Action zoomOut = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				if (zoomSlider.getValue() > ZOOM_MIN)
-					zoomSlider.setValue(zoomSlider.getValue()-1);
+				zoomOut(1);
 			}
 		};
 

@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import tablet.data.*;
+import tablet.gui.*;
 
 import scri.commons.gui.*;
 
@@ -65,8 +66,11 @@ class ReadsCanvasML extends MouseInputAdapter
 	{
 		if (SwingUtilities.isLeftMouseButton(e))
 		{
+			if (e.getClickCount() == 2)
+				aPanel.clickZoom(e);
+
 			// Page left or right if the navigation arrows were clicked on
-			if (nHighlighter.isLeftActive())
+			else if (nHighlighter.isLeftActive())
 				aPanel.pageLeft();
 			else if (nHighlighter.isRightActive())
 				aPanel.pageRight();
