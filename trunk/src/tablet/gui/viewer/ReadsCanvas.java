@@ -47,6 +47,9 @@ class ReadsCanvas extends JPanel
 	// next repaint operation
 	int xS, xE;
 
+	// Tracks the base closest to the centre of the view
+	float ntCenterX, ntCenterY;
+
 	// Holds the current dimensions of the canvas in an AWT friendly format
 	private Dimension dimension = new Dimension();
 
@@ -134,8 +137,8 @@ class ReadsCanvas extends JPanel
 		if (contig == null)
 			return;
 
-		ntOnScreenX = 1 + (int) ((float) viewSize.getWidth()  / ntW);
-		ntOnScreenY = 1 + (int) ((float) viewSize.getHeight() / ntH);
+		ntOnScreenX = 1 + (int) ((float) viewSize.width  / ntW);
+		ntOnScreenY = 1 + (int) ((float) viewSize.height / ntH);
 
 		pX1 = viewPosition.x;
 		pX2 = pX2Max = pX1 + viewSize.width -1;
@@ -145,6 +148,10 @@ class ReadsCanvas extends JPanel
 
 		pY1 = viewPosition.y;
 		pY2 = pY1 + viewSize.height - 1;
+
+		// Track the base closest to the center of the current view
+		ntCenterX = (pX1 / ntW)	+ ((viewSize.width  / ntW) / 2);
+		ntCenterY = (pY1 / ntH)	+ ((viewSize.height / ntH) / 2);
 
 		updateOverview();
 		updateBuffer = true;

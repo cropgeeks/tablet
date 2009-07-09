@@ -25,6 +25,12 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	private JScrollBar hBar, vBar;
 	private JViewport viewport;
 
+	// Normal or click zooming (affects which base to zoom in on)
+	private boolean isZooming = false;
+	private boolean isClickZooming = false;
+	// Tracks the base to zoom in on
+	private float ntCenterX, ntCenterY;
+
 	public AssemblyPanel(WinMain winMain)
 	{
 		createControls();
@@ -127,7 +133,8 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		// Each time the scollbars are moved, the canvas must be redrawn, with
 		// the new dimensions of the canvas being passed to it (window size
 		// changes will cause scrollbar movement events)
-		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
+		if (isZooming == false)
+			readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
 	}
 
 	void setScrollbarAdjustmentValues(int xIncrement, int yIncrement)
@@ -142,6 +149,18 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	{
 		overviewCanvas.updateOverview(xIndex, xNum, yIndex, yNum);
 		repaint();
+	}
+
+	void clickZoom(MouseEvent e)
+	{
+		isClickZooming = true;
+
+		ntCenterX = (e.getX() / readsCanvas.ntW);
+		ntCenterY = (e.getY() / readsCanvas.ntH);
+
+		HomeAdjustBand.zoomIn(6);
+
+		isClickZooming = false;
 	}
 
 	// Moves the scroll bars by the given amount in the x and y directions
@@ -192,11 +211,33 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 	public void computePanelSizes()
 	{
-		int zoom = Prefs.visReadsCanvasZoom;
+		// Track the center of the screen (before the zoom)
+		if (isClickZooming == false)
+		{
+			ntCenterX = readsCanvas.ntCenterX;
+			ntCenterY = readsCanvas.ntCenterY;
+		}
 
+		// This is needed because for some crazy reason the moveToPosition call
+		// further down will not work correctly until after Swing has stopped
+		// generating endless resize events that affect the scrollbars
+		Runnable r = new Runnable() {
+			public void run() {
+				moveToPosition(Math.round(ntCenterY), Math.round(ntCenterX), true);
+			}
+		};
+		SwingUtilities.invokeLater(r);
+
+		isZooming = true;
+
+		int zoom = Prefs.visReadsCanvasZoom;
 		readsCanvas.setDimensions(zoom, zoom);
 		consensusCanvas.setDimensions();
 		proteinCanvas.setDimensions();
+
+		// Then after the zoom, try to get back to that position
+		isZooming = false;
+		moveToPosition(Math.round(ntCenterY), Math.round(ntCenterX), true);
 	}
 
 	// Jumps the screen left by one "page"
