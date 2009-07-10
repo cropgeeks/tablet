@@ -35,7 +35,7 @@ class ReadsCanvasML extends MouseInputAdapter
 		sCanvas = aPanel.scaleCanvas;
 
 		// Create the various objects that track the mouse
-		rCanvasMenu = new ReadsCanvasMenu(infoPane);
+		rCanvasMenu = new ReadsCanvasMenu(aPanel, infoPane);
 		nHighlighter = new NavigationHighlighter(aPanel, infoPane);
 		infoPane.setCanvases(sCanvas, rCanvas);
 
@@ -179,7 +179,7 @@ class ReadsCanvasML extends MouseInputAdapter
 				readS = read.getStartPosition();
 				readE = read.getEndPosition();
 
-				infoPane.setData(read, data);
+				infoPane.setData(lineIndex, read, data);
 			}
 			else
 				infoPane.setMousePosition(null);
