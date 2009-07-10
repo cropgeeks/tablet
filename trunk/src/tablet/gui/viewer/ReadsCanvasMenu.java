@@ -3,62 +3,65 @@ package tablet.gui.viewer;
 import java.awt.event.*;
 import javax.swing.*;
 
+import tablet.data.*;
+
 import scri.commons.gui.*;
 
-class ReadsCanvasMenu
+class ReadsCanvasMenu implements ActionListener
 {
+	private AssemblyPanel aPanel;
+	private ReadsCanvas rCanvas;
 	private ReadsCanvasInfoPane infoPane;
-	private int menuShortcut;
-
-	private AbstractAction aClipboardName;
-	private AbstractAction aClipboardData;
 
 	private JPopupMenu menu = new JPopupMenu();
 	private JMenuItem mClipboardName;
 	private JMenuItem mClipboardData;
+	private JMenuItem mFindStart, mFindEnd;
 
-	ReadsCanvasMenu(ReadsCanvasInfoPane infoPane)
+	ReadsCanvasMenu(AssemblyPanel aPanel, ReadsCanvasInfoPane infoPane)
 	{
+		this.aPanel = aPanel;
 		this.infoPane = infoPane;
+		rCanvas = aPanel.readsCanvas;
 
-		createActions();
+		mClipboardName = new JMenuItem("", Icons.getIcon("CLIPBOARDNAME"));
+		RB.setText(mClipboardName, "gui.viewer.ReadsCanvasMenu.mClipboardName");
+		mClipboardName.addActionListener(this);
 
-		mClipboardName = getItem(aClipboardName,
-			"gui.viewer.ReadsCanvasMenu.mClipboardName", 0, 0);
-		mClipboardData = getItem(aClipboardData,
-			"gui.viewer.ReadsCanvasMenu.mClipboardData", 0, 0);
+		mClipboardData = new JMenuItem("", Icons.getIcon("CLIPBOARD"));
+		RB.setText(mClipboardData, "gui.viewer.ReadsCanvasMenu.mClipboardData");
+		mClipboardData.addActionListener(this);
+
+		mFindStart = new JMenuItem("");
+		RB.setText(mFindStart, "gui.viewer.ReadsCanvasMenu.mFindStart");
+		mFindStart.addActionListener(this);
+
+		mFindEnd = new JMenuItem("");
+		RB.setText(mFindEnd, "gui.viewer.ReadsCanvasMenu.mFindEnd");
+		mFindEnd.addActionListener(this);
 	}
 
-	private void createActions()
+	public void actionPerformed(ActionEvent e)
 	{
-		aClipboardName = new AbstractAction(
-			RB.getString("gui.viewer.ReadsCanvasMenu.mClipboardName"),
-			Icons.getIcon("CLIPBOARDNAME"))
+		if (e.getSource() == mClipboardName)
+			infoPane.copyReadNameToClipboard();
+		else if (e.getSource() == mClipboardData)
+			infoPane.copyDataToClipboard();
+
+		else if (e.getSource() == mFindStart)
 		{
-			public void actionPerformed(ActionEvent e) {
-				infoPane.copyReadNameToClipboard();
-			}
-		};
+			int position = infoPane.read.getStartPosition() + rCanvas.offset;
 
-		aClipboardData = new AbstractAction(
-			RB.getString("gui.viewer.ReadsCanvasMenu.mClipboardData"),
-			Icons.getIcon("CLIPBOARD"))
+			aPanel.moveToPosition(-1, position, true);
+			new ReadHighlighter(aPanel, infoPane.read, infoPane.lineIndex);
+		}
+		else if (e.getSource() == mFindEnd)
 		{
-			public void actionPerformed(ActionEvent e) {
-				infoPane.copyDataToClipboard();
-			}
-		};
-	}
+			int position = infoPane.read.getEndPosition() + rCanvas.offset;
 
-	private JMenuItem getItem(Action action, String key, int keymask, int modifiers)
-	{
-		JMenuItem item = new JMenuItem(action);
-		RB.setMnemonic(item, key);
-
-		if (keymask != 0)
-			item.setAccelerator(KeyStroke.getKeyStroke(keymask, modifiers));
-
-		return item;
+			aPanel.moveToPosition(-1, position, true);
+			new ReadHighlighter(aPanel, infoPane.read, infoPane.lineIndex);
+		}
 	}
 
 	boolean isShowingMenu()
@@ -70,10 +73,16 @@ class ReadsCanvasMenu
 		menu = new JPopupMenu();
 		menu.add(mClipboardName);
 		menu.add(mClipboardData);
+		menu.addSeparator();
+		menu.add(mFindStart);
+		menu.add(mFindEnd);
 
 		// Check enabled states
-		mClipboardName.setEnabled(infoPane.isOverRead());
-		mClipboardData.setEnabled(infoPane.isOverRead());
+		boolean isOverRead = infoPane.isOverRead();
+		mClipboardName.setEnabled(isOverRead);
+		mClipboardData.setEnabled(isOverRead);
+		mFindStart.setEnabled(isOverRead);
+		mFindEnd.setEnabled(isOverRead);
 
 		menu.show(e.getComponent(), e.getX(), e.getY());
 	}

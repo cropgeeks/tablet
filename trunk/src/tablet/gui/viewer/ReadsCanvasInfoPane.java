@@ -26,8 +26,9 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	private ReadsCanvas rCanvas;
 
 	// Variables that change as we move the mouse
-	private Read read;
-	private ReadMetaData metaData;
+	int lineIndex;
+	Read read;
+	ReadMetaData metaData;
 	private Point mouse;
 	private int x, y, w, h;
 
@@ -59,8 +60,9 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	void setMousePosition(Point mouse)
 		{ this.mouse = mouse; }
 
-	void setData(Read read, ReadMetaData metaData)
+	void setData(int lineIndex, Read read, ReadMetaData metaData)
 	{
+		this.lineIndex = lineIndex;
 		this.read = read;
 		this.metaData = metaData;
 
