@@ -18,7 +18,10 @@ class OverviewCanvas extends JPanel
 	private BufferedImage image = null;
 	private int w, h;
 
+	// Outline box co-ordinates
 	private int bX1, bY1, bX2, bY2;
+	// Read under mouse tracking co-ordinates
+	private int readX = -1, readY, readW, readH;
 
 	private boolean basicView = true;
 
@@ -129,11 +132,25 @@ class OverviewCanvas extends JPanel
 		repaint();
 	}
 
+	// TODO: These don't always map very well to the overview's data, probably
+	// because we draw the data pixel by pixel, but do the outlines by trying to
+	// map from data-indices back to pixels
+	void updateRead(int lineIndex, int start, int end)
+	{
+		readX = Math.round(bufferFactory.xScale * start);
+		readY = Math.round(bufferFactory.yScale * lineIndex);
+		readW = Math.round(bufferFactory.xScale * (end-start+1));
+		readH = Math.round(bufferFactory.yScale);
+
+		if (readH < 1) readH = 1;
+
+		repaint();
+	}
+
 	private class Canvas2D extends JPanel
 	{
 		Canvas2D()
 		{
-	//		setOpaque(false);
 			setBackground(Color.white);
 		}
 
@@ -162,14 +179,18 @@ class OverviewCanvas extends JPanel
 
 			// Paint the image of the alignment
 			g.drawImage(image, 0, 0, null);
-	//		g.setPaint(new Color(255, 255, 255, 50));
-	//		g.fillRect(0, 0, w, h);
 
 			// Then draw the tracking rectangle
 			g.setPaint(new Color(0, 0, 255, 50));
 			g.fillRect(bX1, bY1, bX2-bX1, bY2-bY1);
 			g.setColor(Color.red);
 			g.drawRect(bX1, bY1, bX2-bX1, bY2-bY1);
+
+			if (readX >= 0)
+			{
+				g.setColor(Color.blue);
+				g.drawRect(readX, readY, readW-1, readH-1);
+			}
 		}
 	}
 
