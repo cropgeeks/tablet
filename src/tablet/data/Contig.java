@@ -2,6 +2,7 @@ package tablet.data;
 
 import java.util.*;
 
+import tablet.data.auxiliary.*;
 import tablet.data.cache.*;
 
 /**

@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 
 import tablet.data.*;
+import tablet.data.auxiliary.*;
 import static tablet.io.ReadException.*;
 
 class AceFileReader extends AssemblyReader

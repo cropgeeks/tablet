@@ -7,6 +7,7 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 
 import tablet.data.*;
+import tablet.data.auxiliary.*;
 import tablet.gui.viewer.*;
 
 import scri.commons.gui.*;
