@@ -22,6 +22,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	private Font titleFont, labelFont;
 	private FontMetrics fmTitle, fmLabel;
 
+	private OverviewCanvas oCanvas;
 	private ScaleCanvas sCanvas;
 	private ReadsCanvas rCanvas;
 
@@ -44,10 +45,11 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		labelFont = new Font("SansSerif", Font.PLAIN, 10);
 	}
 
-	void setCanvases(ScaleCanvas sCanvas, ReadsCanvas rCanvas)
+	void setAssemblyPanel(AssemblyPanel aPanel)
 	{
-		this.sCanvas = sCanvas;
-		this.rCanvas = rCanvas;
+		oCanvas = aPanel.overviewCanvas;
+		sCanvas = aPanel.scaleCanvas;
+		rCanvas = aPanel.readsCanvas;
 
 		// Pre-build some font metrics for calculating string widths
 		Image image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
@@ -58,7 +60,12 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	}
 
 	void setMousePosition(Point mouse)
-		{ this.mouse = mouse; }
+	{
+		if (mouse == null)
+			oCanvas.updateRead(-1, -1, -1);
+
+		this.mouse = mouse;
+	}
 
 	void setData(int lineIndex, Read read, ReadMetaData metaData)
 	{
@@ -91,6 +98,10 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			w = fmTitle.stringWidth(posData) + 20;
 		if (fmTitle.stringWidth(lengthData) > (w-20))
 			w = fmTitle.stringWidth(lengthData) + 20;
+
+		// Tell the overview canvas to paint this read too
+		int offset = rCanvas.offset;
+		oCanvas.updateRead(lineIndex, readS+offset, readE+offset);
 	}
 
 	boolean isOverRead()

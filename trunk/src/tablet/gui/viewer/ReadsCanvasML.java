@@ -37,7 +37,7 @@ class ReadsCanvasML extends MouseInputAdapter
 		// Create the various objects that track the mouse
 		rCanvasMenu = new ReadsCanvasMenu(aPanel, infoPane);
 		nHighlighter = new NavigationHighlighter(aPanel, infoPane);
-		infoPane.setCanvases(sCanvas, rCanvas);
+		infoPane.setAssemblyPanel(aPanel);
 
 		// Then add listeners and overlays to the canvas
 		rCanvas.addMouseListener(this);
