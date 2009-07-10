@@ -20,7 +20,7 @@ class ReadsCanvasML extends MouseInputAdapter
 
 	// Deals with navigation issues
 	private NavigationHandler nHandler = new NavigationHandler();
-	private NavigationHighlighter nHighlighter;
+	private NavigationOverlay nOverlay;
 
 	// Deals with pop-up menus
 	private ReadsCanvasMenu rCanvasMenu;
@@ -36,14 +36,14 @@ class ReadsCanvasML extends MouseInputAdapter
 
 		// Create the various objects that track the mouse
 		rCanvasMenu = new ReadsCanvasMenu(aPanel, infoPane);
-		nHighlighter = new NavigationHighlighter(aPanel, infoPane);
+		nOverlay = new NavigationOverlay(aPanel, infoPane);
 		infoPane.setAssemblyPanel(aPanel);
 
 		// Then add listeners and overlays to the canvas
 		rCanvas.addMouseListener(this);
 		rCanvas.addMouseMotionListener(this);
 		rCanvas.overlays.add(readOutliner);
-		rCanvas.overlays.add(nHighlighter);
+		rCanvas.overlays.add(nOverlay);
 		rCanvas.overlays.add(infoPane);
 	}
 
@@ -56,7 +56,7 @@ class ReadsCanvasML extends MouseInputAdapter
 	{
 		readOutliner.read = null;
 		infoPane.setMousePosition(null);
-		nHighlighter.setMousePosition(null);
+		nOverlay.setMousePosition(null);
 
 		sCanvas.setMouseBase(null);
 		rCanvas.repaint();
@@ -66,14 +66,14 @@ class ReadsCanvasML extends MouseInputAdapter
 	{
 		if (SwingUtilities.isLeftMouseButton(e))
 		{
-			if (e.getClickCount() == 2)
-				aPanel.clickZoom(e);
-
 			// Page left or right if the navigation arrows were clicked on
-			else if (nHighlighter.isLeftActive())
+			if (nOverlay.isLeftActive())
 				aPanel.pageLeft();
-			else if (nHighlighter.isRightActive())
+			else if (nOverlay.isRightActive())
 				aPanel.pageRight();
+
+			else if (e.getClickCount() == 2)
+				aPanel.clickZoom(e);
 		}
 	}
 
@@ -117,7 +117,7 @@ class ReadsCanvasML extends MouseInputAdapter
 		// Track the mouse position
 		sCanvas.setMouseBase(xIndex);
 		infoPane.setMousePosition(e.getPoint());
-		nHighlighter.setMousePosition(e.getPoint());
+		nOverlay.setMousePosition(e.getPoint());
 
 		// Track the read under the mouse (if any)
 		Read read = rCanvas.reads.getReadAt(yIndex, xIndex);

@@ -7,7 +7,7 @@ import scri.commons.gui.*;
 /**
  * Overlay renderer used for the navigation buttons at the edges
  */
-class NavigationHighlighter implements IOverlayRenderer
+class NavigationOverlay implements IOverlayRenderer
 {
 	private AssemblyPanel aPanel;
 	private ReadsCanvas rCanvas;
@@ -20,7 +20,7 @@ class NavigationHighlighter implements IOverlayRenderer
 	private boolean isLeftActive;
 	private boolean isRightActive;
 
-	public NavigationHighlighter(AssemblyPanel aPanel, ReadsCanvasInfoPane infoPane)
+	public NavigationOverlay(AssemblyPanel aPanel, ReadsCanvasInfoPane infoPane)
 	{
 		this.aPanel = aPanel;
 		this.infoPane = infoPane;
