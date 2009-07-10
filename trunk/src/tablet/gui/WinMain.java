@@ -103,6 +103,7 @@ public class WinMain extends JRibbonFrame
 		});
 
 		add(splitter);
+		add(new WinMainStatusBar(), BorderLayout.SOUTH);
 	}
 
 	private void addListeners()
