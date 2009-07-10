@@ -133,7 +133,8 @@ class OverviewCanvas extends JPanel
 	{
 		Canvas2D()
 		{
-			setOpaque(false);
+	//		setOpaque(false);
+			setBackground(Color.white);
 		}
 
 		private void processMouse(MouseEvent e)
