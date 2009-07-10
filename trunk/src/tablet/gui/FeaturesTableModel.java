@@ -5,6 +5,7 @@ import javax.swing.*;
 import javax.swing.table.*;
 
 import tablet.data.*;
+import tablet.data.auxiliary.*;
 
 import scri.commons.gui.*;
 

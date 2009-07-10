@@ -1,4 +1,4 @@
-package tablet.data;
+package tablet.data.auxiliary;
 
 /**
  * A feature is a region of interest from point p1 to p2 (inclusive) in
