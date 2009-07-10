@@ -76,8 +76,6 @@ public class HomeAdjustBand extends JRibbonBand implements ChangeListener
 
 	public static void zoomIn(int amount)
 	{
-		System.out.println("Zoom in " + amount);
-
 		if (zoomSlider.getValue()+amount < ZOOM_MAX)
 			zoomSlider.setValue(zoomSlider.getValue()+amount);
 		else
@@ -86,8 +84,6 @@ public class HomeAdjustBand extends JRibbonBand implements ChangeListener
 
 	public static void zoomOut(int amount)
 	{
-		System.out.println("Zoom out " + amount);
-
 		if (zoomSlider.getValue()-amount > ZOOM_MIN)
 			zoomSlider.setValue(zoomSlider.getValue()-amount);
 		else

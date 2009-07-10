@@ -77,7 +77,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 		// TODO: on Prefs.visHideUnpaddedValues set XXX to ""
 		lengthData = "Length: " + nf.format(read.length()) + " ("
-			+ metaData.getUnpaddedLength() + ")";
+			+ nf.format(metaData.getUnpaddedLength()) + ")";
 
 		// Name
 		readName = metaData.getName();
