@@ -26,7 +26,7 @@ class ReadsCanvasML extends MouseInputAdapter
 	private ReadsCanvasMenu rCanvasMenu;
 
 	private ReadsCanvasInfoPane infoPane = new ReadsCanvasInfoPane();
-	private ReadOutliner readOutliner = new ReadOutliner();
+	private OutlinerOverlay outliner;
 
 	ReadsCanvasML(AssemblyPanel aPanel)
 	{
@@ -37,12 +37,13 @@ class ReadsCanvasML extends MouseInputAdapter
 		// Create the various objects that track the mouse
 		rCanvasMenu = new ReadsCanvasMenu(aPanel, infoPane);
 		nOverlay = new NavigationOverlay(aPanel, infoPane);
+		outliner = new OutlinerOverlay(aPanel, infoPane);
 		infoPane.setAssemblyPanel(aPanel);
 
 		// Then add listeners and overlays to the canvas
 		rCanvas.addMouseListener(this);
 		rCanvas.addMouseMotionListener(this);
-		rCanvas.overlays.add(readOutliner);
+		rCanvas.overlays.add(outliner);
 		rCanvas.overlays.add(nOverlay);
 		rCanvas.overlays.add(infoPane);
 	}
@@ -54,7 +55,7 @@ class ReadsCanvasML extends MouseInputAdapter
 
 	public void mouseExited(MouseEvent e)
 	{
-		readOutliner.read = null;
+		outliner.setRead(null, 0, 0);
 		infoPane.setMousePosition(null);
 		nOverlay.setMousePosition(null);
 
@@ -121,7 +122,7 @@ class ReadsCanvasML extends MouseInputAdapter
 
 		// Track the read under the mouse (if any)
 		Read read = rCanvas.reads.getReadAt(yIndex, xIndex);
-		readOutliner.setRead(read, xIndex, yIndex);
+		outliner.setRead(read, xIndex, yIndex);
 
 		aPanel.repaint();
 	}
@@ -155,49 +156,6 @@ class ReadsCanvasML extends MouseInputAdapter
 
 				aPanel.moveBy(diffX, diffY);
 			}
-		}
-	}
-
-	// Inner class to draw an outline around a specified read.
-	private class ReadOutliner implements IOverlayRenderer
-	{
-		Read read;
-
-		int readS, readE;
-		int lineIndex;
-
-		void setRead(Read read, int colIndex, int lineIndex)
-		{
-			this.read = read;
-			this.lineIndex = lineIndex;
-
-			if (read != null)
-			{
-				ReadMetaData data = aPanel.getAssembly().getReadMetaData(read);
-
-				// Start and ending positions (against consensus)
-				readS = read.getStartPosition();
-				readE = read.getEndPosition();
-
-				infoPane.setData(lineIndex, read, data);
-			}
-			else
-				infoPane.setMousePosition(null);
-		}
-
-		public void render(Graphics2D g)
-		{
-			if (read == null)
-				return;
-
-			int offset = rCanvas.offset * rCanvas.ntW;
-
-			int y  = lineIndex * rCanvas.ntH;
-			int xS = readS * rCanvas.ntW + offset;
-			int xE = readE * rCanvas.ntW + rCanvas.ntW + offset;
-
-			g.setColor(Color.red);
-			g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);
 		}
 	}
 }

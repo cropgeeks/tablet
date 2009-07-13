@@ -25,7 +25,10 @@ public class Contig
 	private PackSet packSet;
 	private StackSet stackSet;
 
+	// Main set of features associated with this contig
 	private Vector<Feature> features = new Vector<Feature>();
+	// Supplementary set of features used purely for graphical outlining
+	private Vector<Feature> outlines = new Vector<Feature>();
 
 	/** Constructs a new, empty contig. */
 	public Contig()
@@ -104,6 +107,13 @@ public class Contig
 	public int featureCount()
 		{ return features.size(); }
 
+	/**
+	 * Returns the supplementary (outliner) features held within this contig.
+	 * @return the supplementary (outliner) features held within this contig
+	 */
+	public Vector<Feature> getOutlines()
+		{ return outlines; }
+
 	public void calculateOffsets()
 	{
 		// Set the rhsOffset to the final index position in the consensus seq
@@ -152,4 +162,13 @@ public class Contig
 
 	public IReadManager getStackSetManager()
 		{ return (readManager = stackSet); }
+
+	public void addOutline(Feature outline)
+	{
+		outlines.add(outline);
+
+		// If the number of elements is higher than 5, remove the oldest
+		if (outlines.size() > 5)
+			outlines.remove(0);
+	}
 }
