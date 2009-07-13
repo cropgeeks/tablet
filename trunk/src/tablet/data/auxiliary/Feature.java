@@ -2,12 +2,14 @@ package tablet.data.auxiliary;
 
 /**
  * A feature is a region of interest from point p1 to p2 (inclusive) in
- * consensus space.
+ * consensus space (including offset positions).
  */
 public class Feature implements Comparable<Feature>
 {
 	public final static byte UNKNOWN = 0;
 	public final static byte SNP = 1;
+	public final static byte ROW_OUTLINE = 2;
+	public final static byte COL_OUTLINE = 3;
 
 	protected byte type = UNKNOWN;
 
