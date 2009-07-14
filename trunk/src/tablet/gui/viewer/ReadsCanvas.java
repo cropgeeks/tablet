@@ -98,6 +98,11 @@ class ReadsCanvas extends JPanel
 
 			offset = contig.getConsensusOffset();
 		}
+
+		// We need to ensure that any references to tablet.data objects are
+		// removed, otherwise they can't get garbage collected
+		else
+			reads = null;
 	}
 
 	public Dimension getPreferredSize()
@@ -169,8 +174,8 @@ class ReadsCanvas extends JPanel
 
 	private void updateColorScheme()
 	{
-		colors = ColorScheme.getDNA(Prefs.visColorScheme, contig, ntW, ntH);
-		proteins = ColorScheme.getProtein(Prefs.visColorScheme, contig, ntW, ntH);
+		colors = ColorScheme.getDNA(Prefs.visColorScheme, ntW, ntH);
+		proteins = ColorScheme.getProtein(Prefs.visColorScheme, ntW, ntH);
 	}
 
 	public void paintComponent(Graphics graphics)

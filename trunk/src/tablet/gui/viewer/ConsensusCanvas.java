@@ -48,6 +48,10 @@ class ConsensusCanvas extends JPanel
 			consensus = contig.getConsensus();
 			offset = contig.getConsensusOffset();
 		}
+
+		// Remove tablet.data references if nothing is going to be displayed
+		else
+			consensus = null;
 	}
 
 	void setDimensions()

@@ -57,6 +57,10 @@ class ProteinCanvas extends JPanel
 
 			updateTranslations();
 		}
+
+		// Remove tablet.data references if nothing is going to be displayed
+		else
+			consensus = null;
 	}
 
 	void updateTranslations()
@@ -213,6 +217,9 @@ class ProteinCanvas extends JPanel
 						translations.add(null);
 				}
 			}
+
+			// Remove any references to tablet.data objects we were tracking
+			consensus = null;
 
 			if (killMe == false)
 				setTranslations(translations);

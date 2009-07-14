@@ -196,8 +196,8 @@ class OverviewCanvas extends JPanel
 
 	private class BufferFactory extends Thread
 	{
-		Contig contig;
-		IReadManager reads;
+		private Contig contig;
+		private IReadManager reads;
 
 		private BufferedImage buffer;
 		private int w, h;
@@ -313,6 +313,10 @@ class OverviewCanvas extends JPanel
 			// Scaling factors for mouse/mapping
 			xScale = w / (float) ntOnCanvasX;
 			yScale = h / (float) ntOnCanvasY;
+
+			// Remove any references to tablet.data objects we were tracking
+			contig = null;
+			reads = null;
 
 			long e = System.nanoTime();
 			System.out.println("Overview time: " + ((e-s)/1000000f) + "ms");

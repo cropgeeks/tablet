@@ -13,9 +13,9 @@ public class TextColorScheme extends ColorScheme
 	// Holds the states needed by the consensus canvas
 	private Vector<ColorState> statesCS = new Vector<ColorState>();
 
-	public TextColorScheme(Contig contig, int w, int h)
+	public TextColorScheme(int w, int h)
 	{
-		super(contig);
+		super();
 
 		// VERY IMPORTANT: These MUST be in the same order as the sequential
 		// values within the data.Sequence class, eg, unknown, P, N, A, C, G, T

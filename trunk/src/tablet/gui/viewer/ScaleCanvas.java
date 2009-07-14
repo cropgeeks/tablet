@@ -71,6 +71,11 @@ class ScaleCanvas extends JPanel
 			consensus = contig.getConsensus();
 			offset = contig.getConsensusOffset();
 		}
+
+		// Remove tablet.data references if nothing is going to be displayed
+		else
+			consensus = null;
+
 	}
 
 	void setMouseBase(Integer mouseBase, String message)

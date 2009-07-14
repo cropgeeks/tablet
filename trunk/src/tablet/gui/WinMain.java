@@ -199,6 +199,7 @@ public class WinMain extends JRibbonFrame
 		assembly = null;
 
 		contigsPanel.setAssembly(null);
+		assemblyPanel.setAssembly(null);
 
 		Actions.closed();
 	}

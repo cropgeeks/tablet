@@ -11,9 +11,9 @@ public class ProteinTextColorScheme extends ColorScheme
 {
 	private Vector<ColorState> states = new Vector<ColorState>();
 
-	public ProteinTextColorScheme(Contig contig, int w, int h)
+	public ProteinTextColorScheme(int w, int h)
 	{
-		super(contig);
+		super();
 
 		String[] codes = ProteinTranslator.codes;
 
