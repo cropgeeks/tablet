@@ -27,7 +27,7 @@ public class ProgressDialog extends JDialog
 	// A reference to any exception thrown while the job was active
 	private Exception exception = null;
 
-	public ProgressDialog(final ITrackableJob job, String title, String label, String[] msgs)
+	public ProgressDialog(ITrackableJob job, String title, String label, String[] msgs)
 	{
 		super(Tablet.winMain, "", true);
 
@@ -41,17 +41,14 @@ public class ProgressDialog extends JDialog
 			public void windowOpened(WindowEvent e)	{
 				startJob();
 			}
-			public void windowClosing(WindowEvent e)
-			{
-				job.cancelJob();
-				jobOK = false;
+			public void windowClosing(WindowEvent e) {
+				cancelJob();
 			}
 		});
 
 		pack();
 		setTitle(title);
 		setLocationRelativeTo(Tablet.winMain);
-		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		setVisible(true);
 	}
@@ -86,6 +83,12 @@ public class ProgressDialog extends JDialog
 	private void startJob()
 		{ new Thread(this).start(); }
 
+	private void cancelJob()
+	{
+		job.cancelJob();
+		jobOK = false;
+	}
+
 	// Starts the job running in its own thread
 	public void run()
 	{
@@ -94,11 +97,16 @@ public class ProgressDialog extends JDialog
 
 		try
 		{
-			for (int i = 0; i < job.getJobCount(); i++)
+			for (int i = 0; i < job.getJobCount() && jobOK; i++)
 			{
 				nbPanel.msgLabel.setText(msgs[i]);
 				job.runJob(i);
 			}
+
+			// Remove all references to the job once completed, because this
+			// window never seems to get garbage-collected meaning its
+			// references (which include a reference to the assembly) never die
+			job = null;
 		}
 		catch (Exception e)
 		{
