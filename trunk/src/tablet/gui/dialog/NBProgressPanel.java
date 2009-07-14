@@ -10,6 +10,7 @@ class NBProgressPanel extends javax.swing.JPanel
 
 		mainLabel.setText(labelString);
 
+		pBar.setString("0.00%");
 		pBar.setMaximum(job.getMaximum());
 		pBar.setIndeterminate(job.isIndeterminate());
 	}
