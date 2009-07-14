@@ -17,9 +17,9 @@ public class ProteinClassificationColorScheme extends ColorScheme
 	private final static Color ACIDIC = new Color(248, 183, 211);
 	private final static Color STOP = new Color(255, 105, 105);
 
-	public ProteinClassificationColorScheme(Contig contig, int w, int h)
+	public ProteinClassificationColorScheme(int w, int h)
 	{
-		super(contig);
+		super();
 
 		// VERY IMPORTANT: These MUST be in the same order as the codes within
 		// the string array from the ProteinTranslator
