@@ -14,7 +14,6 @@ import scri.commons.gui.*;
  */
 class FeaturesTableModel extends AbstractTableModel
 {
-	private Contig contig;
 	private Vector<Feature> features;
 
 	private JTable table;
@@ -22,7 +21,6 @@ class FeaturesTableModel extends AbstractTableModel
 
 	FeaturesTableModel(Contig contig, JTable table)
 	{
-		this.contig = contig;
 		this.table = table;
 
 		features = contig.getFeatures();

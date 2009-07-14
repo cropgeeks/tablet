@@ -55,26 +55,27 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 		if (contig == null || contig.getFeatures().size() == 0)
 		{
 			ctrlTabs.setEnabledAt(1, false);
-			ctrlTabs.setTitleAt(1, getTitle());
+			ctrlTabs.setTitleAt(1, getTitle(0));
+
+			model = null;
+			table.setModel(new DefaultTableModel());
+			table.setRowSorter(null);
 		}
 
 		else
 		{
 			ctrlTabs.setEnabledAt(1, true);
+			ctrlTabs.setTitleAt(1, getTitle(contig.getFeatures().size()));
 
 			model = new FeaturesTableModel(contig, table);
-
 			table.setModel(model);
 			table.setRowSorter(new TableRowSorter<FeaturesTableModel>(model));
-
-			String title = RB.format("gui.FeaturesPanel.title", contig.getFeatures().size());
-			ctrlTabs.setTitleAt(1, title);
 		}
 	}
 
-	String getTitle()
+	String getTitle(int count)
 	{
-		return RB.format("gui.FeaturesPanel.title", 0);
+		return RB.format("gui.FeaturesPanel.title", count);
 	}
 
 	public void valueChanged(ListSelectionEvent e)
