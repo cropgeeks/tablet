@@ -11,6 +11,7 @@ import tablet.gui.*;
  * a dialog with a tracking progress bar.
  */
 public class ProgressDialog extends JDialog
+	implements Runnable, ActionListener
 {
 	private static DecimalFormat d = new DecimalFormat("0.00");
 
@@ -38,7 +39,7 @@ public class ProgressDialog extends JDialog
 
 		addWindowListener(new WindowAdapter() {
 			public void windowOpened(WindowEvent e)	{
-				runJob();
+				startJob();
 			}
 			public void windowClosing(WindowEvent e)
 			{
@@ -50,39 +51,9 @@ public class ProgressDialog extends JDialog
 		pack();
 		setTitle(title);
 		setLocationRelativeTo(Tablet.winMain);
+		setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 		setResizable(false);
 		setVisible(true);
-	}
-
-	// Starts the job running in its own thread, catching any exceptions that
-	// may occur as it runs.
-	private void runJob()
-	{
-		Runnable r = new Runnable() {
-			public void run()
-			{
-				try
-				{
-					for (int i = 0; i < job.getJobCount(); i++)
-					{
-						nbPanel.msgLabel.setText(msgs[i]);
-						job.runJob(i);
-					}
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-
-					exception = e;
-					jobOK = false;
-				}
-
-				setVisible(false);
-			}
-		};
-
-		new MonitorThread().start();
-		new Thread(r).start();
 	}
 
 	public boolean jobOK()
@@ -91,41 +62,53 @@ public class ProgressDialog extends JDialog
 	public Exception getException()
 		{ return exception; }
 
-	// Simple monitor thread that tracks the progress of the job, updating the
-	// progress bar as it goes
-	private class MonitorThread extends Thread
+	// Called every 100ms to update the status of the progress bar
+	public void actionPerformed(ActionEvent e)
 	{
-		public void run()
+		nbPanel.pBar.setIndeterminate(job.isIndeterminate());
+
+		int val = job.getValue();
+		int max = job.getMaximum();
+		nbPanel.pBar.setMaximum(max);
+		nbPanel.pBar.setValue(val);
+
+		// If the job doesn't know its maximum (yet), this would
+		// have caused a 0 divided by 0 which isn't pretty
+		if (max == 0)
+			nbPanel.pBar.setString(d.format(0) + "%");
+		else
 		{
-			Runnable r = new Runnable() {
-				public void run()
-				{
-					nbPanel.pBar.setIndeterminate(job.isIndeterminate());
+			float value = ((float) val / (float) max) * 100;
+			nbPanel.pBar.setString(d.format(value) + "%");
+		}
+	}
 
-					int val = job.getValue();
-					int max = job.getMaximum();
-					nbPanel.pBar.setMaximum(max);
-					nbPanel.pBar.setValue(val);
+	private void startJob()
+		{ new Thread(this).start(); }
 
-					// If the job doesn't know its maximum (yet), this would
-					// have caused a 0 divided by 0 which isn't pretty
-					if (max == 0)
-						nbPanel.pBar.setString(d.format(0) + "%");
-					else
-					{
-						float value = ((float) val / (float) max) * 100;
-						nbPanel.pBar.setString(d.format(value) + "%");
-					}
-				}
-			};
+	// Starts the job running in its own thread
+	public void run()
+	{
+		Timer timer = new Timer(100, this);
+		timer.start();
 
-			while (isVisible())
+		try
+		{
+			for (int i = 0; i < job.getJobCount(); i++)
 			{
-				SwingUtilities.invokeLater(r);
-
-				try { Thread.sleep(100); }
-				catch (InterruptedException e) {}
+				nbPanel.msgLabel.setText(msgs[i]);
+				job.runJob(i);
 			}
 		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+
+			exception = e;
+			jobOK = false;
+		}
+
+		timer.stop();
+		setVisible(false);
 	}
 }
