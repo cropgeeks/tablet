@@ -83,9 +83,9 @@ public class WinMain extends JRibbonFrame
 		setDropTarget(new DropTarget(this, dropAdapter));
 
 		ctrlTabs.addTab("", contigsPanel);
-		ctrlTabs.setTitleAt(0, contigsPanel.getTitle());
+		ctrlTabs.setTitleAt(0, contigsPanel.getTitle(0));
 		ctrlTabs.addTab("", featuresPanel);
-		ctrlTabs.setTitleAt(1, featuresPanel.getTitle());
+		ctrlTabs.setTitleAt(1, featuresPanel.getTitle(0));
 		ctrlTabs.setEnabledAt(1, false);
 
 		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
@@ -190,17 +190,16 @@ public class WinMain extends JRibbonFrame
 	// Closes the current assembly and the cache associated with it
 	public void closeAssembly()
 	{
-		// TODO: What else can be closed/set to null/etc to save memory?
-		// The assemblyPanel will still have a reference to any data just now
-
-		try
-		{
+		try {
 			if (assembly != null)
 				assembly.getCache().close();
 		}
-		catch (Exception e) { e.printStackTrace(); }
+		catch (Exception e) {}
+
+		assembly = null;
 
 		contigsPanel.setAssembly(null);
+
 		Actions.closed();
 	}
 

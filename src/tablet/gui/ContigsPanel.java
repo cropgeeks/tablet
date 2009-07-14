@@ -42,24 +42,30 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 	void setFeaturesPanel(FeaturesPanel featuresPanel)
 		{ this.featuresPanel = featuresPanel; }
 
-	String getTitle()
+	String getTitle(int count)
 	{
-		return RB.format("gui.ContigsPanel.title", 0);
+		return RB.format("gui.ContigsPanel.title", count);
 	}
 
 	void setTableFilter(RowFilter<ContigsTableModel, Object> rf)
 	{
 		sorter.setRowFilter(rf);
-
-		String title = RB.format("gui.ContigsPanel.title", table.getRowCount());
-		ctrlTabs.setTitleAt(0, title);
+		ctrlTabs.setTitleAt(0, getTitle(table.getRowCount()));
 	}
 
 	void setAssembly(Assembly assembly)
 	{
-		controls.clearFilter();
+		if (assembly == null)
+		{
+			// This is done to ensure complete removal of all references that
+			// might lead back to the Assembly object (and lots of memory)
+			model = null;
+			sorter = null;
 
-		if (assembly != null)
+			table.setModel(new DefaultTableModel());
+			table.setRowSorter(null);
+		}
+		else
 		{
 			model = new ContigsTableModel(assembly, table);
 			sorter = new TableRowSorter<ContigsTableModel>(model);
@@ -67,18 +73,14 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 			table.setModel(model);
 			table.setRowSorter(sorter);
 			sp.getVerticalScrollBar().setValue(0);
-
-			controls.setEnabledState(true);
-		}
-		else
-		{
-			table.setModel(new DefaultTableModel());
-			table.setRowSorter(null);
-			controls.setEnabledState(false);
 		}
 
 		String title = RB.format("gui.ContigsPanel.title", table.getRowCount());
 		ctrlTabs.setTitleAt(0, title);
+		ctrlTabs.setSelectedIndex(0);
+
+		controls.clearFilter();
+		controls.setEnabledState(assembly != null);
 	}
 
 	public void valueChanged(ListSelectionEvent e)
