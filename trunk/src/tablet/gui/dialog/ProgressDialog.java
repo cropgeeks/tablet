@@ -29,7 +29,7 @@ public class ProgressDialog extends JDialog
 
 	public ProgressDialog(ITrackableJob job, String title, String label, String[] msgs)
 	{
-		super(Tablet.winMain, "", true);
+		super(Tablet.winMain, title, true);
 
 		this.job = job;
 		this.msgs = msgs;
@@ -47,7 +47,6 @@ public class ProgressDialog extends JDialog
 		});
 
 		pack();
-		setTitle(title);
 		setLocationRelativeTo(Tablet.winMain);
 		setResizable(false);
 		setVisible(true);
@@ -102,11 +101,6 @@ public class ProgressDialog extends JDialog
 				nbPanel.msgLabel.setText(msgs[i]);
 				job.runJob(i);
 			}
-
-			// Remove all references to the job once completed, because this
-			// window never seems to get garbage-collected meaning its
-			// references (which include a reference to the assembly) never die
-			job = null;
 		}
 		catch (Exception e)
 		{
@@ -115,6 +109,11 @@ public class ProgressDialog extends JDialog
 			exception = e;
 			jobOK = false;
 		}
+
+		// Remove all references to the job once completed, because this window
+		// never seems to get garbage-collected meaning its references (which
+		// include a reference to the assembly) never die
+		job = null;
 
 		timer.stop();
 		setVisible(false);
