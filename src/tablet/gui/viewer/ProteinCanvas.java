@@ -109,7 +109,7 @@ class ProteinCanvas extends JPanel
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
 
-		if (contig == null || translations == null)
+		if (translations == null)
 			return;
 
 		// Determine lhs and rhs of canvas

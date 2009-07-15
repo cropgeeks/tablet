@@ -48,9 +48,6 @@ class ScaleCanvas extends JPanel
 		{
 			public void mouseMoved(MouseEvent e)
 			{
-				if (rCanvas.contig == null)
-					return;
-
 				int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) - rCanvas.offset;
 				setMouseBase(xIndex);
 			}
@@ -75,7 +72,6 @@ class ScaleCanvas extends JPanel
 		// Remove tablet.data references if nothing is going to be displayed
 		else
 			consensus = null;
-
 	}
 
 	void setMouseBase(Integer mouseBase, String message)
@@ -97,9 +93,6 @@ class ScaleCanvas extends JPanel
 	{
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
-
-		if (contig == null)
-			return;
 
 		// Determine lhs and rhs of canvas
 		int x1 = rCanvas.pX1;

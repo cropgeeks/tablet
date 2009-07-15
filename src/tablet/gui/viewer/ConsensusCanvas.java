@@ -70,9 +70,6 @@ class ConsensusCanvas extends JPanel
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
 
-		if (contig == null)
-			return;
-
 		// Determine lhs and rhs of canvas
 		int x1 = rCanvas.pX1;
 		int x2 = rCanvas.pX2;

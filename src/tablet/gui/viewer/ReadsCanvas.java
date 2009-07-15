@@ -139,9 +139,6 @@ class ReadsCanvas extends JPanel
 	// the canvas
 	void computeForRedraw(Dimension viewSize, Point viewPosition)
 	{
-		if (contig == null)
-			return;
-
 		ntOnScreenX = 1 + (int) ((float) viewSize.width  / ntW);
 		ntOnScreenY = 1 + (int) ((float) viewSize.height / ntH);
 
@@ -182,9 +179,6 @@ class ReadsCanvas extends JPanel
 	{
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
-
-		if (contig == null)
-			return;
 
 		long s = System.nanoTime();
 
