@@ -132,9 +132,9 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 		// Complemented/uncomplemented arrow
 		if (metaData.isComplemented())
-			g.drawImage(rhArrow, 10, 55, null);
-		else
 			g.drawImage(lhArrow, w-10-lhArrow.getWidth(null), 55, null);
+		else
+			g.drawImage(rhArrow, 10, 55, null);
 
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		renderSequence(g);
