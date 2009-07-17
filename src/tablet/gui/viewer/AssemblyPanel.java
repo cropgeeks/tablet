@@ -88,7 +88,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		this.assembly = assembly;
 	}
 
-	Assembly getAssembly()
+	public Assembly getAssembly()
 	{
 		return assembly;
 	}

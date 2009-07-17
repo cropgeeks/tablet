@@ -154,6 +154,9 @@ public class WinMain extends JRibbonFrame
 	public AssemblyPanel getAssemblyPanel()
 		{ return assemblyPanel; }
 
+	ContigsPanel getContigsPanel()
+		{ return contigsPanel; }
+
 	public JumpToDialog getJumpToDialog()
 	{
 		if (jumpToDialog == null)
