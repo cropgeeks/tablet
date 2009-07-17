@@ -38,72 +38,70 @@ class AceFileReader extends TrackableReader
 		this.useAscii = useAscii;
 	}
 
+	boolean canRead()
+		throws Exception
+	{
+		// Read and check for the header
+		in = new BufferedReader(new InputStreamReader(getInputStream()));
+		str = readLine();
+
+		boolean isACEFile = (str != null && str.startsWith("AS "));
+
+		in.close();
+		is.close();
+
+		return isACEFile;
+	}
+
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		try
+		if (useAscii)
+			in = new BufferedReader(new InputStreamReader(getInputStream(), "ASCII")); // ISO8859_1
+		else
+			in = new BufferedReader(new InputStreamReader(getInputStream()));
+
+		// Read in the header
+		str = readLine();
+
+		String[] AS = str.split("\\s+");
+		if (AS.length != 3)
+			throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
+
+		// Initialize the vector of contigs to be at least this size
+		assembly.setContigsSize(Integer.parseInt(AS[1]));
+
+		// Scan for contigs
+		while ((str = readLine()) != null && okToRun)
 		{
-			if (useAscii)
-				in = new BufferedReader(new InputStreamReader(is, "ASCII")); // ISO8859_1
-			else
-				in = new BufferedReader(new InputStreamReader(is));
+			if (str.startsWith("AF "))
+				processReadLocation();
 
+			else if (str.startsWith("RD "))
+				processRead();
 
-			// Read and check for the header
-			str = readLine();
+//			else if (str.startsWith("QA "))
+//				processReadQualities();
 
-			if (str == null || str.startsWith("AS ") == false)
-				throw new ReadException(UNKNOWN_FORMAT, lineCount);
+			else if (str.startsWith("CO "))
+				processContig();
 
-			String[] AS = str.split("\\s+");
-			if (AS.length != 3)
-				throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
+			else if (str.startsWith("BQ"))
+				processBaseQualities();
 
-			// Initialize the vector of contigs to be at least this size
-			assembly.setContigsSize(Integer.parseInt(AS[1]));
-
-			// Scan for contigs
-			while ((str = readLine()) != null && okToRun)
+			else if (str.startsWith("BS "))
 			{
-				if (str.startsWith("AF "))
-					processReadLocation();
-
-				else if (str.startsWith("RD "))
-					processRead();
-
-	//			else if (str.startsWith("QA "))
-	//				processReadQualities();
-
-				else if (str.startsWith("CO "))
-					processContig();
-
-				else if (str.startsWith("BQ"))
-					processBaseQualities();
-
-				else if (str.startsWith("BS "))
-				{
-	//				processBaseSegment();
-				}
-
-				// Currently not doing anything with these tags
-				else if (str.startsWith("CT{"))
-					processConsesusTag();
-				else if (str.startsWith("RT{"))
-					while ((str = readLine()) != null && !str.startsWith("}"));
-				else if (str.startsWith("WA{"))
-					while ((str = readLine()) != null && !str.startsWith("}"));
+//				processBaseSegment();
 			}
-		}
-		// Rethrow any ReadExceptions that have already been dealt with
-		catch (ReadException e) {
-			throw e;
-		}
-		// But rewrap any unexpected exceptions into a ReadException
-		catch (Exception e) {
-			throw new ReadException(e.toString(), lineCount);
-		}
 
-		in.close();
+			// Currently not doing anything with these tags
+			else if (str.startsWith("CT{"))
+				processConsesusTag();
+			else if (str.startsWith("RT{"))
+				while ((str = readLine()) != null && !str.startsWith("}"));
+			else if (str.startsWith("WA{"))
+				while ((str = readLine()) != null && !str.startsWith("}"));
+		}
 	}
 
 	private void processContig()

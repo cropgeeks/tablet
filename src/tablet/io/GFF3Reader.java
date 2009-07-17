@@ -30,18 +30,26 @@ public class GFF3Reader extends TrackableReader
 		contigs = new Hashtable<String, Vector<Feature>>();
 	}
 
+	boolean canRead()
+		throws Exception
+	{
+		// Read and check for the header
+		in = new BufferedReader(new InputStreamReader(getInputStream()));
+		str = readLine();
+
+		boolean isGFF3File = (str != null
+			&& str.trim().toLowerCase().startsWith("##gff-version3"));
+
+		in.close();
+		is.close();
+
+		return isGFF3File;
+	}
+
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		is = new ProgressInputStream(new FileInputStream(file));
-		is.setSize(file.length());
-		in = new BufferedReader(new InputStreamReader(is));
-
-		// Read and check for the header
-		str = readLine();
-
-		if (str == null || !str.trim().toLowerCase().startsWith("##gff-version3"))
-			throw new ReadException(UNKNOWN_FORMAT, lineCount);
+		in = new BufferedReader(new InputStreamReader(getInputStream()));
 
 		while ((str = readLine()) != null && okToRun)
 		{
