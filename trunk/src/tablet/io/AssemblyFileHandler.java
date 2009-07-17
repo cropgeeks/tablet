@@ -54,7 +54,8 @@ class AssemblyFileHandler extends SimpleJob
 
 		if (okToRun && fileParsed == false)
 		{
-			// Use next reader type
+//			reader = new AceFileReader(readCache, true);
+//			canParse = readFile();
 		}
 
 		if (okToRun && fileParsed)
@@ -81,40 +82,24 @@ class AssemblyFileHandler extends SimpleJob
 			throw new ReadException(ReadException.UNKNOWN_FORMAT, 0);
 	}
 
+	// Gets a reader to check if it can read a given file, and then lets it
+	// do the full read if it says it can
 	private boolean readFile()
 		throws Exception
 	{
-		ProgressInputStream is = new ProgressInputStream(
-			new FileInputStream(file));
-		is.setSize(file.length());
+		reader.setInputs(file, new Assembly());
 
-		reader.setInputs(is, new Assembly());
-
-		try
+		if (reader.canRead())
 		{
 			long s = System.currentTimeMillis();
-
-			reader.runJob(1);
-
+			reader.runJob(0);
 			long e = System.currentTimeMillis();
 			System.out.println("\nRead time: " + ((e-s)/1000f) + "s");
 
 			return true;
 		}
-		catch (ReadException e)
-		{
-			// If the failure was due to not understanding the input stream,
-			// then return gracefully and let another file reader try
-			if (e.getError() == ReadException.UNKNOWN_FORMAT)
-				return false;
-			// Otherwise, it must be a genuine failure
-			else
-				throw e;
-		}
-		finally
-		{
-			is.close();
-		}
+
+		return false;
 	}
 
 	public boolean isIndeterminate()
