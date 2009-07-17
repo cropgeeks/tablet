@@ -59,6 +59,10 @@ public class Commands
 
 		Prefs.setRecentDocument(filename);
 		winMain.setAssembly(ioHandler.getAssembly());
+
+		// See if a feature file can be loaded at this point too
+		if (getFeatureFile(file) != null)
+			importFeatures(getFeatureFile(file).getPath());
 	}
 
 	public void importFeatures(String filename)
@@ -79,7 +83,7 @@ public class Commands
 		String title = RB.getString("gui.Commands.importFeatures.title");
 		String label = RB.getString("gui.Commands.importFeatures.label");
 		String[] msgs = new String[] {
-			RB.format("gui.Commands.fileOpen.msg01", file.getName()) };
+			RB.format("gui.Commands.importFeatures.msg", file.getName()) };
 
 		// Run the job...
 		ProgressDialog dialog = new ProgressDialog(reader, title, label, msgs);
@@ -126,5 +130,24 @@ public class Commands
 			Prefs.guiCurrentDir = fd.getDirectory();
 			return new File(fd.getDirectory(), fd.getFile()).getPath();
 		}
+	}
+
+	// Given assemblyfile.<ext> see if there is a featurefile.gff file that is
+	// in the same directory as it, and return it.
+	private File getFeatureFile(File assemblyFile)
+	{
+		String name = assemblyFile.getName();
+
+		// Remove the file extension
+		int index = name.lastIndexOf(".");
+		if (index != -1)
+			name = name.substring(0, index);
+
+		File file = new File(assemblyFile.getParent(), name + ".gff");
+
+		if (file.exists())
+			return file;
+		else
+			return null;
 	}
 }
