@@ -15,6 +15,7 @@ public class Actions
 	public static ActionRepeatableButtonModel homeAssembliesOpen16;
 	public static ActionRepeatableButtonModel homeAssembliesOpen32;
 	public static ActionRepeatableButtonModel applicationMenuSave16;
+	public static ActionRepeatableButtonModel homeAssembliesImportFeatures;
 
 	public static ActionToggleButtonModel homeOptionsInfoPane16;
 	public static ActionToggleButtonModel homeOptionsHidePads16;
@@ -43,6 +44,7 @@ public class Actions
 		ApplicationMenu.mSaveAs.setEnabled(false);
 		ApplicationMenu.mClose.setEnabled(false);
 		applicationMenuSave16.setEnabled(false);
+		homeAssembliesImportFeatures.setEnabled(false);
 
 		// Ribbon controls
 		HomeAdjustBand.zoomSliderComponent.setEnabled(false);
@@ -73,6 +75,7 @@ public class Actions
 		ApplicationMenu.mSaveAs.setEnabled(false);
 		ApplicationMenu.mClose.setEnabled(true);
 		applicationMenuSave16.setEnabled(false);
+		homeAssembliesImportFeatures.setEnabled(true);
 
 		// Ribbon controls
 		HomeAdjustBand.zoomSliderComponent.setEnabled(false);
@@ -103,6 +106,7 @@ public class Actions
 		ApplicationMenu.mSaveAs.setEnabled(false);
 		ApplicationMenu.mClose.setEnabled(true);
 		applicationMenuSave16.setEnabled(false);
+		homeAssembliesImportFeatures.setEnabled(true);
 
 		// Ribbon controls
 		HomeAdjustBand.zoomSliderComponent.setEnabled(true);

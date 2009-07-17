@@ -9,6 +9,7 @@ import org.jvnet.flamingo.common.model.*;
 import org.jvnet.flamingo.common.*;
 import org.jvnet.flamingo.common.icon.*;
 import org.jvnet.flamingo.ribbon.*;
+import org.jvnet.flamingo.ribbon.resize.*;
 
 import scri.commons.gui.*;
 
@@ -16,11 +17,14 @@ class HomeAssembliesBand extends JRibbonBand implements ActionListener
 {
 	private WinMain winMain;
 	private JCommandButton bOpen16, bOpen32;
+	private JCommandButton bImportFeatures;
 
 	HomeAssembliesBand(WinMain winMain)
 	{
 		super(RB.getString("gui.ribbon.HomeAssembliesBand.title"),
 			new EmptyResizableIcon(32));
+
+		setResizePolicies(CoreRibbonResizePolicies.getCorePoliciesRestrictive(this));
 
 		this.winMain = winMain;
 
@@ -38,7 +42,6 @@ class HomeAssembliesBand extends JRibbonBand implements ActionListener
 		RibbonController.assignShortcut(bOpen32,
 			KeyStroke.getKeyStroke(KeyEvent.VK_O, Tablet.menuShortcut));
 
-
 		// Open an assembly (16x16 shortcut button)
 		bOpen16 = new JCommandButton("",
 			RibbonController.getIcon("FILEOPEN16", 16));
@@ -50,8 +53,21 @@ class HomeAssembliesBand extends JRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.HomeAssembliesBand.bOpen.richtip")));
 		bOpen16.setActionKeyTip("1");
 
+		// Import features
+		bImportFeatures = new JCommandButton(
+			RB.getString("gui.ribbon.HomeAssembliesBand.bImportFeatures"),
+			RibbonController.getIcon("ATTACH32", 32));
+		Actions.homeAssembliesImportFeatures = new ActionRepeatableButtonModel(bImportFeatures);
+		Actions.homeAssembliesImportFeatures.addActionListener(this);
+		bImportFeatures.setActionModel(Actions.homeAssembliesImportFeatures);
+		bImportFeatures.setActionKeyTip("IF");
+		bImportFeatures.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeAssembliesBand.bImportFeatures.tooltip"),
+			RB.getString("gui.ribbon.HomeAssembliesBand.bImportFeatures.richtip")));
+
+
 		addCommandButton(bOpen32, RibbonElementPriority.TOP);
-//		startGroup();
+		addCommandButton(bImportFeatures, RibbonElementPriority.TOP);
 
 		winMain.getRibbon().addTaskbarComponent(bOpen16);
 	}

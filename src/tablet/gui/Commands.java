@@ -66,7 +66,7 @@ public class Commands
 		if (SystemUtils.isMacOS() == false)
 		{
 			JFileChooser fc = new JFileChooser();
-			fc.setDialogTitle(RB.getString("gui.Commands.fileOpen.openDialog"));
+			fc.setDialogTitle(title);
 			fc.setCurrentDirectory(new File(Prefs.guiCurrentDir));
 
 			if (fc.showOpenDialog(winMain) != JFileChooser.APPROVE_OPTION)
