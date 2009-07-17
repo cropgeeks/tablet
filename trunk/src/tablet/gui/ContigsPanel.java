@@ -114,4 +114,20 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 			winMain.setAssemblyPanelVisible(true);
 		}
 	}
+
+	// Forces the panel to recreate the table then reselect the row
+	void updateTable(Assembly assembly)
+	{
+		// TODO: Any way to do this without recreating the entire table because
+		// that causes the user's custom sorting/filtering to be removed
+
+		int row = table.getSelectedRow();
+		if (row != -1)
+			row = table.convertRowIndexToModel(row);
+
+		setAssembly(assembly);
+
+		if (row != -1)
+			table.setRowSelectionInterval(row, row);
+	}
 }

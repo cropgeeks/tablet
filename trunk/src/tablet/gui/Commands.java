@@ -4,6 +4,7 @@ import java.awt.*;
 import java.io.*;
 import javax.swing.*;
 
+import tablet.data.*;
 import tablet.gui.dialog.*;
 import tablet.io.*;
 
@@ -58,6 +59,43 @@ public class Commands
 
 		Prefs.setRecentDocument(filename);
 		winMain.setAssembly(ioHandler.getAssembly());
+	}
+
+	public void importFeatures(String filename)
+	{
+		// If no file was passed in then we need to prompt the user to pick one
+		if (filename == null)
+		{
+			filename = getFilename(RB.getString("gui.Commands.importFeatures.openDialog"));
+			if (filename == null)
+				return;
+		}
+
+		File file = new File(filename);
+
+		Assembly assembly = winMain.getAssemblyPanel().getAssembly();
+		GFF3Reader reader = new GFF3Reader(file, assembly);
+
+		String title = RB.getString("gui.Commands.importFeatures.title");
+		String label = RB.getString("gui.Commands.importFeatures.label");
+		String[] msgs = new String[] {
+			RB.format("gui.Commands.fileOpen.msg01", file.getName()) };
+
+		// Run the job...
+		ProgressDialog dialog = new ProgressDialog(reader, title, label, msgs);
+		if (dialog.jobOK() == false)
+		{
+			if (dialog.getException() != null)
+			{
+				TaskDialog.error(
+					"Error importing features from " + filename + "\n\n" + dialog.getException(),
+					RB.getString("gui.text.close"));
+			}
+
+			return;
+		}
+
+		winMain.getContigsPanel().updateTable(assembly);
 	}
 
 	private String getFilename(String title)

@@ -79,5 +79,8 @@ class HomeAssembliesBand extends JRibbonBand implements ActionListener
 		{
 			winMain.getCommands().fileOpen(null);
 		}
+
+		else if (e.getSource() == Actions.homeAssembliesImportFeatures)
+			winMain.getCommands().importFeatures(null);
 	}
 }

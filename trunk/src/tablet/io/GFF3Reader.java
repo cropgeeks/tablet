@@ -14,18 +14,12 @@ import scri.commons.file.*;
 
 public class GFF3Reader extends TrackableReader
 {
-	private Assembly assembly;
-
-	// The input stream being read from
-	private File file;
-
 	// Stores a list of features per contig (as they are found)
 	private Hashtable<String, Vector<Feature>> contigs;
 
 	public GFF3Reader(File file, Assembly assembly)
 	{
-		this.file = file;
-		this.assembly = assembly;
+		setInputs(file, assembly);
 
 		contigs = new Hashtable<String, Vector<Feature>>();
 	}
