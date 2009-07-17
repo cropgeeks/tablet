@@ -4,17 +4,16 @@ import java.io.*;
 import java.util.*;
 
 import tablet.data.*;
+import tablet.data.cache.*;
 import tablet.data.auxiliary.*;
 import static tablet.io.ReadException.*;
 
-class AceFileReader extends AssemblyReader
+import scri.commons.file.*;
+
+class AceFileReader extends TrackableReader
 {
 	private boolean useAscii;
-	private BufferedReader in;
-
-	// Stores each line as it is read
-	private String str;
-	private int lineCount;
+	private IReadCache readCache;
 
 	private Contig contig;
 	private Consensus consensus;
@@ -33,16 +32,10 @@ class AceFileReader extends AssemblyReader
 	// contig quickly when processing consensus tags
 	private Hashtable<String, Contig> contigHash = new Hashtable<String, Contig>();
 
-	AceFileReader(boolean useAscii)
+	AceFileReader(IReadCache readCache, boolean useAscii)
 	{
+		this.readCache = readCache;
 		this.useAscii = useAscii;
-	}
-
-	String readLine()
-		throws IOException
-	{
-		lineCount++;
-		return in.readLine();
 	}
 
 	public void runJob(int jobIndex)
@@ -70,7 +63,7 @@ class AceFileReader extends AssemblyReader
 			assembly.setContigsSize(Integer.parseInt(AS[1]));
 
 			// Scan for contigs
-			while ((str = readLine()) != null && okToRead)
+			while ((str = readLine()) != null && okToRun)
 			{
 				if (str.startsWith("AF "))
 					processReadLocation();
