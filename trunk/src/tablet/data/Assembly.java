@@ -68,6 +68,9 @@ public class Assembly implements Iterable<Contig>
 	public void addContig(Contig contig)
 		{ contigs.add(contig); }
 
+	public Vector<Contig> getContigs()
+		{ return contigs; }
+
 	/**
 	 * Returns the contig at the given index location.
 	 * @return the contig at the given index location
