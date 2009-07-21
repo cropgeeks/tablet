@@ -59,6 +59,8 @@ class WinMainStatusBar extends JPanel implements ActionListener
 	{
 		public void run()
 		{
+			setName("TipsThread");
+
 			float step = (bgColor / 15f);
 			float fontColor = 0;
 

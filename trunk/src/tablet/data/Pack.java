@@ -9,7 +9,7 @@ import java.util.*;
  */
 public class Pack
 {
-	private Vector<Read> reads = new Vector<Read>();
+	private ArrayList<Read> reads = new ArrayList<Read>();
 
 	private int positionS;
 	private int positionE;
