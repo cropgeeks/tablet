@@ -65,11 +65,11 @@ public class PackSetCreator extends SimpleJob
 
 		public void run()
 		{
-			Vector<Contig> contigs = assembly.getContigs();
+			int contigCount = assembly.size();
 
-			for (int i = startIndex; i < contigs.size(); i += cores)
+			for (int i = startIndex; i < contigCount; i += cores)
 			{
-				Contig contig = contigs.get(i);
+				Contig contig = assembly.getContig(i);
 				PackSet packSet = new PackSet();
 
 				for (Read read: contig.getReads())
@@ -97,6 +97,11 @@ public class PackSetCreator extends SimpleJob
 					progress.addAndGet(1);
 
 				}
+
+				// Trim the packs down to size once finished
+				for (Pack pack: packSet)
+					pack.trimToSize();
+				packSet.trimToSize();
 
 				contig.setPackSet(packSet);
 			}

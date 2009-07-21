@@ -9,7 +9,7 @@ import tablet.data.*;
 
 public class ProteinClassificationColorScheme extends ColorScheme
 {
-	private Vector<ColorState> states = new Vector<ColorState>();
+	private ArrayList<ColorState> states = new ArrayList<ColorState>();
 
 	private final static Color NONPOLAR = new Color(255, 231, 95);
 	private final static Color POLAR = new Color(179, 222, 192);

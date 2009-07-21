@@ -14,7 +14,7 @@ public class Assembly implements Iterable<Contig>
 	private String name;
 	private IReadCache cache;
 
-	private Vector<Contig> contigs = new Vector<Contig>();
+	private ArrayList<Contig> contigs = new ArrayList<Contig>();
 
 	/** Constructs a new, empty assembly. */
 	public Assembly()
@@ -41,17 +41,10 @@ public class Assembly implements Iterable<Contig>
 	 * @param size the initial size of the vector
 	 */
 	public void setContigsSize(int size)
-		{ contigs = new Vector<Contig>(size); }
+		{ contigs = new ArrayList<Contig>(size); }
 
 	public Iterator<Contig> iterator()
 		{ return contigs.iterator(); }
-
-	/**
-	 * Returns a count of the number of contigs held within this assembly.
-	 * @return a count of the number of contigs held within this assembly
-	 */
-	public int contigCount()
-		{ return contigs.size(); }
 
 	/**
 	 * Assigns the read cache for this assembly. All further lookups for read
@@ -68,14 +61,19 @@ public class Assembly implements Iterable<Contig>
 	public void addContig(Contig contig)
 		{ contigs.add(contig); }
 
-	public Vector<Contig> getContigs()
-		{ return contigs; }
+	/**
+	 * Returns the size of this assembly, that is, the number of contigs within
+	 * it.
+	 * @return the size of this assembly
+	 */
+	public int size()
+		{ return contigs.size(); }
 
 	/**
 	 * Returns the contig at the given index location.
 	 * @return the contig at the given index location
 	 * @throws ArrayIndexOutOfBoundsException if the index is out of range
-	 * (index < 0 || index >= contigCount())
+	 * (index < 0 || index >= size())
 	 */
 	public Contig getContig(int index)
 		throws ArrayIndexOutOfBoundsException

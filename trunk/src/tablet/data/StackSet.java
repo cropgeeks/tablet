@@ -4,13 +4,13 @@ import java.util.*;
 
 class StackSet implements IReadManager
 {
-	private Vector<Read> stack = new Vector<Read>();
+	private ArrayList<Read> stack = new ArrayList<Read>();
 
 	StackSet()
 	{
 	}
 
-	StackSet(Vector<Read> reads)
+	StackSet(ArrayList<Read> reads)
 	{
 		stack = reads;
 	}

@@ -9,7 +9,7 @@ import tablet.data.*;
 
 public class ProteinTextColorScheme extends ColorScheme
 {
-	private Vector<ColorState> states = new Vector<ColorState>();
+	private ArrayList<ColorState> states = new ArrayList<ColorState>();
 
 	public ProteinTextColorScheme(int w, int h)
 	{

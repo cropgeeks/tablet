@@ -6,7 +6,6 @@ public class PackSet implements Iterable<Pack>, IReadManager
 {
 	private ArrayList<Pack> packs = new ArrayList<Pack>();
 
-
 	public Iterator<Pack> iterator()
 		{ return packs.iterator(); }
 
@@ -15,6 +14,9 @@ public class PackSet implements Iterable<Pack>, IReadManager
 
 	public void addPack(Pack pack)
 		{ packs.add(pack); }
+
+	public void trimToSize()
+		{ packs.trimToSize(); }
 
 	/**
 	 * Returns a byte array containing sequence information (or -1 for no data)
