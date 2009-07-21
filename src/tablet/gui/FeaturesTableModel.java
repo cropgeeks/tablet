@@ -14,7 +14,7 @@ import scri.commons.gui.*;
  */
 class FeaturesTableModel extends AbstractTableModel
 {
-	private Vector<Feature> features;
+	private ArrayList<Feature> features;
 
 	private JTable table;
 	private String[] columnNames;

@@ -10,7 +10,7 @@ import scri.commons.gui.*;
 class WinMainStatusBar extends JPanel implements ActionListener
 {
 	private JLabel tipsLabel, helpLabel;
-	private Vector<String> helpHints = new Vector<String>();
+	private ArrayList<String> helpHints = new ArrayList<String>();
 
 	private int bgColor;
 

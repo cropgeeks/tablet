@@ -15,13 +15,13 @@ import scri.commons.file.*;
 public class GFF3Reader extends TrackableReader
 {
 	// Stores a list of features per contig (as they are found)
-	private Hashtable<String, Vector<Feature>> contigs;
+	private Hashtable<String, ArrayList<Feature>> contigs;
 
 	public GFF3Reader(File file, Assembly assembly)
 	{
 		setInputs(file, assembly);
 
-		contigs = new Hashtable<String, Vector<Feature>>();
+		contigs = new Hashtable<String, ArrayList<Feature>>();
 	}
 
 	boolean canRead()
@@ -81,13 +81,13 @@ public class GFF3Reader extends TrackableReader
 	// Searches and returns an existing list of features (for a contig). If a
 	// list can't be found, then a new one is created (added to the hashtable)
 	// and then returned.
-	private Vector<Feature> getFeatures(String contigName)
+	private ArrayList<Feature> getFeatures(String contigName)
 	{
-		Vector<Feature> list = contigs.get(contigName);
+		ArrayList<Feature> list = contigs.get(contigName);
 
 		if (list == null)
 		{
-			list = new Vector<Feature>();
+			list = new ArrayList<Feature>();
 			contigs.put(contigName, list);
 		}
 
@@ -98,12 +98,12 @@ public class GFF3Reader extends TrackableReader
 	{
 		for (Contig contig: assembly)
 		{
-			Vector<Feature> newFeatures = contigs.get(contig.getName());
+			ArrayList<Feature> newFeatures = contigs.get(contig.getName());
 
 			if (newFeatures == null)
 				continue;
 
-			Vector<Feature> features = contig.getFeatures();
+			ArrayList<Feature> features = contig.getFeatures();
 			for (Feature newFeature: newFeatures)
 				features.add(newFeature);
 		}

@@ -106,8 +106,8 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 			String label = RB.format("gui.viewer.AssemblyPanel.summaryLabel",
 				contig.getName(),
 				length,
-				nf.format(contig.getReads().size()),
-				nf.format(contig.getFeatures().size()));
+				nf.format(contig.readCount()),
+				nf.format(contig.featureCount()));
 			RibbonController.setTitleLabel(label);
 		}
 		else

@@ -19,7 +19,7 @@ class ProteinCanvas extends JPanel
 	private TranslationFractory factory;
 
 	boolean[] enabled = new boolean[6];
-	Vector<short[]> translations;
+	ArrayList<short[]> translations;
 
 	// The LHS offset (difference) between the left-most read and the consensus
 	private int offset;
@@ -98,7 +98,7 @@ class ProteinCanvas extends JPanel
 	public Dimension getPreferredSize()
 		{ return dimension; }
 
-	private void setTranslations(Vector<short[]> translations)
+	private void setTranslations(ArrayList<short[]> translations)
 	{
 		this.translations = translations;
 		repaint();
@@ -178,7 +178,7 @@ class ProteinCanvas extends JPanel
 	private class TranslationFractory extends Thread
 	{
 		private Consensus consensus;
-		private Vector<short[]> translations = new Vector<short[]>(6);
+		private ArrayList<short[]> translations = new ArrayList<short[]>(6);
 
 		boolean killMe = false;
 

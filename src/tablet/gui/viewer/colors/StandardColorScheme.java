@@ -9,9 +9,9 @@ import tablet.data.*;
 public class StandardColorScheme extends ColorScheme
 {
 	// Holds the states needed by the reads canvas
-	private Vector<ColorState> statesRD = new Vector<ColorState>();
+	private ArrayList<ColorState> statesRD = new ArrayList<ColorState>();
 	// Holds the states needed by the consensus canvas
-	private Vector<ColorState> statesCS = new Vector<ColorState>();
+	private ArrayList<ColorState> statesCS = new ArrayList<ColorState>();
 
 	public StandardColorScheme(int w, int h)
 	{

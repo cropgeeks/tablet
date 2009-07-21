@@ -14,6 +14,9 @@ public class Pack
 	private int positionS;
 	private int positionE;
 
+	public void trimToSize()
+		{ reads.trimToSize(); }
+
 	/**
 	 * Attempts to add the read to this pack. It will only be added if it does
 	 * not overlap with any reads already stored in this pack.

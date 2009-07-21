@@ -71,6 +71,7 @@ class AssemblyFileHandler extends SimpleJob
 			long s = System.currentTimeMillis();
 			for (Contig contig: assembly)
 			{
+				contig.getReads().trimToSize();
 				Collections.sort(contig.getReads());
 				contig.calculateOffsets();
 			}

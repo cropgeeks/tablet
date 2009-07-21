@@ -40,7 +40,7 @@ class ContigsTableModel extends AbstractTableModel
 
 	public int getRowCount()
 	{
-		return assembly.contigCount();
+		return assembly.size();
 	}
 
 	public Class getColumnClass(int col)

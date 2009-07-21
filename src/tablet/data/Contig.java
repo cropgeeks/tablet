@@ -15,7 +15,7 @@ public class Contig
 	private Consensus consensus;
 	private boolean complemented;
 
-	private Vector<Read> reads;
+	private ArrayList<Read> reads;
 
 	// Starting and ending indices of the leftmost and rightmost reads
 	private int lhsOffset, rhsOffset;
@@ -26,9 +26,9 @@ public class Contig
 	private StackSet stackSet;
 
 	// Main set of features associated with this contig
-	private Vector<Feature> features = new Vector<Feature>();
+	private ArrayList<Feature> features = new ArrayList<Feature>();
 	// Supplementary set of features used purely for graphical outlining
-	private Vector<Feature> outlines = new Vector<Feature>();
+	private ArrayList<Feature> outlines = new ArrayList<Feature>();
 
 	/** Constructs a new, empty contig. */
 	public Contig()
@@ -48,7 +48,7 @@ public class Contig
 		this.name = name;
 		this.complemented = complemented;
 
-		reads = new Vector<Read>(readCount);
+		reads = new ArrayList<Read>(readCount);
 	}
 
 	/**
@@ -83,7 +83,7 @@ public class Contig
 	 * Returns the reads held by this contig as a vector.
 	 * @return the reads held by this contig as a vector
 	 */
-	public Vector<Read> getReads()
+	public ArrayList<Read> getReads()
 		{ return reads; }
 
 	/**
@@ -97,7 +97,7 @@ public class Contig
 	 * Returns the features held by this contig as a vector.
 	 * @return the features held by this contig as a vector
 	 */
-	public Vector<Feature> getFeatures()
+	public ArrayList<Feature> getFeatures()
 		{ return features; }
 
 	/**
@@ -111,7 +111,7 @@ public class Contig
 	 * Returns the supplementary (outliner) features held within this contig.
 	 * @return the supplementary (outliner) features held within this contig
 	 */
-	public Vector<Feature> getOutlines()
+	public ArrayList<Feature> getOutlines()
 		{ return outlines; }
 
 	public void calculateOffsets()
