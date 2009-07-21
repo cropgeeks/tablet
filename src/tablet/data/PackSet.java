@@ -4,7 +4,7 @@ import java.util.*;
 
 public class PackSet implements Iterable<Pack>, IReadManager
 {
-	private Vector<Pack> packs = new Vector<Pack>();
+	private ArrayList<Pack> packs = new ArrayList<Pack>();
 
 
 	public Iterator<Pack> iterator()
@@ -13,10 +13,8 @@ public class PackSet implements Iterable<Pack>, IReadManager
 	public int size()
 		{ return packs.size(); }
 
-	public boolean addPack(Pack pack)
-	{
-		return packs.add(pack);
-	}
+	public void addPack(Pack pack)
+		{ packs.add(pack); }
 
 	/**
 	 * Returns a byte array containing sequence information (or -1 for no data)

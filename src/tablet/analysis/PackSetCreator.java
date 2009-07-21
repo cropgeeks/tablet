@@ -35,9 +35,9 @@ public class PackSetCreator extends SimpleJob
 
 		// Start the threads...
 		for (int i = 0; i < threads.length; i++)
-			threads[i] = new ThreadRunner(i, cores);
+			threads[i] = new ThreadRunner(i);
 		// ...and then wait on them to finish
-		for (int i = 0; i < cores; i++)
+		for (int i = 0; i < threads.length; i++)
 			threads[i].join();
 
 		long e = System.currentTimeMillis();
@@ -55,11 +55,11 @@ public class PackSetCreator extends SimpleJob
 	{
 		private int startIndex, increment;
 
-		ThreadRunner(int startIndex, int increment)
+		ThreadRunner(int startIndex)
 		{
 			this.startIndex = startIndex;
-			this.increment = increment;
 
+			setName("PackSetCreator-" + startIndex);
 			start();
 		}
 
@@ -67,7 +67,7 @@ public class PackSetCreator extends SimpleJob
 		{
 			Vector<Contig> contigs = assembly.getContigs();
 
-			for (int i = startIndex; i < contigs.size(); i += increment)
+			for (int i = startIndex; i < contigs.size(); i += cores)
 			{
 				Contig contig = contigs.get(i);
 				PackSet packSet = new PackSet();
@@ -82,21 +82,20 @@ public class PackSetCreator extends SimpleJob
 
 					// Can this read be added to any of the existing pack lines?
 					for (Pack pack: packSet)
-					{
 						if (added = pack.addRead(read))
 							break;
-					}
 
 					// If not, create a new pack and add it there
 					if (added == false)
 					{
 						Pack newPack = new Pack();
-						newPack.addRead(read);
+						added = newPack.addRead(read);
 
-						added = packSet.addPack(newPack);
+						packSet.addPack(newPack);
 					}
 
 					progress.addAndGet(1);
+
 				}
 
 				contig.setPackSet(packSet);
