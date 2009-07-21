@@ -60,7 +60,7 @@ class HomeAssembliesBand extends JRibbonBand implements ActionListener
 		Actions.homeAssembliesImportFeatures = new ActionRepeatableButtonModel(bImportFeatures);
 		Actions.homeAssembliesImportFeatures.addActionListener(this);
 		bImportFeatures.setActionModel(Actions.homeAssembliesImportFeatures);
-		bImportFeatures.setActionKeyTip("IF");
+		bImportFeatures.setActionKeyTip("F");
 		bImportFeatures.setActionRichTooltip(new RichTooltip(
 			RB.getString("gui.ribbon.HomeAssembliesBand.bImportFeatures.tooltip"),
 			RB.getString("gui.ribbon.HomeAssembliesBand.bImportFeatures.richtip")));
