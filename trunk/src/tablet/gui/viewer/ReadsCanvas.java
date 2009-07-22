@@ -4,6 +4,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.util.*;
+import java.util.concurrent.*;
 import javax.swing.*;
 
 import tablet.data.*;
@@ -45,7 +46,7 @@ class ReadsCanvas extends JPanel
 
 	// Starting and ending indices of the bases that will be drawn during the
 	// next repaint operation
-	int xS, xE;
+	int xS, xE, yE;
 
 	// Tracks the base closest to the centre of the view
 	float ntCenterX, ntCenterY;
@@ -56,6 +57,11 @@ class ReadsCanvas extends JPanel
 	// A list of renderers that will perform further drawing once the main
 	// canvas has been drawn
 	LinkedList<IOverlayRenderer> overlays = new LinkedList<IOverlayRenderer>();
+
+	// Objects for multicore rendering
+	private int cores = Runtime.getRuntime().availableProcessors();
+	private ExecutorService executor;
+	private Future[] tasks;
 
 
 	ReadsCanvas()
@@ -77,6 +83,10 @@ class ReadsCanvas extends JPanel
 		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
 			KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, 0), "right");
 		getActionMap().put("right", pageRight);
+
+		// Prepare the background threads that will do the main painting
+		executor = Executors.newFixedThreadPool(cores);
+		tasks = new Future[cores];
 	}
 
 	void setAssemblyPanel(AssemblyPanel aPanel)
@@ -182,11 +192,17 @@ class ReadsCanvas extends JPanel
 
 		long s = System.nanoTime();
 
+		// Update the back buffer (if it needs redrawn)
 		if (updateBuffer)
-			paintBuffer();
+		{
+			try { paintBuffer(); }
+			catch (Exception e) {}
+		}
 
+		// Then paint it to the screen
 		g.drawImage(buffer, pX1, pY1, null);
 
+		// Then allow any overlays to be painted on top of it
 		try
 		{
 			for (IOverlayRenderer renderer: overlays)
@@ -201,6 +217,7 @@ class ReadsCanvas extends JPanel
 	}
 
 	private void paintBuffer()
+		throws Exception
 	{
 		validateBuffer();
 
@@ -229,25 +246,16 @@ class ReadsCanvas extends JPanel
 		// with a check to set the end index to the last value in the array if
 		// the calculated index would go out of bounds
 		xE = xS + ntOnScreenX;
-		if (xE >= ntOnCanvasX)
-			xE = ntOnCanvasX-1;
+		if (xE >= ntOnCanvasX) xE = ntOnCanvasX-1;
 
-		int yE = yS + ntOnScreenY;
-		if (yE >= ntOnCanvasY)
-			yE = ntOnCanvasY-1;
+		yE = yS + ntOnScreenY;
+		if (yE >= ntOnCanvasY) yE = ntOnCanvasY-1;
 
-
-		// For each row...
-		for (int row = yS, y = (ntH*yS); row <= yE; row++, y += ntH)
-		{
-			byte[] data = reads.getValues(row, xS-offset, xE-offset);
-
-			for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
-			{
-				if (data[i] != -1)
-					g.drawImage(colors.getImage(data[i]), x, y, null);
-			}
-		}
+		// Paint the lines using multiple cores...
+		for (int i = 0; i < tasks.length; i++)
+			tasks[i] = executor.submit(new LinePainter(g, yS+i));
+		for (Future task: tasks)
+			task.get();
 
 		g.dispose();
 		updateBuffer = false;
@@ -263,5 +271,30 @@ class ReadsCanvas extends JPanel
 		// a noticeable effect on performance because of the time it takes
 		if (buffer == null || buffer.getWidth() != w || buffer.getHeight() != h)
 			buffer = (BufferedImage) createImage(w, h);
+	}
+
+	private final class LinePainter implements Runnable
+	{
+		private Graphics g;
+		private int yS;
+
+		LinePainter(Graphics g, int yS)
+		{
+			this.g = g;
+			this.yS = yS;
+		}
+
+		public void run()
+		{
+			// For every [nth] row, where n = number of available CPU cores...
+			for (int row = yS, y = (ntH*yS); row <= yE; row += cores, y += ntH*cores)
+			{
+				byte[] data = reads.getValues(row, xS-offset, xE-offset);
+
+				for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
+					if (data[i] != -1)
+						g.drawImage(colors.getImage(data[i]), x, y, null);
+			}
+		}
 	}
 }
