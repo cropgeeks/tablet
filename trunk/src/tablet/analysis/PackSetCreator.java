@@ -1,6 +1,7 @@
 package tablet.analysis;
 
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import tablet.data.*;
@@ -31,14 +32,17 @@ public class PackSetCreator extends SimpleJob
 		for (Contig contig: assembly)
 			maximum += contig.readCount();
 
-		ThreadRunner[] threads = new ThreadRunner[cores];
+		ExecutorService executor = Executors.newFixedThreadPool(cores);
+		Future[] tasks = new Future[cores];
 
 		// Start the threads...
-		for (int i = 0; i < threads.length; i++)
-			threads[i] = new ThreadRunner(i);
+		for (int i = 0; i < tasks.length; i++)
+			tasks[i] = executor.submit(new ThreadRunner(i));
 		// ...and then wait on them to finish
-		for (int i = 0; i < threads.length; i++)
-			threads[i].join();
+		for (Future task: tasks)
+			task.get();
+
+		executor.shutdown();
 
 		long e = System.currentTimeMillis();
 		System.out.println("Packed data in " + (e-s) + "ms");
@@ -49,22 +53,19 @@ public class PackSetCreator extends SimpleJob
 
 	// Performs the actual packing of the data. This class is told to run on
 	// the set of contigs, but starting from a given index, and incrementing at
-	// a given value. So for a 2-core machine, thread 1 will run on contigs 0,
-	// 2, 4, 6, etc, while thread-2 is running on contigs 1, 3, 5, 7, etc.
-	private class ThreadRunner extends Thread
+	// a given value. So for a 2-core machine, thread-0 will run on contigs 0,
+	// 2, 4, 6, etc, while thread-1 is running on contigs 1, 3, 5, 7, etc.
+	private class ThreadRunner implements Runnable
 	{
-		private int startIndex, increment;
+		private int startIndex;
 
 		ThreadRunner(int startIndex)
-		{
-			this.startIndex = startIndex;
-
-			setName("PackSetCreator-" + startIndex);
-			start();
-		}
+			{ this.startIndex = startIndex;	}
 
 		public void run()
 		{
+			Thread.currentThread().setName("PackSetCreator-" + startIndex);
+
 			int contigCount = assembly.size();
 
 			for (int i = startIndex; i < contigCount; i += cores)
@@ -95,7 +96,6 @@ public class PackSetCreator extends SimpleJob
 					}
 
 					progress.addAndGet(1);
-
 				}
 
 				// Trim the packs down to size once finished

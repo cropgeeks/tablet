@@ -30,7 +30,7 @@ class AceFileReader extends TrackableReader
 
 	// We maintain a local hashtable of contigs to help with finding a
 	// contig quickly when processing consensus tags
-	private Hashtable<String, Contig> contigHash = new Hashtable<String, Contig>();
+	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
 	AceFileReader(IReadCache readCache, boolean useAscii)
 	{

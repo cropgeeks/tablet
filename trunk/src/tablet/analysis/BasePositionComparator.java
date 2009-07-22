@@ -1,5 +1,9 @@
 package tablet.analysis;
 
+import java.util.*;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
+
 import tablet.data.*;
 
 /**
@@ -7,74 +11,105 @@ import tablet.data.*;
  * that contig's consensus sequence. Comparing each base position, differences
  * between the read and consensus are then encoded back into the read's data,
  * so that these comparisons do not have to be done in real-time when the data
- * is used for rendering.
+ * is used for rendering. Note that this class is multi-core aware, running
+ * threads that will independently process sets of reads.
  */
 public class BasePositionComparator extends SimpleJob
 {
 	private Assembly assembly;
+
+	private static int cores = Runtime.getRuntime().availableProcessors();
+
+	private AtomicInteger progress = new AtomicInteger();
 
 	public BasePositionComparator(Assembly assembly)
 	{
 		this.assembly = assembly;
 	}
 
-	// TODO: Test case
 	public void runJob(int jobIndex)
+		throws Exception
 	{
 		long s = System.currentTimeMillis();
-		long count = 0;
 
-		byte NOTUSED = Sequence.NOTUSED;
-
-		// How many reads do we have to deal with?
+		// Use the number of reads as a count of how much work will be done
 		for (Contig contig: assembly)
 			maximum += contig.readCount();
 
-		System.out.println("Running comparisons for " + maximum + " reads");
+		ExecutorService executor = Executors.newFixedThreadPool(cores);
+		Future[] tasks = new Future[cores];
 
-		for (Contig contig: assembly)
+		// Start the threads...
+		for (int i = 0; i < tasks.length; i++)
+			tasks[i] = executor.submit(new ThreadRunner(i));
+		// ...and then wait on them to finish
+		for (Future task: tasks)
+			task.get();
+
+		executor.shutdown();
+
+		System.out.println(maximum + " reads base compared in "
+			+ (System.currentTimeMillis()-s) + "ms");
+	}
+
+	public int getValue()
+		{ return progress.get(); }
+
+	private class ThreadRunner implements Runnable
+	{
+		private int startIndex;
+
+		ThreadRunner(int startIndex)
+			{ this.startIndex = startIndex; }
+
+		public void run()
 		{
-			Consensus consensus = contig.getConsensus();
+			Thread.currentThread().setName("BasePositionComparator-" + startIndex);
 
-			for (Read read: contig.getReads())
+			byte NOTUSED = Sequence.NOTUSED;
+
+			// The thread will process every contig...
+			for (Contig contig: assembly)
 			{
-				// Check for quit/cancel on the job...
-				if (okToRun == false)
-					return;
+				Consensus consensus = contig.getConsensus();
+				ArrayList<Read> reads = contig.getReads();
+				int readCount = reads.size();
 
-				// Index start position within the consensus sequence
-				int c = read.getStartPosition();
-				int cLength = consensus.length();
-				int rLength = read.length();
-
-				for (int r = 0; r < rLength; r++, c++, count++)
+				// But will only deal with every [cores] read within it, so on
+				// a 2-core machine, a thread will deal with every other read
+				for (int i = startIndex; i < readCount && okToRun; i += cores)
 				{
-					byte value = read.getStateAt(r);
+					Read read = reads.get(i);
 
-					if (c < 0 || c >= cLength)
+					// Index start position within the consensus sequence
+					int c = read.getStartPosition();
+					int cLength = consensus.length();
+					int rLength = read.length();
+
+					for (int r = 0; r < rLength; r++, c++)
 					{
-						// Out of bounds means that this base on the read does
-						// not have a corresponding position on the consensus
-						// (and must therefore be different from it)
-						read.setStateAt(r, (byte)(value+1));
-					}
-					else
-					{
-						// The DNATable encodes its states so that A and dA are
-						// only ever 1 byte apart, meaning we can change quickly
-						// by just incrementing the value by one
-						if (consensus.getStateAt(c) != value && value > NOTUSED)
+						byte value = read.getStateAt(r);
+
+						if (c < 0 || c >= cLength)
+						{
+							// Out of bounds means that this base on the read does
+							// not have a corresponding position on the consensus
+							// (and must therefore be different from it)
 							read.setStateAt(r, (byte)(value+1));
+						}
+						else
+						{
+							// The DNATable encodes its states so that A and dA are
+							// only ever 1 byte apart, meaning we can change quickly
+							// by just incrementing the value by one
+							if (consensus.getStateAt(c) != value && value > NOTUSED)
+								read.setStateAt(r, (byte)(value+1));
+						}
 					}
-				}
 
-				progress++;
+					progress.addAndGet(1);
+				}
 			}
 		}
-
-		long e = System.currentTimeMillis();
-
-		System.out.println("Ran " + count + " base comparisons");
-		System.out.println("  in " + (e-s) + "ms");
 	}
 }
