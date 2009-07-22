@@ -2,6 +2,7 @@ package tablet.io;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 
 import tablet.data.*;
 import tablet.data.cache.*;
@@ -31,6 +32,9 @@ class AceFileReader extends TrackableReader
 	// We maintain a local hashtable of contigs to help with finding a
 	// contig quickly when processing consensus tags
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
+
+	// Pretty much all the tokenizing we do is based on this one pattern
+	private Pattern p = Pattern.compile("\\s+");
 
 	AceFileReader(IReadCache readCache, boolean useAscii)
 	{
@@ -64,7 +68,7 @@ class AceFileReader extends TrackableReader
 		// Read in the header
 		str = readLine();
 
-		String[] AS = str.split("\\s+");
+		String[] AS = p.split(str);
 		if (AS.length != 3)
 			throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
 
@@ -108,7 +112,7 @@ class AceFileReader extends TrackableReader
 		throws Exception
 	{
 		// CO <contig name> <# of bases> <# of reads in contig> <# of base segments in contig> <U or C>
-		String[] CO = str.split("\\s+");
+		String[] CO = p.split(str);
 
 		if (CO.length != 6)
 			throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
@@ -149,7 +153,7 @@ class AceFileReader extends TrackableReader
 		while ((str = readLine()) != null && str.length() > 0)
 			bqStr.append(" " + str);
 
-		String[] tokens = bqStr.toString().trim().split("\\s+");
+		String[] tokens = p.split(bqStr.toString().trim());
 		byte[] bq = new byte[consensus.length()];
 
 		for (int t = 0, i = 0; t < tokens.length; t++, i++)
@@ -171,7 +175,7 @@ class AceFileReader extends TrackableReader
 		throws Exception
 	{
 		// AF <read name> <C or U> <padded start consensus position>
-		String[] AF = str.split("\\s+");
+		String[] AF = p.split(str);
 
 		if (AF.length != 4)
 			throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
@@ -216,7 +220,7 @@ class AceFileReader extends TrackableReader
 		throws Exception
 	{
 		// RD <read name> <# of padded bases> <# of whole read info items> <# of read tags>
-		String[] RD = str.split("\\s+");
+		String[] RD = p.split(str);
 
 		if (RD.length != 5)
 			throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
@@ -243,7 +247,7 @@ class AceFileReader extends TrackableReader
 		throws Exception
 	{
 		// QA <qual clipping start> <qual clipping end> <align clipping start> <align clipping end>
-		String[] QA = str.split("\\s+");
+		String[] QA = p.split(str);
 
 		int qa_start = Integer.parseInt(QA[1]);
 		int qa_end = Integer.parseInt(QA[2]);
@@ -259,7 +263,7 @@ class AceFileReader extends TrackableReader
 	{
 		// The next line of the tag should be the one with all the info on it
 		str = readLine();
-		String[] CT = str.split("\\s+");
+		String[] CT = p.split(str);
 
 		// POLYMORPHIC SNPs
 		if (CT[1].equalsIgnoreCase("polymorphism"))

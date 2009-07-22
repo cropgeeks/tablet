@@ -11,6 +11,8 @@ public class Pack
 {
 	private ArrayList<Read> reads = new ArrayList<Read>();
 
+	// TODO: This isn't being used yet - it should be possible to speed up
+	// searches with it though
 	private int positionS;
 	private int positionE;
 
