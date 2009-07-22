@@ -80,10 +80,7 @@ public class ProgressDialog extends JDialog
 	}
 
 	private void startJob()
-	{
-		setName("ProgressDialog-ITrackableJob");
-		new Thread(this).start();
-	}
+		{ new Thread(this).start(); }
 
 	private void cancelJob()
 	{
@@ -94,6 +91,8 @@ public class ProgressDialog extends JDialog
 	// Starts the job running in its own thread
 	public void run()
 	{
+		Thread.currentThread().setName("ProgressDialog-ITrackableJob");
+
 		Timer timer = new Timer(100, this);
 		timer.start();
 

@@ -211,22 +211,24 @@ public class WinMain extends JRibbonFrame
 	private void createMemoryTimer()
 	{
 		final DecimalFormat df = new DecimalFormat("0.00");
-		final MemoryMXBean bean = ManagementFactory.getMemoryMXBean();
+		final MemoryMXBean mBean = ManagementFactory.getMemoryMXBean();
+		final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
 
 		// TODO: Is this reporting correctly?
 		ActionListener listener = new ActionListener() {
 			public void actionPerformed(ActionEvent evt)
 			{
-				long used = bean.getHeapMemoryUsage().getUsed()
-					+ bean.getNonHeapMemoryUsage().getUsed();
+				long used = mBean.getHeapMemoryUsage().getUsed()
+					+ mBean.getNonHeapMemoryUsage().getUsed();
 
 				String label = RB.format("gui.WinMain.memory",
-					df.format(used/1024f/1024f));
+					df.format(used/1024f/1024f),
+					tBean.getThreadCount()-tBean.getDaemonThreadCount());
 				RibbonController.setMemoryLabel(label);
 			}
 		};
 
-		javax.swing.Timer timer = new javax.swing.Timer(10000, listener);
+		javax.swing.Timer timer = new javax.swing.Timer(2500, listener);
 		timer.setInitialDelay(0);
 		timer.start();
 	}
