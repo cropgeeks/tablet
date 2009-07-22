@@ -188,6 +188,8 @@ class ProteinCanvas extends JPanel
 		public void run()
 		{
 			setPriority(Thread.MIN_PRIORITY);
+			setName("ProteinCanvas-TranslationFractory");
+
 			try { Thread.sleep(250); } catch (Exception e) {}
 
 			// Forward and reverse...
