@@ -214,7 +214,6 @@ public class WinMain extends JRibbonFrame
 		final MemoryMXBean mBean = ManagementFactory.getMemoryMXBean();
 		final ThreadMXBean tBean = ManagementFactory.getThreadMXBean();
 
-		// TODO: Is this reporting correctly?
 		ActionListener listener = new ActionListener() {
 			public void actionPerformed(ActionEvent evt)
 			{
