@@ -15,13 +15,13 @@ import scri.commons.file.*;
 public class GFF3Reader extends TrackableReader
 {
 	// Stores a list of features per contig (as they are found)
-	private Hashtable<String, ArrayList<Feature>> contigs;
+	private HashMap<String, ArrayList<Feature>> contigs;
 
 	public GFF3Reader(File file, Assembly assembly)
 	{
 		setInputs(file, assembly);
 
-		contigs = new Hashtable<String, ArrayList<Feature>>();
+		contigs = new HashMap<String, ArrayList<Feature>>();
 	}
 
 	boolean canRead()
