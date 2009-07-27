@@ -189,7 +189,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		String lb = System.getProperty("line.separator");
 		String seq = read.toString();
 
-		StringBuffer text = new StringBuffer(seq.length() + 500);
+		StringBuilder text = new StringBuilder(seq.length() + 500);
 		text.append(readName + lb + posData + lb + lengthData + lb);
 
 		if (metaData.isComplemented())

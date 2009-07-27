@@ -16,7 +16,7 @@ public class SequenceTest extends TestCase
 		{
 			Consensus c = new Consensus();
 
-			StringBuffer sb = new StringBuffer(i);
+			StringBuilder sb = new StringBuilder(i);
 			for (int s = 0; s < i; s++)
 				sb.append(rndNucleotide());
 
@@ -37,7 +37,7 @@ public class SequenceTest extends TestCase
 
 		Consensus c = new Consensus();
 
-		StringBuffer sb = new StringBuffer(10);
+		StringBuilder sb = new StringBuilder(10);
 		for (int s = 0; s < 10; s++)
 			sb.append(rndNucleotide());
 

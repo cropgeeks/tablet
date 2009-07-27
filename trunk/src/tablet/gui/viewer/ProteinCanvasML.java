@@ -198,7 +198,7 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 		int actualTrack = getActualTrack(track);
 		short[] translation = pCanvas.translations.get(actualTrack);
 
-		StringBuffer str = new StringBuffer(translation.length/3);
+		StringBuilder str = new StringBuilder(translation.length/3);
 
 		// NOTE: the translation array holds different numbers for the same
 		// protein depending on whether it is the 1st/3rd digit or the 2nd.

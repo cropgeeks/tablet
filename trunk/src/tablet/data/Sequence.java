@@ -220,7 +220,7 @@ public abstract class Sequence
 	{
 		int length = length();
 
-		StringBuffer sb = new StringBuffer(length);
+		StringBuilder sb = new StringBuilder(length);
 
 		for (int i = 0; i < length; i++)
 		{
