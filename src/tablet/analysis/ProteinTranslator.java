@@ -29,7 +29,7 @@ public class ProteinTranslator extends SimpleJob
 	private int[] dna;
 
 	// Only needed for the unit test (stores a human readable translation)
-	private StringBuffer translation;
+	private StringBuilder translation;
 
 	/**
 	 * Creates a new ProteinTranslator, ready to translate a sequence with the
@@ -52,7 +52,7 @@ public class ProteinTranslator extends SimpleJob
 		int length = sequence.length();
 
 		protein = new short[length];
-		translation = new StringBuffer(length);
+		translation = new StringBuilder(length);
 
 		if (direction == Direction.FORWARD)
 			translateForward();

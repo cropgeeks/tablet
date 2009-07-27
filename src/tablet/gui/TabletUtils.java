@@ -24,7 +24,7 @@ public class TabletUtils
 	{
 		String lb = System.getProperty("line.separator");
 
-		StringBuffer text = new StringBuffer(sequence.length());
+		StringBuilder text = new StringBuilder(sequence.length());
 		text.append(">" + title + lb);
 
 		for (int i = 0; i < sequence.length(); i += 50)
