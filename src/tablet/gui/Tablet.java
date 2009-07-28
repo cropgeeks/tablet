@@ -5,6 +5,8 @@ import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 
+import tablet.gui.dialog.prefs.*;
+
 import scri.commons.gui.*;
 import scri.commons.file.*;
 
@@ -127,8 +129,8 @@ public class Tablet
 		try
 		{
 			// Register handlers to deal with the System menu about/quit options
-//			OSXAdapter.setPreferencesHandler(this,
-//				getClass().getDeclaredMethod("osxPreferences", (Class[])null));
+			OSXAdapter.setPreferencesHandler(this,
+				getClass().getDeclaredMethod("osxPreferences", (Class[])null));
 //			OSXAdapter.setAboutHandler(this,
 //				getClass().getDeclaredMethod("osxAbout", (Class[])null));
 			OSXAdapter.setQuitHandler(this,
@@ -145,13 +147,12 @@ public class Tablet
 	/** "Preferences" on the OS X system menu. */
 	public void osxPreferences()
 	{
-//		winMain.mHelp.helpPrefs();
+		new PreferencesDialog();
 	}
 
 	/** "About Flapjack" on the OS X system menu. */
 	public void osxAbout()
 	{
-//		winMain.mHelp.helpAbout();
 	}
 
 	/** "Quit Flapjack" on the OS X system menu. */

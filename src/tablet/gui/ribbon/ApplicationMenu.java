@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 
+import tablet.gui.dialog.prefs.*;
 import tablet.gui.*;
 
 import org.jvnet.flamingo.common.*;
@@ -90,14 +91,14 @@ public class ApplicationMenu extends RibbonApplicationMenu
 		mOptions = new RibbonApplicationMenuEntryFooter(iOptions,
 			RB.getString("gui.ribbon.ApplicationMenu.mOptions"), this);
 		mOptions.setActionKeyTip("TO");
-		mOptions.setEnabled(false);
 
 		iExit = RibbonController.getIcon("EXIT16", 16);
 		mExit = new RibbonApplicationMenuEntryFooter(iExit,
 			RB.getString("gui.ribbon.ApplicationMenu.mExit"), this);
 		mExit.setActionKeyTip("X");
 
-		addFooterEntry(mOptions);
+		if (SystemUtils.isMacOS() == false)
+			addFooterEntry(mOptions);
 		addFooterEntry(mExit);
 
 		winMain.getRibbon().addTaskbarComponent(bSave);
@@ -159,6 +160,9 @@ public class ApplicationMenu extends RibbonApplicationMenu
 
 		else if (icon == iClose)
 			winMain.closeAssembly();
+
+		else if (icon == iOptions)
+			new PreferencesDialog();
 
 		else if (icon == iExit)
 		{
