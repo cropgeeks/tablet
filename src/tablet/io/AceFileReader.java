@@ -133,7 +133,7 @@ class AceFileReader extends TrackableReader
 
 		consensus = new Consensus();
 		consensus.setData(ref.toString());
-		consensus.calculatePaddedMappings();
+		consensus.calculateUnpaddedLength();
 		contig.setConsensusSequence(consensus);
 
 		ucCache = new boolean[readCount];
