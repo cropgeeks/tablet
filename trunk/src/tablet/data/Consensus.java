@@ -3,6 +3,7 @@ package tablet.data;
 /** The consensus sequence for a contig. */
 public class Consensus extends Sequence
 {
+	// Base quality information, one byte per nucleotide base
 	private byte[] bq;
 
 	// Contains info to map from a padded to an unpadded position
@@ -18,16 +19,32 @@ public class Consensus extends Sequence
 	}
 
 	/**
+	 * Sets the unpadded length of this consensus sequence. This is done by
+	 * calling Sequence.calculateUnpaddedLength() and storing the result.
+	 * @return the unpadded length of this consensus sequence
+	 */
+	public int calculateUnpaddedLength()
+		{ return (unpaddedLength = super.calculateUnpaddedLength()); }
+
+	/**
 	 * Ensures that the consensus' internal mappings between padded and unpadded
-	 * positions have been properly calculated. Must be called as part of data
-	 * loading.
+	 * positions have been properly calculated. Must be called before display.
 	 */
 	public void calculatePaddedMappings()
 	{
 		calculatePaddedToUnpadded();
 		calculateUnpaddedToPadded();
+	}
 
-		unpaddedLength = calculateUnpaddedLength();
+	/**
+	 * Clears the memory allocated for the storage of padded/unpadded mapping
+	 * information by this consensus sequence. It is only needed at display time
+	 * and if this contig isn't visible it can be a massive waste of memory.
+	 */
+	public void clearPaddedMappings()
+	{
+		paddedToUnpadded = null;
+		unpaddedToPadded = null;
 	}
 
 	// Given a padded index value (0 to length-1) what is the unpadded value at
@@ -177,20 +194,5 @@ public class Consensus extends Sequence
 			data[d] = -1;
 
 		return data;
-	}
-
-	void print()
-	{
-		System.out.println();
-		System.out.println("Consensus:");
-		System.out.println("  length: " + length());
-
-		for (int i = 0; i < length(); i++)
-		{
-//			System.out.print(DNATable.getDNA(data[i]));
-			System.out.print(bq[i] + " ");
-		}
-
-		System.out.println();
 	}
 }
