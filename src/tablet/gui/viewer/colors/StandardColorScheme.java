@@ -33,10 +33,10 @@ public class StandardColorScheme extends ColorScheme
 		statesCS.add(null);
 
 		// Sequence.P
-		statesRD.add(new StandardColorState("*", Color.lightGray, w, h, true, false));
-		statesCS.add(new StandardColorState("*", Color.lightGray, w, h, false, false));
+		statesRD.add(new StandardColorState(Sequence.PAD, Color.lightGray, w, h, true, false));
+		statesCS.add(new StandardColorState(Sequence.PAD, Color.lightGray, w, h, false, false));
 		// Sequence.dP
-		statesRD.add(new StandardColorState("*", Color.lightGray, w, h, true, true));
+		statesRD.add(new StandardColorState(Sequence.PAD, Color.lightGray, w, h, true, true));
 		statesCS.add(null);
 
 		// Sequence.N

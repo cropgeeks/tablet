@@ -6,6 +6,9 @@ package tablet.data;
  */
 public abstract class Sequence
 {
+	// Defines what the pad character will be (can be changed if need be)
+	public static String PAD = "*";
+
 	// The codes that we store for each "state".
 	// There are obvious codes for ATCG*N, but also codes for when the base
 	// in a read is different (d) from the same base in the consensus.
@@ -154,7 +157,11 @@ public abstract class Sequence
 			case 'T': return T;
 
 			case 'N': return N;
+
+			// TODO: Any other potential pad characters in use in file types?
+			// "*" is used in ACE files, "-" is used often elsewhere
 			case '*': return P;
+			case '-': return P;
 
 			case 'a': return A;
 			case 'c': return C;
@@ -176,9 +183,9 @@ public abstract class Sequence
 			case T:  return "T";
 
 			case N:  return "N";
-			case P:  return "*";
+			case P:  return PAD;
 
-			case dP: return "*";
+			case dP: return PAD;
 			case dA: return "A";
 			case dC: return "C";
 			case dG: return "G";
@@ -199,9 +206,9 @@ public abstract class Sequence
 			case T:  return "A";
 
 			case N:  return "N";
-			case P:  return "*";
+			case P:  return PAD;
 
-			case dP: return "*";
+			case dP: return PAD;
 			case dT: return "A";
 			case dG: return "C";
 			case dC: return "G";

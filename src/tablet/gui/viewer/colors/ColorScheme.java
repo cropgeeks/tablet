@@ -4,7 +4,9 @@ import java.awt.*;
 import java.awt.image.*;
 import java.util.*;
 
+import tablet.analysis.*;
 import tablet.data.*;
+import tablet.gui.*;
 
 public abstract class ColorScheme
 {
@@ -25,6 +27,12 @@ public abstract class ColorScheme
 	/** Returns a DNA colouring scheme from the cache of schemes. */
 	public static ColorScheme getDNA(int type, int w, int h)
 	{
+		// Ensure the correct type of pad character rendering is used
+		if (Prefs.visPadCharType == 0)
+			Sequence.PAD = "*";
+		else if (Prefs.visPadCharType == 1)
+			Sequence.PAD = "-";
+
 		ColorScheme scheme = null;
 
 		if (type == STANDARD)
@@ -39,6 +47,12 @@ public abstract class ColorScheme
 	/** Returns a PROTEIN colouring scheme from the cache of schemes. */
 	public static ColorScheme getProtein(int type, int w, int h)
 	{
+		// Ensure the correct type of pad character rendering is used
+		if (Prefs.visStopCharType == 0)
+			ProteinTranslator.setStopCharacter(".");
+		else if (Prefs.visStopCharType == 1)
+			ProteinTranslator.setStopCharacter("*");
+
 		ColorScheme scheme = null;
 
 		if (type == STANDARD)

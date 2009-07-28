@@ -51,7 +51,7 @@ public class ProteinClassificationColorScheme extends ColorScheme
 			states.add(new ProteinClassificationColorState(codes[18], ACIDIC, w, h, i));	// D
 			states.add(new ProteinClassificationColorState(codes[19], BASIC, w, h, i));		// K
 			states.add(new ProteinClassificationColorState(codes[20], BASIC, w, h, i));		// R
-			states.add(new ProteinClassificationColorState("\u25AA", STOP, w, h, i));		// . (codes[21] overridden with a nicer unicode "stop")
+			states.add(new ProteinClassificationColorState(codes[21], STOP, w, h, i));		// .
 		}
 	}
 

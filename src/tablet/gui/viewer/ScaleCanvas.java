@@ -216,7 +216,7 @@ class ScaleCanvas extends JPanel
 		int unpadded = consensus.getUnpaddedPosition(mouseBase);
 
 		if (unpadded == -1)
-			return " (*)";
+			return " (" + Sequence.PAD + ")";
 		else
 			return " (" + d.format(unpadded+1) + ")";
 	}
