@@ -72,6 +72,10 @@ public class Prefs extends XMLPreferences
 	// Which protein translations should be shown?
 	public static String visProteins = "1 0 0 0 0 0";
 
+	// What type of pad/stop characters should be displayed
+	public static int visPadCharType = 0;
+	public static int visStopCharType = 0;
+
 	// TODO: The scri-commons XML loading needs to support arrays
 	public static String guiRecent01 = "";
 	public static String guiRecent02 = "";

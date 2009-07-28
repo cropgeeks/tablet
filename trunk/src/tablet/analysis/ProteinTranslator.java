@@ -9,12 +9,13 @@ public class ProteinTranslator extends SimpleJob
 {
 	public static enum Direction { FORWARD, REVERSE };
 
+	static { createTranslationTable(); }
+
 	public static Hashtable<String, Integer> acids;
 	public static String[] codes;
 
-	static { createTranslationTable(); }
-
 	private Sequence sequence;
+	private static String STOP = ".";
 
 	private Direction direction;
 	private int readingFrame;
@@ -44,6 +45,15 @@ public class ProteinTranslator extends SimpleJob
 
 		if (acids == null)
 			createTranslationTable();
+	}
+
+	public static void setStopCharacter(String stopChar)
+	{
+		if (STOP != stopChar)
+		{
+			STOP = stopChar;
+			createTranslationTable();
+		}
 	}
 
 	public void runJob(int jobIndex)
@@ -275,7 +285,7 @@ public class ProteinTranslator extends SimpleJob
 		acids.put("AGG", 20);
 
 		// 21 = .
-		codes[21] = ".";
+		codes[21] = STOP;
 		acids.put("TAA", 21);
 		acids.put("TAG", 21);
 		acids.put("TGA", 21);

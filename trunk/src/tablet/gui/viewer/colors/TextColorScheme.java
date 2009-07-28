@@ -33,10 +33,10 @@ public class TextColorScheme extends ColorScheme
 		statesCS.add(null);
 
 		// Sequence.P
-		statesRD.add(new TextState("*", w, h, true, false));
-		statesCS.add(new TextState("*", w, h, false, false));
+		statesRD.add(new TextState(Sequence.PAD, w, h, true, false));
+		statesCS.add(new TextState(Sequence.PAD, w, h, false, false));
 		// Sequence.dP
-		statesRD.add(new TextState("*", w, h, true, true));
+		statesRD.add(new TextState(Sequence.PAD, w, h, true, true));
 		statesCS.add(null);
 
 		// Sequence.N

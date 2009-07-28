@@ -40,7 +40,7 @@ public class ProteinTextColorScheme extends ColorScheme
 		states.add(new TextState(codes[18], w, h, false, false));	// D
 		states.add(new TextState(codes[19], w, h, false, false));	// K
 		states.add(new TextState(codes[20], w, h, false, false));	// R
-		states.add(new TextState("\u25AA", w, h, false, true));	// .
+		states.add(new TextState(codes[21], w, h, false, true));	// .
 
 		// The 21 proteins as images WITHOUT text
 		// We can reuse the same image for each group
