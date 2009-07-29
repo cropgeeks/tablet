@@ -150,7 +150,14 @@ public class ApplicationMenu extends RibbonApplicationMenu
 		ResizableIcon icon = ((JCommandButton)e.getSource()).getIcon();
 
 		if (icon == iOpen)
-			winMain.getCommands().fileOpen(null);
+		{
+			// Work-around for OS X not liking its heavyweight file dialog being
+			// opened on top of the ribbon's application menu
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					winMain.getCommands().fileOpen(null);
+			}});
+		}
 
 		else if (icon == iSave || e.getSource() == Actions.applicationMenuSave16)
 			System.out.println("Save");
