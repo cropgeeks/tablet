@@ -35,7 +35,7 @@ public class Prefs extends XMLPreferences
 	public static int guiJumpToY = -9999;
 
 	// The location of the main splits pane divider
-	public static int guiSplitterLocation = 150;
+	public static int guiSplitterLocation = 200;
 
 	// The last used directory location in file chooser dialogs
 	public static String guiCurrentDir = "";
