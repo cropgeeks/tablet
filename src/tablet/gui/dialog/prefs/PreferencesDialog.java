@@ -17,7 +17,7 @@ public class PreferencesDialog extends JDialog implements ActionListener
 
 	private JTabbedPane tabs;
 	private NBGeneralPanel generalPanel;
-//	private NBVisualizationPanel visualizationPanel;
+	private NBVisualizationPanel visualizationPanel;
 
 	public PreferencesDialog()
 	{
@@ -28,14 +28,14 @@ public class PreferencesDialog extends JDialog implements ActionListener
 		);
 
 		generalPanel = new NBGeneralPanel();
-//		visualizationPanel = new NBVisualizationPanel();
+		visualizationPanel = new NBVisualizationPanel();
 
 		tabs = new JTabbedPane();
 		tabs.setBorder(BorderFactory.createEmptyBorder(2, 2, 10, 2));
 		tabs.addTab(RB.getString("gui.dialog.prefs.PreferencesDialog.generalTab"),
 			Icons.getIcon("GENERALTAB"), generalPanel);
-//		tabs.addTab(RB.getString("gui.dialog.prefs.PreferencesDialog.visualizationTab"),
-//			Icons.getIcon("VISUALIZATIONTAB"), visualizationPanel);
+		tabs.addTab(RB.getString("gui.dialog.prefs.PreferencesDialog.visualizationTab"),
+			Icons.getIcon("VISUALIZATIONTAB"), visualizationPanel);
 		tabs.setSelectedIndex(lastTab);
 
 		add(tabs);
@@ -74,6 +74,7 @@ public class PreferencesDialog extends JDialog implements ActionListener
 		if (e.getSource() == bOK)
 		{
 			generalPanel.applySettings();
+			visualizationPanel.applySettings();
 
 			lastTab = tabs.getSelectedIndex();
 			isOK = true;

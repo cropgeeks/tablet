@@ -11,7 +11,7 @@ public class ProteinTranslator extends SimpleJob
 
 	static { createTranslationTable(); }
 
-	public static Hashtable<String, Integer> acids;
+	public static HashMap<String, Integer> acids;
 	public static String[] codes;
 
 	private Sequence sequence;
@@ -49,11 +49,8 @@ public class ProteinTranslator extends SimpleJob
 
 	public static void setStopCharacter(String stopChar)
 	{
-		if (STOP != stopChar)
-		{
-			STOP = stopChar;
-			createTranslationTable();
-		}
+		STOP = stopChar;
+		createTranslationTable();
 	}
 
 	public void runJob(int jobIndex)
@@ -158,7 +155,7 @@ public class ProteinTranslator extends SimpleJob
 
 	private static void createTranslationTable()
 	{
-		acids = new Hashtable<String, Integer>();
+		acids = new HashMap<String, Integer>();
 		codes = new String[22];
 
 		codes[0] = "?";
