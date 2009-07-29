@@ -29,7 +29,7 @@ class NBGeneralPanel extends JPanel
         displayModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.en_GB"));
         displayModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.en_US"));
         displayCombo.setModel(displayModel);
-
+		displayCombo.setSelectedIndex(getLocaleIndex());
 
         // Update settings
         RB.setText(updateLabel, "gui.dialog.prefs.NBGeneralPanel.updateLabel");
@@ -41,9 +41,8 @@ class NBGeneralPanel extends JPanel
         updateModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.updateWeekly"));
         updateModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.updateMonthly"));
         updateCombo.setModel(updateModel);
-
-        initSettings();
-    }
+        updateCombo.setSelectedIndex(Prefs.guiUpdateSchedule);
+	}
 
     private int getLocaleIndex()
 	{
@@ -54,12 +53,6 @@ class NBGeneralPanel extends JPanel
 		else
 			return 0;
 	}
-
-	private void initSettings()
-    {
-    	displayCombo.setSelectedIndex(getLocaleIndex());
-    	updateCombo.setSelectedIndex(Prefs.guiUpdateSchedule);
-    }
 
 	public void applySettings()
 	{
@@ -72,7 +65,6 @@ class NBGeneralPanel extends JPanel
 
 		Prefs.guiUpdateSchedule = updateCombo.getSelectedIndex();
 	}
-
 
     /** This method is called from within the constructor to
      * initialize the form.
