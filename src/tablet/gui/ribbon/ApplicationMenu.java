@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 
+import tablet.gui.dialog.*;
 import tablet.gui.dialog.prefs.*;
 import tablet.gui.*;
 
@@ -31,6 +32,8 @@ public class ApplicationMenu extends RibbonApplicationMenu
 	private ResizableIcon iSaveAs;
 	public static RibbonApplicationMenuEntryPrimary mClose;
 
+	private ResizableIcon iAbout;
+	private RibbonApplicationMenuEntryFooter mAbout;
 	private ResizableIcon iOptions;
 	private RibbonApplicationMenuEntryFooter mOptions;
 	private ResizableIcon iExit;
@@ -87,6 +90,11 @@ public class ApplicationMenu extends RibbonApplicationMenu
 
 
 		// Footer menu options
+		iAbout = RibbonController.getIcon("APPICON16", 16);
+		mAbout = new RibbonApplicationMenuEntryFooter(iAbout,
+			RB.getString("gui.ribbon.ApplicationMenu.mAbout"), this);
+		mAbout.setActionKeyTip("TA");
+
 		iOptions = RibbonController.getIcon("OPTIONS16", 16);
 		mOptions = new RibbonApplicationMenuEntryFooter(iOptions,
 			RB.getString("gui.ribbon.ApplicationMenu.mOptions"), this);
@@ -98,7 +106,11 @@ public class ApplicationMenu extends RibbonApplicationMenu
 		mExit.setActionKeyTip("X");
 
 		if (SystemUtils.isMacOS() == false)
+		{
+			addFooterEntry(mAbout);
 			addFooterEntry(mOptions);
+		}
+
 		addFooterEntry(mExit);
 
 		winMain.getRibbon().addTaskbarComponent(bSave);
@@ -167,6 +179,9 @@ public class ApplicationMenu extends RibbonApplicationMenu
 
 		else if (icon == iClose)
 			winMain.closeAssembly();
+
+		else if (icon == iAbout)
+			new AboutDialog();
 
 		else if (icon == iOptions)
 			new PreferencesDialog();
