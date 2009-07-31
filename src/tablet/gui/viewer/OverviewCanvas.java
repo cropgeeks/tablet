@@ -5,19 +5,27 @@ import java.awt.event.*;
 import java.awt.image.*;
 import javax.swing.*;
 
-class OverviewCanvas extends JPanel
+import tablet.gui.*;
+
+import scri.commons.gui.*;
+
+public class OverviewCanvas extends JPanel
 {
+	public static final int SCALEDDATA = 0;
+	public static final int COVERAGE = 1;
+
 	private AssemblyPanel aPanel;
 	private ReadsCanvas rCanvas;
 
 	private Canvas2D canvas = new Canvas2D();
+	private OverviewCanvasML canvasML;
 
 	private OverviewBufferFactory bufferFactory = null;
 	private BufferedImage image = null;
 	private int w, h;
 
+	// Scaling factors from main canvas back to the overview
 	private float xScale, yScale;
-
 	// Outline box co-ordinates
 	private int bX1, bY1, bX2, bY2;
 	// Read under mouse tracking co-ordinates
@@ -40,25 +48,14 @@ class OverviewCanvas extends JPanel
 			}
 		});
 
-		// Mouse listener for the canvas
-		canvas.addMouseListener(new MouseAdapter()
-		{
-			public void mouseClicked(MouseEvent e)
-				{ canvas.processMouse(e); }
-
-			public void mousePressed(MouseEvent e)
-				{ canvas.processMouse(e); }
-
-			public void mouseReleased(MouseEvent e)
-				{ canvas.processMouse(e); }
-		});
-
-		canvas.addMouseMotionListener(new MouseMotionAdapter()
-		{
-			public void mouseDragged(MouseEvent e)
-				{ canvas.processMouse(e); }
-		});
+		canvasML = new OverviewCanvasML(this, canvas);
 	}
+
+	void displayMenu(JComponent button, MouseEvent e)
+		{ canvasML.displayMenu(button, e); }
+
+	void processMouse(MouseEvent e)
+		{ canvas.processMouse(e); }
 
 	void setAssemblyPanel(AssemblyPanel aPanel)
 	{
@@ -81,8 +78,10 @@ class OverviewCanvas extends JPanel
 			bufferFactory.killMe = true;
 
 		// Before starting a new one
-//		bufferFactory = new ScaledOverviewFactory(this, w, h, rCanvas);
-		bufferFactory = new CoverageOverviewFactory(this, w, h, rCanvas);
+		if (Prefs.visOverviewType == SCALEDDATA)
+			bufferFactory = new ScaledOverviewFactory(this, w, h, rCanvas);
+		else if (Prefs.visOverviewType == COVERAGE)
+			bufferFactory = new CoverageOverviewFactory(this, w, h, rCanvas);
 
 		repaint();
 	}
@@ -133,7 +132,7 @@ class OverviewCanvas extends JPanel
 	// map from data-indices back to pixels
 	void updateRead(int lineIndex, int start, int end)
 	{
-		if (bufferFactory instanceof ScaledOverviewFactory)
+		if (Prefs.visOverviewType == SCALEDDATA)
 		{
 			readX = Math.round(xScale * start);
 			readY = Math.round(yScale * lineIndex);

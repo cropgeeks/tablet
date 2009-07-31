@@ -269,4 +269,9 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	{
 		proteinCanvas.mouseListener.displayMenu(button, null);
 	}
+
+	public void displayOverviewOptions(JComponent button)
+	{
+		overviewCanvas.displayMenu(button, null);
+	}
 }

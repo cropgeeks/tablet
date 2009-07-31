@@ -18,9 +18,10 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 	private JCommandToggleButton bInfoPane;
 	private JCommandToggleButton bHidePads;
 
-	private JCommandToggleButton bHideOverview;
-	private JCommandToggleButton bHideConsensus;
+	private JCommandButton bHideOverview;
 	private JCommandButton bHideProteins;
+
+	private JCommandToggleButton bHideConsensus;
 	private JCommandToggleButton bHideScaleBar;
 	private JCommandToggleButton bHideContigs;
 
@@ -64,9 +65,9 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 
 
 		// Hide the overview panel
-		bHideOverview = new JCommandToggleButton("",
+		bHideOverview = new JCommandButton("",
 			RibbonController.getIcon("HIDEOVERVIEW16", 16));
-		Actions.homeOptionsHideOverview = new ActionToggleButtonModel(false);
+		Actions.homeOptionsHideOverview = new ActionRepeatableButtonModel(bHideOverview);
 		Actions.homeOptionsHideOverview.setSelected(Prefs.guiHideOverview);
 		Actions.homeOptionsHideOverview.addActionListener(this);
 		bHideOverview.setActionModel(Actions.homeOptionsHideOverview);
@@ -74,6 +75,23 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		bHideOverview.setActionRichTooltip(new RichTooltip(
 			RB.getString("gui.ribbon.HomeOptionsBand.bHideOverview.tooltip"),
 			RB.getString("gui.ribbon.HomeOptionsBand.bHideOverview.richtip")));
+
+		// Open the proteins option menu
+		bHideProteins = new JCommandButton("",
+			RibbonController.getIcon("HIDEPROTEINS16", 16));
+		Actions.homeOptionsHideProteins = new ActionRepeatableButtonModel(bHideProteins);
+		Actions.homeOptionsHideProteins.addActionListener(this);
+		bHideProteins.setActionModel(Actions.homeOptionsHideProteins);
+		bHideProteins.setActionKeyTip("HP");
+		bHideProteins.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeOptionsBand.bHideProteins.tooltip"),
+			RB.getString("gui.ribbon.HomeOptionsBand.bHideProteins.richtip")));
+
+		JCommandButtonStrip menuStrip = new JCommandButtonStrip();
+		menuStrip.add(bHideOverview);
+		menuStrip.add(bHideProteins);
+		addFlowComponent(menuStrip);
+
 
 		// Hide the consensus canvas
 		bHideConsensus = new JCommandToggleButton("",
@@ -111,21 +129,8 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.HomeOptionsBand.bHideContigs.tooltip"),
 			RB.getString("gui.ribbon.HomeOptionsBand.bHideContigs.richtip")));
 
-		// Open the proteins option menu
-		bHideProteins = new JCommandButton("",
-			RibbonController.getIcon("HIDEPROTEINS16", 16));
-		Actions.homeOptionsHideProteins = new ActionRepeatableButtonModel(bHideProteins);
-		Actions.homeOptionsHideProteins.addActionListener(this);
-		bHideProteins.setActionModel(Actions.homeOptionsHideProteins);
-		bHideProteins.setActionKeyTip("HP");
-		bHideProteins.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeOptionsBand.bHideProteins.tooltip"),
-			RB.getString("gui.ribbon.HomeOptionsBand.bHideProteins.richtip")));
-
 
 		JCommandButtonStrip panelsStrip = new JCommandButtonStrip();
-		panelsStrip.add(bHideOverview);
-		panelsStrip.add(bHideProteins);
 		panelsStrip.add(bHideConsensus);
 		panelsStrip.add(bHideScaleBar);
 		panelsStrip.add(bHideContigs);
@@ -151,8 +156,7 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		// Panel controls
 		else if (source == Actions.homeOptionsHideOverview)
 		{
-			Prefs.guiHideOverview = !Prefs.guiHideOverview;
-			winMain.getAssemblyPanel().setVisibilities();
+			winMain.getAssemblyPanel().displayOverviewOptions(bHideOverview);
 		}
 		else if (source == Actions.homeOptionsHideProteins)
 		{
