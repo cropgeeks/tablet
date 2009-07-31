@@ -19,10 +19,10 @@ public class Actions
 
 	public static ActionToggleButtonModel homeOptionsInfoPane16;
 	public static ActionToggleButtonModel homeOptionsHidePads16;
-	public static ActionToggleButtonModel homeOptionsHideOverview;
 	public static ActionToggleButtonModel homeOptionsHideConsensus;
 	public static ActionToggleButtonModel homeOptionsHideScaleBar;
 	public static ActionToggleButtonModel homeOptionsHideContigs;
+	public static ActionRepeatableButtonModel homeOptionsHideOverview;
 	public static ActionRepeatableButtonModel homeOptionsHideProteins;
 
 	public static ActionToggleButtonModel homeStylesStandard;

@@ -2,6 +2,7 @@ package tablet.gui;
 
 import java.util.*;
 
+import tablet.gui.viewer.*;
 import tablet.gui.viewer.colors.*;
 
 import scri.commons.gui.*;
@@ -58,6 +59,9 @@ public class Prefs extends XMLPreferences
 
 	// Display reads in packed or stacked form?
 	public static boolean visPacked = true;
+
+	// Overview canvas type
+	public static int visOverviewType = OverviewCanvas.SCALEDDATA;
 
 	// Current zoom level of the reads canvas
 	public static int visReadsCanvasZoom = 7;
