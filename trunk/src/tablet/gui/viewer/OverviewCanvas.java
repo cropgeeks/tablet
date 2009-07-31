@@ -5,8 +5,6 @@ import java.awt.event.*;
 import java.awt.image.*;
 import javax.swing.*;
 
-import tablet.data.*;
-
 class OverviewCanvas extends JPanel
 {
 	private AssemblyPanel aPanel;
@@ -14,16 +12,16 @@ class OverviewCanvas extends JPanel
 
 	private Canvas2D canvas = new Canvas2D();
 
-	private BufferFactory bufferFactory = null;
+	private OverviewBufferFactory bufferFactory = null;
 	private BufferedImage image = null;
 	private int w, h;
+
+	private float xScale, yScale;
 
 	// Outline box co-ordinates
 	private int bX1, bY1, bX2, bY2;
 	// Read under mouse tracking co-ordinates
 	private int readX = -1, readY, readW, readH;
-
-	private boolean basicView = true;
 
 	OverviewCanvas()
 	{
@@ -46,15 +44,7 @@ class OverviewCanvas extends JPanel
 		canvas.addMouseListener(new MouseAdapter()
 		{
 			public void mouseClicked(MouseEvent e)
-			{
-				if (e.getClickCount() == 2)
-				{
-					basicView = !basicView;
-					createImage();
-				}
-				else
-					canvas.processMouse(e);
-			}
+				{ canvas.processMouse(e); }
 
 			public void mousePressed(MouseEvent e)
 				{ canvas.processMouse(e); }
@@ -89,15 +79,21 @@ class OverviewCanvas extends JPanel
 		// Kill off any old image generation that might still be running...
 		if (bufferFactory != null)
 			bufferFactory.killMe = true;
+
 		// Before starting a new one
-		bufferFactory = new BufferFactory(w, h);
+//		bufferFactory = new ScaledOverviewFactory(this, w, h, rCanvas);
+		bufferFactory = new CoverageOverviewFactory(this, w, h, rCanvas);
 
 		repaint();
 	}
 
-	private void bufferAvailable(BufferedImage image)
+	void bufferAvailable(BufferedImage image)
 	{
 		this.image = image;
+
+		// Scaling factors for mouse/mapping
+		xScale = w / (float) rCanvas.ntOnCanvasX;
+		yScale = h / (float) rCanvas.ntOnCanvasY;
 
 		// Force the main canvas to send its view size dimensions so we can draw
 		// the highlighting box on top of the new back buffer's image
@@ -110,19 +106,19 @@ class OverviewCanvas extends JPanel
 			return;
 
 		// Work out the x1 position for the outline box
-		bX1 = Math.round(bufferFactory.xScale * xIndex);
+		bX1 = Math.round(xScale * xIndex);
 		if (bX1 >= w) bX1 = w - 1;
 
 		// Work out the y1 position for the outline box
-		bY1 = Math.round(bufferFactory.yScale * yIndex);
+		bY1 = Math.round(yScale * yIndex);
 		if (bY1 >= h) bY1 = h - 1;
 
 		// Work out the x2 position for the outline box
-		bX2 = bX1 + Math.round(xNum * bufferFactory.xScale);
+		bX2 = bX1 + Math.round(xNum * xScale);
 		if (bX2 >= w) bX2 = w - 1;
 
 		// Work out the y2 position for the outline box
-		bY2 = bY1 + Math.round(yNum * bufferFactory.yScale);
+		bY2 = bY1 + Math.round(yNum * yScale);
 		if (bY2 >= h) bY2 = h - 1;
 
 		// Tweak for a fatter outline on very large canvases
@@ -137,14 +133,17 @@ class OverviewCanvas extends JPanel
 	// map from data-indices back to pixels
 	void updateRead(int lineIndex, int start, int end)
 	{
-		readX = Math.round(bufferFactory.xScale * start);
-		readY = Math.round(bufferFactory.yScale * lineIndex);
-		readW = Math.round(bufferFactory.xScale * (end-start+1));
-		readH = Math.round(bufferFactory.yScale);
+		if (bufferFactory instanceof ScaledOverviewFactory)
+		{
+			readX = Math.round(xScale * start);
+			readY = Math.round(yScale * lineIndex);
+			readW = Math.round(xScale * (end-start+1));
+			readH = Math.round(yScale);
 
-		if (readH < 1) readH = 1;
+			if (readH < 1) readH = 1;
 
-		repaint();
+			repaint();
+		}
 	}
 
 	private class Canvas2D extends JPanel
@@ -156,15 +155,12 @@ class OverviewCanvas extends JPanel
 
 		private void processMouse(MouseEvent e)
 		{
-			if (aPanel == null)
-				return;
-
 			// Compute mouse position (and adjust by wid/hgt of rectangle)
 			int x = e.getX() - (int) ((bX2-bX1+1) / 2f);
 			int y = e.getY() - (int) ((bY2-bY1+1) / 2f);
 
-			int rowIndex = (int) (y / bufferFactory.yScale);
-			int colIndex = (int) (x / bufferFactory.xScale);
+			int rowIndex = (int) (y / yScale);
+			int colIndex = (int) (x / xScale);
 
 			aPanel.moveToPosition(rowIndex, colIndex, false);
 		}
@@ -193,136 +189,35 @@ class OverviewCanvas extends JPanel
 			}
 		}
 	}
+}
 
-	private class BufferFactory extends Thread
+/**
+ * Abstract base class for all overview image-generation factories.
+ */
+abstract class OverviewBufferFactory extends Thread
+{
+	protected OverviewCanvas canvas;
+	protected BufferedImage buffer;
+	protected int w, h;
+
+	boolean killMe = false;
+
+	protected OverviewBufferFactory(OverviewCanvas canvas, int w, int h)
 	{
-		private Contig contig;
-		private IReadManager reads;
+		this.canvas = canvas;
+		this.w = w;
+		this.h = h;
+	}
 
-		private BufferedImage buffer;
-		private int w, h;
-		private int ntOnCanvasX, ntOnCanvasY;
-		private int xWidth, yHeight;
-		private float xScale, yScale;
+	// Creates and (fills with white) an image buffer of the correct size
+	protected Graphics2D createBuffer()
+	{
+		buffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 
-		boolean killMe = false;
+		Graphics2D g = buffer.createGraphics();
+		g.setColor(Color.white);
+		g.fillRect(0, 0, w, h);
 
-		BufferFactory(int w, int h)
-		{
-			this.w = w;
-			this.h = h;
-
-			// Make private references to certain values now, as they MAY change
-			// while the buffer is still being created, which creates a cock-up
-			contig = rCanvas.contig;
-			reads = rCanvas.reads;
-			ntOnCanvasX = rCanvas.ntOnCanvasX;
-			ntOnCanvasY = rCanvas.ntOnCanvasY;
-
-			start();
-		}
-
-		public void run()
-		{
-			setPriority(Thread.MIN_PRIORITY);
-			setName("OverviewCanvas-BufferFactory");
-
-			try { Thread.sleep(500); }
-			catch (InterruptedException e) {}
-
-			long s = System.nanoTime();
-
-			if (killMe)
-				return;
-
-			// Scaling factors
-			xScale = ntOnCanvasX / (float) w;
-			yScale = ntOnCanvasY / (float) h;
-
-			buffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-
-			Graphics2D g = buffer.createGraphics();
-			g.setColor(Color.white);
-			g.fillRect(0, 0, w, h);
-
-
-			if (basicView)
-			{
-				// Loop over every pixel that makes up the overview...
-				for (int y = 0; y < h && !killMe; y++)
-				{
-					int dataY = (int) (y * yScale);
-
-					for (int x = 0; x < w && !killMe; x++)
-					{
-						// Working out where each pixel maps to in the data...
-						int dataX = (int) (x * xScale) - rCanvas.offset;
-
-						// Then drawing that data (or not)
-						Read read = reads.getReadAt(dataY, dataX);
-						if (read != null)
-						{
-							byte b = read.getStateAt(dataX-read.getStartPosition());
-
-							g.setColor(rCanvas.colors.getColor(b));
-							g.drawLine(x, y, x, y);
-						}
-					}
-				}
-			}
-			else
-			{
-				// Loop over every pixel that makes up the overview...
-				for (int y = 0; y < h && !killMe; y++)
-				{
-					int dataY = (int) (y * yScale);
-
-					for (int x = 0; x < w && !killMe; x++)
-					{
-						// Working out where each pixel maps to in the data...
-						// Each overview pixel maps to a window of data (x1 to x2)
-						int dataX1 = (int) (x * xScale) - rCanvas.offset;
-						int dataX2 = dataX1 + (int) xScale;
-
-						// Determine the percentage of actual data in this window
-						byte[] data = reads.getValues(dataY, dataX1, dataX2);
-
-						float dataCount = 0;
-						for (int i = 0; i < data.length; i++)
-							if (data[i] != -1)
-								dataCount++;
-
-						float percent = dataCount / (float)data.length;
-
-						// Draw the lower 10% in red
-						if (percent > 0 && percent < 0.1f)
-						{
-							g.setColor(new Color(255, 0, 0, 100));
-							g.drawLine(x, y, x, y);
-						}
-						// And the rest in shades of blue
-						else if (percent > 0)
-						{
-							g.setColor(new Color(0, 0, 255, (int)(255*(percent))));
-							g.drawLine(x, y, x, y);
-						}
-					}
-				}
-			}
-
-			// Scaling factors for mouse/mapping
-			xScale = w / (float) ntOnCanvasX;
-			yScale = h / (float) ntOnCanvasY;
-
-			// Remove any references to tablet.data objects we were tracking
-			contig = null;
-			reads = null;
-
-			long e = System.nanoTime();
-			System.out.println("Overview time: " + ((e-s)/1000000f) + "ms");
-
-			if (!killMe)
-				bufferAvailable(buffer);
-		}
+		return g;
 	}
 }

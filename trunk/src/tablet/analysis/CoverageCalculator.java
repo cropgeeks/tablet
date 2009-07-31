@@ -7,38 +7,41 @@ import tablet.data.*;
  * simplest, that of detecting the presence or absense of a read at any given
  * nucleotide position (regardless of how it relates to the consensus).
  */
-public class CoverageCalculator extends SimpleJob
+public class CoverageCalculator
 {
 	private Contig contig;
 
-	private int[] coverage;
-	private int max;
-	private float average;
+	// Stores the exact coverage value per base
+	public static int[] coverage;
+	// Stores values for a moving window average over all the bases
+	private int[] movAverage;
+
+	private int maxValue;
+	private float averageValue;
 
 	public CoverageCalculator(Contig contig)
 	{
 		this.contig = contig;
 	}
 
-	public int[] getCoverage()
-		{ return coverage; }
-
 	public int getMaximum()
-		{ return max; }
+		{ return maxValue; }
 
 	public float getAverage()
-		{ return average; }
+		{ return averageValue; }
 
-	// TODO: Test case
-	public void runJob(int jobIndex)
+	public int[] getCoverage()
 	{
 		long s = System.currentTimeMillis();
 		calculateReadCoverage();
 		long e = System.currentTimeMillis();
 
 		System.out.println("CoverageCalculator: " + (e-s) + "ms");
+
+		return coverage;
 	}
 
+	// TODO: Test case
 	private void calculateReadCoverage()
 	{
 		coverage = new int[contig.getWidth()];
@@ -58,16 +61,21 @@ public class CoverageCalculator extends SimpleJob
 				coverage[i]++;
 		}
 
-		average = baseCount / (float) contig.getWidth();
+		averageValue = baseCount / (float) contig.getWidth();
 
 		// Finally, work out what the maximum depth of coverage was
 		for (int i: coverage)
-			if (i > max)
-				max = i;
+			if (i > maxValue)
+				maxValue = i;
 	}
 
-	// TODO: There may be other methods of determing "coverage"
+	// TODO: There may be other methods of determining "coverage"
 	private void calculateConsensusSupport()
 	{
+	}
+
+	public int[] getMovingAverage(int windowSize)
+	{
+		return movAverage;
 	}
 }
