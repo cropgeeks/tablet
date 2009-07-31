@@ -31,6 +31,10 @@ public class OverviewCanvas extends JPanel
 	// Read under mouse tracking co-ordinates
 	private int readX = -1, readY, readW, readH;
 
+	// Animation timer and an alpha value used when the buffer is ready
+	private Timer timer;
+	private float alpha;
+
 	OverviewCanvas()
 	{
 		setLayout(new BorderLayout());
@@ -49,6 +53,7 @@ public class OverviewCanvas extends JPanel
 		});
 
 		canvasML = new OverviewCanvasML(this, canvas);
+		createTimer();
 	}
 
 	void displayMenu(JComponent button, MouseEvent e)
@@ -63,6 +68,25 @@ public class OverviewCanvas extends JPanel
 		rCanvas = aPanel.readsCanvas;
 	}
 
+	void createTimer()
+	{
+		timer = new Timer(50, new ActionListener()
+		{
+			public void actionPerformed(ActionEvent e)
+			{
+				// We want the alpha to go opaque to transparent in 10 steps
+				alpha -= 0.1;
+
+				if (alpha <= 0)
+					timer.stop();
+
+				repaint();
+			}
+		});
+
+		timer.setInitialDelay(0);
+	}
+
 	void createImage()
 	{
 		w = canvas.getSize().width;
@@ -75,7 +99,10 @@ public class OverviewCanvas extends JPanel
 
 		// Kill off any old image generation that might still be running...
 		if (bufferFactory != null)
+		{
 			bufferFactory.killMe = true;
+			bufferFactory.interrupt();
+		}
 
 		// Before starting a new one
 		if (Prefs.visOverviewType == SCALEDDATA)
@@ -97,6 +124,9 @@ public class OverviewCanvas extends JPanel
 		// Force the main canvas to send its view size dimensions so we can draw
 		// the highlighting box on top of the new back buffer's image
 		rCanvas.updateOverview();
+
+		alpha = 1.0f;
+		timer.restart();
 	}
 
 	void updateOverview(int xIndex, int xNum, int yIndex, int yNum)
@@ -185,6 +215,13 @@ public class OverviewCanvas extends JPanel
 			{
 				g.setColor(Color.blue);
 				g.drawRect(readX, readY, readW-1, readH-1);
+			}
+
+			// White overlay that gives the fade-in effect
+			if (alpha >= 0)
+			{
+				g.setColor(new Color(1f, 1f, 1f, alpha));
+				g.fillRect(0, 0, w, h);
 			}
 		}
 	}

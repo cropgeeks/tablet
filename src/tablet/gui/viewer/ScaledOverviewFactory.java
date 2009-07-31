@@ -33,7 +33,7 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 		setPriority(Thread.MIN_PRIORITY);
 		setName("ScaledOverview-BufferFactory");
 
-		try { Thread.sleep(250); }
+		try { Thread.sleep(500); }
 		catch (InterruptedException e) {}
 
 		if (killMe)

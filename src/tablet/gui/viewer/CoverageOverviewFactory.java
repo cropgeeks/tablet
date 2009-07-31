@@ -25,7 +25,7 @@ class CoverageOverviewFactory extends OverviewBufferFactory
 		setPriority(Thread.MIN_PRIORITY);
 		setName("CoverageOverview-BufferFactory");
 
-		try { Thread.sleep(250); }
+		try { Thread.sleep(500); }
 		catch (InterruptedException e) {}
 
 		if (killMe)
@@ -59,12 +59,8 @@ class CoverageOverviewFactory extends OverviewBufferFactory
 			{
 				averages[block] /= num;
 
-				if (i == coverage.length-1)
-					System.out.println("final block contained " + num + " values");
-
 				if (averages[block] > blockMax)
 					blockMax = averages[block];
-
 
 				num = 0;
 				block++;
