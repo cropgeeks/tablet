@@ -11,9 +11,6 @@ import tablet.data.*;
  */
 public class DisplayData
 {
-	// Reference to the contig that this DisplayData holds information for
-	private static Contig contig;
-
 	// Contains info to map from a padded to an unpadded position
 	private static int[] paddedToUnpadded;
 	// Contains info to map from an unpadded to a padded position
@@ -23,21 +20,22 @@ public class DisplayData
 	private static int[] coverage;
 	private static int maxCoverage;
 
-	// TODO: Thread this off (and make everything check that data is available
-	// before attempting to access it)
 	public static void calculateData(Contig contig)
 	{
-		long s = System.currentTimeMillis();
+		try
+		{
+			BaseMappingCalculator bm = new BaseMappingCalculator(contig.getConsensus());
+			bm.runJob(0);
 
-		calculatePaddedToUnpadded(contig.getConsensus());
-		calculateUnpaddedToPadded(contig.getConsensus());
+			paddedToUnpadded = bm.getPaddedToUnpaddedArray();
+			unpaddedToPadded = bm.getUnpaddedToPaddedArray();
 
-		CoverageCalculator cc = new CoverageCalculator(contig);
-		coverage = cc.getCoverage();
-		maxCoverage = cc.getMaximum();
-
-		long e = System.currentTimeMillis();
-		System.out.println("DisplayData: " + (e-s) + "ms");
+			CoverageCalculator cc = new CoverageCalculator(contig);
+			cc.runJob(0);
+			coverage = cc.getCoverage();
+			maxCoverage = cc.getMaximum();
+		}
+		catch (Exception e) {}
 	}
 
 	/**
@@ -58,48 +56,6 @@ public class DisplayData
 
 	public static int getMaxCoverage()
 		{ return maxCoverage; }
-
-	// Given a padded index value (0 to length-1) what is the unpadded value at
-	// that position?
-	//
-	// A  * T C
-	// 0 -1 1 2
-	private static void calculatePaddedToUnpadded(Consensus c)
-	{
-		paddedToUnpadded = new int[c.length()];
-
-		for (int i = 0, index = 0; i < paddedToUnpadded.length; i++)
-		{
-			if (c.getStateAt(i) != Sequence.P)
-				paddedToUnpadded[i] = index++;
-
-			else
-				paddedToUnpadded[i] = -1;
-		}
-	}
-
-	// Given an unpadded index value (0 to length-1) what index within the real
-	// data array does that map back to? In other words, given the first
-	// unpadded value (unpadded index=0), where does this lie = padded 0 (the
-	// A). Given the second unpadded value (unpadded index=1), this time it maps
-	// to the T, which is padded value 2.
-	// A * T  C
-	// 0 2 3 -1
-	private static void calculateUnpaddedToPadded(Consensus c)
-	{
-		unpaddedToPadded = new int[c.length()];
-
-		int map = 0;
-		for (int i = 0; i < unpaddedToPadded.length; i++)
-		{
-			if (c.getStateAt(i) != Sequence.P)
-				unpaddedToPadded[map++] = i;
-		}
-
-		// Any left over positions can't map to anything
-		for (; map < unpaddedToPadded.length; map++)
-			unpaddedToPadded[map] = -1;
-	}
 
 	/**
 	 * Returns the unpadded index (within consensus index space) for the given

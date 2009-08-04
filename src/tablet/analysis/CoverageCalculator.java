@@ -7,14 +7,12 @@ import tablet.data.*;
  * simplest, that of detecting the presence or absense of a read at any given
  * nucleotide position (regardless of how it relates to the consensus).
  */
-public class CoverageCalculator
+public class CoverageCalculator extends SimpleJob
 {
 	private Contig contig;
 
 	// Stores the exact coverage value per base
 	private int[] coverage;
-	// Stores values for a moving window average over all the bases
-	private int[] movAverage;
 
 	private int maxValue;
 	private float averageValue;
@@ -24,20 +22,9 @@ public class CoverageCalculator
 		this.contig = contig;
 	}
 
-	public int getMaximum()
-		{ return maxValue; }
-
-	public float getAverage()
-		{ return averageValue; }
-
-	public int[] getCoverage()
-	{
-		calculateReadCoverage();
-		return coverage;
-	}
-
 	// TODO: Test case
-	private void calculateReadCoverage()
+	public void runJob(int jobIndex)
+		throws Exception
 	{
 		coverage = new int[contig.getWidth()];
 
@@ -64,13 +51,12 @@ public class CoverageCalculator
 				maxValue = i;
 	}
 
-	// TODO: There may be other methods of determining "coverage"
-	private void calculateConsensusSupport()
-	{
-	}
+	public int[] getCoverage()
+		{ return coverage; }
 
-	public int[] getMovingAverage(int windowSize)
-	{
-		return movAverage;
-	}
+	public int getMaximum()
+		{ return maxValue; }
+
+	public float getAverage()
+		{ return averageValue; }
 }
