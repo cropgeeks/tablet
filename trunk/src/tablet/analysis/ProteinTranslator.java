@@ -9,8 +9,6 @@ public class ProteinTranslator extends SimpleJob
 {
 	public static enum Direction { FORWARD, REVERSE };
 
-	static { createTranslationTable(); }
-
 	public static HashMap<String, Integer> acids;
 	public static String[] codes;
 
@@ -31,6 +29,8 @@ public class ProteinTranslator extends SimpleJob
 
 	// Only needed for the unit test (stores a human readable translation)
 	private StringBuilder translation;
+
+	static { createTranslationTable(); }
 
 	/**
 	 * Creates a new ProteinTranslator, ready to translate a sequence with the
