@@ -44,6 +44,9 @@ abstract class TrackableReader extends SimpleJob
 
 	public int getValue()
 	{
+		if (is == null)
+			return 0;
+
 		float bytesRead = is.getBytesRead();
 		float size = is.getSize();
 
