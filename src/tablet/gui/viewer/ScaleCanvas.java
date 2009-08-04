@@ -14,7 +14,7 @@ import scri.commons.gui.*;
 class ScaleCanvas extends JPanel
 {
 	private static final NumberFormat d = NumberFormat.getInstance();
-	private String P, U, C;
+	private String U, C;
 
 	private Contig contig;
 	private Consensus consensus;
@@ -39,7 +39,6 @@ class ScaleCanvas extends JPanel
 		setOpaque(false);
 		setPreferredSize(new Dimension(0, h));
 
-		P = RB.getString("gui.viewer.ScaleCanvas.P");
 		U = RB.getString("gui.viewer.ScaleCanvas.U");
 		C = RB.getString("gui.viewer.ScaleCanvas.C");
 
