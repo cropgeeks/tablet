@@ -103,62 +103,62 @@ class NBAboutPanel extends javax.swing.JPanel
         scriIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         scriIcon.setText("SCRI LOGO");
 
-        org.jdesktop.layout.GroupLayout p2Layout = new org.jdesktop.layout.GroupLayout(p2);
+        javax.swing.GroupLayout p2Layout = new javax.swing.GroupLayout(p2);
         p2.setLayout(p2Layout);
         p2Layout.setHorizontalGroup(
-            p2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(p2Layout.createSequentialGroup()
+            p2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(p2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(p2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(versionLabel)
-                    .add(webLabel)
-                    .add(copyrightLabel)
-                    .add(nameLabel)
-                    .add(javaLabel)
-                    .add(memLabel)
-                    .add(localeLabel)
-                    .add(idLabel)
-                    .add(scriIcon, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
+                .addGroup(p2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(versionLabel)
+                    .addComponent(webLabel)
+                    .addComponent(copyrightLabel)
+                    .addComponent(nameLabel)
+                    .addComponent(javaLabel)
+                    .addComponent(memLabel)
+                    .addComponent(localeLabel)
+                    .addComponent(idLabel)
+                    .addComponent(scriIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
                 .addContainerGap())
         );
         p2Layout.setVerticalGroup(
-            p2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(p2Layout.createSequentialGroup()
+            p2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(p2Layout.createSequentialGroup()
                 .addContainerGap()
-                .add(versionLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(webLabel)
-                .add(18, 18, 18)
-                .add(copyrightLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(nameLabel)
-                .add(18, 18, 18)
-                .add(javaLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(memLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(localeLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(idLabel)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(scriIcon)
-                .addContainerGap(org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(versionLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(webLabel)
+                .addGap(18, 18, 18)
+                .addComponent(copyrightLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(nameLabel)
+                .addGap(18, 18, 18)
+                .addComponent(javaLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(memLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(localeLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(idLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(scriIcon)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(p2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(p2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-            .add(layout.createSequentialGroup()
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .add(p2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(p2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
