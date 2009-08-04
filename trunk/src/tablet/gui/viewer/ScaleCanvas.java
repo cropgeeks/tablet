@@ -9,9 +9,12 @@ import tablet.data.*;
 import tablet.data.auxiliary.*;
 import tablet.gui.*;
 
+import scri.commons.gui.*;
+
 class ScaleCanvas extends JPanel
 {
 	private static final NumberFormat d = NumberFormat.getInstance();
+	private String P, U, C;
 
 	private Contig contig;
 	private Consensus consensus;
@@ -35,6 +38,10 @@ class ScaleCanvas extends JPanel
 	{
 		setOpaque(false);
 		setPreferredSize(new Dimension(0, h));
+
+		P = RB.getString("gui.viewer.ScaleCanvas.P");
+		U = RB.getString("gui.viewer.ScaleCanvas.U");
+		C = RB.getString("gui.viewer.ScaleCanvas.C");
 
 		// Simple mouse listeners to update the base position on mouse overs
 		addMouseListener(new MouseAdapter()
@@ -150,8 +157,9 @@ class ScaleCanvas extends JPanel
 			g.drawLine(x, 0, x, 8);
 
 			// Then format, centre and draw the message
-			String unpadded = getUnpadded(mouseBase);
-			String str = d.format(mouseBase+1) + unpadded;
+			String str = d.format(mouseBase+1)
+				+ getUnpadded(mouseBase) + " " + C
+				+ d.format(DisplayData.getCoverage()[mouseBase+offset]);
 
 			if (message != null)
 				str += " - " + message;
@@ -215,8 +223,8 @@ class ScaleCanvas extends JPanel
 		int unpadded = DisplayData.getUnpaddedPosition(mouseBase);
 
 		if (unpadded == -1)
-			return " (" + Sequence.PAD + ")";
+			return " " + U + Sequence.PAD;
 		else
-			return " (" + d.format(unpadded+1) + ")";
+			return " " + U + d.format(unpadded+1);
 	}
 }

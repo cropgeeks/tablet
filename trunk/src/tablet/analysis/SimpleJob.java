@@ -2,6 +2,10 @@ package tablet.analysis;
 
 import tablet.gui.*;
 
+/**
+ * Abstract base class that can be used for all "simple" trackable jobs (jobs
+ * with just a single task to run).
+ */
 abstract public class SimpleJob implements ITrackableJob
 {
 	// Maximum progress bar value that we're aiming for
