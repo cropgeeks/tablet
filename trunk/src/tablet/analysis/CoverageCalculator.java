@@ -12,7 +12,7 @@ public class CoverageCalculator
 	private Contig contig;
 
 	// Stores the exact coverage value per base
-	public static int[] coverage;
+	private int[] coverage;
 	// Stores values for a moving window average over all the bases
 	private int[] movAverage;
 
@@ -32,12 +32,7 @@ public class CoverageCalculator
 
 	public int[] getCoverage()
 	{
-		long s = System.currentTimeMillis();
 		calculateReadCoverage();
-		long e = System.currentTimeMillis();
-
-		System.out.println("CoverageCalculator: " + (e-s) + "ms");
-
 		return coverage;
 	}
 

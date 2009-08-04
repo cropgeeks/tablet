@@ -6,11 +6,6 @@ public class Consensus extends Sequence
 	// Base quality information, one byte per nucleotide base
 	private byte[] bq;
 
-	// Contains info to map from a padded to an unpadded position
-	private int[] paddedToUnpadded;
-	// Contains info to map from an unpadded to a padded position
-	private int[] unpaddedToPadded;
-
 	private int unpaddedLength;
 
 	/** Constructs a new, empty consensus sequence. */
@@ -25,101 +20,6 @@ public class Consensus extends Sequence
 	 */
 	public int calculateUnpaddedLength()
 		{ return (unpaddedLength = super.calculateUnpaddedLength()); }
-
-	/**
-	 * Ensures that the consensus' internal mappings between padded and unpadded
-	 * positions have been properly calculated. Must be called before display.
-	 */
-	public void calculatePaddedMappings()
-	{
-		calculatePaddedToUnpadded();
-		calculateUnpaddedToPadded();
-	}
-
-	/**
-	 * Clears the memory allocated for the storage of padded/unpadded mapping
-	 * information by this consensus sequence. It is only needed at display time
-	 * and if this contig isn't visible it can be a massive waste of memory.
-	 */
-	public void clearPaddedMappings()
-	{
-		paddedToUnpadded = null;
-		unpaddedToPadded = null;
-	}
-
-	// Given a padded index value (0 to length-1) what is the unpadded value at
-	// that position?
-	//
-	// A  * T C
-	// 0 -1 1 2
-	private void calculatePaddedToUnpadded()
-	{
-		paddedToUnpadded = new int[length()];
-
-		for (int i = 0, index = 0; i < paddedToUnpadded.length; i++)
-		{
-			if (getStateAt(i) != Sequence.P)
-				paddedToUnpadded[i] = index++;
-
-			else
-				paddedToUnpadded[i] = -1;
-		}
-	}
-
-	// Given an unpadded index value (0 to length-1) what index within the real
-	// data array does that map back to? In other words, given the first
-	// unpadded value (unpadded index=0), where does this lie = padded 0 (the
-	// A). Given the second unpadded value (unpadded index=1), this time it maps
-	// to the T, which is padded value 2.
-	// A * T  C
-	// 0 2 3 -1
-	private void calculateUnpaddedToPadded()
-	{
-		unpaddedToPadded = new int[length()];
-
-		int map = 0;
-		for (int i = 0; i < unpaddedToPadded.length; i++)
-		{
-			if (getStateAt(i) != Sequence.P)
-				unpaddedToPadded[map++] = i;
-		}
-
-		// Any left over positions can't map to anything
-		for (; map < unpaddedToPadded.length; map++)
-			unpaddedToPadded[map] = -1;
-	}
-
-	/**
-	 * Returns the unpadded index (within consensus index space) for the given
-	 * padded index position, or -1 if the mapping cannot be made.
-	 * @param paddedPosition the padded position to convert to unpadded
-	 * @return the unpadded index for the given padded index position
-	 */
-	public int getUnpaddedPosition(int paddedPosition)
-	{
-		try {
-			return paddedToUnpadded[paddedPosition];
-		}
-		catch (ArrayIndexOutOfBoundsException e) {
-			return -1;
-		}
-	}
-
-	/**
-	 * Returns the padded index (within consensus index space) for the given
-	 * unpadded index position, or -1 if the mapping cannot be made.
-	 * @param unpaddedPosition the unpadded position to convert to padded
-	 * @return the padded index for the given unpadded index position
-	 */
-	public int getPaddedPosition(int unpaddedPosition)
-	{
-		try {
-			return unpaddedToPadded[unpaddedPosition];
-		}
-		catch (ArrayIndexOutOfBoundsException e) {
-			return -1;
-		}
-	}
 
 	/**
 	 * Returns the unpadded length of this consensus sequence.

@@ -6,6 +6,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import tablet.data.*;
+import tablet.data.auxiliary.*;
 import tablet.gui.*;
 import tablet.gui.viewer.*;
 
@@ -137,7 +138,6 @@ public class JumpToDialog extends JDialog
 		}
 
 		Contig contig = aPanel.getContig();
-		Consensus con = contig.getConsensus();
 
 		// Work out the padded index for this base
 		paddedIndex = base + contig.getConsensusOffset() - 1;
@@ -147,7 +147,7 @@ public class JumpToDialog extends JDialog
 			nbPanel.bJumpPadded.setEnabled(true);
 
 		// Work out the unpadded index
-		unpaddedIndex = con.getPaddedPosition(base-1);
+		unpaddedIndex = DisplayData.getPaddedPosition(base-1);
 		nbPanel.bJumpUnpadded.setEnabled(unpaddedIndex != -1);
 		unpaddedIndex += contig.getConsensusOffset();
 	}

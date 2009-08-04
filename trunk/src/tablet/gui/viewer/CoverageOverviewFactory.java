@@ -2,8 +2,8 @@ package tablet.gui.viewer;
 
 import java.awt.*;
 
-import tablet.analysis.*;
 import tablet.data.*;
+import tablet.data.auxiliary.*;
 
 class CoverageOverviewFactory extends OverviewBufferFactory
 {
@@ -32,9 +32,8 @@ class CoverageOverviewFactory extends OverviewBufferFactory
 			return;
 
 		// Get the coverage information
-		CoverageCalculator cc = new CoverageCalculator(contig);
-		int[] coverage = cc.getCoverage();
-		int coverageMax = cc.getMaximum();
+		int[] coverage = DisplayData.getCoverage();
+		int coverageMax = DisplayData.getMaxCoverage();
 
 		// Work out how many bases per block to average over, and hence how many
 		// blocks we can chop the data in to (always rounded UP due to pixels)
