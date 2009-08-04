@@ -6,6 +6,7 @@ import java.text.*;
 import javax.swing.*;
 
 import tablet.data.*;
+import tablet.data.auxiliary.*;
 import tablet.gui.*;
 
 class ScaleCanvas extends JPanel
@@ -68,16 +69,14 @@ class ScaleCanvas extends JPanel
 			consensus = contig.getConsensus();
 			offset = contig.getConsensusOffset();
 
-			// Ensure the consensus has its internal mappings loaded
-			consensus.calculatePaddedMappings();
+			// Run display-only calculations
+			DisplayData.calculateData(contig);
 		}
 
 		// Remove tablet.data references if nothing is going to be displayed
 		else
 		{
-			if (consensus != null)
-				consensus.clearPaddedMappings();
-
+			DisplayData.clearData();
 			consensus = null;
 		}
 	}
@@ -213,7 +212,7 @@ class ScaleCanvas extends JPanel
 		if (Prefs.visHideUnpaddedValues)
 			return "";
 
-		int unpadded = consensus.getUnpaddedPosition(mouseBase);
+		int unpadded = DisplayData.getUnpaddedPosition(mouseBase);
 
 		if (unpadded == -1)
 			return " (" + Sequence.PAD + ")";

@@ -1,4 +1,4 @@
-package tablet.data;
+/*package tablet.data;
 
 import junit.framework.*;
 
@@ -109,3 +109,4 @@ public class ConsensusTest extends TestCase
 		assertEquals(-1, c.getPaddedPosition(4));
 	}
 }
+*/

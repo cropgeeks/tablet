@@ -6,6 +6,7 @@ import java.awt.image.*;
 import java.text.*;
 import javax.swing.*;
 
+import tablet.analysis.*;
 import tablet.data.*;
 import tablet.gui.*;
 
@@ -81,12 +82,17 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		int readS = read.getStartPosition();
 		int readE = read.getEndPosition();
 
-		posData = "From " + nf.format(readS+1) + sCanvas.getUnpadded(readS) + " to "
-			+ nf.format(readE+1) + sCanvas.getUnpadded(readE);
+		posData = RB.format("gui.viewer.ReadsCanvasInfoPane.from",
+			(nf.format(readS+1) + sCanvas.getUnpadded(readS)),
+			(nf.format(readE+1) + sCanvas.getUnpadded(readE)));
 
-		// TODO: on Prefs.visHideUnpaddedValues set XXX to ""
-		lengthData = "Length: " + nf.format(read.length()) + " ("
-			+ nf.format(metaData.getUnpaddedLength()) + ")";
+		if (Prefs.visHideUnpaddedValues)
+			lengthData = RB.format("gui.viewer.ReadsCanvasInfoPane.length",
+				nf.format(read.length()));
+		else
+			lengthData = RB.format("gui.viewer.ReadsCanvasInfoPane.lengthUnpadded",
+				nf.format(read.length()),
+				nf.format(metaData.getUnpaddedLength()));
 
 		// Name
 		readName = metaData.getName();
