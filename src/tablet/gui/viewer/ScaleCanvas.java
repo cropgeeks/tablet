@@ -29,7 +29,6 @@ class ScaleCanvas extends TrackingCanvas
 
 	ScaleCanvas()
 	{
-		setOpaque(false);
 		setPreferredSize(new Dimension(0, h));
 
 		U = RB.getString("gui.viewer.ScaleCanvas.U");

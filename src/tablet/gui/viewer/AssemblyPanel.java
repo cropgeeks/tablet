@@ -22,6 +22,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	ScaleCanvas scaleCanvas;
 	ConsensusCanvas consensusCanvas;
 	ProteinCanvas proteinCanvas;
+	CoverageCanvas coverageCanvas;
 	ReadsCanvas readsCanvas;
 
 	private JScrollPane sp;
@@ -45,6 +46,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		JPanel consensusPanel = new JPanel(new BorderLayout());
 		consensusPanel.add(proteinCanvas, BorderLayout.NORTH);
 		consensusPanel.add(consensusCanvas);
+		consensusPanel.add(coverageCanvas, BorderLayout.SOUTH);
 
 		JPanel topPanel = new JPanel(new BorderLayout());
 		topPanel.add(overviewCanvas, BorderLayout.NORTH);
@@ -65,12 +67,17 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		consensusCanvas = new ConsensusCanvas();
 		scaleCanvas = new ScaleCanvas();
 		proteinCanvas = new ProteinCanvas();
+		coverageCanvas = new CoverageCanvas();
 
+		// Passing 'this' to the canvas classes can't happen in their
+		// constructors because they often need to refer to each other too, so
+		// we have to ensure that they've all been created first
 		readsCanvas.setAssemblyPanel(this);
 		overviewCanvas.setAssemblyPanel(this);
 		consensusCanvas.setAssemblyPanel(this);
 		scaleCanvas.setAssemblyPanel(this);
 		proteinCanvas.setAssemblyPanel(this);
+		coverageCanvas.setAssemblyPanel(this);
 
 		sp = new JScrollPane();
 		viewport = sp.getViewport();
@@ -124,6 +131,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		consensusCanvas.setContig(contig);
 		scaleCanvas.setContig(contig);
 		proteinCanvas.setContig(contig);
+		coverageCanvas.setContig(contig);
 
 		forceRedraw();
 	}
@@ -263,6 +271,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		overviewCanvas.setVisible(!Prefs.guiHideOverview);
 		consensusCanvas.setVisible(!Prefs.guiHideConsensus);
 		scaleCanvas.setVisible(!Prefs.guiHideScaleBar);
+		coverageCanvas.setVisible(!Prefs.guiHideCoverage);
 	}
 
 	public void displayProteinOptions(JComponent button)
