@@ -9,20 +9,16 @@ import tablet.data.*;
 import tablet.gui.*;
 import tablet.gui.viewer.colors.*;
 
-class ProteinCanvas extends JPanel
+class ProteinCanvas extends TrackingCanvas
 {
 	private Contig contig;
 	private Consensus consensus;
 	private ScaleCanvas sCanvas;
-	private ReadsCanvas rCanvas;
 
 	private TranslationFractory factory;
 
 	boolean[] enabled = new boolean[6];
 	ArrayList<short[]> translations;
-
-	// The LHS offset (difference) between the left-most read and the consensus
-	private int offset;
 
 	private Dimension dimension = new Dimension();
 
@@ -111,17 +107,6 @@ class ProteinCanvas extends JPanel
 
 		if (translations == null)
 			return;
-
-		// Determine lhs and rhs of canvas
-		int x1 = rCanvas.pX1;
-		int x2 = rCanvas.pX2;
-		int width = (x2-x1+1);
-
-		// Clip to only draw what's needed (mainly ignoring what would appear
-		// above the vertical scrollbar of the reads canvas)
-		g.setClip(3, 0, width, getHeight());
-		g.translate(3-x1, 0);
-
 
 		int ntW = rCanvas.ntW;
 		int ntH = rCanvas.ntH;

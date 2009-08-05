@@ -11,14 +11,13 @@ import tablet.gui.*;
 
 import scri.commons.gui.*;
 
-class ScaleCanvas extends JPanel
+class ScaleCanvas extends TrackingCanvas
 {
 	private static final NumberFormat d = NumberFormat.getInstance();
 	private String U, C;
 
 	private Contig contig;
 	private Consensus consensus;
-	private ReadsCanvas rCanvas;
 
 	private int h = 22;
 
@@ -27,12 +26,6 @@ class ScaleCanvas extends JPanel
 	private Integer mouseBase;
 	// A custom message to be displayed in addition to the mouse position
 	private String message;
-
-	// The LHS offset (difference) between the left-most read and the consensus
-	int offset;
-
-	// Tracks the left most and right most bases being displayed
-	int ntL, ntR;
 
 	ScaleCanvas()
 	{
@@ -106,17 +99,6 @@ class ScaleCanvas extends JPanel
 	{
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
-
-		// Determine lhs and rhs of canvas
-		int x1 = rCanvas.pX1;
-		int x2 = rCanvas.pX2;
-		int width = (x2-x1+1);
-
-		// Clip to only draw what's needed (mainly ignoring what would appear
-		// above the vertical scrollbar of the reads canvas)
-		g.setClip(3, 0, width, h);
-		g.translate(3-x1, 0);
-
 
 		int ntW = rCanvas.ntW;
 		int ntH = rCanvas.ntH;
