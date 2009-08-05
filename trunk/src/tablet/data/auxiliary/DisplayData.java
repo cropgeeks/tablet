@@ -19,6 +19,7 @@ public class DisplayData
 	// Contains the coverage information across the contig
 	private static int[] coverage;
 	private static int maxCoverage;
+	private static float averageCoverage;
 
 	public static void calculateData(Contig contig)
 	{
@@ -34,6 +35,7 @@ public class DisplayData
 			cc.runJob(0);
 			coverage = cc.getCoverage();
 			maxCoverage = cc.getMaximum();
+			averageCoverage = cc.getAverage();
 		}
 		catch (Exception e) {}
 	}
@@ -56,6 +58,9 @@ public class DisplayData
 
 	public static int getMaxCoverage()
 		{ return maxCoverage; }
+
+	public static float getAverageCoverage()
+		{ return averageCoverage; }
 
 	/**
 	 * Returns the unpadded index (within consensus index space) for the given

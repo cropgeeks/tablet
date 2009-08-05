@@ -19,8 +19,6 @@ class ConsensusCanvas extends TrackingCanvas
 
 	ConsensusCanvas()
 	{
-		setOpaque(false);
-
 		// Set up the base quality colours
 		Color col1 = new Color(255, 120, 120); // low
 		Color col2 = new Color(120, 255, 120); // high

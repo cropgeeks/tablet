@@ -27,8 +27,6 @@ class ProteinCanvas extends TrackingCanvas
 
 	ProteinCanvas()
 	{
-		setOpaque(false);
-
 		String[] enabledStates = Prefs.visProteins.split("\\s+");
 		for (int i = 0; i < enabledStates.length; i++)
 			enabled[i] = enabledStates[i].equals("1");
