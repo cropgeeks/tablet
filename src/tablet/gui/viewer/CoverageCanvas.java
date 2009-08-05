@@ -1,6 +1,7 @@
 package tablet.gui.viewer;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 import tablet.data.*;
@@ -23,6 +24,25 @@ class CoverageCanvas extends TrackingCanvas
 	void setAssemblyPanel(AssemblyPanel aPanel)
 	{
 		rCanvas = aPanel.readsCanvas;
+		final ScaleCanvas sCanvas = aPanel.scaleCanvas;
+
+		// Simple mouse listeners to update the base position on mouse overs
+		addMouseListener(new MouseAdapter()
+		{
+			public void mouseExited(MouseEvent e)
+			{
+				sCanvas.setMouseBase(null);
+			}
+		});
+
+		addMouseMotionListener(new MouseMotionAdapter()
+		{
+			public void mouseMoved(MouseEvent e)
+			{
+				int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) - offset;
+				sCanvas.setMouseBase(xIndex);
+			}
+		});
 	}
 
 	void setContig(Contig contig)
