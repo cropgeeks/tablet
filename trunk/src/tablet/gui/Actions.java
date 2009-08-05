@@ -21,6 +21,7 @@ public class Actions
 	public static ActionToggleButtonModel homeOptionsHidePads16;
 	public static ActionToggleButtonModel homeOptionsHideConsensus;
 	public static ActionToggleButtonModel homeOptionsHideScaleBar;
+	public static ActionToggleButtonModel homeOptionsHideCoverage;
 	public static ActionToggleButtonModel homeOptionsHideContigs;
 	public static ActionRepeatableButtonModel homeOptionsHideOverview;
 	public static ActionRepeatableButtonModel homeOptionsHideProteins;
@@ -55,6 +56,7 @@ public class Actions
 		homeOptionsHideOverview.setEnabled(false);
 		homeOptionsHideConsensus.setEnabled(false);
 		homeOptionsHideScaleBar.setEnabled(false);
+		homeOptionsHideCoverage.setEnabled(false);
 		homeOptionsHideContigs.setEnabled(false);
 		homeOptionsHideProteins.setEnabled(false);
 
@@ -86,6 +88,7 @@ public class Actions
 		homeOptionsHideOverview.setEnabled(false);
 		homeOptionsHideConsensus.setEnabled(false);
 		homeOptionsHideScaleBar.setEnabled(false);
+		homeOptionsHideCoverage.setEnabled(false);
 		homeOptionsHideContigs.setEnabled(false);
 		homeOptionsHideProteins.setEnabled(false);
 
@@ -117,6 +120,7 @@ public class Actions
 		homeOptionsHideOverview.setEnabled(true);
 		homeOptionsHideConsensus.setEnabled(true);
 		homeOptionsHideScaleBar.setEnabled(true);
+		homeOptionsHideCoverage.setEnabled(true);
 		homeOptionsHideContigs.setEnabled(false);
 		homeOptionsHideProteins.setEnabled(true);
 

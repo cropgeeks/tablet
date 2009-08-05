@@ -23,6 +23,7 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 
 	private JCommandToggleButton bHideConsensus;
 	private JCommandToggleButton bHideScaleBar;
+	private JCommandToggleButton bHideCoverage;
 	private JCommandToggleButton bHideContigs;
 
 
@@ -117,6 +118,18 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.HomeOptionsBand.bHideScaleBar.tooltip"),
 			RB.getString("gui.ribbon.HomeOptionsBand.bHideScaleBar.richtip")));
 
+		// Hide the coverage display
+		bHideCoverage = new JCommandToggleButton("",
+			RibbonController.getIcon("HIDECOVERAGE16", 16));
+		Actions.homeOptionsHideCoverage = new ActionToggleButtonModel(false);
+		Actions.homeOptionsHideCoverage.setSelected(Prefs.guiHideCoverage);
+		Actions.homeOptionsHideCoverage.addActionListener(this);
+		bHideCoverage.setActionModel(Actions.homeOptionsHideCoverage);
+		bHideCoverage.setActionKeyTip("HV");
+		bHideCoverage.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeOptionsBand.bHideCoverage.tooltip"),
+			RB.getString("gui.ribbon.HomeOptionsBand.bHideCoverage.richtip")));
+
 		// Hide the contigs panel
 		bHideContigs = new JCommandToggleButton("",
 			RibbonController.getIcon("HIDECONTIGS16", 16));
@@ -133,6 +146,7 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		JCommandButtonStrip panelsStrip = new JCommandButtonStrip();
 		panelsStrip.add(bHideConsensus);
 		panelsStrip.add(bHideScaleBar);
+		panelsStrip.add(bHideCoverage);
 		panelsStrip.add(bHideContigs);
 		addFlowComponent(panelsStrip);
 	}
@@ -170,6 +184,11 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		else if (source == Actions.homeOptionsHideScaleBar)
 		{
 			Prefs.guiHideScaleBar = !Prefs.guiHideScaleBar;
+			winMain.getAssemblyPanel().setVisibilities();
+		}
+		else if (source == Actions.homeOptionsHideCoverage)
+		{
+			Prefs.guiHideCoverage = !Prefs.guiHideCoverage;
 			winMain.getAssemblyPanel().setVisibilities();
 		}
 		else if (source == Actions.homeOptionsHideContigs)
