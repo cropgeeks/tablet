@@ -49,7 +49,9 @@
 			<zipfileset dir="${res}" prefix="res"/>
 		</jar>
 		<jar jarfile="${tablet.jar}">
-			<fileset dir="${classes}"/>
+			<fileset dir="${classes}">
+				<exclude name="**/*Test.class"/>
+			</fileset>
 			<manifest>
 				<attribute name="Main-Class" value="tablet.gui.Tablet"/>
 				<attribute name="Class-Path"
