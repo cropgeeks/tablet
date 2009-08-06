@@ -16,7 +16,9 @@ public class Read extends Sequence implements Comparable<Read>
 	// The position of the beginning of the read, in terms of consensus bases
 	private int position;
 
-	/** Constructs a new, empty read. */
+	/**
+	 * Constructs an empty read object
+	 */
 	public Read()
 	{
 	}
@@ -35,6 +37,22 @@ public class Read extends Sequence implements Comparable<Read>
 
 	int getID()
 		{ return id; }
+	
+	/**
+	 * Sets this read's ID.
+	 * @param The Read ID.
+	 */
+	public void setID(int id)
+	{
+		this.id = id;
+	}
+	
+	/**
+	 * Sets this read's start position.
+	 * @param this read's start position
+	 */
+	public void setStartPosition(int position)
+		{this.position = position;}
 
 	/**
 	 * Returns this read's starting position (aligned against the consensus).
@@ -102,5 +120,12 @@ public class Read extends Sequence implements Comparable<Read>
 
 		// Otherwise must be within the window
 		return 0;
+	}
+	
+	public Read clone()
+	{
+		Read newRead = new Read();
+		newRead.cloneData(this);
+		return newRead;
 	}
 }
