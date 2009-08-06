@@ -6,15 +6,12 @@ import tablet.data.*;
 
 /**
  * Concrete implementation of the IDataCache interface that stores its data in
- * a binary file on disk. Each element written to the file is always written
- * using the same number of bytes, allowing for random read-back from any
- * location with a fixed access time.
+ * a binary file on disk. The number of bytes written per element is stored in
+ * an accompanying index file (see FileCacheIndex), allowing for random
+ * read-back from any location with a fixed access time.
  */
 public class FileCache implements IReadCache
 {
-	// TODO: FileCache: This class needs to be made to work properly with
-	// unicode character streams
-
 	private FileCacheIndex index = new FileCacheIndex();
 
 	// Used while writing to the cache
