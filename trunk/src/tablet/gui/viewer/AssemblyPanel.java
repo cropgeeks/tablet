@@ -215,6 +215,9 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		readsCanvas.setContig(contig);
 
 		computePanelSizes();
+		// adjustmentValueChanged needed to deal with contigs that don't (need
+		// to) force the scrollbars to change meaning the panel sizes are wrong
+		adjustmentValueChanged(null);
 		overviewCanvas.createImage();
 
 		repaint();
