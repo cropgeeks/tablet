@@ -256,4 +256,11 @@ public abstract class Sequence
 
 		return baseCount;
 	}
+	
+	protected void cloneData(Sequence cloneFrom)
+	{
+		data = new byte[cloneFrom.data.length];
+		for (int i = 0; i < data.length; i++)
+			data[i] = cloneFrom.data[i];
+	}
 }

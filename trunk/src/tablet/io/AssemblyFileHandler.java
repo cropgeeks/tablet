@@ -51,11 +51,12 @@ class AssemblyFileHandler extends SimpleJob
 			reader = new AceFileReader(readCache, true);
 			fileParsed = readFile();
 		}
-
+		
+		// AFG
 		if (okToRun && fileParsed == false)
 		{
-//			reader = new AceFileReader(readCache, true);
-//			canParse = readFile();
+			reader = new AfgFileReader(readCache, true);
+			fileParsed = readFile();
 		}
 
 		if (okToRun && fileParsed)
