@@ -14,8 +14,7 @@ import scri.commons.gui.*;
 
 /**
  * ImportHandler is a 3-state ITrackableJob implementation, that is responsible
- * for monitoring progress during assembly import, base comparison, and finally
- * pack/stack creation.
+ * for monitoring progress during assembly import and read base comparisons.
  */
 public class ImportHandler implements ITrackableJob
 {
@@ -49,10 +48,6 @@ public class ImportHandler implements ITrackableJob
 			currentJob = new BasePositionComparator(assembly);
 		}
 
-		// Orangise the reads into pack/stack sets suitable for display
-		else if (jobIndex == 2)
-			currentJob = new PackSetCreator(assembly);
-
 		currentJob.runJob(0);
 	}
 
@@ -60,7 +55,7 @@ public class ImportHandler implements ITrackableJob
 		{ return assembly; }
 
 	public int getJobCount()
-		{ return 3; }
+		{ return 2; }
 
 	public void cancelJob()
 	{

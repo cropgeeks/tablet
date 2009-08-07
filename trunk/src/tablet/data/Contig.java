@@ -171,4 +171,11 @@ public class Contig
 		if (outlines.size() > 5)
 			outlines.remove(0);
 	}
+
+	/**
+	 * Returns true if this contig has had its reads packed.
+	 * @return true if this contig has had its reads packed
+	 */
+	public boolean isDataPacked()
+		{ return packSet != null; }
 }

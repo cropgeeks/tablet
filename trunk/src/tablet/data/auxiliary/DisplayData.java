@@ -25,17 +25,28 @@ public class DisplayData
 	{
 		try
 		{
+			// Compute mappings between unpadded and padded values
 			BaseMappingCalculator bm = new BaseMappingCalculator(contig.getConsensus());
 			bm.runJob(0);
 
 			paddedToUnpadded = bm.getPaddedToUnpaddedArray();
 			unpaddedToPadded = bm.getUnpaddedToPaddedArray();
 
+
+			// Compute per-base coverage across the contig
 			CoverageCalculator cc = new CoverageCalculator(contig);
 			cc.runJob(0);
 			coverage = cc.getCoverage();
 			maxCoverage = cc.getMaximum();
 			averageCoverage = cc.getAverage();
+
+
+			// Pack the reads into a packset (if it's not already been done)
+			if (contig.isDataPacked() == false)
+			{
+				PackSetCreator psc = new PackSetCreator(contig);
+				psc.runJob(0);
+			}
 		}
 		catch (Exception e) {}
 	}

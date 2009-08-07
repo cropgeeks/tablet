@@ -40,8 +40,7 @@ public class Commands
 		String label = RB.getString("gui.Commands.fileOpen.label");
 		String[] msgs = new String[] {
 			RB.format("gui.Commands.fileOpen.msg01", file.getName()),
-			RB.getString("gui.Commands.fileOpen.msg02"),
-			RB.getString("gui.Commands.fileOpen.msg03") };
+			RB.getString("gui.Commands.fileOpen.msg02") };
 
 		// Run the job...
 		ProgressDialog dialog = new ProgressDialog(ioHandler, title, label, msgs);
