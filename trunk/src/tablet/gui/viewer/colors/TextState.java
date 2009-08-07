@@ -20,7 +20,7 @@ class TextState extends ColorState
 		image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = image.createGraphics();
 
-		g.setColor(Color.white);
+		g.setColor(new Color(235, 235, 235));
 		Rectangle2D.Float r = new Rectangle2D.Float(0, 0, w, h);
 		g.fill(r);
 
