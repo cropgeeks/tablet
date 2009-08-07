@@ -10,7 +10,7 @@ import java.io.*;
 class AfgNameCache
 {
 	private File cacheFile;
-	private int entrySize = 100;
+	private int entrySize = 75;
 
 	// Used while writing to the cache
 	private DataOutputStream out;
