@@ -40,7 +40,7 @@ abstract class TrackableReader extends SimpleJob
 		{ return false; }
 
 	public int getMaximum()
-		{ return 50000; }
+		{ return 5555; }
 
 	public int getValue()
 	{
@@ -50,7 +50,7 @@ abstract class TrackableReader extends SimpleJob
 		float bytesRead = is.getBytesRead();
 		float size = is.getSize();
 
-		return Math.round((bytesRead / size) * 50000);
+		return Math.round((bytesRead / size) * 5555);
 	}
 
 	protected ProgressInputStream getInputStream()
