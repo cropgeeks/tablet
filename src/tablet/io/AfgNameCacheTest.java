@@ -27,7 +27,7 @@ public class AfgNameCacheTest extends TestCase
 
 		for (int i = 0; i < 500; i++)
 		{
-			String rnd = SystemUtils.createGUID(r.nextInt(96));
+			String rnd = SystemUtils.createGUID(r.nextInt(50));
 			rndNames.add(rnd);
 			cache.storeName(rnd);
 		}
