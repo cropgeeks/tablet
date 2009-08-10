@@ -21,6 +21,8 @@ public class ProgressDialog extends JDialog
 	private ITrackableJob job;
 	private boolean jobOK = true;
 
+	private Timer timer;
+
 	// And the messages it will need for each job part
 	private String[] msgs;
 
@@ -35,21 +37,22 @@ public class ProgressDialog extends JDialog
 		this.msgs = msgs;
 
 		nbPanel = new NBProgressPanel(job, label);
-		add(nbPanel);
+		new Thread(this).start();
 
 		addWindowListener(new WindowAdapter() {
-			public void windowOpened(WindowEvent e)	{
-				startJob();
-			}
 			public void windowClosing(WindowEvent e) {
 				cancelJob();
 			}
 		});
 
+		add(nbPanel);
 		pack();
 		setLocationRelativeTo(Tablet.winMain);
 		setResizable(false);
-		setVisible(true);
+
+		// Only show the dialog if the job hasn't finished yet
+		if (this.job != null)
+			setVisible(true);
 	}
 
 	public boolean jobOK()
@@ -61,7 +64,16 @@ public class ProgressDialog extends JDialog
 	// Called every 100ms to update the status of the progress bar
 	public void actionPerformed(ActionEvent e)
 	{
+		// The job will be null when it's finished/failed or was cancelled
+		if (job == null)
+		{
+			timer.stop();
+			setVisible(false);
+			return;
+		}
+
 		nbPanel.pBar.setIndeterminate(job.isIndeterminate());
+		nbPanel.pBar.setStringPainted(!job.isIndeterminate());
 
 		int val = job.getValue();
 		int max = job.getMaximum();
@@ -93,7 +105,7 @@ public class ProgressDialog extends JDialog
 	{
 		Thread.currentThread().setName("ProgressDialog-ITrackableJob");
 
-		Timer timer = new Timer(100, this);
+		timer = new Timer(100, this);
 		timer.start();
 
 		try
@@ -116,8 +128,5 @@ public class ProgressDialog extends JDialog
 		// never seems to get garbage-collected meaning its references (which
 		// include a reference to the assembly) never die
 		job = null;
-
-		timer.stop();
-		setVisible(false);
 	}
 }
