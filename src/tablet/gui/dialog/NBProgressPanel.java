@@ -32,8 +32,6 @@ class NBProgressPanel extends javax.swing.JPanel
         mainLabel = new javax.swing.JLabel();
         msgLabel = new javax.swing.JLabel();
 
-        pBar.setStringPainted(true);
-
         mainLabel.setText("mainLabel");
 
         msgLabel.setText("msgLabel");
