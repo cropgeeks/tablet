@@ -204,11 +204,11 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 		// changing to it (and would result in the overview redrawing)
 		public void mouseEntered(MouseEvent e)
 		{
-			if (e.getSource() == bStandard && bStandard.isEnabled() &&
+			if (e.getSource() == bStandard && Actions.homeStylesStandard.isEnabled() &&
 				previousScheme != ColorScheme.STANDARD)
 				setColorScheme(ColorScheme.STANDARD);
 
-			else if (e.getSource() == bText && bText.isEnabled() &&
+			else if (e.getSource() == bText && Actions.homeStylesText.isEnabled() &&
 				previousScheme != ColorScheme.TEXT)
 				setColorScheme(ColorScheme.TEXT);
 		}
