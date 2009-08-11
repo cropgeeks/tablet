@@ -13,13 +13,17 @@ import tablet.gui.*;
 public class ProgressDialog extends JDialog
 	implements Runnable, ActionListener
 {
+	public static final int JOB_COMPLETED = 0;
+	public static final int JOB_CANCELLED = 1;
+	public static final int JOB_FAILED = 2;
+
 	private static DecimalFormat d = new DecimalFormat("0.00");
 
 	private NBProgressPanel nbPanel;
 
 	// Runnable object that will be active while the dialog is visible
 	private ITrackableJob job;
-	private boolean jobOK = true;
+	private int jobStatus = JOB_COMPLETED;
 
 	private Timer timer;
 
@@ -55,8 +59,8 @@ public class ProgressDialog extends JDialog
 			setVisible(true);
 	}
 
-	public boolean jobOK()
-		{ return jobOK; }
+	public int getResult()
+		{ return jobStatus; }
 
 	public Exception getException()
 		{ return exception; }
@@ -97,7 +101,7 @@ public class ProgressDialog extends JDialog
 	private void cancelJob()
 	{
 		job.cancelJob();
-		jobOK = false;
+		jobStatus = JOB_CANCELLED;
 	}
 
 	// Starts the job running in its own thread
@@ -110,7 +114,7 @@ public class ProgressDialog extends JDialog
 
 		try
 		{
-			for (int i = 0; i < job.getJobCount() && jobOK; i++)
+			for (int i = 0; i < job.getJobCount() && jobStatus == 0; i++)
 			{
 				nbPanel.msgLabel.setText(msgs[i]);
 				job.runJob(i);
@@ -121,7 +125,7 @@ public class ProgressDialog extends JDialog
 			e.printStackTrace();
 
 			exception = e;
-			jobOK = false;
+			jobStatus = JOB_FAILED;
 		}
 
 		// Remove all references to the job once completed, because this window

@@ -93,13 +93,7 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 		int row = table.getSelectedRow();
 
 		if (row == -1)
-		{
-			aPanel.setContig(null);
-			featuresPanel.setContig(null);
-
-			winMain.setAssemblyPanelVisible(false);
-			winMain.getJumpToDialog().setVisible(false);
-		}
+			setNullContig();
 		else
 		{
 			// Convert from view->model (deals with user-sorted table)
@@ -107,12 +101,28 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 
 			// Then pull the contig out of the model and set...
 			Contig contig = (Contig) model.getValueAt(row, 0);
-			aPanel.setContig(contig);
-			featuresPanel.setContig(contig);
 
-			Actions.openedContigSelected();
-			winMain.setAssemblyPanelVisible(true);
+			// Attempt to set the contig on the graphical components...
+			if (aPanel.setContig(contig))
+			{
+				featuresPanel.setContig(contig);
+
+				Actions.openedContigSelected();
+				winMain.setAssemblyPanelVisible(true);
+			}
+			// ...but if the set failed, then act the same as a de-selection
+			else
+				setNullContig();
 		}
+	}
+
+	private void setNullContig()
+	{
+		aPanel.setContig(null);
+		featuresPanel.setContig(null);
+
+		winMain.setAssemblyPanelVisible(false);
+		winMain.getJumpToDialog().setVisible(false);
 	}
 
 	// Forces the panel to recreate the table then reselect the row

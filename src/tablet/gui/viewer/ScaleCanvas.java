@@ -66,9 +66,6 @@ class ScaleCanvas extends TrackingCanvas
 		{
 			consensus = contig.getConsensus();
 			offset = contig.getConsensusOffset();
-
-			// Run display-only calculations
-			DisplayData.calculateData(contig);
 		}
 
 		// Remove tablet.data references if nothing is going to be displayed
