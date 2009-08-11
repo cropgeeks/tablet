@@ -5,8 +5,11 @@ import java.awt.event.*;
 import java.text.*;
 import javax.swing.*;
 
+import tablet.analysis.*;
 import tablet.data.*;
+import tablet.data.auxiliary.*;
 import tablet.gui.*;
+import tablet.gui.dialog.*;
 import tablet.gui.ribbon.*;
 
 import scri.commons.gui.*;
@@ -121,19 +124,24 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 			RibbonController.setTitleLabel("");
 	}
 
-	public void setContig(Contig contig)
+	public boolean setContig(Contig contig)
 	{
 		this.contig = contig;
+		boolean setContigOK = true;
 
-		updateContigInformation();
+		if (contig != null && ((setContigOK = updateDisplayData()) == false))
+			this.contig = contig = null;
 
-		// Then pass the contig to the other components for rendering
+		// Pass the contig to the other components for rendering
 		consensusCanvas.setContig(contig);
 		scaleCanvas.setContig(contig);
 		proteinCanvas.setContig(contig);
 		coverageCanvas.setContig(contig);
 
 		forceRedraw();
+		updateContigInformation();
+
+		return setContigOK;
 	}
 
 	public Contig getContig()
@@ -285,5 +293,27 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	public void displayOverviewOptions(JComponent button)
 	{
 		overviewCanvas.displayMenu(button, null);
+	}
+
+	private boolean updateDisplayData()
+	{
+		String title = "Preparing Contig";
+		String label = "Preparing contig for display - please be patient...";
+		String[] msgs = new String[] { "" };
+
+		// Run the job...
+		DisplayDataCalculator ddc = new DisplayDataCalculator(contig);
+		ProgressDialog dialog = new ProgressDialog(ddc, title, label, msgs);
+		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
+		{
+			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
+			{
+				System.out.println(dialog.getException());
+			}
+
+			return false;
+		}
+
+		return true;
 	}
 }

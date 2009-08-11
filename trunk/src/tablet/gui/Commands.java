@@ -44,9 +44,9 @@ public class Commands
 
 		// Run the job...
 		ProgressDialog dialog = new ProgressDialog(ioHandler, title, label, msgs);
-		if (dialog.jobOK() == false)
+		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
-			if (dialog.getException() != null)
+			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
 			{
 				TaskDialog.error(
 					"Error opening " + filename + "\n\n" + dialog.getException(),
@@ -86,9 +86,9 @@ public class Commands
 
 		// Run the job...
 		ProgressDialog dialog = new ProgressDialog(reader, title, label, msgs);
-		if (dialog.jobOK() == false)
+		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
-			if (dialog.getException() != null)
+			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
 			{
 				TaskDialog.error(
 					"Error importing features from " + filename + "\n\n" + dialog.getException(),
