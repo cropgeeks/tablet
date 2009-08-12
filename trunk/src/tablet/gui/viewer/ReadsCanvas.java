@@ -149,6 +149,9 @@ class ReadsCanvas extends JPanel
 	// the canvas
 	void computeForRedraw(Dimension viewSize, Point viewPosition)
 	{
+		if (contig == null)
+			return;
+
 		ntOnScreenX = 1 + (int) ((float) viewSize.width  / ntW);
 		ntOnScreenY = 1 + (int) ((float) viewSize.height / ntH);
 
