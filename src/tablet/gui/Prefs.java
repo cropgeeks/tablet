@@ -41,6 +41,9 @@ public class Prefs extends XMLPreferences
 	// The last used directory location in file chooser dialogs
 	public static String guiCurrentDir = "";
 
+	// A list of previously accessed documents
+	public static String[] guiRecentDocs = new String[10];
+
 	// What filtering option was last in use for the contigs panel
 	public static int guiContigsFilter = 0;
 
@@ -81,59 +84,27 @@ public class Prefs extends XMLPreferences
 	public static int visPadCharType = 0;
 	public static int visStopCharType = 0;
 
-	// TODO: The scri-commons XML loading needs to support arrays
-	public static String guiRecent01 = "";
-	public static String guiRecent02 = "";
-	public static String guiRecent03 = "";
-	public static String guiRecent04 = "";
-	public static String guiRecent05 = "";
-	public static String guiRecent06 = "";
-	public static String guiRecent07 = "";
-	public static String guiRecent08 = "";
-	public static String guiRecent09 = "";
-	public static String guiRecent10 = "";
-
 	static void setDefaults()
 	{
 
 	}
 
-	public static LinkedList<String> getRecentDocuments()
-	{
-		LinkedList<String> list = new LinkedList<String>();
-
-		list.add(guiRecent01);
-		list.add(guiRecent02);
-		list.add(guiRecent03);
-		list.add(guiRecent04);
-		list.add(guiRecent05);
-		list.add(guiRecent06);
-		list.add(guiRecent07);
-		list.add(guiRecent08);
-		list.add(guiRecent09);
-		list.add(guiRecent10);
-
-		return list;
-	}
-
+	// Updates the array of recently accessed documents so that 'document' is
+	// the first element, even if it has been accessed previously
 	public static void setRecentDocument(String document)
 	{
-		LinkedList<String> list = getRecentDocuments();
+		System.out.println("guiRecentDocs.length " + guiRecentDocs.length);
+
+		LinkedList<String> list = new LinkedList<String>();
+		for (String file: guiRecentDocs)
+			list.add(file);
 
 		if (list.contains(document))
 			list.remove(document);
 
 		list.addFirst(document);
 
-		guiRecent01 = list.get(0);
-		guiRecent02 = list.get(1);
-		guiRecent03 = list.get(2);
-		guiRecent04 = list.get(3);
-		guiRecent05 = list.get(4);
-		guiRecent06 = list.get(5);
-		guiRecent07 = list.get(6);
-		guiRecent08 = list.get(7);
-		guiRecent09 = list.get(8);
-		guiRecent10 = list.get(9);
+		for (int i = 0; i < guiRecentDocs.length; i++)
+			guiRecentDocs[i] = list.get(i);
 	}
 }

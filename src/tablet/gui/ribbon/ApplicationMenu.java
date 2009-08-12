@@ -126,10 +126,10 @@ public class ApplicationMenu extends RibbonApplicationMenu
 		recentPanel.addButtonGroup(groupName);
 
 		// Parse the list of recent documents
-		for (final String path: Prefs.getRecentDocuments())
+		for (final String path: Prefs.guiRecentDocs)
 		{
 			// Ignore any that haven't been set yet
-			if (path.length() == 0)
+			if (path == null || path.equals(" "))
 				continue;
 
 			File file = new File(path);
