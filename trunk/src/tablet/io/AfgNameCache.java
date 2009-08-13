@@ -1,5 +1,6 @@
 package tablet.io;
 
+import scri.commons.file.BufferedRandomAccessFile;
 import java.io.*;
 
 /**
@@ -15,7 +16,7 @@ class AfgNameCache
 	// Used while writing to the cache
 	private DataOutputStream out;
 	// Used while reading from the cache
-	private RandomAccessFile rnd;
+	private BufferedRandomAccessFile rnd;
 
 	AfgNameCache(File cacheFile)
 	{
@@ -35,7 +36,8 @@ class AfgNameCache
 		throws IOException
 	{
 		out.close();
-		rnd = new RandomAccessFile(cacheFile, "r");
+		rnd = new BufferedRandomAccessFile(cacheFile, "r", 1024);
+		rnd.fillBuffer();
 	}
 
 	// Close the cache file
