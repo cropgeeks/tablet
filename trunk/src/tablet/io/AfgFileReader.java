@@ -52,7 +52,7 @@ class AfgFileReader extends TrackableReader
 		throws Exception
 	{
 		// Read and check for the header
-		in = new BufferedReader(new InputStreamReader(getInputStream()));
+		in = new BufferedReader(new InputStreamReader(getInputStream(0)));
 		str = readLine();
 
 		boolean isAFGFile = (str != null && str.startsWith("{"));
@@ -69,14 +69,14 @@ class AfgFileReader extends TrackableReader
 		throws Exception
 	{
 		if (useAscii)
-			in = new BufferedReader(new InputStreamReader(getInputStream(), "ASCII")); // ISO8859_1
+			in = new BufferedReader(new InputStreamReader(getInputStream(0), "ASCII")); // ISO8859_1
 		else
-			in = new BufferedReader(new InputStreamReader(getInputStream()));
+			in = new BufferedReader(new InputStreamReader(getInputStream(0)));
 
 		//open the temporary file cache for the read names
 		long time = System.currentTimeMillis();
 		File cacheDir = SystemUtils.getTempUserDirectory("scri-tablet");
-		File cacheFile = new File(cacheDir, time + "-" + file.getName() + ".names");
+		File cacheFile = new File(cacheDir, time + "-" + files[0].getName() + ".names");
 
 		cache = new AfgNameCache(cacheFile);
 		cache.openForWriting();

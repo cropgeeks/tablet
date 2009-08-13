@@ -34,7 +34,8 @@ public class Commands
 		winMain.closeAssembly();
 		System.gc();
 
-		ImportHandler ioHandler = new ImportHandler(filename);
+		String[] filenames = new String[] { filename };
+		ImportHandler ioHandler = new ImportHandler(filenames);
 
 		String title = RB.getString("gui.Commands.fileOpen.title");
 		String label = RB.getString("gui.Commands.fileOpen.label");

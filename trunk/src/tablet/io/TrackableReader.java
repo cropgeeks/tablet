@@ -12,7 +12,7 @@ import scri.commons.file.*;
 abstract class TrackableReader extends SimpleJob
 {
 	// Read data
-	protected File file;
+	protected File[] files;
 	protected ProgressInputStream is;
 	protected BufferedReader in;
 	protected String str;
@@ -20,9 +20,9 @@ abstract class TrackableReader extends SimpleJob
 
 	protected Assembly assembly;
 
-	void setInputs(File file, Assembly assembly)
+	void setInputs(File[] files, Assembly assembly)
 	{
-		this.file = file;
+		this.files = files;
 		this.assembly = assembly;
 	}
 
@@ -53,11 +53,11 @@ abstract class TrackableReader extends SimpleJob
 		return Math.round((bytesRead / size) * 5555);
 	}
 
-	protected ProgressInputStream getInputStream()
+	protected ProgressInputStream getInputStream(int index)
 		throws Exception
 	{
-		is = new ProgressInputStream(new FileInputStream(file));
-		is.setSize(file.length());
+		is = new ProgressInputStream(new FileInputStream(files[index]));
+		is.setSize(files[index].length());
 
 		return is;
 	}
