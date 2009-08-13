@@ -18,12 +18,12 @@ import scri.commons.gui.*;
  */
 class AssemblyFileHandler extends SimpleJob
 {
-	private File file = null;
+	private File[] files = null;
 	private TrackableReader reader = null;
 
-	AssemblyFileHandler(File file)
+	AssemblyFileHandler(File[] files)
 	{
-		this.file = file;
+		this.files = files;
 	}
 
 	Assembly getAssembly()
@@ -38,8 +38,8 @@ class AssemblyFileHandler extends SimpleJob
 
 		// Set up the read cache
 		String time = "" + System.currentTimeMillis();
-		File cache = new File(cacheDir, time + "-" + file.getName() + ".cache");
-		File index = new File(cacheDir, time + "-" + file.getName() + ".index");
+		File cache = new File(cacheDir, time + "-" + files[0].getName() + ".cache");
+		File index = new File(cacheDir, time + "-" + files[0].getName() + ".index");
 		IReadCache readCache = FileCache.createWritableCache(cache, index);
 
 
@@ -51,7 +51,7 @@ class AssemblyFileHandler extends SimpleJob
 			reader = new AceFileReader(readCache, true);
 			fileParsed = readFile();
 		}
-		
+
 		// AFG
 		if (okToRun && fileParsed == false)
 		{
@@ -62,7 +62,8 @@ class AssemblyFileHandler extends SimpleJob
 		if (okToRun && fileParsed)
 		{
 			Assembly assembly = reader.getAssembly();
-			assembly.setName(file.getName());
+			// TODO: for multi-file inputs, what file will define the name?
+			assembly.setName(files[0].getName());
 
 			readCache.close();
 			assembly.setReadCache(FileCache.createReadableCache(cache, index));
@@ -89,7 +90,7 @@ class AssemblyFileHandler extends SimpleJob
 	private boolean readFile()
 		throws Exception
 	{
-		reader.setInputs(file, new Assembly());
+		reader.setInputs(files, new Assembly());
 
 		if (reader.canRead())
 		{

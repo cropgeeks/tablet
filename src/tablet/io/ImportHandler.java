@@ -18,16 +18,18 @@ import scri.commons.gui.*;
  */
 public class ImportHandler implements ITrackableJob
 {
-	private File file;
+	private File[] files;
 	private boolean okToRun = true;
 
 	private ITrackableJob currentJob = null;
 
 	private Assembly assembly;
 
-	public ImportHandler(String filename)
+	public ImportHandler(String[] filenames)
 	{
-		file = new File(filename);
+		files = new File[filenames.length];
+		for (int i = 0; i < files.length; i++)
+			files[i] = new File(filenames[i]);
 	}
 
 	// Decide which part of the import operation to run; then run it
@@ -39,7 +41,7 @@ public class ImportHandler implements ITrackableJob
 
 		// Import the assembly file
 		if (jobIndex == 0)
-			currentJob = new AssemblyFileHandler(file);
+			currentJob = new AssemblyFileHandler(files);
 
 		// Rewrite the internal read data if it differs from the consensus
 		else if (jobIndex == 1)
