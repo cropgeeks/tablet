@@ -46,7 +46,7 @@ public class Tablet
 		{
 			initialFiles = new String[args.length];
 			for (int i = 0; i < args.length; i++)
-				initialFiles[i] = args[0];
+				initialFiles[i] = args[i];
 		}
 
 		new Tablet();
