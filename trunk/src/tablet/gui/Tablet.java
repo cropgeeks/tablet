@@ -87,7 +87,7 @@ public class Tablet
 			{
 				// Do we want to open an initial project?
 				if (initialFile != null)
-					winMain.getCommands().fileOpen(initialFile);
+					winMain.getCommands().fileOpen(new String[] { initialFile });
 
 				if (Install4j.displayUpdate)
 					TabletUtils.visitURL("http://bioinf.scri.ac.uk/tablet/svn.txt");
@@ -172,7 +172,7 @@ public class Tablet
 		if (winMain != null && winMain.isVisible())
 		{
 			// TODO: If we have project modified checks, do them here too
-			winMain.getCommands().fileOpen(path);
+			winMain.getCommands().fileOpen(new String[] { path });
 		}
 
 		// Otherwise, mark it for opening once Tablet is ready

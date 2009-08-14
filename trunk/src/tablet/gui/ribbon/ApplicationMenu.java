@@ -143,7 +143,7 @@ public class ApplicationMenu extends RibbonApplicationMenu
 			// And give it an action
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					winMain.getCommands().fileOpen(path);
+					winMain.getCommands().fileOpen(new String[] { path });
 				}
 			});
 		}
