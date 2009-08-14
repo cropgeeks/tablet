@@ -95,6 +95,8 @@ class AfgFileReader extends TrackableReader
 		//close the temporary file cache for the read names
 		//this also deletes the file itself
 		cache.close();
+
+		assembly.setName(files[0].getName());
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------

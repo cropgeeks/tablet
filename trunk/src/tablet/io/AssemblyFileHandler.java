@@ -12,9 +12,9 @@ import scri.commons.file.*;
 import scri.commons.gui.*;
 
 /**
- * The AssemblyFileHandler class is given a file pointer and will attempt to
+ * The AssemblyFileHandler class is given file pointers and will attempt to
  * a) find out which of the assembly file formats that Tablet understands is
- * capable of reading that file type, then b) proceed with the read/import.
+ * capable of reading those file types, then b) proceed with the read/import.
  */
 class AssemblyFileHandler extends SimpleJob
 {
@@ -74,8 +74,6 @@ class AssemblyFileHandler extends SimpleJob
 		if (okToRun && fileParsed)
 		{
 			Assembly assembly = reader.getAssembly();
-			// TODO: for multi-file inputs, what file will define the name?
-			assembly.setName(files[0].getName());
 
 			readCache.close();
 			assembly.setReadCache(FileCache.createReadableCache(cache, index));
