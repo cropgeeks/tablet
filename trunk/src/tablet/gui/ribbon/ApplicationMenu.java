@@ -132,10 +132,21 @@ public class ApplicationMenu extends RibbonApplicationMenu
 			if (path == null || path.equals(" "))
 				continue;
 
-			File file = new File(path);
+			// Split multi-file inputs
+			final String[] paths = path.split("<!TABLET!>");
+
+			File[] files = new File[paths.length];
+			for (int i = 0; i < files.length; i++)
+				files[i] = new File(paths[i]);
+
+			// Button text will be "name" (or "name1" | "name2")
+			String text = files[0].getName();
+			for (int i = 1; i < files.length; i++)
+				text += "  ~  " + files[i].getName();
+
 
 			// Make the button
-			JCommandButton button = new JCommandButton(file.getName(),
+			JCommandButton button = new JCommandButton(text,
 				RibbonController.getIcon("DOCUMENTS16", 16));
 			button.setHorizontalAlignment(SwingUtilities.LEFT);
 			recentPanel.addButtonToLastGroup(button);
@@ -143,7 +154,7 @@ public class ApplicationMenu extends RibbonApplicationMenu
 			// And give it an action
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					winMain.getCommands().fileOpen(new String[] { path });
+					winMain.getCommands().fileOpen(paths);
 				}
 			});
 		}

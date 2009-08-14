@@ -60,7 +60,7 @@ public class Commands
 			return;
 		}
 
-		Prefs.setRecentDocument(filenames[0]);
+		Prefs.setRecentDocument(filenames);
 		winMain.setAssembly(ioHandler.getAssembly());
 
 		// See if a feature file can be loaded at this point too
