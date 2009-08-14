@@ -13,7 +13,7 @@ import scri.commons.file.*;
 import scri.commons.gui.*;
 
 /**
- * ImportHandler is a 3-state ITrackableJob implementation, that is responsible
+ * ImportHandler is a 2-state ITrackableJob implementation, that is responsible
  * for monitoring progress during assembly import and read base comparisons.
  */
 public class ImportHandler implements ITrackableJob

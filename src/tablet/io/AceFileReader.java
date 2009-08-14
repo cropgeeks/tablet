@@ -106,6 +106,8 @@ class AceFileReader extends TrackableReader
 			else if (str.startsWith("WA{"))
 				while ((str = readLine()) != null && !str.startsWith("}"));
 		}
+
+		assembly.setName(files[0].getName());
 	}
 
 	private void processContig()

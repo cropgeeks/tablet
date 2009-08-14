@@ -22,7 +22,7 @@ public class Tablet
 	public static WinMain winMain;
 
 	// Optional path to a file to be loaded when Tablet opens
-	private static String initialFile = null;
+	private static String[] initialFiles = null;
 
 	// Returns value for "CTRL" under most OSs, and the "apple" key for OS X
 	public static int menuShortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
@@ -42,8 +42,12 @@ public class Tablet
 
 		Install4j.doStartUpCheck();
 
-		if (args.length == 1)
-			initialFile = args[0];
+		if (args.length > 0)
+		{
+			initialFiles = new String[args.length];
+			for (int i = 0; i < args.length; i++)
+				initialFiles[i] = args[0];
+		}
 
 		new Tablet();
 	}
@@ -86,8 +90,8 @@ public class Tablet
 			public void windowOpened(WindowEvent e)
 			{
 				// Do we want to open an initial project?
-				if (initialFile != null)
-					winMain.getCommands().fileOpen(new String[] { initialFile });
+				if (initialFiles != null)
+					winMain.getCommands().fileOpen(initialFiles);
 
 				if (Install4j.displayUpdate)
 					TabletUtils.visitURL("http://bioinf.scri.ac.uk/tablet/svn.txt");
@@ -166,8 +170,6 @@ public class Tablet
 
 	public void osxOpen(String path)
 	{
-		JOptionPane.showMessageDialog(null, Thread.currentThread() + ", " + Thread.currentThread().getName());
-
 		// If Tablet is already open, then open the file straight away
 		if (winMain != null && winMain.isVisible())
 		{
@@ -177,6 +179,9 @@ public class Tablet
 
 		// Otherwise, mark it for opening once Tablet is ready
 		else
-			initialFile = path;
+		{
+			initialFiles = new String[1];
+			initialFiles[0] = path;
+		}
 	}
 }

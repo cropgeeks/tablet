@@ -124,6 +124,8 @@ class SoapFileReader extends TrackableReader
 			addContig(contig, new Consensus(), sb);
 
 		in.close();
+
+		assembly.setName(files[soapIndex].getName());
 	}
 
 	private void readSoapFile()
