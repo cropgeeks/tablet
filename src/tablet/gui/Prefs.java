@@ -91,16 +91,21 @@ public class Prefs extends XMLPreferences
 
 	// Updates the array of recently accessed documents so that 'document' is
 	// the first element, even if it has been accessed previously
-	public static void setRecentDocument(String document)
+	public static void setRecentDocument(String[] files)
 	{
+		// Convert the array of files back into a single string
+		String mostRecent = files[0];
+		for (int i = 1; i < files.length; i++)
+			mostRecent += "<!TABLET!>" + files[i];
+
 		LinkedList<String> list = new LinkedList<String>();
 		for (String file: guiRecentDocs)
 			list.add(file);
 
-		if (list.contains(document))
-			list.remove(document);
+		if (list.contains(mostRecent))
+			list.remove(mostRecent);
 
-		list.addFirst(document);
+		list.addFirst(mostRecent);
 
 		for (int i = 0; i < guiRecentDocs.length; i++)
 			guiRecentDocs[i] = list.get(i);
