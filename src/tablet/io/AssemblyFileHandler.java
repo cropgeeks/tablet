@@ -45,18 +45,30 @@ class AssemblyFileHandler extends SimpleJob
 
 		// For each file format that we understand...
 
-		// ACE
-		if (okToRun && fileParsed == false)
+		if (files.length == 1)
 		{
-			reader = new AceFileReader(readCache, true);
-			fileParsed = readFile();
-		}
+			// ACE
+			if (okToRun && fileParsed == false)
+			{
+				reader = new AceFileReader(readCache, true);
+				fileParsed = readFile();
+			}
 
-		// AFG
-		if (okToRun && fileParsed == false)
+			// AFG
+			if (okToRun && fileParsed == false)
+			{
+				reader = new AfgFileReader(readCache, true);
+				fileParsed = readFile();
+			}
+		}
+		else if (files.length == 2)
 		{
-			reader = new AfgFileReader(readCache, true);
-			fileParsed = readFile();
+			// SOAP
+			if (okToRun && fileParsed == false)
+			{
+				reader = new SoapFileReader(readCache, true);
+				fileParsed = readFile();
+			}
 		}
 
 		if (okToRun && fileParsed)

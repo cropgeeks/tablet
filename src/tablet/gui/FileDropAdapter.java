@@ -29,16 +29,14 @@ class FileDropAdapter extends DropTargetAdapter
 				{
 					List<?> list = (List<?>) t.getTransferData(dataFlavors[i]);
 
-					if (list.size() == 1)
-					{
-						String filename = list.get(0).toString();
+					String[] filenames = new String[list.size()];
+					for (int fn = 0; fn < filenames.length; fn++)
+						filenames[fn] = list.get(fn).toString();
 
-						winMain.getCommands().fileOpen(filename);
-						dtde.dropComplete(true);
-						return;
-					}
+					winMain.getCommands().fileOpen(filenames);
+					dtde.dropComplete(true);
 
-					break;
+					return;
 				}
 			}
 

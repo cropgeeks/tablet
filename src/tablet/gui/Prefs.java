@@ -93,8 +93,6 @@ public class Prefs extends XMLPreferences
 	// the first element, even if it has been accessed previously
 	public static void setRecentDocument(String document)
 	{
-		System.out.println("guiRecentDocs.length " + guiRecentDocs.length);
-
 		LinkedList<String> list = new LinkedList<String>();
 		for (String file: guiRecentDocs)
 			list.add(file);

@@ -9,6 +9,10 @@ import tablet.gui.*;
 
 import scri.commons.file.*;
 
+/**
+ * Tracks reading from one or more files. Tracking is based on all the files
+ * together so will go from 0 to (total size of all files).
+ */
 abstract class TrackableReader extends SimpleJob
 {
 	// Read data
@@ -20,10 +24,23 @@ abstract class TrackableReader extends SimpleJob
 
 	protected Assembly assembly;
 
+	// Tracks how many bytes have been read from each of the files
+	private long[] bytesRead;
+	// Tracks the current file being read from
+	private int fileIndex;
+
+	// The total size (in bytes) of all the files
+	private long totalSize;
+
 	void setInputs(File[] files, Assembly assembly)
 	{
 		this.files = files;
 		this.assembly = assembly;
+
+		bytesRead = new long[files.length];
+
+		for (File file: files)
+			totalSize += file.length();
 	}
 
 	protected String readLine()
@@ -47,17 +64,26 @@ abstract class TrackableReader extends SimpleJob
 		if (is == null)
 			return 0;
 
-		float bytesRead = is.getBytesRead();
-		float size = is.getSize();
+		// Update the value for the file currently being read
+		bytesRead[fileIndex] = is.getBytesRead();
 
-		return Math.round((bytesRead / size) * 5555);
+		// But calculate the overall percentage using all the files
+		long total = 0;
+		for (long bytes: bytesRead)
+			total += bytes;
+
+		return Math.round((total / (float) totalSize) * 5555);
 	}
 
-	protected ProgressInputStream getInputStream(int index)
+	protected ProgressInputStream getInputStream(int fileIndex)
 		throws Exception
 	{
-		is = new ProgressInputStream(new FileInputStream(files[index]));
-		is.setSize(files[index].length());
+		this.fileIndex = fileIndex;
+
+		is = new ProgressInputStream(new FileInputStream(files[fileIndex]));
+
+		// Reset the counter for this file
+		bytesRead[fileIndex] = 0;
 
 		return is;
 	}

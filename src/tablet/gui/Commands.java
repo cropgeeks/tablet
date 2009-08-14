@@ -19,28 +19,27 @@ public class Commands
 		this.winMain = winMain;
 	}
 
-	public void fileOpen(String filename)
+	public void fileOpen(String[] filenames)
 	{
 		// If no file was passed in then we need to prompt the user to pick one
-		if (filename == null)
+		if (filenames == null)
 		{
-			filename = getFilename(RB.getString("gui.Commands.fileOpen.openDialog"));
-			if (filename == null)
+			filenames = getFilenames(RB.getString("gui.Commands.fileOpen.openDialog"));
+			if (filenames == null)
 				return;
 		}
 
-		File file = new File(filename);
+		File file = new File(filenames[0]);
 
 		winMain.closeAssembly();
 		System.gc();
 
-		String[] filenames = new String[] { filename };
 		ImportHandler ioHandler = new ImportHandler(filenames);
 
 		String title = RB.getString("gui.Commands.fileOpen.title");
 		String label = RB.getString("gui.Commands.fileOpen.label");
 		String[] msgs = new String[] {
-			RB.format("gui.Commands.fileOpen.msg01", file.getName()),
+			RB.getString("gui.Commands.fileOpen.msg01"),
 			RB.getString("gui.Commands.fileOpen.msg02") };
 
 		// Run the job...
@@ -49,15 +48,19 @@ public class Commands
 		{
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
 			{
-				TaskDialog.error(
-					"Error opening " + filename + "\n\n" + dialog.getException(),
+				String files = "";
+				for (int i = 0; i < filenames.length; i++)
+					files += "\n     " + filenames[i];
+
+				TaskDialog.error(RB.format("gui.Commands.fileOpen.error",
+					dialog.getException(), files),
 					RB.getString("gui.text.close"));
 			}
 
 			return;
 		}
 
-		Prefs.setRecentDocument(filename);
+		Prefs.setRecentDocument(filenames[0]);
 		winMain.setAssembly(ioHandler.getAssembly());
 
 		// See if a feature file can be loaded at this point too
@@ -70,7 +73,8 @@ public class Commands
 		// If no file was passed in then we need to prompt the user to pick one
 		if (filename == null)
 		{
-			filename = getFilename(RB.getString("gui.Commands.importFeatures.openDialog"));
+			String[] filenames = getFilenames(RB.getString("gui.Commands.importFeatures.openDialog"));
+			filename = filenames[0];
 			if (filename == null)
 				return;
 		}
@@ -102,7 +106,7 @@ public class Commands
 		winMain.getContigsPanel().updateTable(assembly);
 	}
 
-	private String getFilename(String title)
+	private String[] getFilenames(String title)
 	{
 		// Decide on AWT or Swing dialog based on OS X or not
 		if (SystemUtils.isMacOS() == false)
@@ -110,14 +114,23 @@ public class Commands
 			JFileChooser fc = new JFileChooser();
 			fc.setDialogTitle(title);
 			fc.setCurrentDirectory(new File(Prefs.guiCurrentDir));
+			fc.setMultiSelectionEnabled(true);
 
 			if (fc.showOpenDialog(winMain) != JFileChooser.APPROVE_OPTION)
 				return null;
 
 			Prefs.guiCurrentDir = fc.getCurrentDirectory().getPath();
-			return fc.getSelectedFile().getPath();
+			File[] files = fc.getSelectedFiles();
+			String[] filenames = new String[files.length];
+			for (int i = 0; i < files.length; i++)
+			{
+				filenames[i] = files[i].getPath();
+				System.out.println(filenames[i]);
+			}
+
+			return filenames;
 		}
-		else
+/*		else
 		{
 			FileDialog fd = new FileDialog(winMain, title, FileDialog.LOAD);
 			fd.setDirectory(Prefs.guiCurrentDir);
@@ -130,6 +143,8 @@ public class Commands
 			Prefs.guiCurrentDir = fd.getDirectory();
 			return new File(fd.getDirectory(), fd.getFile()).getPath();
 		}
+*/
+		return null;
 	}
 
 	// Given assemblyfile.<ext> see if there is a featurefile.gff file that is
