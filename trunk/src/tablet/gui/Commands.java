@@ -1,14 +1,13 @@
 package tablet.gui;
 
-import java.awt.*;
 import java.io.*;
-import javax.swing.*;
 
-import tablet.data.*;
+import javax.swing.*;
 import tablet.gui.dialog.*;
 import tablet.io.*;
 
 import scri.commons.gui.*;
+import tablet.data.*;
 
 public class Commands
 {
@@ -24,12 +23,12 @@ public class Commands
 		// If no file was passed in then we need to prompt the user to pick one
 		if (filenames == null)
 		{
-			filenames = getFilenames(RB.getString("gui.Commands.fileOpen.openDialog"));
+			ImportAssemblyDialog importDialog = new ImportAssemblyDialog(winMain);
+			importDialog.setVisible(true);
+			//filenames = getFilenames(RB.getString("gui.Commands.fileOpen.openDialog"));
 			if (filenames == null)
 				return;
 		}
-
-		File file = new File(filenames[0]);
 
 		winMain.closeAssembly();
 		System.gc();
@@ -64,8 +63,12 @@ public class Commands
 		winMain.setAssembly(ioHandler.getAssembly());
 
 		// See if a feature file can be loaded at this point too
-		if (getFeatureFile(file) != null)
-			importFeatures(getFeatureFile(file).getPath());
+		if(filenames.length == 1)
+		{
+		    File file = new File(filenames[0]);
+		    if (getFeatureFile(file) != null)
+			    importFeatures(getFeatureFile(file).getPath());
+		}
 	}
 
 	public void importFeatures(String filename)
