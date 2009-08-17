@@ -44,6 +44,15 @@ public class Prefs extends XMLPreferences
 	// A list of previously accessed documents
 	public static String[] guiRecentDocs = new String[10];
 
+	// A list of previously accessed ace documents
+	public static String[] aceRecentDocs = new String[10];
+
+	// A list of previously accessed afg documents
+	public static String[] afgRecentDocs = new String[10];
+
+	// A list of previously accessed soap documents
+	public static String[] soapRecentDocs = new String[10];
+
 	// What filtering option was last in use for the contigs panel
 	public static int guiContigsFilter = 0;
 
@@ -109,5 +118,32 @@ public class Prefs extends XMLPreferences
 
 		for (int i = 0; i < guiRecentDocs.length; i++)
 			guiRecentDocs[i] = list.get(i);
+	}
+
+	// Updates the array of recently accessed documents so that 'document' is
+	// the first element, even if it has been accessed previously
+	public static void setRecentFiles(String[] files, String[] recentDocs)
+	{
+		for (int i = 0; i < files.length; i++)
+			recentDocs[i] = files[i];
+	}
+
+	public static void setRecentSoapFiles(String[] soapFiles, String[] fastAFiles)
+	{
+		int length;
+		if(soapFiles.length > fastAFiles.length)
+		{
+		    length = soapFiles.length;
+		}
+		else if(fastAFiles.length > soapFiles.length)
+		{
+		    length = fastAFiles.length;
+		}
+		else
+		{
+		    length = soapFiles.length;
+		}
+		for (int i = 0; i < length; i++)
+			soapRecentDocs[i] = soapFiles[i] + "<!TABLET!>" + fastAFiles[i];
 	}
 }
