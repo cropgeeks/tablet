@@ -74,8 +74,8 @@ public class Commands
 		// If no file was passed in then we need to prompt the user to pick one
 		if (filename == null)
 		{
-			String[] filenames = getFilenames(RB.getString("gui.Commands.importFeatures.openDialog"));
-			filename = filenames[0];
+			filename = TabletUtils.getFilename(
+				RB.getString("gui.Commands.importFeatures.openDialog"), null);
 			if (filename == null)
 				return;
 		}
@@ -105,47 +105,6 @@ public class Commands
 		}
 
 		winMain.getContigsPanel().updateTable(assembly);
-	}
-
-	private String[] getFilenames(String title)
-	{
-		// Decide on AWT or Swing dialog based on OS X or not
-		if (SystemUtils.isMacOS() == false)
-		{
-			JFileChooser fc = new JFileChooser();
-			fc.setDialogTitle(title);
-			fc.setCurrentDirectory(new File(Prefs.guiCurrentDir));
-			fc.setMultiSelectionEnabled(true);
-
-			if (fc.showOpenDialog(winMain) != JFileChooser.APPROVE_OPTION)
-				return null;
-
-			Prefs.guiCurrentDir = fc.getCurrentDirectory().getPath();
-			File[] files = fc.getSelectedFiles();
-			String[] filenames = new String[files.length];
-			for (int i = 0; i < files.length; i++)
-			{
-				filenames[i] = files[i].getPath();
-				System.out.println(filenames[i]);
-			}
-
-			return filenames;
-		}
-/*		else
-		{
-			FileDialog fd = new FileDialog(winMain, title, FileDialog.LOAD);
-			fd.setDirectory(Prefs.guiCurrentDir);
-			fd.setLocationRelativeTo(winMain);
-			fd.setVisible(true);
-
-			if (fd.getFile() == null)
-				return null;
-
-			Prefs.guiCurrentDir = fd.getDirectory();
-			return new File(fd.getDirectory(), fd.getFile()).getPath();
-		}
-*/
-		return null;
 	}
 
 	// Given assemblyfile.<ext> see if there is a featurefile.gff file that is
