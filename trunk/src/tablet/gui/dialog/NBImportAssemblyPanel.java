@@ -2,22 +2,25 @@ package tablet.gui.dialog;
 
 import java.awt.*;
 import javax.swing.*;
+
 import scri.commons.gui.*;
 
-public class NBImportAssemblyPanel extends javax.swing.JPanel
+class NBImportAssemblyPanel extends javax.swing.JPanel
 {
-
     /** Creates new form NBImportAssembly */
     public NBImportAssemblyPanel(ImportAssemblyDialog parent)
     {
-	    initComponents();
+		initComponents();
 
-	    assemblyComboBox.addItemListener(parent);
+		assemblyComboBox.addItem(RB.getString("gui.dialog.NBImportAssembly.aceFile"));
+		assemblyComboBox.addItem(RB.getString("gui.dialog.NBImportAssembly.afgFile"));
+		assemblyComboBox.addItem(RB.getString("gui.dialog.NBImportAssembly.soapFile"));
 
-	    RB.setText(assemblyLabel, "gui.dialog.NBImportAssembly.assembly");
-	    //RB.setText(fileLabel1, "gui.dialog.NBImportAssembly.fileType");
-	    setBackground(Color.white);
-	    setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		assemblyComboBox.addItemListener(parent);
+
+		RB.setText(assemblyLabel, "gui.dialog.NBImportAssembly.assemblyLabel");
+		setBackground(Color.white);
+		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
     }
 
     /** This method is called from within the constructor to
@@ -32,13 +35,8 @@ public class NBImportAssemblyPanel extends javax.swing.JPanel
         assemblyComboBox = new javax.swing.JComboBox();
         assemblyLabel = new javax.swing.JLabel();
 
-        assemblyComboBox.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "ACE", "AFG", "SOAP" }));
-        assemblyComboBox.setMinimumSize(new java.awt.Dimension(80, 20));
-        assemblyComboBox.setPreferredSize(new java.awt.Dimension(80, 20));
-
         assemblyLabel.setLabelFor(assemblyComboBox);
-        assemblyLabel.setText("Assembly type");
-        assemblyLabel.setPreferredSize(new java.awt.Dimension(94, 14));
+        assemblyLabel.setText("Open an assembly of type:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -46,18 +44,18 @@ public class NBImportAssemblyPanel extends javax.swing.JPanel
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(assemblyLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(assemblyLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(assemblyComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(74, Short.MAX_VALUE))
+                .addComponent(assemblyComboBox, 0, 75, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(assemblyLabel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(assemblyComboBox, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(assemblyLabel)
+                    .addComponent(assemblyComboBox))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents

@@ -9,8 +9,6 @@ import scri.commons.gui.*;
 
 public class TabletUtils
 {
-	public static boolean dirChanged = false;
-
 	public static JPanel getButtonPanel()
 	{
 		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
@@ -60,18 +58,19 @@ public class TabletUtils
 		}
 	}
 
-	public static String getFilename(String title, String filePath)
+	public static String getFilename(String title, File filePath)
 	{
 		WinMain winMain = Tablet.winMain;
+
 		// Decide on AWT or Swing dialog based on OS X or not
 		if (SystemUtils.isMacOS() == false)
 		{
 			JFileChooser fc = new JFileChooser();
 			fc.setDialogTitle(title);
-			if(dirChanged)
-			    fc.setCurrentDirectory(new File(Prefs.guiCurrentDir));
+			if (filePath != null)
+				fc.setCurrentDirectory(filePath);
 			else
-			    fc.setCurrentDirectory(new File(filePath));
+				fc.setCurrentDirectory(new File(Prefs.guiCurrentDir));
 
 			if (fc.showOpenDialog(winMain) != JFileChooser.APPROVE_OPTION)
 				return null;
@@ -82,10 +81,10 @@ public class TabletUtils
 		else
 		{
 			FileDialog fd = new FileDialog(winMain, title, FileDialog.LOAD);
-			if(dirChanged)
-			    fd.setDirectory(Prefs.guiCurrentDir);
+			if (filePath != null)
+				fd.setDirectory(filePath.getParent());
 			else
-			    fd.setDirectory(filePath);
+				fd.setDirectory(Prefs.guiCurrentDir);
 			fd.setLocationRelativeTo(winMain);
 			fd.setVisible(true);
 

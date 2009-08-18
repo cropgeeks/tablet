@@ -2,6 +2,7 @@ package tablet.gui.dialog;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.LinkedList;
 import javax.swing.*;
 
@@ -17,53 +18,47 @@ public class ImportAssemblyDialog extends JDialog
 	private NBImportAssemblyAFGPanel afgPanel;
 	private NBImportAssemblySOAPPanel soapPanel;
 
-	private static final String ACEPANEL = "ACE", AFGPANEL = "AFG", SOAPPANEL = "SOAP";
-	
+	private static final String ACEPANEL  = "ACE";
+	private static final String AFGPANEL  = "AFG";
+	private static final String SOAPPANEL = "SOAP";
+	private String type = ACEPANEL;
+
 	private JButton bCancel, bHelp, bOpen;
-	
+
 	private NBImportAssemblyPanel nbPanel;
 
-	String [] filenames;
-	
-	public ImportAssemblyDialog(WinMain winMain)
+	private String[] filenames;
+
+	public ImportAssemblyDialog()
 	{
 		super(
 			Tablet.winMain,
 			RB.getString("gui.dialog.ImportAssemblyDialog.title"),
 			true
 		);
-		
+
 		nbPanel = new NBImportAssemblyPanel(this);
-		cardsPanel = new JPanel(new CardLayout());
-
 		acePanel = new NBImportAssemblyACEPanel(this);
-		cardsPanel.add(acePanel, ACEPANEL);
-
 		afgPanel = new NBImportAssemblyAFGPanel(this);
-		cardsPanel.add(afgPanel, AFGPANEL);
-
 		soapPanel = new NBImportAssemblySOAPPanel(this);
+
+		// Create the CardLayout for flicking between input types
+		cardsPanel = new JPanel(new CardLayout());
+		cardsPanel.add(acePanel, ACEPANEL);
+		cardsPanel.add(afgPanel, AFGPANEL);
 		cardsPanel.add(soapPanel, SOAPPANEL);
 
 		add(nbPanel, BorderLayout.NORTH);
 		add(cardsPanel);
 		add(createButtons(), BorderLayout.SOUTH);
-		
+
 		SwingUtils.addCloseHandler(this, bCancel);
+		getRootPane().setDefaultButton(bOpen);
 
 		pack();
 		setResizable(false);
-		setLocationRelativeTo(winMain);
-
-		// Position on screen...
-		if (Prefs.guiJumpToX != -9999 || Prefs.guiJumpToY != -9999)
-			setLocation(Prefs.guiJumpToX, Prefs.guiJumpToY);
-
-		//populate combo boxes with recent file lists from XML
-		setupComboBox(acePanel.aceComboBox, acePanel.recentFiles);
-		setupComboBox(afgPanel.afgComboBox, afgPanel.recentFiles);
-		setupComboBox(soapPanel.soapComboBox, soapPanel.recentFilesSoap);
-		setupComboBox(soapPanel.soapComboBox2, soapPanel.recentFilesFastA);
+		setLocationRelativeTo(Tablet.winMain);
+		setVisible(true);
 	}
 
 	private JPanel createButtons()
@@ -83,156 +78,121 @@ public class ImportAssemblyDialog extends JDialog
 		return p1;
 	}
 
+	public String[] getFilenames()
+		{ return filenames; }
+
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == bCancel)
 			setVisible(false);
 
+		// Open button selected - find out which file type and get the files
 		else if(e.getSource() == bOpen)
 		{
-			//set the filenames to be loaded
-			//update the recent files
-			//load the file
-			if(nbPanel.assemblyComboBox.getSelectedItem() == ACEPANEL && acePanel.aceComboBox.getSelectedItem() != null)
-			{
-				filenames = new String[1];
-				filenames[0] = acePanel.aceComboBox.getSelectedItem().toString();
-				updateRecentFiles(acePanel.recentFiles, Prefs.aceRecentDocs);
-				loadFile();
-			}
-			else if(nbPanel.assemblyComboBox.getSelectedItem() == AFGPANEL && afgPanel.afgComboBox.getSelectedItem() != null)
-			{
-				filenames = new String[1];
-				filenames[0] = afgPanel.afgComboBox.getSelectedItem().toString();
-				updateRecentFiles(afgPanel.recentFiles, Prefs.afgRecentDocs);
-				loadFile();
-			}
-			else if(nbPanel.assemblyComboBox.getSelectedItem() == SOAPPANEL && soapPanel.soapComboBox.getSelectedItem() != null && soapPanel.soapComboBox2.getSelectedItem() != null)
-			{
-				filenames = new String[2];
-				filenames[0] = soapPanel.soapComboBox.getSelectedItem().toString();
-				filenames[1] = soapPanel.soapComboBox2.getSelectedItem().toString();
+			if (type.equals(ACEPANEL) && acePanel.isOK())
+				filenames = acePanel.getFilenames();
 
-				LinkedList<String> soapFiles = new LinkedList<String>();
+			else if (type.equals(AFGPANEL) && afgPanel.isOK())
+				filenames = afgPanel.getFilenames();
 
-				int length;
-				if(soapPanel.recentFilesSoap.size() > soapPanel.recentFilesFastA.size())
-				{
-				    length = soapPanel.recentFilesSoap.size();
-				}
-				else if(soapPanel.recentFilesFastA.size() > soapPanel.recentFilesSoap.size())
-				{
-				    length = soapPanel.recentFilesFastA.size();
-				}
-				else
-				{
-				    length = soapPanel.recentFilesSoap.size();
-				}
+			else if (type.equals(SOAPPANEL) && soapPanel.isOK())
+				filenames = soapPanel.getFilenames();
 
-				for(int i=0; i < length; i++)
-				{
-					soapFiles.add(soapPanel.recentFilesSoap.get(i) + "<!TABLET!>" + soapPanel.recentFilesFastA.get(i));
-				}
-				System.out.println("UPDATE RECENT FILES");
-				updateRecentFiles(soapFiles, Prefs.soapRecentDocs);
-				loadFile();
-			}
-			else
-			{
-				JOptionPane.showMessageDialog(this, "Please select a file to be loaded.");
-			}
-
+			if (filenames != null)
+				setVisible(false);
 		}
 
-		else if(e.getSource() == acePanel.bBrowse)
+		else if (e.getSource() == acePanel.aceComboBox)
 		{
-			updateComboBox(acePanel.aceComboBox, acePanel.recentFiles);
+			String value = (String) acePanel.aceComboBox.getSelectedItem();
+			updateComboBox(value, acePanel.aceComboBox, acePanel.recentFiles);
 		}
 
-		else if(e.getSource() == afgPanel.bBrowse)
+		else if (e.getSource() == afgPanel.afgComboBox)
 		{
-			updateComboBox(afgPanel.afgComboBox, afgPanel.recentFiles);
+			String value = (String) afgPanel.afgComboBox.getSelectedItem();
+			updateComboBox(value, afgPanel.afgComboBox, afgPanel.recentFiles);
 		}
-		else if(e.getSource() == soapPanel.bBrowse)
+
+		else if (e.getSource() == soapPanel.soapComboBox)
 		{
-			updateComboBox(soapPanel.soapComboBox, soapPanel.recentFilesSoap);
-			TabletUtils.dirChanged = true;
+			String value = (String) soapPanel.soapComboBox.getSelectedItem();
+			updateComboBox(value, soapPanel.soapComboBox, soapPanel.recentFilesSoap);
 		}
-		else if(e.getSource() == soapPanel.bBrowse2)
+
+		else if (e.getSource() == soapPanel.fastaComboBox)
 		{
-			updateComboBox(soapPanel.soapComboBox2, soapPanel.recentFilesFastA);
-			TabletUtils.dirChanged = true;
+			String value = (String) soapPanel.fastaComboBox.getSelectedItem();
+			updateComboBox(value, soapPanel.fastaComboBox, soapPanel.recentFilesFasta);
 		}
+
+		else if (e.getSource() == acePanel.bBrowse)
+			browse(acePanel.aceComboBox, acePanel.recentFiles);
+
+		else if (e.getSource() == afgPanel.bBrowse)
+			browse(afgPanel.afgComboBox, afgPanel.recentFiles);
+
+		else if (e.getSource() == soapPanel.bBrowse1)
+			browse(soapPanel.soapComboBox, soapPanel.recentFilesSoap);
+
+		else if (e.getSource() == soapPanel.bBrowse2)
+			browse(soapPanel.fastaComboBox, soapPanel.recentFilesFasta);
 	}
 
+	// Toggle to another layout
 	public void itemStateChanged(ItemEvent e)
 	{
-		CardLayout cl = (CardLayout)(cardsPanel.getLayout());
-		cl.show(cardsPanel, (String)e.getItem());
-	}
-
-	private void loadFile()
-	{
-		setVisible(false);
-		Tablet.winMain.getCommands().fileOpen(filenames);
-		TabletUtils.dirChanged = false;
-	}
-
-	//update the preferences file with recent file list
-	private void updateRecentFiles(LinkedList<String> files, String[] recentDocs)
-	{
-		if(files.size() > 10)
+		switch (nbPanel.assemblyComboBox.getSelectedIndex())
 		{
-			String [] filePaths = new String[10];
-			Prefs.setRecentFiles((files.subList(0, 10)).toArray(filePaths), recentDocs);
+			case 0: type = ACEPANEL; break;
+			case 1: type = AFGPANEL; break;
+			case 2: type = SOAPPANEL; break;
+		}
+
+		CardLayout cl = (CardLayout) cardsPanel.getLayout();
+		cl.show(cardsPanel, type);
+	}
+
+	//update the combobox and list of recent files from the new input
+	void browse(JComboBox combo, LinkedList<String> recentFiles)
+	{
+		String filename = null;
+		String title = RB.getString("gui.dialog.ImportAssemblyDialog.browse");
+
+		if (combo.getSelectedItem() != null)
+		{
+			File file = new File(combo.getSelectedItem().toString());
+			filename = TabletUtils.getFilename(title, file);
 		}
 		else
-		{
-			String [] filePaths = new String[files.size()];
-			Prefs.setRecentFiles(files.toArray(filePaths), recentDocs);
-		}
+			filename = TabletUtils.getFilename(title, null);
+
+		updateComboBox(filename, combo, recentFiles);
 	}
 
-	//update the combobox and list of recent files fromt he new input
-	private void updateComboBox(JComboBox combo, LinkedList<String> recentFiles)
+	void updateComboBox(String value, JComboBox combo, LinkedList<String> recentFiles)
 	{
-		String name;
-		if(combo.getSelectedItem() != null)
+		if (value != null)
 		{
-			name = TabletUtils.getFilename("Choose a file", combo.getSelectedItem().toString());
-		}
-		else
-		{
-			name = TabletUtils.getFilename("Choose a file", "");
+			recentFiles.remove(value);
+			recentFiles.addFirst(value);
 		}
 
-		System.out.println("Supplied name");
-		System.out.println(name);
+		// Add the new entry to the list, and keep its overall size 10 or less
+		while (recentFiles.size() > 10)
+			recentFiles.removeLast();
 
-		if(recentFiles.contains(name))
-		{
-		    recentFiles.remove(name);
-		    recentFiles.addFirst(name);
-		    combo.removeItem(name);
-		    combo.addItem(name);
-		    combo.setSelectedItem(name);
-		}
-		else
-		{
-		    recentFiles.addFirst(name);
-		    combo.addItem(name);
-		    combo.setSelectedItem(name);
-		}
-	}
+		// The combo's box's ALs need to be removed before changing it
+		ActionListener[] listeners = combo.getActionListeners();
+		for (ActionListener al: listeners)
+			combo.removeActionListener(al);
 
-	private void setupComboBox(JComboBox combo, LinkedList<String> recentFiles)
-	{
-		if(!recentFiles.isEmpty())
-		{
-		    for(String item : recentFiles)
-		    {
-			combo.addItem(item);
-		    }
-		}
+		// Update the combo box to contain the same items
+		combo.removeAllItems();
+		for (String entry: recentFiles)
+			combo.addItem(entry);
+
+		for (ActionListener al: listeners)
+			combo.addActionListener(al);
 	}
 }

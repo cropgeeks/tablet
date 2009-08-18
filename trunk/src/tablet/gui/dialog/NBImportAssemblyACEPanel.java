@@ -1,59 +1,53 @@
 package tablet.gui.dialog;
 
 import java.awt.*;
-import java.io.File;
-import java.util.LinkedList;
+import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
 
-import scri.commons.gui.*;
 import tablet.gui.Prefs;
 
-/**
- *
- * @author gsteph
- */
-public class NBImportAssemblyACEPanel extends javax.swing.JPanel
+import scri.commons.gui.*;
+
+class NBImportAssemblyACEPanel extends JPanel
 {
-    LinkedList<String> recentFiles;
+	LinkedList<String> recentFiles = new LinkedList<String>();
 
-    /** Creates new form NBImportAssemblyACEPanel */
-    public NBImportAssemblyACEPanel(ImportAssemblyDialog parent)
-    {
-	    initComponents();
+	public NBImportAssemblyACEPanel(ImportAssemblyDialog parent)
+	{
+		initComponents();
 
-	    bBrowse.addActionListener(parent);
-	    aceComboBox.addActionListener(parent);
+		setBackground(Color.white);
+		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-	    recentFiles  = new LinkedList<String>();
+		RB.setText(bBrowse, "gui.text.browse");
+		RB.setText(aceLabel, "gui.dialog.NBImportAssemblyACEPanel.aceLabel");
 
-	    RB.setText(bBrowse, "gui.text.browse");
-	    RB.setText(aceFileLabel, "gui.dialog.NBImportAssemblyACEPanel.label");
-	    
-	    for(final String path : Prefs.aceRecentDocs)
-	    {
-		    if (path == null || path.equals(" "))
-			    continue;
+		// Parse out the tab-delimited list of files
+		StringTokenizer st = new StringTokenizer(Prefs.aceRecentDocs, "\t");
+		while (st.hasMoreTokens())
+			recentFiles.add(st.nextToken());
 
-		    // Split multi-file inputs
-		    final String[] paths = path.split("<!TABLET!>");
+		parent.updateComboBox(null, aceComboBox, recentFiles);
 
-		    File[] files = new File[paths.length];
-		    for (int i = 0; i < files.length; i++)
-			    files[i] = new File(paths[i]);
+		bBrowse.addActionListener(parent);
+		aceComboBox.addActionListener(parent);
+	}
 
+	String[] getFilenames()
+	{
+		return new String[] { recentFiles.get(0) };
+	}
 
-		    // Button text will be "name" (or "name1" | "name2")
-		    for(int i = 0; i < files.length; i++)
-		    {
-			    String text = files[i].getPath();
-			    //if(!recentFiles.contains(text))
-			    recentFiles.add(text);
-		    }
-	    }
+	boolean isOK()
+	{
+		// Save the list back to the preferences
+		Prefs.aceRecentDocs = "";
+		for (String str: recentFiles)
+			Prefs.aceRecentDocs += str + "\t";
 
-	    setBackground(Color.white);
-	    setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-    }
+		return aceComboBox.getSelectedItem() != null;
+	}
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -64,18 +58,16 @@ public class NBImportAssemblyACEPanel extends javax.swing.JPanel
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        aceFileLabel = new javax.swing.JLabel();
         aceComboBox = new javax.swing.JComboBox();
         bBrowse = new javax.swing.JButton();
-
-        aceFileLabel.setText("Choose ACE File:");
-        aceFileLabel.setPreferredSize(new java.awt.Dimension(94, 14));
+        aceLabel = new javax.swing.JLabel();
 
         aceComboBox.setEditable(true);
-        aceComboBox.setMinimumSize(new java.awt.Dimension(0, 0));
-        aceComboBox.setPreferredSize(new java.awt.Dimension(70, 20));
 
         bBrowse.setText("Browse...");
+
+        aceLabel.setLabelFor(aceComboBox);
+        aceLabel.setText("ACE input file:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -83,21 +75,21 @@ public class NBImportAssemblyACEPanel extends javax.swing.JPanel
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(aceFileLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(aceLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(aceComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(aceComboBox, 0, 197, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bBrowse)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(aceFileLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(aceComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bBrowse))
+                    .addComponent(bBrowse)
+                    .addComponent(aceLabel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -105,7 +97,7 @@ public class NBImportAssemblyACEPanel extends javax.swing.JPanel
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JComboBox aceComboBox;
-    private javax.swing.JLabel aceFileLabel;
+    private javax.swing.JLabel aceLabel;
     javax.swing.JButton bBrowse;
     // End of variables declaration//GEN-END:variables
 

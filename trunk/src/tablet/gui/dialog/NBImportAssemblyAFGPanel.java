@@ -1,55 +1,52 @@
 package tablet.gui.dialog;
 
 import java.awt.*;
-import java.io.File;
-import java.util.LinkedList;
+import java.util.*;
 import javax.swing.*;
 
-import scri.commons.gui.*;
 import tablet.gui.Prefs;
 
-public class NBImportAssemblyAFGPanel extends javax.swing.JPanel
+import scri.commons.gui.*;
+
+class NBImportAssemblyAFGPanel extends javax.swing.JPanel
 {
-    LinkedList<String> recentFiles;
-    
-    /** Creates new form NBImportAssemblyAFGPanel */
+    LinkedList<String> recentFiles = new LinkedList<String>();
+
     public NBImportAssemblyAFGPanel(ImportAssemblyDialog parent)
-    {
-	    initComponents();
+	{
+		initComponents();
 
-	    bBrowse.addActionListener(parent);
-	    afgComboBox.addActionListener(parent);
+		setBackground(Color.white);
+		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-	    recentFiles  = new LinkedList<String>();
+		RB.setText(bBrowse, "gui.text.browse");
+		RB.setText(afgLabel, "gui.dialog.NBImportAssemblyAFGPanel.afgLabel");
 
-	    RB.setText(bBrowse, "gui.text.browse");
-	    RB.setText(afgLabel, "gui.dialog.NBImportAssemblyAFGPanel.label");
+		// Parse out the tab-delimited list of files
+		StringTokenizer st = new StringTokenizer(Prefs.afgRecentDocs, "\t");
+		while (st.hasMoreTokens())
+			recentFiles.add(st.nextToken());
 
-	    for(final String path : Prefs.afgRecentDocs)
-	    {
-		    // Ignore any that haven't been set yet
-		    if (path == null || path.equals(" "))
-			    continue;
+		parent.updateComboBox(null, afgComboBox, recentFiles);
 
-		    // Split multi-file inputs
-		    final String[] paths = path.split("<!TABLET!>");
+		bBrowse.addActionListener(parent);
+		afgComboBox.addActionListener(parent);
+	}
 
-		    File[] files = new File[paths.length];
-		    for (int i = 0; i < files.length; i++)
-			    files[i] = new File(paths[i]);
+	String[] getFilenames()
+	{
+		return new String[] { recentFiles.get(0) };
+	}
 
-		    // Button text will be "name" (or "name1" | "name2")
-		    for(int i=0; i < files.length; i++)
-		    {
-			String text = files[i].getPath();
-			if(!recentFiles.contains(text))
-			    recentFiles.add(text);
-		    }
-	    }
+	boolean isOK()
+	{
+		// Save the list back to the preferences
+		Prefs.afgRecentDocs = "";
+		for (String str: recentFiles)
+			Prefs.afgRecentDocs += str + "\t";
 
-	    setBackground(Color.white);
-	    setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-    }
+		return afgComboBox.getSelectedItem() != null;
+	}
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -64,14 +61,10 @@ public class NBImportAssemblyAFGPanel extends javax.swing.JPanel
         afgComboBox = new javax.swing.JComboBox();
         bBrowse = new javax.swing.JButton();
 
-        setPreferredSize(new java.awt.Dimension(431, 45));
-
-        afgLabel.setText("Choose AFG file:");
-        afgLabel.setPreferredSize(new java.awt.Dimension(94, 14));
+        afgLabel.setLabelFor(afgComboBox);
+        afgLabel.setText("AFG input file:");
 
         afgComboBox.setEditable(true);
-        afgComboBox.setMinimumSize(new java.awt.Dimension(0, 0));
-        afgComboBox.setPreferredSize(new java.awt.Dimension(70, 20));
 
         bBrowse.setText("Browse...");
 
@@ -81,21 +74,21 @@ public class NBImportAssemblyAFGPanel extends javax.swing.JPanel
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(afgLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(afgLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(afgComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(afgComboBox, 0, 197, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(bBrowse)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(afgLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(afgComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bBrowse))
+                    .addComponent(bBrowse)
+                    .addComponent(afgLabel))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
