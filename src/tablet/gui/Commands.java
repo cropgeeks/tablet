@@ -23,10 +23,8 @@ public class Commands
 		// If no file was passed in then we need to prompt the user to pick one
 		if (filenames == null)
 		{
-			ImportAssemblyDialog importDialog = new ImportAssemblyDialog(winMain);
-			importDialog.setVisible(true);
-			//filenames = getFilenames(RB.getString("gui.Commands.fileOpen.openDialog"));
-			if (filenames == null)
+			ImportAssemblyDialog importDialog = new ImportAssemblyDialog();
+			if ((filenames = importDialog.getFilenames()) == null)
 				return;
 		}
 

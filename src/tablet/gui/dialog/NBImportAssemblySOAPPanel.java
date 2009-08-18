@@ -1,65 +1,68 @@
 package tablet.gui.dialog;
 
 import java.awt.*;
-import java.io.File;
-import java.util.LinkedList;
+import java.util.*;
 import javax.swing.*;
 
-import scri.commons.gui.*;
 import tablet.gui.Prefs;
 
-public class NBImportAssemblySOAPPanel extends javax.swing.JPanel
+import scri.commons.gui.*;
+
+class NBImportAssemblySOAPPanel extends javax.swing.JPanel
 {
-    LinkedList<String> recentFilesSoap;
-    LinkedList<String> recentFilesFastA;
-    
-    /** Creates new form NBImportAssemblySOAPPanel */
-    public NBImportAssemblySOAPPanel(ImportAssemblyDialog parent)
-    {
-	    initComponents();
+    LinkedList<String> recentFilesSoap = new LinkedList<String>();
+    LinkedList<String> recentFilesFasta = new LinkedList<String>();
 
-	    bBrowse.addActionListener(parent);
-	    bBrowse2.addActionListener(parent);
-	    soapComboBox.addActionListener(parent);
+	public NBImportAssemblySOAPPanel(ImportAssemblyDialog parent)
+	{
+		initComponents();
 
-	    recentFilesSoap  = new LinkedList<String>();
-	    recentFilesFastA  = new LinkedList<String>();
+		setBackground(Color.white);
+		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
-	    RB.setText(bBrowse, "gui.text.browse");
-	    RB.setText(soapLabel, "gui.dialog.NBImportAssemblySOAPPanel.label");
-	    RB.setText(bBrowse2, "gui.text.browse");
-	    RB.setText(soapLabel2, "gui.dialog.NBImportAssemblySOAPPanel.labelFile2");
+		RB.setText(bBrowse1, "gui.text.browse");
+		RB.setText(bBrowse2, "gui.text.browse");
+		RB.setText(soapLabel, "gui.dialog.NBImportAssemblySOAPPanel.soapLabel");
+		RB.setText(fastaLabel, "gui.dialog.NBImportAssemblySOAPPanel.fastaLabel");
 
-	    for(final String path : Prefs.soapRecentDocs)
-	    {
-		    // Ignore any that haven't been set yet
-		    if (path == null || path.equals(" "))
-			    continue;
+		// Parse out the tab-delimited list of files
+		StringTokenizer st = new StringTokenizer(Prefs.soapRecentDocs, "\t");
+		while (st.hasMoreTokens())
+			recentFilesSoap.add(st.nextToken());
 
-		    // Split multi-file inputs
-		    final String[] paths = path.split("<!TABLET!>");
+		st = new StringTokenizer(Prefs.fastaRecentDocs, "\t");
+		while (st.hasMoreTokens())
+			recentFilesFasta.add(st.nextToken());
 
-		    File[] files = new File[paths.length];
-		    for (int i = 0; i < files.length; i++)
-			    files[i] = new File(paths[i]);
+		parent.updateComboBox(null, soapComboBox, recentFilesSoap);
+		parent.updateComboBox(null, fastaComboBox, recentFilesFasta);
 
-		    // Button text will be "name" (or "name1" | "name2")
-		    for(int i=0; i < files.length; i+=2)
-		    {
-			    String text = files[i].getPath();
-			    if(!recentFilesSoap.contains(text))
-				recentFilesSoap.add(text);
-		    }
-		    for (int i = 1; i < files.length; i+=2)
-		    {
-			    String text = files[i].getPath();
-			    recentFilesFastA.add(text);
-		    }
-	    }
+		bBrowse1.addActionListener(parent);
+		bBrowse2.addActionListener(parent);
+		soapComboBox.addActionListener(parent);
+		fastaComboBox.addActionListener(parent);
+	}
 
-	    setBackground(Color.white);
-	    setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-    }
+	String[] getFilenames()
+	{
+		return new String[] {
+			recentFilesSoap.get(0), recentFilesFasta.get(0) };
+	}
+
+	boolean isOK()
+	{
+		// Save the list back to the preferences
+		Prefs.soapRecentDocs = "";
+		for (String str: recentFilesSoap)
+			Prefs.soapRecentDocs += str + "\t";
+
+		Prefs.fastaRecentDocs = "";
+		for (String str: recentFilesFasta)
+			Prefs.fastaRecentDocs += str + "\t";
+
+		return soapComboBox.getSelectedItem() != null &&
+			fastaComboBox.getSelectedItem() != null;
+	}
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -72,27 +75,22 @@ public class NBImportAssemblySOAPPanel extends javax.swing.JPanel
 
         soapLabel = new javax.swing.JLabel();
         soapComboBox = new javax.swing.JComboBox();
-        bBrowse = new javax.swing.JButton();
-        soapLabel2 = new javax.swing.JLabel();
-        soapComboBox2 = new javax.swing.JComboBox();
+        bBrowse1 = new javax.swing.JButton();
+        fastaLabel = new javax.swing.JLabel();
+        fastaComboBox = new javax.swing.JComboBox();
         bBrowse2 = new javax.swing.JButton();
 
-        soapLabel.setText("Choose SOAP file:");
-        soapLabel.setMinimumSize(new java.awt.Dimension(80, 14));
-        soapLabel.setPreferredSize(new java.awt.Dimension(94, 14));
+        soapLabel.setLabelFor(soapComboBox);
+        soapLabel.setText("SOAP input file:");
 
         soapComboBox.setEditable(true);
-        soapComboBox.setMinimumSize(new java.awt.Dimension(0, 0));
-        soapComboBox.setPreferredSize(new java.awt.Dimension(70, 20));
 
-        bBrowse.setText("Browse...");
+        bBrowse1.setText("Browse...");
 
-        soapLabel2.setText("Choose second file:");
-        soapLabel2.setMinimumSize(new java.awt.Dimension(80, 14));
+        fastaLabel.setLabelFor(fastaComboBox);
+        fastaLabel.setText("FASTA input file:");
 
-        soapComboBox2.setEditable(true);
-        soapComboBox2.setMinimumSize(new java.awt.Dimension(0, 0));
-        soapComboBox2.setPreferredSize(new java.awt.Dimension(70, 20));
+        fastaComboBox.setEditable(true);
 
         bBrowse2.setText("Browse...");
 
@@ -102,33 +100,31 @@ public class NBImportAssemblySOAPPanel extends javax.swing.JPanel
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(soapLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(soapComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, 224, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(soapLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(soapComboBox2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(soapLabel)
+                    .addComponent(fastaLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(bBrowse, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(bBrowse2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(18, Short.MAX_VALUE))
+                    .addComponent(soapComboBox, 0, 249, Short.MAX_VALUE)
+                    .addComponent(fastaComboBox, 0, 249, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(bBrowse1)
+                    .addComponent(bBrowse2))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(soapLabel)
                     .addComponent(soapComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(soapLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bBrowse))
+                    .addComponent(bBrowse1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(soapLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(soapComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(fastaLabel)
+                    .addComponent(fastaComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bBrowse2))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -136,12 +132,12 @@ public class NBImportAssemblySOAPPanel extends javax.swing.JPanel
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    javax.swing.JButton bBrowse;
+    javax.swing.JButton bBrowse1;
     javax.swing.JButton bBrowse2;
+    javax.swing.JComboBox fastaComboBox;
+    private javax.swing.JLabel fastaLabel;
     javax.swing.JComboBox soapComboBox;
-    javax.swing.JComboBox soapComboBox2;
     private javax.swing.JLabel soapLabel;
-    private javax.swing.JLabel soapLabel2;
     // End of variables declaration//GEN-END:variables
 
 }
