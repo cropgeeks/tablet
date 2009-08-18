@@ -86,4 +86,10 @@
 		</javadoc>
 	</target>
 
+	<target name="run" depends="jar">
+		<java jar="${tablet.jar}">
+			<jvmarg value="-Xmx1024m"/>
+		</java>
+	</target>
+
 </project>
