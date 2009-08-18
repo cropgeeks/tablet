@@ -3,6 +3,8 @@ package tablet.gui.dialog;
 import java.awt.*;
 import javax.swing.*;
 
+import tablet.gui.*;
+
 import scri.commons.gui.*;
 
 class NBImportAssemblyPanel extends javax.swing.JPanel
@@ -15,6 +17,7 @@ class NBImportAssemblyPanel extends javax.swing.JPanel
 		assemblyComboBox.addItem(RB.getString("gui.dialog.NBImportAssembly.aceFile"));
 		assemblyComboBox.addItem(RB.getString("gui.dialog.NBImportAssembly.afgFile"));
 		assemblyComboBox.addItem(RB.getString("gui.dialog.NBImportAssembly.soapFile"));
+		assemblyComboBox.setSelectedIndex(Prefs.guiLastFileType);
 
 		assemblyComboBox.addItemListener(parent);
 

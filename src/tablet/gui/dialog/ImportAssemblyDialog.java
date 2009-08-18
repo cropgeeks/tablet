@@ -13,7 +13,9 @@ import scri.commons.gui.*;
 public class ImportAssemblyDialog extends JDialog
 	implements ActionListener, ItemListener
 {
+	private CardLayout cardLayout = new CardLayout();
 	private JPanel cardsPanel;
+
 	private NBImportAssemblyACEPanel acePanel;
 	private NBImportAssemblyAFGPanel afgPanel;
 	private NBImportAssemblySOAPPanel soapPanel;
@@ -21,7 +23,6 @@ public class ImportAssemblyDialog extends JDialog
 	private static final String ACEPANEL  = "ACE";
 	private static final String AFGPANEL  = "AFG";
 	private static final String SOAPPANEL = "SOAP";
-	private String type = ACEPANEL;
 
 	private JButton bCancel, bHelp, bOpen;
 
@@ -43,10 +44,11 @@ public class ImportAssemblyDialog extends JDialog
 		soapPanel = new NBImportAssemblySOAPPanel(this);
 
 		// Create the CardLayout for flicking between input types
-		cardsPanel = new JPanel(new CardLayout());
+		cardsPanel = new JPanel(cardLayout);
 		cardsPanel.add(acePanel, ACEPANEL);
 		cardsPanel.add(afgPanel, AFGPANEL);
 		cardsPanel.add(soapPanel, SOAPPANEL);
+		initDisplay();
 
 		add(nbPanel, BorderLayout.NORTH);
 		add(cardsPanel);
@@ -78,6 +80,16 @@ public class ImportAssemblyDialog extends JDialog
 		return p1;
 	}
 
+	private void initDisplay()
+	{
+		switch (Prefs.guiLastFileType)
+		{
+			case 0: cardLayout.show(cardsPanel, ACEPANEL); break;
+			case 1: cardLayout.show(cardsPanel, AFGPANEL); break;
+			case 2: cardLayout.show(cardsPanel, SOAPPANEL); break;
+		}
+	}
+
 	public String[] getFilenames()
 		{ return filenames; }
 
@@ -89,13 +101,13 @@ public class ImportAssemblyDialog extends JDialog
 		// Open button selected - find out which file type and get the files
 		else if(e.getSource() == bOpen)
 		{
-			if (type.equals(ACEPANEL) && acePanel.isOK())
+			if (Prefs.guiLastFileType == 0 && acePanel.isOK())
 				filenames = acePanel.getFilenames();
 
-			else if (type.equals(AFGPANEL) && afgPanel.isOK())
+			else if (Prefs.guiLastFileType == 1 && afgPanel.isOK())
 				filenames = afgPanel.getFilenames();
 
-			else if (type.equals(SOAPPANEL) && soapPanel.isOK())
+			else if (Prefs.guiLastFileType == 2 && soapPanel.isOK())
 				filenames = soapPanel.getFilenames();
 
 			if (filenames != null)
@@ -142,15 +154,16 @@ public class ImportAssemblyDialog extends JDialog
 	// Toggle to another layout
 	public void itemStateChanged(ItemEvent e)
 	{
+		String layout = null;
+
 		switch (nbPanel.assemblyComboBox.getSelectedIndex())
 		{
-			case 0: type = ACEPANEL; break;
-			case 1: type = AFGPANEL; break;
-			case 2: type = SOAPPANEL; break;
+			case 0: layout = ACEPANEL;  Prefs.guiLastFileType = 0; break;
+			case 1: layout = AFGPANEL;  Prefs.guiLastFileType = 1; break;
+			case 2: layout = SOAPPANEL; Prefs.guiLastFileType = 2; break;
 		}
 
-		CardLayout cl = (CardLayout) cardsPanel.getLayout();
-		cl.show(cardsPanel, type);
+		cardLayout.show(cardsPanel, layout);
 	}
 
 	//update the combobox and list of recent files from the new input
