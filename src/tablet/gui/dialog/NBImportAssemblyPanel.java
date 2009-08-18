@@ -23,7 +23,7 @@ class NBImportAssemblyPanel extends javax.swing.JPanel
 
 		RB.setText(assemblyLabel, "gui.dialog.NBImportAssembly.assemblyLabel");
 		setBackground(Color.white);
-		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+		setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
     }
 
     /** This method is called from within the constructor to
