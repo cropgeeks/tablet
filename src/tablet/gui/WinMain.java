@@ -92,7 +92,7 @@ public class WinMain extends JRibbonFrame
 		splitter.setDividerLocation(Prefs.guiSplitterLocation);
 		splitter.setOneTouchExpandable(true);
 		splitter.setLeftComponent(ctrlTabs);
-		splitter.setRightComponent(new LogoPanel(new BorderLayout()));
+		splitter.setRightComponent(new NavPanel(this));
 
 		splitter.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent e)
@@ -185,7 +185,7 @@ public class WinMain extends JRibbonFrame
 		if (isVisible)
 			splitter.setRightComponent(assemblyPanel);
 		else
-			splitter.setRightComponent(new LogoPanel(new BorderLayout()));
+			splitter.setRightComponent(new NavPanel(this));
 
 		splitter.setDividerLocation(location);
 	}
@@ -230,37 +230,5 @@ public class WinMain extends JRibbonFrame
 		javax.swing.Timer timer = new javax.swing.Timer(2500, listener);
 		timer.setInitialDelay(0);
 		timer.start();
-	}
-
-	private static class LogoPanel extends JPanel
-	{
-		private static ImageIcon logo = Icons.getIcon("SCRILARGE");
-
-		LogoPanel(LayoutManager lm)
-		{
-			super(lm);
-			setBackground(Color.white);
-		}
-
-		public void paintComponent(Graphics graphics)
-		{
-			super.paintComponent(graphics);
-
-			Graphics2D g = (Graphics2D) graphics;
-
-			int w = getWidth();
-			int h = getHeight();
-
-			g.drawImage(logo.getImage(), 0, 0, w, w, null);
-
-			String str = "Please don't distribute Tablet outside of SCRI";
-			int strWidth = g.getFontMetrics().stringWidth(str);
-
-			g.setColor(Color.lightGray);
-			g.setFont(new Font("Dialog", Font.BOLD, 14));
-			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
-			g.drawString(str, w/2-(strWidth/2), getHeight()/2);
-		}
 	}
 }
