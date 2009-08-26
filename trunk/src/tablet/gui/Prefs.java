@@ -12,6 +12,7 @@ public class Prefs extends XMLPreferences
 	// Is this the first time the program has ever been run (by this user)?
 	public static boolean isFirstRun = true;
 	public static boolean isSCRIUser = false;
+	public static int rating = 0;
 
 	// Last known (install4j) version number of Tablet that was run
 	public static String lastVersion = null;
