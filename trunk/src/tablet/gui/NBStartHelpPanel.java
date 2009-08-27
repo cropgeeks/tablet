@@ -19,7 +19,7 @@ public class NBStartHelpPanel extends javax.swing.JPanel implements ActionListen
 		initComponents();
 		setOpaque(false);
 
-		RB.setText(homeLabel, "gui.navpanel.NBStartHelpPanel.homeLabel");
+		RB.setText(homeLabel, "gui.NBStartHelpPanel.homeLabel");
 
 		homeLabel.setIcon(Icons.getIcon("BOOK"));
 		homeLabel.addActionListener(this);

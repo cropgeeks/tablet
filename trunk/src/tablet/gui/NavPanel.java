@@ -26,21 +26,21 @@ public class NavPanel extends JPanel
 		welcomePanel.setOpaque(false);
 		welcomePanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 8, 2));
 		welcomePanel.add(new TitlePanel3(
-			RB.getString("gui.navpanel.NBStartWelcomePanel.title")), BorderLayout.NORTH);
+			RB.getString("gui.NBStartWelcomePanel.title")), BorderLayout.NORTH);
 		welcomePanel.add(new NBStartWelcomePanel());
 
 		JPanel filePanel = new JPanel(new BorderLayout());
 		filePanel.setOpaque(false);
 		filePanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 		filePanel.add(new TitlePanel3(
-			RB.getString("gui.navpanel.NBStartFilePanel.title")), BorderLayout.NORTH);
+			RB.getString("gui.NBStartFilePanel.title")), BorderLayout.NORTH);
 		filePanel.add(new NBStartFilePanel());
 
 		JPanel helpPanel = new JPanel(new BorderLayout());
 		helpPanel.setOpaque(false);
 		helpPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 		helpPanel.add(new TitlePanel3(
-			RB.getString("gui.navpanel.NBStartHelpPanel.title")), BorderLayout.NORTH);
+			RB.getString("gui.NBStartHelpPanel.title")), BorderLayout.NORTH);
 		helpPanel.add(new NBStartHelpPanel());
 
 		JPanel centrePanel = new JPanel(new GridLayout(1, 2, 0, 0));
