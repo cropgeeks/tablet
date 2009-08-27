@@ -25,13 +25,9 @@
                   <Component id="project1" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="project2" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="project3" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="rateLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="ratingsPanel" min="-2" max="-2" attributes="0"/>
-                  </Group>
+                  <Component id="rateLabel" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="75" max="32767" attributes="0"/>
+              <EmptySpace pref="82" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -51,10 +47,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="project3" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="2" attributes="0">
-                  <Component id="rateLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                  <Component id="ratingsPanel" alignment="2" min="-2" max="-2" attributes="0"/>
-              </Group>
+              <Component id="rateLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -110,8 +103,6 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Click to rate Tablet:"/>
       </Properties>
-    </Component>
-    <Component class="scri.commons.gui.matisse.RatingsPanel" name="ratingsPanel">
     </Component>
   </SubComponents>
 </Form>
