@@ -99,10 +99,13 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 		// Pull the feature out of the model
 		Feature feature = (Feature) model.getValueAt(row, 9);
 
-		int position = feature.getP1();
-		position = position + contig.getConsensusOffset();
+		int start = feature.getP1();
+		int end   = feature.getP2();
 
-		aPanel.moveToPosition(-1, position, true);
-		highlighter = new ColumnHighlighter(aPanel, position);
+		start = start + contig.getConsensusOffset();
+		end = end + contig.getConsensusOffset();
+
+		aPanel.moveToPosition(-1, start, true);
+		highlighter = new ColumnHighlighter(aPanel, start, end);
 	}
 }

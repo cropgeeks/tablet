@@ -278,7 +278,7 @@ class AceFileReader extends TrackableReader
 			// And assuming a contig exists with this name...
 			Contig contig = contigHash.get(contigName);
 			if (contig != null)
-				contig.getFeatures().add(new Feature(Feature.SNP, p1, p2));
+				contig.getFeatures().add(new Feature("SNP", Feature.GFF3, p1, p2));
 		}
 
 		else if (CT[1].equalsIgnoreCase("comment") && CT[2].equalsIgnoreCase("gigaBayes"))
@@ -294,7 +294,7 @@ class AceFileReader extends TrackableReader
 				// And assuming a contig exists with this name...
 				Contig contig = contigHash.get(contigName);
 				if (contig != null)
-					contig.getFeatures().add(new Feature(Feature.SNP, p1, p2));
+					contig.getFeatures().add(new Feature("SNP", Feature.GFF3, p1, p2));
 			}
 		}
 

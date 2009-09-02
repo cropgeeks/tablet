@@ -7,17 +7,19 @@ package tablet.data.auxiliary;
 public class Feature implements Comparable<Feature>
 {
 	public final static byte UNKNOWN = 0;
-	public final static byte SNP = 1;
-	public final static byte ROW_OUTLINE = 2;
-	public final static byte COL_OUTLINE = 3;
+	public final static byte GFF3 = 1;
+	public final static byte ROW_OUTLINE = 100;
+	public final static byte COL_OUTLINE = 101;
 
+	protected String name;
 	protected byte type = UNKNOWN;
 
 	protected int p1;
 	protected int p2;
 
-	public Feature(byte type, int p1, int p2)
+	public Feature(String name, byte type, int p1, int p2)
 	{
+		this.name = name;
 		this.type = type;
 		this.p1 = p1;
 		this.p2 = p2;
@@ -41,6 +43,9 @@ public class Feature implements Comparable<Feature>
 		else
 			return 1;
 	}
+
+	public String getName()
+		{ return name; }
 
 	public int getType()
 		{ return type; }
