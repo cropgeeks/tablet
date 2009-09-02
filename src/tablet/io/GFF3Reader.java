@@ -56,8 +56,7 @@ public class GFF3Reader extends TrackableReader
 			if (tokens.length != 9)
 				throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
 
-			if (tokens[2].toUpperCase().equals("SNP"))
-				processSNP(tokens);
+			processFeature(tokens);
 		}
 
 		in.close();
@@ -66,16 +65,17 @@ public class GFF3Reader extends TrackableReader
 		assignFeatures();
 	}
 
-	private void processSNP(String[] tokens)
+	private void processFeature(String[] tokens)
 		throws Exception
 	{
 		String contigName = URLDecoder.decode(tokens[0], "UTF-8");
 		int start = Integer.parseInt(tokens[3]);
 		int end   = Integer.parseInt(tokens[4]);
 
-		Feature snp = new Feature(Feature.SNP, start-1, end-1);
+		String name = new String(tokens[2]);
+		Feature f = new Feature(name, Feature.GFF3, start-1, end-1);
 
-		getFeatures(contigName).add(snp);
+		getFeatures(contigName).add(f);
 	}
 
 	// Searches and returns an existing list of features (for a contig). If a

@@ -94,12 +94,12 @@ class ReadsCanvasMenu implements ActionListener
 		else if (e.getSource() == mOutlineCol)
 		{
 			rCanvas.contig.addOutline(
-				new Feature(Feature.COL_OUTLINE, colIndex, colIndex));
+				new Feature(null, Feature.COL_OUTLINE, colIndex, colIndex));
 		}
 		else if (e.getSource() == mOutlineRow)
 		{
 			rCanvas.contig.addOutline(
-				new Feature(Feature.ROW_OUTLINE, rowIndex, rowIndex));
+				new Feature(null, Feature.ROW_OUTLINE, rowIndex, rowIndex));
 		}
 		else if (e.getSource() == mOutlineClear)
 			rCanvas.contig.getOutlines().clear();

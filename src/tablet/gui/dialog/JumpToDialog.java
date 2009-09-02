@@ -117,7 +117,7 @@ public class JumpToDialog extends JDialog
 	private void jumpToBase(int index)
 	{
 		aPanel.moveToPosition(-1, index, true);
-		new ColumnHighlighter(aPanel, index);
+		new ColumnHighlighter(aPanel, index, index);
 	}
 
 	private void checkControls()
