@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.2.3" transformSequenceNumber="2">
-  <directoryPresets config="C:/Java/JDK64/jre" />
-  <application name="Tablet" distributionSourceDir="" applicationId="9483-2571-4596-9336" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" missingFilesStrategy="warn" shortName="tablet" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="0.09.08.12" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+  <directoryPresets config="./licence" />
+  <application name="Tablet" distributionSourceDir="" applicationId="9483-2571-4596-9336" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" missingFilesStrategy="warn" shortName="tablet" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="0.09.09.02" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -20,12 +20,16 @@
     <roots />
     <mountPoints>
       <mountPoint id="19" root="" location="lib" mode="755" />
+      <mountPoint id="342" root="" location="docs" mode="755" />
     </mountPoints>
     <entries>
       <dirEntry mountPoint="19" file="../lib" overwrite="1" shared="false" mode="644" uninstallMode="0" excludeSuffixes="*.svn" dirMode="755">
         <exclude>
           <entry location="i4jruntime.jar" fileType="regular" />
         </exclude>
+      </dirEntry>
+      <dirEntry mountPoint="342" file="./licence" overwrite="1" shared="false" mode="644" uninstallMode="0" excludeSuffixes="*.svn" dirMode="755">
+        <exclude />
       </dirEntry>
     </entries>
     <components />
@@ -90,6 +94,28 @@
                   <void property="bannerImageFile">
                     <object class="com.install4j.api.beans.ExternalFile">
                       <string>./scribanner.png</string>
+                    </object>
+                  </void>
+                </object>
+              </java>
+            </serializedBean>
+            <condition />
+            <validation />
+            <preActivation />
+            <postActivation />
+            <actions />
+            <formComponents />
+          </screen>
+          <screen name="" id="343" beanClass="com.install4j.runtime.beans.screens.LicenseScreen" enabled="true" commentSet="false" comment="" rollbackBarrier="false" backButton="2" finishScreen="false">
+            <serializedBean>
+              <java class="java.beans.XMLDecoder">
+                <object class="com.install4j.runtime.beans.screens.LicenseScreen">
+                  <void property="acceptInitiallySelected">
+                    <boolean>true</boolean>
+                  </void>
+                  <void property="displayedTextFile">
+                    <object class="com.install4j.api.beans.ExternalFile">
+                      <string>./licence/tablet.html</string>
                     </object>
                   </void>
                 </object>
@@ -181,6 +207,20 @@
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.desktop.CreateProgramGroupAction">
+                      <void property="programGroupEntryConfigs">
+                        <void method="add">
+                          <object class="com.install4j.runtime.beans.screens.components.ProgramGroupEntryConfig">
+                            <void property="name">
+                              <string>Tablet Help</string>
+                            </void>
+                            <void property="target">
+                              <object class="java.io.File">
+                                <string>docs/help.html</string>
+                              </object>
+                            </void>
+                          </object>
+                        </void>
+                      </void>
                       <void property="programGroupName">
                         <string>${compiler:sys.fullName}</string>
                       </void>
