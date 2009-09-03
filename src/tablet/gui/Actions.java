@@ -43,6 +43,7 @@ public class Actions
 		// Application menu options
 		ApplicationMenu.mSave.setEnabled(false);
 		ApplicationMenu.mSaveAs.setEnabled(false);
+		ApplicationMenu.mExportImage.setEnabled(false);
 		ApplicationMenu.mClose.setEnabled(false);
 		applicationMenuSave16.setEnabled(false);
 		homeAssembliesImportFeatures.setEnabled(false);
@@ -75,6 +76,7 @@ public class Actions
 		// Application menu options
 		ApplicationMenu.mSave.setEnabled(false);
 		ApplicationMenu.mSaveAs.setEnabled(false);
+		ApplicationMenu.mExportImage.setEnabled(false);
 		ApplicationMenu.mClose.setEnabled(true);
 		applicationMenuSave16.setEnabled(false);
 		homeAssembliesImportFeatures.setEnabled(true);
@@ -107,6 +109,7 @@ public class Actions
 		// Application menu options
 		ApplicationMenu.mSave.setEnabled(false);
 		ApplicationMenu.mSaveAs.setEnabled(false);
+		ApplicationMenu.mExportImage.setEnabled(true);
 		ApplicationMenu.mClose.setEnabled(true);
 		applicationMenuSave16.setEnabled(false);
 		homeAssembliesImportFeatures.setEnabled(true);

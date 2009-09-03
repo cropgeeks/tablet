@@ -1,6 +1,7 @@
 package tablet.gui.viewer;
 
 import java.awt.*;
+import java.awt.image.*;
 import java.awt.event.*;
 import java.text.*;
 import javax.swing.*;
@@ -315,5 +316,11 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		}
 
 		return true;
+	}
+
+	// Returns a reference to the current back-buffer in use by the reads canvas
+	public BufferedImage getBackBuffer()
+	{
+		return readsCanvas.buffer;
 	}
 }

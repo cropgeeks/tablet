@@ -1,13 +1,17 @@
 package tablet.gui;
 
+import java.awt.image.*;
 import java.io.*;
-
+import javax.imageio.*;
 import javax.swing.*;
+import javax.swing.filechooser.*;
+
+import tablet.data.*;
 import tablet.gui.dialog.*;
+import tablet.gui.viewer.*;
 import tablet.io.*;
 
 import scri.commons.gui.*;
-import tablet.data.*;
 
 public class Commands
 {
@@ -74,8 +78,13 @@ public class Commands
 		// If no file was passed in then we need to prompt the user to pick one
 		if (filename == null)
 		{
-			filename = TabletUtils.getFilename(
-				RB.getString("gui.Commands.importFeatures.openDialog"), null);
+			FileNameExtensionFilter[] filters = new FileNameExtensionFilter[] {
+				new FileNameExtensionFilter(
+					RB.getString("gui.Commands.importFeatures.gffFiles"), "gff") };
+
+			filename = TabletUtils.getOpenFilename(RB.getString(
+				"gui.Commands.importFeatures.openDialog"), null, filters);
+
 			if (filename == null)
 				return;
 		}
@@ -124,5 +133,43 @@ public class Commands
 			return file;
 		else
 			return null;
+	}
+
+	public void exportImage()
+	{
+		AssemblyPanel aPanel = winMain.getAssemblyPanel();
+
+		String aName = aPanel.getAssembly().getName();
+		String cName = aPanel.getContig().getName();
+		File saveAs = new File(Prefs.guiCurrentDir, aName+"-"+cName+".png");
+
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+			RB.getString("gui.Commands.exportImage.pngFiles"), "png");
+
+		// Ask the user for a filename to save the current view as
+		String filename = TabletUtils.getSaveFilename(
+			RB.getString("gui.Commands.exportImage.saveDialog"), saveAs, filter);
+
+		// Quit if the user cancelled the file selection
+		if (filename == null)
+			return;
+
+		try
+		{
+			BufferedImage image = winMain.getAssemblyPanel().getBackBuffer();
+			ImageIO.write(image, "png", new File(filename));
+
+			TaskDialog.info(
+				RB.format("gui.Commands.exportImage.success", filename),
+				RB.getString("gui.text.close"));
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+
+			TaskDialog.error(
+				RB.format("gui.Commands.exportImage.exception", e.getMessage()),
+				RB.getString("gui.text.close"));
+		}
 	}
 }
