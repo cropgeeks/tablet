@@ -15,7 +15,7 @@ class ReadsCanvas extends JPanel
 {
 	private AssemblyPanel aPanel;
 
-	private BufferedImage buffer;
+	BufferedImage buffer;
 	private boolean updateBuffer = true;
 
 	Contig contig;

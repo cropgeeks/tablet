@@ -24,12 +24,14 @@ public class ApplicationMenu extends RibbonApplicationMenu
 
 	private ResizableIcon iOpen;
 	private RibbonApplicationMenuEntryPrimary mOpen;
-	private ResizableIcon iClose;
 	public static RibbonApplicationMenuEntryPrimary mSave;
 	public static JCommandButton bSave;
 	private ResizableIcon iSave;
 	public static RibbonApplicationMenuEntryPrimary mSaveAs;
 	private ResizableIcon iSaveAs;
+	private ResizableIcon iExportImage;
+	public static RibbonApplicationMenuEntryPrimary mExportImage;
+	private ResizableIcon iClose;
 	public static RibbonApplicationMenuEntryPrimary mClose;
 
 	private ResizableIcon iAbout;
@@ -75,6 +77,13 @@ public class ApplicationMenu extends RibbonApplicationMenu
 		mSaveAs.setRolloverCallback(this);
 		mSaveAs.setActionKeyTip("A");
 
+		iExportImage = RibbonController.getIcon("IMAGE32", 32);
+		mExportImage = new RibbonApplicationMenuEntryPrimary(iExportImage,
+			RB.getString("gui.ribbon.ApplicationMenu.mExportImage"), this,
+			CommandButtonKind.ACTION_ONLY);
+		mExportImage.setRolloverCallback(this);
+		mExportImage.setActionKeyTip("E");
+
 		iClose = RibbonController.getIcon("FILECLOSE32", 32);
 		mClose = new RibbonApplicationMenuEntryPrimary(iClose,
 			RB.getString("gui.ribbon.ApplicationMenu.mClose"), this,
@@ -86,6 +95,7 @@ public class ApplicationMenu extends RibbonApplicationMenu
 		addMenuEntry(mOpen);
 		addMenuEntry(mSave);
 		addMenuEntry(mSaveAs);
+		addMenuEntry(mExportImage);
 		addMenuEntry(mClose);
 
 
@@ -187,6 +197,9 @@ public class ApplicationMenu extends RibbonApplicationMenu
 
 		else if (icon == iSaveAs)
 			System.out.println("Save As");
+
+		else if (icon == iExportImage)
+			winMain.getCommands().exportImage();
 
 		else if (icon == iClose)
 			winMain.closeAssembly();

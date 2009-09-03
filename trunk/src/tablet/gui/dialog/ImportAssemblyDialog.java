@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.io.*;
 import java.util.LinkedList;
 import javax.swing.*;
+import javax.swing.filechooser.*;
 
 import tablet.gui.*;
 
@@ -23,6 +24,12 @@ public class ImportAssemblyDialog extends JDialog
 	private static final String ACEPANEL  = "ACE";
 	private static final String AFGPANEL  = "AFG";
 	private static final String SOAPPANEL = "SOAP";
+
+	// File filters used by each of the browse options
+	private FileNameExtensionFilter[] aceFilters;
+	private FileNameExtensionFilter[] afgFilters;
+	private FileNameExtensionFilter[] soapFilters;
+	private FileNameExtensionFilter[] fastaFilters;
 
 	private JButton bCancel, bHelp, bOpen;
 
@@ -88,6 +95,18 @@ public class ImportAssemblyDialog extends JDialog
 			case 1: cardLayout.show(cardsPanel, AFGPANEL); break;
 			case 2: cardLayout.show(cardsPanel, SOAPPANEL); break;
 		}
+
+		aceFilters = new FileNameExtensionFilter[] {
+			new FileNameExtensionFilter(RB.getString("gui.dialog.ImportAssemblyDialog.aceFiles"), "ace") };
+
+		afgFilters = new FileNameExtensionFilter[] {
+			new FileNameExtensionFilter(RB.getString("gui.dialog.ImportAssemblyDialog.afgFiles"), "afg") };
+
+		soapFilters = new FileNameExtensionFilter[] {
+			new FileNameExtensionFilter(RB.getString("gui.dialog.ImportAssemblyDialog.soapFiles"), "soap") };
+
+		fastaFilters = new FileNameExtensionFilter[] {
+			new FileNameExtensionFilter(RB.getString("gui.dialog.ImportAssemblyDialog.fastaFiles"), "fasta") };
 	}
 
 	public String[] getFilenames()
@@ -139,16 +158,16 @@ public class ImportAssemblyDialog extends JDialog
 		}
 
 		else if (e.getSource() == acePanel.bBrowse)
-			browse(acePanel.aceComboBox, acePanel.recentFiles);
+			browse(acePanel.aceComboBox, acePanel.recentFiles, aceFilters);
 
 		else if (e.getSource() == afgPanel.bBrowse)
-			browse(afgPanel.afgComboBox, afgPanel.recentFiles);
+			browse(afgPanel.afgComboBox, afgPanel.recentFiles, afgFilters);
 
 		else if (e.getSource() == soapPanel.bBrowse1)
-			browse(soapPanel.soapComboBox, soapPanel.recentFilesSoap);
+			browse(soapPanel.soapComboBox, soapPanel.recentFilesSoap, soapFilters);
 
 		else if (e.getSource() == soapPanel.bBrowse2)
-			browse(soapPanel.fastaComboBox, soapPanel.recentFilesFasta);
+			browse(soapPanel.fastaComboBox, soapPanel.recentFilesFasta, fastaFilters);
 	}
 
 	// Toggle to another layout
@@ -167,7 +186,7 @@ public class ImportAssemblyDialog extends JDialog
 	}
 
 	//update the combobox and list of recent files from the new input
-	void browse(JComboBox combo, LinkedList<String> recentFiles)
+	void browse(JComboBox combo, LinkedList<String> recentFiles, FileNameExtensionFilter[] filters)
 	{
 		String filename = null;
 		String title = RB.getString("gui.dialog.ImportAssemblyDialog.browse");
@@ -175,10 +194,10 @@ public class ImportAssemblyDialog extends JDialog
 		if (combo.getSelectedItem() != null)
 		{
 			File file = new File(combo.getSelectedItem().toString());
-			filename = TabletUtils.getFilename(title, file);
+			filename = TabletUtils.getOpenFilename(title, file, filters);
 		}
 		else
-			filename = TabletUtils.getFilename(title, null);
+			filename = TabletUtils.getOpenFilename(title, null, filters);
 
 		updateComboBox(filename, combo, recentFiles);
 	}
