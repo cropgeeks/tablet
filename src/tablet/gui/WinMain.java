@@ -45,8 +45,8 @@ public class WinMain extends JRibbonFrame
 		System.out.println("Ribbon UI created in " + (System.currentTimeMillis()-s) + "ms");
 
 		ArrayList<Image> images = new ArrayList<Image>(2);
-		images.add(Icons.getIcon("APPICON64").getImage());
-		images.add(Icons.getIcon("APPICON22").getImage());
+		images.add(Icons.getIcon("APPICON32").getImage());
+		images.add(Icons.getIcon("APPICON16").getImage());
 		setIconImages(images);
 
 		setTitle(RB.getString("gui.WinMain.title") + " - " + Install4j.VERSION);

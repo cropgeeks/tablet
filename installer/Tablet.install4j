@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <install4j version="4.2.3" transformSequenceNumber="2">
-  <directoryPresets config="C:/Java/JDK64" />
+  <directoryPresets config="../res/icons" />
   <application name="Tablet" distributionSourceDir="" applicationId="9483-2571-4596-9336" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" missingFilesStrategy="warn" shortName="tablet" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="0.09.09.02" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
@@ -35,7 +35,7 @@
     <components />
   </files>
   <launchers>
-    <launcher name="tablet" id="20" external="false" excludeFromMenu="false" menuName="Tablet" icnsFile="../res/icons/appicon64.icns" pngIcon16File="../res/icons/appicon64.png" pngIcon32File="../res/icons/appicon64.png" macServiceDependencies="" swtApp="false" fileset="">
+    <launcher name="tablet" id="20" external="false" excludeFromMenu="false" menuName="Tablet" icnsFile="../res/icons/appicon128.icns" pngIcon16File="../res/icons/appicon16.png" pngIcon32File="../res/icons/appicon32.png" macServiceDependencies="" swtApp="false" fileset="">
       <executable name="tablet" type="1" iconSet="true" iconFile="" executableDir="." redirectStderr="true" stderrFile="output.log" redirectStdout="true" stdoutFile="output.log" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" />
       </executable>

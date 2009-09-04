@@ -12,7 +12,7 @@ import tablet.gui.*;
 
 import scri.commons.gui.*;
 
-class NBAboutPanel extends javax.swing.JPanel
+class NBAboutPanel extends javax.swing.JPanel implements ActionListener
 {
 	public NBAboutPanel()
 	{
@@ -22,6 +22,8 @@ class NBAboutPanel extends javax.swing.JPanel
 		setBackground(Color.white);
 		p2.setBackground(Color.white);
 
+		webLabel.addActionListener(this);
+
 		String javaVer = System.getProperty("java.version");
 		long freeMem = (ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax()
 				- ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed());
@@ -29,6 +31,7 @@ class NBAboutPanel extends javax.swing.JPanel
 
 		versionLabel.setText(RB.format("gui.dialog.NBAboutPanel.versionLabel", Install4j.VERSION));
 		RB.setText(copyrightLabel, "gui.dialog.NBAboutPanel.copyrightLabel");
+		RB.setText(nameLabel, "gui.dialog.NBAboutPanel.nameLabel");
 		javaLabel.setText(RB.format("gui.dialog.NBAboutPanel.javaLabel", javaVer));
 		memLabel.setText(RB.format("gui.dialog.NBAboutPanel.memLabel", nf.format((long)(freeMem/1024f/1024f)) + "MB"));
 		localeLabel.setText(RB.format("gui.dialog.NBAboutPanel.localeLabel", java.util.Locale.getDefault()));
@@ -40,18 +43,7 @@ class NBAboutPanel extends javax.swing.JPanel
 
 	private void initWebStuff()
 	{
-		final String flapHTML = "http://bioinf.scri.ac.uk/tablet";
 		final String scriHTML = "http://www.scri.ac.uk";
-
-		// Turns the label into a blue mouse-over clickable link to a website
-		webLabel.setForeground(Color.blue);
-		webLabel.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		webLabel.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent event)
-			{
-				TabletUtils.visitURL(flapHTML);
-			}
-		});
 
 		scriIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		scriIcon.addMouseListener(new MouseAdapter() {
@@ -60,6 +52,12 @@ class NBAboutPanel extends javax.swing.JPanel
 				TabletUtils.visitURL(scriHTML);
 			}
 		});
+	}
+
+	public void actionPerformed(ActionEvent e)
+	{
+		if(e.getSource() == webLabel)
+			TabletUtils.visitURL("http://bioinf.scri.ac.uk/tablet");
 	}
 
     /** This method is called from within the constructor to
@@ -79,7 +77,7 @@ class NBAboutPanel extends javax.swing.JPanel
         versionLabel = new javax.swing.JLabel();
         javaLabel = new javax.swing.JLabel();
         memLabel = new javax.swing.JLabel();
-        webLabel = new javax.swing.JLabel();
+        webLabel = new scri.commons.gui.matisse.HyperLinkLabel();
         scriIcon = new javax.swing.JLabel();
 
         idLabel.setForeground(java.awt.Color.gray);
@@ -88,7 +86,7 @@ class NBAboutPanel extends javax.swing.JPanel
         localeLabel.setForeground(java.awt.Color.gray);
         localeLabel.setText("Current Locale:");
 
-        nameLabel.setText("Iain Milne, Micha Bayer, Linda Cardle, David Marshall");
+        nameLabel.setText("Iain Milne, Micha Bayer, Linda Cardle, Paul Shaw, Gordon Stephen, David Marshall");
 
         copyrightLabel.setText("Copyright (C) 2009, Plant Bioinformatics Group, SCRI");
 
@@ -177,7 +175,7 @@ class NBAboutPanel extends javax.swing.JPanel
     private javax.swing.JPanel p2;
     private javax.swing.JLabel scriIcon;
     private javax.swing.JLabel versionLabel;
-    private javax.swing.JLabel webLabel;
+    private scri.commons.gui.matisse.HyperLinkLabel webLabel;
     // End of variables declaration//GEN-END:variables
 
 }
