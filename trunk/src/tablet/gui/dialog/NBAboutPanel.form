@@ -101,7 +101,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="nameLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Iain Milne, Micha Bayer, Linda Cardle, David Marshall"/>
+            <Property name="text" type="java.lang.String" value="Iain Milne, Micha Bayer, Linda Cardle, Paul Shaw, Gordon Stephen, David Marshall"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="copyrightLabel">
@@ -133,7 +133,7 @@
             <Property name="text" type="java.lang.String" value="Memory available to JVM:"/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="webLabel">
+        <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="webLabel">
           <Properties>
             <Property name="text" type="java.lang.String" value="http://bioinf.scri.ac.uk/tablet"/>
           </Properties>
