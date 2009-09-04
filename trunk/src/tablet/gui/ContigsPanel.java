@@ -40,6 +40,8 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 		setLayout(new BorderLayout());
 		add(sp = new JScrollPane(table));
 		add(controls = new NBContigsPanelControls(this), BorderLayout.SOUTH);
+
+		sp.getViewport().setBackground(Color.white);
 	}
 
 	void setFeaturesPanel(FeaturesPanel featuresPanel)
