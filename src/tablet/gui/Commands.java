@@ -82,11 +82,11 @@ public class Commands
 		if (filename == null)
 		{
 			FileNameExtensionFilter[] filters = new FileNameExtensionFilter[] {
-				new FileNameExtensionFilter(
-					RB.getString("gui.Commands.importFeatures.gffFiles"), "gff") };
+				new FileNameExtensionFilter(RB.getString("gui.text.formats.gff"), "gff"),
+				new FileNameExtensionFilter(RB.getString("gui.text.formats.txt"), "txt") };
 
 			filename = TabletUtils.getOpenFilename(RB.getString(
-				"gui.Commands.importFeatures.openDialog"), null, filters);
+				"gui.Commands.importFeatures.openDialog"), null, filters, 0);
 
 			if (filename == null)
 				return;
