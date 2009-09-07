@@ -66,6 +66,12 @@ class AssemblyFileHandler extends SimpleJob
 		}
 		else if (files.length == 2)
 		{
+			// Maq
+			if (okToRun && fileParsed == false)
+			{
+				reader = new MaqFileReader(readCache, true);
+				fileParsed = readFile();
+			}
 			// SOAP
 			if (okToRun && fileParsed == false)
 			{

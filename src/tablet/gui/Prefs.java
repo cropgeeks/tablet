@@ -59,6 +59,10 @@ public class Prefs extends XMLPreferences
 	public static String soapRecentDocs = "";
 	// A list of previously accessed fasta documents
 	public static String fastaRecentDocs = "";
+	// A list of previously accessed maq documents
+	public static String maqRecentDocs = "";
+	// A list of previously accessed fastq documents
+	public static String fastqRecentDocs = "";
 
 	// What filtering option was last in use for the contigs panel
 	public static int guiContigsFilter = 0;
