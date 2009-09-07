@@ -86,7 +86,7 @@ public class JumpToDialog extends JDialog
 		bClose.addActionListener(this);
 		bHelp = SwingUtils.getButton(RB.getString("gui.text.help"));
 		RB.setText(bHelp, "gui.text.help");
-//		FlapjackUtils.setHelp(bHelp, "gui.dialog.NewViewDialog");
+		TabletUtils.setHelp(bHelp, "gui.dialog.JumpToDialog");
 
 		JPanel p1 = TabletUtils.getButtonPanel();
 		p1.add(bClose);

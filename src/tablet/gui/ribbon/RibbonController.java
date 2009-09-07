@@ -48,8 +48,12 @@ public class RibbonController
 		ribbon.addTaskbarComponent(memoryLabel);
 
 		ribbon.configureHelp(getIcon("HELP16", 16), new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				System.out.println("help"); }
+			public void actionPerformed(ActionEvent e)
+			{
+				JButton bHelp = new JButton();
+				TabletUtils.setHelp(bHelp, "index");
+				bHelp.doClick();
+			}
 		});
 	}
 

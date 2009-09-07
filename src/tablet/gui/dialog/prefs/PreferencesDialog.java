@@ -61,7 +61,7 @@ public class PreferencesDialog extends JDialog implements ActionListener
 		bCancel.addActionListener(this);
 		bHelp = SwingUtils.getButton(RB.getString("gui.text.help"));
 		RB.setText(bHelp, "gui.text.help");
-//		FlapjackUtils.setHelp(bHelp, "gui.dialog.prefs.PreferencesDialog");
+		TabletUtils.setHelp(bHelp, "gui.dialog.prefs.PreferencesDialog");
 
 		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
 		p1.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 5));
