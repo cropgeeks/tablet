@@ -16,7 +16,7 @@ import scri.commons.file.*;
 
 import apple.dts.samplecode.osxadapter.*;
 
-public class Tablet
+public class Tablet implements Thread.UncaughtExceptionHandler
 {
 	private static File prefsFile = new File(
 		System.getProperty("user.home"), ".tablet.xml");
@@ -86,6 +86,8 @@ public class Tablet
 		}
 		catch (Exception e) {}
 
+		Thread.setDefaultUncaughtExceptionHandler(this);
+
 		winMain = new WinMain();
 
 		winMain.addWindowListener(new WindowAdapter()
@@ -127,6 +129,39 @@ public class Tablet
 		prefs.savePreferences(prefsFile, Prefs.class);
 
 		System.exit(0);
+	}
+
+	public void uncaughtException(Thread thread, Throwable throwable)
+	{
+		final Thread t = thread;
+		final Throwable e = throwable;
+
+		if (throwable instanceof java.lang.OutOfMemoryError == false)
+			return;
+
+		// We open the dialog using SwingUtilities because the uncaughtException
+		// may have happened in a non EDT thread
+		Runnable r = new Runnable() {
+			public void run()
+			{
+				if (winMain != null)
+					winMain.dispose();
+
+				String msg = RB.getString("gui.Tablet.outOfMemory");
+				String[] options = new String[] {
+					RB.getString("gui.text.help"),
+					RB.getString("gui.text.close")
+				};
+
+				int response = TaskDialog.show(msg, TaskDialog.ERR, 0, options);
+				if (response == 0)
+					TabletUtils.visitURL("http://bioinf.scri.ac.uk/tablet");
+
+				System.exit(1);
+			}
+		};
+
+		SwingUtilities.invokeLater(r);
 	}
 
 	// --------------------------------------------------
