@@ -19,6 +19,7 @@ class NBImportAssemblyPanel extends javax.swing.JPanel
 
 		assemblyComboBox.addItem(RB.getString("gui.dialog.NBImportAssembly.aceFile"));
 		assemblyComboBox.addItem(RB.getString("gui.dialog.NBImportAssembly.afgFile"));
+		assemblyComboBox.addItem(RB.getString("gui.dialog.NBImportAssembly.maqFile"));
 		assemblyComboBox.addItem(RB.getString("gui.dialog.NBImportAssembly.soapFile"));
 		assemblyComboBox.setSelectedIndex(Prefs.guiLastFileType);
 

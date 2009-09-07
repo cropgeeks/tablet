@@ -166,6 +166,7 @@ class SoapFileReader extends TrackableReader
 				ReadMetaData rmd = new ReadMetaData(
 					name, complemented, read.calculateUnpaddedLength());
 				readCache.setReadMetaData(rmd);
+				readID++;
 			}
 		}
 

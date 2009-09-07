@@ -23,16 +23,20 @@ public class ImportAssemblyDialog extends JDialog
 	private NBImportAssemblyACEPanel acePanel;
 	private NBImportAssemblyAFGPanel afgPanel;
 	private NBImportAssemblySOAPPanel soapPanel;
+	private NBImportAssemblyMaqPanel maqPanel;
 
 	private static final String ACEPANEL  = "ACE";
 	private static final String AFGPANEL  = "AFG";
 	private static final String SOAPPANEL = "SOAP";
+	private static final String MAQPANEL = "Maq";
 
 	// File filters used by each of the browse options
 	private FileNameExtensionFilter[] aceFilters;
 	private FileNameExtensionFilter[] afgFilters;
 	private FileNameExtensionFilter[] soapFilters;
 	private FileNameExtensionFilter[] fastaFilters;
+	private FileNameExtensionFilter[] maqFilters;
+	private FileNameExtensionFilter[] fastqFilters;
 
 	private JButton bCancel, bHelp, bOpen;
 
@@ -52,12 +56,14 @@ public class ImportAssemblyDialog extends JDialog
 		acePanel = new NBImportAssemblyACEPanel(this);
 		afgPanel = new NBImportAssemblyAFGPanel(this);
 		soapPanel = new NBImportAssemblySOAPPanel(this);
+		maqPanel = new NBImportAssemblyMaqPanel(this);
 
 		// Create the CardLayout for flicking between input types
 		cardsPanel = new JPanel(cardLayout);
 		cardsPanel.add(acePanel, ACEPANEL);
 		cardsPanel.add(afgPanel, AFGPANEL);
 		cardsPanel.add(soapPanel, SOAPPANEL);
+		cardsPanel.add(maqPanel, MAQPANEL);
 		initDisplay();
 
 		add(nbPanel, BorderLayout.NORTH);
@@ -97,6 +103,7 @@ public class ImportAssemblyDialog extends JDialog
 			case 0: cardLayout.show(cardsPanel, ACEPANEL); break;
 			case 1: cardLayout.show(cardsPanel, AFGPANEL); break;
 			case 2: cardLayout.show(cardsPanel, SOAPPANEL); break;
+			case 3: cardLayout.show(cardsPanel, MAQPANEL); break;
 		}
 
 		aceFilters = new FileNameExtensionFilter[] {
@@ -110,6 +117,12 @@ public class ImportAssemblyDialog extends JDialog
 
 		fastaFilters = new FileNameExtensionFilter[] {
 			new FileNameExtensionFilter(RB.getString("gui.dialog.ImportAssemblyDialog.fastaFiles"), "fasta") };
+
+		maqFilters = new FileNameExtensionFilter[] {
+			new FileNameExtensionFilter(RB.getString("gui.dialog.ImportAssemblyDialog.maqFiles"), "maq") };
+
+		fastqFilters = new FileNameExtensionFilter[] {
+			new FileNameExtensionFilter(RB.getString("gui.dialog.ImportAssemblyDialog.fastqFiles"), "fastq") };
 	}
 
 	public String[] getFilenames()
@@ -131,6 +144,9 @@ public class ImportAssemblyDialog extends JDialog
 
 			else if (Prefs.guiLastFileType == 2 && soapPanel.isOK())
 				filenames = soapPanel.getFilenames();
+
+			else if (Prefs.guiLastFileType == 3 && maqPanel.isOK())
+				filenames = maqPanel.getFilenames();
 
 			if (filenames != null)
 				setVisible(false);
@@ -160,6 +176,18 @@ public class ImportAssemblyDialog extends JDialog
 			updateComboBox(value, soapPanel.fastaComboBox, soapPanel.recentFilesFasta);
 		}
 
+		else if (e.getSource() == maqPanel.maqComboBox)
+		{
+			String value = (String) maqPanel.maqComboBox.getSelectedItem();
+			updateComboBox(value, maqPanel.maqComboBox, maqPanel.recentFilesMaq);
+		}
+
+		else if (e.getSource() == maqPanel.fastqComboBox)
+		{
+			String value = (String) maqPanel.fastqComboBox.getSelectedItem();
+			updateComboBox(value, maqPanel.fastqComboBox, maqPanel.recentFilesFastq);
+		}
+
 		else if (e.getSource() == acePanel.bBrowse)
 			browse(acePanel.aceComboBox, acePanel.recentFiles, aceFilters);
 
@@ -171,6 +199,12 @@ public class ImportAssemblyDialog extends JDialog
 
 		else if (e.getSource() == soapPanel.bBrowse2)
 			browse(soapPanel.fastaComboBox, soapPanel.recentFilesFasta, fastaFilters);
+
+		else if (e.getSource() == maqPanel.bBrowse1)
+			browse(maqPanel.maqComboBox, maqPanel.recentFilesMaq, maqFilters);
+
+		else if (e.getSource() == maqPanel.bBrowse2)
+			browse(maqPanel.fastqComboBox, maqPanel.recentFilesFastq, fastqFilters);
 	}
 
 	// Toggle to another layout
@@ -183,6 +217,7 @@ public class ImportAssemblyDialog extends JDialog
 			case 0: layout = ACEPANEL;  Prefs.guiLastFileType = 0; break;
 			case 1: layout = AFGPANEL;  Prefs.guiLastFileType = 1; break;
 			case 2: layout = SOAPPANEL; Prefs.guiLastFileType = 2; break;
+			case 3: layout = MAQPANEL; Prefs.guiLastFileType = 3; break;
 		}
 
 		cardLayout.show(cardsPanel, layout);
