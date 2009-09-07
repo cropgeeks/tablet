@@ -81,12 +81,14 @@ public class ImportAssemblyDialog extends JDialog
 
 	private JPanel createButtons()
 	{
+		bOpen = SwingUtils.getButton(RB.getString("gui.text.open"));
+		bOpen.addActionListener(this);
 		bCancel = SwingUtils.getButton(RB.getString("gui.text.cancel"));
 		bCancel.addActionListener(this);
 		bHelp = SwingUtils.getButton(RB.getString("gui.text.help"));
 		RB.setText(bHelp, "gui.text.help");
-		bOpen = SwingUtils.getButton(RB.getString("gui.text.open"));
-		bOpen.addActionListener(this);
+		TabletUtils.setHelp(bHelp, "gui.dialog.ImportAssemblyDialog");
+
 
 		JPanel p1 = TabletUtils.getButtonPanel();
 		p1.add(bOpen);
@@ -227,7 +229,7 @@ public class ImportAssemblyDialog extends JDialog
 			case 1: layout = AFGPANEL;  Prefs.guiLastFileType = 1; break;
 			case 2: layout = MAQPANEL; Prefs.guiLastFileType = 2; break;
 			case 3: layout = SOAPPANEL; Prefs.guiLastFileType = 3; break;
-			
+
 		}
 
 		cardLayout.show(cardsPanel, layout);
