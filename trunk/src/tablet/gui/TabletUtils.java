@@ -53,6 +53,16 @@ public class TabletUtils
 		button.getActionMap().put("help", helpAction);
 	}
 
+	public static void sendFeedback()
+	{
+		try
+		{
+			Desktop desktop = Desktop.getDesktop();
+			desktop.mail(new URI("mailto:bioinf@scri.ac.uk?subject=Tablet%20Feedback"));
+		}
+		catch (Exception e) { System.out.println(e); }
+	}
+
 	/** Produces a FASTA formatted version of a sequence. */
 	public static String formatFASTA(String title, String sequence)
 	{
