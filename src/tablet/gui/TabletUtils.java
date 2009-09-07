@@ -4,6 +4,7 @@
 package tablet.gui;
 
 import java.awt.*;
+import java.awt.event.*;
 import java.io.File;
 import java.net.*;
 import javax.swing.*;
@@ -22,6 +23,34 @@ public class TabletUtils
 			BorderFactory.createEmptyBorder(10, 0, 10, 5)));
 
 		return p1;
+	}
+
+	/**
+	 * Registers a button to display Tablet help on the specified topic. Will
+	 * make both the button's actionListener and a keypress of F1 take Tablet
+	 * to the appropriate help page (on the web).
+	 */
+	public static void setHelp(final JButton button, String topic)
+	{
+		final String html = "http://bioinf.scri.ac.uk/tablet/help/" + topic + ".shtml";
+
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				visitURL(html);
+			}
+		});
+
+		// TODO: is there a better way of doing this that doesn't rely on having
+		// an actionListener AND an AbstractAction both doing the same thing
+		AbstractAction helpAction = new AbstractAction() {
+			public void actionPerformed(ActionEvent e) {
+				visitURL(html);
+			}
+		};
+
+		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0);
+		button.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "help");
+		button.getActionMap().put("help", helpAction);
 	}
 
 	/** Produces a FASTA formatted version of a sequence. */
