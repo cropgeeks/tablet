@@ -26,7 +26,10 @@ public class NBStartWelcomePanel extends javax.swing.JPanel implements ActionLis
 
 	public void actionPerformed(ActionEvent e)
 	{
-		throw new UnsupportedOperationException("Not supported yet.");
+		if(e.getSource() == feedbackLabel)
+		{
+			TabletUtils.sendFeedback();
+		}
 	}
 
     /** This method is called from within the constructor to
