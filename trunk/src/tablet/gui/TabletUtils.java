@@ -66,8 +66,8 @@ public class TabletUtils
 	 * Shows an OPEN file dialog, returning the path to the file selected as a
 	 * string.
 	 */
-	public static String getOpenFilename(
-		String title, File filePath, FileNameExtensionFilter[] filters)
+	public static String getOpenFilename(String title, File filePath,
+		FileNameExtensionFilter[] filters, int selectedFilter)
 	{
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle(title);
@@ -78,8 +78,11 @@ public class TabletUtils
 			fc.setCurrentDirectory(new File(Prefs.guiCurrentDir));
 
 		if (filters != null)
+		{
 			for (FileNameExtensionFilter filter: filters)
 				fc.addChoosableFileFilter(filter);
+			fc.setFileFilter(filters[selectedFilter]);
+		}
 
 		if (fc.showOpenDialog(Tablet.winMain) != JFileChooser.APPROVE_OPTION)
 			return null;

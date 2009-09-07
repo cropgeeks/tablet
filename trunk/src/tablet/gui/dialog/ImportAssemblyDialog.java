@@ -106,23 +106,32 @@ public class ImportAssemblyDialog extends JDialog
 			case 3: cardLayout.show(cardsPanel, SOAPPANEL); break;
 		}
 
+		FileNameExtensionFilter txtFilter = new FileNameExtensionFilter(
+			RB.getString("gui.text.formats.txt"), "txt");
+
 		aceFilters = new FileNameExtensionFilter[] {
-			new FileNameExtensionFilter(RB.getString("gui.dialog.ImportAssemblyDialog.aceFiles"), "ace") };
+			new FileNameExtensionFilter(RB.getString("gui.text.formats.ace"), "ace"),
+			txtFilter };
 
 		afgFilters = new FileNameExtensionFilter[] {
-			new FileNameExtensionFilter(RB.getString("gui.dialog.ImportAssemblyDialog.afgFiles"), "afg") };
+			new FileNameExtensionFilter(RB.getString("gui.text.formats.afg"), "afg"),
+			txtFilter };
 
 		soapFilters = new FileNameExtensionFilter[] {
-			new FileNameExtensionFilter(RB.getString("gui.dialog.ImportAssemblyDialog.soapFiles"), "soap") };
+			new FileNameExtensionFilter(RB.getString("gui.text.formats.soap"), "soap"),
+			txtFilter };
 
 		fastaFilters = new FileNameExtensionFilter[] {
-			new FileNameExtensionFilter(RB.getString("gui.dialog.ImportAssemblyDialog.fastaFiles"), "fasta") };
+			new FileNameExtensionFilter(RB.getString("gui.text.formats.fasta"), "fasta"),
+			txtFilter };
 
 		maqFilters = new FileNameExtensionFilter[] {
-			new FileNameExtensionFilter(RB.getString("gui.dialog.ImportAssemblyDialog.maqFiles"), "maq") };
+			new FileNameExtensionFilter(RB.getString("gui.text.formats.maq"), "maq", "txt"),
+			txtFilter };
 
 		fastqFilters = new FileNameExtensionFilter[] {
-			new FileNameExtensionFilter(RB.getString("gui.dialog.ImportAssemblyDialog.fastqFiles"), "fastq") };
+			new FileNameExtensionFilter(RB.getString("gui.text.formats.fastq"), "fastq"),
+			txtFilter };
 	}
 
 	public String[] getFilenames()
@@ -233,10 +242,10 @@ public class ImportAssemblyDialog extends JDialog
 		if (combo.getSelectedItem() != null)
 		{
 			File file = new File(combo.getSelectedItem().toString());
-			filename = TabletUtils.getOpenFilename(title, file, filters);
+			filename = TabletUtils.getOpenFilename(title, file, filters, 0);
 		}
 		else
-			filename = TabletUtils.getOpenFilename(title, null, filters);
+			filename = TabletUtils.getOpenFilename(title, null, filters, 0);
 
 		updateComboBox(filename, combo, recentFiles);
 	}
