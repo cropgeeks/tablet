@@ -151,11 +151,11 @@ public class ImportAssemblyDialog extends JDialog
 			else if (Prefs.guiLastFileType == 1 && afgPanel.isOK())
 				filenames = afgPanel.getFilenames();
 
-			else if (Prefs.guiLastFileType == 2 && soapPanel.isOK())
-				filenames = soapPanel.getFilenames();
-
-			else if (Prefs.guiLastFileType == 3 && maqPanel.isOK())
+			else if (Prefs.guiLastFileType == 2 && maqPanel.isOK())
 				filenames = maqPanel.getFilenames();
+
+			else if (Prefs.guiLastFileType == 3 && soapPanel.isOK())
+				filenames = soapPanel.getFilenames();
 
 			if (filenames != null)
 				setVisible(false);
