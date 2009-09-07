@@ -15,7 +15,7 @@ public class NBStartHelpPanel extends javax.swing.JPanel implements ActionListen
    private HyperLinkLabel[] labels = new HyperLinkLabel[8];
 
 	private static String home =
-		"http://bioinf.scri.ac.uk/flapjack/help";
+		"http://bioinf.scri.ac.uk/tablet/help";
 
     public NBStartHelpPanel()
 	{
@@ -34,7 +34,7 @@ public class NBStartHelpPanel extends javax.swing.JPanel implements ActionListen
 
 		for (int i = 0; i < labels.length; i++)
 		{
-			//RB.setText(labels[i], "gui.navpanel.NBStartHelpPanel.link" + (i+1));
+			RB.setText(labels[i], "gui.NBStartHelpPanel.link" + (i+1));
 			labels[i].addActionListener(this);
 		}
     }
@@ -43,13 +43,14 @@ public class NBStartHelpPanel extends javax.swing.JPanel implements ActionListen
 	{
 		if (e.getSource() == homeLabel)
 		{
-
+			TabletUtils.visitURL(home);
 		}
 		else
 		{
 			for (int i = 0; i < labels.length; i++)
 				if (e.getSource() == labels[i])
 				{
+					TabletUtils.visitURL(RB.getString("gui.NBStartHelpPanel.url" + (i+1)));
 				}
 		}
 	}
