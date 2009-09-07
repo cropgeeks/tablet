@@ -133,9 +133,6 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 	public void uncaughtException(Thread thread, Throwable throwable)
 	{
-		final Thread t = thread;
-		final Throwable e = throwable;
-
 		if (throwable instanceof java.lang.OutOfMemoryError == false)
 			return;
 
@@ -155,7 +152,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 				int response = TaskDialog.show(msg, TaskDialog.ERR, 0, options);
 				if (response == 0)
-					TabletUtils.visitURL("http://bioinf.scri.ac.uk/tablet");
+					TabletUtils.visitURL("http://bioinf.scri.ac.uk/tablet/help/memory.shtml");
 
 				System.exit(1);
 			}
