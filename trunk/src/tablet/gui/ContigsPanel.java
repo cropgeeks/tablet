@@ -60,6 +60,8 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 
 	void setAssembly(Assembly assembly)
 	{
+		setNullContig();
+
 		if (assembly == null)
 		{
 			// This is done to ensure complete removal of all references that

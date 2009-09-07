@@ -26,6 +26,7 @@ public class WinMain extends JRibbonFrame
 	private Commands commands = new Commands(this);
 
 	private JSplitPane splitter;
+	private int splitterMin = 1;
 	private JTabbedPane ctrlTabs;
 
 	private AssemblyPanel assemblyPanel;
@@ -95,13 +96,30 @@ public class WinMain extends JRibbonFrame
 		splitter.setDividerLocation(Prefs.guiSplitterLocation);
 		splitter.setOneTouchExpandable(true);
 		splitter.setLeftComponent(ctrlTabs);
-		splitter.setRightComponent(new NavPanel(this));
+		splitter.setRightComponent(NavPanel.getLinksPanel(this));
+		toggleSplitterLocation();
+
+		if (SystemUtils.isMacOS())
+			splitterMin = 2;
 
 		splitter.addPropertyChangeListener(new PropertyChangeListener() {
 			public void propertyChange(PropertyChangeEvent e)
 			{
-				if (splitter.getDividerLocation() != 1)
+				Prefs.guiSplitterLocationPrev = Prefs.guiSplitterLocation;
+
+				// If the splitter is NOT hidden...
+				if (splitter.getDividerLocation() != splitterMin)
+				{
 					Prefs.guiSplitterLocation = splitter.getDividerLocation();
+					Actions.homeOptionsHideContigs.setSelected(false);
+					Prefs.guiHideContigs = false;
+				}
+				// If the splitter IS hidden...
+				else
+				{
+					Actions.homeOptionsHideContigs.setSelected(true);
+					Prefs.guiHideContigs = true;
+				}
 			}
 		});
 
@@ -187,8 +205,10 @@ public class WinMain extends JRibbonFrame
 
 		if (isVisible)
 			splitter.setRightComponent(assemblyPanel);
+		else if (assembly != null)
+			splitter.setRightComponent(NavPanel.getContigsPanel(assembly));
 		else
-			splitter.setRightComponent(new NavPanel(this));
+			splitter.setRightComponent(NavPanel.getLinksPanel(this));
 
 		splitter.setDividerLocation(location);
 	}
@@ -233,5 +253,13 @@ public class WinMain extends JRibbonFrame
 		javax.swing.Timer timer = new javax.swing.Timer(2500, listener);
 		timer.setInitialDelay(0);
 		timer.start();
+	}
+
+	public void toggleSplitterLocation()
+	{
+		if (Prefs.guiHideContigs)
+			splitter.setDividerLocation(splitterMin);
+		else
+			splitter.setDividerLocation(Prefs.guiSplitterLocationPrev);
 	}
 }

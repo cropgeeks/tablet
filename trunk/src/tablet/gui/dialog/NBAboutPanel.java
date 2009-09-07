@@ -56,7 +56,7 @@ class NBAboutPanel extends javax.swing.JPanel implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if(e.getSource() == webLabel)
+		if (e.getSource() == webLabel)
 			TabletUtils.visitURL("http://bioinf.scri.ac.uk/tablet");
 	}
 
