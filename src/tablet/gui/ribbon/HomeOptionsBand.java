@@ -196,6 +196,8 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		}
 		else if (source == Actions.homeOptionsHideContigs)
 		{
+			Prefs.guiHideContigs = !Prefs.guiHideContigs;
+			winMain.toggleSplitterLocation();
 		}
 	}
 }

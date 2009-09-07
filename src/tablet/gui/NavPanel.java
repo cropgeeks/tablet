@@ -5,20 +5,19 @@ package tablet.gui;
 
 import java.awt.*;
 import javax.swing.*;
+
+import tablet.data.*;
+
 import scri.commons.gui.*;
 
-/**
- *
- * @author gsteph
- */
-public class NavPanel extends JPanel
+class NavPanel
 {
-	NavPanel(WinMain winMain)
+	static JPanel getLinksPanel(WinMain winMain)
 	{
-		setLayout(new BorderLayout());
-		setBorder(BorderFactory.createLineBorder(new Color(119, 126, 143), 3));
+		JPanel panel = new JPanel(new BorderLayout());
+		panel.setBorder(BorderFactory.createLineBorder(new Color(119, 126, 143), 3));
 
-		JPanel panel = new LogoPanel(new BorderLayout(0, 0));
+		JPanel logoPanel = new LogoPanel(new BorderLayout(0, 0));
 
 		JPanel welcomePanel = new JPanel(new BorderLayout());
 		welcomePanel.setOpaque(false);
@@ -46,12 +45,23 @@ public class NavPanel extends JPanel
 		centrePanel.add(filePanel);
 		centrePanel.add(helpPanel);
 
-		panel.add(welcomePanel, BorderLayout.NORTH);
-		panel.add(centrePanel, BorderLayout.CENTER);
+		logoPanel.add(welcomePanel, BorderLayout.NORTH);
+		logoPanel.add(centrePanel, BorderLayout.CENTER);
 
-		add(panel);
+		panel.add(logoPanel);
+
+		return panel;
 	}
 
+	static JPanel getContigsPanel(Assembly assembly)
+	{
+		JPanel logoPanel = new LogoPanel(new BorderLayout(0, 0));
+
+		String text = RB.getString("gui.NavPanel.message");
+		logoPanel.add(new JLabel(text, JLabel.CENTER));
+
+		return logoPanel;
+	}
 
 	private static class LogoPanel extends JPanel
 	{
@@ -73,11 +83,6 @@ public class NavPanel extends JPanel
 			int h = getHeight();
 
 			g.drawImage(logo.getImage(), 0, 0, w, w, null);
-
-			g.setColor(Color.lightGray);
-			g.setFont(new Font("Dialog", Font.BOLD, 14));
-			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-				RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 		}
 	}
 }

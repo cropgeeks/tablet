@@ -61,7 +61,6 @@ public class Actions
 		homeOptionsHideConsensus.setEnabled(false);
 		homeOptionsHideScaleBar.setEnabled(false);
 		homeOptionsHideCoverage.setEnabled(false);
-		homeOptionsHideContigs.setEnabled(false);
 		homeOptionsHideProteins.setEnabled(false);
 
 		homeStylesStandard.setEnabled(false);
@@ -94,7 +93,6 @@ public class Actions
 		homeOptionsHideConsensus.setEnabled(false);
 		homeOptionsHideScaleBar.setEnabled(false);
 		homeOptionsHideCoverage.setEnabled(false);
-		homeOptionsHideContigs.setEnabled(false);
 		homeOptionsHideProteins.setEnabled(false);
 
 		homeStylesStandard.setEnabled(false);
@@ -127,7 +125,6 @@ public class Actions
 		homeOptionsHideConsensus.setEnabled(true);
 		homeOptionsHideScaleBar.setEnabled(true);
 		homeOptionsHideCoverage.setEnabled(true);
-		homeOptionsHideContigs.setEnabled(false);
 		homeOptionsHideProteins.setEnabled(true);
 
 		homeStylesStandard.setEnabled(true);
