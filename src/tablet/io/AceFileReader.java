@@ -171,6 +171,9 @@ class AceFileReader extends TrackableReader
 			}
 
 			bq[i] = Byte.parseByte(tokens[t]);
+
+			if (bq[i] > 100)
+				bq[i] = 100;
 		}
 
 		consensus.setBaseQualities(bq);
