@@ -102,8 +102,8 @@ public class ImportAssemblyDialog extends JDialog
 		{
 			case 0: cardLayout.show(cardsPanel, ACEPANEL); break;
 			case 1: cardLayout.show(cardsPanel, AFGPANEL); break;
-			case 2: cardLayout.show(cardsPanel, SOAPPANEL); break;
-			case 3: cardLayout.show(cardsPanel, MAQPANEL); break;
+			case 2: cardLayout.show(cardsPanel, MAQPANEL); break;
+			case 3: cardLayout.show(cardsPanel, SOAPPANEL); break;
 		}
 
 		aceFilters = new FileNameExtensionFilter[] {
@@ -216,8 +216,9 @@ public class ImportAssemblyDialog extends JDialog
 		{
 			case 0: layout = ACEPANEL;  Prefs.guiLastFileType = 0; break;
 			case 1: layout = AFGPANEL;  Prefs.guiLastFileType = 1; break;
-			case 2: layout = SOAPPANEL; Prefs.guiLastFileType = 2; break;
-			case 3: layout = MAQPANEL; Prefs.guiLastFileType = 3; break;
+			case 2: layout = MAQPANEL; Prefs.guiLastFileType = 2; break;
+			case 3: layout = SOAPPANEL; Prefs.guiLastFileType = 3; break;
+			
 		}
 
 		cardLayout.show(cardsPanel, layout);

@@ -77,9 +77,12 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
 				labels[i].setVisible(false);
 		}
 
-//		ratingsPanel.doSetup(Prefs.rating,
-//			Icons.getIcon("STARON"), Icons.getIcon("STAROFF"));
-//		ratingsPanel.addActionListener(this);
+		ratingsPanel.doSetup(Prefs.rating,
+			Icons.getIcon("STARON"), Icons.getIcon("STAROFF"));
+		ratingsPanel.addActionListener(this);
+
+		ratingsPanel.setVisible(false);
+		rateLabel.setVisible(false);
     }
 
 	public void actionPerformed(ActionEvent e)
@@ -115,6 +118,7 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
         project2 = new scri.commons.gui.matisse.HyperLinkLabel();
         project3 = new scri.commons.gui.matisse.HyperLinkLabel();
         rateLabel = new javax.swing.JLabel();
+        ratingsPanel = new scri.commons.gui.matisse.RatingsPanel();
 
         importLabel.setForeground(new java.awt.Color(68, 106, 156));
         importLabel.setText("Import data into Flapjack");
@@ -148,8 +152,11 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
                     .addComponent(project1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(project2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(project3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(rateLabel))
-                .addContainerGap(82, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(rateLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ratingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -167,7 +174,9 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(project3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(rateLabel)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(rateLabel)
+                    .addComponent(ratingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -181,6 +190,7 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
     private scri.commons.gui.matisse.HyperLinkLabel project2;
     private scri.commons.gui.matisse.HyperLinkLabel project3;
     private javax.swing.JLabel rateLabel;
+    private scri.commons.gui.matisse.RatingsPanel ratingsPanel;
     // End of variables declaration//GEN-END:variables
 
 }
