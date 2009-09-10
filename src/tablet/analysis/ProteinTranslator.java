@@ -78,8 +78,14 @@ public class ProteinTranslator extends SimpleJob
 		int s = 0;
 
 		int length = sequence.length();
+		int startAt = 0;
 
-		for (int i = readingFrame; i < length; i++)
+		// Find the first "real" base (skips translating NNNNN etc at start)
+		for (startAt = 0; startAt < length; startAt++)
+			if (sequence.getStateAt(startAt) >= A)
+				break;
+
+		for (int i = startAt + readingFrame; i < length; i++)
 		{
 			byte state = sequence.getStateAt(i);
 
@@ -119,8 +125,14 @@ public class ProteinTranslator extends SimpleJob
 		int s = 0;
 
 		int length = sequence.length();
+		int startAt = length - 1;
 
-		for (int i = length-1-readingFrame; i >= 0; i--)
+		// Find the first "real" base (skips translating NNNNN etc at start)
+		for (; startAt >= 0; startAt--)
+			if (sequence.getStateAt(startAt) >= A)
+				break;
+
+		for (int i = startAt-readingFrame; i >= 0; i--)
 		{
 			byte state = sequence.getStateAt(i);
 
