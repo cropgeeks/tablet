@@ -1,0 +1,58 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="../stylesheet/styles.css" type="text/css">
+
+<title>Tablet Options Dialog</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.html" -->
+
+
+<h2>Tablet Options Dialog</h2>
+
+<p>The Preferences dialog can be used to modify various settings that affect the
+way Tablet is used and is displayed.</p>
+
+<h3>General</h3>
+
+<p>The <b>General</b> tab includes options which are specifc to Tablet's general operation.</p>
+
+<p><a href="images/gui.dialog.prefs.NBGeneralPanel.png">
+<img class="capture" src="images/gui.dialog.prefs.NBGeneralPanel2.png" alt="Tablet Screenshot"></a></p>
+
+<ul>
+	<li><b>Interface Display Language</b><br>
+	This setting determines what language Tablet will display its user interface in.</li>
+	<li><b>Check for newer versions of Tablet</b><br>
+	This setting determines how often Tablet will attempt to connect back to its
+	download server to see if a newer version is available. The options available are
+	Never, At application startup, Once a day, Once a week, and Once a month.</li>
+</ul>
+
+<h3>Visualization</h3>
+
+<p>The <b>Visualization</b> tab allows you to customise elements of Tablet's visual display.</p>
+
+<p><a href="images/gui.dialog.prefs.NBVisualizationPanel.png">
+<img class="capture" src="images/gui.dialog.prefs.NBVisualizationPanel2.png" alt="Tablet Screenshot"></a></p>
+
+<ul>
+	<li><b>Character to display for DNA pad/gap bases</b><br>
+	Determines what character will be shown whenever a padded base is displayed.</li>
+	<li><b>Character to display for Protein stop codons</b><br>
+	Determines what character will be shown whenver DNA translates to a stop
+	codon.</li>
+</ul>
+
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>

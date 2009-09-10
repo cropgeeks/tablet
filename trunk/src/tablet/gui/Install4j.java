@@ -124,6 +124,7 @@ public class Install4j
 						+ "?id=" + id
 						+ "&version=" + version
 						+ "&locale=" + locale
+						+ "&rating=" + Prefs.rating
 						+ "&os=" + os;
 
 					// We DO NOT log usernames from non-SCRI addresses
