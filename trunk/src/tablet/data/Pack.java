@@ -16,7 +16,6 @@ public class Pack
 
 	// TODO: This isn't being used yet - it should be possible to speed up
 	// searches with it though
-	private int positionS;
 	private int positionE;
 
 	public void trimToSize()
@@ -30,33 +29,19 @@ public class Pack
 	{
 		if (reads.size() == 0)
 		{
-			addReadToList(read);
+			reads.add(read);
+			positionE = read.getEndPosition();
 			return true;
 		}
 
-		Read lastRead = reads.get(reads.size()-1);
-
-		if (read.getStartPosition() > lastRead.getEndPosition())
+		if(read.getStartPosition() > positionE)
 		{
-			addReadToList(read);
+			reads.add(read);
+			positionE = read.getEndPosition();
 			return true;
 		}
 
 		return false;
-	}
-
-	private void addReadToList(Read read)
-	{
-		// Adds a read to the end of the list. If it's the first read added,
-		// then we track its starting position. We also update the ending
-		// position (for the pack) to be the ending position of this read.
-
-		if (reads.size() == 0)
-			positionS = read.getStartPosition();
-
-		reads.add(read);
-
-		positionE = read.getEndPosition();
 	}
 
 	/**
@@ -178,5 +163,10 @@ public class Pack
 		}
 
 		return null;
+	}
+
+	public int PositionE()
+	{
+		return positionE;
 	}
 }

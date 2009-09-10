@@ -31,13 +31,13 @@ public class PackSetCreator extends SimpleJob
 
 		PackSet packSet = new PackSet();
 
+		boolean added = false;
+
 		for (Read read: contig.getReads())
 		{
 			// Check for quit/cancel on the job...
 			if (okToRun == false)
 				return;
-
-			boolean added = false;
 
 			// Can this read be added to any of the existing pack lines?
 			for (Pack pack: packSet)
@@ -48,7 +48,7 @@ public class PackSetCreator extends SimpleJob
 			if (added == false)
 			{
 				Pack newPack = new Pack();
-				added = newPack.addRead(read);
+				newPack.addRead(read);
 
 				packSet.addPack(newPack);
 			}
