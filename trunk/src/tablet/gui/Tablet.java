@@ -99,7 +99,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 					winMain.getCommands().fileOpen(initialFiles);
 
 				if (Install4j.displayUpdate)
-					TabletUtils.visitURL("http://bioinf.scri.ac.uk/tablet/svn.txt");
+					TabletUtils.visitURL("http://bioinf.scri.ac.uk/tablet/help/whats-new.shtml");
 			}
 
 			public void windowClosing(WindowEvent e)
