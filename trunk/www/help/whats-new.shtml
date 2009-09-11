@@ -23,6 +23,15 @@ changes between versions, please see the <a href="http://bioinf.scri.ac.uk/table
 subversion change log</a>.</p>
 
 
+<h3>New in 0.09.09.11</h3>
+
+<ul>
+<li>CHG: Significant reduction in the time required to pack reads when dealing with large contigs.</li>
+<li>BUG: Fixed a problem with protein translations when the sequence didn't start with known characters.</li>
+<li>BUG: Copy-to-clipboard operations were copying the read orientation incorrectly.</li>
+</ul>
+
+
 <h3>New in 0.09.09.07</h3>
 
 <ul>

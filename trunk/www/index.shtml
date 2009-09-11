@@ -7,7 +7,7 @@
 
 <link rel="stylesheet" href="stylesheet/styles.css" type="text/css">
 
-<title>Tablet - Next Generation Sequence Visualization</title>
+<title>Tablet - Next Generation Sequence Assembly Visualization</title>
 
 </head>
 <body>
@@ -15,7 +15,7 @@
 <!--#include virtual="header.shtml" -->
 
 
-<h2>Tablet - Next Generation Sequence Visualization</h2>
+<h2>Tablet - Next Generation Sequence Assembly Visualization</h2>
 
 <p>Tablet is a lightweight, high-performance graphical viewer for next
 generation sequence assemblies and alignments.</p>
