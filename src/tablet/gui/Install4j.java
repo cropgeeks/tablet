@@ -117,7 +117,8 @@ public class Install4j
 					String id = URLEncoder.encode(Prefs.tabletID, "UTF-8");
 					String version = URLEncoder.encode(VERSION, "UTF-8");
 					String locale = URLEncoder.encode("" + Locale.getDefault(), "UTF-8");
-					String os = URLEncoder.encode(System.getProperty("os.name"), "UTF-8");
+					String os = URLEncoder.encode(System.getProperty("os.name")
+						+ " (" + System.getProperty("os.arch") + ")", "UTF-8");
 					String user = URLEncoder.encode(System.getProperty("user.name"), "UTF-8");
 
 					String addr = "http://bioinf.scri.ac.uk/cgi-bin/tablet/tablet.cgi"
