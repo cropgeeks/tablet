@@ -53,7 +53,7 @@ public class NBFeaturesPanelControls extends javax.swing.JPanel implements Docum
 
 		try
 		{
-			rf = RowFilter.regexFilter(filterText.getText(), 0);
+			rf = RowFilter.regexFilter(filterText.getText().toUpperCase(), 0);
 		}
 		catch (Exception e)
 		{
