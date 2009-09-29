@@ -50,9 +50,10 @@ class FeaturesTableModel extends AbstractTableModel
 
 	public Class getColumnClass(int col)
 	{
-		if (col == 0) return String.class;
-
-		return Integer.class;
+		if (col == 0)
+			return String.class;
+		else
+			return Integer.class;
 	}
 
 	public Object getValueAt(int row, int col)
@@ -64,7 +65,6 @@ class FeaturesTableModel extends AbstractTableModel
 			case 0: return feature.getName();
 			case 1: return feature.getP1() + 1; // +1 back into consensus space
 			case 2: return feature.getP2() + 1; // +1 back into consensus space
-
 			case 9: return feature;
 		}
 
