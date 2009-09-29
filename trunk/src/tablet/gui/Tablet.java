@@ -36,6 +36,9 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 	{
 		// OS X: This has to be set before anything else
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Tablet");
+		// This disables the API preferences, which can cause problems on Linux
+		// - see: http://www.allaboutbalance.com/articles/disableprefs
+		System.setProperty("java.util.prefs.PreferencesFactory", "scri.commons.gui.DisabledPreferencesFactory");
 
 		Prefs.setDefaults();
 		prefs.loadPreferences(prefsFile, Prefs.class);
