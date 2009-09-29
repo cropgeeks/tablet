@@ -23,8 +23,10 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 	private JTabbedPane ctrlTabs;
 	private FeaturesTableModel model;
 	private JTable table;
+	private NBFeaturesPanelControls controls;
 
 	private Contig contig;
+	private TableRowSorter<FeaturesTableModel> sorter;
 
 	FeaturesPanel(AssemblyPanel aPanel, JTabbedPane ctrlTabs)
 	{
@@ -47,6 +49,7 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 
 		setLayout(new BorderLayout());
 		add(new JScrollPane(table));
+		add(controls = new NBFeaturesPanelControls(this), BorderLayout.SOUTH);
 	}
 
 	void setContig(Contig contig)
@@ -69,10 +72,10 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 		{
 			ctrlTabs.setEnabledAt(1, true);
 			ctrlTabs.setTitleAt(1, getTitle(contig.getFeatures().size()));
-
 			model = new FeaturesTableModel(contig, table);
+			sorter = new TableRowSorter<FeaturesTableModel>(model);
 			table.setModel(model);
-			table.setRowSorter(new TableRowSorter<FeaturesTableModel>(model));
+			table.setRowSorter(sorter);
 		}
 	}
 
@@ -110,5 +113,11 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 
 		aPanel.moveToPosition(-1, start, true);
 		highlighter = new ColumnHighlighter(aPanel, start, end);
+	}
+
+	void setTableFilter(RowFilter<FeaturesTableModel, Object> rf)
+	{
+		sorter.setRowFilter(rf);
+		ctrlTabs.setTitleAt(1, getTitle(table.getRowCount()));
 	}
 }

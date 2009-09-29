@@ -8,8 +8,6 @@ import javax.swing.*;
 import javax.swing.RowFilter.*;
 import javax.swing.event.*;
 
-import tablet.gui.*;
-
 import scri.commons.gui.*;
 
 class NBContigsPanelControls extends JPanel implements ActionListener, DocumentListener
