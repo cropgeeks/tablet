@@ -205,7 +205,10 @@ public class ApplicationMenu extends RibbonApplicationMenu
 			winMain.getCommands().exportImage();
 
 		else if (icon == iClose)
-			winMain.closeAssembly();
+		{
+			if (winMain.okToExit(true))
+				winMain.closeAssembly();
+		}
 
 		else if (icon == iAbout)
 			new AboutDialog();
@@ -215,7 +218,7 @@ public class ApplicationMenu extends RibbonApplicationMenu
 
 		else if (icon == iExit)
 		{
-			if (winMain.okToExit())
+			if (winMain.okToExit(false))
 				winMain.exit();
 		}
 	}

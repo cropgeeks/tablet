@@ -158,9 +158,45 @@ public class WinMain extends JRibbonFrame
 		createMemoryTimer();
 	}
 
-	public boolean okToExit()
+	public boolean okToExit(boolean isClose)
 	{
-		return true;
+		// If the user doesn't care, just allow it
+		if (isClose == false && Prefs.guiWarnOnExit == false)
+			return true;
+		if (isClose && Prefs.guiWarnOnClose == false)
+			return true;
+
+		// If no assembly is loaded, it's fine too
+		if (assembly == null)
+			return true;
+
+		// For all other situations, we need to prompt...
+		String msg = null;
+		JCheckBox checkbox = new JCheckBox();
+
+		if (isClose)
+		{
+			msg = RB.getString("gui.WinMain.okToCloseMsg");
+			RB.setText(checkbox, "gui.WinMain.warnOnClose");
+		}
+		else
+		{
+			msg = RB.getString("gui.WinMain.okToExitMsg");
+			RB.setText(checkbox, "gui.WinMain.warnOnExit");
+		}
+
+		String[] options = new String[] {
+			RB.getString("gui.text.yes"),
+			RB.getString("gui.text.no") };
+
+		int response = TaskDialog.show(msg, TaskDialog.QST, 1, checkbox, options);
+
+		if (isClose)
+			Prefs.guiWarnOnClose = !checkbox.isSelected();
+		else
+			Prefs.guiWarnOnExit = !checkbox.isSelected();
+
+		return response == 0;
 	}
 
 	public void exit()
