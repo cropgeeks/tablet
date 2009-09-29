@@ -107,10 +107,8 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 			public void windowClosing(WindowEvent e)
 			{
-				if (winMain.okToExit() == false)
-					return;
-
-				shutdown();
+				if (winMain.okToExit(false))
+					shutdown();
 			}
 		});
 
@@ -202,6 +200,9 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 	/** "Quit Tablet" on the OS X system menu. */
 	public boolean osxShutdown()
 	{
+		if (winMain.okToExit(false) == false)
+			return false;
+
 		shutdown();
 		return true;
 	}

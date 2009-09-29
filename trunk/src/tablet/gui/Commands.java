@@ -27,6 +27,9 @@ public class Commands
 
 	public void fileOpen(String[] filenames)
 	{
+		if (winMain.okToExit(true) == false)
+			return;
+
 		// If no file was passed in then we need to prompt the user to pick one
 		if (filenames == null)
 		{

@@ -49,6 +49,10 @@ public class Prefs extends XMLPreferences
 	// A list of previously accessed documents
 	public static String[] guiRecentDocs = new String[10];
 
+	// Prompt for okToClose messages?
+	public static boolean guiWarnOnClose = true;
+	public static boolean guiWarnOnExit = true;
+
 	// The last selected file type in the open assembly dialog
 	public static int guiLastFileType = 0;
 	// A list of previously accessed ace documents
