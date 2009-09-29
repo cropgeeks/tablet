@@ -75,7 +75,7 @@ public class GFF3Reader extends TrackableReader
 		int start = Integer.parseInt(tokens[3]);
 		int end   = Integer.parseInt(tokens[4]);
 
-		String name = new String(tokens[2]);
+		String name = new String(tokens[2].toUpperCase());
 		Feature f = new Feature(name, Feature.GFF3, start-1, end-1);
 
 		getFeatures(contigName).add(f);
