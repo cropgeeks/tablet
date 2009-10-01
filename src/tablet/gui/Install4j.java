@@ -20,7 +20,6 @@ public class Install4j
 	private static String URL = "http://bioinf.scri.ac.uk/tablet/installers/updates.xml";
 
 	public static String VERSION = "x.xx.xx.xx";
-	public static boolean displayUpdate = false;
 
 	public static final int NEVER = 0;
 	public static final int STARTUP = 1;
@@ -37,6 +36,18 @@ public class Install4j
 		getVersion();
 		pingServer();
 
+		Runnable r = new Runnable() {
+			public void run()
+			{
+				checkForUpdate();
+			}
+		};
+
+		new Thread(r).start();
+	}
+
+	private static void checkForUpdate()
+	{
 		try
 		{
 			switch (Prefs.guiUpdateSchedule)
@@ -66,8 +77,8 @@ public class Install4j
 			if (ud.getPossibleUpdateEntry() != null)
 				checkForUpdate(true);
 		}
-		catch (Exception e) {}
-		catch (Error e) {}
+		catch (Exception e) { e.printStackTrace(); }
+		catch (Error e) { e.printStackTrace(); }
 	}
 
 	/**
@@ -91,11 +102,6 @@ public class Install4j
 				com.install4j.api.ApplicationRegistry.getApplicationInfoByDir(new File("."));
 
 			VERSION = info.getVersion();
-
-			if (Prefs.lastVersion == null || !Prefs.lastVersion.equals(VERSION))
-				displayUpdate = true;
-
-			Prefs.lastVersion = VERSION;
 		}
 		catch (Exception e) {}
 		catch (Throwable e) {}

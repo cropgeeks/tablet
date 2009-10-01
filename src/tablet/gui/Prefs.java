@@ -17,8 +17,6 @@ public class Prefs extends XMLPreferences
 	public static boolean isSCRIUser = false;
 	public static int rating = 0;
 
-	// Last known (install4j) version number of Tablet that was run
-	public static String lastVersion = null;
 	// When to check for updates
 	public static int guiUpdateSchedule = Install4j.STARTUP;
 

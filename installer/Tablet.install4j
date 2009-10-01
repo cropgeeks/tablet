@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="4.2.3" transformSequenceNumber="2">
+<install4j version="4.2.4" transformSequenceNumber="2">
   <directoryPresets config="../res/icons" />
-  <application name="Tablet" distributionSourceDir="" applicationId="9483-2571-4596-9336" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" missingFilesStrategy="warn" shortName="tablet" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="0.09.09.11" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+  <application name="Tablet" distributionSourceDir="" applicationId="9483-2571-4596-9336" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" keepModificationTimes="false" missingFilesStrategy="warn" shortName="tablet" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="0.09.10.01" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -12,7 +12,10 @@
       <envVar name="JDK_HOME" />
     </searchSequence>
     <variables>
-      <variable name="website" value="http://bioinf.scri.ac.uk/tablet" />
+      <variable name="urlWebsite" value="http://bioinf.scri.ac.uk/tablet" />
+      <variable name="urlWhatsNew" value="http://bioinf.scri.ac.uk/tablet/help/whats-new.shtml" />
+      <variable name="changeLog" value="Show Change Log" />
+      <variable name="linuxWarning" value="Note, that on some versions of Linux you may still have to run the downloaded update manually." />
     </variables>
   </application>
   <files>
@@ -36,7 +39,7 @@
   </files>
   <launchers>
     <launcher name="tablet" id="20" external="false" excludeFromMenu="false" menuName="Tablet" icnsFile="../res/icons/appicon128.icns" pngIcon16File="../res/icons/appicon16.png" pngIcon32File="../res/icons/appicon32.png" macServiceDependencies="" swtApp="false" fileset="">
-      <executable name="tablet" type="1" iconSet="true" iconFile="" executableDir="." redirectStderr="true" stderrFile="output.log" redirectStdout="true" stdoutFile="output.log" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false">
+      <executable name="tablet" type="1" iconSet="true" iconFile="" executableDir="." redirectStderr="true" stderrFile="output.log" stderrMode="overwrite" redirectStdout="true" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" />
       </executable>
       <splashScreen show="false" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="" java6SplashScreen="false">
@@ -58,7 +61,7 @@
       </customScript>
     </launcher>
     <launcher name="tablet64" id="435" external="false" excludeFromMenu="false" menuName="Tablet" icnsFile="../res/icons/appicon128.icns" pngIcon16File="../res/icons/appicon16.png" pngIcon32File="../res/icons/appicon32.png" macServiceDependencies="" swtApp="false" fileset="">
-      <executable name="tablet" type="1" iconSet="true" iconFile="" executableDir="." redirectStderr="true" stderrFile="output.log" redirectStdout="true" stdoutFile="output.log" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false">
+      <executable name="tablet" type="1" iconSet="true" iconFile="" executableDir="." redirectStderr="true" stderrFile="output.log" stderrMode="overwrite" redirectStdout="true" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="true" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false">
         <versionInfo include="false" fileVersion="" fileDescription="" legalCopyright="" internalName="" />
       </executable>
       <splashScreen show="false" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="" java6SplashScreen="false">
@@ -88,7 +91,7 @@
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.applications.InstallerApplication">
               <void property="customWatermarkText">
-                <string>${compiler:website}</string>
+                <string>${compiler:urlWebsite}</string>
               </void>
             </object>
           </java>
@@ -378,7 +381,7 @@
           <java class="java.beans.XMLDecoder">
             <object class="com.install4j.runtime.beans.applications.UninstallerApplication">
               <void property="customWatermarkText">
-                <string>${compiler:website}</string>
+                <string>${compiler:urlWebsite}</string>
               </void>
             </object>
           </java>
@@ -498,7 +501,7 @@
                 </object>
               </void>
               <void property="customWatermarkText">
-                <string>${compiler:website}</string>
+                <string>${compiler:urlWebsite}</string>
               </void>
               <void property="executableName">
                 <string>updater</string>
@@ -756,6 +759,11 @@
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.screens.CustomizableBannerScreen">
+                      <void property="bannerImageFile">
+                        <object class="com.install4j.api.beans.ExternalFile">
+                          <string>./scribanner.png</string>
+                        </object>
+                      </void>
                       <void property="infoText">
                         <string>${i18n:updater.UpToDateInfoText("${compiler:sys.fullName}")}</string>
                       </void>
@@ -870,25 +878,20 @@
                     <initScript />
                     <visibiltyScript />
                   </formComponent>
-                  <formComponent name="" id="86" beanClass="com.install4j.runtime.beans.formcomponents.HyperlinkActionLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                  <formComponent name="" id="701" beanClass="com.install4j.runtime.beans.formcomponents.HyperlinkLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
                     <serializedBean>
                       <java class="java.beans.XMLDecoder">
-                        <object class="com.install4j.runtime.beans.formcomponents.HyperlinkActionLabelComponent">
-                          <void property="actionScript">
-                            <object class="com.install4j.api.beans.ScriptProperty">
-                              <void property="value">
-                                <string>context.goForward(1, false, false);</string>
-                              </void>
-                            </object>
-                          </void>
+                        <object class="com.install4j.runtime.beans.formcomponents.HyperlinkLabelComponent">
                           <void property="hyperlinkText">
-                            <string>${i18n:updater.ShowComments}</string>
+                            <string>${compiler:changeLog}</string>
+                          </void>
+                          <void property="url">
+                            <string>${compiler:urlWhatsNew}</string>
                           </void>
                         </object>
                       </java>
                     </serializedBean>
-                    <initScript>boolean hasComment = ((String)context.getVariable("updaterComment")).length() &gt; 0;
-component.setVisible(hasComment);</initScript>
+                    <initScript />
                     <visibiltyScript />
                   </formComponent>
                   <formComponent name="" id="87" beanClass="com.install4j.runtime.beans.formcomponents.SpacerComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
@@ -1063,6 +1066,11 @@ if (wizardContext != null) {
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.screens.BannerFormScreen">
+                      <void property="bannerImageFile">
+                        <object class="com.install4j.api.beans.ExternalFile">
+                          <string>./scribanner.png</string>
+                        </object>
+                      </void>
                       <void property="infoText">
                         <string>${i18n:updater.FinishInfoText("${compiler:sys.fullName}")}</string>
                       </void>
@@ -1206,6 +1214,27 @@ if (wizardContext != null) {
 }</initScript>
                     <visibiltyScript />
                   </formComponent>
+                  <formComponent name="" id="672" beanClass="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
+                    <serializedBean>
+                      <java class="java.beans.XMLDecoder">
+                        <object class="com.install4j.runtime.beans.formcomponents.MultilineLabelComponent">
+                          <void property="labelColor">
+                            <object class="java.awt.Color">
+                              <int>255</int>
+                              <int>0</int>
+                              <int>0</int>
+                              <int>255</int>
+                            </object>
+                          </void>
+                          <void property="labelText">
+                            <string>${compiler:linuxWarning}</string>
+                          </void>
+                        </object>
+                      </java>
+                    </serializedBean>
+                    <initScript />
+                    <visibiltyScript />
+                  </formComponent>
                   <formComponent name="" id="104" beanClass="com.install4j.runtime.beans.formcomponents.HyperlinkActionLabelComponent" enabled="true" commentSet="false" comment="" insetTop="" insetLeft="" insetBottom="" insetRight="" resetInitOnPrevious="false">
                     <serializedBean>
                       <java class="java.beans.XMLDecoder">
@@ -1253,7 +1282,7 @@ if (wizardContext != null) {
     </applications>
   </installerGui>
   <mediaSets>
-    <win32 name="Windows x86" id="62" mediaFileName="${compiler:sys.shortName}_windows_x86_${compiler:sys.version}" installDir="Tablet" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.6.0_16" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
+    <win32 name="Windows x86" id="62" mediaFileName="${compiler:sys.shortName}_windows_x86_${compiler:sys.version}" installDir="Tablet" overridePrincipalLanguage="false" requires64bit="false" jreBitType="32" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-x86-1.6.0_16" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
       <excludedLaunchers>
         <launcher id="435" />
       </excludedLaunchers>
@@ -1263,7 +1292,7 @@ if (wizardContext != null) {
       <exclude />
       <variables />
     </win32>
-    <win32 name="Windows x64" id="262" mediaFileName="${compiler:sys.shortName}_windows_x64_${compiler:sys.version}" installDir="Tablet" overridePrincipalLanguage="false" requires64bit="true" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-amd64-1.6.0_16_x64" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
+    <win32 name="Windows x64" id="262" mediaFileName="${compiler:sys.shortName}_windows_x64_${compiler:sys.version}" installDir="Tablet" overridePrincipalLanguage="false" requires64bit="true" jreBitType="64" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="windows-amd64-1.6.0_16_x64" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" runAsAdmin="false">
       <excludedLaunchers>
         <launcher id="20" />
       </excludedLaunchers>
@@ -1273,14 +1302,14 @@ if (wizardContext != null) {
       <exclude />
       <variables />
     </win32>
-    <macos name="Mac OS X Single Bundle" id="186" mediaFileName="" installDir="Tablet" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" launcherId="435">
+    <macos name="Mac OS X Single Bundle" id="186" mediaFileName="" installDir="Tablet" overridePrincipalLanguage="false" requires64bit="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="" launcherId="435">
       <excludedComponents />
       <excludedBeans />
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude />
       <variables />
     </macos>
-    <unixInstaller name="Linux Installer x86" id="187" mediaFileName="${compiler:sys.shortName}_linux_x86_${compiler:sys.version}" installDir="Tablet" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="linux-x86-1.6.0_16_client_only" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
+    <unixInstaller name="Linux Installer x86" id="187" mediaFileName="${compiler:sys.shortName}_linux_x86_${compiler:sys.version}" installDir="Tablet" overridePrincipalLanguage="false" requires64bit="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="linux-x86-1.6.0_16" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
       <excludedLaunchers>
         <launcher id="435" />
       </excludedLaunchers>
@@ -1293,7 +1322,7 @@ if (wizardContext != null) {
         <scriptLines />
       </installerScript>
     </unixInstaller>
-    <unixInstaller name="Linux Installer x64" id="433" mediaFileName="${compiler:sys.shortName}_linux_x64_${compiler:sys.version}" installDir="Tablet" overridePrincipalLanguage="false" requires64bit="false" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="linux-amd64-1.6.0_16_x64" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
+    <unixInstaller name="Linux Installer x64" id="433" mediaFileName="${compiler:sys.shortName}_linux_x64_${compiler:sys.version}" installDir="Tablet" overridePrincipalLanguage="false" requires64bit="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" includedJRE="linux-amd64-1.6.0_16_x64" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" customInstallBaseDir="" createUninstallIcon="true" contentFilesType="1" downloadURL="">
       <excludedLaunchers>
         <launcher id="20" />
       </excludedLaunchers>

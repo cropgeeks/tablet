@@ -38,10 +38,11 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Tablet");
 		// This disables the API preferences, which can cause problems on Linux
 		// - see: http://www.allaboutbalance.com/articles/disableprefs
-		System.setProperty("java.util.prefs.PreferencesFactory", "scri.commons.gui.DisabledPreferencesFactory");
+//		System.setProperty("java.util.prefs.PreferencesFactory", "scri.commons.gui.DisabledPreferencesFactory");
 
 		Prefs.setDefaults();
 		prefs.loadPreferences(prefsFile, Prefs.class);
+		prefs.savePreferences(prefsFile, Prefs.class);
 
 		Icons.initialize("/res/icons", ".png");
 		RB.initialize(Prefs.localeText, "res.text.tablet");
@@ -100,9 +101,6 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 				// Do we want to open an initial project?
 				if (initialFiles != null)
 					winMain.getCommands().fileOpen(initialFiles);
-
-				if (Install4j.displayUpdate)
-					TabletUtils.visitURL("http://bioinf.scri.ac.uk/tablet/help/whats-new.shtml");
 			}
 
 			public void windowClosing(WindowEvent e)
