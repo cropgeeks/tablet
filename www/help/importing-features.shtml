@@ -30,6 +30,12 @@ the feature starts. It will also be highlighted for a few seconds. (If you wish 
 outline the column more permanently, right-click it and select <b>Outline > Outline
 Column</b> from the popup menu.)</p>
 
+<p>Tablet can treat feature positions as either padded or unpadded depending on
+whether the <b>Feature values are padded</b> checkbox is selected or not. This
+setting determines where in the consensus sequence a feature will start and end,
+with padded values counting pad (*) characters and unpadded  values ignoring them.
+</p>
+
 
 <!--#include virtual="footer.html" -->
 
