@@ -108,6 +108,13 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 		int start = feature.getP1();
 		int end   = feature.getP2();
 
+		// Override position if we're using unpadded values
+		if (Prefs.guiFeaturesArePadded == false)
+		{
+			start = DisplayData.getUnpaddedPosition(start);
+			end = DisplayData.getUnpaddedPosition(end);
+		}
+
 		start = start + contig.getConsensusOffset();
 		end = end + contig.getConsensusOffset();
 
