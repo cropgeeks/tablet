@@ -116,6 +116,14 @@
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.screens.WelcomeScreen">
+                  <void property="bannerBackground">
+                    <object class="java.awt.Color">
+                      <int>255</int>
+                      <int>255</int>
+                      <int>255</int>
+                      <int>255</int>
+                    </object>
+                  </void>
                   <void property="bannerImageFile">
                     <object class="com.install4j.api.beans.ExternalFile">
                       <string>./scribanner.png</string>
@@ -314,6 +322,14 @@
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.screens.FinishedScreen">
+                  <void property="bannerBackground">
+                    <object class="java.awt.Color">
+                      <int>255</int>
+                      <int>255</int>
+                      <int>255</int>
+                      <int>255</int>
+                    </object>
+                  </void>
                   <void property="bannerImageFile">
                     <object class="com.install4j.api.beans.ExternalFile">
                       <string>./scribanner.png</string>
@@ -415,6 +431,14 @@
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.screens.UninstallWelcomeScreen">
+                  <void property="bannerBackground">
+                    <object class="java.awt.Color">
+                      <int>255</int>
+                      <int>255</int>
+                      <int>255</int>
+                      <int>255</int>
+                    </object>
+                  </void>
                   <void property="bannerImageFile">
                     <object class="com.install4j.api.beans.ExternalFile">
                       <string>./scribanner.png</string>
@@ -469,6 +493,14 @@
             <serializedBean>
               <java class="java.beans.XMLDecoder">
                 <object class="com.install4j.runtime.beans.screens.UninstallSuccessScreen">
+                  <void property="bannerBackground">
+                    <object class="java.awt.Color">
+                      <int>255</int>
+                      <int>255</int>
+                      <int>255</int>
+                      <int>255</int>
+                    </object>
+                  </void>
                   <void property="bannerImageFile">
                     <object class="com.install4j.api.beans.ExternalFile">
                       <string>./scribanner.png</string>
@@ -759,6 +791,14 @@
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.screens.CustomizableBannerScreen">
+                      <void property="bannerBackground">
+                        <object class="java.awt.Color">
+                          <int>255</int>
+                          <int>255</int>
+                          <int>255</int>
+                          <int>255</int>
+                        </object>
+                      </void>
                       <void property="bannerImageFile">
                         <object class="com.install4j.api.beans.ExternalFile">
                           <string>./scribanner.png</string>
@@ -1066,6 +1106,14 @@ if (wizardContext != null) {
                 <serializedBean>
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.screens.BannerFormScreen">
+                      <void property="bannerBackground">
+                        <object class="java.awt.Color">
+                          <int>255</int>
+                          <int>255</int>
+                          <int>255</int>
+                          <int>255</int>
+                        </object>
+                      </void>
                       <void property="bannerImageFile">
                         <object class="com.install4j.api.beans.ExternalFile">
                           <string>./scribanner.png</string>
