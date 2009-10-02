@@ -144,18 +144,13 @@ public class IOHandler
 			}
 
 			int reads = 0;
-
-			//Mark our position in the Maq file, quickly parse through to get the
-			//number of reads in the contig, then reset to this position.
-			reader.getInMaq().mark(10000000);
 			String[] vars = reader.getReadInfo();
 			while(reader.getContigName().equals("@"+vars[2]))
 			{
+				tempList.add(vars);
 				reads++;
 				vars = reader.getReadInfo();
 			}
-			//reset to the marked position.
-			reader.getInMaq().reset();
 
 			//Write the contig header to disk.
 			writer.writeContig(new String(reader.getContigName().substring(1)), reader.getConsensus().toString(), true, reads);
@@ -164,18 +159,17 @@ public class IOHandler
 			writer.writeBaseQualities(bq);
 
 			//Write the read information to disk
-			for(int i=reads; i > 0; i--)
+			for(String[] readInfo : tempList)
 			{
-				vars = reader.getReadInfo();
-				writer.writeReadInfo(vars[0], vars[3].equals("-"), Integer.parseInt(vars[4]));
-				//temporarily store some read data until it can be written
-				tempList.add(vars);
+				writer.writeReadInfo(readInfo[0], readInfo[3].equals("-"), Integer.parseInt(readInfo[4]));
 			}
 
 			//Write the read data to disk.
 			for(String[] readInfo : tempList)
 			{
 				writer.writeReadData(readInfo[0], readInfo[1]);
+				System.out.println(readInfo[0] + " " + readInfo[1]);
+				return;
 			}
 			//clear the temporary memory cache of read info.
 			tempList.clear();
@@ -183,7 +177,7 @@ public class IOHandler
 			contigsWritten++;
 			
 			//update the progress bar
-			progressBar(totalContigs, contigsWritten);
+			//progressBar(totalContigs, contigsWritten);
 		}
 	}
 
