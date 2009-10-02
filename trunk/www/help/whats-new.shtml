@@ -23,6 +23,13 @@ changes between versions, please see the <a href="http://bioinf.scri.ac.uk/table
 subversion change log</a>.</p>
 
 
+<h3>New in 0.09.10.02</h3>
+
+<ul>
+<li>BUG: Fixed a parsing error with fasta/fastq files.</li>
+<ul>
+
+
 <h3>New in 0.09.10.01</h3>
 
 <ul>

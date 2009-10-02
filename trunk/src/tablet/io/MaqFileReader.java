@@ -103,7 +103,11 @@ public class MaqFileReader extends TrackableReader
 			{
 				sb = new StringBuilder();
 
-				String name = str.substring(1, str.length());
+				String name;
+				if (str.indexOf(" ") != -1)
+					name = str.substring(1, str.indexOf(" "));
+				else
+					name = str.substring(1);
 
 				contig = new Contig(name, true, 0);
 				contigHash.put(name, contig);
