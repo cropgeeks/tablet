@@ -27,7 +27,7 @@ subversion change log</a>.</p>
 
 <ul>
 <li>BUG: Fixed a parsing error with fasta/fastq files.</li>
-<ul>
+</ul>
 
 
 <h3>New in 0.09.10.01</h3>

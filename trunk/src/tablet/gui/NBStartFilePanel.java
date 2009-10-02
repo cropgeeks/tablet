@@ -54,7 +54,7 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
 			String filePath = tempFiles[0].getPath();
 			for (int i = 1; i < tempFiles.length; i++)
 			{
-				text += "  ~  " + tempFiles[i].getName();
+				text += "&nbsp;&nbsp;~&nbsp;&nbsp;" + tempFiles[i].getName();
 				filePath += " ~ " + tempFiles[i].getPath();
 			}
 
