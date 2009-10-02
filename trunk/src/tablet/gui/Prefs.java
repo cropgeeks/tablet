@@ -51,6 +51,9 @@ public class Prefs extends XMLPreferences
 	public static boolean guiWarnOnClose = true;
 	public static boolean guiWarnOnExit = true;
 
+	// The warning shown when toggling between padded/unpadded feature values
+	public static boolean guiWarnOnPaddedFeatureToggle = true;
+
 	// The last selected file type in the open assembly dialog
 	public static int guiLastFileType = 0;
 	// A list of previously accessed ace documents
@@ -79,6 +82,7 @@ public class Prefs extends XMLPreferences
 	// What was that last type of jumpToBase jump performed?
 	public static boolean guiUsePaddedJumpToBases = true;
 	public static int guiJumpToBase = 1;
+	public static boolean guiFeaturesArePadded = true;
 
 	// Colour scheme in use
 	public static int visColorScheme = ColorScheme.STANDARD;

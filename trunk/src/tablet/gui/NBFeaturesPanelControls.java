@@ -1,28 +1,15 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
-/*
- * NBFeaturesPanelControls.java
- *
- * Created on 14-Sep-2009, 16:21:40
- */
-
 package tablet.gui;
 
-import javax.swing.RowFilter;
+import java.awt.event.*;
+import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import scri.commons.gui.RB;
 
-/**
- *
- * @author gsteph
- */
-public class NBFeaturesPanelControls extends javax.swing.JPanel implements DocumentListener
+import scri.commons.gui.*;
+
+class NBFeaturesPanelControls extends JPanel
+	implements ActionListener, DocumentListener
 {
-
 	private FeaturesPanel panel;
 
     /** Creates new form NBFeaturesPanelControls */
@@ -34,8 +21,13 @@ public class NBFeaturesPanelControls extends javax.swing.JPanel implements Docum
 
 		// i18n text
 		RB.setText(filterLabel, "gui.NBFeaturesPanelControls.filterLabel");
+		RB.setText(checkPadded, "gui.NBFeaturesPanelControls.checkPadded");
+		checkPadded.setToolTipText(RB.getString("gui.NBFeaturesPanelControls.checkPaddedTooltip"));
+
+		checkPadded.setSelected(Prefs.guiFeaturesArePadded);
 
 		filterText.getDocument().addDocumentListener(this);
+		checkPadded.addActionListener(this);
     }
 
 	public void changedUpdate(DocumentEvent e)
@@ -63,6 +55,22 @@ public class NBFeaturesPanelControls extends javax.swing.JPanel implements Docum
 		panel.setTableFilter(rf);
 	}
 
+	public void actionPerformed(ActionEvent e)
+	{
+		if (Prefs.guiWarnOnPaddedFeatureToggle)
+		{
+			String msg = RB.getString("gui.NBFeaturesPanelControls.checkMessage");
+			JCheckBox checkbox = new JCheckBox();
+			RB.setText(checkbox, "gui.NBFeaturesPanelControls.checkWarning");
+
+			TaskDialog.info(msg, RB.getString("gui.text.close"), checkbox);
+
+			Prefs.guiWarnOnPaddedFeatureToggle = !checkbox.isSelected();
+		}
+
+		Prefs.guiFeaturesArePadded = checkPadded.isSelected();
+	}
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -74,9 +82,12 @@ public class NBFeaturesPanelControls extends javax.swing.JPanel implements Docum
 
         filterLabel = new javax.swing.JLabel();
         filterText = new javax.swing.JTextField();
+        checkPadded = new javax.swing.JCheckBox();
 
         filterLabel.setLabelFor(filterText);
         filterLabel.setText("Filter by type:");
+
+        checkPadded.setText("Feature values are padded");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -84,9 +95,12 @@ public class NBFeaturesPanelControls extends javax.swing.JPanel implements Docum
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(filterLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(filterText, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(checkPadded)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(filterLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(filterText, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -96,12 +110,15 @@ public class NBFeaturesPanelControls extends javax.swing.JPanel implements Docum
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(filterLabel)
                     .addComponent(filterText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(checkPadded)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JCheckBox checkPadded;
     private javax.swing.JLabel filterLabel;
     private javax.swing.JTextField filterText;
     // End of variables declaration//GEN-END:variables
