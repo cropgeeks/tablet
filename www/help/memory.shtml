@@ -27,7 +27,7 @@ instructions below.</p>
 <p>Note though, that for any 32-bit system, the maximum amount of memory Tablet will
 be able to use will be somewhere between 1.5GB and 2GB, regardless of the total
 amount of memory installed. If you have data sets requiring more memory than
-this then Tablet must be run under a 64-bit operating system.</p>
+this then you must run a 64-bit copy of Tablet on a 64-bit operating system.</p>
 
 
 <h3>Windows & Linux</h3>
