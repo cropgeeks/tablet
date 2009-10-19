@@ -93,6 +93,7 @@ public class WinMain extends JRibbonFrame
 		ctrlTabs.setEnabledAt(1, false);
 
 		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
+		splitter.setBorder(BorderFactory.createEmptyBorder());
 		splitter.setDividerLocation(Prefs.guiSplitterLocation);
 		splitter.setOneTouchExpandable(true);
 		splitter.setLeftComponent(ctrlTabs);
