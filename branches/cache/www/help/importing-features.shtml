@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="../stylesheet/styles.css" type="text/css">
+
+<title>Importing Features</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.html" -->
+
+
+<h2>Importing Features</h2>
+
+<p>Select <b>Import Features</b> from the <a href="ribbon.shtml">Ribbon Bar</a>
+to import a <a href="http://www.sequenceontology.org/gff3.shtml">GFF3 formatted</a>
+file containing additional feature information that
+you want to associated with an assembly.
+
+<p>Once a feature file has been loaded, the <b>Features Browser</b> tab will become
+active whenever a contig is selected that contains features.</p>
+
+<p>Clicking on a feature will automatically move the view to the column where
+the feature starts. It will also be highlighted for a few seconds. (If you wish to
+outline the column more permanently, right-click it and select <b>Outline > Outline
+Column</b> from the popup menu.)</p>
+
+<p>Tablet can treat feature positions as either padded or unpadded depending on
+whether the <b>Feature values are padded</b> checkbox is selected or not. This
+setting determines where in the consensus sequence a feature will start and end,
+with padded values counting pad (*) characters and unpadded  values ignoring them.
+</p>
+
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>

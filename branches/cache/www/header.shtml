@@ -1,0 +1,45 @@
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script>
+<script type="text/javascript">
+try {
+var pageTracker = _gat._getTracker("UA-5735678-5");
+pageTracker._trackPageview();
+} catch(err) {}</script>
+
+<div id="page">
+
+
+<div id="header">
+	<span class="logo">
+	</span>
+</div>
+
+<div id="headerImage">
+</div>
+
+<div id="topNav">
+	<span class="headerText">
+		<b>Plant Bioinformatics Group</b>
+	</span>
+</div>
+
+<div id="navigation">
+
+<div class="block-header">Tablet</div>
+<ul class="navigation">
+  <li><a href="index.shtml">Tablet Homepage</a></li>
+  <li><a href="download.shtml">Download Tablet</a></li>
+  <li><a href="screenshots.shtml">Screenshots</a></li>
+  <li><a href="faq.shtml">Tablet FAQ</a></li>
+  <li><a href="privacy-policy.shtml">Privacy Policy</a></li>
+  <p></p>
+  <li><a href="help">Online Help</a></li>
+</ul>
+
+<!--#include virtual="../software_common/links.html" -->
+
+</div>
+
+<div id="content">

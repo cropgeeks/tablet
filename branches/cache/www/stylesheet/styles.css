@@ -1,0 +1,177 @@
+body
+{
+	font-size: 62.5%; /* Resets 1em to 10px */
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	color: #333;
+}
+
+#page
+{
+	background-color: white;
+	margin: 20px auto;
+	padding: 0;
+	width: 870px;
+}
+
+#header
+{
+	background: #fff url('top-header.png') no-repeat top center;
+	background-color: #fff;
+	margin: 0 0 0 1px;
+	padding: 0;
+	height: 86px;
+	width: 870px;
+	text-align: right;
+}
+
+.logo
+{
+	position: relative;
+	background: url('scri.gif');
+	display: inline;
+	float: left;
+	margin: 1.3em 0pt 0pt 1.6em;
+	width: 175px;
+	height: 53px;
+}
+
+#headerImage
+{
+	background: #fff url('genetics.png') no-repeat top center;
+	background-color: #fff;
+	margin: 0 0 0 1px;
+	padding: 0;
+	height: 150px;
+	width: 870px;
+}
+
+#topNav
+{
+	background: #fff url('main-nav-bg.png') no-repeat top center;
+	background-color: #fff;
+	margin: 0 0 0 1px;
+	padding: 0;
+	height: 60px;
+	width: 870px;
+	text-align: right;
+}
+
+.headerText
+{
+	display: inline;
+	float: right;
+	margin: 11pt 10pt 0pt 1.6em;
+	font-size: 13px;
+}
+
+.block-header
+{
+	background-image: url('right-side-bit-top.png');
+	line-height: 20px;
+	padding-left: 15px;
+	font-size: 12px;
+	color: #FFF;
+	background-repeat: no-repeat;
+}
+
+#navigation
+{
+	float: left;
+	width: 220px;
+	font-size: 11px;
+}
+
+UL
+{
+	list-style-image: url('button.png');
+}
+
+UL.navigation
+{
+	line-height: 1.2;
+}
+
+LI
+{
+	margin-bottom: 3px;
+}
+
+.capture
+{
+	border: 0;
+	margin-left: 30px;
+}
+
+#content
+{
+	float: right;
+	width: 650px;
+	font-size: 11px;
+
+	color: #474747;
+	line-height: 1.5em;
+
+}
+
+A:link, A:visited, A:active
+{
+    text-decoration: none;
+    color: #0066B2;
+}
+
+A:hover
+{
+	text-decoration: underline;
+}
+
+h2
+{
+	border-bottom: 1px solid #438500;
+	color:#0066B2;
+	font-size:150%;
+	font-weight:lighter;
+	margin-bottom:0.6em;
+	padding:0pt 0pt 10px 0px;
+}
+
+h3
+{
+	color:#438500;
+	font-size:120%;
+	line-height:20px;
+}
+
+h5
+{
+	font-size:110%;
+	line-height:10px;
+}
+
+#footer
+{
+	background: url('footer-bg.png');
+	padding: 0;
+	margin: 0 auto;
+	width: 870px;
+	height: 60px;
+	clear: both;
+	background-repeat: no-repeat;
+}
+
+#footer p
+{
+	margin: 0;
+	padding:25px 0;
+	text-align: center;
+}
+
+.w3c
+{
+	position: relative;
+	background: url('w3c.png');
+	display: inline;
+	float: right;
+	margin: 17px 20px -200px 0;
+	width: 180px;
+	height: 31px;
+}
