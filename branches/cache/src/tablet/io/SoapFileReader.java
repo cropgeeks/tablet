@@ -7,10 +7,9 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
+import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
-import tablet.data.auxiliary.*;
-import static tablet.io.ReadException.*;
 
 import scri.commons.file.*;
 
@@ -138,7 +137,7 @@ class SoapFileReader extends TrackableReader
 	private void readSoapFile()
 		throws Exception
 	{
-/*
+
 		if (useAscii)
 			in = new BufferedReader(new InputStreamReader(getInputStream(soapIndex), "ASCII")); // ISO8859_1
 		else
@@ -153,14 +152,12 @@ class SoapFileReader extends TrackableReader
 			String[] tokens = str.split("\t");
 
 			String name = new String(tokens[0]);
-			String data = tokens[1];
+			String data = new String(tokens[1]);
 			String chr  = tokens[7];
 			boolean complemented = tokens[6].equals("-");
 			int pos = Integer.parseInt(tokens[8]) - 1;
 
 			Read read = new Read(readID, pos);
-			read.setData(data.toString());
-
 
 			Contig contigToAddTo = contigHash.get(chr);
 
@@ -168,15 +165,22 @@ class SoapFileReader extends TrackableReader
 			{
 				contigToAddTo.getReads().add(read);
 
-				ReadMetaData rmd = new ReadMetaData(
-					name, complemented, read.calculateUnpaddedLength());
+				ReadMetaData rmd = new ReadMetaData(name, complemented);
+				rmd.setData(data.toString());
+				rmd.calculateUnpaddedLength();
+				read.setLength(rmd.length());
+
+				// Do base-position comparison...
+				BasePositionComparator.compare(contigToAddTo.getConsensus(), rmd,
+					read.getStartPosition());
+
 				readCache.setReadMetaData(rmd);
+
 				readID++;
 			}
 		}
 
 		in.close();
-*/
 	}
 
 	private void addContig(Contig contig, Consensus consensus, StringBuilder sb)

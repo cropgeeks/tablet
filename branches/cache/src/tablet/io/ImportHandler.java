@@ -46,21 +46,16 @@ public class ImportHandler implements ITrackableJob
 		if (jobIndex == 0)
 			currentJob = new AssemblyFileHandler(files);
 
-		// Rewrite the internal read data if it differs from the consensus
-		else if (jobIndex == 1)
-		{
-			assembly = ((AssemblyFileHandler)currentJob).getAssembly();
-			currentJob = new BasePositionComparator(assembly);
-		}
-
 		currentJob.runJob(0);
+
+		assembly = ((AssemblyFileHandler)currentJob).getAssembly();
 	}
 
 	public Assembly getAssembly()
 		{ return assembly; }
 
 	public int getJobCount()
-		{ return 2; }
+		{ return 1; }
 
 	public void cancelJob()
 	{
