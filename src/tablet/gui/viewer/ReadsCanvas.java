@@ -62,10 +62,12 @@ class ReadsCanvas extends JPanel
 	LinkedList<IOverlayRenderer> overlays = new LinkedList<IOverlayRenderer>();
 
 	// Objects for multicore rendering
-	private int cores = 1;// Runtime.getRuntime().availableProcessors();
+	private int cores = Runtime.getRuntime().availableProcessors();
 	private ExecutorService executor;
 	private Future[] tasks;
 
+	// Stores the data to be rendered (from the cache)
+	private ArrayList<byte[]> rowData;
 
 	ReadsCanvas()
 	{
@@ -257,6 +259,11 @@ class ReadsCanvas extends JPanel
 		yE = yS + ntOnScreenY;
 		if (yE >= ntOnCanvasY) yE = ntOnCanvasY-1;
 
+		// Generate the data to be rendered
+		rowData = new ArrayList<byte[]>(yE-yS+1);
+		for (int row = yS; row <= yE; row++)
+			rowData.add(reads.getValues(row, xS-offset, xE-offset));
+
 		// Paint the lines using multiple cores...
 		for (int i = 0; i < tasks.length; i++)
 			tasks[i] = executor.submit(new LinePainter(g, yS+i));
@@ -293,9 +300,9 @@ class ReadsCanvas extends JPanel
 		public void run()
 		{
 			// For every [nth] row, where n = number of available CPU cores...
-			for (int row = yS, y = (ntH*yS); row <= yE; row += cores, y += ntH*cores)
+			for (int row = 0, y = (ntH*yS); row < rowData.size(); row += cores, y += ntH*cores)
 			{
-				byte[] data = reads.getValues(row, xS-offset, xE-offset);
+				byte[] data = rowData.get(row);
 
 				for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
 					if (data[i] != -1)
