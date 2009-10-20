@@ -155,6 +155,8 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 	private void renderSequence(Graphics2D g)
 	{
+		ReadMetaData rmd = Assembly.getReadMetaData(read);
+
 		float xScale = read.length() / (float) (w - 10);
 
 		for (int x = 10; x < w-10; x++)
@@ -163,7 +165,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			int dataX = (int) (x * xScale);
 
 			// Then drawing that data
-			byte b = read.getStateAt(dataX);
+			byte b = rmd.getStateAt(dataX);
 
 			g.setColor(rCanvas.colors.getColor(b));
 			g.drawLine(x, 70, x, 80);

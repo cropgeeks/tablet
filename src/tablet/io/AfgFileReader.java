@@ -174,7 +174,7 @@ class AfgFileReader extends TrackableReader
 	//parses a TLE tag -- this contains the info about the alignment of a read against the consensus
 	private void processReadLocation() throws Exception
 	{
-		if(!firstTileFound)
+/*		if(!firstTileFound)
 		{
 			firstTileFound = true;
 			cache.openForReading();
@@ -290,6 +290,7 @@ class AfgFileReader extends TrackableReader
 		//every so often, print out the number of reads found
 		if (readsFound % 250000 == 0)
 			System.out.println(" reads found: " + readsFound);
+*/
 	}
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -297,7 +298,7 @@ class AfgFileReader extends TrackableReader
 	//parses a RED tag -- contains read information (internal ID, external ID i.e. name, unpadded sequence, quality scores)
 	private void processRead() throws Exception
 	{
-		Read read = new Read();
+/*		Read read = new Read();
 
 		//String qualScores = null; // quality scores for  sequence  -- not used for now
 
@@ -342,6 +343,7 @@ class AfgFileReader extends TrackableReader
 		//consensus sequence
 		//at this point the read is not complemented so we can set the boolean (3rd param) to false accordingly
 		afgReadList.add(new AfgRead(read, false));
+*/
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -386,6 +388,7 @@ class AfgFileReader extends TrackableReader
 
 	private void reverseComplementRead(Read read)
 	{
+/*
 		int length = read.length();
 		StringBuilder sb = new StringBuilder(length);
 
@@ -396,6 +399,7 @@ class AfgFileReader extends TrackableReader
 		}
 
 		read.setData(sb.toString());
+*/
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------

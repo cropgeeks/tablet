@@ -138,6 +138,7 @@ class SoapFileReader extends TrackableReader
 	private void readSoapFile()
 		throws Exception
 	{
+/*
 		if (useAscii)
 			in = new BufferedReader(new InputStreamReader(getInputStream(soapIndex), "ASCII")); // ISO8859_1
 		else
@@ -175,6 +176,7 @@ class SoapFileReader extends TrackableReader
 		}
 
 		in.close();
+*/
 	}
 
 	private void addContig(Contig contig, Consensus consensus, StringBuilder sb)

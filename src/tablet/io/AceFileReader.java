@@ -240,13 +240,19 @@ class AceFileReader extends TrackableReader
 			seq.append(str);
 
 		// Fetch the read for this location
-		Read read = contig.getReads().get(rdIndex);
-		read.setData(seq.toString());
+//		Read read = contig.getReads().get(rdIndex);
+//		read.setData(seq.toString());
 
 		// Store the metadata about the read in the cache
-		ReadMetaData rmd = new ReadMetaData(
-			RD[1], ucCache[rdIndex], read.calculateUnpaddedLength());
+		ReadMetaData rmd = new ReadMetaData(RD[1], ucCache[rdIndex]);
+		rmd.setData(seq.toString());
+		rmd.calculateUnpaddedLength();
+
 		readCache.setReadMetaData(rmd);
+
+		// Fetch the read for this location
+		Read read = contig.getReads().get(rdIndex);
+		read.setLength(rmd.length());
 
 		rdIndex++;
 	}

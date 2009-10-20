@@ -86,7 +86,14 @@ public class FileCache implements IReadCache
 			// Unpadded length
 			int unpaddedLength = rnd.readInt();
 
-			return new ReadMetaData(name, isComplemented, unpaddedLength);
+			int dataLength = rnd.readInt();
+			byte[] data = new byte[dataLength];
+			rnd.read(data);
+
+			ReadMetaData rmd = new ReadMetaData(name, isComplemented, unpaddedLength);
+			rmd.setRawData(data);
+
+			return rmd;
 		}
 		catch (Exception e)
 		{
@@ -113,12 +120,20 @@ public class FileCache implements IReadCache
 		// Write out its unpadded length (length minus pad characters)
 		out.writeInt(readMetaData.getUnpaddedLength());
 
+		// Write out the length of the data
+		byte[] data = readMetaData.getRawData();
+		out.writeInt(data.length);
+		// And the data itself
+		out.write(data);
+
 		// Bytes written:
 		//   4   - INT, length of the name to follow
 		//   [n] - BYTES, the name itself
 		//   1   - BYTE, 0 or 1 (for C or U)
 		//   4   - INT, unpadded length
-		// = 9
-		byteCount += array.length + 9;
+		//   4   - INT, data length
+		//   [d] - BYTES, the data
+		// = 13
+		byteCount += array.length + 13 + data.length;
 	}
 }

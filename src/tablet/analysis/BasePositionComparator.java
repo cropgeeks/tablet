@@ -33,6 +33,12 @@ public class BasePositionComparator extends SimpleJob
 	public void runJob(int jobIndex)
 		throws Exception
 	{
+	}
+
+/*
+	public void runJob(int jobIndex)
+		throws Exception
+	{
 		long s = System.currentTimeMillis();
 
 		// Use the number of reads as a count of how much work will be done
@@ -115,4 +121,5 @@ public class BasePositionComparator extends SimpleJob
 			}
 		}
 	}
+*/
 }

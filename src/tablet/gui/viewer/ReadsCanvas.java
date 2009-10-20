@@ -62,7 +62,7 @@ class ReadsCanvas extends JPanel
 	LinkedList<IOverlayRenderer> overlays = new LinkedList<IOverlayRenderer>();
 
 	// Objects for multicore rendering
-	private int cores = Runtime.getRuntime().availableProcessors();
+	private int cores = 1;// Runtime.getRuntime().availableProcessors();
 	private ExecutorService executor;
 	private Future[] tasks;
 
@@ -219,7 +219,7 @@ class ReadsCanvas extends JPanel
 		}
 
 		long e = System.nanoTime();
-//		System.out.println("Render time: " + ((e-s)/1000000f) + "ms");
+		System.out.println("Render time: " + ((e-s)/1000000f) + "ms");
 	}
 
 	private void paintBuffer()

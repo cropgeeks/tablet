@@ -140,6 +140,7 @@ public class MaqFileReader extends TrackableReader
 	private void readMaqFile()
 			throws Exception
 	{
+/*
 		if (useAscii)
 			in = new BufferedReader(new InputStreamReader(getInputStream(maqIndex), "ASCII")); // ISO8859_1
 		else
@@ -177,6 +178,7 @@ public class MaqFileReader extends TrackableReader
 		}
 
 		in.close();
+*/
 	}
 
 	private void addContig(Contig contig, Consensus consensus, StringBuilder sb, StringBuilder qlt)

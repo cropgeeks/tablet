@@ -15,7 +15,7 @@ import tablet.data.cache.*;
 public class Assembly implements Iterable<Contig>
 {
 	private String name;
-	private IReadCache cache;
+	private static IReadCache cache;
 
 	private ArrayList<Contig> contigs = new ArrayList<Contig>();
 
@@ -88,7 +88,7 @@ public class Assembly implements Iterable<Contig>
 	 * Finds and returns the read meta data for the given read.
 	 * @return the read meta data for the given read
 	 */
-	public ReadMetaData getReadMetaData(Read read)
+	public static ReadMetaData getReadMetaData(Read read)
 	{
 		return cache.getReadMetaData(read.getID());
 	}

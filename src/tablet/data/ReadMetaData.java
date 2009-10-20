@@ -10,7 +10,7 @@ package tablet.data;
  * because it isn't needed at all times and can be fetched from the cache as and
  * when it *is* needed.
  */
-public class ReadMetaData
+public class ReadMetaData extends Sequence
 {
 	private String name;
 
@@ -18,6 +18,12 @@ public class ReadMetaData
 	private boolean isComplemented;
 
 	private int unpaddedLength;
+
+	public ReadMetaData(String name, boolean isComplemented)
+	{
+		this.name = name;
+		this.isComplemented = isComplemented;
+	}
 
 	public ReadMetaData(String name, boolean isComplemented, int unpaddedLength)
 	{
@@ -34,4 +40,9 @@ public class ReadMetaData
 
 	public int getUnpaddedLength()
 		{ return unpaddedLength; }
+
+	public int calculateUnpaddedLength()
+	{
+		return (unpaddedLength = super.calculateUnpaddedLength());
+	}
 }
