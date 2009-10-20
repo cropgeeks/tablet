@@ -266,7 +266,7 @@ class ReadsCanvas extends JPanel
 
 		// Paint the lines using multiple cores...
 		for (int i = 0; i < tasks.length; i++)
-			tasks[i] = executor.submit(new LinePainter(g, yS+i));
+			tasks[i] = executor.submit(new LinePainter(g, i, yS+i));
 		for (Future task: tasks)
 			task.get();
 
@@ -289,18 +289,19 @@ class ReadsCanvas extends JPanel
 	private final class LinePainter implements Runnable
 	{
 		private Graphics g;
-		private int yS;
+		private int row, yS;
 
-		LinePainter(Graphics g, int yS)
+		LinePainter(Graphics g, int row, int yS)
 		{
 			this.g = g;
+			this.row = row;
 			this.yS = yS;
 		}
 
 		public void run()
 		{
 			// For every [nth] row, where n = number of available CPU cores...
-			for (int row = 0, y = (ntH*yS); row < rowData.size(); row += cores, y += ntH*cores)
+			for (int y = (ntH*yS); row < rowData.size(); row += cores, y += ntH*cores)
 			{
 				byte[] data = rowData.get(row);
 
