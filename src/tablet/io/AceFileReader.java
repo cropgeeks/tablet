@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
+import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
 import tablet.data.auxiliary.*;
@@ -240,19 +241,19 @@ class AceFileReader extends TrackableReader
 			seq.append(str);
 
 		// Fetch the read for this location
-//		Read read = contig.getReads().get(rdIndex);
-//		read.setData(seq.toString());
+		Read read = contig.getReads().get(rdIndex);
 
 		// Store the metadata about the read in the cache
 		ReadMetaData rmd = new ReadMetaData(RD[1], ucCache[rdIndex]);
 		rmd.setData(seq.toString());
 		rmd.calculateUnpaddedLength();
+		read.setLength(rmd.length());
+
+		// Do base-position comparison...
+		BasePositionComparator.compare(contig.getConsensus(), rmd,
+			read.getStartPosition());
 
 		readCache.setReadMetaData(rmd);
-
-		// Fetch the read for this location
-		Read read = contig.getReads().get(rdIndex);
-		read.setLength(rmd.length());
 
 		rdIndex++;
 	}

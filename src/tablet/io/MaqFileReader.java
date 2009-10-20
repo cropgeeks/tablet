@@ -3,8 +3,9 @@ package tablet.io;
 import java.io.*;
 import java.util.*;
 
+import tablet.analysis.*;
 import tablet.data.*;
-import tablet.data.cache.IReadCache;
+import tablet.data.cache.*;
 
 public class MaqFileReader extends TrackableReader
 {
@@ -140,7 +141,6 @@ public class MaqFileReader extends TrackableReader
 	private void readMaqFile()
 			throws Exception
 	{
-/*
 		if (useAscii)
 			in = new BufferedReader(new InputStreamReader(getInputStream(maqIndex), "ASCII")); // ISO8859_1
 		else
@@ -154,15 +154,13 @@ public class MaqFileReader extends TrackableReader
 		{
 			String[] tokens = str.split("\t");
 
-			String name = tokens[0];
-			String data = tokens[14];
+			String name = new String(tokens[0]);
+			String data = new String(tokens[14]);
 			String chr  = tokens[1];
 			boolean complemented = tokens[3].equals("-");
 			int pos = Integer.parseInt(tokens[2]) - 1;
 
 			Read read = new Read(readID, pos);
-			read.setData(data.toString());
-
 
 			Contig contigToAddTo = contigHash.get(chr);
 
@@ -170,15 +168,22 @@ public class MaqFileReader extends TrackableReader
 			{
 				contigToAddTo.getReads().add(read);
 
-				ReadMetaData rmd = new ReadMetaData(
-					name, complemented, read.calculateUnpaddedLength());
+				ReadMetaData rmd = new ReadMetaData(name, complemented);
+				rmd.setData(data.toString());
+				rmd.calculateUnpaddedLength();
+				read.setLength(rmd.length());
+
+				// Do base-position comparison...
+				BasePositionComparator.compare(contigToAddTo.getConsensus(), rmd,
+					read.getStartPosition());
+
 				readCache.setReadMetaData(rmd);
+
 				readID++;
 			}
 		}
 
 		in.close();
-*/
 	}
 
 	private void addContig(Contig contig, Consensus consensus, StringBuilder sb, StringBuilder qlt)
@@ -198,5 +203,4 @@ public class MaqFileReader extends TrackableReader
 
 		assembly.addContig(contig);
 	}
-
 }
