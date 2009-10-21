@@ -4,8 +4,11 @@
 package tablet.data.cache;
 
 import java.io.*;
+import java.util.concurrent.*;
 
 import tablet.data.*;
+
+import scri.commons.file.*;
 
 /**
  * Concrete implementation of the IDataCache interface that stores its data in
@@ -24,6 +27,8 @@ public class FileCache implements IReadCache
 
 	// When writing, how many bytes have been written to the cache?
 	private long byteCount = 0;
+
+	private Semaphore fileLock = new Semaphore(1, true);
 
 	private FileCache()
 	{
@@ -66,39 +71,49 @@ public class FileCache implements IReadCache
 
 	public ReadMetaData getReadMetaData(int id)
 	{
-		try
+		while (true)
 		{
-			long seekTo = index.getSeekPosition(id);
-			rnd.seek(seekTo);
+			try
+			{
+				ReadMetaData rmd = null;
 
-			// Read the length (in bytes) that the name takes up
-			int length = rnd.readInt();
+				fileLock.acquire();
 
-			// Make an array of this length
-			byte[] array = new byte[length];
-			// Then read its name from the file
-			rnd.read(array);
-			String name = new String(array, "UTF8");
+				try
+				{
+					long seekTo = index.getSeekPosition(id);
+					rnd.seek(seekTo);
 
-			// Then C or U
-			boolean isComplemented = rnd.readBoolean();
+					// Read the length (in bytes) that the name takes up
+					int length = rnd.readInt();
 
-			// Unpadded length
-			int unpaddedLength = rnd.readInt();
+					// Make an array of this length
+					byte[] array = new byte[length];
+					// Then read its name from the file
+					rnd.read(array);
+					String name = new String(array, "UTF8");
 
-			int dataLength = rnd.readInt();
-			byte[] data = new byte[dataLength];
-			rnd.read(data);
+					// Then C or U
+					boolean isComplemented = rnd.readBoolean();
 
-			ReadMetaData rmd = new ReadMetaData(name, isComplemented, unpaddedLength);
-			rmd.setRawData(data);
+					// Unpadded length
+					int unpaddedLength = rnd.readInt();
 
-			return rmd;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			return null;
+					int dataLength = rnd.readInt();
+					byte[] data = new byte[dataLength];
+					rnd.read(data);
+
+					rmd = new ReadMetaData(name, isComplemented, unpaddedLength);
+					rmd.setRawData(data);
+				}
+				catch (Exception e)	{
+					e.printStackTrace();
+				}
+
+				fileLock.release();
+				return rmd;
+			}
+			catch (InterruptedException e) {}
 		}
 	}
 
@@ -134,6 +149,6 @@ public class FileCache implements IReadCache
 		//   4   - INT, data length
 		//   [d] - BYTES, the data
 		// = 13
-		byteCount += array.length + 13 + data.length;
+		byteCount += (array.length + 13 + data.length);
 	}
 }
