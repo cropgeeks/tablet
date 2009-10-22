@@ -23,7 +23,7 @@ public class FileCache implements IReadCache
 	// Used while writing to the cache
 	private DataOutputStream out;
 	// Used while reading from the cache
-	private RandomAccessFile rnd;
+	private BufferedRandomAccessFile rnd;
 
 	// When writing, how many bytes have been written to the cache?
 	private long byteCount = 0;
@@ -50,7 +50,7 @@ public class FileCache implements IReadCache
 		throws IOException
 	{
 		FileCache fc = new FileCache();
-		fc.rnd = new RandomAccessFile(cacheFile, "r");
+		fc.rnd = new BufferedRandomAccessFile(cacheFile, "r", 1024);
 		fc.index.createReadableIndex(indexFile);
 
 		return fc;
@@ -85,7 +85,7 @@ public class FileCache implements IReadCache
 					rnd.seek(seekTo);
 
 					// Read the length (in bytes) that the name takes up
-					int length = rnd.readInt();
+					int length = rnd.readIntFromBuffer();
 
 					// Make an array of this length
 					byte[] array = new byte[length];
@@ -94,12 +94,12 @@ public class FileCache implements IReadCache
 					String name = new String(array, "UTF8");
 
 					// Then C or U
-					boolean isComplemented = rnd.readBoolean();
+					boolean isComplemented = rnd.readBooleanFromBuffer();
 
 					// Unpadded length
-					int unpaddedLength = rnd.readInt();
+					int unpaddedLength = rnd.readIntFromBuffer();
 
-					int dataLength = rnd.readInt();
+					int dataLength = rnd.readIntFromBuffer();
 					byte[] data = new byte[dataLength];
 					rnd.read(data);
 
