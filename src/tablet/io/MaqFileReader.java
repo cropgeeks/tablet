@@ -9,27 +9,28 @@ import tablet.data.cache.*;
 
 public class MaqFileReader extends TrackableReader
 {
-	private boolean useAscii;
 	private IReadCache readCache;
+
+	private ReferenceFileReader refReader;
 
 	// The index of the Maq file in the files[] array
 	private int maqIndex = -1;
-	// The index of the FASTQ file in the files[] array
-	private int fastqIndex = -1;
+	// The index of the reference file in the files[] array
+	private int refIndex = -1;
 
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
-	MaqFileReader(IReadCache readCache, boolean useAscii)
+	MaqFileReader(IReadCache readCache)
 	{
 		this.readCache = readCache;
-		this.useAscii = useAscii;
 	}
 
-	@Override
 	boolean canRead() throws Exception
 	{
+		refReader = new ReferenceFileReader(assembly);
+
 		boolean foundMaq = false;
-		boolean foundFastq = false;
+		boolean foundRef  = false;
 
 		// We need to check each file to see if it is readable
 		for (int i = 0; i < 2; i++)
@@ -39,23 +40,17 @@ public class MaqFileReader extends TrackableReader
 				foundMaq = true;
 				maqIndex = i;
 			}
-			else if (isFastqFile(i))
+			else if (refReader.canRead(files[i]))
 			{
-				foundFastq = true;
-				fastqIndex = i;
+				foundRef = true;
+				refIndex = i;
 			}
 		}
 
-		return (foundMaq && foundFastq);
+		return (foundMaq && foundRef);
 	}
 
-	public void runJob(int jobIndex) throws Exception
-	{
-		readFastqFile();
-		readMaqFile();
-	}
-
-		// Checks to see if this is a Maq file by assuming 16 columns of \t data
+	// Checks to see if this is a Maq file by assuming 16 columns of \t data
 	private boolean isMaqFile(int fileIndex)
 		throws Exception
 	{
@@ -69,70 +64,20 @@ public class MaqFileReader extends TrackableReader
 		return isMaqFile;
 	}
 
-	// Checks to see if this is a FASTQ file by looking for a leading @
-	private boolean isFastqFile(int fileIndex)
-		throws Exception
+	public void runJob(int jobIndex) throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(fileIndex)));
-		str = readLine();
-
-		boolean isFastqFile = (str != null && str.startsWith("@"));
-		in.close();
-		is.close();
-
-		return isFastqFile;
+		readReferenceFile();
+		readMaqFile();
 	}
 
-	private void readFastqFile()
+	private void readReferenceFile()
 			throws Exception
 	{
-		if (useAscii)
-			in = new BufferedReader(new InputStreamReader(getInputStream(fastqIndex), "ASCII"));
-		else
-			in = new BufferedReader(new InputStreamReader(getInputStream(fastqIndex)));
+		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex), "ASCII"));
 
-		System.out.println("FASTQ: " + files[fastqIndex]);
+		refReader.readReferenceFile(this, files[refIndex]);
+		contigHash = refReader.getContigHashMap();
 
-		Contig contig = null;
-		StringBuilder sb = null;
-
-		StringBuilder qlt = null;
-
-		while ((str = readLine()) != null && okToRun)
-		{
-			if (str.startsWith("@"))
-			{
-				sb = new StringBuilder();
-
-				String name;
-				if (str.indexOf(" ") != -1)
-					name = str.substring(1, str.indexOf(" "));
-				else
-					name = str.substring(1);
-
-				contig = new Contig(name, true, 0);
-				contigHash.put(name, contig);
-			}
-
-			//Process quality data to avoid incorrectly catching @ markers
-			else if(str.startsWith("+"))
-			{
-				int length = sb.length();
-				qlt = new StringBuilder();
-				while(qlt.length() != length)
-				{
-					str = readLine();
-					qlt.append(str.trim());
-				}
-				if (sb != null && sb.length() > 0 && qlt != null && qlt.length() > 0)
-					addContig(contig, new Consensus(), sb, qlt);
-			}
-
-			else
-			{
-				sb.append(str.trim());
-			}
-		}
 		in.close();
 
 		assembly.setName(files[maqIndex].getName());
@@ -141,12 +86,7 @@ public class MaqFileReader extends TrackableReader
 	private void readMaqFile()
 			throws Exception
 	{
-		if (useAscii)
-			in = new BufferedReader(new InputStreamReader(getInputStream(maqIndex), "ASCII")); // ISO8859_1
-		else
-			in = new BufferedReader(new InputStreamReader(getInputStream(maqIndex)));
-
-		System.out.println("Maq:  " + files[maqIndex]);
+		in = new BufferedReader(new InputStreamReader(getInputStream(maqIndex), "ASCII"));
 
 		int readID = 0;
 
@@ -184,23 +124,5 @@ public class MaqFileReader extends TrackableReader
 		}
 
 		in.close();
-	}
-
-	private void addContig(Contig contig, Consensus consensus, StringBuilder sb, StringBuilder qlt)
-	{
-		consensus.setData(sb.toString());
-		consensus.calculateUnpaddedLength();
-		contig.setConsensusSequence(consensus);
-
-		byte[] bq = new byte[consensus.length()];
-		for(int i = 0; i < bq.length; i++)
-		{
-			bq[i] = (byte) (qlt.charAt(i) - 33);
-			if(bq[i] > 100)
-				bq[i] = 100;
-		}
-		consensus.setBaseQualities(bq);
-
-		assembly.addContig(contig);
 	}
 }

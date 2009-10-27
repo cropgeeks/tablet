@@ -15,27 +15,29 @@ import scri.commons.file.*;
 
 class SoapFileReader extends TrackableReader
 {
-	private boolean useAscii;
 	private IReadCache readCache;
+
+	private ReferenceFileReader refReader;
 
 	// The index of the SOAP file in the files[] array
 	private int soapIndex = -1;
-	// The index of the FASTA file in the files[] array
-	private int fastaIndex = -1;
+	// The index of the reference file in the files[] array
+	private int refIndex = -1;
 
-	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
+	private HashMap<String, Contig> contigHash;
 
-	SoapFileReader(IReadCache readCache, boolean useAscii)
+	SoapFileReader(IReadCache readCache)
 	{
 		this.readCache = readCache;
-		this.useAscii = useAscii;
 	}
 
 	boolean canRead()
 		throws Exception
 	{
+		refReader = new ReferenceFileReader(assembly);
+
 		boolean foundSoap = false;
-		boolean foundFasta = false;
+		boolean foundRef  = false;
 
 		// We need to check each file to see if it is readable
 		for (int i = 0; i < 2; i++)
@@ -45,14 +47,14 @@ class SoapFileReader extends TrackableReader
 				foundSoap = true;
 				soapIndex = i;
 			}
-			else if (isFastaFile(i))
+			else if (refReader.canRead(files[i]))
 			{
-				foundFasta = true;
-				fastaIndex = i;
+				foundRef = true;
+				refIndex = i;
 			}
 		}
 
-		return (foundSoap && foundFasta);
+		return (foundSoap && foundRef);
 	}
 
 	// Checks to see if this is a SOAP file by assuming 10 columns of \t data
@@ -69,65 +71,20 @@ class SoapFileReader extends TrackableReader
 		return isSoapFile;
 	}
 
-	// Checks to see if this is a FASTA file by looking for a leading >
-	private boolean isFastaFile(int fileIndex)
-		throws Exception
-	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(fileIndex)));
-		str = readLine();
-
-		boolean isFastaFile = (str != null && str.startsWith(">"));
-		in.close();
-		is.close();
-
-		return isFastaFile;
-	}
-
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		readFastaFile();
+		readReferenceFile();
 		readSoapFile();
 	}
 
-	private void readFastaFile()
+	private void readReferenceFile()
 		throws Exception
 	{
-		if (useAscii)
-			in = new BufferedReader(new InputStreamReader(getInputStream(fastaIndex), "ASCII")); // ISO8859_1
-		else
-			in = new BufferedReader(new InputStreamReader(getInputStream(fastaIndex)));
+		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex), "ASCII"));
 
-		System.out.println("FASTA: " + files[fastaIndex]);
-
-		Contig contig = null;
-		StringBuilder sb = null;
-
-		while ((str = readLine()) != null && okToRun)
-		{
-			if (str.startsWith(">"))
-			{
-				if (sb != null && sb.length() > 0)
-					addContig(contig, new Consensus(), sb);
-
-				sb = new StringBuilder();
-
-				String name;
-				if (str.indexOf(" ") != -1)
-					name = str.substring(1, str.indexOf(" "));
-				else
-					name = str.substring(1);
-
-				contig = new Contig(name, true, 0);
-				contigHash.put(name, contig);
-			}
-
-			else
-				sb.append(str.trim());
-		}
-
-		if (sb != null && sb.length() > 0)
-			addContig(contig, new Consensus(), sb);
+		refReader.readReferenceFile(this, files[refIndex]);
+		contigHash = refReader.getContigHashMap();
 
 		in.close();
 
@@ -137,13 +94,7 @@ class SoapFileReader extends TrackableReader
 	private void readSoapFile()
 		throws Exception
 	{
-
-		if (useAscii)
-			in = new BufferedReader(new InputStreamReader(getInputStream(soapIndex), "ASCII")); // ISO8859_1
-		else
-			in = new BufferedReader(new InputStreamReader(getInputStream(soapIndex)));
-
-		System.out.println("SOAP:  " + files[soapIndex]);
+		in = new BufferedReader(new InputStreamReader(getInputStream(soapIndex), "ASCII"));
 
 		int readID = 0;
 
@@ -181,17 +132,5 @@ class SoapFileReader extends TrackableReader
 		}
 
 		in.close();
-	}
-
-	private void addContig(Contig contig, Consensus consensus, StringBuilder sb)
-	{
-		consensus.setData(sb.toString());
-		consensus.calculateUnpaddedLength();
-		contig.setConsensusSequence(consensus);
-
-		byte[] bq = new byte[consensus.length()];
-		consensus.setBaseQualities(bq);
-
-		assembly.addContig(contig);
 	}
 }
