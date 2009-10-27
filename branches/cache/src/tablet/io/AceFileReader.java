@@ -17,7 +17,6 @@ import scri.commons.file.*;
 
 class AceFileReader extends TrackableReader
 {
-	private boolean useAscii;
 	private IReadCache readCache;
 
 	private Contig contig;
@@ -40,10 +39,9 @@ class AceFileReader extends TrackableReader
 	// Pretty much all the tokenizing we do is based on this one pattern
 	private Pattern p = Pattern.compile("\\s+");
 
-	AceFileReader(IReadCache readCache, boolean useAscii)
+	AceFileReader(IReadCache readCache)
 	{
 		this.readCache = readCache;
-		this.useAscii = useAscii;
 	}
 
 	boolean canRead()
@@ -64,10 +62,7 @@ class AceFileReader extends TrackableReader
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		if (useAscii)
-			in = new BufferedReader(new InputStreamReader(getInputStream(0), "ASCII")); // ISO8859_1
-		else
-			in = new BufferedReader(new InputStreamReader(getInputStream(0)));
+		in = new BufferedReader(new InputStreamReader(getInputStream(0), "ASCII"));
 
 		// Read in the header
 		str = readLine();

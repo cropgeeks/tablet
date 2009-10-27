@@ -53,14 +53,14 @@ class AssemblyFileHandler extends SimpleJob
 			// ACE
 			if (okToRun && fileParsed == false)
 			{
-				reader = new AceFileReader(readCache, true);
+				reader = new AceFileReader(readCache);
 				fileParsed = readFile();
 			}
 
 			// AFG
 			if (okToRun && fileParsed == false)
 			{
-				reader = new AfgFileReader(readCache, true);
+				reader = new AfgFileReader(readCache);
 				fileParsed = readFile();
 			}
 		}
@@ -69,13 +69,13 @@ class AssemblyFileHandler extends SimpleJob
 			// Maq
 			if (okToRun && fileParsed == false)
 			{
-				reader = new MaqFileReader(readCache, true);
+				reader = new MaqFileReader(readCache);
 				fileParsed = readFile();
 			}
 			// SOAP
 			if (okToRun && fileParsed == false)
 			{
-				reader = new SoapFileReader(readCache, true);
+				reader = new SoapFileReader(readCache);
 				fileParsed = readFile();
 			}
 		}

@@ -13,7 +13,6 @@ import tablet.data.cache.*;
 
 class AfgFileReader extends TrackableReader
 {
-	private boolean useAscii;
 	private IReadCache readCache;
 
 	private Contig contig;
@@ -43,10 +42,9 @@ class AfgFileReader extends TrackableReader
 
 	//=======================================c'tor==========================================
 
-	AfgFileReader(IReadCache readCache, boolean useAscii)
+	AfgFileReader(IReadCache readCache)
 	{
 		this.readCache = readCache;
-		this.useAscii = useAscii;
 	}
 
 	//=======================================methods==========================================
@@ -71,10 +69,7 @@ class AfgFileReader extends TrackableReader
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		if (useAscii)
-			in = new BufferedReader(new InputStreamReader(getInputStream(0), "ASCII")); // ISO8859_1
-		else
-			in = new BufferedReader(new InputStreamReader(getInputStream(0)));
+		in = new BufferedReader(new InputStreamReader(getInputStream(0), "ASCII"));
 
 		//open the temporary file cache for the read names
 		long time = System.currentTimeMillis();

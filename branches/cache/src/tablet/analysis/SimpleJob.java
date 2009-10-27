@@ -32,4 +32,7 @@ public abstract class SimpleJob implements ITrackableJob
 
 	public int getJobCount()
 		{ return 1; }
+
+	public boolean okToRun()
+		{ return okToRun; }
 }
