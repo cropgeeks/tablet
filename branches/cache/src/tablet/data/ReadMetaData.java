@@ -19,6 +19,10 @@ public class ReadMetaData extends Sequence
 
 	private int unpaddedLength;
 
+	public ReadMetaData()
+	{
+	}
+
 	public ReadMetaData(String name, boolean isComplemented)
 	{
 		this.name = name;
@@ -32,8 +36,18 @@ public class ReadMetaData extends Sequence
 		this.unpaddedLength = unpaddedLength;
 	}
 
+	public void setName(String name)
+	{
+		this.name = name;
+	}
+
 	public String getName()
 		{ return name; }
+
+	public void setComplmented(boolean isComplemented)
+	{
+		this.isComplemented = isComplemented;
+	}
 
 	public boolean isComplemented()
 		{ return isComplemented; }
