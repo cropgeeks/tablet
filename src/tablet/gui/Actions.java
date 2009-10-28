@@ -37,6 +37,8 @@ public class Actions
 	public static ActionRepeatableButtonModel homeNavigatePageLeft;
 	public static ActionRepeatableButtonModel homeNavigatePageRight;
 	public static ActionRepeatableButtonModel homeNavigateJumpTo;
+	public static ActionRepeatableButtonModel homeNavigateNextFeature;
+	public static ActionRepeatableButtonModel homeNavigatePrevFeature;
 
 	void setRibbonController(RibbonController ribbon)
 		{ this.ribbon = ribbon; }
@@ -71,6 +73,8 @@ public class Actions
 		homeNavigatePageLeft.setEnabled(false);
 		homeNavigatePageRight.setEnabled(false);
 		homeNavigateJumpTo.setEnabled(false);
+		homeNavigateNextFeature.setEnabled(false);
+		homeNavigatePrevFeature.setEnabled(false);
 	}
 
 	public static void openedNoContigSelected()
@@ -103,6 +107,8 @@ public class Actions
 		homeNavigatePageLeft.setEnabled(false);
 		homeNavigatePageRight.setEnabled(false);
 		homeNavigateJumpTo.setEnabled(false);
+		homeNavigateNextFeature.setEnabled(false);
+		homeNavigatePrevFeature.setEnabled(false);
 	}
 
 	public static void openedContigSelected()
@@ -135,5 +141,7 @@ public class Actions
 		homeNavigatePageLeft.setEnabled(true);
 		homeNavigatePageRight.setEnabled(true);
 		homeNavigateJumpTo.setEnabled(true);
+		homeNavigateNextFeature.setEnabled(true);
+		homeNavigatePrevFeature.setEnabled(true);
 	}
 }

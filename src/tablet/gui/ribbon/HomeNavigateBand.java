@@ -22,6 +22,8 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 	private JCommandButton bPageLeft;
 	private JCommandButton bPageRight;
 	private JCommandButton bJumpTo;
+	private JCommandButton bNextFeature;
+	private JCommandButton bPrevFeature;
 
 	HomeNavigateBand(WinMain winMain)
 	{
@@ -70,10 +72,39 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 		RibbonController.assignShortcut(bJumpTo,
 			KeyStroke.getKeyStroke(KeyEvent.VK_J, Tablet.menuShortcut));
 
+		// Next Feature...
+		bNextFeature = new JCommandButton(
+			RB.getString("gui.ribbon.HomeNavigateBand.bNextFeature"),
+			RibbonController.getIcon("NEXTFEATURE32", 32));
+		Actions.homeNavigateNextFeature = new ActionRepeatableButtonModel(bNextFeature);
+		Actions.homeNavigateNextFeature.addActionListener(this);
+		bNextFeature.setActionModel(Actions.homeNavigateNextFeature);
+		bNextFeature.setActionKeyTip(".");
+		bNextFeature.setActionRichTooltip(new RichTooltip(
+			RB.format("gui.ribbon.HomeNavigateBand.bNextFeature.tooltip", Tablet.winKey),
+			RB.getString("gui.ribbon.HomeNavigateBand.bNextFeature.richtip")));
+		RibbonController.assignShortcut(bNextFeature,
+			KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, Tablet.menuShortcut));
+
+		// Previous Feature...
+		bPrevFeature = new JCommandButton(
+			RB.getString("gui.ribbon.HomeNavigateBand.bPrevFeature"),
+			RibbonController.getIcon("PREVIOUSFEATURE32", 32));
+		Actions.homeNavigatePrevFeature = new ActionRepeatableButtonModel(bPrevFeature);
+		Actions.homeNavigatePrevFeature.addActionListener(this);
+		bPrevFeature.setActionModel(Actions.homeNavigatePrevFeature);
+		bPrevFeature.setActionKeyTip(",");
+		bPrevFeature.setActionRichTooltip(new RichTooltip(
+			RB.format("gui.ribbon.HomeNavigateBand.bPrevFeature.tooltip", Tablet.winKey),
+			RB.getString("gui.ribbon.HomeNavigateBand.bPrevFeature.richtip")));
+		RibbonController.assignShortcut(bPrevFeature,
+			KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Tablet.menuShortcut));
+
 		addCommandButton(bPageLeft, RibbonElementPriority.MEDIUM);
 		addCommandButton(bPageRight, RibbonElementPriority.MEDIUM);
 		addCommandButton(bJumpTo, RibbonElementPriority.MEDIUM);
-
+		addCommandButton(bPrevFeature, RibbonElementPriority.MEDIUM);
+		addCommandButton(bNextFeature, RibbonElementPriority.MEDIUM);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -87,6 +118,16 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 		else if (e.getSource() == Actions.homeNavigateJumpTo)
 		{
 			winMain.getJumpToDialog().setVisible(true);
+		}
+
+		else if(e.getSource() == Actions.homeNavigateNextFeature)
+		{
+			winMain.getFeaturesPanel().nextFeature();
+		}
+
+		else if(e.getSource() == Actions.homeNavigatePrevFeature)
+		{
+			winMain.getFeaturesPanel().prevFeature();
 		}
 	}
 }

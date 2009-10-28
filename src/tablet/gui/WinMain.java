@@ -299,4 +299,9 @@ public class WinMain extends JRibbonFrame
 		else
 			splitter.setDividerLocation(Prefs.guiSplitterLocationPrev);
 	}
+
+	public FeaturesPanel getFeaturesPanel()
+	{
+		return featuresPanel;
+	}
 }
