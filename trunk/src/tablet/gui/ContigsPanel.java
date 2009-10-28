@@ -115,6 +115,13 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 				featuresPanel.setContig(contig);
 
 				Actions.openedContigSelected();
+
+				if(contig.getFeatures().size() == 0)
+				{
+					Actions.homeNavigateNextFeature.setEnabled(false);
+					Actions.homeNavigatePrevFeature.setEnabled(false);
+				}
+
 				winMain.setAssemblyPanelVisible(true);
 			}
 			// ...but if the set failed, then act the same as a de-selection

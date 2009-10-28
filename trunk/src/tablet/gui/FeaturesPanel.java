@@ -15,7 +15,7 @@ import tablet.gui.viewer.*;
 
 import scri.commons.gui.*;
 
-class FeaturesPanel extends JPanel implements ListSelectionListener
+public class FeaturesPanel extends JPanel implements ListSelectionListener
 {
 	private AssemblyPanel aPanel;
 	private ColumnHighlighter highlighter;
@@ -126,5 +126,19 @@ class FeaturesPanel extends JPanel implements ListSelectionListener
 	{
 		sorter.setRowFilter(rf);
 		ctrlTabs.setTitleAt(1, getTitle(table.getRowCount()));
+	}
+
+	public void nextFeature()
+	{
+		if(table.getSelectedRow() < table.getRowCount()-1)
+			table.setRowSelectionInterval(table.getSelectedRow()+1, table.getSelectedRow()+1);
+	}
+
+	public void prevFeature()
+	{
+		if(table.getSelectedRow() == -1)
+			table.setRowSelectionInterval(table.getRowCount()-1, table.getRowCount()-1);
+		else if(table.getSelectedRow() > 0)
+			table.setRowSelectionInterval(table.getSelectedRow()-1, table.getSelectedRow()-1);
 	}
 }
