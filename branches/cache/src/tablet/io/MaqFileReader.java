@@ -1,3 +1,6 @@
+// Copyright 2009 Plant Bioinformatics Group, SCRI. All rights reserved.
+// Use is subject to the accompanying licence terms.
+
 package tablet.io;
 
 import java.io.*;
@@ -7,7 +10,9 @@ import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
 
-public class MaqFileReader extends TrackableReader
+import scri.commons.file.*;
+
+class MaqFileReader extends TrackableReader
 {
 	private IReadCache readCache;
 
@@ -29,7 +34,8 @@ public class MaqFileReader extends TrackableReader
 		this.readCache = readCache;
 	}
 
-	boolean canRead() throws Exception
+	boolean canRead()
+		throws Exception
 	{
 		refReader = new ReferenceFileReader(assembly);
 
@@ -60,7 +66,8 @@ public class MaqFileReader extends TrackableReader
 		return isMaqFile;
 	}
 
-	public void runJob(int jobIndex) throws Exception
+	public void runJob(int jobIndex)
+		throws Exception
 	{
 		// Read reference information (if it exists)
 		if (refIndex >= 0)
@@ -71,7 +78,7 @@ public class MaqFileReader extends TrackableReader
 	}
 
 	private void readReferenceFile()
-			throws Exception
+		throws Exception
 	{
 		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex), "ASCII"));
 
@@ -79,12 +86,10 @@ public class MaqFileReader extends TrackableReader
 		contigHash = refReader.getContigHashMap();
 
 		in.close();
-
-		assembly.setName(files[maqIndex].getName());
 	}
 
 	private void readMaqFile()
-			throws Exception
+		throws Exception
 	{
 		in = new BufferedReader(new InputStreamReader(getInputStream(maqIndex), "ASCII"));
 
@@ -133,5 +138,7 @@ public class MaqFileReader extends TrackableReader
 		}
 
 		in.close();
+
+		assembly.setName(files[maqIndex].getName());
 	}
 }

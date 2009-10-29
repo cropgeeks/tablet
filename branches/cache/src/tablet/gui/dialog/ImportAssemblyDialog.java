@@ -100,6 +100,9 @@ public class ImportAssemblyDialog extends JDialog
 		// Open button selected - find out which file type and get the files
 		else if(e.getSource() == bOpen)
 		{
+			if (referenceCheckOK() == false)
+				return;
+
 			if (nbPanel.isUsingReference())
 			{
 				filenames = new String[] {
@@ -147,5 +150,27 @@ public class ImportAssemblyDialog extends JDialog
 			filename = TabletUtils.getOpenFilename(title, null, filters, -1);
 
 		combo.updateComboBox(filename);
+	}
+
+	private boolean referenceCheckOK()
+	{
+		if (nbPanel.isIgnoringReference() && Prefs.guiWarnNoRef)
+		{
+			String msg = RB.getString("gui.dialog.ImportAssemblyDialog.warnNoRef");
+			JCheckBox checkbox = new JCheckBox();
+			RB.setText(checkbox, "gui.dialog.ImportAssemblyDialog.checkWarning");
+
+			String[] options = new String[] {
+				RB.getString("gui.dialog.ImportAssemblyDialog.continue"),
+				RB.getString("gui.text.cancel") };
+
+			int response = TaskDialog.show(msg, TaskDialog.QST, 1, checkbox, options);
+			Prefs.guiWarnNoRef = !checkbox.isSelected();
+
+			if (response != 0)
+				return false;
+		}
+
+		return true;
 	}
 }

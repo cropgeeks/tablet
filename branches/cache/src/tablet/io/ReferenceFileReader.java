@@ -31,7 +31,6 @@ class ReferenceFileReader
 		if (isFastqFile(file))
 			return AssemblyFileHandler.FASTQ;
 
-		System.out.println("REF UNKNOWN");
 		return AssemblyFileHandler.UNKNOWN;
 	}
 
