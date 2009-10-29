@@ -132,6 +132,8 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 	public void uncaughtException(Thread thread, Throwable throwable)
 	{
+		throwable.printStackTrace();
+
 		if (throwable instanceof java.lang.OutOfMemoryError == false)
 			return;
 
