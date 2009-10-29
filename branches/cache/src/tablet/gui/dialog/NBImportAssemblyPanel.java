@@ -4,31 +4,114 @@
 package tablet.gui.dialog;
 
 import java.awt.*;
+import java.io.*;
 import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.text.*;
 
 import tablet.gui.*;
+import tablet.io.*;
+import static tablet.io.AssemblyFileHandler.*;
 
 import scri.commons.gui.*;
 
-class NBImportAssemblyPanel extends javax.swing.JPanel
+class NBImportAssemblyPanel extends JPanel implements DocumentListener
 {
-    /** Creates new form NBImportAssembly */
-    public NBImportAssemblyPanel(ImportAssemblyDialog parent)
-    {
+	private Document doc1, doc2;
+
+    NBImportAssemblyPanel(ImportAssemblyDialog parent)
+	{
 		initComponents();
-
-		assemblyComboBox.addItem(RB.getString("gui.dialog.NBImportAssembly.aceFile"));
-		assemblyComboBox.addItem(RB.getString("gui.dialog.NBImportAssembly.afgFile"));
-		assemblyComboBox.addItem(RB.getString("gui.dialog.NBImportAssembly.maqFile"));
-		assemblyComboBox.addItem(RB.getString("gui.dialog.NBImportAssembly.soapFile"));
-		assemblyComboBox.setSelectedIndex(Prefs.guiLastFileType);
-
-		assemblyComboBox.addItemListener(parent);
-
-		RB.setText(assemblyLabel, "gui.dialog.NBImportAssembly.assemblyLabel");
 		setBackground(Color.white);
-		setBorder(BorderFactory.createEmptyBorder(5, 5, 0, 5));
+		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
+
+		// Apply i18n text to the controls
+		RB.setText(label1, "gui.dialog.NBImportAssemblyPanel.label1");
+		RB.setText(label2, "gui.dialog.NBImportAssemblyPanel.label2");
+		RB.setText(assLabel, "gui.dialog.NBImportAssemblyPanel.assLabel");
+		RB.setText(refLabel, "gui.dialog.NBImportAssemblyPanel.refLabel");
+		RB.setText(bBrowse1, "gui.text.browse");
+		RB.setText(bBrowse2, "gui.text.browse");
+		RB.setText(statusLabel, "gui.dialog.NBImportAssemblyPanel.statusLabel");
+
+		bBrowse1.addActionListener(parent);
+		bBrowse2.addActionListener(parent);
+
+		file1Combo.setHistory(Prefs.assRecentDocs);
+		file2Combo.setHistory(Prefs.refRecentDocs);
+
+		if (Prefs.refNotUsed)
+			((JTextComponent) file2Combo.getEditor().getEditorComponent()).setText("");
+
+		doc1 = ((JTextComponent) file1Combo.getEditor().getEditorComponent()).getDocument();
+		doc2 = ((JTextComponent) file2Combo.getEditor().getEditorComponent()).getDocument();
+		doc1.addDocumentListener(this);
+		doc2.addDocumentListener(this);
+
+		processFiles();
     }
+
+    boolean isUsingReference()
+    {
+    	return (file2Combo.isEnabled() && doc2.getLength() > 0);
+    }
+
+    private void setReferenceControls(boolean state)
+    {
+    	refLabel.setEnabled(state);
+    	file2Combo.setEnabled(state);
+    	bBrowse2.setEnabled(state);
+    }
+
+    private void processFiles()
+    {
+    	int status1 = UNKNOWN, status2 = UNKNOWN;
+
+    	System.out.println("\nprocessFiles()");
+
+    	try
+    	{
+    		// Determine the types of the two files (regardless of whether we'll
+    		// actually accept them or not
+    		File file1 = new File(doc1.getText(0, doc1.getLength()));
+    		status1 = AssemblyFileHandler.getType(file1);
+
+	    	File file2 = new File(doc2.getText(0, doc2.getLength()));
+	    	status2 = AssemblyFileHandler.getType(file2);
+    	}
+    	catch (Exception e) {}
+
+    	// The assembly file must be ACE, AFG, MAQ, or SOAP
+    	if (status1 > SOAP)
+    		status1 = UNKNOWN;
+
+    	// The reference file must be FASTA or FASTQ
+    	if (status2 != FASTA && status2 != FASTQ)
+	    	status2 = UNKNOWN;
+
+    	// The reference option is only needed for MAQ or SOAP
+    	setReferenceControls(status1 == MAQ || status1 == SOAP);
+
+
+    	String str1 = RB.getString("gui.dialog.NBImportAssembly.ass.status"
+    		+ status1);
+    	String str2 = RB.getString("gui.dialog.NBImportAssembly.ref.status"
+    		+ status2);
+
+		if (refLabel.isEnabled())
+    		statusText.setText(str1 + "  |  " + str2);
+    	else
+    		statusText.setText(str1);
+    }
+
+    public void insertUpdate(DocumentEvent e)
+    	{ processFiles(); }
+
+    public void removeUpdate(DocumentEvent e)
+    	{ processFiles(); }
+
+    public void changedUpdate(DocumentEvent e)
+    	{}
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -39,11 +122,35 @@ class NBImportAssemblyPanel extends javax.swing.JPanel
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        assemblyComboBox = new javax.swing.JComboBox();
-        assemblyLabel = new javax.swing.JLabel();
+        label1 = new javax.swing.JLabel();
+        assLabel = new javax.swing.JLabel();
+        bBrowse1 = new javax.swing.JButton();
+        file1Combo = new scri.commons.gui.matisse.HistoryComboBox();
+        refLabel = new javax.swing.JLabel();
+        file2Combo = new scri.commons.gui.matisse.HistoryComboBox();
+        bBrowse2 = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        statusLabel = new javax.swing.JLabel();
+        statusText = new javax.swing.JLabel();
+        label2 = new javax.swing.JLabel();
 
-        assemblyLabel.setLabelFor(assemblyComboBox);
-        assemblyLabel.setText("Open an assembly of type:");
+        label1.setText("Tablet supports assemblies that are in ACE, AFG, MAQ (text), or SOAP formats. Reference");
+
+        assLabel.setLabelFor(file1Combo);
+        assLabel.setText("Primary assembly file:");
+
+        bBrowse1.setText("Browse...");
+
+        refLabel.setLabelFor(file2Combo);
+        refLabel.setText("Reference/consensus file (optional):");
+
+        bBrowse2.setText("Browse...");
+
+        statusLabel.setText("Current Status:");
+
+        statusText.setText("<status>");
+
+        label2.setText("files (if needed for MAQ or SOAP) can be in FASTA or FASTQ format.");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -51,26 +158,69 @@ class NBImportAssemblyPanel extends javax.swing.JPanel
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(assemblyLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(assemblyComboBox, 0, 75, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(assLabel)
+                            .addComponent(file1Combo, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bBrowse1, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(file2Combo, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bBrowse2))
+                    .addComponent(refLabel)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(statusLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(statusText, javax.swing.GroupLayout.DEFAULT_SIZE, 356, Short.MAX_VALUE))
+                    .addComponent(label2, javax.swing.GroupLayout.DEFAULT_SIZE, 437, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(label1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(label2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(assLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(assemblyLabel)
-                    .addComponent(assemblyComboBox))
-                .addContainerGap())
+                    .addComponent(file1Combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bBrowse1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(refLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(file2Combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bBrowse2))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(statusLabel)
+                    .addComponent(statusText))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    javax.swing.JComboBox assemblyComboBox;
-    private javax.swing.JLabel assemblyLabel;
+    private javax.swing.JLabel assLabel;
+    javax.swing.JButton bBrowse1;
+    javax.swing.JButton bBrowse2;
+    scri.commons.gui.matisse.HistoryComboBox file1Combo;
+    scri.commons.gui.matisse.HistoryComboBox file2Combo;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JLabel label1;
+    private javax.swing.JLabel label2;
+    private javax.swing.JLabel refLabel;
+    private javax.swing.JLabel statusLabel;
+    private javax.swing.JLabel statusText;
     // End of variables declaration//GEN-END:variables
 
 }

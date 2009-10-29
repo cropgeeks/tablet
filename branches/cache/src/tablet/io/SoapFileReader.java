@@ -24,7 +24,11 @@ class SoapFileReader extends TrackableReader
 	// The index of the reference file in the files[] array
 	private int refIndex = -1;
 
-	private HashMap<String, Contig> contigHash;
+	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
+
+	SoapFileReader()
+	{
+	}
 
 	SoapFileReader(IReadCache readCache)
 	{
@@ -36,25 +40,17 @@ class SoapFileReader extends TrackableReader
 	{
 		refReader = new ReferenceFileReader(assembly);
 
-		boolean foundSoap = false;
-		boolean foundRef  = false;
-
 		// We need to check each file to see if it is readable
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < files.length; i++)
 		{
 			if (isSoapFile(i))
-			{
-				foundSoap = true;
 				soapIndex = i;
-			}
-			else if (refReader.canRead(files[i]))
-			{
-				foundRef = true;
+
+			else if (refReader.canRead(files[i]) != AssemblyFileHandler.UNKNOWN)
 				refIndex = i;
-			}
 		}
 
-		return (foundSoap && foundRef);
+		return (soapIndex >= 0);
 	}
 
 	// Checks to see if this is a SOAP file by assuming 10 columns of \t data
@@ -74,7 +70,11 @@ class SoapFileReader extends TrackableReader
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		readReferenceFile();
+		// Read reference information (if it exists)
+		if (refIndex >= 0)
+			readReferenceFile();
+
+		// Then read the main assembly/read data file
 		readSoapFile();
 	}
 
@@ -111,6 +111,15 @@ class SoapFileReader extends TrackableReader
 			Read read = new Read(readID, pos);
 
 			Contig contigToAddTo = contigHash.get(chr);
+
+			// If it wasn't found (and we don't have ref data), make it
+			if (contigToAddTo == null && refIndex == -1)
+			{
+				contigToAddTo = new Contig(chr);
+				contigHash.put(chr, contigToAddTo);
+
+				assembly.addContig(contigToAddTo);
+			}
 
 			if (contigToAddTo != null)
 			{

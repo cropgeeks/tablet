@@ -67,6 +67,9 @@ class ConsensusCanvas extends TrackingCanvas
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
 
+		if (consensus.length() == 0)
+			return;
+
 		int ntW = rCanvas.ntW;
 		int ntH = rCanvas.ntH;
 		int xS = rCanvas.xS;

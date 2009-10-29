@@ -23,6 +23,9 @@ class AceFileReader extends TrackableReader
 	private Consensus consensus;
 	private Read read;
 
+	// The index of the ACE file in the files[] array
+	private int aceIndex = -1;
+
 	// Index trackers for counting AF and RD lines as they are parsed
 	private int afIndex = 0, rdIndex = 0;
 
@@ -39,6 +42,10 @@ class AceFileReader extends TrackableReader
 	// Pretty much all the tokenizing we do is based on this one pattern
 	private Pattern p = Pattern.compile("\\s+");
 
+	AceFileReader()
+	{
+	}
+
 	AceFileReader(IReadCache readCache)
 	{
 		this.readCache = readCache;
@@ -47,22 +54,26 @@ class AceFileReader extends TrackableReader
 	boolean canRead()
 		throws Exception
 	{
-		// Read and check for the header
-		in = new BufferedReader(new InputStreamReader(getInputStream(0)));
-		str = readLine();
+		for (int i = 0; i < files.length; i++)
+		{
+			// Read and check for the header
+			in = new BufferedReader(new InputStreamReader(getInputStream(i)));
+			str = readLine();
 
-		boolean isACEFile = (str != null && str.startsWith("AS "));
+			if (str != null && str.startsWith("AS "))
+				aceIndex = i;
 
-		in.close();
-		is.close();
+			in.close();
+			is.close();
+		}
 
-		return isACEFile;
+		return (aceIndex >= 0);
 	}
 
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(0), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(aceIndex), "ASCII"));
 
 		// Read in the header
 		str = readLine();

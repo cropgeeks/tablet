@@ -20,6 +20,10 @@ public class MaqFileReader extends TrackableReader
 
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
+	MaqFileReader()
+	{
+	}
+
 	MaqFileReader(IReadCache readCache)
 	{
 		this.readCache = readCache;
@@ -29,25 +33,17 @@ public class MaqFileReader extends TrackableReader
 	{
 		refReader = new ReferenceFileReader(assembly);
 
-		boolean foundMaq = false;
-		boolean foundRef  = false;
-
 		// We need to check each file to see if it is readable
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < files.length; i++)
 		{
 			if (isMaqFile(i))
-			{
-				foundMaq = true;
 				maqIndex = i;
-			}
-			else if (refReader.canRead(files[i]))
-			{
-				foundRef = true;
+
+			else if (refReader.canRead(files[i]) != AssemblyFileHandler.UNKNOWN)
 				refIndex = i;
-			}
 		}
 
-		return (foundMaq && foundRef);
+		return (maqIndex >= 0);
 	}
 
 	// Checks to see if this is a Maq file by assuming 16 columns of \t data
@@ -66,7 +62,11 @@ public class MaqFileReader extends TrackableReader
 
 	public void runJob(int jobIndex) throws Exception
 	{
-		readReferenceFile();
+		// Read reference information (if it exists)
+		if (refIndex >= 0)
+			readReferenceFile();
+
+		// Then read the main assembly/read data file
 		readMaqFile();
 	}
 
@@ -103,6 +103,15 @@ public class MaqFileReader extends TrackableReader
 			Read read = new Read(readID, pos);
 
 			Contig contigToAddTo = contigHash.get(chr);
+
+			// If it wasn't found (and we don't have ref data), make it
+			if (contigToAddTo == null && refIndex == -1)
+			{
+				contigToAddTo = new Contig(chr);
+				contigHash.put(chr, contigToAddTo);
+
+				assembly.addContig(contigToAddTo);
+			}
 
 			if (contigToAddTo != null)
 			{

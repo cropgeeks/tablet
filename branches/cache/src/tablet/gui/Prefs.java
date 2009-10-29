@@ -54,20 +54,12 @@ public class Prefs extends XMLPreferences
 	// The warning shown when toggling between padded/unpadded feature values
 	public static boolean guiWarnOnPaddedFeatureToggle = true;
 
-	// The last selected file type in the open assembly dialog
-	public static int guiLastFileType = 0;
-	// A list of previously accessed ace documents
-	public static String aceRecentDocs = "";
-	// A list of previously accessed afg documents
-	public static String afgRecentDocs = "";
-	// A list of previously accessed soap documents
-	public static String soapRecentDocs = "";
-	// A list of previously accessed fasta documents
-	public static String fastaRecentDocs = "";
-	// A list of previously accessed maq documents
-	public static String maqRecentDocs = "";
-	// A list of previously accessed fastq documents
-	public static String fastqRecentDocs = "";
+	// A list of previously accessed assembly documents
+	public static String assRecentDocs = "";
+	// A list of previously accessed referebce documents
+	public static String refRecentDocs = "";
+	// Was a selection made from the reference file
+	public static boolean refNotUsed = true;
 
 	// What filtering option was last in use for the contigs panel
 	public static int guiContigsFilter = 0;

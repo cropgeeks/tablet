@@ -22,16 +22,17 @@ class ReferenceFileReader
 	HashMap<String, Contig> getContigHashMap()
 		{ return contigHash; }
 
-	boolean canRead(File file)
+	int canRead(File file)
 		throws Exception
 	{
 		if (isFastaFile(file))
-			return true;
+			return AssemblyFileHandler.FASTA;
 
 		if (isFastqFile(file))
-			return true;
+			return AssemblyFileHandler.FASTQ;
 
-		return false;
+		System.out.println("REF UNKNOWN");
+		return AssemblyFileHandler.UNKNOWN;
 	}
 
 	void readReferenceFile(TrackableReader reader, File file)

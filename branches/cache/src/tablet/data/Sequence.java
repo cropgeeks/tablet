@@ -72,6 +72,9 @@ public abstract class Sequence
 	 */
 	public int length()
 	{
+		if (data == null)
+			return 0;
+
 //		byte n1 = (byte) ((data[data.length-1] >> 4) & 0xF);
 		byte n2 = (byte) (data[data.length-1] & 0xF);
 
