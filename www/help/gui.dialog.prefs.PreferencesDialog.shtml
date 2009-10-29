@@ -22,7 +22,7 @@ way Tablet is used and is displayed.</p>
 
 <h3>General</h3>
 
-<p>The <b>General</b> tab includes options which are specifc to Tablet's general operation.</p>
+<p>The <b>General</b> tab includes options which are specific to Tablet's general operation.</p>
 
 <p><a href="images/gui.dialog.prefs.NBGeneralPanel.png">
 <img class="capture" src="images/gui.dialog.prefs.NBGeneralPanel2.png" alt="Tablet Screenshot"></a></p>
@@ -36,6 +36,7 @@ way Tablet is used and is displayed.</p>
 	Never, At application startup, Once a day, Once a week, and Once a month.</li>
 </ul>
 
+
 <h3>Visualization</h3>
 
 <p>The <b>Visualization</b> tab allows you to customise elements of Tablet's visual display.</p>
@@ -47,8 +48,38 @@ way Tablet is used and is displayed.</p>
 	<li><b>Character to display for DNA pad/gap bases</b><br>
 	Determines what character will be shown whenever a padded base is displayed.</li>
 	<li><b>Character to display for Protein stop codons</b><br>
-	Determines what character will be shown whenver DNA translates to a stop
+	Determines what character will be shown whenever DNA translates to a stop
 	codon.</li>
+</ul>
+
+
+<h3>Warnings</h3>
+
+<p>The <b>Warnings</b> tab allows you to switch on or off the various warnings that
+Tablet can pop up from time to time. If an item is checked, Tablet will display
+a relevant warning to you whenever its associated action occurs. Unchecking an
+item means that Tablet will proceed with the action without warning you.</p>
+
+<p><a href="images/gui.dialog.prefs.NBWarningPanel.png">
+<img class="capture" src="images/gui.dialog.prefs.NBWarningPanel2.png" alt="Tablet Screenshot"></a></p>
+
+<ul>
+	<li><b>Before closing an assembly if a file is already in memory</b><br>
+	This warning occurs if you attempt to close an open assembly file. Some files
+	can be large, and take time to load, so Tablet will check that you really <b>do</b>
+	want to close the file before doing so.</li>
+	<li><b>Before exiting Tablet if a file is still in memory</b><br>
+	Similar to the above warning; this time the warning happens if you attempt
+	to close Tablet while a file is still loaded.</li>
+	<li><b>When attempting to load an assembly if no reference file was included</b><br>
+	Not all assembly file formats include reference/consensus information in the
+	primary file and it must be provided in a separate file. Tablet does not need
+	this information, but can warn you if it is not included.</li>
+	<li><b>When switching between features being treated as padded or unpadded</b><br>
+	GFF3 feature files include position information that Tablet can treat as
+	either a padded or unpadded position. Depending on the data, the difference
+	between a padded or unpadded position can be significant, and you may wish
+	Tablet to remind you of this.</li>
 </ul>
 
 

@@ -94,7 +94,7 @@ appropriate option from the popup menu that appears after right-clicking on it.
 <h3>Coverage information</h3>
 
 <p>Per-column coverage information is provided by the <b>Coverage Panel</b>.
-Coverage is determined by looking for the presense or absense of read data,
+Coverage is determined by looking for the presence or absence of read data,
 regardless of what the data is (or whether a read base matches the consensus
 base for that position). The height of the coverage bar over a particular column
 represents that column's coverage as a percentage of the maximum coverage for

@@ -29,9 +29,8 @@
 	Select this option to display the <a href="gui.dialog.ImportAssemblyDialog.shtml">Open Assembly</a> dialog
 	which allows a number of different assembly formats to be opened for viewing in Tablet.</li>
 	<li><b>Import Features</b><br>
-	Select this option to display the Import Feautres dialog which
-	allows GFF3 formatted features to be <a href="importing-features.shtml">
-	imported into Tablet</a>.</li>
+	Select this option to display the <a href="importing-features.shtml">Import Features</a> dialog which
+	allows GFF3 formatted features to be imported into Tablet.</li>
 </ul>
 
 
@@ -71,7 +70,7 @@ zoom and the intensity of variant highlighting.</p>
 	<li><b>Zoom</b><br>
 	Adjusts the zoom level of the main display</li>
 	 <li><b>Variants</b><br>
-	 Controls the intesity of the highlighting of read bases that are different
+	 Controls the intensity of the highlighting of read bases that are different
 	 from the consensus at that position (variant bases).</li>
  </ul>
 
@@ -110,8 +109,8 @@ miscellaneous options.</p>
 	 in the various display components.</li>
 	 <li><b>Show/Hide Overview</b><br>
 	 Opens a menu allowing you to toggle the Overview on or off, or to select which
-	 overview visualiation to display.</li>
-	 <li><b>Show/Hide Protein Tranlastions</b><br>
+	 overview visualization to display.</li>
+	 <li><b>Show/Hide Protein Translations</b><br>
 	 Opens a menu allowing you to toggle the protein translations or or off, or to
 	 select which combination of the six available translations should be shown.</li>
 	 <li><b>Hide Consensus</b><br>
