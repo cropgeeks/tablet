@@ -18,9 +18,30 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="assemblyLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="assemblyComboBox" pref="75" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="label1" alignment="0" max="32767" attributes="0"/>
+                  <Component id="jSeparator1" alignment="0" pref="437" max="32767" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="assLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="file1Combo" alignment="0" pref="352" max="32767" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="bBrowse1" min="-2" pref="79" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="file2Combo" pref="352" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="bBrowse2" min="-2" max="-2" attributes="0"/>
+                  </Group>
+                  <Component id="refLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="statusLabel" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="statusText" pref="356" max="32767" attributes="0"/>
+                  </Group>
+                  <Component id="label2" alignment="0" pref="437" max="32767" attributes="0"/>
+              </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -29,17 +50,58 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="assemblyLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="assemblyComboBox" alignment="3" max="32767" attributes="0"/>
-              </Group>
+              <Component id="label1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
+              <Component id="label2" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="jSeparator1" min="-2" pref="10" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="assLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="file1Combo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="bBrowse1" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+              <Component id="refLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="file2Combo" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="bBrowse2" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="3" attributes="0">
+                  <Component id="statusLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="statusText" alignment="3" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
   </Layout>
   <SubComponents>
-    <Component class="javax.swing.JComboBox" name="assemblyComboBox">
+    <Component class="javax.swing.JLabel" name="label1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Tablet supports assemblies that are in ACE, AFG, MAQ (text), or SOAP formats. Reference"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="assLabel">
+      <Properties>
+        <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+          <ComponentRef name="file1Combo"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Primary assembly file:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JButton" name="bBrowse1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Browse..."/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="scri.commons.gui.matisse.HistoryComboBox" name="file1Combo">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
           <StringArray count="0"/>
@@ -49,12 +111,47 @@
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="assemblyLabel">
+    <Component class="javax.swing.JLabel" name="refLabel">
       <Properties>
         <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
-          <ComponentRef name="assemblyComboBox"/>
+          <ComponentRef name="file2Combo"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Open an assembly of type:"/>
+        <Property name="text" type="java.lang.String" value="Reference/consensus file (optional):"/>
+      </Properties>
+    </Component>
+    <Component class="scri.commons.gui.matisse.HistoryComboBox" name="file2Combo">
+      <Properties>
+        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+          <StringArray count="0"/>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JButton" name="bBrowse2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Browse..."/>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
+    </Component>
+    <Component class="javax.swing.JSeparator" name="jSeparator1">
+    </Component>
+    <Component class="javax.swing.JLabel" name="statusLabel">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Current Status:"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="statusText">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="&lt;status&gt;"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JLabel" name="label2">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="files (if needed for MAQ or SOAP) can be in FASTA or FASTQ format."/>
       </Properties>
     </Component>
   </SubComponents>

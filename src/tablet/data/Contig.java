@@ -18,7 +18,7 @@ public class Contig
 	private Consensus consensus;
 	private boolean complemented;
 
-	private ArrayList<Read> reads;
+	private ArrayList<Read> reads = new ArrayList<Read>();
 
 	// Starting and ending indices of the leftmost and rightmost reads
 	private int lhsOffset, rhsOffset;
@@ -36,6 +36,18 @@ public class Contig
 	/** Constructs a new, empty contig. */
 	public Contig()
 	{
+	}
+
+	/**
+	 * Constructs an empty contig with the given name, and also attaches an
+	 * empty consensus object to it. To be used when reference/consensus data
+	 * is not available.
+	 */
+	public Contig(String name)
+	{
+		this.name = name;
+
+		consensus = new Consensus();
 	}
 
 	/**

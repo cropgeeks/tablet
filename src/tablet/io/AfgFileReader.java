@@ -18,6 +18,9 @@ class AfgFileReader extends TrackableReader
 
 	private Contig contig;
 
+	// The index of the AFG file in the files[] array
+	private int afgIndex = -1;
+
 	// Incrementing count of the number of reads processed
 	private int readsFound = 0;
 
@@ -47,6 +50,10 @@ class AfgFileReader extends TrackableReader
 
 	//=======================================c'tor==========================================
 
+	AfgFileReader()
+	{
+	}
+
 	AfgFileReader(IReadCache readCache)
 	{
 		this.readCache = readCache;
@@ -57,16 +64,20 @@ class AfgFileReader extends TrackableReader
 	boolean canRead()
 		throws Exception
 	{
-		// Read and check for the header
-		in = new BufferedReader(new InputStreamReader(getInputStream(0)));
-		str = readLine();
+		for (int i = 0; i < files.length; i++)
+		{
+			// Read and check for the header
+			in = new BufferedReader(new InputStreamReader(getInputStream(0)));
+			str = readLine();
 
-		boolean isAFGFile = (str != null && str.startsWith("{"));
+			if (str != null && str.startsWith("{"))
+				afgIndex = i;
 
-		in.close();
-		is.close();
+			in.close();
+			is.close();
+		}
 
-		return isAFGFile;
+		return (afgIndex >= 0);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -74,7 +85,7 @@ class AfgFileReader extends TrackableReader
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(0), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(afgIndex), "ASCII"));
 
 		//open the temporary file cache for the read names
 		long time = System.currentTimeMillis();

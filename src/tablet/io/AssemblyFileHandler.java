@@ -19,8 +19,16 @@ import scri.commons.gui.*;
  * a) find out which of the assembly file formats that Tablet understands is
  * capable of reading those file types, then b) proceed with the read/import.
  */
-class AssemblyFileHandler extends SimpleJob
+public class AssemblyFileHandler extends SimpleJob
 {
+	public static final int UNKNOWN = 0;
+	public static final int ACE = 1;
+	public static final int AFG = 2;
+	public static final int MAQ = 3;
+	public static final int SOAP = 4;
+	public static final int FASTA = 5;
+	public static final int FASTQ = 6;
+
 	private File[] files = null;
 	private TrackableReader reader = null;
 
@@ -48,36 +56,29 @@ class AssemblyFileHandler extends SimpleJob
 
 		// For each file format that we understand...
 
-		if (files.length == 1)
+		// ACE
+		if (okToRun && fileParsed == false)
 		{
-			// ACE
-			if (okToRun && fileParsed == false)
-			{
-				reader = new AceFileReader(readCache);
-				fileParsed = readFile();
-			}
-
-			// AFG
-			if (okToRun && fileParsed == false)
-			{
-				reader = new AfgFileReader(readCache);
-				fileParsed = readFile();
-			}
+			reader = new AceFileReader(readCache);
+			fileParsed = readFile();
 		}
-		else if (files.length == 2)
+		// AFG
+		if (okToRun && fileParsed == false)
 		{
-			// Maq
-			if (okToRun && fileParsed == false)
-			{
-				reader = new MaqFileReader(readCache);
-				fileParsed = readFile();
-			}
-			// SOAP
-			if (okToRun && fileParsed == false)
-			{
-				reader = new SoapFileReader(readCache);
-				fileParsed = readFile();
-			}
+			reader = new AfgFileReader(readCache);
+			fileParsed = readFile();
+		}
+		// Maq
+		if (okToRun && fileParsed == false)
+		{
+			reader = new MaqFileReader(readCache);
+			fileParsed = readFile();
+		}
+		// SOAP
+		if (okToRun && fileParsed == false)
+		{
+			reader = new SoapFileReader(readCache);
+			fileParsed = readFile();
 		}
 
 		if (okToRun && fileParsed)
@@ -154,5 +155,42 @@ class AssemblyFileHandler extends SimpleJob
 
 		if (reader != null)
 			reader.cancelJob();
+	}
+
+
+	// Some additional utility methods that are used by the GUI to determine
+	// file type and report back to the user - this code is NOT used to load
+
+	public static int getType(File file)
+	{
+		TrackableReader reader = null;
+
+		try
+		{
+			if (read(new AceFileReader(), file))
+				return ACE;
+
+			if (read(new AfgFileReader(), file))
+				return AFG;
+
+			if (read(new MaqFileReader(), file))
+				return MAQ;
+
+			if (read(new SoapFileReader(), file))
+				return SOAP;
+
+			return new ReferenceFileReader(null).canRead(file);
+		}
+		catch (Exception e) { System.out.println(e); }
+
+		return UNKNOWN;
+	}
+
+	private static boolean read(TrackableReader reader, File file)
+		throws Exception
+	{
+		reader.setInputs(new File[] { file }, null);
+
+		return reader.canRead();
 	}
 }
