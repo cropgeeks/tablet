@@ -181,7 +181,7 @@ public class AssemblyFileHandler extends SimpleJob
 
 			return new ReferenceFileReader(null).canRead(file);
 		}
-		catch (Exception e) { System.out.println(e); }
+		catch (Exception e) {}
 
 		return UNKNOWN;
 	}

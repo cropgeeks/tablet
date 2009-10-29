@@ -5,7 +5,6 @@ package tablet.io;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
@@ -87,8 +86,6 @@ class SoapFileReader extends TrackableReader
 		contigHash = refReader.getContigHashMap();
 
 		in.close();
-
-		assembly.setName(files[soapIndex].getName());
 	}
 
 	private void readSoapFile()
@@ -141,5 +138,7 @@ class SoapFileReader extends TrackableReader
 		}
 
 		in.close();
+
+		assembly.setName(files[soapIndex].getName());
 	}
 }

@@ -51,9 +51,16 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
 		processFiles();
     }
 
+	// Returns true if using a reference sequence is POSSIBLE and PROVIDED
     boolean isUsingReference()
     {
     	return (file2Combo.isEnabled() && doc2.getLength() > 0);
+    }
+
+    // Returns true if using a reference sequence is POSSIBLE but IGNORED
+    boolean isIgnoringReference()
+    {
+    	return (file2Combo.isEnabled() && doc2.getLength() == 0);
     }
 
     private void setReferenceControls(boolean state)
@@ -66,8 +73,6 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
     private void processFiles()
     {
     	int status1 = UNKNOWN, status2 = UNKNOWN;
-
-    	System.out.println("\nprocessFiles()");
 
     	try
     	{

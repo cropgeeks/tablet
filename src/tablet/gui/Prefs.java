@@ -60,6 +60,7 @@ public class Prefs extends XMLPreferences
 	public static String refRecentDocs = "";
 	// Was a selection made from the reference file
 	public static boolean refNotUsed = true;
+	public static boolean guiWarnNoRef = true;
 
 	// What filtering option was last in use for the contigs panel
 	public static int guiContigsFilter = 0;
