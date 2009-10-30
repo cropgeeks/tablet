@@ -6,7 +6,6 @@ package tablet.gui;
 import java.awt.image.*;
 import java.io.*;
 import javax.imageio.*;
-import javax.swing.*;
 import javax.swing.filechooser.*;
 
 import tablet.data.*;

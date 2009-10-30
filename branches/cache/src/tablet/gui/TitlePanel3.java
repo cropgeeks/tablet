@@ -6,8 +6,6 @@ package tablet.gui;
 import java.awt.*;
 import javax.swing.*;
 
-import scri.commons.gui.*;
-
 public class TitlePanel3 extends JPanel
 {
 	private static final Color lineColor = new Color(207, 219, 234);

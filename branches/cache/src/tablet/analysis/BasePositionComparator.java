@@ -3,8 +3,6 @@
 
 package tablet.analysis;
 
-import java.util.*;
-
 import tablet.data.*;
 
 /**

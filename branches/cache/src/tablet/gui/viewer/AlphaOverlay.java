@@ -3,8 +3,6 @@
 
 package tablet.gui.viewer;
 
-import java.awt.*;
-
 /**
  * Abstract base class of any highlighters that modify the alpha overlay value
  * of the main canvas. Because all such highlighters inherit from this class we
@@ -46,7 +44,7 @@ abstract class AlphaOverlay extends Thread implements IOverlayRenderer
 		for (int i = 1; i <= 40 && isOK; i++)
 		{
 			// 40 * 5 = 200 (the starting alpha)
-			alphaEffect = (int) (200 - (i * 5));
+			alphaEffect = (200 - (i * 5));
 			rCanvas.repaint();
 
 			// 25 * 40 = 1000 (1 second)

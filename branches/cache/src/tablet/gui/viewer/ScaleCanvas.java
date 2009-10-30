@@ -19,7 +19,6 @@ class ScaleCanvas extends TrackingCanvas
 	private static final NumberFormat d = NumberFormat.getInstance();
 	private String U, C;
 
-	private Contig contig;
 	private Consensus consensus;
 
 	private int h = 22;
@@ -63,8 +62,6 @@ class ScaleCanvas extends TrackingCanvas
 
 	void setContig(Contig contig)
 	{
-		this.contig = contig;
-
 		if (contig != null)
 		{
 			consensus = contig.getConsensus();
@@ -100,7 +97,7 @@ class ScaleCanvas extends TrackingCanvas
 		Graphics2D g = (Graphics2D) graphics;
 
 		int ntW = rCanvas.ntW;
-		int ntH = rCanvas.ntH;
+		//int ntH = rCanvas.ntH;
 		int xS = x1 / ntW;
 		int xE = x2 / ntW;
 

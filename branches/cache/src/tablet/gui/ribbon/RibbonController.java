@@ -17,7 +17,6 @@ import org.jvnet.flamingo.ribbon.*;
 
 public class RibbonController
 {
-	private static WinMain winMain;
 	private static JRibbon ribbon;
 
 	private static JLabel titleLabel = new JLabel(" ");
@@ -25,8 +24,7 @@ public class RibbonController
 
 	public RibbonController(WinMain winMain)
 	{
-		this.winMain = winMain;
-		this.ribbon = winMain.getRibbon();
+		RibbonController.ribbon = winMain.getRibbon();
 
 		RibbonTask homeTask = new RibbonTask(
 			RB.getString("gui.ribbon.RibbonController.home"),

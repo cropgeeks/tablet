@@ -13,8 +13,6 @@ import org.jvnet.flamingo.common.model.*;
  */
 public class Actions
 {
-	private RibbonController ribbon;
-
 	public static ActionRepeatableButtonModel homeAssembliesOpen16;
 	public static ActionRepeatableButtonModel homeAssembliesOpen32;
 	public static ActionRepeatableButtonModel applicationMenuSave16;
@@ -37,9 +35,6 @@ public class Actions
 	public static ActionRepeatableButtonModel homeNavigatePageLeft;
 	public static ActionRepeatableButtonModel homeNavigatePageRight;
 	public static ActionRepeatableButtonModel homeNavigateJumpTo;
-
-	void setRibbonController(RibbonController ribbon)
-		{ this.ribbon = ribbon; }
 
 	public static void closed()
 	{

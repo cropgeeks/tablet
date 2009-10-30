@@ -4,7 +4,6 @@
 package tablet.analysis;
 
 import tablet.data.*;
-import tablet.data.auxiliary.*;
 
 import junit.framework.*;
 
