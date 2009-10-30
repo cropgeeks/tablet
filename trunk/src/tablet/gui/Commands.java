@@ -6,7 +6,6 @@ package tablet.gui;
 import java.awt.image.*;
 import java.io.*;
 import javax.imageio.*;
-import javax.swing.*;
 import javax.swing.filechooser.*;
 
 import tablet.data.*;
@@ -41,13 +40,12 @@ public class Commands
 		winMain.closeAssembly();
 		System.gc();
 
-		ImportHandler ioHandler = new ImportHandler(filenames);
+		ImportHandler ioHandler = new ImportHandler(filenames, new File(Prefs.cacheDir));
 
 		String title = RB.getString("gui.Commands.fileOpen.title");
 		String label = RB.getString("gui.Commands.fileOpen.label");
 		String[] msgs = new String[] {
-			RB.getString("gui.Commands.fileOpen.msg01"),
-			RB.getString("gui.Commands.fileOpen.msg02") };
+			RB.getString("gui.Commands.fileOpen.msg01") };
 
 		// Run the job...
 		ProgressDialog dialog = new ProgressDialog(ioHandler, title, label, msgs);

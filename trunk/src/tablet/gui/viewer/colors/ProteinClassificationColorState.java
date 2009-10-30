@@ -7,8 +7,6 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.*;
 
-import tablet.gui.*;
-
 class ProteinClassificationColorState extends ColorState
 {
 	ProteinClassificationColorState(String txt, Color c, int w, int h, int chop)

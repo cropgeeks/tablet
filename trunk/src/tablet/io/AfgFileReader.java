@@ -7,16 +7,18 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
-import scri.commons.gui.*;
+import tablet.analysis.BasePositionComparator;
 import tablet.data.*;
 import tablet.data.cache.*;
 
 class AfgFileReader extends TrackableReader
 {
-	private boolean useAscii;
 	private IReadCache readCache;
 
 	private Contig contig;
+
+	// The index of the AFG file in the files[] array
+	private int afgIndex = -1;
 
 	// Incrementing count of the number of reads processed
 	private int readsFound = 0;
@@ -28,7 +30,6 @@ class AfgFileReader extends TrackableReader
 	//how the reads are aligned against the consensus
 	//reads and tiles are matched to each other by means of the internal ID of the read within the file
 	//reads are supplied in that order by default, starting at 1
-	private ArrayList<AfgRead> afgReadList = new ArrayList<AfgRead>();
 
 	//the Tablet ID for the read currently being processed
 	private int currReadID = 0;
@@ -36,17 +37,27 @@ class AfgFileReader extends TrackableReader
 	//the standard gap character for this file format
 	private final String gapChar = "-";
 
-	//this temporary disk cache holds the names of the  reads while we read them in, to conserve memory
-	private AfgNameCache cache = null;
+	//this temporary disk cache holds the names of the reads while we read them in, to conserve memory
+	//private AfgNameCache cache = null;
+
+	private IReadCache tempCache;
+	private File cacheDir;
+
+	private File cacheFile;
+	private File indexFile;
 
 	private boolean firstTileFound = false;
 
 	//=======================================c'tor==========================================
 
-	AfgFileReader(IReadCache readCache, boolean useAscii)
+	AfgFileReader()
+	{
+	}
+
+	AfgFileReader(IReadCache readCache, File cacheDir)
 	{
 		this.readCache = readCache;
-		this.useAscii = useAscii;
+		this.cacheDir = cacheDir;
 	}
 
 	//=======================================methods==========================================
@@ -54,16 +65,20 @@ class AfgFileReader extends TrackableReader
 	boolean canRead()
 		throws Exception
 	{
-		// Read and check for the header
-		in = new BufferedReader(new InputStreamReader(getInputStream(0)));
-		str = readLine();
+		for (int i = 0; i < files.length; i++)
+		{
+			// Read and check for the header
+			in = new BufferedReader(new InputStreamReader(getInputStream(0)));
+			str = readLine();
 
-		boolean isAFGFile = (str != null && str.startsWith("{"));
+			if (str != null && str.startsWith("{"))
+				afgIndex = i;
 
-		in.close();
-		is.close();
+			in.close();
+			is.close();
+		}
 
-		return isAFGFile;
+		return (afgIndex >= 0);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -71,18 +86,14 @@ class AfgFileReader extends TrackableReader
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		if (useAscii)
-			in = new BufferedReader(new InputStreamReader(getInputStream(0), "ASCII")); // ISO8859_1
-		else
-			in = new BufferedReader(new InputStreamReader(getInputStream(0)));
+		in = new BufferedReader(new InputStreamReader(getInputStream(afgIndex), "ASCII"));
 
 		//open the temporary file cache for the read names
 		long time = System.currentTimeMillis();
-		File cacheDir = SystemUtils.getTempUserDirectory("scri-tablet");
-		File cacheFile = new File(cacheDir, time + "-" + files[0].getName() + ".names");
+		cacheFile = new File(cacheDir, time + "-" + files[0].getName() + ".tempCache");
+		indexFile = new File(cacheDir, time + "-" + files[0].getName() + ".tempCacheIndex");
 
-		cache = new AfgNameCache(cacheFile);
-		cache.openForWriting();
+		tempCache = FileCache.createWritableCache(cacheFile, indexFile);
 
 		// Scan for contigs
 		while ((str = readLine()) != null && okToRun)
@@ -92,12 +103,7 @@ class AfgFileReader extends TrackableReader
 
 			else if (str.startsWith("{CTG"))
 				processContig();
-
 		}
-
-		//close the temporary file cache for the read names
-		//this also deletes the file itself
-		cache.close();
 
 		assembly.setName(files[0].getName());
 	}
@@ -109,6 +115,8 @@ class AfgFileReader extends TrackableReader
 	{
 		String consensusSeq = null; // the consensus sequence itself
 		String qualScores = null; // quality scores for consensus sequence
+
+		Consensus consensus = new Consensus();
 
 		//parse the CTG tag
 		while ((str = readLine()) != null && str.length() > 0 && !str.startsWith("}"))
@@ -142,6 +150,11 @@ class AfgFileReader extends TrackableReader
 					seqBuf.append(str);
 				}
 				consensusSeq = seqBuf.toString();
+
+				//deal with the consensus sequence
+				consensus.setData(consensusSeq);
+				consensus.calculateUnpaddedLength();
+				contig.setConsensusSequence(consensus);
 			}
 
 			//read alignment info
@@ -154,19 +167,11 @@ class AfgFileReader extends TrackableReader
 		//make new contig and add to assembly
 		assembly.addContig(contig);
 
-
-		//deal with the consensus sequence
-		Consensus consensus = new Consensus();
-		consensus.setData(consensusSeq);
-		consensus.calculateUnpaddedLength();
-		contig.setConsensusSequence(consensus);
-
 		//convert consensus qualScores to numerical values (ASCII codes)
 		qualScores = convertStringtoASCII(qualScores);
 		//convert to byte array and set on the consensus object
 		processBaseQualities(consensus, qualScores);
 
-//		System.out.println("added new contig: " + name);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -177,8 +182,8 @@ class AfgFileReader extends TrackableReader
 		if(!firstTileFound)
 		{
 			firstTileFound = true;
-			cache.openForReading();
-			System.out.println("opening cache for reading");
+			tempCache.close();
+			tempCache = FileCache.createReadableCache(cacheFile, indexFile);
 		}
 
 		//this contains the positions of the gap characters in this read
@@ -223,66 +228,48 @@ class AfgFileReader extends TrackableReader
 
 		//retrieve the corresponding read from the array list using the internal id
 		//tile internal ID is 1-based but list is 0-based so need to subtract 1 here to get the right read
-		AfgRead afgRead = afgReadList.get(tileIID-1);
-		int unpaddedLength = afgRead.read.calculateUnpaddedLength();
-		//retrieve the read name from the temporary disk cache we keep for this
-//		System.out.println("attempting to retrieve name from cache: " + (tileIID-1));
-		String readName = cache.getName(tileIID-1);
+		ReadMetaData readMetaData = tempCache.getReadMetaData(tileIID-1);
+		readMetaData.calculateUnpaddedLength();
 
-		//check whether it already has a start position
-		//if not, add it
-		//if it has, clone it so that we have the correct number of reads matching the number of tiles
-		if(afgRead.startPositionIsSet)
-		{
-			Read read = afgRead.read.clone();
-			AfgRead newAfgRead = new AfgRead(read, afgRead.isComplemented);
-			//now point the current object at this new object so we can consistently apply the same steps to existing and cloned objects afterwards
-			afgRead = newAfgRead;
-		}
+		Read read = new Read();
 
 		//set Tablet read id on the current read
-		afgRead.read.setID(currReadID);
+		read.setID(currReadID);
 
 		//set start pos
-		afgRead.read.setStartPosition(offset);
-		afgRead.startPositionIsSet = true;
+		read.setStartPosition(offset);
+
+		read.setLength(readMetaData.length());
 
 		//now deal with the gap positions
 		//first check whether we have any gaps in the existing sequence and remove them if there are
-		String cleanSeq = null;
-		if (unpaddedLength != afgRead.read.length())
-		{
-			cleanSeq = afgRead.read.toString().replaceAll(gapChar, "");
-			afgRead.read.setData(cleanSeq);
-		}
 
 		//if the read is meant to be complemented we need to do this ourselves here now
 		//in the afg format all reads sequences are stored as uncomplemented
-		if((isComplemented && !afgRead.isComplemented) || (!isComplemented && afgRead.isComplemented))
+		if((isComplemented && !readMetaData.isComplemented()) || (!isComplemented && readMetaData.isComplemented()))
 		{
-			reverseComplementRead(afgRead.read);
-			afgRead.isComplemented = isComplemented;
+			reverseComplementRead(readMetaData);
+			readMetaData.setComplmented(isComplemented);
 		}
 
 		//check for gaps and insert if present
 		if(gapPositions != null && gapPositions.size() > 0)
 		{
-			StringBuilder buf = new StringBuilder(cleanSeq);
+			StringBuilder buf = new StringBuilder(readMetaData.toString());
 			for(Integer i : gapPositions)
 			{
 				buf.insert(i, gapChar);
 			}
-			afgRead.read.setData(buf.toString());
+			readMetaData.setData(buf.toString());
 		}
 
 		//add read to this contig
-		contig.getReads().add(afgRead.read);
+		contig.getReads().add(read);
 		readsFound++;
 
-		// Store the metadata about the read in the cache
-		//TODO: the "complemented" boolean is hard coded to false here for now -- deal with this later
-		ReadMetaData rmd = new ReadMetaData(readName, isComplemented, unpaddedLength);
-		readCache.setReadMetaData(rmd);
+		BasePositionComparator.compare(contig.getConsensus(), readMetaData, read.getStartPosition());
+
+		readCache.setReadMetaData(readMetaData);
 
 		//remember to increment the read id
 		currReadID++;
@@ -290,6 +277,7 @@ class AfgFileReader extends TrackableReader
 		//every so often, print out the number of reads found
 		if (readsFound % 250000 == 0)
 			System.out.println(" reads found: " + readsFound);
+
 	}
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -297,7 +285,8 @@ class AfgFileReader extends TrackableReader
 	//parses a RED tag -- contains read information (internal ID, external ID i.e. name, unpadded sequence, quality scores)
 	private void processRead() throws Exception
 	{
-		Read read = new Read();
+		//Read read = new Read();
+		ReadMetaData readMetaData = new ReadMetaData();
 
 		//String qualScores = null; // quality scores for  sequence  -- not used for now
 
@@ -305,26 +294,10 @@ class AfgFileReader extends TrackableReader
 		while ((str = readLine()) != null && str.length() > 0 && !str.startsWith("}"))
 		{
 			// external ID AKA contig name
-			if (str.startsWith("eid"))
+			if(str.startsWith("eid"))
 			{
-				// Store the name separately in the temporary disk cache, to preserve memory
-				cache.storeName(str.substring(str.indexOf(":") + 1));
+				readMetaData.setName(str.substring(str.indexOf(":") + 1));
 			}
-
-			// internal ID -- for cross referencing within AFG file
-//			else if (str.startsWith("iid"))
-//				internalID = Integer.parseInt(str.substring(str.indexOf(":") + 1));
-
-//			// quality scores for sequence
-//			else if (str.startsWith("qlt"))
-//			{
-//				StringBuffer qltBuf = new StringBuffer();
-//				while ((str = readLine()) != null && str.length() > 0 && !str.trim().equals("."))
-//				{
-//					qltBuf.append(str);
-//				}
-//				qualScores = qltBuf.toString();
-//			}
 
 			// the  sequence itself
 			else if (str.startsWith("seq"))
@@ -334,14 +307,17 @@ class AfgFileReader extends TrackableReader
 				{
 					seqBuf.append(str);
 				}
-				read.setData(seqBuf.toString());
+				readMetaData.setData(seqBuf.toString());
 			}
 		}
+
+		readMetaData.calculateUnpaddedLength();
+		readMetaData.setComplmented(false);
 
 		//store this read in the local list so we can look it up later when we are dealing with the alignment of reads against the
 		//consensus sequence
 		//at this point the read is not complemented so we can set the boolean (3rd param) to false accordingly
-		afgReadList.add(new AfgRead(read, false));
+		tempCache.setReadMetaData(readMetaData);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -384,32 +360,17 @@ class AfgFileReader extends TrackableReader
 		consensus.setBaseQualities(bq);
 	}
 
-	private void reverseComplementRead(Read read)
+	private void reverseComplementRead(ReadMetaData rmd)
 	{
-		int length = read.length();
+		int length = rmd.length();
 		StringBuilder sb = new StringBuilder(length);
 
 		for (int i = length-1; i >= 0; i--)
 		{
-			byte state = read.getStateAt(i);
-			sb.append(read.getComplementaryDNA(state));
+			byte state = rmd.getStateAt(i);
+			sb.append(rmd.getComplementaryDNA(state));
 		}
 
-		read.setData(sb.toString());
-	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------
-
-	private static class AfgRead
-	{
-		private Read read;
-		private boolean startPositionIsSet;
-		private boolean isComplemented;
-
-		AfgRead(Read read, boolean isComplemented)
-		{
-			this.read = read;
-			this.isComplemented = isComplemented;
-		}
+		rmd.setData(sb.toString());
 	}
 }

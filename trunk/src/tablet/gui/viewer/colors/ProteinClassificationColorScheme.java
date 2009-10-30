@@ -8,7 +8,6 @@ import java.awt.image.*;
 import java.util.*;
 
 import tablet.analysis.*;
-import tablet.data.*;
 
 public class ProteinClassificationColorScheme extends ColorScheme
 {

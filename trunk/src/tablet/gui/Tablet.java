@@ -121,8 +121,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		// Attempt to remove any temp files that were in use
 		winMain.closeAssembly();
 
-		File cacheDir = SystemUtils.getTempUserDirectory("scri-tablet");
-		FileUtils.emptyDirectory(cacheDir, true);
+		FileUtils.emptyDirectory(new File(Prefs.cacheDir), true);
 
 		Prefs.isFirstRun = false;
 		prefs.savePreferences(prefsFile, Prefs.class);
@@ -132,6 +131,8 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 	public void uncaughtException(Thread thread, Throwable throwable)
 	{
+		throwable.printStackTrace();
+
 		if (throwable instanceof java.lang.OutOfMemoryError == false)
 			return;
 

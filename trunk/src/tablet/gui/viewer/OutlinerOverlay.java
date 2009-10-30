@@ -4,7 +4,6 @@
 package tablet.gui.viewer;
 
 import java.awt.*;
-import java.util.*;
 
 import tablet.data.*;
 import tablet.data.auxiliary.*;
@@ -39,7 +38,7 @@ class OutlinerOverlay implements IOverlayRenderer
 
 		if (read != null)
 		{
-			ReadMetaData data = aPanel.getAssembly().getReadMetaData(read);
+			ReadMetaData data = Assembly.getReadMetaData(read);
 
 			// Start and ending positions (against consensus)
 			readS = read.getStartPosition();

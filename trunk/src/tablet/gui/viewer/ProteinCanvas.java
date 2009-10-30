@@ -5,7 +5,6 @@ package tablet.gui.viewer;
 
 import java.awt.*;
 import java.util.*;
-import javax.swing.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
@@ -14,9 +13,7 @@ import tablet.gui.viewer.colors.*;
 
 class ProteinCanvas extends TrackingCanvas
 {
-	private Contig contig;
 	private Consensus consensus;
-	private ScaleCanvas sCanvas;
 
 	private TranslationFractory factory;
 
@@ -38,15 +35,12 @@ class ProteinCanvas extends TrackingCanvas
 	void setAssemblyPanel(AssemblyPanel aPanel)
 	{
 		rCanvas = aPanel.readsCanvas;
-		sCanvas = aPanel.scaleCanvas;
 
 		mouseListener = new ProteinCanvasML(aPanel);
 	}
 
 	void setContig(Contig contig)
 	{
-		this.contig = contig;
-
 		if (contig != null)
 		{
 			consensus = contig.getConsensus();

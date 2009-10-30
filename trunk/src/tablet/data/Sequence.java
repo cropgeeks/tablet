@@ -60,6 +60,11 @@ public abstract class Sequence
 	// Stores the actual DNA states, using one byte for every two states
 	private byte[] data;
 
+	public byte[] getRawData()
+		{ return data; }
+
+	public void setRawData(byte[] data)
+		{ this.data = data; }
 
 	/**
 	 * Returns the length of this sequence.
@@ -67,6 +72,9 @@ public abstract class Sequence
 	 */
 	public int length()
 	{
+		if (data == null)
+			return 0;
+
 //		byte n1 = (byte) ((data[data.length-1] >> 4) & 0xF);
 		byte n2 = (byte) (data[data.length-1] & 0xF);
 
@@ -226,6 +234,7 @@ public abstract class Sequence
 	 * Returns a string representation of this sequence.
 	 * @return a string representation of this thread
 	 */
+	@Override
 	public String toString()
 	{
 		int length = length();
@@ -258,12 +267,5 @@ public abstract class Sequence
 				baseCount++;
 
 		return baseCount;
-	}
-	
-	protected void cloneData(Sequence cloneFrom)
-	{
-		data = new byte[cloneFrom.data.length];
-		for (int i = 0; i < data.length; i++)
-			data[i] = cloneFrom.data[i];
 	}
 }

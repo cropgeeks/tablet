@@ -3,21 +3,21 @@
 
 package tablet.data;
 
-import tablet.data.cache.*;
-
 /**
  * A read holds sequence information for a short stretch of sequenced DNA. The
  * Read class only holds the data and its starting position (as aligned against
  * the consenses. All other information is stored in the read cache, with each
  * read accessible via its unique index ID.
  */
-public class Read extends Sequence implements Comparable<Read>
+public class Read implements Comparable<Read>
 {
 	// The lookup ID for this read's name (which is stored elsewhere)
 	private int id;
 
 	// The position of the beginning of the read, in terms of consensus bases
 	private int position;
+
+	private int length;
 
 	/**
 	 * Constructs an empty read object
@@ -40,7 +40,7 @@ public class Read extends Sequence implements Comparable<Read>
 
 	int getID()
 		{ return id; }
-	
+
 	/**
 	 * Sets this read's ID.
 	 * @param The Read ID.
@@ -49,7 +49,7 @@ public class Read extends Sequence implements Comparable<Read>
 	{
 		this.id = id;
 	}
-	
+
 	/**
 	 * Sets this read's start position.
 	 * @param this read's start position
@@ -124,11 +124,12 @@ public class Read extends Sequence implements Comparable<Read>
 		// Otherwise must be within the window
 		return 0;
 	}
-	
-	public Read clone()
+
+	public int length()
 	{
-		Read newRead = new Read();
-		newRead.cloneData(this);
-		return newRead;
+		return length;
 	}
+
+	public void setLength(int length)
+		{ this.length = length; }
 }

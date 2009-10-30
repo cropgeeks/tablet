@@ -120,7 +120,13 @@ public class TabletUtils
 		{
 			for (FileNameExtensionFilter filter: filters)
 				fc.addChoosableFileFilter(filter);
-			fc.setFileFilter(filters[selectedFilter]);
+
+			// Set the filter to a a specific type...
+			if (selectedFilter != -1)
+				fc.setFileFilter(filters[selectedFilter]);
+			// ...or leave the default at "all files"
+			else
+				fc.setFileFilter(fc.getChoosableFileFilters()[0]);
 		}
 
 		if (fc.showOpenDialog(Tablet.winMain) != JFileChooser.APPROVE_OPTION)

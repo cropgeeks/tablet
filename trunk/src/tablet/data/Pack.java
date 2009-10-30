@@ -14,8 +14,6 @@ public class Pack
 {
 	private ArrayList<Read> reads = new ArrayList<Read>();
 
-	// TODO: This isn't being used yet - it should be possible to speed up
-	// searches with it though
 	private int positionE;
 
 	public void trimToSize()
@@ -27,14 +25,7 @@ public class Pack
 	 */
 	public boolean addRead(Read read)
 	{
-		if (reads.size() == 0)
-		{
-			reads.add(read);
-			positionE = read.getEndPosition();
-			return true;
-		}
-
-		if(read.getStartPosition() > positionE)
+		if (reads.size() == 0 || read.getStartPosition() > positionE)
 		{
 			reads.add(read);
 			positionE = read.getEndPosition();
@@ -121,13 +112,15 @@ public class Pack
 			int readS = read.getStartPosition();
 			int readE = read.getEndPosition();
 
+			ReadMetaData rmd = Assembly.getReadMetaData(read);
+
 			// Fill in any blanks between the current index the next read
 			for (; index < readS; index++, dataI++)
 				data[dataI] = -1;
 
 			// Fill in the read data
 			for (; index <= end && index <= readE; index++, dataI++)
-				data[dataI] = read.getStateAt(index-readS);
+				data[dataI] = rmd.getStateAt(index-readS);
 		}
 
 		// If no more reads are within the window, fill in any blanks between
@@ -163,10 +156,5 @@ public class Pack
 		}
 
 		return null;
-	}
-
-	public int PositionE()
-	{
-		return positionE;
 	}
 }

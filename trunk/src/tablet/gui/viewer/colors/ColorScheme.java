@@ -5,7 +5,6 @@ package tablet.gui.viewer.colors;
 
 import java.awt.*;
 import java.awt.image.*;
-import java.util.*;
 
 import tablet.analysis.*;
 import tablet.data.*;

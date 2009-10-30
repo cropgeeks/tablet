@@ -5,55 +5,49 @@ package tablet.io;
 
 import java.io.*;
 import java.util.*;
-import java.util.regex.*;
 
+import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
-import tablet.data.auxiliary.*;
-import static tablet.io.ReadException.*;
-
-import scri.commons.file.*;
 
 class SoapFileReader extends TrackableReader
 {
-	private boolean useAscii;
 	private IReadCache readCache;
+
+	private ReferenceFileReader refReader;
 
 	// The index of the SOAP file in the files[] array
 	private int soapIndex = -1;
-	// The index of the FASTA file in the files[] array
-	private int fastaIndex = -1;
+	// The index of the reference file in the files[] array
+	private int refIndex = -1;
 
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
-	SoapFileReader(IReadCache readCache, boolean useAscii)
+	SoapFileReader()
+	{
+	}
+
+	SoapFileReader(IReadCache readCache)
 	{
 		this.readCache = readCache;
-		this.useAscii = useAscii;
 	}
 
 	boolean canRead()
 		throws Exception
 	{
-		boolean foundSoap = false;
-		boolean foundFasta = false;
+		refReader = new ReferenceFileReader(assembly);
 
 		// We need to check each file to see if it is readable
-		for (int i = 0; i < 2; i++)
+		for (int i = 0; i < files.length; i++)
 		{
 			if (isSoapFile(i))
-			{
-				foundSoap = true;
 				soapIndex = i;
-			}
-			else if (isFastaFile(i))
-			{
-				foundFasta = true;
-				fastaIndex = i;
-			}
+
+			else if (refReader.canRead(files[i]) != AssemblyFileHandler.UNKNOWN)
+				refIndex = i;
 		}
 
-		return (foundSoap && foundFasta);
+		return (soapIndex >= 0);
 	}
 
 	// Checks to see if this is a SOAP file by assuming 10 columns of \t data
@@ -70,80 +64,32 @@ class SoapFileReader extends TrackableReader
 		return isSoapFile;
 	}
 
-	// Checks to see if this is a FASTA file by looking for a leading >
-	private boolean isFastaFile(int fileIndex)
-		throws Exception
-	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(fileIndex)));
-		str = readLine();
-
-		boolean isFastaFile = (str != null && str.startsWith(">"));
-		in.close();
-		is.close();
-
-		return isFastaFile;
-	}
-
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		readFastaFile();
+		// Read reference information (if it exists)
+		if (refIndex >= 0)
+			readReferenceFile();
+
+		// Then read the main assembly/read data file
 		readSoapFile();
 	}
 
-	private void readFastaFile()
+	private void readReferenceFile()
 		throws Exception
 	{
-		if (useAscii)
-			in = new BufferedReader(new InputStreamReader(getInputStream(fastaIndex), "ASCII")); // ISO8859_1
-		else
-			in = new BufferedReader(new InputStreamReader(getInputStream(fastaIndex)));
+		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex), "ASCII"));
 
-		System.out.println("FASTA: " + files[fastaIndex]);
-
-		Contig contig = null;
-		StringBuilder sb = null;
-
-		while ((str = readLine()) != null && okToRun)
-		{
-			if (str.startsWith(">"))
-			{
-				if (sb != null && sb.length() > 0)
-					addContig(contig, new Consensus(), sb);
-
-				sb = new StringBuilder();
-
-				String name;
-				if (str.indexOf(" ") != -1)
-					name = str.substring(1, str.indexOf(" "));
-				else
-					name = str.substring(1);
-
-				contig = new Contig(name, true, 0);
-				contigHash.put(name, contig);
-			}
-
-			else
-				sb.append(str.trim());
-		}
-
-		if (sb != null && sb.length() > 0)
-			addContig(contig, new Consensus(), sb);
+		refReader.readReferenceFile(this, files[refIndex]);
+		contigHash = refReader.getContigHashMap();
 
 		in.close();
-
-		assembly.setName(files[soapIndex].getName());
 	}
 
 	private void readSoapFile()
 		throws Exception
 	{
-		if (useAscii)
-			in = new BufferedReader(new InputStreamReader(getInputStream(soapIndex), "ASCII")); // ISO8859_1
-		else
-			in = new BufferedReader(new InputStreamReader(getInputStream(soapIndex)));
-
-		System.out.println("SOAP:  " + files[soapIndex]);
+		in = new BufferedReader(new InputStreamReader(getInputStream(soapIndex), "ASCII"));
 
 		int readID = 0;
 
@@ -152,40 +98,45 @@ class SoapFileReader extends TrackableReader
 			String[] tokens = str.split("\t");
 
 			String name = new String(tokens[0]);
-			String data = tokens[1];
+			String data = new String(tokens[1]);
 			String chr  = tokens[7];
 			boolean complemented = tokens[6].equals("-");
 			int pos = Integer.parseInt(tokens[8]) - 1;
 
 			Read read = new Read(readID, pos);
-			read.setData(data.toString());
-
 
 			Contig contigToAddTo = contigHash.get(chr);
+
+			// If it wasn't found (and we don't have ref data), make it
+			if (contigToAddTo == null && refIndex == -1)
+			{
+				contigToAddTo = new Contig(chr);
+				contigHash.put(chr, contigToAddTo);
+
+				assembly.addContig(contigToAddTo);
+			}
 
 			if (contigToAddTo != null)
 			{
 				contigToAddTo.getReads().add(read);
 
-				ReadMetaData rmd = new ReadMetaData(
-					name, complemented, read.calculateUnpaddedLength());
+				ReadMetaData rmd = new ReadMetaData(name, complemented);
+				rmd.setData(data.toString());
+				rmd.calculateUnpaddedLength();
+				read.setLength(rmd.length());
+
+				// Do base-position comparison...
+				BasePositionComparator.compare(contigToAddTo.getConsensus(), rmd,
+					read.getStartPosition());
+
 				readCache.setReadMetaData(rmd);
+
 				readID++;
 			}
 		}
 
 		in.close();
-	}
 
-	private void addContig(Contig contig, Consensus consensus, StringBuilder sb)
-	{
-		consensus.setData(sb.toString());
-		consensus.calculateUnpaddedLength();
-		contig.setConsensusSequence(consensus);
-
-		byte[] bq = new byte[consensus.length()];
-		consensus.setBaseQualities(bq);
-
-		assembly.addContig(contig);
+		assembly.setName(files[soapIndex].getName());
 	}
 }
