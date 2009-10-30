@@ -7,7 +7,6 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
-import scri.commons.gui.*;
 import tablet.analysis.BasePositionComparator;
 import tablet.data.*;
 import tablet.data.cache.*;
@@ -299,21 +298,6 @@ class AfgFileReader extends TrackableReader
 			{
 				readMetaData.setName(str.substring(str.indexOf(":") + 1));
 			}
-
-			// internal ID -- for cross referencing within AFG file
-//			else if (str.startsWith("iid"))
-//				internalID = Integer.parseInt(str.substring(str.indexOf(":") + 1));
-
-//			// quality scores for sequence
-//			else if (str.startsWith("qlt"))
-//			{
-//				StringBuffer qltBuf = new StringBuffer();
-//				while ((str = readLine()) != null && str.length() > 0 && !str.trim().equals("."))
-//				{
-//					qltBuf.append(str);
-//				}
-//				qualScores = qltBuf.toString();
-//			}
 
 			// the  sequence itself
 			else if (str.startsWith("seq"))

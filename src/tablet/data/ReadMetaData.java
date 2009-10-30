@@ -55,6 +55,7 @@ public class ReadMetaData extends Sequence
 	public int getUnpaddedLength()
 		{ return unpaddedLength; }
 
+	@Override
 	public int calculateUnpaddedLength()
 	{
 		return (unpaddedLength = super.calculateUnpaddedLength());

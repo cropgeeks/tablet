@@ -3,9 +3,6 @@
 
 package tablet.data.auxiliary;
 
-import tablet.analysis.*;
-import tablet.data.*;
-
 /**
  * DisplayData holds information about a contig that is *only* required when
  * Tablet is displaying that contig. The information is calculated just before

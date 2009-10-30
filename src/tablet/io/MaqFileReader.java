@@ -10,8 +10,6 @@ import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
 
-import scri.commons.file.*;
-
 class MaqFileReader extends TrackableReader
 {
 	private IReadCache readCache;

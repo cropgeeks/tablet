@@ -3,8 +3,6 @@
 
 package tablet.data;
 
-import tablet.data.cache.*;
-
 /**
  * A read holds sequence information for a short stretch of sequenced DNA. The
  * Read class only holds the data and its starting position (as aligned against
