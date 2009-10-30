@@ -17,6 +17,10 @@ public class Prefs extends XMLPreferences
 	public static boolean isSCRIUser = false;
 	public static int rating = 0;
 
+	// The local working directory for disk caching
+	public static String cacheDir =
+		SystemUtils.getTempUserDirectory("scri-tablet").getPath();
+
 	// When to check for updates
 	public static int guiUpdateSchedule = Install4j.STARTUP;
 

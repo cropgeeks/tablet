@@ -22,14 +22,17 @@ import scri.commons.gui.*;
 public class ImportHandler implements ITrackableJob
 {
 	private File[] files;
+	private File cacheDir;
 	private boolean okToRun = true;
 
 	private ITrackableJob currentJob = null;
 
 	private Assembly assembly;
 
-	public ImportHandler(String[] filenames)
+	public ImportHandler(String[] filenames, File cacheDir)
 	{
+		this.cacheDir = cacheDir;
+
 		files = new File[filenames.length];
 		for (int i = 0; i < files.length; i++)
 			files[i] = new File(filenames[i]);
@@ -44,7 +47,7 @@ public class ImportHandler implements ITrackableJob
 
 		// Import the assembly file
 		if (jobIndex == 0)
-			currentJob = new AssemblyFileHandler(files);
+			currentJob = new AssemblyFileHandler(files, cacheDir);
 
 		currentJob.runJob(0);
 

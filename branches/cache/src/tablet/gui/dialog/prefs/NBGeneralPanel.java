@@ -4,13 +4,15 @@
 package tablet.gui.dialog.prefs;
 
 import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
 import javax.swing.*;
 
 import tablet.gui.*;
 
 import scri.commons.gui.*;
 
-class NBGeneralPanel extends JPanel
+class NBGeneralPanel extends JPanel implements ActionListener
 {
 	private DefaultComboBoxModel displayModel;
 	private DefaultComboBoxModel updateModel;
@@ -21,6 +23,7 @@ class NBGeneralPanel extends JPanel
 
         setBackground(Color.white);
         generalPanel.setBackground(Color.white);
+		cachePanel.setBackground(Color.white);
 
 		// Interface settings
 		generalPanel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.prefs.NBGeneralPanel.generalPanelTitle")));
@@ -45,6 +48,14 @@ class NBGeneralPanel extends JPanel
         updateModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.updateMonthly"));
         updateCombo.setModel(updateModel);
         updateCombo.setSelectedIndex(Prefs.guiUpdateSchedule);
+
+        // Cache settings
+        cachePanel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.prefs.NBGeneralPanel.cachePanelTitle")));
+        RB.setText(cacheLabel, "gui.dialog.prefs.NBGeneralPanel.cacheLabel");
+        RB.setText(bBrowse, "gui.text.browse");
+
+        cacheField.setText(Prefs.cacheDir);
+        bBrowse.addActionListener(this);
 	}
 
     private int getLocaleIndex()
@@ -67,6 +78,18 @@ class NBGeneralPanel extends JPanel
 		}
 
 		Prefs.guiUpdateSchedule = updateCombo.getSelectedIndex();
+		Prefs.cacheDir = cacheField.getText();
+	}
+
+	public void actionPerformed(ActionEvent e)
+	{
+		JFileChooser fc = new JFileChooser();
+		fc.setDialogTitle("");
+		fc.setSelectedFile(new File(cacheField.getText()));
+		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+
+		if (fc.showOpenDialog(Tablet.winMain) == JFileChooser.APPROVE_OPTION)
+			cacheField.setText(fc.getSelectedFile().getPath());
 	}
 
     /** This method is called from within the constructor to
@@ -83,6 +106,10 @@ class NBGeneralPanel extends JPanel
         displayLabel = new javax.swing.JLabel();
         updateLabel = new javax.swing.JLabel();
         displayHint = new javax.swing.JLabel();
+        cachePanel = new javax.swing.JPanel();
+        cacheLabel = new javax.swing.JLabel();
+        cacheField = new javax.swing.JTextField();
+        bBrowse = new javax.swing.JButton();
 
         generalPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("General options:"));
 
@@ -126,13 +153,48 @@ class NBGeneralPanel extends JPanel
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        cachePanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Cache options:"));
+
+        cacheLabel.setLabelFor(cacheField);
+        cacheLabel.setText("Tablet requires a local directory for storing temporary files:");
+
+        bBrowse.setText("Browse...");
+
+        javax.swing.GroupLayout cachePanelLayout = new javax.swing.GroupLayout(cachePanel);
+        cachePanel.setLayout(cachePanelLayout);
+        cachePanelLayout.setHorizontalGroup(
+            cachePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cachePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(cachePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cacheLabel)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, cachePanelLayout.createSequentialGroup()
+                        .addComponent(cacheField, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bBrowse)))
+                .addContainerGap())
+        );
+        cachePanelLayout.setVerticalGroup(
+            cachePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(cachePanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(cacheLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(cachePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(cacheField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bBrowse))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(generalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(cachePanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(generalPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -140,11 +202,17 @@ class NBGeneralPanel extends JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(generalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(89, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(cachePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bBrowse;
+    private javax.swing.JTextField cacheField;
+    private javax.swing.JLabel cacheLabel;
+    private javax.swing.JPanel cachePanel;
     private javax.swing.JComboBox displayCombo;
     private javax.swing.JLabel displayHint;
     private javax.swing.JLabel displayLabel;

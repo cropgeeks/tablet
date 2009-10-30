@@ -30,11 +30,13 @@ public class AssemblyFileHandler extends SimpleJob
 	public static final int FASTQ = 6;
 
 	private File[] files = null;
+	private File cacheDir = null;
 	private TrackableReader reader = null;
 
-	AssemblyFileHandler(File[] files)
+	AssemblyFileHandler(File[] files, File cacheDir)
 	{
 		this.files = files;
+		this.cacheDir = cacheDir;
 	}
 
 	Assembly getAssembly()
@@ -45,7 +47,8 @@ public class AssemblyFileHandler extends SimpleJob
 	{
 		boolean fileParsed = false;
 
-		File cacheDir = SystemUtils.getTempUserDirectory("scri-tablet");
+		// Ensure the cache directory exists (and is valid)
+		cacheDir.mkdirs();
 
 		// Set up the read cache
 		String time = "" + System.currentTimeMillis();
@@ -65,7 +68,7 @@ public class AssemblyFileHandler extends SimpleJob
 		// AFG
 		if (okToRun && fileParsed == false)
 		{
-			reader = new AfgFileReader(readCache);
+			reader = new AfgFileReader(readCache, cacheDir);
 			fileParsed = readFile();
 		}
 		// Maq
