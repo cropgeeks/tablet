@@ -23,6 +23,20 @@ changes between versions, please see the <a href="http://bioinf.scri.ac.uk/table
 subversion change log</a>.</p>
 
 
+<h3>New in 0.09.10.30</h3>
+
+<ul>
+<li>NEW: Tablet now uses up to 50% less memory per assembly than in previous versions.</li>
+<li>NEW: The Import Assembly dialog has had a complete redesign to make it easier to use.</li>
+<li>NEW: SOAP or MAQ assemblies can now be loaded without having to provide reference or consensus data in an additional file.</li>
+<li>NEW: The location of the (temporary) assembly cache directory can now be specified in the Tablet Options dialog.</li>
+<li>NEW: Tablet pop-up warnings can now be toggled on or off via the Tablet Options dialog.</li>
+<li>NEW: Added Ribbon controls for iterating backwards or forwards through the list of features.</li>
+<li>NEW: Feature positions can now be tagged as either padded or unpadded.</li>
+<li>BUG: Running "tablet &lt;somefile&gt;" from the command line now behaves properly regardless of the directory level used.</li>
+</ul>
+
+
 <h3>New in 0.09.10.02</h3>
 
 <ul>

@@ -83,8 +83,8 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 		bNextFeature.setActionRichTooltip(new RichTooltip(
 			RB.format("gui.ribbon.HomeNavigateBand.bNextFeature.tooltip", Tablet.winKey),
 			RB.getString("gui.ribbon.HomeNavigateBand.bNextFeature.richtip")));
-		RibbonController.assignShortcut(bNextFeature,
-			KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, Tablet.menuShortcut));
+//		RibbonController.assignShortcut(bNextFeature,
+//			KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, Tablet.menuShortcut));
 
 		// Previous Feature...
 		bPrevFeature = new JCommandButton(
@@ -97,8 +97,8 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 		bPrevFeature.setActionRichTooltip(new RichTooltip(
 			RB.format("gui.ribbon.HomeNavigateBand.bPrevFeature.tooltip", Tablet.winKey),
 			RB.getString("gui.ribbon.HomeNavigateBand.bPrevFeature.richtip")));
-		RibbonController.assignShortcut(bPrevFeature,
-			KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Tablet.menuShortcut));
+//		RibbonController.assignShortcut(bPrevFeature,
+//			KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Tablet.menuShortcut));
 
 		addCommandButton(bPageLeft, RibbonElementPriority.MEDIUM);
 		addCommandButton(bPageRight, RibbonElementPriority.MEDIUM);
