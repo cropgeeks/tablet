@@ -234,6 +234,7 @@ public abstract class Sequence
 	 * Returns a string representation of this sequence.
 	 * @return a string representation of this thread
 	 */
+	@Override
 	public String toString()
 	{
 		int length = length();
@@ -266,12 +267,5 @@ public abstract class Sequence
 				baseCount++;
 
 		return baseCount;
-	}
-
-	protected void cloneData(Sequence cloneFrom)
-	{
-		data = new byte[cloneFrom.data.length];
-		for (int i = 0; i < data.length; i++)
-			data[i] = cloneFrom.data[i];
 	}
 }

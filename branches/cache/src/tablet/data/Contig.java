@@ -6,7 +6,6 @@ package tablet.data;
 import java.util.*;
 
 import tablet.data.auxiliary.*;
-import tablet.data.cache.*;
 
 /**
  * The contig class holds the consensus sequence along with a list of reads and

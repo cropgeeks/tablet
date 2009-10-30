@@ -13,8 +13,6 @@ import tablet.data.cache.*;
 import tablet.data.auxiliary.*;
 import static tablet.io.ReadException.*;
 
-import scri.commons.file.*;
-
 class AceFileReader extends TrackableReader
 {
 	private IReadCache readCache;

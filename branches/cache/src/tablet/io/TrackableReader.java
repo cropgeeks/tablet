@@ -7,8 +7,6 @@ import java.io.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
-import tablet.data.cache.*;
-import tablet.gui.*;
 
 import scri.commons.file.*;
 

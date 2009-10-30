@@ -9,11 +9,7 @@ import java.util.*;
 
 import tablet.data.*;
 import tablet.data.auxiliary.*;
-import tablet.data.cache.*;
-import tablet.gui.*;
 import static tablet.io.ReadException.*;
-
-import scri.commons.file.*;
 
 public class GFF3Reader extends TrackableReader
 {

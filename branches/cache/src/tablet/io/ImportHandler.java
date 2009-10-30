@@ -4,20 +4,14 @@
 package tablet.io;
 
 import java.io.*;
-import java.util.*;
-import java.util.zip.*;
 
-import tablet.analysis.*;
 import tablet.data.*;
-import tablet.data.cache.*;
 import tablet.gui.*;
 
-import scri.commons.file.*;
-import scri.commons.gui.*;
-
 /**
- * ImportHandler is a 2-state ITrackableJob implementation, that is responsible
- * for monitoring progress during assembly import and read base comparisons.
+ * ImportHandler is an ITrackableJob implementation, that is responsible
+ * for monitoring progress during assembly import. It is a legacy class that
+ * probably needs to be removed, but isn't doing any harm in the meantime.
  */
 public class ImportHandler implements ITrackableJob
 {

@@ -9,10 +9,6 @@ import java.util.*;
 import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
-import tablet.gui.*;
-
-import scri.commons.file.*;
-import scri.commons.gui.*;
 
 /**
  * The AssemblyFileHandler class is given file pointers and will attempt to
