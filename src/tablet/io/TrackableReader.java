@@ -7,8 +7,6 @@ import java.io.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
-import tablet.data.cache.*;
-import tablet.gui.*;
 
 import scri.commons.file.*;
 
@@ -46,7 +44,7 @@ abstract class TrackableReader extends SimpleJob
 			totalSize += file.length();
 	}
 
-	protected String readLine()
+	String readLine()
 		throws IOException
 	{
 		lineCount++;
@@ -78,7 +76,7 @@ abstract class TrackableReader extends SimpleJob
 		return Math.round((total / (float) totalSize) * 5555);
 	}
 
-	protected ProgressInputStream getInputStream(int fileIndex)
+	ProgressInputStream getInputStream(int fileIndex)
 		throws Exception
 	{
 		this.fileIndex = fileIndex;

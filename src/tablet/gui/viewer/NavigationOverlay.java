@@ -12,7 +12,6 @@ import scri.commons.gui.*;
  */
 class NavigationOverlay implements IOverlayRenderer
 {
-	private AssemblyPanel aPanel;
 	private ReadsCanvas rCanvas;
 	private ReadsCanvasInfoPane infoPane;
 
@@ -25,7 +24,6 @@ class NavigationOverlay implements IOverlayRenderer
 
 	public NavigationOverlay(AssemblyPanel aPanel, ReadsCanvasInfoPane infoPane)
 	{
-		this.aPanel = aPanel;
 		this.infoPane = infoPane;
 		rCanvas = aPanel.readsCanvas;
 

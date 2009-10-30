@@ -5,15 +5,12 @@ package tablet.gui.viewer;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
 
 import tablet.data.*;
 import tablet.data.auxiliary.*;
 
 class CoverageCanvas extends TrackingCanvas
 {
-	private Contig contig;
-
 	private BasicStroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT,
 		BasicStroke.JOIN_MITER, 10, new float[] { 5,2 }, 0);
 
@@ -50,8 +47,6 @@ class CoverageCanvas extends TrackingCanvas
 
 	void setContig(Contig contig)
 	{
-		this.contig = contig;
-
 		if (contig != null)
 			offset = contig.getConsensusOffset();
 	}

@@ -9,7 +9,7 @@ import javax.swing.*;
 class Nimbus
 {
 	private static final Color BACKGROUND = new Color(240, 240, 240);
-	private static final Font FONT = new Font("Tahoma", Font.PLAIN, 11);
+	//private static final Font FONT = new Font("Tahoma", Font.PLAIN, 11);
 
 	static void customizeNimbus()
 		throws Exception

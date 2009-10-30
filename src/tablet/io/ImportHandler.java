@@ -4,32 +4,29 @@
 package tablet.io;
 
 import java.io.*;
-import java.util.*;
-import java.util.zip.*;
 
-import tablet.analysis.*;
 import tablet.data.*;
-import tablet.data.cache.*;
 import tablet.gui.*;
 
-import scri.commons.file.*;
-import scri.commons.gui.*;
-
 /**
- * ImportHandler is a 2-state ITrackableJob implementation, that is responsible
- * for monitoring progress during assembly import and read base comparisons.
+ * ImportHandler is an ITrackableJob implementation, that is responsible
+ * for monitoring progress during assembly import. It is a legacy class that
+ * probably needs to be removed, but isn't doing any harm in the meantime.
  */
 public class ImportHandler implements ITrackableJob
 {
 	private File[] files;
+	private File cacheDir;
 	private boolean okToRun = true;
 
 	private ITrackableJob currentJob = null;
 
 	private Assembly assembly;
 
-	public ImportHandler(String[] filenames)
+	public ImportHandler(String[] filenames, File cacheDir)
 	{
+		this.cacheDir = cacheDir;
+
 		files = new File[filenames.length];
 		for (int i = 0; i < files.length; i++)
 			files[i] = new File(filenames[i]);
@@ -44,23 +41,18 @@ public class ImportHandler implements ITrackableJob
 
 		// Import the assembly file
 		if (jobIndex == 0)
-			currentJob = new AssemblyFileHandler(files);
-
-		// Rewrite the internal read data if it differs from the consensus
-		else if (jobIndex == 1)
-		{
-			assembly = ((AssemblyFileHandler)currentJob).getAssembly();
-			currentJob = new BasePositionComparator(assembly);
-		}
+			currentJob = new AssemblyFileHandler(files, cacheDir);
 
 		currentJob.runJob(0);
+
+		assembly = ((AssemblyFileHandler)currentJob).getAssembly();
 	}
 
 	public Assembly getAssembly()
 		{ return assembly; }
 
 	public int getJobCount()
-		{ return 2; }
+		{ return 1; }
 
 	public void cancelJob()
 	{

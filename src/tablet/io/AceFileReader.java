@@ -7,21 +7,22 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
+import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
 import tablet.data.auxiliary.*;
 import static tablet.io.ReadException.*;
 
-import scri.commons.file.*;
-
 class AceFileReader extends TrackableReader
 {
-	private boolean useAscii;
 	private IReadCache readCache;
 
 	private Contig contig;
 	private Consensus consensus;
 	private Read read;
+
+	// The index of the ACE file in the files[] array
+	private int aceIndex = -1;
 
 	// Index trackers for counting AF and RD lines as they are parsed
 	private int afIndex = 0, rdIndex = 0;
@@ -39,34 +40,38 @@ class AceFileReader extends TrackableReader
 	// Pretty much all the tokenizing we do is based on this one pattern
 	private Pattern p = Pattern.compile("\\s+");
 
-	AceFileReader(IReadCache readCache, boolean useAscii)
+	AceFileReader()
+	{
+	}
+
+	AceFileReader(IReadCache readCache)
 	{
 		this.readCache = readCache;
-		this.useAscii = useAscii;
 	}
 
 	boolean canRead()
 		throws Exception
 	{
-		// Read and check for the header
-		in = new BufferedReader(new InputStreamReader(getInputStream(0)));
-		str = readLine();
+		for (int i = 0; i < files.length; i++)
+		{
+			// Read and check for the header
+			in = new BufferedReader(new InputStreamReader(getInputStream(i)));
+			str = readLine();
 
-		boolean isACEFile = (str != null && str.startsWith("AS "));
+			if (str != null && str.startsWith("AS "))
+				aceIndex = i;
 
-		in.close();
-		is.close();
+			in.close();
+			is.close();
+		}
 
-		return isACEFile;
+		return (aceIndex >= 0);
 	}
 
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		if (useAscii)
-			in = new BufferedReader(new InputStreamReader(getInputStream(0), "ASCII")); // ISO8859_1
-		else
-			in = new BufferedReader(new InputStreamReader(getInputStream(0)));
+		in = new BufferedReader(new InputStreamReader(getInputStream(aceIndex), "ASCII"));
 
 		// Read in the header
 		str = readLine();
@@ -241,11 +246,17 @@ class AceFileReader extends TrackableReader
 
 		// Fetch the read for this location
 		Read read = contig.getReads().get(rdIndex);
-		read.setData(seq.toString());
 
 		// Store the metadata about the read in the cache
-		ReadMetaData rmd = new ReadMetaData(
-			RD[1], ucCache[rdIndex], read.calculateUnpaddedLength());
+		ReadMetaData rmd = new ReadMetaData(RD[1], ucCache[rdIndex]);
+		rmd.setData(seq.toString());
+		rmd.calculateUnpaddedLength();
+		read.setLength(rmd.length());
+
+		// Do base-position comparison...
+		BasePositionComparator.compare(contig.getConsensus(), rmd,
+			read.getStartPosition());
+
 		readCache.setReadMetaData(rmd);
 
 		rdIndex++;

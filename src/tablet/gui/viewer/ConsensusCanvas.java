@@ -4,14 +4,12 @@
 package tablet.gui.viewer;
 
 import java.awt.*;
-import javax.swing.*;
 
 import tablet.data.*;
 import tablet.gui.viewer.colors.*;
 
 class ConsensusCanvas extends TrackingCanvas
 {
-	private Contig contig;
 	private Consensus consensus;
 
 	// Low/high colour information used to draw the base quality scores
@@ -38,8 +36,6 @@ class ConsensusCanvas extends TrackingCanvas
 
 	void setContig(Contig contig)
 	{
-		this.contig = contig;
-
 		if (contig != null)
 		{
 			consensus = contig.getConsensus();
@@ -66,6 +62,9 @@ class ConsensusCanvas extends TrackingCanvas
 	{
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
+
+		if (consensus.length() == 0)
+			return;
 
 		int ntW = rCanvas.ntW;
 		int ntH = rCanvas.ntH;

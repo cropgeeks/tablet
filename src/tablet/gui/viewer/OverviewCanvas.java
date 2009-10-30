@@ -10,8 +10,6 @@ import javax.swing.*;
 
 import tablet.gui.*;
 
-import scri.commons.gui.*;
-
 public class OverviewCanvas extends JPanel
 {
 	public static final int SCALEDDATA = 0;

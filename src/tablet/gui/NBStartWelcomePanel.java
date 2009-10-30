@@ -6,7 +6,6 @@ package tablet.gui;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import scri.commons.gui.*;
-import tablet.gui.Install4j;
 
 public class NBStartWelcomePanel extends javax.swing.JPanel implements ActionListener
 {
