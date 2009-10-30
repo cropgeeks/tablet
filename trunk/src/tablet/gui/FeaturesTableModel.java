@@ -4,7 +4,6 @@
 package tablet.gui;
 
 import java.util.*;
-import javax.swing.*;
 import javax.swing.table.*;
 
 import tablet.data.*;
@@ -19,13 +18,10 @@ class FeaturesTableModel extends AbstractTableModel
 {
 	private ArrayList<Feature> features;
 
-	private JTable table;
 	private String[] columnNames;
 
-	FeaturesTableModel(Contig contig, JTable table)
+	FeaturesTableModel(Contig contig)
 	{
-		this.table = table;
-
 		features = contig.getFeatures();
 
 		String col1 = RB.getString("gui.FeaturesTableModel.col1");

@@ -58,7 +58,7 @@ public class DisplayData
 	 * @param paddedPosition the padded position to convert to unpadded
 	 * @return the unpadded index for the given padded index position
 	 */
-	public static int getUnpaddedPosition(int paddedPosition)
+	public static int paddedToUnpadded(int paddedPosition)
 	{
 		try {
 			return paddedToUnpadded[paddedPosition];
@@ -77,7 +77,7 @@ public class DisplayData
 	 * @param unpaddedPosition the unpadded position to convert to padded
 	 * @return the padded index for the given unpadded index position
 	 */
-	public static int getPaddedPosition(int unpaddedPosition)
+	public static int unpaddedToPadded(int unpaddedPosition)
 	{
 		try {
 			return unpaddedToPadded[unpaddedPosition];

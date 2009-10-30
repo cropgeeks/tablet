@@ -149,8 +149,8 @@ public class JumpToDialog extends JDialog
 		else
 			nbPanel.bJumpPadded.setEnabled(true);
 
-		// Work out the unpadded index
-		unpaddedIndex = DisplayData.getPaddedPosition(base-1);
+		// Convert the unpadded index to a padded index
+		unpaddedIndex = DisplayData.unpaddedToPadded(base-1);
 		nbPanel.bJumpUnpadded.setEnabled(unpaddedIndex != -1);
 		unpaddedIndex += contig.getConsensusOffset();
 	}
