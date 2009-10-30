@@ -38,10 +38,11 @@ class AfgFileReader extends TrackableReader
 	//the standard gap character for this file format
 	private final String gapChar = "-";
 
-	//this temporary disk cache holds the names of the  reads while we read them in, to conserve memory
+	//this temporary disk cache holds the names of the reads while we read them in, to conserve memory
 	//private AfgNameCache cache = null;
 
-	IReadCache tempCache;
+	private IReadCache tempCache;
+	private File cacheDir;
 
 	private File cacheFile;
 	private File indexFile;
@@ -54,9 +55,10 @@ class AfgFileReader extends TrackableReader
 	{
 	}
 
-	AfgFileReader(IReadCache readCache)
+	AfgFileReader(IReadCache readCache, File cacheDir)
 	{
 		this.readCache = readCache;
+		this.cacheDir = cacheDir;
 	}
 
 	//=======================================methods==========================================
@@ -89,7 +91,6 @@ class AfgFileReader extends TrackableReader
 
 		//open the temporary file cache for the read names
 		long time = System.currentTimeMillis();
-		File cacheDir = SystemUtils.getTempUserDirectory("scri-tablet");
 		cacheFile = new File(cacheDir, time + "-" + files[0].getName() + ".tempCache");
 		indexFile = new File(cacheDir, time + "-" + files[0].getName() + ".tempCacheIndex");
 

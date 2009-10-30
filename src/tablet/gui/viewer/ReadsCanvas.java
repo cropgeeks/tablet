@@ -66,6 +66,8 @@ class ReadsCanvas extends JPanel
 	private ExecutorService executor;
 	private Future[] tasks;
 
+	// Set to true if the canvas is rendered (ie, generated the back buffer)
+	boolean isRendering = false;
 
 	ReadsCanvas()
 	{
@@ -201,8 +203,12 @@ class ReadsCanvas extends JPanel
 		// Update the back buffer (if it needs redrawn)
 		if (updateBuffer)
 		{
+			isRendering = true;
+
 			try { paintBuffer(); }
 			catch (Exception e) {}
+
+			isRendering = false;
 		}
 
 		// Then paint it to the screen

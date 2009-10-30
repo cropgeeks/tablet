@@ -34,6 +34,10 @@ way Tablet is used and is displayed.</p>
 	This setting determines how often Tablet will attempt to connect back to its
 	download server to see if a newer version is available. The options available are
 	Never, At application startup, Once a day, Once a week, and Once a month.</li>
+	<li><b>Tablet requires a local directory for storing temporary files</b><br>
+	Specifies the directory where Tablet will keep its disk cache (of the assembly
+	data). The size of the cache depends on the size of the assembly, so it is
+	advisable to pick a location with plenty of free space.</li>
 </ul>
 
 

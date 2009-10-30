@@ -55,6 +55,10 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 
 			for (int x = 0; x < w && !killMe; x++)
 			{
+				while (rCanvas.isRendering)
+					try { Thread.sleep(5); }
+					catch (InterruptedException e) {}
+
 				// Working out where each pixel maps to in the data...
 				int dataX = (int) (x * xScale) - rCanvas.offset;
 
