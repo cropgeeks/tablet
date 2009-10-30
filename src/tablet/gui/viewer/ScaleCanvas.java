@@ -197,7 +197,7 @@ class ScaleCanvas extends TrackingCanvas
 		if (Prefs.visHideUnpaddedValues)
 			return "";
 
-		int unpadded = DisplayData.getUnpaddedPosition(mouseBase);
+		int unpadded = DisplayData.paddedToUnpadded(mouseBase);
 
 		if (unpadded == -1)
 			return " " + U + Sequence.PAD;

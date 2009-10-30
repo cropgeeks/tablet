@@ -72,7 +72,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		{
 			ctrlTabs.setEnabledAt(1, true);
 			ctrlTabs.setTitleAt(1, getTitle(contig.getFeatures().size()));
-			model = new FeaturesTableModel(contig, table);
+			model = new FeaturesTableModel(contig);
 			sorter = new TableRowSorter<FeaturesTableModel>(model);
 			table.setModel(model);
 			table.setRowSorter(sorter);
@@ -111,8 +111,8 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		// Override position if we're using unpadded values
 		if (Prefs.guiFeaturesArePadded == false)
 		{
-			start = DisplayData.getUnpaddedPosition(start);
-			end = DisplayData.getUnpaddedPosition(end);
+			start = DisplayData.unpaddedToPadded(start);
+			end = DisplayData.unpaddedToPadded(end);
 		}
 
 		start = start + contig.getConsensusOffset();
@@ -132,6 +132,9 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 	{
 		if(table.getSelectedRow() < table.getRowCount()-1)
 			table.setRowSelectionInterval(table.getSelectedRow()+1, table.getSelectedRow()+1);
+
+		ctrlTabs.setSelectedComponent(this);
+		table.scrollRectToVisible(table.getCellRect(table.getSelectedRow(), table.getSelectedColumn(), true));
 	}
 
 	public void prevFeature()
@@ -140,5 +143,8 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 			table.setRowSelectionInterval(table.getRowCount()-1, table.getRowCount()-1);
 		else if(table.getSelectedRow() > 0)
 			table.setRowSelectionInterval(table.getSelectedRow()-1, table.getSelectedRow()-1);
+
+		ctrlTabs.setSelectedComponent(this);
+		table.scrollRectToVisible(table.getCellRect(table.getSelectedRow(), table.getSelectedColumn(), true));
 	}
 }
