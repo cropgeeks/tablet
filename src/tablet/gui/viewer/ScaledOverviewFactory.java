@@ -10,11 +10,9 @@ import tablet.data.*;
 class ScaledOverviewFactory extends OverviewBufferFactory
 {
 	private ReadsCanvas rCanvas;
-	private Contig contig;
 	private IReadManager reads;
 
 	private int ntOnCanvasX, ntOnCanvasY;
-	private int xWidth, yHeight;
 
 	ScaledOverviewFactory(OverviewCanvas canvas, int w, int h, ReadsCanvas rCanvas)
 	{
@@ -23,7 +21,6 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 
 		// Make private references to certain values now, as they MAY change
 		// while the buffer is still being created, which will create problems
-		contig = rCanvas.contig;
 		reads = rCanvas.reads;
 		ntOnCanvasX = rCanvas.ntOnCanvasX;
 		ntOnCanvasY = rCanvas.ntOnCanvasY;
@@ -76,7 +73,6 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 		}
 
 		// Remove any references to tablet.data objects we were tracking
-		contig = null;
 		reads = null;
 
 		if (!killMe)

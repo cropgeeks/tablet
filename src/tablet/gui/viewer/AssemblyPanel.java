@@ -11,7 +11,6 @@ import javax.swing.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
-import tablet.data.auxiliary.*;
 import tablet.gui.*;
 import tablet.gui.dialog.*;
 import tablet.gui.ribbon.*;

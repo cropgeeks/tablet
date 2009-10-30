@@ -15,7 +15,6 @@ import scri.commons.gui.*;
 
 class ConsensusCanvasML extends MouseInputAdapter implements ActionListener
 {
-	private AssemblyPanel aPanel;
 	private ConsensusCanvas cCanvas;
 	private ReadsCanvas rCanvas;
 	private ScaleCanvas sCanvas;
@@ -24,7 +23,6 @@ class ConsensusCanvasML extends MouseInputAdapter implements ActionListener
 
 	ConsensusCanvasML(AssemblyPanel aPanel)
 	{
-		this.aPanel = aPanel;
 		cCanvas = aPanel.consensusCanvas;
 		rCanvas = aPanel.readsCanvas;
 		sCanvas = aPanel.scaleCanvas;

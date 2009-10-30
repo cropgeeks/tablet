@@ -2,11 +2,6 @@
 // Use is subject to the accompanying licence terms.
 
 package tablet.analysis;
-
-import java.util.*;
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
-
 import tablet.data.*;
 
 /**

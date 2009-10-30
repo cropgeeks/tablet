@@ -6,7 +6,6 @@ package tablet.gui.dialog;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.util.LinkedList;
 import javax.swing.*;
 import javax.swing.filechooser.*;
 
@@ -71,9 +70,6 @@ public class ImportAssemblyDialog extends JDialog
 
 	private void initDisplay()
 	{
-		FileNameExtensionFilter txtFilter = new FileNameExtensionFilter(
-			RB.getString("gui.text.formats.txt"), "txt");
-
 		assFilters = new FileNameExtensionFilter[] {
 			new FileNameExtensionFilter(RB.getString("gui.text.formats.ace"), "ace"),
 			new FileNameExtensionFilter(RB.getString("gui.text.formats.afg"), "afg"),

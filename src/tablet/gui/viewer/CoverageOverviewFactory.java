@@ -10,15 +10,12 @@ import tablet.data.auxiliary.*;
 
 class CoverageOverviewFactory extends OverviewBufferFactory
 {
-	private Contig contig;
-
 	CoverageOverviewFactory(OverviewCanvas canvas, int w, int h, ReadsCanvas rCanvas)
 	{
 		super(canvas, w, h);
 
 		// Make private references to certain values now, as they MAY change
 		// while the buffer is still being created, which will create problems
-		contig = rCanvas.contig;
 
 		start();
 	}
@@ -93,9 +90,6 @@ class CoverageOverviewFactory extends OverviewBufferFactory
 			g.setColor(new Color(70, 116, 162, alpha));
 			g.drawLine(x, 0, x, Math.round(h*value));
 		}
-
-		// Remove any references to tablet.data objects we were tracking
-		contig = null;
 
 		if (!killMe)
 			canvas.bufferAvailable(buffer);

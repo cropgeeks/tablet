@@ -9,7 +9,6 @@ import java.awt.image.*;
 import java.text.*;
 import javax.swing.*;
 
-import tablet.analysis.*;
 import tablet.data.*;
 import tablet.gui.*;
 
@@ -24,7 +23,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	private Image lhArrow = Icons.getIcon("LHARROW").getImage();
 	private Image rhArrow = Icons.getIcon("RHARROW").getImage();
 	private Font titleFont, labelFont;
-	private FontMetrics fmTitle, fmLabel;
+	private FontMetrics fmTitle;
 
 	private OverviewCanvas oCanvas;
 	private ScaleCanvas sCanvas;
@@ -59,7 +58,6 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		Image image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
 		Graphics g = image.getGraphics();
 		fmTitle = g.getFontMetrics(titleFont);
-		fmLabel = g.getFontMetrics(labelFont);
 		g.dispose();
 	}
 
