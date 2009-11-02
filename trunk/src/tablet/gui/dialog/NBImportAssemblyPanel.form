@@ -54,24 +54,23 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="assLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="file1Combo" alignment="0" pref="388" max="32767" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="bBrowse1" min="-2" pref="79" max="-2" attributes="0"/>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="file2Combo" pref="388" max="32767" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Component id="bBrowse2" min="-2" max="-2" attributes="0"/>
-                      </Group>
                       <Component id="refLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="statusLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="statusText" pref="392" max="32767" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="file2Combo" pref="388" max="32767" attributes="0"/>
+                              <Component id="assLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="file1Combo" alignment="0" pref="388" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                              <Component id="bBrowse2" max="32767" attributes="1"/>
+                              <Component id="bBrowse1" alignment="1" max="32767" attributes="1"/>
+                          </Group>
                       </Group>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
