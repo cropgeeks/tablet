@@ -154,8 +154,12 @@ public class ApplicationMenu extends RibbonApplicationMenu
 
 			// Button text will be "name" (or "name1" | "name2")
 			String text = files[0].getName();
+			String tooltip = files[0].getPath();
 			for (int i = 1; i < files.length; i++)
+			{
 				text += "  ~  " + files[i].getName();
+				tooltip += "\n" + files[i].getPath();
+			}
 
 
 			// Make the button
@@ -163,6 +167,11 @@ public class ApplicationMenu extends RibbonApplicationMenu
 				RibbonController.getIcon("DOCUMENTS16", 16));
 			button.setHorizontalAlignment(SwingUtilities.LEFT);
 			recentPanel.addButtonToLastGroup(button);
+
+			// TODO: This doesn't work very well
+			button.setActionRichTooltip(new RichTooltip(
+				RB.getString("gui.ribbon.ApplicationMenu.recent.tooltip"),
+				tooltip));
 
 			// And give it an action
 			button.addActionListener(new ActionListener() {
