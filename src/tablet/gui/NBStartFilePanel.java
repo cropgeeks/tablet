@@ -14,11 +14,11 @@ import scri.commons.gui.matisse.HyperLinkLabel;
  */
 public class NBStartFilePanel extends javax.swing.JPanel implements ActionListener
 {
-	private HyperLinkLabel[] labels = new HyperLinkLabel[4];
+	private HyperLinkLabel[] labels = new HyperLinkLabel[10];
 
-	private String[] files = new String[4];
-	private String[] filenames = new String[4];
-	private String[] tooltips = new String[4];
+	private String[] files = new String[10];
+	private String[] filenames = new String[10];
+	private String[] tooltips = new String[10];
 
 	public NBStartFilePanel()
 	{
@@ -35,6 +35,9 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
 		// Create the labels array
 		labels[0] = project0; labels[1] = project1;
 		labels[2] = project2; labels[3] = project3;
+		labels[4] = project4; labels[5] = project5;
+		labels[6] = project6; labels[7] = project7;
+		labels[8] = project8; labels[9] = project9;
 
 		int j=0;
 		// Parse the list of recent documents
@@ -68,6 +71,9 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
 				files[j] = filePath;
 				tooltips[j] = tooltip;
 			}
+			else
+				break;
+
 			j++;
 		}
 
@@ -128,6 +134,12 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
         project1 = new scri.commons.gui.matisse.HyperLinkLabel();
         project2 = new scri.commons.gui.matisse.HyperLinkLabel();
         project3 = new scri.commons.gui.matisse.HyperLinkLabel();
+        project4 = new scri.commons.gui.matisse.HyperLinkLabel();
+        project5 = new scri.commons.gui.matisse.HyperLinkLabel();
+        project6 = new scri.commons.gui.matisse.HyperLinkLabel();
+        project7 = new scri.commons.gui.matisse.HyperLinkLabel();
+        project8 = new scri.commons.gui.matisse.HyperLinkLabel();
+        project9 = new scri.commons.gui.matisse.HyperLinkLabel();
         rateLabel = new javax.swing.JLabel();
         ratingsPanel = new scri.commons.gui.matisse.RatingsPanel();
 
@@ -148,6 +160,24 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
         project3.setForeground(new java.awt.Color(68, 106, 156));
         project3.setText("<project3>");
 
+        project4.setForeground(new java.awt.Color(68, 106, 156));
+        project4.setText("<project3>");
+
+        project5.setForeground(new java.awt.Color(68, 106, 156));
+        project5.setText("<project3>");
+
+        project6.setForeground(new java.awt.Color(68, 106, 156));
+        project6.setText("<project3>");
+
+        project7.setForeground(new java.awt.Color(68, 106, 156));
+        project7.setText("<project3>");
+
+        project8.setForeground(new java.awt.Color(68, 106, 156));
+        project8.setText("<project3>");
+
+        project9.setForeground(new java.awt.Color(68, 106, 156));
+        project9.setText("<project3>");
+
         rateLabel.setText("Click to rate Tablet:");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -166,7 +196,13 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(rateLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(ratingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(ratingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(project4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(project5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(project6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(project7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(project8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(project9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(75, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -184,11 +220,23 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
                 .addComponent(project2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(project3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(project4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(project5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(project6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(project7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(project8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(project9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(rateLabel)
                     .addComponent(ratingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -200,6 +248,12 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
     private scri.commons.gui.matisse.HyperLinkLabel project1;
     private scri.commons.gui.matisse.HyperLinkLabel project2;
     private scri.commons.gui.matisse.HyperLinkLabel project3;
+    private scri.commons.gui.matisse.HyperLinkLabel project4;
+    private scri.commons.gui.matisse.HyperLinkLabel project5;
+    private scri.commons.gui.matisse.HyperLinkLabel project6;
+    private scri.commons.gui.matisse.HyperLinkLabel project7;
+    private scri.commons.gui.matisse.HyperLinkLabel project8;
+    private scri.commons.gui.matisse.HyperLinkLabel project9;
     private javax.swing.JLabel rateLabel;
     private scri.commons.gui.matisse.RatingsPanel ratingsPanel;
     // End of variables declaration//GEN-END:variables
