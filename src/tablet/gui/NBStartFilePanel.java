@@ -15,8 +15,10 @@ import scri.commons.gui.matisse.HyperLinkLabel;
 public class NBStartFilePanel extends javax.swing.JPanel implements ActionListener
 {
 	private HyperLinkLabel[] labels = new HyperLinkLabel[4];
+
 	private String[] files = new String[4];
 	private String[] filenames = new String[4];
+	private String[] tooltips = new String[4];
 
 	public NBStartFilePanel()
 	{
@@ -52,16 +54,19 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
 			// Button text will be "name" (or "name1" | "name2")
 			String text = tempFiles[0].getName();
 			String filePath = tempFiles[0].getPath();
+			String tooltip = tempFiles[0].getPath();
 			for (int i = 1; i < tempFiles.length; i++)
 			{
 				text += "&nbsp;&nbsp;~&nbsp;&nbsp;" + tempFiles[i].getName();
 				filePath += " ~ " + tempFiles[i].getPath();
+				tooltip += "<br>" + tempFiles[i].getPath();
 			}
 
 			if(j < filenames.length)
 			{
 				filenames[j] = text;
 				files[j] = filePath;
+				tooltips[j] = tooltip;
 			}
 			j++;
 		}
@@ -72,6 +77,12 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
 			{
 				labels[i].addActionListener(this);
 				labels[i].setText(filenames[i]);
+				labels[i].setToolTipText("<html>" + tooltips[i] + "</html>");
+
+				if (tooltips[i].indexOf("<br>") == -1)
+					labels[i].setIcon(Icons.getIcon("DOCSINGLE"));
+				else
+					labels[i].setIcon(Icons.getIcon("DOCMULTIPLE"));
 			}
 			else
 				labels[i].setVisible(false);
