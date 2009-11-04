@@ -7,6 +7,7 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
+import com.install4j.api.*;
 import com.install4j.api.launcher.*;
 import com.install4j.api.update.*;
 
@@ -98,10 +99,10 @@ public class Install4j
 	{
 		try
 		{
-			com.install4j.api.ApplicationRegistry.ApplicationInfo info =
-				com.install4j.api.ApplicationRegistry.getApplicationInfoByDir(new File("."));
+			ApplicationRegistry.ApplicationInfo[] info =
+				ApplicationRegistry.getApplicationInfoById("9483-2571-4596-9336");
 
-			VERSION = info.getVersion();
+			VERSION = info[0].getVersion();
 		}
 		catch (Exception e) {}
 		catch (Throwable e) {}
