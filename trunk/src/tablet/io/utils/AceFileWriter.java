@@ -37,11 +37,14 @@ public class AceFileWriter
 	 * @param contigs	The number of contigs to be contained in the ACE file.
 	 * @throws IOException
 	 */
-	public void writeHeader(int contigs)
+	public void writeHeader(int contigs, long reads)
 		throws IOException
 	{
-		String header = "AS " + contigs + " 0" + lineSeparator + lineSeparator;
+		String header = "AS " + contigs + " " + reads;
 		out.write(header, 0, header.length());
+		out.newLine();
+
+		out.newLine(); // NL
 	}
 
 	/**
@@ -61,10 +64,27 @@ public class AceFileWriter
 			complemented = 'C';
 		else
 			complemented = 'U';
-		String contigHeader = "CO " + name + " " + consensus.length() + " " + reads + " 00" + " " + complemented + lineSeparator;
+		String contigHeader = "CO " + name + " " + consensus.length() + " " + reads + " 1" + " " + complemented;
 		out.write(contigHeader, 0, contigHeader.length());
-		contigHeader = consensus + lineSeparator + lineSeparator;
-		out.write(contigHeader, 0, contigHeader.length());
+		out.newLine();
+
+		boolean newLine = false;
+		for (int i = 0; i < consensus.length(); i++)
+		{
+			out.write(consensus.charAt(i));
+			if (i % 50 == 0 && i != 0)
+			{
+				newLine = true;
+				out.newLine();
+			}
+			else
+				newLine = false;
+		}
+		if(newLine != true)
+			out.newLine();
+
+		out.newLine(); //NL
+		out.newLine(); //NL
 	}
 
 	/**
@@ -77,16 +97,30 @@ public class AceFileWriter
 	public void writeBaseQualities(byte[] qualities)
 		throws IOException
 	{
-		out.write("BQ" + lineSeparator);
-		for(byte quality : qualities)
+		out.write("BQ");
+		out.newLine();
+		boolean newLine = false;
+		for (int i = 0; i < qualities.length; i++)
+//		for(byte quality : qualities)
 		{
-			if(quality != -1)
-				out.write(quality + " ");
+			if(qualities[i] != -1)
+				out.write(" " + qualities[i]);
 			else
-				out.write("  ");
+				out.write(" ");
+
+			if (i % 50 == 0 && i != 0)
+			{
+				newLine = true;
+				out.newLine();
+			}
+			else
+				newLine = false;
 		}
-		out.newLine();
-		out.newLine();
+
+		if(newLine != true)
+			out.newLine();
+
+		out.newLine(); //NL
 	}
 
 	/**
@@ -107,7 +141,7 @@ public class AceFileWriter
 			complemented = 'C';
 		else
 			complemented = 'U';
-		
+
 		readName = "AF " + name + " " + complemented + " " + pos;
 		out.write(readName, 0, readName.length());
 		out.newLine();
@@ -125,10 +159,38 @@ public class AceFileWriter
 	{
 		String readData;
 
-		readData = "RD " + name + " " + data.length() + " " + 0 + " " + 0 + lineSeparator;
+		readData = "RD " + name + " " + data.length() + " " + 0 + " " + 0;
 		out.write(readData, 0, readData.length());
-		readData = data + lineSeparator + lineSeparator;
-		out.write(readData, 0, readData.length());
+		out.newLine();
+
+		boolean newLine = false;
+		for (int i = 0; i < data.length(); i++)
+		{
+			out.write(data.charAt(i));
+			if (i % 50 == 0 && i != 0)
+			{
+				newLine = true;
+				out.newLine();
+			}
+			else
+				newLine = false;
+		}
+		if(newLine != true)
+			out.newLine();
+		out.newLine(); //NL
+
+		out.write("QA " + 1 + " " + data.length()+ " " + 1 + " " + data.length());
+		out.newLine();
+		out.write("DS CHROMAT_FILE: " + name + ".scf PHD_FILE: " + name + ".scf.phd.1 TIME: Thu Sep  3 19:28:47 2009");
+		out.newLine();
+	}
+
+	public void writeBS(String consensus, String name) throws IOException
+	{
+		out.write("BS " + 1 + " " + consensus.length() + " " + name);
+		out.newLine();
+
+		out.newLine(); //NL
 	}
 
 	/**
