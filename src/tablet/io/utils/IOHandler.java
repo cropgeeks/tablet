@@ -23,6 +23,10 @@ public class IOHandler
 	int contigLoop = 0;
 	int loop = 0;
 	int contigsWritten = 0;
+	long[] contigReads;
+
+	int consensusLength;
+	int writtenBases;
 
 	/**
 	 * Constructor, takes a MaqFileReader and an AceFileWriter as its arguments.
@@ -84,6 +88,7 @@ public class IOHandler
 			reader.getInMaq().close();
 			reader.getInFastQ().close();
 			writer.getOut().close();
+			System.out.println("consensus length " + consensusLength + " bq length " + writtenBases);
 		}
 	}
 
@@ -140,8 +145,10 @@ public class IOHandler
 			if(option != null && option.equals("-m"))
 			{
 				writer.setOut(new BufferedWriter(new FileWriter(writer.getFile().getPath() + "_" + new String(reader.getContigName().substring(1)) + "_" + reader.getConsensus().length() + ".ace")));
-				writer.writeHeader(contigLoop);
+				writer.writeHeader(contigLoop, 0);
 			}
+
+			tempList = new ArrayList<String[]>();
 
 			int reads = 0;
 			String[] vars = reader.getReadInfo();
@@ -152,11 +159,14 @@ public class IOHandler
 				vars = reader.getReadInfo();
 			}
 
+			consensusLength = reader.getConsensus().length();
 			//Write the contig header to disk.
-			writer.writeContig(new String(reader.getContigName().substring(1)), reader.getConsensus().toString(), true, reads);
+			writer.writeContig(new String(reader.getContigName().substring(1)), reader.getConsensus().toString(), true, reads+1);
 			//Write the base qualities to disc.
 			byte[] bq = reader.calculateBaseQualities(reader.getBaseQualities());
 			writer.writeBaseQualities(bq);
+
+			writer.writeReadInfo(".TabletReference", true, 1);
 
 			//Write the read information to disk
 			for(String[] readInfo : tempList)
@@ -164,20 +174,22 @@ public class IOHandler
 				writer.writeReadInfo(readInfo[0], readInfo[3].equals("-"), Integer.parseInt(readInfo[4]));
 			}
 
+			writer.writeBS(reader.getConsensus().toString(), ".TabletReference");
+
+			writer.writeReadData(".TabletReference", reader.getConsensus().toString());
+
 			//Write the read data to disk.
 			for(String[] readInfo : tempList)
 			{
 				writer.writeReadData(readInfo[0], readInfo[1]);
-				System.out.println(readInfo[0] + " " + readInfo[1]);
-				return;
 			}
 			//clear the temporary memory cache of read info.
 			tempList.clear();
 
 			contigsWritten++;
-			
+
 			//update the progress bar
-			//progressBar(totalContigs, contigsWritten);
+			progressBar(totalContigs, contigsWritten);
 		}
 	}
 
@@ -202,7 +214,7 @@ public class IOHandler
 		while(loop > 0)
 		{
 			writer.setOut(new BufferedWriter(new FileWriter(writer.getFile().getPath() + "_batch_" + batchNo + ".ace")));
-			writer.writeHeader(contigLoop);
+			writer.writeHeader(contigLoop, 0);
 			batchNo++;
 
 			processContigs(contigLoop, contigs, contigsWritten, "-b");
@@ -216,7 +228,7 @@ public class IOHandler
 		while(contigs-contigsWritten > 1)
 		{
 			writer.setOut(new BufferedWriter(new FileWriter(writer.getFile().getPath() + "_batch_" + batchNo + ".ace")));
-			writer.writeHeader(contigs);
+			writer.writeHeader(contigs, 0);
 
 			processContigs(contigs-contigsWritten, contigs, contigsWritten, "-b");
 			contigsWritten += contigs;
@@ -255,10 +267,40 @@ public class IOHandler
 	{
 		contigLoop = contigs;
 
+		contigReads = new long [1];
+
 		writer.setOut(new BufferedWriter(new FileWriter(writer.getFile().getPath() + ".ace")));
-		writer.writeHeader(contigLoop);
+		contigReads[0] = processReads(contigLoop);
+		writer.getOut().close();
+		reader.getInFastQ().close();
+		reader.resetInFastQ();
+		reader.getInMaq().close();
+		reader.resetInMaq();
+		reader.readNoContigs();
+		writer.setOut(new BufferedWriter(new FileWriter(writer.getFile().getPath() + ".ace", true)));
+		writer.writeHeader(contigLoop, contigReads[0]);
 
 		processContigs(contigLoop, contigs, contigsWritten, null);
 		contigsWritten += contigLoop;
+	}
+
+	public long processReads(int contigLoop) throws IOException
+	{
+		long totalReads = 0;
+		String[] vars = new String[5];
+
+		for(int k=contigLoop; k > 0; k--)
+		{
+			reader.readFastqEntry();
+
+			System.arraycopy(reader.getReadInfo(), 0, vars, 0, 5);
+			while(reader.getContigName().equals("@"+vars[2]))
+			{
+				tempList.add(vars);
+				totalReads++;
+				System.arraycopy(reader.getReadInfo(), 0, vars, 0, 5);
+			}
+		}
+		return totalReads+1;
 	}
 }

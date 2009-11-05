@@ -131,7 +131,7 @@ public class MaqFileReader
 	public void readFastqEntry()
 		throws IOException
 	{
-		
+
 		consensus = null;
 		baseQualities = null;
 
@@ -253,7 +253,7 @@ public class MaqFileReader
 	public byte[] calculateBaseQualities(StringBuilder qlt)
 	{
 		byte[] bq = new byte[qlt.length()];
-		for(int i = 0; i < bq.length; i++)
+		for(int i = 0; i < bq.length -1; i++)
 		{
 			bq[i] = (byte) (qlt.charAt(i) - 33);
 			if(bq[i] > 100)
@@ -324,6 +324,16 @@ public class MaqFileReader
 	public BufferedReader getInFastQ()
 	{
 		return inFastQ;
+	}
+
+	public void resetInFastQ() throws FileNotFoundException
+	{
+		inFastQ = new BufferedReader(new FileReader(files[fastqIndex]));
+	}
+
+	public void resetInMaq() throws FileNotFoundException
+	{
+		inMaq = new BufferedReader(new FileReader(files[maqIndex]));
 	}
 
 	/**
