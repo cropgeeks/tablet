@@ -196,7 +196,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	void copyDataToClipboard()
 	{
 		String lb = System.getProperty("line.separator");
-		String seq = read.toString();
+		String seq = metaData.toString();
 
 		StringBuilder text = new StringBuilder(seq.length() + 500);
 		text.append(readName + lb + posData + lb + lengthData + lb);
