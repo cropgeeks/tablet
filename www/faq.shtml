@@ -25,17 +25,6 @@ detail in the <a href="help/memory.shtml">Allocating Memory</a> help topic,
 along with instructions on how to adjust (higher or lower) the amount of memory
 Tablet will use.</p>
 
-<p>&nbsp;</p>
-
-<p><b>On Linux, Tablet detects an update and downloads it, but does not execute
-the update when I select that option.</b></p>
-<p>This is a known issue with the Tablet installer running on Linux. Until a
-solution is found, you may need to manually run the update after it has been downloaded
-if it does not start automatically.</p>
-<p>For example, if an update called <i>tablet_linux_x86_0_09_10_01.sh</i> is located
-in your home directory, then change to that directory and run the following
-from the command line:<br>&nbsp;&nbsp;&nbsp;<i>sh tablet_linux_x86_0_09_10_01.sh</i>
-</p>
 
 <p>&nbsp;</p>
 
@@ -48,6 +37,9 @@ more details).</p>
 The format of the command should resemble <i>maq mapview input.map > output.txt</i>.</p>
 <p>To produce the fastq file from the .cns file, you should execute the cns2fq command.
 The format of the command should resemble <i>maq cns2fq input.cns > output.fastq</i>.</p>
+
+<p>Also see our <a href="assembly-conversion.shtml">Assembly Conversion</a> guide
+that covers coverting between several common assembly formats.</p>
 
 
 <!--#include virtual="footer.html" -->

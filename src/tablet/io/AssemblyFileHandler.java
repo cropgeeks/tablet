@@ -20,10 +20,11 @@ public class AssemblyFileHandler extends SimpleJob
 	public static final int UNKNOWN = 0;
 	public static final int ACE = 1;
 	public static final int AFG = 2;
-	public static final int MAQ = 3;
-	public static final int SOAP = 4;
-	public static final int FASTA = 5;
-	public static final int FASTQ = 6;
+	public static final int SAM = 3;
+	public static final int MAQ = 4;
+	public static final int SOAP = 5;
+	public static final int FASTA = 20;
+	public static final int FASTQ = 21;
 
 	private File[] files = null;
 	private File cacheDir = null;
@@ -65,6 +66,12 @@ public class AssemblyFileHandler extends SimpleJob
 		if (okToRun && fileParsed == false)
 		{
 			reader = new AfgFileReader(readCache, cacheDir);
+			fileParsed = readFile();
+		}
+		// SAM
+		if (okToRun && fileParsed == false)
+		{
+			reader = new SamFileReader(readCache);
 			fileParsed = readFile();
 		}
 		// Maq
@@ -171,6 +178,9 @@ public class AssemblyFileHandler extends SimpleJob
 
 			if (read(new AfgFileReader(), file))
 				return AFG;
+
+			if (read(new SamFileReader(), file))
+				return SAM;
 
 			if (read(new MaqFileReader(), file))
 				return MAQ;
