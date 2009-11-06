@@ -79,36 +79,36 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
 
     private void processFiles()
     {
-    	int status1 = UNKNOWN, status2 = UNKNOWN;
+    	int t1 = UNKNOWN, t2 = UNKNOWN;
 
     	try
     	{
     		// Determine the types of the two files (regardless of whether we'll
     		// actually accept them or not
     		File file1 = new File(doc1.getText(0, doc1.getLength()));
-    		status1 = AssemblyFileHandler.getType(file1);
+    		t1 = AssemblyFileHandler.getType(file1);
 
 	    	File file2 = new File(doc2.getText(0, doc2.getLength()));
-	    	status2 = AssemblyFileHandler.getType(file2);
+	    	t2 = AssemblyFileHandler.getType(file2);
     	}
     	catch (Exception e) {}
 
-    	// The assembly file must be ACE, AFG, MAQ, or SOAP
-    	if (status1 > SOAP)
-    		status1 = UNKNOWN;
+    	// The assembly file must be ACE, AFG, SAM, MAQ, or SOAP
+    	if (t1 > SOAP)
+    		t1 = UNKNOWN;
 
     	// The reference file must be FASTA or FASTQ
-    	if (status2 != FASTA && status2 != FASTQ)
-	    	status2 = UNKNOWN;
+    	if (t2 != FASTA && t2 != FASTQ)
+	    	t2 = UNKNOWN;
 
-    	// The reference option is only needed for MAQ or SOAP
-    	setReferenceControls(status1 == MAQ || status1 == SOAP);
+    	// The reference option is only needed for SAM, MAQ or SOAP
+    	setReferenceControls(t1 == SAM || t1 == MAQ || t1 == SOAP);
 
 
     	String str1 = RB.getString("gui.dialog.NBImportAssembly.ass.status"
-    		+ status1);
+    		+ t1);
     	String str2 = RB.getString("gui.dialog.NBImportAssembly.ref.status"
-    		+ status2);
+    		+ t2);
 
 		if (refLabel.isEnabled())
     		statusText.setText(str1 + "  |  " + str2);

@@ -1,23 +1,16 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
-
+// Copyright 2009 Plant Bioinformatics Group, SCRI. All rights reserved.
+// Use is subject to the accompanying licence terms.
 package tablet.io;
 
-/**
- *
- * @author gsteph
- */
-public class CigarParser
+class CigarParser
 {
 	private int position;
 
-	public CigarParser()
+	CigarParser()
 	{
 	}
 
-	public String cigarDecoder(String read, int position, String cigarString)
+	String cigarDecoder(String read, int position, String cigarString)
 		throws Exception
 	{
 		this.position = position;
@@ -33,10 +26,8 @@ public class CigarParser
 			for(int i=0; i < cigarString.length(); i++)
 			{
 				if(Character.isDigit(cigarString.charAt(i)))
-				{
-					System.out.println(cigarString.charAt(i));
 					numberString += cigarString.charAt(i);
-				}
+
 				else
 				{
 					switch (cigarString.charAt(i))
@@ -63,15 +54,12 @@ public class CigarParser
 							read = new String(read.substring(Integer.parseInt(numberString)));
 							break;
 						case 'H':
-							System.out.println("Process HardClip");
+//							System.out.println("Process HardClip");
 							break;
 					}
 					numberString = "";
 					if(first)
-					{
-						System.out.println("First");
 						first = false;
-					}
 				}
 			}
 			return readString.toString();
@@ -100,10 +88,8 @@ public class CigarParser
 		throws Exception
 	{
 		if(first)
-		{
 			position -= (Integer.parseInt(numberString));
-			System.out.println("Position: " + position);
-		}
+
 		return new String(read.substring(0, (Integer.parseInt(numberString))));
 	}
 

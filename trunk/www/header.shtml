@@ -34,7 +34,9 @@ pageTracker._trackPageview();
   <li><a href="screenshots.shtml">Screenshots</a></li>
   <li><a href="faq.shtml">Tablet FAQ</a></li>
   <li><a href="sample-data.shtml">Sample Data</a></li>
+  <li><a href="assembly-conversion.shtml">Assembly Conversion</a></li>
   <li><a href="privacy-policy.shtml">Privacy Policy</a></li>
+  <li><a href="map.shtml">Tablet World Map</a></li>
   <p></p>
   <li><a href="help">Online Help</a></li>
 </ul>

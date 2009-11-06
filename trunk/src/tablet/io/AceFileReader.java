@@ -101,14 +101,15 @@ class AceFileReader extends TrackableReader
 			else if (str.startsWith("BQ"))
 				processBaseQualities();
 
-			else if (str.startsWith("BS "))
-			{
+//			else if (str.startsWith("BS "))
+//			{
 //				processBaseSegment();
-			}
+//			}
 
-			// Currently not doing anything with these tags
 			else if (str.startsWith("CT{"))
 				processConsesusTag();
+
+			// Currently not doing anything with these tags
 			else if (str.startsWith("RT{"))
 				while ((str = readLine()) != null && !str.startsWith("}"));
 			else if (str.startsWith("WA{"))
@@ -317,18 +318,6 @@ class AceFileReader extends TrackableReader
 
 
 		// Read until the end of the tag
-		while ((str = readLine()) != null && !str.startsWith("}"));
-	}
-
-	private void processReadTag()
-		throws Exception
-	{
-		while ((str = readLine()) != null && !str.startsWith("}"));
-	}
-
-	private void processAssemblyTag()
-		throws Exception
-	{
 		while ((str = readLine()) != null && !str.startsWith("}"));
 	}
 }

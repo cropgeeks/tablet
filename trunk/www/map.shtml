@@ -72,7 +72,9 @@
 
 <p>We use the geolocation service at <a href="http://www.infosniper.net">
 www.infosniper.net</a> to map IP addresses to cities. It's not always accurate,
-but we think it gives a fairly good overview.</p>
+but we think it gives a fairly good overview. The pins don't show visits to
+our website, but actual locations where users have downloaded - <i>and
+run</i> - Tablet.</p>
 
 
 <!--#include virtual="footer.html" -->
