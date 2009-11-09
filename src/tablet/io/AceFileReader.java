@@ -13,6 +13,8 @@ import tablet.data.cache.*;
 import tablet.data.auxiliary.*;
 import static tablet.io.ReadException.*;
 
+import scri.commons.gui.*;
+
 class AceFileReader extends TrackableReader
 {
 	private IReadCache readCache;
@@ -32,6 +34,10 @@ class AceFileReader extends TrackableReader
 
 	// Incrementing count of the number of reads processed
 	private int readsFound = 0;
+
+	// Count of the number of reads and contigs processed (GUI tracking only)
+	private int contigsAdded = 0;
+	private int readsAdded = 0;
 
 	// We maintain a local hashtable of contigs to help with finding a
 	// contig quickly when processing consensus tags
@@ -151,6 +157,8 @@ class AceFileReader extends TrackableReader
 
 		afIndex = 0;
 		rdIndex = 0;
+
+		contigsAdded++;
 	}
 
 	private void processBaseQualities()
@@ -203,9 +211,6 @@ class AceFileReader extends TrackableReader
 		contig.getReads().add(read);
 
 		readsFound++;
-
-		if (readsFound % 250000 == 0)
-			System.out.println(" reads found: " + readsFound);
 	}
 
 	private void processBaseSegment()
@@ -261,6 +266,7 @@ class AceFileReader extends TrackableReader
 		readCache.setReadMetaData(rmd);
 
 		rdIndex++;
+		readsAdded++;
 	}
 
 	private void processReadQualities()
@@ -319,5 +325,11 @@ class AceFileReader extends TrackableReader
 
 		// Read until the end of the tag
 		while ((str = readLine()) != null && !str.startsWith("}"));
+	}
+
+	public String getMessage()
+	{
+		return RB.format("io.AssemblyFileHandler.status",
+			contigsAdded, readsAdded);
 	}
 }

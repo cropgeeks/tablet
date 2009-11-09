@@ -10,6 +10,8 @@ import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
 
+import scri.commons.gui.*;
+
 class SoapFileReader extends TrackableReader
 {
 	private IReadCache readCache;
@@ -23,6 +25,8 @@ class SoapFileReader extends TrackableReader
 
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
+	private int readID = 0;
+
 	SoapFileReader()
 	{
 	}
@@ -35,7 +39,7 @@ class SoapFileReader extends TrackableReader
 	boolean canRead()
 		throws Exception
 	{
-		refReader = new ReferenceFileReader(assembly);
+		refReader = new ReferenceFileReader(assembly, contigHash);
 
 		// We need to check each file to see if it is readable
 		for (int i = 0; i < files.length; i++)
@@ -81,7 +85,6 @@ class SoapFileReader extends TrackableReader
 		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex), "ASCII"));
 
 		refReader.readReferenceFile(this, files[refIndex]);
-		contigHash = refReader.getContigHashMap();
 
 		in.close();
 	}
@@ -91,7 +94,7 @@ class SoapFileReader extends TrackableReader
 	{
 		in = new BufferedReader(new InputStreamReader(getInputStream(soapIndex), "ASCII"));
 
-		int readID = 0;
+		readID = 0;
 
 		while ((str = readLine()) != null && okToRun)
 		{
@@ -138,5 +141,11 @@ class SoapFileReader extends TrackableReader
 		in.close();
 
 		assembly.setName(files[soapIndex].getName());
+	}
+
+	public String getMessage()
+	{
+		return RB.format("io.AssemblyFileHandler.status",
+			contigHash.size(), readID);
 	}
 }

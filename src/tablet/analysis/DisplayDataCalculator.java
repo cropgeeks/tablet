@@ -6,6 +6,8 @@ package tablet.analysis;
 import tablet.data.*;
 import tablet.data.auxiliary.*;
 
+import scri.commons.gui.*;
+
 /**
  * Computes a fills the tablet.data.auxiliary.DisplayData object with the
  * values it needs to hold before a contig can be displayed to the screen.
@@ -88,5 +90,13 @@ public class DisplayDataCalculator extends SimpleJob
 			progress = ps.getValue();
 
 		return progress;
+	}
+
+	public String getMessage()
+	{
+		if (ps != null)
+			return ps.getMessage();
+
+		return RB.getString("analysis.DisplayDataCalculator.status");
 	}
 }

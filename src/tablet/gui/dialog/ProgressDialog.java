@@ -30,18 +30,14 @@ public class ProgressDialog extends JDialog
 
 	private Timer timer;
 
-	// And the messages it will need for each job part
-	private String[] msgs;
-
 	// A reference to any exception thrown while the job was active
 	private Exception exception = null;
 
-	public ProgressDialog(ITrackableJob job, String title, String label, String[] msgs)
+	public ProgressDialog(ITrackableJob job, String title, String label)
 	{
 		super(Tablet.winMain, title, true);
 
 		this.job = job;
-		this.msgs = msgs;
 
 		nbPanel = new NBProgressPanel(job, label);
 		new Thread(this).start();
@@ -87,6 +83,10 @@ public class ProgressDialog extends JDialog
 		nbPanel.pBar.setMaximum(max);
 		nbPanel.pBar.setValue(val);
 
+		String message = job.getMessage();
+		if (message != null)
+			nbPanel.msgLabel.setText(message);
+
 		// If the job doesn't know its maximum (yet), this would
 		// have caused a 0 divided by 0 which isn't pretty
 		if (max == 0)
@@ -118,10 +118,7 @@ public class ProgressDialog extends JDialog
 		try
 		{
 			for (int i = 0; i < job.getJobCount() && jobStatus == 0; i++)
-			{
-				nbPanel.msgLabel.setText(msgs[i]);
 				job.runJob(i);
-			}
 		}
 		catch (Exception e)
 		{

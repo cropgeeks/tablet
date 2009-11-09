@@ -85,4 +85,12 @@ public class ImportHandler implements ITrackableJob
 
 		return false;
 	}
+
+	public String getMessage()
+	{
+		if (currentJob != null)
+			return currentJob.getMessage();
+
+		return null;
+	}
 }

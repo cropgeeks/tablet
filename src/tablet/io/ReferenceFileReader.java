@@ -12,15 +12,13 @@ import tablet.data.*;
 class ReferenceFileReader
 {
 	private Assembly assembly;
-	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
+	private HashMap<String, Contig> contigHash;
 
-	ReferenceFileReader(Assembly assembly)
+	ReferenceFileReader(Assembly assembly, HashMap<String, Contig> contigHash)
 	{
 		this.assembly = assembly;
+		this.contigHash = contigHash;
 	}
-
-	HashMap<String, Contig> getContigHashMap()
-		{ return contigHash; }
 
 	int canRead(File file)
 		throws Exception

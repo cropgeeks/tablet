@@ -44,11 +44,9 @@ public class Commands
 
 		String title = RB.getString("gui.Commands.fileOpen.title");
 		String label = RB.getString("gui.Commands.fileOpen.label");
-		String[] msgs = new String[] {
-			RB.getString("gui.Commands.fileOpen.msg01") };
 
 		// Run the job...
-		ProgressDialog dialog = new ProgressDialog(ioHandler, title, label, msgs);
+		ProgressDialog dialog = new ProgressDialog(ioHandler, title, label);
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
@@ -100,11 +98,9 @@ public class Commands
 
 		String title = RB.getString("gui.Commands.importFeatures.title");
 		String label = RB.getString("gui.Commands.importFeatures.label");
-		String[] msgs = new String[] {
-			RB.format("gui.Commands.importFeatures.msg", file.getName()) };
 
 		// Run the job...
-		ProgressDialog dialog = new ProgressDialog(reader, title, label, msgs);
+		ProgressDialog dialog = new ProgressDialog(reader, title, label);
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)

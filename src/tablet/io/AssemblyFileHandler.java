@@ -163,6 +163,14 @@ public class AssemblyFileHandler extends SimpleJob
 			reader.cancelJob();
 	}
 
+	public String getMessage()
+	{
+		if (reader != null)
+			return reader.getMessage();
+
+		return null;
+	}
+
 
 	// Some additional utility methods that are used by the GUI to determine
 	// file type and report back to the user - this code is NOT used to load
@@ -188,7 +196,7 @@ public class AssemblyFileHandler extends SimpleJob
 			if (read(new SoapFileReader(), file))
 				return SOAP;
 
-			return new ReferenceFileReader(null).canRead(file);
+			return new ReferenceFileReader(null, null).canRead(file);
 		}
 		catch (Exception e) {}
 
