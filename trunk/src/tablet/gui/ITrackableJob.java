@@ -26,4 +26,7 @@ public interface ITrackableJob
 
 	/** Indicates to the job that it should cancel whatever it is doing. */
 	public void cancelJob();
+
+	/** An optional (null if not used) message to display while running. */
+	public String getMessage();
 }

@@ -12,6 +12,7 @@ class NBProgressPanel extends javax.swing.JPanel
 		initComponents();
 
 		mainLabel.setText(labelString);
+		msgLabel.setText(" ");
 
 		pBar.setString("0.00%");
 		pBar.setMaximum(job.getMaximum());

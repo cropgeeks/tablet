@@ -4,12 +4,15 @@
 package tablet.analysis;
 import tablet.data.*;
 
+import scri.commons.gui.*;
+
 /**
  * Processes a contig to oganise its reads into packs ready for display.
  */
 public class PackSetCreator extends SimpleJob
 {
 	private Contig contig;
+	private PackSet packSet = new PackSet();
 
 	public PackSetCreator(Contig contig)
 	{
@@ -23,8 +26,6 @@ public class PackSetCreator extends SimpleJob
 
 		// Use the number of reads as a count of how much work will be done
 		maximum += contig.readCount();
-
-		PackSet packSet = new PackSet();
 
 		boolean added = false;
 
@@ -61,5 +62,10 @@ public class PackSetCreator extends SimpleJob
 
 		long e = System.currentTimeMillis();
 		System.out.println("Packed data in " + (e-s) + "ms");
+	}
+
+	public String getMessage()
+	{
+		return RB.format("analysis.PackSetCreator.status", packSet.size());
 	}
 }

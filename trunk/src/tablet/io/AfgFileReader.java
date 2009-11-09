@@ -11,6 +11,8 @@ import tablet.analysis.BasePositionComparator;
 import tablet.data.*;
 import tablet.data.cache.*;
 
+import scri.commons.gui.*;
+
 class AfgFileReader extends TrackableReader
 {
 	private IReadCache readCache;
@@ -21,7 +23,7 @@ class AfgFileReader extends TrackableReader
 	private int afgIndex = -1;
 
 	// Incrementing count of the number of reads processed
-	private int readsFound = 0;
+//	private int readsFound = 0;
 
 	// Pretty much all the tokenizing we do is based on this one pattern
 	private Pattern p = Pattern.compile("\\s+");
@@ -47,6 +49,10 @@ class AfgFileReader extends TrackableReader
 	private File indexFile;
 
 	private boolean firstTileFound = false;
+
+	// Count of the number of reads and contigs processed (GUI tracking only)
+	private int contigsAdded = 0;
+	private int readsAdded = 0;
 
 	//=======================================c'tor==========================================
 
@@ -166,6 +172,7 @@ class AfgFileReader extends TrackableReader
 
 		//make new contig and add to assembly
 		assembly.addContig(contig);
+		contigsAdded++;
 
 		//convert consensus qualScores to numerical values (ASCII codes)
 		qualScores = convertStringtoASCII(qualScores);
@@ -265,19 +272,14 @@ class AfgFileReader extends TrackableReader
 
 		//add read to this contig
 		contig.getReads().add(read);
-		readsFound++;
 
 		BasePositionComparator.compare(contig.getConsensus(), readMetaData, read.getStartPosition());
 
 		readCache.setReadMetaData(readMetaData);
+		readsAdded++;
 
 		//remember to increment the read id
 		currReadID++;
-
-		//every so often, print out the number of reads found
-		if (readsFound % 250000 == 0)
-			System.out.println(" reads found: " + readsFound);
-
 	}
 
 //---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -372,5 +374,11 @@ class AfgFileReader extends TrackableReader
 		}
 
 		rmd.setData(sb.toString());
+	}
+
+	public String getMessage()
+	{
+		return RB.format("io.AssemblyFileHandler.status",
+			contigsAdded, readsAdded);
 	}
 }

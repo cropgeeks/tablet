@@ -35,4 +35,7 @@ public abstract class SimpleJob implements ITrackableJob
 
 	public boolean okToRun()
 		{ return okToRun; }
+
+	public String getMessage()
+		{ return null; }
 }

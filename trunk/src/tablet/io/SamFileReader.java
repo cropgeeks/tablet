@@ -10,6 +10,8 @@ import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
 
+import scri.commons.gui.*;
+
 class SamFileReader extends TrackableReader
 {
 	private IReadCache readCache;
@@ -24,6 +26,8 @@ class SamFileReader extends TrackableReader
 
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
+	private int readID = 0;
+
 	SamFileReader()
 	{
 	}
@@ -36,7 +40,7 @@ class SamFileReader extends TrackableReader
 	boolean canRead()
 		throws Exception
 	{
-		refReader = new ReferenceFileReader(assembly);
+		refReader = new ReferenceFileReader(assembly, contigHash);
 
 		// We need to check each file to see if it is readable
 		for (int i = 0; i < files.length; i++)
@@ -101,7 +105,6 @@ class SamFileReader extends TrackableReader
 		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex), "ASCII"));
 
 		refReader.readReferenceFile(this, files[refIndex]);
-		contigHash = refReader.getContigHashMap();
 
 		in.close();
 	}
@@ -111,7 +114,7 @@ class SamFileReader extends TrackableReader
 	{
 		in = new BufferedReader(new InputStreamReader(getInputStream(samIndex), "ASCII"));
 
-		int readID = 0;
+		readID = 0;
 
 		while ((str = readLine()) != null && okToRun)
 		{
@@ -176,5 +179,11 @@ class SamFileReader extends TrackableReader
 		in.close();
 
 		assembly.setName(files[samIndex].getName());
+	}
+
+	public String getMessage()
+	{
+		return RB.format("io.AssemblyFileHandler.status",
+			contigHash.size(), readID);
 	}
 }

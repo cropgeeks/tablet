@@ -302,11 +302,10 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	{
 		String title = "Preparing Contig";
 		String label = "Preparing contig for display - please be patient...";
-		String[] msgs = new String[] { "" };
 
 		// Run the job...
 		DisplayDataCalculator ddc = new DisplayDataCalculator(contig);
-		ProgressDialog dialog = new ProgressDialog(ddc, title, label, msgs);
+		ProgressDialog dialog = new ProgressDialog(ddc, title, label);
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
