@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.regex.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.table.DefaultTableModel;
 import scri.commons.gui.*;
 import tablet.analysis.SimpleJob;
 import tablet.data.*;
@@ -203,12 +204,10 @@ public class FindPanel extends JPanel implements ListSelectionListener
 		if(assembly == null)
 			toggleComponentEnabled(false);
 		
-		finder.results = new LinkedList<SearchResult>();
-		tableModel = new FindTableModel(finder.results);
-		controls.table.setModel(tableModel);
+		finder.results = null;
+		controls.table.setModel(new DefaultTableModel());
 		controls.table.invalidate();
 	}
-
 
 	/**
 	 * Class extends Simplejob such that a search on reads can be run

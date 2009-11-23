@@ -44,8 +44,6 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 			}
 		});
 
-		//titlePanel = new TitlePanel3(getTitle(0));
-
 		controls.featuresLabel.setText(getTitle(0));
 
 		toggleComponentEnabled(false);
@@ -142,7 +140,6 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 
 	public void toggleComponentEnabled(boolean enabled)
 	{
-		controls.table.setEnabled(enabled);
 		controls.toggleComponentEnabled(enabled);
 	}
 }

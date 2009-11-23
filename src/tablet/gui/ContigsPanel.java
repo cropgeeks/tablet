@@ -77,6 +77,7 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 
 			controls.table.setModel(model);
 			controls.table.setRowSorter(sorter);
+			featuresPanel.toggleComponentEnabled(true);
 		}
 
 		String title = RB.format("gui.ContigsPanel.title", controls.table.getRowCount());

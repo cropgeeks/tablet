@@ -21,8 +21,8 @@
 
 <p>The <b>Data Panel</b> of the ribbon menu contains controls for importing data into Tablet.</p>
 
-<p><a href="images/ribbonmenudata.png">
-<img class="capture" src="images/ribbonmenudata2.png" alt="Tablet Screenshot"></a></p>
+<p>
+<img class="capture" src="images/ribbonmenudata.png" alt="Tablet Screenshot"></a></p>
 
 <ul>
 	<li><b>Open Assembly</b><br>
@@ -38,8 +38,8 @@
 
 <p>The <b>Layout Style Panel</b> contains controls which alter the display of reads within Tablet.</p>
 
-<p><a href="images/ribbonmenulayoutstyle.png">
-<img class="capture" src="images/ribbonmenulayoutstyle2.png" alt="Tablet Screenshot"></a></p>
+<p>
+<img class="capture" src="images/ribbonmenulayoutstyle.png" alt="Tablet Screenshot"></a></p>
 
 <ul>
 	<li><b>Enhanced</b><br>
@@ -63,8 +63,8 @@
 <p>The <b>Adjust Panel</b> contains slider controls for adjusting the level of display
 zoom and the intensity of variant highlighting.</p>
 
-<p><a href="images/ribbonmenuadjust.png">
-<img class="capture" src="images/ribbonmenuadjust2.png" alt="Tablet Screenshot"></a></p>
+<p>
+<img class="capture" src="images/ribbonmenuadjust.png" alt="Tablet Screenshot"></a></p>
 
 <ul>
 	<li><b>Zoom</b><br>
@@ -79,8 +79,8 @@ zoom and the intensity of variant highlighting.</p>
 
 <p>The <b>Navigate Panel</b> offers controls that aid in navigation.</p>
 
-<p><a href="images/ribbonmenunavigate.png">
-<img class="capture" src="images/ribbonmenunavigate2.png" alt="Tablet Screenshot"></a></p>
+<p>
+<img class="capture" src="images/ribbonmenunavigate.png" alt="Tablet Screenshot"></a></p>
 
 <ul>
 	<li><b>Page Left</b><br>
@@ -90,6 +90,10 @@ zoom and the intensity of variant highlighting.</p>
 	 <li><b>Jump to Base</b><br>
 	 Opens the <a href="gui.dialog.JumpToDialog.shtml">Jump to Base</a> dialog,
 	 which can be used to jump the view to a specific base (padded or unpadded.</li>
+	 <li><b>Prev Feature</b><br>
+	 Moves to and highlights the previous feature in the feature panel's list of features.</li>
+	 <li><b>Next Feature</b><br>
+	 Moves to and highlights the next feature in the feature panel's list of features.</li>
 </ul>
 
 
@@ -98,8 +102,8 @@ zoom and the intensity of variant highlighting.</p>
 <p>The <b>Options Panel</b> contains several controls for adjusting various
 miscellaneous options.</p>
 
-<p><a href="images/ribbonmenuoptions.png">
-<img class="capture" src="images/ribbonmenuoptions2.png" alt="Tablet Screenshot"></a></p>
+<p>
+<img class="capture" src="images/ribbonmenuoptions.png" alt="Tablet Screenshot"></a></p>
 
 <ul>
 	 <li><b>Show Read Tooltips</b><br>
@@ -119,8 +123,8 @@ miscellaneous options.</p>
 	 Toggles on or off the Scale Bar display panel.</li>
 	 <li><b>Hide Coverage</b><br>
 	 Toggles on or off the Coverage display panel.</li>
-	 <li><b>Hide Contigs Browser</b><br>
-	 Toggles on or off the Contigs Browser panel.</li>
+	 <li><b>Hide Control Panel</b><br>
+	 Toggles on or off the Contigs/Features/Search Control panel.</li>
 </ul>
 
 <!--#include virtual="footer.html" -->
