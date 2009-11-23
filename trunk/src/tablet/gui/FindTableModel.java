@@ -2,6 +2,8 @@ package tablet.gui;
 
 import java.util.LinkedList;
 import javax.swing.table.AbstractTableModel;
+import scri.commons.gui.RB;
+import tablet.data.*;
 
 /**
  * Class which provides the table model for the find reads table.
@@ -17,10 +19,10 @@ public class FindTableModel extends AbstractTableModel
 	{
 		this.results = results;
 
-		String col1 = "Name";
-		String col2 = "Position";
-		String col3 = "Length";
-		String col4 = "Contig";
+		String col1 = RB.getString("gui.FindTableModel.name");
+		String col2 = RB.getString("gui.FindTableModel.position");
+		String col3 = RB.getString("gui.FindTableModel.length");
+		String col4 = RB.getString("gui.FindTableModel.contig");
 
 		columnNames = new String[] { col1, col2, col3, col4 };
 	}
@@ -35,15 +37,24 @@ public class FindTableModel extends AbstractTableModel
 
 	public int getRowCount()
 	{
-		return results.size();
+		if(results != null)
+			return results.size();
+		else
+			return 0;
 	}
 
 	public Class getColumnClass(int col)
 	{
-		if (col == 0 || col == 4)
+		if (col == 0 || col == 3)
 			return String.class;
-		else
+		else if(col == 1 || col == 2)
 			return Integer.class;
+		else if(col == 4)
+			return Read.class;
+		else if(col == 5)
+			return Contig.class;
+		else
+			return null;
 	}
 
 	public Object getValueAt(int row, int col)
