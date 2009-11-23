@@ -28,7 +28,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="panel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="34" max="32767" attributes="0"/>
+              <EmptySpace pref="18" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -53,6 +53,7 @@
                       <Component id="warnOnExit" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="warnNoRef" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="warnOnPaddedFeatureToggle" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="warnSearchLimitExceeded" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace pref="16" max="32767" attributes="0"/>
               </Group>
@@ -70,6 +71,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="warnOnPaddedFeatureToggle" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
+                  <Component id="warnSearchLimitExceeded" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -93,6 +95,11 @@
         <Component class="javax.swing.JCheckBox" name="warnNoRef">
           <Properties>
             <Property name="text" type="java.lang.String" value="When attempting to load an assembly if no reference file was included"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="warnSearchLimitExceeded">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="When a search has stopped after finding 500 results"/>
           </Properties>
         </Component>
       </SubComponents>

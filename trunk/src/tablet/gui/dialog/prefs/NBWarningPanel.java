@@ -25,11 +25,13 @@ class NBWarningPanel extends JPanel
 		RB.setText(warnOnExit, "gui.dialog.prefs.NBWarningPanel.warnOnExit");
 		RB.setText(warnNoRef, "gui.dialog.prefs.NBWarningPanel.warnNoRef");
 		RB.setText(warnOnPaddedFeatureToggle, "gui.dialog.prefs.NBWarningPanel.warnOnPaddedFeatureToggle");
+		RB.setText(warnSearchLimitExceeded, "gui.dialog.prefs.NBWarningPanel.warnSearchLimitExceeded");
 
 		warnOnClose.setSelected(Prefs.guiWarnOnClose);
 		warnOnExit.setSelected(Prefs.guiWarnOnExit);
 		warnNoRef.setSelected(Prefs.guiWarnNoRef);
 		warnOnPaddedFeatureToggle.setSelected(Prefs.guiWarnOnPaddedFeatureToggle);
+		warnSearchLimitExceeded.setSelected(Prefs.guiWarnSearchLimitExceeded);
     }
 
 	public void applySettings()
@@ -38,6 +40,7 @@ class NBWarningPanel extends JPanel
 		Prefs.guiWarnOnExit = warnOnExit.isSelected();
 		Prefs.guiWarnNoRef = warnNoRef.isSelected();
 		Prefs.guiWarnOnPaddedFeatureToggle = warnOnPaddedFeatureToggle.isSelected();
+		Prefs.guiWarnSearchLimitExceeded = warnSearchLimitExceeded.isSelected();
 	}
 
 
@@ -54,6 +57,7 @@ class NBWarningPanel extends JPanel
         warnOnExit = new javax.swing.JCheckBox();
         warnOnPaddedFeatureToggle = new javax.swing.JCheckBox();
         warnNoRef = new javax.swing.JCheckBox();
+        warnSearchLimitExceeded = new javax.swing.JCheckBox();
 
         panel.setBorder(javax.swing.BorderFactory.createTitledBorder("Inform me:"));
 
@@ -65,6 +69,8 @@ class NBWarningPanel extends JPanel
 
         warnNoRef.setText("When attempting to load an assembly if no reference file was included");
 
+        warnSearchLimitExceeded.setText("When a search has stopped after finding 500 results");
+
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
@@ -75,7 +81,8 @@ class NBWarningPanel extends JPanel
                     .addComponent(warnOnClose)
                     .addComponent(warnOnExit)
                     .addComponent(warnNoRef)
-                    .addComponent(warnOnPaddedFeatureToggle))
+                    .addComponent(warnOnPaddedFeatureToggle)
+                    .addComponent(warnSearchLimitExceeded))
                 .addContainerGap(16, Short.MAX_VALUE))
         );
         panelLayout.setVerticalGroup(
@@ -89,7 +96,8 @@ class NBWarningPanel extends JPanel
                 .addComponent(warnNoRef)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(warnOnPaddedFeatureToggle)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(warnSearchLimitExceeded))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -106,7 +114,7 @@ class NBWarningPanel extends JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(34, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -116,5 +124,6 @@ class NBWarningPanel extends JPanel
     private javax.swing.JCheckBox warnOnClose;
     private javax.swing.JCheckBox warnOnExit;
     private javax.swing.JCheckBox warnOnPaddedFeatureToggle;
+    private javax.swing.JCheckBox warnSearchLimitExceeded;
     // End of variables declaration//GEN-END:variables
 }

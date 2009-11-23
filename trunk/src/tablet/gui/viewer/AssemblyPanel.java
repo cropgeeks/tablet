@@ -300,8 +300,8 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 	private boolean updateDisplayData()
 	{
-		String title = "Preparing Contig";
-		String label = "Preparing contig for display - please be patient...";
+		String title = RB.getString("gui.viewer.assemblyPanel.progressDialog.title");
+		String label = RB.getString("gui.viewer.assemblyPanel.progressDialog.label");
 
 		// Run the job...
 		DisplayDataCalculator ddc = new DisplayDataCalculator(contig);

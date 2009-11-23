@@ -17,4 +17,6 @@ public interface IReadManager
 	public int size();
 
 	public Read getReadAt(int line, int nucleotidePosition);
+
+	public int getLineForRead(Read read);
 }

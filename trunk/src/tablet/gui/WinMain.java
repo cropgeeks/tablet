@@ -32,6 +32,7 @@ public class WinMain extends JRibbonFrame
 	private AssemblyPanel assemblyPanel;
 	private ContigsPanel contigsPanel;
 	private FeaturesPanel featuresPanel;
+	private FindPanel findPanel;
 
 	private Assembly assembly;
 
@@ -80,17 +81,25 @@ public class WinMain extends JRibbonFrame
 		assemblyPanel = new AssemblyPanel(this);
 		contigsPanel = new ContigsPanel(this, assemblyPanel, ctrlTabs);
 		featuresPanel = new FeaturesPanel(assemblyPanel, ctrlTabs);
+		findPanel = new FindPanel(assemblyPanel, this, ctrlTabs);
 
 		contigsPanel.setFeaturesPanel(featuresPanel);
+		contigsPanel.setFindPanel(findPanel);
 
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(this, dropAdapter));
 
 		ctrlTabs.addTab("", contigsPanel);
-		ctrlTabs.setTitleAt(0, contigsPanel.getTitle(0));
+		ctrlTabs.setIconAt(0, Icons.getIcon("ENHANCED16"));
+		ctrlTabs.setToolTipTextAt(0, "Contigs");
 		ctrlTabs.addTab("", featuresPanel);
-		ctrlTabs.setTitleAt(1, featuresPanel.getTitle(0));
-		ctrlTabs.setEnabledAt(1, false);
+		ctrlTabs.setIconAt(1, Icons.getIcon("COLUMN16"));
+		ctrlTabs.setToolTipTextAt(1, "Features");
+		ctrlTabs.setEnabledAt(1, true);
+		ctrlTabs.addTab("", findPanel);
+		ctrlTabs.setIconAt(2, Icons.getIcon("FIND"));
+		ctrlTabs.setToolTipTextAt(2, "Search for reads");
+		ctrlTabs.setEnabledAt(2, true);
 
 		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		splitter.setBorder(BorderFactory.createEmptyBorder());
