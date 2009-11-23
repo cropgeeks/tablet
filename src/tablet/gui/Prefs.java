@@ -66,6 +66,8 @@ public class Prefs extends XMLPreferences
 	public static boolean refNotUsed = true;
 	public static boolean guiWarnNoRef = true;
 
+	public static boolean guiWarnSearchLimitExceeded = true;
+
 	// What filtering option was last in use for the contigs panel
 	public static int guiContigsFilter = 0;
 
@@ -106,6 +108,9 @@ public class Prefs extends XMLPreferences
 	// What type of pad/stop characters should be displayed
 	public static int visPadCharType = 0;
 	public static int visStopCharType = 0;
+
+	public static int guiFindPanelSelectedIndex = 0;
+	public static String recentSearches = "";
 
 	static void setDefaults()
 	{

@@ -76,4 +76,50 @@ class StackSet implements IReadManager
 
 		return null;
 	}
+
+	/**
+	 * Method which uses a binary search to find the correct lineIndex for
+	 * a given read.
+	 *
+	 * @param read	The read whose lineIndex we are searching for.
+	 * @return mid	The lineIndex.
+	 */
+	public int getLineForRead(Read read)
+	{
+		int high = stack.size()-1;
+		int low = 0;
+
+		while(high >= low)
+		{
+			int mid = low + ((high-low) /2);
+
+			if (stack.get(mid).compareTo(read) == -1)
+				low = mid+1;
+			else if(stack.get(mid).compareTo(read) == 1)
+				high = mid-1;
+			else
+			{
+				//we've potentially found the read, but must check to ensure
+				//we have as reads can be equal without being the desired read.
+				if(stack.get(mid).getID() == read.getID())
+					return mid;
+				else
+				{
+					while(stack.get(mid).getStartPosition() >= read.getStartPosition())
+					{
+						mid--;
+						if(stack.get(mid).getID() == read.getID())
+							return mid;
+					}
+					while(stack.get(mid).getStartPosition() <= read.getStartPosition())
+					{
+						mid++;
+						if(stack.get(mid).getID() == read.getID())
+							return mid;
+					}
+				}
+			}
+		}
+		return -1;
+	}
 }

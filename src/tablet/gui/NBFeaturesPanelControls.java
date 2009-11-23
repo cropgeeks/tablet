@@ -28,6 +28,10 @@ class NBFeaturesPanelControls extends JPanel
 
 		filterText.getDocument().addDocumentListener(this);
 		checkPadded.addActionListener(this);
+
+		table.getTableHeader().setReorderingAllowed(false);
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getSelectionModel().addListSelectionListener(panel);
     }
 
 	public void changedUpdate(DocumentEvent e)
@@ -71,6 +75,33 @@ class NBFeaturesPanelControls extends JPanel
 		Prefs.guiFeaturesArePadded = checkPadded.isSelected();
 	}
 
+	public void toggleComponentEnabled(boolean enabled)
+	{
+		checkPadded.setEnabled(enabled);
+		filterLabel.setEnabled(enabled);
+		filterText.setEnabled(enabled);
+		featuresLabel.setEnabled(enabled);
+		table.setEnabled(enabled);
+	}
+
+	public void nextFeature()
+	{
+		if(table.getSelectedRow() < table.getRowCount()-1)
+			table.setRowSelectionInterval(table.getSelectedRow()+1, table.getSelectedRow()+1);
+
+		table.scrollRectToVisible(table.getCellRect(table.getSelectedRow(), table.getSelectedColumn(), true));
+	}
+
+	public void prevFeature()
+	{
+		if(table.getSelectedRow() == -1)
+			table.setRowSelectionInterval(table.getRowCount()-1, table.getRowCount()-1);
+		else if(table.getSelectedRow() > 0)
+			table.setRowSelectionInterval(table.getSelectedRow()-1, table.getSelectedRow()-1);
+
+		table.scrollRectToVisible(table.getCellRect(table.getSelectedRow(), table.getSelectedColumn(), true));
+	}
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -83,16 +114,36 @@ class NBFeaturesPanelControls extends JPanel
         filterLabel = new javax.swing.JLabel();
         filterText = new javax.swing.JTextField();
         checkPadded = new javax.swing.JCheckBox();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
+        featuresLabel = new javax.swing.JLabel();
 
         filterLabel.setLabelFor(filterText);
         filterLabel.setText("Filter by type:");
 
         checkPadded.setText("Feature values are padded");
 
+        table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(table);
+
+        featuresLabel.setText("Features (0):");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(featuresLabel)
+                .addContainerGap(326, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -105,22 +156,29 @@ class NBFeaturesPanelControls extends JPanel
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(featuresLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(filterLabel)
                     .addComponent(filterText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(checkPadded)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox checkPadded;
+    public javax.swing.JLabel featuresLabel;
     private javax.swing.JLabel filterLabel;
     private javax.swing.JTextField filterText;
+    private javax.swing.JScrollPane jScrollPane1;
+    public javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 
 }

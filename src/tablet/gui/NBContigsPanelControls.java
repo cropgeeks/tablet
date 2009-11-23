@@ -33,6 +33,10 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
 		// Event handlers
 		textField.getDocument().addDocumentListener(this);
 		combo.addActionListener(this);
+
+		table.getTableHeader().setReorderingAllowed(false);
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getSelectionModel().addListSelectionListener(panel);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -114,7 +118,6 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
 			System.out.println(e);
 		}
 
-
 		panel.setTableFilter(rf);
 	}
 
@@ -123,6 +126,7 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
 		filterLabel.setEnabled(state);
 		combo.setEnabled(state);
 		textField.setEnabled(state);
+		contigsLabel.setEnabled(state);
 	}
 
     /** This method is called from within the constructor to
@@ -137,14 +141,34 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
         combo = new javax.swing.JComboBox();
         textField = new javax.swing.JTextField();
         filterLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        table = new javax.swing.JTable();
+        contigsLabel = new javax.swing.JLabel();
 
         filterLabel.setLabelFor(combo);
         filterLabel.setText("Filter by:");
+
+        table.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane1.setViewportView(table);
+
+        contigsLabel.setText("Contigs (0):");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(contigsLabel)
+                .addContainerGap(317, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,21 +181,28 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(contigsLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(filterLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(textField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox combo;
+    public javax.swing.JLabel contigsLabel;
     private javax.swing.JLabel filterLabel;
+    private javax.swing.JScrollPane jScrollPane1;
+    public javax.swing.JTable table;
     private javax.swing.JTextField textField;
     // End of variables declaration//GEN-END:variables
 

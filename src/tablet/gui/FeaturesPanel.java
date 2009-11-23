@@ -22,7 +22,6 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 
 	private JTabbedPane ctrlTabs;
 	private FeaturesTableModel model;
-	private JTable table;
 	private NBFeaturesPanelControls controls;
 
 	private Contig contig;
@@ -33,23 +32,23 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		this.aPanel = aPanel;
 		this.ctrlTabs = ctrlTabs;
 
-		table = new JTable();
-		table.getTableHeader().setReorderingAllowed(false);
-		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.getSelectionModel().addListSelectionListener(this);
-
+		setLayout(new BorderLayout());
+		add(controls = new NBFeaturesPanelControls(this));
+		
 		// Additional (duplicate) table-clicked handler to catch the user
 		// re-clicking on the same row. This doesn't generate a table event, but
 		// we still want to respond to it and highlight the selection again
-		table.addMouseListener(new MouseAdapter() {
+		controls.table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				processTableSelection();
 			}
 		});
 
-		setLayout(new BorderLayout());
-		add(new JScrollPane(table));
-		add(controls = new NBFeaturesPanelControls(this), BorderLayout.SOUTH);
+		//titlePanel = new TitlePanel3(getTitle(0));
+
+		controls.featuresLabel.setText(getTitle(0));
+
+		toggleComponentEnabled(false);
 	}
 
 	void setContig(Contig contig)
@@ -60,22 +59,23 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		// no features to actually show, disable the tab
 		if (contig == null || contig.getFeatures().size() == 0)
 		{
-			ctrlTabs.setEnabledAt(1, false);
-			ctrlTabs.setTitleAt(1, getTitle(0));
+			ctrlTabs.setEnabledAt(1, true);
+			controls.featuresLabel.setText(getTitle(0));
 
 			model = null;
-			table.setModel(new DefaultTableModel());
-			table.setRowSorter(null);
+			controls.table.setModel(new DefaultTableModel());
+			controls.table.setRowSorter(null);
 		}
 
 		else
 		{
 			ctrlTabs.setEnabledAt(1, true);
-			ctrlTabs.setTitleAt(1, getTitle(contig.getFeatures().size()));
+			toggleComponentEnabled(true);
+			controls.featuresLabel.setText(getTitle(contig.getFeatures().size()));
 			model = new FeaturesTableModel(contig);
 			sorter = new TableRowSorter<FeaturesTableModel>(model);
-			table.setModel(model);
-			table.setRowSorter(sorter);
+			controls.table.setModel(model);
+			controls.table.setRowSorter(sorter);
 		}
 	}
 
@@ -94,13 +94,13 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 
 	private void processTableSelection()
 	{
-		int row = table.getSelectedRow();
+		int row = controls.table.getSelectedRow();
 
 		if (row == -1)
 			return;
 
 		// Convert from view->model (deals with user-sorted table)
-		row = table.convertRowIndexToModel(row);
+		row = controls.table.convertRowIndexToModel(row);
 
 		// Pull the feature out of the model
 		Feature feature = (Feature) model.getValueAt(row, 9);
@@ -125,26 +125,24 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 	void setTableFilter(RowFilter<FeaturesTableModel, Object> rf)
 	{
 		sorter.setRowFilter(rf);
-		ctrlTabs.setTitleAt(1, getTitle(table.getRowCount()));
+		ctrlTabs.setTitleAt(1, getTitle(controls.table.getRowCount()));
 	}
 
 	public void nextFeature()
 	{
-		if(table.getSelectedRow() < table.getRowCount()-1)
-			table.setRowSelectionInterval(table.getSelectedRow()+1, table.getSelectedRow()+1);
-
+		controls.nextFeature();
 		ctrlTabs.setSelectedComponent(this);
-		table.scrollRectToVisible(table.getCellRect(table.getSelectedRow(), table.getSelectedColumn(), true));
 	}
 
 	public void prevFeature()
 	{
-		if(table.getSelectedRow() == -1)
-			table.setRowSelectionInterval(table.getRowCount()-1, table.getRowCount()-1);
-		else if(table.getSelectedRow() > 0)
-			table.setRowSelectionInterval(table.getSelectedRow()-1, table.getSelectedRow()-1);
-
+		controls.prevFeature();
 		ctrlTabs.setSelectedComponent(this);
-		table.scrollRectToVisible(table.getCellRect(table.getSelectedRow(), table.getSelectedColumn(), true));
+	}
+
+	public void toggleComponentEnabled(boolean enabled)
+	{
+		controls.table.setEnabled(enabled);
+		controls.toggleComponentEnabled(enabled);
 	}
 }

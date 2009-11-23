@@ -19,12 +19,11 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 	private AssemblyPanel aPanel;
 	private FeaturesPanel featuresPanel;
 	private NBContigsPanelControls controls;
+	private FindPanel findPanel;
 	private JTabbedPane ctrlTabs;
 
 	private ContigsTableModel model;
 	private TableRowSorter<ContigsTableModel> sorter;
-	private JTable table;
-	private JScrollPane sp;
 
 	ContigsPanel(WinMain winMain, AssemblyPanel aPanel, JTabbedPane ctrlTabs)
 	{
@@ -32,20 +31,17 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 		this.aPanel = aPanel;
 		this.ctrlTabs = ctrlTabs;
 
-		table = new JTable();
-		table.getTableHeader().setReorderingAllowed(false);
-		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.getSelectionModel().addListSelectionListener(this);
-
 		setLayout(new BorderLayout());
-		add(sp = new JScrollPane(table));
-		add(controls = new NBContigsPanelControls(this), BorderLayout.SOUTH);
-
-		sp.getViewport().setBackground(Color.white);
+		add(controls = new NBContigsPanelControls(this));
 	}
 
 	void setFeaturesPanel(FeaturesPanel featuresPanel)
 		{ this.featuresPanel = featuresPanel; }
+
+	void setFindPanel(FindPanel findPanel)
+	{
+		this.findPanel = findPanel;
+	}
 
 	String getTitle(int count)
 	{
@@ -55,7 +51,7 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 	void setTableFilter(RowFilter<ContigsTableModel, Object> rf)
 	{
 		sorter.setRowFilter(rf);
-		ctrlTabs.setTitleAt(0, getTitle(table.getRowCount()));
+		controls.contigsLabel.setText(getTitle(controls.table.getRowCount()));
 	}
 
 	void setAssembly(Assembly assembly)
@@ -69,25 +65,28 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 			model = null;
 			sorter = null;
 
-			table.setModel(new DefaultTableModel());
-			table.setRowSorter(null);
+			controls.table.setModel(new DefaultTableModel());
+			controls.table.setRowSorter(null);
+			featuresPanel.toggleComponentEnabled(false);
+
 		}
 		else
 		{
-			model = new ContigsTableModel(assembly, table);
+			model = new ContigsTableModel(assembly, controls.table);
 			sorter = new TableRowSorter<ContigsTableModel>(model);
 
-			table.setModel(model);
-			table.setRowSorter(sorter);
-			sp.getVerticalScrollBar().setValue(0);
+			controls.table.setModel(model);
+			controls.table.setRowSorter(sorter);
 		}
 
-		String title = RB.format("gui.ContigsPanel.title", table.getRowCount());
-		ctrlTabs.setTitleAt(0, title);
+		String title = RB.format("gui.ContigsPanel.title", controls.table.getRowCount());
+		controls.contigsLabel.setText(title);
 		ctrlTabs.setSelectedIndex(0);
 
 		controls.clearFilter();
 		controls.setEnabledState(assembly != null);
+
+		findPanel.setAssembly(assembly);
 	}
 
 	public void valueChanged(ListSelectionEvent e)
@@ -97,14 +96,14 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 
 		Actions.openedNoContigSelected();
 
-		int row = table.getSelectedRow();
+		int row = controls.table.getSelectedRow();
 
 		if (row == -1)
 			setNullContig();
 		else
 		{
 			// Convert from view->model (deals with user-sorted table)
-			row = table.convertRowIndexToModel(row);
+			row = controls.table.convertRowIndexToModel(row);
 
 			// Then pull the contig out of the model and set...
 			Contig contig = (Contig) model.getValueAt(row, 0);
@@ -134,6 +133,7 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 	{
 		aPanel.setContig(null);
 		featuresPanel.setContig(null);
+		findPanel.toggleComponentEnabled(true);
 
 		winMain.setAssemblyPanelVisible(false);
 		winMain.getJumpToDialog().setVisible(false);
@@ -145,13 +145,18 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 		// TODO: Any way to do this without recreating the entire table because
 		// that causes the user's custom sorting/filtering to be removed
 
-		int row = table.getSelectedRow();
+		int row = controls.table.getSelectedRow();
 		if (row != -1)
-			row = table.convertRowIndexToModel(row);
+			row = controls.table.convertRowIndexToModel(row);
 
 		setAssembly(assembly);
 
 		if (row != -1)
-			table.setRowSelectionInterval(row, row);
+			controls.table.setRowSelectionInterval(row, row);
+	}
+
+	public JTable getTable()
+	{
+		return controls.table;
 	}
 }
