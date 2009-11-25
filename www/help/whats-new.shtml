@@ -23,6 +23,13 @@ changes between versions, please see the <a href="http://bioinf.scri.ac.uk/table
 subversion change log</a>.</p>
 
 
+<h3>New in 0.09.11.25</h3>
+
+<ul>
+<li>NEW: Added support for finding reads by name (across current or all contigs), with graphical pinpointing.</li>
+<li>CHG: The "Contigs Browser" is now the "Control Panel", containing contig, features, and search tabs.</li>
+</ul>
+
 <h3>New in 0.09.11.06</h3>
 
 <ul>

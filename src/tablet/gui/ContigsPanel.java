@@ -108,26 +108,31 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 
 			// Then pull the contig out of the model and set...
 			Contig contig = (Contig) model.getValueAt(row, 0);
-
-			// Attempt to set the contig on the graphical components...
-			if (aPanel.setContig(contig))
-			{
-				featuresPanel.setContig(contig);
-
-				Actions.openedContigSelected();
-
-				if(contig.getFeatures().size() == 0)
-				{
-					Actions.homeNavigateNextFeature.setEnabled(false);
-					Actions.homeNavigatePrevFeature.setEnabled(false);
-				}
-
-				winMain.setAssemblyPanelVisible(true);
-			}
-			// ...but if the set failed, then act the same as a de-selection
-			else
-				setNullContig();
+			setDisplayedContig(contig);
 		}
+	}
+
+	void setDisplayedContig(Contig contig)
+	{
+		// Attempt to set the contig on the graphical components...
+		if (aPanel.setContig(contig))
+		{
+			featuresPanel.setContig(contig);
+
+			Actions.openedContigSelected();
+
+			if(contig.getFeatures().size() == 0)
+			{
+				Actions.homeNavigateNextFeature.setEnabled(false);
+				Actions.homeNavigatePrevFeature.setEnabled(false);
+			}
+
+			winMain.setAssemblyPanelVisible(true);
+		}
+
+		// If the set failed, then act the same as a table de-selection
+		else
+			setNullContig();
 	}
 
 	private void setNullContig()

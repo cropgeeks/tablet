@@ -29,9 +29,10 @@ generation sequence assemblies and alignments.</p>
 <li>Display of reads in both packed and stacked formats.</li>
 <li>File format support for ACE, AFG, MAQ, and SOAP.</li>
 <li>Import GFF3 features and quickly find/highlight them.</li>
+<li>Search and locate reads by name across entire data sets.</li>
 <li>Entire-contig overviews, showing data layout or coverage information.</li>
 <li>Simple install routine via auto-updating graphical installers.</li>
-<li>Support for Windows, Apple Mac OS X, and Linux, in 32 and 64-bit.</li>
+<li>Support for Windows, Apple Mac OS X, Linux and Solaris, in 32 and 64-bit.</li>
 </ul>
 
 
