@@ -82,7 +82,7 @@ public class FindPanel extends JPanel implements ListSelectionListener
         			return false;
         	}};
 		}
-		
+
 		controls.table.setModel(tableModel);
 		controls.table.setCellEditor(null);
 	}
@@ -114,20 +114,8 @@ public class FindPanel extends JPanel implements ListSelectionListener
 		int start = (Integer) tableModel.getValueAt(row, 1);
 
 		Contig contig = (Contig) tableModel.getValueAt(row, 5);
+		updateContigsTable(contig);
 
-		if(aPanel.getContig() == null || aPanel.getContig() != contig)
-		{
-			aPanel.setContig(contig);
-			winMain.getFeaturesPanel().setContig(contig);
-			Actions.openedContigSelected();
-
-			if(contig.getFeatures().size() == 0)
-			{
-				Actions.homeNavigateNextFeature.setEnabled(false);
-				Actions.homeNavigatePrevFeature.setEnabled(false);
-			}
-			updateContigsTable(contig);
-		}
 		highlightRead(start, read, contig);
 	}
 
@@ -138,16 +126,20 @@ public class FindPanel extends JPanel implements ListSelectionListener
 	 */
 	public void updateContigsTable(Contig contig)
 	{
-		int i=0;
-		for(i=0; i < cPanel.getTable().getRowCount(); i++)
+		boolean foundInTable = false;
+		for(int i=0; i < cPanel.getTable().getRowCount(); i++)
 		{
 			if(cPanel.getTable().getValueAt(i, 0).equals(contig))
 			{
 				cPanel.getTable().setRowSelectionInterval(i, i);
 				Contig ctg = (Contig) cPanel.getTable().getValueAt(i, 0);
+				foundInTable = true;
 				break;
 			}
 		}
+
+		if (!foundInTable)
+			cPanel.setDisplayedContig(contig);
 	}
 
 	/**
@@ -203,7 +195,7 @@ public class FindPanel extends JPanel implements ListSelectionListener
 	{
 		if(assembly == null)
 			toggleComponentEnabled(false);
-		
+
 		finder.results = null;
 		controls.table.setModel(new DefaultTableModel());
 		controls.table.invalidate();
@@ -246,10 +238,7 @@ public class FindPanel extends JPanel implements ListSelectionListener
 							checkForMatches(read, str, results, contig);
 							//if we've had 500 matches stop searching
 							if (results.size() >= 500)
-							{
-								showWarning();
 								break;
-							}
 						}
 					}
 				}
@@ -297,10 +286,14 @@ public class FindPanel extends JPanel implements ListSelectionListener
 						RB.getString("gui.text.close"));
 					return;
 				}
-			
+
 			results = search(controls.findCombo.getText(), controls.findInCombo.getSelectedIndex());
 
 			setTableModel(results);
+
+			//if we've had 500 matches stop searching
+			if (results.size() >= 500)
+				showWarning();
 		}
 
 		public String getMessage()
