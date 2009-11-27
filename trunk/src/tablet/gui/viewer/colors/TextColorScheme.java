@@ -23,11 +23,6 @@ public class TextColorScheme extends ColorScheme
 		// VERY IMPORTANT: These MUST be in the same order as the sequential
 		// values within the data.Sequence class, eg, unknown, P, N, A, C, G, T
 
-		// Sequence.NOTUSED
-		statesRD.add(null);
-		statesCS.add(null);
-
-
 		// Sequence.UNKNOWN
 		statesRD.add(new TextState("?", w, h, true, false));
 		statesCS.add(new TextState("?", w, h, false, false));

@@ -100,11 +100,17 @@ public class FileCache implements IReadCache
 					int unpaddedLength = rnd.readIntFromBuffer();
 
 					int dataLength = rnd.readIntFromBuffer();
-					byte[] data = new byte[dataLength];
+					
+					byte[] data;
+					if(dataLength % 2 == 0)
+						data = new byte[dataLength/2];
+					else
+						data = new byte[(dataLength/2)+1];
 					rnd.read(data);
 
 					rmd = new ReadMetaData(name, isComplemented, unpaddedLength);
 					rmd.setRawData(data);
+					rmd.setLength(dataLength);
 				}
 				catch (Exception e)	{
 					e.printStackTrace();
@@ -137,7 +143,7 @@ public class FileCache implements IReadCache
 
 		// Write out the length of the data
 		byte[] data = readMetaData.getRawData();
-		out.writeInt(data.length);
+		out.writeInt(readMetaData.length());
 		// And the data itself
 		out.write(data);
 

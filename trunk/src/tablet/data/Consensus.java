@@ -10,6 +10,7 @@ public class Consensus extends Sequence
 	private byte[] bq;
 
 	private int unpaddedLength;
+	private int length;
 
 	/** Constructs a new, empty consensus sequence. */
 	public Consensus()
@@ -17,12 +18,22 @@ public class Consensus extends Sequence
 	}
 
 	/**
-	 * Sets the unpadded length of this consensus sequence. This is done by
-	 * calling Sequence.calculateUnpaddedLength() and storing the result.
-	 * @return the unpadded length of this consensus sequence
+	 * Calculates and returns the unpadded length of this sequence. Note: this
+	 * information is part of the ReadMetaData class and this method is purely
+	 * for calculation to fill that class - it shouldn't be used for any other
+	 * purpose.
+	 * @return the unpadded length of this sequence
 	 */
 	public int calculateUnpaddedLength()
-		{ return (unpaddedLength = super.calculateUnpaddedLength()); }
+	{
+		int baseCount = 0;
+
+		for (int i = 0; i < length; i++)
+			if (getStateAt(i) != P)
+				baseCount++;
+
+		return baseCount;
+	}
 
 	/**
 	 * Returns the unpadded length of this consensus sequence.
@@ -97,5 +108,40 @@ public class Consensus extends Sequence
 			data[d] = -1;
 
 		return data;
+	}
+
+	public int length()
+	{
+		return length;
+	}
+
+	public void setLength(int length)
+	{
+		this.length = length;
+	}
+
+	/**
+	 * Returns a string representation of this sequence.
+	 * @return a string representation of this thread
+	 */
+	@Override
+	public String toString()
+	{
+		StringBuilder sb = new StringBuilder(length);
+
+		for (int i = 0; i < length; i++)
+		{
+			byte state = getStateAt(i);
+			sb.append(getDNA(state));
+		}
+
+		return sb.toString();
+	}
+
+	@Override
+	public void setData(String sequence)
+	{
+		super.setData(sequence);
+		length = sequence.length();
 	}
 }

@@ -22,39 +22,37 @@ public abstract class Sequence
 	// VERY IMPORTANT: The order of these definitions is used elsewhere (WITHOUT
 	// CHECKS) so they must be kept this way.
 	//   29/06/09: Used by TextColorScheme and StandardColorScheme
-
-	/** Base is not used. **/
-	public static final byte NOTUSED = 0;
+	
 
 	/** Base whose nucleotide is unknown. **/
-	public static final byte UNKNOWN = 1;
+	public static final byte UNKNOWN = 0;
 	/** Base whose nucleotide is unknown, but different to the consensus. */
-	public static final byte dUKNOWN = 2;
+	public static final byte dUKNOWN = 1;
 
 	/** Base is a pad (*). */
-	public static final byte P  = 3;
+	public static final byte P  = 2;
 	/** Base is a pad (*), but different to the consensus. */
-	public static final byte dP = 4;
+	public static final byte dP = 3;
 	/** Base is an N. */
-	public static final byte N  = 5;
+	public static final byte N  = 4;
 	/** Base is an N, but different to the consensus. */
-	public static final byte dN = 6;
+	public static final byte dN = 5;
 	/** Base is an A. */
-	public static final byte A  = 7;
+	public static final byte A  = 6;
 	/** Base is an A, but different to the consensus. */
-	public static final byte dA = 8;
+	public static final byte dA = 7;
 	/** Base is an C. */
-	public static final byte C  = 9;
+	public static final byte C  = 8;
 	/** Base is an C, but different to the consensus. */
-	public static final byte dC = 10;
+	public static final byte dC = 9;
 	/** Base is an G. */
-	public static final byte G  = 11;
+	public static final byte G  = 10;
 	/** Base is an G, but different to the consensus. */
-	public static final byte dG = 12;
+	public static final byte dG = 11;
 	/** Base is an T. */
-	public static final byte T  = 13;
+	public static final byte T  = 12;
 	/** Base is an T, but different to the consensus. */
-	public static final byte dT = 14;
+	public static final byte dT = 13;
 
 
 	// Stores the actual DNA states, using one byte for every two states
@@ -65,27 +63,6 @@ public abstract class Sequence
 
 	public void setRawData(byte[] data)
 		{ this.data = data; }
-
-	/**
-	 * Returns the length of this sequence.
-	 * @return the length of this sequence
-	 */
-	public int length()
-	{
-		if (data == null)
-			return 0;
-
-//		byte n1 = (byte) ((data[data.length-1] >> 4) & 0xF);
-		byte n2 = (byte) (data[data.length-1] & 0xF);
-
-		// If storing an odd number of bases
-		if (n2 == NOTUSED)
-			return (2 * data.length) -1;
-
-		// Else if storing an even number of bases
-		else
-			return (2 * data.length);
-	}
 
 	/**
 	 * Sets the DNA data for this sequence.
@@ -230,42 +207,5 @@ public abstract class Sequence
 		}
 	}
 
-	/**
-	 * Returns a string representation of this sequence.
-	 * @return a string representation of this thread
-	 */
-	@Override
-	public String toString()
-	{
-		int length = length();
-
-		StringBuilder sb = new StringBuilder(length);
-
-		for (int i = 0; i < length; i++)
-		{
-			byte state = getStateAt(i);
-			sb.append(getDNA(state));
-		}
-
-		return sb.toString();
-	}
-
-	/**
-	 * Calculates and returns the unpadded length of this sequence. Note: this
-	 * information is part of the ReadMetaData class and this method is purely
-	 * for calculation to fill that class - it shouldn't be used for any other
-	 * purpose.
-	 * @return the unpadded length of this sequence
-	 */
-	public int calculateUnpaddedLength()
-	{
-		int baseCount = 0;
-		int length = length();
-
-		for (int i = 0; i < length; i++)
-			if (getStateAt(i) != P)
-				baseCount++;
-
-		return baseCount;
-	}
+	public abstract int length();
 }
