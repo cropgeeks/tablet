@@ -12,11 +12,12 @@ import scri.commons.gui.*;
 public class PackSetCreator extends SimpleJob
 {
 	private Contig contig;
-	private PackSet packSet = new PackSet();
+	private PackSet packSet;
 
 	public PackSetCreator(Contig contig)
 	{
 		this.contig = contig;
+		packSet = new PackSet(contig);
 	}
 
 	public void runJob(int jobIndex)

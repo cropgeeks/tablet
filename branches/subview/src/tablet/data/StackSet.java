@@ -8,14 +8,16 @@ import java.util.*;
 class StackSet implements IReadManager
 {
 	private ArrayList<Read> stack = new ArrayList<Read>();
+	private Contig contig;
 
 	StackSet()
 	{
 	}
 
-	StackSet(ArrayList<Read> reads)
+	StackSet(ArrayList<Read> reads, Contig contig)
 	{
 		stack = reads;
+		this.contig = contig;
 	}
 
 	public int size()
@@ -30,6 +32,9 @@ class StackSet implements IReadManager
 	public byte[] getValues(int line, int start, int end)
 	{
 		Read read = stack.get(line);
+
+		start += contig.getVisualS();
+		end += contig.getVisualE();
 
 		byte[] data = new byte[end-start+1];
 
