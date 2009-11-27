@@ -9,6 +9,13 @@ public class PackSet implements Iterable<Pack>, IReadManager
 {
 	private ArrayList<Pack> packs = new ArrayList<Pack>();
 
+	private Contig contig;
+
+	public PackSet(Contig contig)
+	{
+		this.contig = contig;
+	}
+
 	public Iterator<Pack> iterator()
 		{ return packs.iterator(); }
 
@@ -28,6 +35,9 @@ public class PackSet implements Iterable<Pack>, IReadManager
 	public byte[] getValues(int line, int start, int end)
 	{
 		Pack pack = packs.get(line);
+
+		start += contig.getVisualS();
+		end += contig.getVisualE();
 
 		return pack.getValues(start, end);
 	}

@@ -111,7 +111,8 @@ class ReadsCanvas extends JPanel
 			else
 				reads = contig.getStackSetManager();
 
-			offset = contig.getConsensusOffset();
+			//offset = contig.getConsensusOffset();
+			offset = contig.getVisualS();
 		}
 
 		// We need to ensure that any references to tablet.data objects are
@@ -137,7 +138,7 @@ class ReadsCanvas extends JPanel
 		ntW = sizeX*2;
 		ntH = fm.getHeight();
 
-		ntOnCanvasX = contig.getWidth();
+		ntOnCanvasX = contig.getVisualWidth();
 		ntOnCanvasY = contig.getHeight();
 
 		canvasW = (ntOnCanvasX * ntW);
@@ -243,9 +244,10 @@ class ReadsCanvas extends JPanel
 		g.translate(-pX1, -pY1);
 
 		// Calculate and draw the blue/gray background for offset regions
+
 		g.setColor(new Color(240, 240, 255));
-		g.fillRect(0, 0, offset*ntW, getHeight());
-		int cLength = offset + contig.getConsensus().length();
+		g.fillRect(0, 0, -offset*ntW, getHeight());
+		int cLength = -offset + contig.getConsensus().length();
 		g.fillRect(cLength*ntW, 0, canvasW-(cLength*ntW), getHeight());
 
 
@@ -301,7 +303,7 @@ class ReadsCanvas extends JPanel
 			// For every [nth] row, where n = number of available CPU cores...
 			for (int row = yS, y = (ntH*yS); row <= yE; row += cores, y += ntH*cores)
 			{
-				byte[] data = reads.getValues(row, xS-offset, xE-offset);
+				byte[] data = reads.getValues(row, xS, xE);
 
 				for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
 					if (data[i] != -1)

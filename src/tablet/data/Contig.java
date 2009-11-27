@@ -20,7 +20,7 @@ public class Contig
 	private ArrayList<Read> reads = new ArrayList<Read>();
 
 	// Starting and ending indices of the leftmost and rightmost reads
-	private int lhsOffset, rhsOffset;
+	private int contigS, contigE;
 
 	// Objects for handling the ordering of reads (for display)
 	private IReadManager readManager;
@@ -31,6 +31,8 @@ public class Contig
 	private ArrayList<Feature> features = new ArrayList<Feature>();
 	// Supplementary set of features used purely for graphical outlining
 	private ArrayList<Feature> outlines = new ArrayList<Feature>();
+
+	private int visualS, visualE;
 
 	/** Constructs a new, empty contig. */
 	public Contig()
@@ -131,27 +133,30 @@ public class Contig
 	public void calculateOffsets()
 	{
 		// Set the rhsOffset to the final index position in the consensus seq
-		rhsOffset = consensus.length() - 1;
+		contigE = consensus.length() - 1;
 
 		// Now scan all the reads and see if any of them extend beyond the lhs
 		// or the rhs of the consensus...
 		for (Read read: reads)
 		{
-			if (read.getStartPosition() < lhsOffset)
-				lhsOffset = read.getStartPosition();
-			if (read.getEndPosition() > rhsOffset)
-				rhsOffset = read.getEndPosition();
+			if (read.getStartPosition() < contigS)
+				contigS = read.getStartPosition();
+			if (read.getEndPosition() > contigE)
+				contigE = read.getEndPosition();
 		}
+
+		visualS = contigS;
+		visualE = contigE;
 	}
 
 	public void setPackSet(PackSet packSet)
 	{
 		this.packSet = packSet;
-		stackSet = new StackSet(reads);
+		stackSet = new StackSet(reads, this);
 	}
 
 	public int getConsensusOffset()
-		{ return -lhsOffset; }
+		{ return -contigS; }
 
 	/**
 	 * Returns the width of this contig, that is, the total number of
@@ -162,8 +167,13 @@ public class Contig
 	 * the overall width.
 	 */
 	public int getWidth()
-		{ return rhsOffset - lhsOffset + 1; }
+		{ return contigE - contigS + 1; }
 
+	public int getVisualWidth()
+	{
+		return visualE - visualS + 1;
+	}
+	
 	/**
 	 * Returns the height of this contig, that is, the total number of lines of
 	 * data from top to bottom, including reads, but excluding the consensus.
@@ -192,4 +202,14 @@ public class Contig
 	 */
 	public boolean isDataPacked()
 		{ return packSet != null; }
+
+	public int getVisualS()
+	{
+		return visualS;
+	}
+
+	int getVisualE()
+	{
+		return visualE;
+	}
 }
