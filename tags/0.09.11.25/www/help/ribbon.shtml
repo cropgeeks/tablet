@@ -1,0 +1,133 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="../stylesheet/styles.css" type="text/css">
+
+<title>The Ribbon Bar</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.html" -->
+
+
+<h2>The Ribbon Bar</h2>
+
+<h3>Data</h3>
+
+<p>The <b>Data Panel</b> of the ribbon menu contains controls for importing data into Tablet.</p>
+
+<p>
+<img class="capture" src="images/ribbonmenudata.png" alt="Tablet Screenshot"></a></p>
+
+<ul>
+	<li><b>Open Assembly</b><br>
+	Select this option to display the <a href="gui.dialog.ImportAssemblyDialog.shtml">Open Assembly</a> dialog
+	which allows a number of different assembly formats to be opened for viewing in Tablet.</li>
+	<li><b>Import Features</b><br>
+	Select this option to display the <a href="importing-features.shtml">Import Features</a> dialog which
+	allows GFF3 formatted features to be imported into Tablet.</li>
+</ul>
+
+
+<h3>Layout Style</h3>
+
+<p>The <b>Layout Style Panel</b> contains controls which alter the display of reads within Tablet.</p>
+
+<p>
+<img class="capture" src="images/ribbonmenulayoutstyle.png" alt="Tablet Screenshot"></a></p>
+
+<ul>
+	<li><b>Enhanced</b><br>
+	Enhanced colouring displays read bases using a nucleotide colouring scheme. Any
+	variants are shown in a lighter colour, with red (rather than black) text.</li>
+	<li><b>Classic</b><br>
+	Classic colouring provides a simple black on white text scheme, but enhanced slightly
+	to help distinguish reads from the background. Variants are shown in red.</li>
+	<p></p>
+	<li><b>Packed</b><br>
+	Changes the display so that reads are organised into a <i>packed</i> layout, where
+	multiple reads are placed on the same row, if there is room to do so.</li>
+	<li><b>Stacked</b><br>
+	Changes the display so that reads are organised into a <i>stacked</i> layout,
+	where every read is positioned on its own row.</li>
+</ul>
+
+
+<h3>Adjust</h3>
+
+<p>The <b>Adjust Panel</b> contains slider controls for adjusting the level of display
+zoom and the intensity of variant highlighting.</p>
+
+<p>
+<img class="capture" src="images/ribbonmenuadjust.png" alt="Tablet Screenshot"></a></p>
+
+<ul>
+	<li><b>Zoom</b><br>
+	Adjusts the zoom level of the main display</li>
+	 <li><b>Variants</b><br>
+	 Controls the intensity of the highlighting of read bases that are different
+	 from the consensus at that position (variant bases).</li>
+ </ul>
+
+
+ <h3>Navigate</h3>
+
+<p>The <b>Navigate Panel</b> offers controls that aid in navigation.</p>
+
+<p>
+<img class="capture" src="images/ribbonmenunavigate.png" alt="Tablet Screenshot"></a></p>
+
+<ul>
+	<li><b>Page Left</b><br>
+	Jumps the view one screen's worth to the left.</li>
+	 <li><b>Page Right</b><br>
+	 Jumps the view one screen's worth to the right.</li>
+	 <li><b>Jump to Base</b><br>
+	 Opens the <a href="gui.dialog.JumpToDialog.shtml">Jump to Base</a> dialog,
+	 which can be used to jump the view to a specific base (padded or unpadded.</li>
+	 <li><b>Prev Feature</b><br>
+	 Moves to and highlights the previous feature in the feature panel's list of features.</li>
+	 <li><b>Next Feature</b><br>
+	 Moves to and highlights the next feature in the feature panel's list of features.</li>
+</ul>
+
+
+<h3>Options</h3>
+
+<p>The <b>Options Panel</b> contains several controls for adjusting various
+miscellaneous options.</p>
+
+<p>
+<img class="capture" src="images/ribbonmenuoptions.png" alt="Tablet Screenshot"></a></p>
+
+<ul>
+	 <li><b>Show Read Tooltips</b><br>
+	 Toggles the display of popup information about the read currently under the mouse.</li>
+	 <li><b>Hide Unpadded Values</b><br>
+	 Toggles whether or not unpadded values are shown alongside their padded counterparts
+	 in the various display components.</li>
+	 <li><b>Show/Hide Overview</b><br>
+	 Opens a menu allowing you to toggle the Overview on or off, or to select which
+	 overview visualization to display.</li>
+	 <li><b>Show/Hide Protein Translations</b><br>
+	 Opens a menu allowing you to toggle the protein translations or or off, or to
+	 select which combination of the six available translations should be shown.</li>
+	 <li><b>Hide Consensus</b><br>
+	 Toggles on or off the Consensus display panel.</li>
+	 <li><b>Hide Scale Bar</b><br>
+	 Toggles on or off the Scale Bar display panel.</li>
+	 <li><b>Hide Coverage</b><br>
+	 Toggles on or off the Coverage display panel.</li>
+	 <li><b>Hide Control Panel</b><br>
+	 Toggles on or off the Contigs/Features/Search Control panel.</li>
+</ul>
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>
