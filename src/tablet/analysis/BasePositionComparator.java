@@ -16,8 +16,6 @@ public class BasePositionComparator
 	public static void compare(Consensus consensus, Sequence read, int start)
 		throws Exception
 	{
-		byte NOTUSED = Sequence.NOTUSED;
-
 		// Index start position within the consensus sequence
 		int c = start;
 		int cLength = consensus.length();
@@ -39,7 +37,7 @@ public class BasePositionComparator
 				// The DNATable encodes its states so that A and dA are
 				// only ever 1 byte apart, meaning we can change quickly
 				// by just incrementing the value by one
-				if (consensus.getStateAt(c) != value && value > NOTUSED)
+				if (consensus.getStateAt(c) != value)
 					read.setStateAt(r, (byte)(value+1));
 			}
 		}

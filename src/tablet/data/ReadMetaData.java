@@ -18,6 +18,7 @@ public class ReadMetaData extends Sequence
 	private boolean isComplemented;
 
 	private int unpaddedLength;
+	private int length;
 
 	public ReadMetaData()
 	{
@@ -55,9 +56,57 @@ public class ReadMetaData extends Sequence
 	public int getUnpaddedLength()
 		{ return unpaddedLength; }
 
-	@Override
+	/**
+	 * Calculates and returns the unpadded length of this sequence. Note: this
+	 * information is part of the ReadMetaData class and this method is purely
+	 * for calculation to fill that class - it shouldn't be used for any other
+	 * purpose.
+	 * @return the unpadded length of this sequence
+	 */
 	public int calculateUnpaddedLength()
 	{
-		return (unpaddedLength = super.calculateUnpaddedLength());
+		int baseCount = 0;
+
+		for (int i = 0; i < length; i++)
+			if (getStateAt(i) != P)
+				baseCount++;
+
+		return baseCount;
+	}
+
+	public int length()
+	{
+		return length;
+	}
+
+	public void setLength(int length)
+	{
+		this.length = length;
+	}
+
+	/**
+	 * Returns a string representation of this sequence.
+	 * @return a string representation of this thread
+	 */
+	@Override
+	public String toString()
+	{
+		System.out.println("Length: " + length);
+		StringBuilder sb = new StringBuilder(length);
+
+		for (int i = 0; i < length; i++)
+		{
+			byte state = getStateAt(i);
+			sb.append(getDNA(state));
+		}
+
+		return sb.toString();
+	}
+
+	@Override
+	public void setData(String sequence)
+	{
+		super.setData(sequence);
+		length = sequence.length();
 	}
 }
