@@ -34,7 +34,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 
 		setLayout(new BorderLayout());
 		add(controls = new NBFeaturesPanelControls(this));
-		
+
 		// Additional (duplicate) table-clicked handler to catch the user
 		// re-clicking on the same row. This doesn't generate a table event, but
 		// we still want to respond to it and highlight the selection again
@@ -123,7 +123,6 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 	void setTableFilter(RowFilter<FeaturesTableModel, Object> rf)
 	{
 		sorter.setRowFilter(rf);
-		ctrlTabs.setTitleAt(1, getTitle(controls.table.getRowCount()));
 	}
 
 	public void nextFeature()
