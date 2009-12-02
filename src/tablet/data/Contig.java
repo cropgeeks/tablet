@@ -145,8 +145,8 @@ public class Contig
 				contigE = read.getEndPosition();
 		}
 
-		visualS = contigS;
-		visualE = contigE;
+		visualS = -12;
+		visualE = 210;
 	}
 
 	public void setPackSet(PackSet packSet)
@@ -211,5 +211,10 @@ public class Contig
 	int getVisualE()
 	{
 		return visualE;
+	}
+
+	public int getCoverageStart()
+	{
+		return -contigS+visualS;
 	}
 }
