@@ -13,10 +13,13 @@ public class PackSetCreator extends SimpleJob
 {
 	private Contig contig;
 	private PackSet packSet = new PackSet();
+	private int startPos, rowIndex;
 
 	public PackSetCreator(Contig contig)
 	{
 		this.contig = contig;
+		packSet = new PackSet();
+		startPos=rowIndex=0;
 	}
 
 	public void runJob(int jobIndex)
@@ -29,16 +32,27 @@ public class PackSetCreator extends SimpleJob
 
 		boolean added = false;
 
+		int startRow;
+
 		for (Read read: contig.getReads())
 		{
+			startRow=0;
 			// Check for quit/cancel on the job...
 			if (okToRun == false)
 				return;
 
+			if(read.getStartPosition() == startPos)
+				startRow = rowIndex+1;
+
 			// Can this read be added to any of the existing pack lines?
-			for (Pack pack: packSet)
-				if (added = pack.addRead(read))
+			for(int i=startRow; i < packSet.size(); i++)
+			{
+				if(added = packSet.get(i).addRead(read))
+				{
+					rowIndex = i;
 					break;
+				}
+			}
 
 			// If not, create a new pack and add it there
 			if (added == false)
@@ -47,7 +61,10 @@ public class PackSetCreator extends SimpleJob
 				newPack.addRead(read);
 
 				packSet.addPack(newPack);
+				rowIndex = packSet.size()-1;
 			}
+
+			startPos = read.getStartPosition();
 
 			progress++;
 		}
