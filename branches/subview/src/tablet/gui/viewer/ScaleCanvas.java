@@ -49,7 +49,7 @@ class ScaleCanvas extends TrackingCanvas
 		{
 			public void mouseMoved(MouseEvent e)
 			{
-				int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) - offset;
+				int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW);
 				setMouseBase(xIndex);
 			}
 		});
@@ -65,7 +65,7 @@ class ScaleCanvas extends TrackingCanvas
 		if (contig != null)
 		{
 			consensus = contig.getConsensus();
-			offset = contig.getConsensusOffset();
+			offset = contig.getVisualS();
 		}
 
 		// Remove tablet.data references if nothing is going to be displayed
@@ -119,24 +119,25 @@ class ScaleCanvas extends TrackingCanvas
 
 		g.setColor(Color.red);
 
-		int mouseBaseS = 0, mouseBaseE =  0;
+		int mouseBaseS = 0, mouseBaseE = 0;
 
 		// REMINDER: mouseBase = base pos under mouse (0 indexed on consensus)
 		if (mouseBase != null)
 		{
 			// If the mouse is beyond the edge of the data, don't do anything
-			if (mouseBase+offset+1 > rCanvas.ntOnCanvasX)
+			if (mouseBase-offset > rCanvas.ntOnCanvasX || mouseBase + offset < offset)
 				return;
 
 			// Work out where to start drawing: base position + 1/2 a base
-			int x = (mouseBase+offset) * ntW + (ntW/2);
+			int x = (mouseBase) * ntW + (ntW/2);
 			// Draw a tick there
 			g.drawLine(x, 0, x, 8);
+			//System.out.println("MouseBase: " + mouseBase);
 
 			// Then format, centre and draw the message
-			String str = d.format(mouseBase+1)
-				+ getUnpadded(mouseBase) + " " + C
-				+ d.format(DisplayData.getCoverage()[mouseBase+offset]);
+			String str = d.format(mouseBase+offset)
+				+ getUnpadded(mouseBase+offset) + " " + C
+				+ d.format(DisplayData.getCoverage()[mouseBase-offset]);
 
 			if (message != null)
 				str += " - " + message;
@@ -150,7 +151,7 @@ class ScaleCanvas extends TrackingCanvas
 		}
 
 		// Attempt to mark the base position on the LHS of the canvas
-		String lhsStr = d.format(xS+1-offset) + getUnpadded(xS-offset);
+		String lhsStr = d.format(xS+offset) + getUnpadded(xS+offset);
 		int strWidth  = g.getFontMetrics().stringWidth(lhsStr);
 		int pos = getPosition(x1, strWidth);;
 		ntL = xS;
@@ -159,7 +160,7 @@ class ScaleCanvas extends TrackingCanvas
 			g.drawString(lhsStr, pos, 20);
 
 		// Attempt to mark the base position on the RHS of the canvas
-		String rhsStr = d.format(xE+1-offset) + getUnpadded(xE-offset);
+		String rhsStr = d.format(xE+offset) + getUnpadded(xE+offset);
 		strWidth  = g.getFontMetrics().stringWidth(rhsStr);
 		pos = getPosition(x2, strWidth);
 		ntR = xE;

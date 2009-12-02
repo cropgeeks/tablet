@@ -41,7 +41,7 @@ class ConsensusCanvasML extends MouseInputAdapter implements ActionListener
 		if (rCanvas.contig == null)
 			return;
 
-		int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) - rCanvas.offset;
+		int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW);
 		sCanvas.setMouseBase(xIndex);
 	}
 

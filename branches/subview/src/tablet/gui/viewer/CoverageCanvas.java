@@ -39,7 +39,7 @@ class CoverageCanvas extends TrackingCanvas
 		{
 			public void mouseMoved(MouseEvent e)
 			{
-				int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) - offset;
+				int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) + offset;
 				sCanvas.setMouseBase(xIndex);
 			}
 		});
@@ -48,7 +48,7 @@ class CoverageCanvas extends TrackingCanvas
 	void setContig(Contig contig)
 	{
 		if (contig != null)
-			offset = contig.getConsensusOffset();
+			offset = -contig.getVisualS();
 	}
 
 	public void paintComponent(Graphics graphics)
