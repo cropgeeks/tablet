@@ -58,4 +58,9 @@ public class PackSet implements Iterable<Pack>, IReadManager
 		}
 		return -1;
 	}
+
+	public Pack get(int i)
+	{
+		return packs.get(i);
+	}
 }
