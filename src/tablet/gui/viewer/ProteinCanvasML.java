@@ -58,7 +58,7 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 	public void mouseMoved(MouseEvent e)
 	{
 		int xIndex =
-			((rCanvas.pX1 + e.getX()) / rCanvas.ntW) - rCanvas.offset;
+			((rCanvas.pX1 + e.getX()) / rCanvas.ntW);
 
 		try
 		{
@@ -67,7 +67,7 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 			track = getActualTrack(track);
 
 			// And get the data value at that point
-			short value = pCanvas.translations.get(track)[(xIndex)];
+			short value = pCanvas.translations.get(track)[(xIndex + rCanvas.offset)];
 
 			// Values greater than 21/42 are positions without the text
 			if (value > 42) value -= 42;

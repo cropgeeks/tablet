@@ -44,7 +44,7 @@ class ProteinCanvas extends TrackingCanvas
 		if (contig != null)
 		{
 			consensus = contig.getConsensus();
-			offset = contig.getConsensusOffset();
+			offset = -contig.getVisualS();
 
 			updateTranslations();
 		}
