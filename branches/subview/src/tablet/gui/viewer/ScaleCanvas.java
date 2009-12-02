@@ -29,6 +29,8 @@ class ScaleCanvas extends TrackingCanvas
 	// A custom message to be displayed in addition to the mouse position
 	private String message;
 
+	private int coverageOffset;
+
 	ScaleCanvas()
 	{
 		setPreferredSize(new Dimension(0, h));
@@ -66,6 +68,7 @@ class ScaleCanvas extends TrackingCanvas
 		{
 			consensus = contig.getConsensus();
 			offset = contig.getVisualS();
+			coverageOffset = contig.getCoverageStart();
 		}
 
 		// Remove tablet.data references if nothing is going to be displayed
@@ -137,7 +140,7 @@ class ScaleCanvas extends TrackingCanvas
 			// Then format, centre and draw the message
 			String str = d.format(mouseBase+offset)
 				+ getUnpadded(mouseBase+offset) + " " + C
-				+ d.format(DisplayData.getCoverage()[mouseBase-offset]);
+				+ d.format(DisplayData.getCoverage()[mouseBase+coverageOffset]);
 
 			if (message != null)
 				str += " - " + message;

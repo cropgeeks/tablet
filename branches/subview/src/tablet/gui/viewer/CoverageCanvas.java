@@ -15,6 +15,7 @@ class CoverageCanvas extends TrackingCanvas
 		BasicStroke.JOIN_MITER, 10, new float[] { 5,2 }, 0);
 
 	private int h = 25;
+	private int coverageStart;
 
 	CoverageCanvas()
 	{
@@ -39,7 +40,7 @@ class CoverageCanvas extends TrackingCanvas
 		{
 			public void mouseMoved(MouseEvent e)
 			{
-				int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) + offset;
+				int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW);
 				sCanvas.setMouseBase(xIndex);
 			}
 		});
@@ -48,7 +49,11 @@ class CoverageCanvas extends TrackingCanvas
 	void setContig(Contig contig)
 	{
 		if (contig != null)
+		{
 			offset = -contig.getVisualS();
+			coverageStart = contig.getCoverageStart();
+			System.out.println("Coverage Start: " + coverageStart);
+		}
 	}
 
 	public void paintComponent(Graphics graphics)
@@ -66,7 +71,7 @@ class CoverageCanvas extends TrackingCanvas
 
 		for (int i = xS; i <= xE; i++)
 		{
-			float percent = coverage[i] / (float) maxCoverage;
+			float percent = coverage[i+coverageStart] / (float) maxCoverage;
 			int barHeight = (int) (percent * h);
 
 			// Work out an intensity value for it (0-255 gives light shades too

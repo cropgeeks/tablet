@@ -36,7 +36,6 @@ public class PackSetCreator extends SimpleJob
 			if (okToRun == false)
 				return;
 
-			// Can this read be added to any of the existing pack lines?
 			for (Pack pack: packSet)
 				if (added = pack.addRead(read))
 					break;
