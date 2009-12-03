@@ -4,6 +4,8 @@
 package tablet.gui;
 
 import java.awt.*;
+import java.awt.event.*;
+import java.text.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -164,5 +166,20 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 	public JTable getTable()
 	{
 		return controls.table;
+	}
+
+	String getTableToolTip(MouseEvent e)
+	{
+		int row = controls.table.rowAtPoint(e.getPoint());
+		row = controls.table.convertRowIndexToModel(row);
+
+		Contig contig = (Contig) model.getValueAt(row, 0);
+		NumberFormat nf = TabletUtils.nf;
+
+		return RB.format("gui.ContigsPanel.tooltip",
+			contig.getName(),
+			TabletUtils.nf.format(contig.getConsensus().length()),
+			TabletUtils.nf.format(contig.readCount()),
+			TabletUtils.nf.format(contig.getFeatures().size()));
 	}
 }

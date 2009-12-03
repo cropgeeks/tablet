@@ -16,12 +16,14 @@ import scri.commons.gui.*;
  */
 class FeaturesTableModel extends AbstractTableModel
 {
+	private FeaturesPanel panel;
 	private ArrayList<Feature> features;
 
 	private String[] columnNames;
 
-	FeaturesTableModel(Contig contig)
+	FeaturesTableModel(FeaturesPanel panel, Contig contig)
 	{
+		this.panel = panel;
 		features = contig.getFeatures();
 
 		String col1 = RB.getString("gui.FeaturesTableModel.col1");
@@ -56,12 +58,25 @@ class FeaturesTableModel extends AbstractTableModel
 	{
 		Feature feature = features.get(row);
 
-		switch (col)
+		if (Prefs.guiFeaturesArePadded)
 		{
-			case 0: return feature.getName();
-			case 1: return feature.getP1() + 1; // +1 back into consensus space
-			case 2: return feature.getP2() + 1; // +1 back into consensus space
-			case 9: return feature;
+			switch (col)
+			{
+				case 0: return feature.getName();
+				case 1: return feature.getP1()+1;  // +1 back into consensus space
+				case 2: return feature.getP2()+1;  // +1 back into consensus space
+				case 9: return feature;
+			}
+		}
+		else
+		{
+			switch (col)
+			{
+				case 0: return feature.getName();
+				case 1: return feature.getP1()+1;  // +1 back into consensus space
+				case 2: return feature.getP2()+1;  // +1 back into consensus space
+				case 9: return feature;
+			}
 		}
 
 		return null;

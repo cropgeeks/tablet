@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.File;
 import java.net.*;
+import java.text.*;
 import javax.swing.*;
 import javax.swing.filechooser.*;
 
@@ -14,6 +15,8 @@ import scri.commons.gui.*;
 
 public class TabletUtils
 {
+	public static NumberFormat nf = NumberFormat.getInstance();
+
 	public static JPanel getButtonPanel()
 	{
 		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));

@@ -5,7 +5,6 @@ package tablet.gui.viewer;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.text.*;
 import javax.swing.*;
 
 import tablet.data.*;
@@ -16,7 +15,6 @@ import scri.commons.gui.*;
 
 class ScaleCanvas extends TrackingCanvas
 {
-	private static final NumberFormat d = NumberFormat.getInstance();
 	private String U, C;
 
 	private Consensus consensus;
@@ -134,9 +132,10 @@ class ScaleCanvas extends TrackingCanvas
 			g.drawLine(x, 0, x, 8);
 
 			// Then format, centre and draw the message
-			String str = d.format(mouseBase+1)
+			String str = TabletUtils.nf.format(mouseBase+1)
 				+ getUnpadded(mouseBase) + " " + C
-				+ d.format(DisplayData.getCoverage()[mouseBase+offset]);
+				+ TabletUtils.nf.format(
+					DisplayData.getCoverage()[mouseBase+offset]);
 
 			if (message != null)
 				str += " - " + message;
@@ -150,7 +149,8 @@ class ScaleCanvas extends TrackingCanvas
 		}
 
 		// Attempt to mark the base position on the LHS of the canvas
-		String lhsStr = d.format(xS+1-offset) + getUnpadded(xS-offset);
+		String lhsStr = TabletUtils.nf.format(xS+1-offset)
+			+ getUnpadded(xS-offset);
 		int strWidth  = g.getFontMetrics().stringWidth(lhsStr);
 		int pos = getPosition(x1, strWidth);;
 		ntL = xS;
@@ -159,7 +159,8 @@ class ScaleCanvas extends TrackingCanvas
 			g.drawString(lhsStr, pos, 20);
 
 		// Attempt to mark the base position on the RHS of the canvas
-		String rhsStr = d.format(xE+1-offset) + getUnpadded(xE-offset);
+		String rhsStr = TabletUtils.nf.format(xE+1-offset)
+			+ getUnpadded(xE-offset);
 		strWidth  = g.getFontMetrics().stringWidth(rhsStr);
 		pos = getPosition(x2, strWidth);
 		ntR = xE;
@@ -202,6 +203,6 @@ class ScaleCanvas extends TrackingCanvas
 		if (unpadded == -1)
 			return " " + U + Sequence.PAD;
 		else
-			return " " + U + d.format(unpadded+1);
+			return " " + U + TabletUtils.nf.format(unpadded+1);
 	}
 }

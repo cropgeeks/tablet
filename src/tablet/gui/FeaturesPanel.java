@@ -25,6 +25,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 	private NBFeaturesPanelControls controls;
 
 	private Contig contig;
+	private Consensus consensus;
 	private TableRowSorter<FeaturesTableModel> sorter;
 
 	FeaturesPanel(AssemblyPanel aPanel, JTabbedPane ctrlTabs)
@@ -57,23 +58,26 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		// no features to actually show, disable the tab
 		if (contig == null || contig.getFeatures().size() == 0)
 		{
-			ctrlTabs.setEnabledAt(1, true);
 			controls.featuresLabel.setText(getTitle(0));
 
 			model = null;
 			controls.table.setModel(new DefaultTableModel());
 			controls.table.setRowSorter(null);
+
+			// Clear the reference if it's not going to be used
+			consensus = null;
 		}
 
 		else
 		{
-			ctrlTabs.setEnabledAt(1, true);
 			toggleComponentEnabled(true);
 			controls.featuresLabel.setText(getTitle(contig.getFeatures().size()));
-			model = new FeaturesTableModel(contig);
+			model = new FeaturesTableModel(this, contig);
 			sorter = new TableRowSorter<FeaturesTableModel>(model);
 			controls.table.setModel(model);
 			controls.table.setRowSorter(sorter);
+
+			consensus = contig.getConsensus();
 		}
 	}
 
@@ -140,5 +144,52 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 	public void toggleComponentEnabled(boolean enabled)
 	{
 		controls.toggleComponentEnabled(enabled);
+	}
+
+	String getTableToolTip(MouseEvent e)
+	{
+		int row = controls.table.rowAtPoint(e.getPoint());
+		row = controls.table.convertRowIndexToModel(row);
+
+		// Pull the feature out of the model
+		Feature feature = (Feature) model.getValueAt(row, 9);
+
+		int p1 = feature.getP1();
+		int p2 = feature.getP2();
+
+		if (Prefs.guiFeaturesArePadded)
+		{
+			return RB.format("gui.FeaturesPanel.tooltip.padded",
+				feature.getName(),
+				TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
+				getUnpadded(p1), getUnpadded(p2));
+		}
+		else
+		{
+			return RB.format("gui.FeaturesPanel.tooltip.unpadded",
+				feature.getName(),
+				TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
+				getPadded(p1), getPadded(p2));
+		}
+	}
+
+	String getUnpadded(int base)
+	{
+		int unpadded = DisplayData.paddedToUnpadded(base);
+
+		if (unpadded == -1)
+			return "" + Sequence.PAD;
+		else
+			return TabletUtils.nf.format(unpadded+1);
+	}
+
+	String getPadded(int base)
+	{
+		int padded = DisplayData.unpaddedToPadded(base);
+
+		if (padded == -1)
+			return "" + Sequence.PAD;
+		else
+			return TabletUtils.nf.format(padded+1);
 	}
 }

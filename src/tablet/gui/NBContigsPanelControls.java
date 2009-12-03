@@ -142,7 +142,11 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
         textField = new javax.swing.JTextField();
         filterLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
+        table = new JTable() {
+            public String getToolTipText(MouseEvent e) {
+                return panel.getTableToolTip(e);
+            }
+        };
         contigsLabel = new javax.swing.JLabel();
 
         filterLabel.setLabelFor(combo);

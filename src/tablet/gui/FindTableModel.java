@@ -10,7 +10,6 @@ import tablet.data.*;
  */
 public class FindTableModel extends AbstractTableModel
 {
-
 	private LinkedList<FindPanel.SearchResult> results;
 
 	private String[] columnNames;
@@ -64,11 +63,12 @@ public class FindTableModel extends AbstractTableModel
 		switch (col)
 		{
 			case 0: return result.getReadMetaData().getName();
-			case 1: return (result.getRead().getStartPosition() + 1);
-			case 2: return result.getReadMetaData().calculateUnpaddedLength();
+			case 1: return result.getRead().getStartPosition() + 1;
+			case 2: return result.getReadMetaData().length();
 			case 3: return result.getContig().getName();
-			case 4: return result.getRead();
-			case 5: return result.getContig();
+
+			case 8: return result.getRead();
+			case 9: return result.getContig();
 		}
 
 		return null;

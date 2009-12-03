@@ -111,7 +111,11 @@ public class NBFindPanelControls extends javax.swing.JPanel implements ActionLis
         resultsLabel = new javax.swing.JLabel();
         bFind = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
+        table = new JTable() {
+            public String getToolTipText(MouseEvent e) {
+                return panel.getTableToolTip(e);
+            }
+        };
 
         findLabel.setLabelFor(findCombo);
         findLabel.setText("Search for reads by name:");
