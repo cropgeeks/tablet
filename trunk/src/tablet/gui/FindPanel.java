@@ -6,12 +6,14 @@ import java.util.LinkedList;
 import java.util.regex.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.table.DefaultTableModel;
-import scri.commons.gui.*;
+import javax.swing.table.*;
+
 import tablet.analysis.SimpleJob;
 import tablet.data.*;
 import tablet.data.auxiliary.DisplayData;
 import tablet.gui.viewer.*;
+
+import scri.commons.gui.*;
 
 public class FindPanel extends JPanel implements ListSelectionListener
 {
@@ -22,6 +24,8 @@ public class FindPanel extends JPanel implements ListSelectionListener
 	private WinMain winMain;
 	private int found;
 	Finder finder;
+
+	private TableRowSorter<FindTableModel> sorter;
 
 	public FindPanel(AssemblyPanel aPanel, WinMain winMain, final JTabbedPane ctrlTabs)
 	{
@@ -66,25 +70,15 @@ public class FindPanel extends JPanel implements ListSelectionListener
 
 	void setTableModel(LinkedList<SearchResult> results)
 	{
-		if (results.size() == 0)
-		{
-			// Note: the model is created to be non-editable
-			tableModel = new FindTableModel(results) {
-        		public boolean isCellEditable(int rowIndex, int mColIndex) {
-        			return false;
-        	}};
-		}
-		else
-		{
-			// Note: the model is created to be non-editable
-			tableModel = new FindTableModel(results) {
-        		public boolean isCellEditable(int rowIndex, int mColIndex) {
-        			return false;
-        	}};
-		}
+		// Note: the model is created to be non-editable
+		tableModel = new FindTableModel(results) {
+        	public boolean isCellEditable(int rowIndex, int mColIndex) {
+        		return false;
+        }};
 
+        sorter = new TableRowSorter<FindTableModel>(tableModel);
 		controls.table.setModel(tableModel);
-		controls.table.setCellEditor(null);
+		controls.table.setRowSorter(sorter);
 	}
 
 	public void valueChanged(ListSelectionEvent e)
@@ -110,13 +104,25 @@ public class FindPanel extends JPanel implements ListSelectionListener
 		// Convert from view->model (deals with user-sorted table)
 		row = controls.table.convertRowIndexToModel(row);
 
-		final Read read = (Read) tableModel.getValueAt(row, 4);
-		int start = (Integer) tableModel.getValueAt(row, 1);
+		Read read = (Read) tableModel.getValueAt(row, 8);
+		Contig contig = (Contig) tableModel.getValueAt(row, 9);
 
-		Contig contig = (Contig) tableModel.getValueAt(row, 5);
 		updateContigsTable(contig);
+		highlightRead(read, contig);
+	}
 
-		highlightRead(start, read, contig);
+	String getTableToolTip(MouseEvent e)
+	{
+		int row = controls.table.rowAtPoint(e.getPoint());
+		row = controls.table.convertRowIndexToModel(row);
+
+		return RB.format("gui.NBFindPanelControls.tooltip",
+			tableModel.getValueAt(row, 0),
+			tableModel.getValueAt(row, 3),
+			TabletUtils.nf.format(tableModel.getValueAt(row, 1)),
+			TabletUtils.nf.format(
+				((Read)tableModel.getValueAt(row, 8)).getEndPosition()+1),
+			tableModel.getValueAt(row, 2));
 	}
 
 	/**
@@ -150,7 +156,7 @@ public class FindPanel extends JPanel implements ListSelectionListener
 	 * @param read The read object itself.
 	 * @param contig The contig associated with this read.
 	 */
-	private void highlightRead(int start, final Read read, final Contig contig)
+	private void highlightRead(final Read read, final Contig contig)
 	{
 		final int lineIndex;
 
@@ -159,21 +165,15 @@ public class FindPanel extends JPanel implements ListSelectionListener
 		else
 			lineIndex = contig.getPackSetManager().getLineForRead(read);
 
-		// Override position if we're using unpadded values
-		if (Prefs.guiFeaturesArePadded == false)
-		{
-			start = DisplayData.unpaddedToPadded(start);
-		}
+		final int startPos = read.getStartPosition() + contig.getConsensusOffset();
 
-		final int startPos = start + contig.getConsensusOffset();
-
-		Runnable r = new Runnable() {
-			public void run() {
-			aPanel.moveToPosition(lineIndex, startPos, true);
-			new ReadHighlighter(aPanel, read, lineIndex);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run()
+			{
+				aPanel.moveToPosition(lineIndex, startPos, true);
+				new ReadHighlighter(aPanel, read, lineIndex);
 			}
-		};
-		SwingUtilities.invokeLater(r);
+		});
 	}
 
 	public Finder getFinder()

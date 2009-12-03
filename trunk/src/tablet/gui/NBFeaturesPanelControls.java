@@ -102,6 +102,7 @@ class NBFeaturesPanelControls extends JPanel
 		table.scrollRectToVisible(table.getCellRect(table.getSelectedRow(), table.getSelectedColumn(), true));
 	}
 
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -115,7 +116,11 @@ class NBFeaturesPanelControls extends JPanel
         filterText = new javax.swing.JTextField();
         checkPadded = new javax.swing.JCheckBox();
         jScrollPane1 = new javax.swing.JScrollPane();
-        table = new javax.swing.JTable();
+        table = new JTable() {
+            public String getToolTipText(MouseEvent e) {
+                return panel.getTableToolTip(e);
+            }
+        };
         featuresLabel = new javax.swing.JLabel();
 
         filterLabel.setLabelFor(filterText);

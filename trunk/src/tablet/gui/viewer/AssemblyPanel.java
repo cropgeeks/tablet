@@ -6,7 +6,6 @@ package tablet.gui.viewer;
 import java.awt.*;
 import java.awt.image.*;
 import java.awt.event.*;
-import java.text.*;
 import javax.swing.*;
 
 import tablet.analysis.*;
@@ -19,8 +18,6 @@ import scri.commons.gui.*;
 
 public class AssemblyPanel extends JPanel implements AdjustmentListener
 {
-	private static NumberFormat nf = NumberFormat.getInstance();
-
 	private Assembly assembly;
 	private Contig contig;
 
@@ -111,16 +108,18 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		// Set the summary label at the top of the screen
 		if (contig != null)
 		{
-			String length = nf.format(contig.getConsensus().length()) + " ("
-				+ nf.format(contig.getConsensus().getUnpaddedLength()) + ")";
+			String length = TabletUtils.nf.format(
+				contig.getConsensus().length()) + " ("
+				+ TabletUtils.nf.format(
+					contig.getConsensus().getUnpaddedLength()) + ")";
 			if (Prefs.visHideUnpaddedValues)
-				length = nf.format(contig.getConsensus().length());
+				length = TabletUtils.nf.format(contig.getConsensus().length());
 
 			String label = RB.format("gui.viewer.AssemblyPanel.summaryLabel",
 				contig.getName(),
 				length,
-				nf.format(contig.readCount()),
-				nf.format(contig.featureCount()));
+				TabletUtils.nf.format(contig.readCount()),
+				TabletUtils.nf.format(contig.featureCount()));
 			RibbonController.setTitleLabel(label);
 		}
 		else

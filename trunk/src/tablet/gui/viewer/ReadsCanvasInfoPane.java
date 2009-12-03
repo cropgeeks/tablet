@@ -6,7 +6,6 @@ package tablet.gui.viewer;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.image.*;
-import java.text.*;
 import javax.swing.*;
 
 import tablet.data.*;
@@ -17,8 +16,6 @@ import scri.commons.gui.*;
 /** Manages and paints the advanced tool tips for the reads canvas. */
 class ReadsCanvasInfoPane implements IOverlayRenderer
 {
-	private NumberFormat nf = NumberFormat.getInstance();
-
 	private Color bgColor;
 	private Image lhArrow = Icons.getIcon("LHARROW").getImage();
 	private Image rhArrow = Icons.getIcon("RHARROW").getImage();
@@ -84,16 +81,16 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		int readE = read.getEndPosition();
 
 		posData = RB.format("gui.viewer.ReadsCanvasInfoPane.from",
-			(nf.format(readS+1) + sCanvas.getUnpadded(readS)),
-			(nf.format(readE+1) + sCanvas.getUnpadded(readE)));
+			(TabletUtils.nf.format(readS+1) + sCanvas.getUnpadded(readS)),
+			(TabletUtils.nf.format(readE+1) + sCanvas.getUnpadded(readE)));
 
 		if (Prefs.visHideUnpaddedValues)
 			lengthData = RB.format("gui.viewer.ReadsCanvasInfoPane.length",
-				nf.format(read.length()));
+				TabletUtils.nf.format(read.length()));
 		else
 			lengthData = RB.format("gui.viewer.ReadsCanvasInfoPane.lengthUnpadded",
-				nf.format(read.length()),
-				nf.format(metaData.getUnpaddedLength()));
+				TabletUtils.nf.format(read.length()),
+				TabletUtils.nf.format(metaData.getUnpaddedLength()));
 
 		// Name
 		readName = metaData.getName();
