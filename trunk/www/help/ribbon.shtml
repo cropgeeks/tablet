@@ -111,12 +111,14 @@ miscellaneous options.</p>
 	 <li><b>Hide Unpadded Values</b><br>
 	 Toggles whether or not unpadded values are shown alongside their padded counterparts
 	 in the various display components.</li>
+	 <br>
 	 <li><b>Show/Hide Overview</b><br>
 	 Opens a menu allowing you to toggle the Overview on or off, or to select which
 	 overview visualization to display.</li>
 	 <li><b>Show/Hide Protein Translations</b><br>
 	 Opens a menu allowing you to toggle the protein translations or or off, or to
 	 select which combination of the six available translations should be shown.</li>
+	 <br>
 	 <li><b>Hide Consensus</b><br>
 	 Toggles on or off the Consensus display panel.</li>
 	 <li><b>Hide Scale Bar</b><br>
