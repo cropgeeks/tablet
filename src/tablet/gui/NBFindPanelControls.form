@@ -20,7 +20,6 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="findLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="resultsLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Group type="102" alignment="1" attributes="0">
                       <Component id="findCombo" pref="126" max="32767" attributes="2"/>
                       <EmptySpace max="-2" attributes="0"/>
@@ -29,6 +28,16 @@
                   <Component id="findInCombo" alignment="0" pref="164" max="32767" attributes="1"/>
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="helpLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="62" max="32767" attributes="0"/>
+          </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="resultsLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="135" max="32767" attributes="0"/>
           </Group>
           <Component id="jScrollPane1" alignment="1" pref="184" max="32767" attributes="0"/>
       </Group>
@@ -45,10 +54,12 @@
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="findInCombo" linkSize="1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="helpLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="resultsLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="44" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="48" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -127,5 +138,13 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="helpLabel">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Get help with searching"/>
+      </Properties>
+    </Component>
   </SubComponents>
 </Form>

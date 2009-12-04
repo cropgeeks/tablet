@@ -68,16 +68,16 @@ public class AssemblyFileHandler extends SimpleJob
 			reader = new AfgFileReader(readCache, cacheDir);
 			fileParsed = readFile();
 		}
-		// SAM
-		if (okToRun && fileParsed == false)
-		{
-			reader = new SamFileReader(readCache);
-			fileParsed = readFile();
-		}
 		// Maq
 		if (okToRun && fileParsed == false)
 		{
 			reader = new MaqFileReader(readCache);
+			fileParsed = readFile();
+		}
+		// SAM
+		if (okToRun && fileParsed == false)
+		{
+			reader = new SamFileReader(readCache);
 			fileParsed = readFile();
 		}
 		// SOAP
@@ -187,11 +187,11 @@ public class AssemblyFileHandler extends SimpleJob
 			if (read(new AfgFileReader(), file))
 				return AFG;
 
-			if (read(new SamFileReader(), file))
-				return SAM;
-
 			if (read(new MaqFileReader(), file))
 				return MAQ;
+
+			if (read(new SamFileReader(), file))
+				return SAM;
 
 			if (read(new SoapFileReader(), file))
 				return SOAP;
