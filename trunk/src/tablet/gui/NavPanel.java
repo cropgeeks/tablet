@@ -40,6 +40,13 @@ class NavPanel
 			RB.getString("gui.NBStartHelpPanel.title")), BorderLayout.NORTH);
 		helpPanel.add(new NBStartHelpPanel());
 
+		JPanel pubPanel = new JPanel(new BorderLayout());
+		pubPanel.setOpaque(false);
+		pubPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 8, 2));
+		pubPanel.add(new TitlePanel3(
+			RB.getString("gui.NBStartPublicationPanel.title")), BorderLayout.NORTH);
+		pubPanel.add(new NBStartPublicationPanel());
+
 		JPanel centrePanel = new JPanel(new GridLayout(1, 2, 0, 0));
 		centrePanel.setOpaque(false);
 		centrePanel.add(filePanel);
@@ -47,6 +54,7 @@ class NavPanel
 
 		logoPanel.add(welcomePanel, BorderLayout.NORTH);
 		logoPanel.add(centrePanel, BorderLayout.CENTER);
+		logoPanel.add(pubPanel, BorderLayout.SOUTH);
 
 		panel.add(logoPanel);
 

@@ -62,6 +62,13 @@ class MaqFileReader extends TrackableReader
 		str = readLine();
 
 		boolean isMaqFile = (str != null && str.split("\t").length == 16);
+		if (isMaqFile)
+		{
+			String strand = str.split("\t")[3];
+			if (!strand.equals("-") && !strand.equals("+"))
+				isMaqFile = false;
+		}
+
 		in.close();
 		is.close();
 

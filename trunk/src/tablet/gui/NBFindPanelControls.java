@@ -19,6 +19,7 @@ public class NBFindPanelControls extends javax.swing.JPanel implements ActionLis
 
 		findLabel.setText(RB.getString("gui.NBFindPanelControls.findLabel"));
 		resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", 0));
+		RB.setText(helpLabel, "gui.NBFindPanelControls.helpLabel");
 
 		findCombo.setHistory(Prefs.recentSearches);
 
@@ -50,13 +51,22 @@ public class NBFindPanelControls extends javax.swing.JPanel implements ActionLis
 			if(e.getKeyCode() == KeyEvent.VK_ENTER)
 				runSearch();
 		}});
+
+		helpLabel.setIcon(Icons.getIcon("WEB"));
+		helpLabel.addActionListener(this);
     }
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if(e.getSource() == bFind)
+		if (e.getSource() == bFind)
 		{
 			runSearch();
+		}
+
+		else if(e.getSource() == helpLabel)
+		{
+			// TODO: This should be a link to a section of Tablet help
+			TabletUtils.visitURL("http://java.sun.com/javase/7/docs/api/java/util/regex/Pattern.html#sum");
 		}
 	}
 
@@ -116,6 +126,7 @@ public class NBFindPanelControls extends javax.swing.JPanel implements ActionLis
                 return panel.getTableToolTip(e);
             }
         };
+        helpLabel = new scri.commons.gui.matisse.HyperLinkLabel();
 
         findLabel.setLabelFor(findCombo);
         findLabel.setText("Search for reads by name:");
@@ -145,6 +156,9 @@ public class NBFindPanelControls extends javax.swing.JPanel implements ActionLis
         ));
         jScrollPane1.setViewportView(table);
 
+        helpLabel.setForeground(new java.awt.Color(68, 106, 156));
+        helpLabel.setText("Get help with searching");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -153,13 +167,20 @@ public class NBFindPanelControls extends javax.swing.JPanel implements ActionLis
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(findLabel)
-                    .addComponent(resultsLabel)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(findCombo, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bFind, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(findInCombo, 0, 164, Short.MAX_VALUE))
                 .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(helpLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(62, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(resultsLabel)
+                .addContainerGap(135, Short.MAX_VALUE))
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
@@ -173,10 +194,12 @@ public class NBFindPanelControls extends javax.swing.JPanel implements ActionLis
                     .addComponent(bFind))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(findInCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(helpLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(resultsLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 48, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {bFind, findCombo, findInCombo});
@@ -199,6 +222,7 @@ public class NBFindPanelControls extends javax.swing.JPanel implements ActionLis
     public scri.commons.gui.matisse.HistoryComboBox findCombo;
     public javax.swing.JComboBox findInCombo;
     public javax.swing.JLabel findLabel;
+    private scri.commons.gui.matisse.HyperLinkLabel helpLabel;
     private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JLabel resultsLabel;
     public javax.swing.JTable table;
