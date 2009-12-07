@@ -118,6 +118,9 @@ miscellaneous options.</p>
 	 <li><b>Show/Hide Protein Translations</b><br>
 	 Opens a menu allowing you to toggle the protein translations or or off, or to
 	 select which combination of the six available translations should be shown.</li>
+	 <li><b>Overlay Read Names</b><br>
+	 Overlays the names of reads on the display. This is only available in the stacked
+	 view.</li>
 	 <br>
 	 <li><b>Hide Consensus</b><br>
 	 Toggles on or off the Consensus display panel.</li>

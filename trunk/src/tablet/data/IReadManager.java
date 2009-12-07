@@ -3,6 +3,8 @@
 
 package tablet.data;
 
+import java.util.ArrayList;
+
 /**
  * An interface for accessing read data that is required for visual display.
  */
@@ -19,4 +21,6 @@ public interface IReadManager
 	public Read getReadAt(int line, int nucleotidePosition);
 
 	public int getLineForRead(Read read);
+
+	public ArrayList<Read> getReadNames(int startIndex, int endIndex);
 }

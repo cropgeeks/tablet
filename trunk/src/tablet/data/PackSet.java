@@ -63,4 +63,9 @@ public class PackSet implements Iterable<Pack>, IReadManager
 	{
 		return packs.get(i);
 	}
+
+	public ArrayList<Read> getReadNames(int startIndex, int endIndex)
+	{
+		return null;
+	}
 }

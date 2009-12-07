@@ -122,4 +122,15 @@ class StackSet implements IReadManager
 		}
 		return -1;
 	}
+
+	public ArrayList<Read> getReadNames(int startIndex, int endIndex)
+	{
+		ArrayList<Read> tempList = new ArrayList<Read>();
+		for(int i=startIndex; i <=endIndex; i++)
+		{
+			tempList.add(stack.get(i));
+		}
+
+		return tempList;
+	}
 }

@@ -98,6 +98,7 @@ class ReadsCanvas extends JPanel
 	{
 		this.aPanel = aPanel;
 		new ReadsCanvasML(aPanel);
+		aPanel.toggleNameOverlay();
 	}
 
 	void setContig(Contig contig)
@@ -225,7 +226,7 @@ class ReadsCanvas extends JPanel
 		}
 
 		long e = System.nanoTime();
-//		System.out.println("Render time: " + ((e-s)/1000000f) + "ms");
+		//System.out.println("Render time: " + ((e-s)/1000000f) + "ms");
 	}
 
 	private void paintBuffer()
@@ -302,7 +303,6 @@ class ReadsCanvas extends JPanel
 			for (int row = yS, y = (ntH*yS); row <= yE; row += cores, y += ntH*cores)
 			{
 				byte[] data = reads.getValues(row, xS-offset, xE-offset);
-
 				for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
 					if (data[i] != -1)
 						g.drawImage(colors.getImage(data[i]), x, y, null);

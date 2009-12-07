@@ -5,6 +5,7 @@ package tablet.gui.ribbon;
 
 import java.awt.event.*;
 
+import javax.swing.KeyStroke;
 import tablet.gui.*;
 
 import org.jvnet.flamingo.common.model.*;
@@ -28,6 +29,7 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 	private JCommandToggleButton bHideScaleBar;
 	private JCommandToggleButton bHideCoverage;
 	private JCommandToggleButton bHideContigs;
+	private JCommandToggleButton bOverlayReadNames;
 
 
 	HomeOptionsBand(WinMain winMain)
@@ -91,9 +93,24 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.HomeOptionsBand.bHideProteins.tooltip"),
 			RB.getString("gui.ribbon.HomeOptionsBand.bHideProteins.richtip")));
 
+		// Hide the contigs panel
+		bOverlayReadNames = new JCommandToggleButton("",
+			RibbonController.getIcon("OVERLAYNAMES16", 16));
+		Actions.homeOptionsOverlayReadNames = new ActionToggleButtonModel(false);
+		Actions.homeOptionsOverlayReadNames.setSelected(Prefs.visOverlayNames);
+		Actions.homeOptionsOverlayReadNames.addActionListener(this);
+		bOverlayReadNames.setActionModel(Actions.homeOptionsOverlayReadNames);
+		bOverlayReadNames.setActionKeyTip("HN");
+		bOverlayReadNames.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeOptionsBand.bOverlayReadNames.tooltip"),
+			RB.getString("gui.ribbon.HomeOptionsBand.bOverlayReadNames.richtip")));
+		RibbonController.assignShortcut(bOverlayReadNames,
+			KeyStroke.getKeyStroke(KeyEvent.VK_N, Tablet.menuShortcut));
+
 		JCommandButtonStrip menuStrip = new JCommandButtonStrip();
 		menuStrip.add(bHideOverview);
 		menuStrip.add(bHideProteins);
+		menuStrip.add(bOverlayReadNames);
 		addFlowComponent(menuStrip);
 
 
@@ -144,7 +161,6 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		bHideContigs.setActionRichTooltip(new RichTooltip(
 			RB.getString("gui.ribbon.HomeOptionsBand.bHideContigs.tooltip"),
 			RB.getString("gui.ribbon.HomeOptionsBand.bHideContigs.richtip")));
-
 
 		JCommandButtonStrip panelsStrip = new JCommandButtonStrip();
 		panelsStrip.add(bHideConsensus);
@@ -198,6 +214,11 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		{
 			Prefs.guiHideContigs = !Prefs.guiHideContigs;
 			winMain.toggleSplitterLocation();
+		}
+		else if(source == Actions.homeOptionsOverlayReadNames)
+		{
+			Prefs.visOverlayNames = !Prefs.visOverlayNames;
+			winMain.getAssemblyPanel().toggleNameOverlay();
 		}
 	}
 }
