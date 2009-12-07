@@ -16,9 +16,10 @@ public class NameOverlayer extends Thread implements IOverlayRenderer
 	private static NameOverlayer previous;
 	private boolean hidden;
 
-	public NameOverlayer(ReadsCanvas rCanvas)
+	public NameOverlayer(ReadsCanvas rCanvas, boolean hidden)
 	{
 		this.rCanvas = rCanvas;
+		this.hidden = hidden;
 
 		//if we're already animating cancel that animation and replace it with
 		//this new one
@@ -77,44 +78,24 @@ public class NameOverlayer extends Thread implements IOverlayRenderer
 	{
 		rCanvas.overlays.addFirst(this);
 
-		//set the initial opacity to 0 (essentially make the overlay invisible)
-		overlayOpacity = 0;
-
 		for (int i = 1; i <= 40 && isOK; i++)
 		{
 			// 40 * 5 = 200 (the desired ending alpha)
-			overlayOpacity = (0 + (i * 5));
+			if(!hidden)
+				overlayOpacity = (0 + (i * 5));
+			else
+				overlayOpacity = (200 - (i * 5));
 			rCanvas.repaint();
 
 			// 25 * 40 = 1000 (1 second)
 			try { Thread.sleep(25); }
 			catch (InterruptedException e) { isOK = false; }
 		}
-
-		//while the button is pressed, continue to display the overlay
-		while(!hidden)
+		
+		if(hidden)
 		{
-			try { Thread.sleep(25); }
-			catch (InterruptedException e) { isOK = false; }
-		}
-
-		//then fade it out again
-		for (int i = 1; i <= 40 && isOK; i++)
-		{
-			// 40 * 5 = 200 (the starting alpha)
-			overlayOpacity = (200 - (i * 5));
+			rCanvas.overlays.remove(this);
 			rCanvas.repaint();
-
-			// 25 * 40 = 1000 (1 second)
-			try { Thread.sleep(25); }
-			catch (InterruptedException e) { isOK = false; }
 		}
-		rCanvas.overlays.remove(this);
-		rCanvas.repaint();
-	}
-
-	public void setHidden(boolean hidden)
-	{
-		this.hidden = hidden;
 	}
 }

@@ -98,7 +98,6 @@ class ReadsCanvas extends JPanel
 	{
 		this.aPanel = aPanel;
 		new ReadsCanvasML(aPanel);
-		aPanel.toggleNameOverlay();
 	}
 
 	void setContig(Contig contig)
@@ -113,6 +112,7 @@ class ReadsCanvas extends JPanel
 				reads = contig.getStackSetManager();
 
 			offset = contig.getConsensusOffset();
+			aPanel.toggleNameOverlay();
 		}
 
 		// We need to ensure that any references to tablet.data objects are

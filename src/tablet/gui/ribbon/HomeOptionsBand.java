@@ -102,7 +102,7 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		bOverlayReadNames.setActionModel(Actions.homeOptionsOverlayReadNames);
 		bOverlayReadNames.setActionKeyTip("HN");
 		bOverlayReadNames.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeOptionsBand.bOverlayReadNames.tooltip"),
+			RB.format("gui.ribbon.HomeOptionsBand.bOverlayReadNames.tooltip", Tablet.winKey),
 			RB.getString("gui.ribbon.HomeOptionsBand.bOverlayReadNames.richtip")));
 		RibbonController.assignShortcut(bOverlayReadNames,
 			KeyStroke.getKeyStroke(KeyEvent.VK_N, Tablet.menuShortcut));
