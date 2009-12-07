@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.dnd.*;
 import java.awt.event.*;
 import java.beans.*;
+import java.io.*;
 import java.util.*;
 import java.lang.management.*;
 import java.text.*;
@@ -310,5 +311,30 @@ public class WinMain extends JRibbonFrame
 	public FeaturesPanel getFeaturesPanel()
 	{
 		return featuresPanel;
+	}
+
+	public void validateCacheFolder()
+	{
+		new File(Prefs.cacheDir).mkdirs();
+		File test = new File(Prefs.cacheDir,
+			System.currentTimeMillis() + "-validate");
+
+		try
+		{
+			if (test.createNewFile() == false)
+				cacheInvalid(new IOException(
+					RB.getString("gui.WinMain.cacheWriteError")));
+		}
+		catch (IOException e) {
+			cacheInvalid(e);
+		}
+	}
+
+	private void cacheInvalid(IOException e)
+	{
+		String msg = RB.format("gui.WinMain.cacheError",
+			Prefs.cacheDir, e.getMessage());
+
+		TaskDialog.error(msg, RB.getString("gui.text.close"));
 	}
 }
