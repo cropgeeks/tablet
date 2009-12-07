@@ -114,11 +114,11 @@ class ReadsCanvasML extends MouseInputAdapter
 
 	private void trackMouse(MouseEvent e)
 	{
-		int xIndex = (e.getX() / rCanvas.ntW);
+		int xIndex = (e.getX() / rCanvas.ntW) + rCanvas.offset;
 		int yIndex = (e.getY() / rCanvas.ntH);
 
 		// Track the mouse position
-		sCanvas.setMouseBase(xIndex);
+		sCanvas.setMouseBase(xIndex-rCanvas.offset);
 		infoPane.setMousePosition(e.getPoint());
 		nOverlay.setMousePosition(e.getPoint());
 

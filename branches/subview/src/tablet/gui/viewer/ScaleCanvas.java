@@ -138,8 +138,8 @@ class ScaleCanvas extends TrackingCanvas
 			//System.out.println("MouseBase: " + mouseBase);
 
 			// Then format, centre and draw the message
-			String str = d.format(mouseBase+offset)
-				+ getUnpadded(mouseBase+offset) + " " + C
+			String str = d.format(mouseBase+offset+1)
+				+ getUnpadded(mouseBase+offset+1) + " " + C
 				+ d.format(DisplayData.getCoverage()[mouseBase+coverageOffset]);
 
 			if (message != null)
@@ -154,7 +154,7 @@ class ScaleCanvas extends TrackingCanvas
 		}
 
 		// Attempt to mark the base position on the LHS of the canvas
-		String lhsStr = d.format(xS+offset) + getUnpadded(xS+offset);
+		String lhsStr = d.format(xS+offset+1) + getUnpadded(xS+offset);
 		int strWidth  = g.getFontMetrics().stringWidth(lhsStr);
 		int pos = getPosition(x1, strWidth);;
 		ntL = xS;
@@ -163,7 +163,7 @@ class ScaleCanvas extends TrackingCanvas
 			g.drawString(lhsStr, pos, 20);
 
 		// Attempt to mark the base position on the RHS of the canvas
-		String rhsStr = d.format(xE+offset) + getUnpadded(xE+offset);
+		String rhsStr = d.format(xE+offset+1) + getUnpadded(xE+offset);
 		strWidth  = g.getFontMetrics().stringWidth(rhsStr);
 		pos = getPosition(x2, strWidth);
 		ntR = xE;

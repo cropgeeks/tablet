@@ -32,6 +32,7 @@ public class Contig
 	// Supplementary set of features used purely for graphical outlining
 	private ArrayList<Feature> outlines = new ArrayList<Feature>();
 
+	//Define the start and end points of the subset view of the data.
 	private int visualS, visualE;
 
 	/** Constructs a new, empty contig. */
@@ -145,8 +146,11 @@ public class Contig
 				contigE = read.getEndPosition();
 		}
 
-		visualS = -12;
-		visualE = 210;
+		//set to contigS and contigE initially.
+//		visualS = -12;
+//		visualE = 210;
+		visualS = contigS;
+		visualE = contigE;
 	}
 
 	public void setPackSet(PackSet packSet)
@@ -169,6 +173,12 @@ public class Contig
 	public int getWidth()
 		{ return contigE - contigS + 1; }
 
+	/**
+	 * Returns the width of the subset of this contig, that is, the number of
+	 * nucleotides that span from the beginning of the left most viewable read to
+	 * end of the right most viewable read.
+	 *
+	 */
 	public int getVisualWidth()
 	{
 		return visualE - visualS + 1;
@@ -203,18 +213,39 @@ public class Contig
 	public boolean isDataPacked()
 		{ return packSet != null; }
 
+	/**
+	 * Returns the base position of the first viewable base in a subset. If the
+	 * data has not been subsetted this will equal contigS.
+	 */
 	public int getVisualS()
 	{
 		return visualS;
 	}
 
-	int getVisualE()
+	/**
+	 * Returns the base position of the last viewable base in a subset. If the
+	 * data has not been subsetted this will equal contigE.
+	 */
+	public int getVisualE()
 	{
 		return visualE;
 	}
 
+	/**
+	 * Method to get the start index of the first base to be included in the
+	 * coverage overview of the subset of the data.
+	 */
 	public int getCoverageStart()
 	{
 		return -contigS+visualS;
+	}
+
+	/**
+	 * Method to get the index of the last base to be included in the
+	 * coverage overview of the subset of the data.
+	 */
+	public int getCoverageEnd()
+	{
+		return getCoverageStart()+((visualE-visualS)+1);
 	}
 }

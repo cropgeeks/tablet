@@ -52,7 +52,6 @@ class CoverageCanvas extends TrackingCanvas
 		{
 			offset = -contig.getVisualS();
 			coverageStart = contig.getCoverageStart();
-			System.out.println("Coverage Start: " + coverageStart);
 		}
 	}
 

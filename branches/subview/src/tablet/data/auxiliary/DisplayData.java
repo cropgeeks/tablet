@@ -89,4 +89,11 @@ public class DisplayData
 
 	public static void setUnpaddedToPadded(int[] newUnpaddedToPadded)
 		{ unpaddedToPadded = newUnpaddedToPadded; }
+
+	public static int[] getCoverageValues(int start, int end)
+	{
+		int[] tempCoverage = new int[end-start];
+		System.arraycopy(coverage, start, tempCoverage, 0, tempCoverage.length);
+		return tempCoverage;
+	}
 }

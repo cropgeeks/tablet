@@ -10,9 +10,13 @@ import tablet.data.auxiliary.*;
 
 class CoverageOverviewFactory extends OverviewBufferFactory
 {
+	private Contig contig;
+
 	CoverageOverviewFactory(OverviewCanvas canvas, int w, int h, ReadsCanvas rCanvas)
 	{
 		super(canvas, w, h);
+
+		this.contig = rCanvas.contig;
 
 		// Make private references to certain values now, as they MAY change
 		// while the buffer is still being created, which will create problems
@@ -31,8 +35,8 @@ class CoverageOverviewFactory extends OverviewBufferFactory
 		if (killMe)
 			return;
 
-		// Get the coverage information
-		int[] coverage = DisplayData.getCoverage();
+		// Get the coverage information to produce the correct sized coverage overview
+		int[] coverage = DisplayData.getCoverageValues(contig.getCoverageStart(), contig.getCoverageEnd());
 		int coverageMax = DisplayData.getMaxCoverage();
 
 		// Work out how many bases per block to average over, and hence how many
@@ -93,5 +97,7 @@ class CoverageOverviewFactory extends OverviewBufferFactory
 
 		if (!killMe)
 			canvas.bufferAvailable(buffer);
+
+		contig = null;
 	}
 }
