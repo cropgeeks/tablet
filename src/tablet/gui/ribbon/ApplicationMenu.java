@@ -223,7 +223,10 @@ public class ApplicationMenu extends RibbonApplicationMenu
 			new AboutDialog();
 
 		else if (icon == iOptions)
+		{
 			new PreferencesDialog();
+			winMain.validateCacheFolder();
+		}
 
 		else if (icon == iExit)
 		{

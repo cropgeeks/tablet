@@ -98,6 +98,8 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		{
 			public void windowOpened(WindowEvent e)
 			{
+				winMain.validateCacheFolder();
+
 				// Do we want to open an initial project?
 				if (initialFiles != null)
 					winMain.getCommands().fileOpen(initialFiles);
