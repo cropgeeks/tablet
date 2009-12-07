@@ -27,7 +27,13 @@ public class AboutDialog extends JDialog implements ActionListener
 
 		nbPanel = new NBAboutPanel();
 
-		add(nbPanel);
+		AvatarPanel avatars = new AvatarPanel();
+
+		JTabbedPane tabs = new JTabbedPane();
+		tabs.add(RB.getString("gui.dialog.AboutDialog.tab1"), nbPanel);
+		tabs.add(RB.getString("gui.dialog.AboutDialog.tab2"), avatars);
+
+		add(tabs);
 		add(createButtons(), BorderLayout.SOUTH);
 
 		getRootPane().setDefaultButton(bClose);
@@ -53,5 +59,40 @@ public class AboutDialog extends JDialog implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		setVisible(false);
+	}
+
+	private class AvatarPanel extends JPanel
+	{
+		AvatarPanel()
+		{
+			setBackground(Color.white);
+			add(new JLabel(Icons.getIcon("AVATARS")));
+
+			addMouseMotionListener(new MouseMotionAdapter()
+			{
+				public void mouseMoved(MouseEvent e)
+				{
+					int x = e.getX();
+					int y = e.getY();
+
+					String tooltip = "<html>";
+
+					if (x < 105)
+						tooltip += "Iain Milne";
+					else if (x >= 105 && x < 200)
+						tooltip += "Micha Bayer";
+					else if (x >= 200 && x < 290)
+						tooltip += "Linda Cardle";
+					else if (x >= 290 && x < 380)
+						tooltip += "Paul Shaw";
+					else if (x >= 380 && x < 467)
+						tooltip += "Gordon Stephen";
+					else
+						tooltip += "David Marshall";
+
+					setToolTipText(tooltip);
+				}
+			});
+		}
 	}
 }
