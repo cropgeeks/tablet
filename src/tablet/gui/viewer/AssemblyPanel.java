@@ -38,6 +38,8 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	// Tracks the base to zoom in on
 	private float ntCenterX, ntCenterY;
 
+	NameOverlayer nameOverlayer;
+
 	public AssemblyPanel(WinMain winMain)
 	{
 		createControls();
@@ -322,5 +324,21 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	public BufferedImage getBackBuffer()
 	{
 		return readsCanvas.buffer;
+	}
+
+	public void toggleNameOverlay()
+	{
+		//start fade in animation for overlay
+		if(Prefs.visOverlayNames)
+		{
+			nameOverlayer = new NameOverlayer(this.readsCanvas);
+			nameOverlayer.start();
+		}
+		//start fade out animation for overlay
+		else
+		{
+			if(nameOverlayer != null)
+				nameOverlayer.setHidden(!Prefs.visOverlayNames);
+		}
 	}
 }

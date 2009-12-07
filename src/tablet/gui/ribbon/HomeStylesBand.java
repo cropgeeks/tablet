@@ -175,6 +175,7 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 		else if (e.getSource() == Actions.homeStylesPacked)
 		{
 			Prefs.visPacked = true;
+			Actions.homeOptionsOverlayReadNames.setEnabled(false);
 			winMain.getAssemblyPanel().forceRedraw();
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
@@ -184,6 +185,7 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 		else if (e.getSource() == Actions.homeStylesStacked)
 		{
 			Prefs.visPacked = false;
+			Actions.homeOptionsOverlayReadNames.setEnabled(true);
 			winMain.getAssemblyPanel().forceRedraw();
 
 			// BUG: Workaround for API allowing toggle groups to be unselected

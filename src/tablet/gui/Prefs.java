@@ -109,6 +109,8 @@ public class Prefs extends XMLPreferences
 	public static int visPadCharType = 0;
 	public static int visStopCharType = 0;
 
+	public static boolean visOverlayNames = false;
+
 	public static int guiFindPanelSelectedIndex = 0;
 	public static String recentSearches = "";
 
