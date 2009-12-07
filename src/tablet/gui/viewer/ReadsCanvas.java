@@ -38,7 +38,8 @@ class ReadsCanvas extends JPanel
 	// And the total number of nucleotides that span the entire canvas
 	int ntOnCanvasX, ntOnCanvasY;
 
-	// The LHS offset (difference) between the left-most read and the consensus
+	// Used to be : The LHS offset (difference) between the left-most read and the consensus
+	// Now: The visual start, the first base position to include in the view.
 	int offset;
 
 	// These are the x and y pixel positions on the canvas that currently appear
@@ -111,7 +112,7 @@ class ReadsCanvas extends JPanel
 			else
 				reads = contig.getStackSetManager();
 
-			//offset = contig.getConsensusOffset();
+			//instead of getting the consensus offset, get the visual start.
 			offset = contig.getVisualS();
 		}
 
@@ -138,6 +139,8 @@ class ReadsCanvas extends JPanel
 		ntW = sizeX*2;
 		ntH = fm.getHeight();
 
+		//instead of getting the total width, get the visual width. Allows
+		//subsetting.
 		ntOnCanvasX = contig.getVisualWidth();
 		ntOnCanvasY = contig.getHeight();
 
