@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="stylesheet/styles.css" type="text/css">
+
+<title>Download Tablet</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.shtml" -->
+
+
+<h2>Download Tablet</h2>
+
+<p>The most recent release of Tablet is <b>1.09.12.08</b> (8th December 2009).</p>
+
+<p>Please use the links below to download the Tablet installer most suitable
+for your operating system. Tablet is currently available for:</p>
+
+<table border="0">
+<tr>
+	<td>&nbsp;&nbsp;&nbsp;</td>
+	<td><img src="images/icon_windows.gif" alt="Windows"></td>
+	<td>
+		<a href="installers/tablet_windows_x86_1_09_12_08.exe"
+		  onClick="javascript: pageTracker._trackPageview('/installers/windows_x86');">Windows (32 bit)</a> or
+		<a href="installers/tablet_windows_x64_1_09_12_08.exe"
+		  onClick="javascript: pageTracker._trackPageview('/installers/windows_x64');">Windows (64 bit)</a>
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;&nbsp;&nbsp;</td>
+	<td><img src="images/icon_linux.gif" alt="Linux"></td>
+	<td>
+		<a href="installers/tablet_linux_x86_1_09_12_08.sh"
+		  onClick="javascript: pageTracker._trackPageview('/installers/linux_x86');">Linux (32 bit)</a> or
+		<a href="installers/tablet_linux_x64_1_09_12_08.sh"
+		  onClick="javascript: pageTracker._trackPageview('/installers/linux_x64');">Linux (64 bit)</a>
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;&nbsp;&nbsp;</td>
+	<td><img src="images/icon_osx.gif" alt="OS X"></td>
+	<td>
+		<a href="installers/tablet_macos_1_09_12_08.dmg"
+		  onClick="javascript: pageTracker._trackPageview('/installers/macosx_x86');">Apple Mac OS X</a>
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;&nbsp;&nbsp;</td>
+	<td><img src="images/icon_solaris.gif" alt="Solaris"></td>
+	<td>
+		<a href="installers/tablet_solaris_1_09_12_08.sh"
+		  onClick="javascript: pageTracker._trackPageview('/installers/solaris');">Solaris (Sparc)</a>
+	</td>
+</tr>
+
+</table>
+
+<p>Follow the instructions provided by the graphical installer to install Tablet.
+Note that Tablet should not require administrator privileges to install or run,
+but if you have any problems, don't hesitate to contact us at
+<a href="mailto:bioinf@scri.ac.uk">bioinf@scri.ac.uk</a>.
+
+<p>Tablet is developed on Windows XP SP3, and gets additional regular testing on
+OS X 10.6, Ubuntu Linux, and Centos 5.</p>
+
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>
