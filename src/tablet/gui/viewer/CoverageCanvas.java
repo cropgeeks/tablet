@@ -8,6 +8,9 @@ import java.awt.event.*;
 
 import tablet.data.*;
 import tablet.data.auxiliary.*;
+import tablet.gui.*;
+
+import scri.commons.gui.*;
 
 class CoverageCanvas extends TrackingCanvas
 {
@@ -48,7 +51,15 @@ class CoverageCanvas extends TrackingCanvas
 	void setContig(Contig contig)
 	{
 		if (contig != null)
+		{
 			offset = contig.getConsensusOffset();
+
+			setToolTipText(
+				RB.format("gui.viewer.OverviewCanvas.coverageTT",
+				TabletUtils.nf.format(DisplayData.getAveragePercentage()),
+				TabletUtils.nf.format(DisplayData.getAverageCoverage()),
+				TabletUtils.nf.format(DisplayData.getMaxCoverage())));
+		}
 	}
 
 	public void paintComponent(Graphics graphics)

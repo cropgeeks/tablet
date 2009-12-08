@@ -50,7 +50,9 @@ public class DisplayDataCalculator extends SimpleJob
 
 			DisplayData.setCoverage(cc.getCoverage());
 			DisplayData.setMaxCoverage(cc.getMaximum());
-			DisplayData.setAverageCoverage(cc.getAverage());
+			DisplayData.setBaseOfMaximum(cc.getBaseOfMaximum());
+			DisplayData.setAverageCoverage(cc.getAverageCoverage());
+			DisplayData.setAveragePercentage(cc.getAveragePercentage());
 		}
 
 		if (okToRun)

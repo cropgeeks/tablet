@@ -56,6 +56,8 @@ public class WinMain extends JRibbonFrame
 		setSize(Prefs.guiWinMainWidth, Prefs.guiWinMainHeight);
 		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
+		ToolTipManager.sharedInstance().setDismissDelay(8000);
+
 		// Work out the current screen's width and height
 		int scrnW = SwingUtils.getVirtualScreenDimension().width;
 		int scrnH = SwingUtils.getVirtualScreenDimension().height;

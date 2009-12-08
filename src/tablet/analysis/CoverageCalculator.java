@@ -18,7 +18,9 @@ public class CoverageCalculator extends SimpleJob
 	private int[] coverage;
 
 	private int maxValue;
-	private float averageValue;
+	private int maxValueAt;
+	private float averageCoverage;
+	private float averagePercentage;
 
 	public CoverageCalculator(Contig contig)
 	{
@@ -46,12 +48,24 @@ public class CoverageCalculator extends SimpleJob
 				coverage[i]++;
 		}
 
-		averageValue = baseCount / (float) contig.getWidth();
+		int basesCovered = 0;
 
-		// Finally, work out what the maximum depth of coverage was
-		for (int i: coverage)
-			if (i > maxValue)
-				maxValue = i;
+		// Finally, work out what the maximum depth of coverage was, the average
+		// percentage coverage, and the base with the maximum depth
+		for (int i = 0; i < coverage.length; i++)
+		{
+			if (coverage[i] > maxValue)
+			{
+				maxValue = coverage[i];
+				maxValueAt = i;
+			}
+
+			if (coverage[i] > 0)
+				basesCovered++;
+		}
+
+		averageCoverage = baseCount / (float) contig.getWidth();
+		averagePercentage = (basesCovered / (float) coverage.length) * 100;
 	}
 
 	public int[] getCoverage()
@@ -60,6 +74,12 @@ public class CoverageCalculator extends SimpleJob
 	public int getMaximum()
 		{ return maxValue; }
 
-	public float getAverage()
-		{ return averageValue; }
+	public int getBaseOfMaximum()
+		{ return maxValueAt; }
+
+	public float getAverageCoverage()
+		{ return averageCoverage; }
+
+	public float getAveragePercentage()
+		{ return averagePercentage; }
 }
