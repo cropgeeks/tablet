@@ -19,7 +19,9 @@ public class DisplayData
 	// Contains the coverage information across the contig
 	private static int[] coverage;
 	private static int maxCoverage;
+	private static int maxCoverageAtBase;
 	private static float averageCoverage;
+	private static float averagePercentage;
 
 	/**
 	 * Clears the memory allocated for the storage of padded/unpadded mapping
@@ -46,11 +48,23 @@ public class DisplayData
 	public static void setMaxCoverage(int newMaxCoverage)
 		{ maxCoverage = newMaxCoverage; }
 
+	public static int getBaseOfMaximum()
+		{ return maxCoverageAtBase; }
+
+	public static void setBaseOfMaximum(int newMaxCoverageAtBase)
+		{ maxCoverageAtBase = newMaxCoverageAtBase; }
+
 	public static float getAverageCoverage()
 		{ return averageCoverage; }
 
 	public static void setAverageCoverage(float newAverageCoverage)
 		{ averageCoverage = newAverageCoverage; }
+
+	public static float getAveragePercentage()
+		{ return averagePercentage; }
+
+	public static void setAveragePercentage(float newAveragePercentage)
+		{ averagePercentage = newAveragePercentage; }
 
 	/**
 	 * Returns the unpadded index (within consensus index space) for the given

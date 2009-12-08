@@ -8,7 +8,10 @@ import java.awt.event.*;
 import java.awt.image.*;
 import javax.swing.*;
 
+import tablet.data.auxiliary.*;
 import tablet.gui.*;
+
+import scri.commons.gui.*;
 
 public class OverviewCanvas extends JPanel
 {
@@ -107,9 +110,21 @@ public class OverviewCanvas extends JPanel
 
 		// Before starting a new one
 		if (Prefs.visOverviewType == SCALEDDATA)
+		{
 			bufferFactory = new ScaledOverviewFactory(this, w, h, rCanvas);
+
+			canvas.setToolTipText(null);
+		}
 		else if (Prefs.visOverviewType == COVERAGE)
+		{
 			bufferFactory = new CoverageOverviewFactory(this, w, h, rCanvas);
+
+			canvas.setToolTipText(
+				RB.format("gui.viewer.OverviewCanvas.coverageTT",
+				TabletUtils.nf.format(DisplayData.getAveragePercentage()),
+				TabletUtils.nf.format(DisplayData.getAverageCoverage()),
+				TabletUtils.nf.format(DisplayData.getMaxCoverage())));
+		}
 
 		repaint();
 	}
