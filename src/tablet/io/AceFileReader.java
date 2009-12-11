@@ -285,46 +285,49 @@ class AceFileReader extends TrackableReader
 	}
 
 	private void processConsesusTag()
-		throws Exception
 	{
-		// The next line of the tag should be the one with all the info on it
-		str = readLine();
-		String[] CT = p.split(str);
-
-		// POLYMORPHIC SNPs
-		if (CT[1].equalsIgnoreCase("polymorphism"))
+		try
 		{
-			// Read the information
-			String contigName = CT[0];
-			int p1 = Integer.parseInt(CT[3]) - 1;
-			int p2 = Integer.parseInt(CT[4]) - 1;
+			// The next line of the tag should be the one with all the info on it
+			str = readLine();
+			String[] CT = p.split(str);
 
-			// And assuming a contig exists with this name...
-			Contig contig = contigHash.get(contigName);
-			if (contig != null)
-				contig.getFeatures().add(new Feature("SNP", Feature.GFF3, p1, p2));
-		}
-
-		else if (CT[1].equalsIgnoreCase("comment") && CT[2].equalsIgnoreCase("gigaBayes"))
-		{
-			// Read the information
-			String contigName = CT[0];
-			int p1 = Integer.parseInt(CT[3]) - 1;
-			int p2 = Integer.parseInt(CT[4]) - 1;
-
-			str = readLine().trim();
-			if (str.equalsIgnoreCase("Variation type=SNP"))
+			// POLYMORPHIC SNPs
+			if (CT[1].equalsIgnoreCase("polymorphism"))
 			{
+				// Read the information
+				String contigName = CT[0];
+				int p1 = Integer.parseInt(CT[3]) - 1;
+				int p2 = Integer.parseInt(CT[4]) - 1;
+
 				// And assuming a contig exists with this name...
 				Contig contig = contigHash.get(contigName);
 				if (contig != null)
 					contig.getFeatures().add(new Feature("SNP", Feature.GFF3, p1, p2));
 			}
+
+			else if (CT[1].equalsIgnoreCase("comment") && CT[2].equalsIgnoreCase("gigaBayes"))
+			{
+				// Read the information
+				String contigName = CT[0];
+				int p1 = Integer.parseInt(CT[3]) - 1;
+				int p2 = Integer.parseInt(CT[4]) - 1;
+
+				str = readLine().trim();
+				if (str.equalsIgnoreCase("Variation type=SNP"))
+				{
+					// And assuming a contig exists with this name...
+					Contig contig = contigHash.get(contigName);
+					if (contig != null)
+						contig.getFeatures().add(new Feature("SNP", Feature.GFF3, p1, p2));
+				}
+			}
+
+
+			// Read until the end of the tag
+			while ((str = readLine()) != null && !str.startsWith("}"));
 		}
-
-
-		// Read until the end of the tag
-		while ((str = readLine()) != null && !str.startsWith("}"));
+		catch (Exception e) { e.printStackTrace(); }
 	}
 
 	public String getMessage()
