@@ -27,6 +27,8 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 	private ContigsTableModel model;
 	private TableRowSorter<ContigsTableModel> sorter;
 
+	private Contig prevContig = null;
+
 	ContigsPanel(WinMain winMain, AssemblyPanel aPanel, JTabbedPane ctrlTabs)
 	{
 		this.winMain = winMain;
@@ -101,8 +103,13 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 
 		int row = controls.table.getSelectedRow();
 
+		System.out.println("Value Changed: " + row);
+
 		if (row == -1)
+		{
 			setNullContig();
+			prevContig = null;
+		}
 		else
 		{
 			// Convert from view->model (deals with user-sorted table)
@@ -110,7 +117,11 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 
 			// Then pull the contig out of the model and set...
 			Contig contig = (Contig) model.getValueAt(row, 0);
-			setDisplayedContig(contig);
+			if(contig != prevContig)
+			{
+				setDisplayedContig(contig);
+				prevContig = contig;
+			}
 		}
 	}
 
