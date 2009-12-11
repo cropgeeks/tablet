@@ -103,8 +103,6 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 
 		int row = controls.table.getSelectedRow();
 
-		System.out.println("Value Changed: " + row);
-
 		if (row == -1)
 		{
 			setNullContig();
