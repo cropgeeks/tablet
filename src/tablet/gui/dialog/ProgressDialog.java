@@ -3,11 +3,14 @@
 
 package tablet.gui.dialog;
 
+import java.awt.*;
 import java.awt.event.*;
 import java.text.*;
 import javax.swing.*;
 
 import tablet.gui.*;
+
+import scri.commons.gui.*;
 
 /**
  * Common class used by most of the trackable job types as they run to display
@@ -23,6 +26,7 @@ public class ProgressDialog extends JDialog
 	private static DecimalFormat d = new DecimalFormat("0.00");
 
 	private NBProgressPanel nbPanel;
+	private JButton bCancel;
 
 	// Runnable object that will be active while the dialog is visible
 	private ITrackableJob job;
@@ -48,7 +52,23 @@ public class ProgressDialog extends JDialog
 			}
 		});
 
+		bCancel = new JButton(RB.getString("gui.text.cancel"));
+		bCancel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				cancelJob();
+			}
+		});
+
+		if (SystemUtils.isMacOS() == false)
+			bCancel.setVisible(false);
+
+		JPanel cancelPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT, 0, 0));
+		cancelPanel.setBorder(BorderFactory.createEmptyBorder(0, 5, 5, 5));
+		cancelPanel.add(bCancel);
+
 		add(nbPanel);
+		add(cancelPanel, BorderLayout.SOUTH);
+
 		pack();
 		setLocationRelativeTo(Tablet.winMain);
 		setResizable(false);
@@ -112,6 +132,9 @@ public class ProgressDialog extends JDialog
 	{
 		Thread.currentThread().setName("ProgressDialog-ITrackableJob");
 
+		if (SystemUtils.isMacOS() == false)
+			createCancelTimer();
+
 		timer = new Timer(100, this);
 		timer.start();
 
@@ -132,5 +155,36 @@ public class ProgressDialog extends JDialog
 		// never seems to get garbage-collected meaning its references (which
 		// include a reference to the assembly) never die
 		job = null;
+	}
+
+	private void createCancelTimer()
+	{
+		Timer timer = new Timer(5000, new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				if (isVisible() == false)
+					return;
+
+				Runnable r = new Runnable() {
+					public void run()
+					{
+						for (int i = 0; i < 25; i++)
+						{
+							setSize(getWidth(), getHeight()+1);
+
+							try { Thread.sleep(25); }
+							catch (InterruptedException e) {}
+						}
+
+						bCancel.setVisible(true);
+					}
+				};
+
+				new Thread(r).start();
+			}
+		});
+
+		timer.setRepeats(false);
+		timer.start();
 	}
 }
