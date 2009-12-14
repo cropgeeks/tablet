@@ -41,13 +41,13 @@ public class Commands
 		winMain.closeAssembly();
 		System.gc();
 
-		ImportHandler ioHandler = new ImportHandler(filenames, new File(Prefs.cacheDir));
+		AssemblyFileHandler assemblyFileHandler = new AssemblyFileHandler(filenames, new File(Prefs.cacheDir));
 
 		String title = RB.getString("gui.Commands.fileOpen.title");
 		String label = RB.getString("gui.Commands.fileOpen.label");
 
 		// Run the job...
-		ProgressDialog dialog = new ProgressDialog(ioHandler, title, label);
+		ProgressDialog dialog = new ProgressDialog(assemblyFileHandler, title, label);
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
@@ -57,7 +57,7 @@ public class Commands
 					files += "\n     " + filenames[i];
 
 				TaskDialog.error(RB.format("gui.Commands.fileOpen.error",
-					dialog.getException(), files),
+					dialog.getException().getMessage(), files),
 					RB.getString("gui.text.close"));
 			}
 
@@ -65,7 +65,7 @@ public class Commands
 		}
 
 		Prefs.setRecentDocument(filenames);
-		winMain.setAssembly(ioHandler.getAssembly());
+		winMain.setAssembly(assemblyFileHandler.getAssembly());
 
 		// See if a feature file can be loaded at this point too
 		if(filenames.length == 1)

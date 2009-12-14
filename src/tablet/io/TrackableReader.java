@@ -92,4 +92,9 @@ abstract class TrackableReader extends SimpleJob
 	/** Returns true if this reader can understand the file given to it. */
 	abstract boolean canRead()
 		throws Exception;
+
+	File currentFile()
+	{
+		return files[fileIndex];
+	}
 }

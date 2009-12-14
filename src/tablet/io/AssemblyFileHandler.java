@@ -30,13 +30,17 @@ public class AssemblyFileHandler extends SimpleJob
 	private File cacheDir = null;
 	private TrackableReader reader = null;
 
-	AssemblyFileHandler(File[] files, File cacheDir)
+	public AssemblyFileHandler(String[] filenames, File cacheDir)
 	{
-		this.files = files;
+		this.files = new File[filenames.length];
+		for(int i=0; i < filenames.length; i++)
+		{
+			files[i] = new File(filenames[i]);
+		}
 		this.cacheDir = cacheDir;
 	}
 
-	Assembly getAssembly()
+	public Assembly getAssembly()
 		{ return reader.getAssembly(); }
 
 	public void runJob(int jobIndex)
@@ -108,27 +112,37 @@ public class AssemblyFileHandler extends SimpleJob
 
 		// If the file couldn't be understand then throw an exception
 		else if (okToRun)
-			throw new ReadException(ReadException.UNKNOWN_FORMAT, 0);
+			throw new ReadException(null, 0, ReadException.UNKNOWN_FORMAT);
 	}
 
 	// Gets a reader to check if it can read a given file, and then lets it
 	// do the full read if it says it can
 	private boolean readFile()
-		throws Exception
+		throws ReadException
 	{
-		reader.setInputs(files, new Assembly());
-
-		if (reader.canRead())
+		try
 		{
-			long s = System.currentTimeMillis();
-			reader.runJob(0);
-			long e = System.currentTimeMillis();
-			System.out.println("\nRead time: " + ((e-s)/1000f) + "s");
+			reader.setInputs(files, new Assembly());
+			
+			if (reader.canRead())
+			{
+				long s = System.currentTimeMillis();
+				reader.runJob(0);
+				long e = System.currentTimeMillis();
+				System.out.println("\nRead time: " + ((e-s)/1000f) + "s");
 
-			return true;
+				return true;
+			}
+			return false;
 		}
-
-		return false;
+		catch(ReadException e)
+		{
+			throw(e);
+		}
+		catch(Exception e)
+		{
+			throw new ReadException(reader.currentFile(), reader.lineCount, e);
+		}
 	}
 
 	public boolean isIndeterminate()
