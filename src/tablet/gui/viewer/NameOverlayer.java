@@ -24,7 +24,10 @@ public class NameOverlayer extends Thread implements IOverlayRenderer
 		//if we're already animating cancel that animation and replace it with
 		//this new one
 		if (previous != null)
+		{
 			previous.interrupt();
+			rCanvas.overlays.remove(previous);
+		}
 		previous = this;
 	}
 
