@@ -339,10 +339,10 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		{
 			if(nameOverlayer != null)
 			{
-				readsCanvas.overlays.remove(nameOverlayer);
 				nameOverlayer = new NameOverlayer(this.readsCanvas, true);
 				nameOverlayer.start();
 			}
 		}
 	}
+
 }
