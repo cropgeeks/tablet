@@ -27,6 +27,7 @@ subversion change log</a>.</p>
 <ul>
 <li>NEW: Added an option to export coverage summary information to a file on disk.</li>
 <li>NEW: Added an explicit cancel option to the progress dialogs (even though closing the dialog did cancel them anyway).</li>
+<li>NEW: Added a right-click "copy-to-clipboard" option for the contigs table data.</li>
 <li>CHG: The Application Menu now contains an "Export" sub menu with multiple items, including the old Export Image option.</li>
 <li>CHG: Tidied up and enhanced Table's file-handling error messages, to ensure file and line number is always given.</li>
 <li>BUG: Fixed a problem with the current contig getting reselected when sorting the contigs table.</li>
