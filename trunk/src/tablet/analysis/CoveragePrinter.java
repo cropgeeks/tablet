@@ -18,31 +18,10 @@ public class CoveragePrinter extends SimpleJob
 	private Assembly assembly;
 	private Contig contig;
 
-	public CoveragePrinter(Assembly assembly)
+	public CoveragePrinter(File file, Assembly assembly)
 	{
 		this.assembly = assembly;
-		if (assembly == null)
-			return;
-
-		JFileChooser fc = new JFileChooser();
-		fc.setDialogTitle("Select Output File");
-		fc.setCurrentDirectory(new File(Prefs.guiCurrentDir));
-		if (fc.showSaveDialog(Tablet.winMain) != JFileChooser.APPROVE_OPTION)
-			return;
-		file = fc.getSelectedFile();
-
-		ProgressDialog dialog = new ProgressDialog(this,
-			"Saving Coverage Data",
-			"Saving coverage data - please be patient...");
-
-		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
-			dialog.getResult() == ProgressDialog.JOB_FAILED)
-		{
-			TaskDialog.error(dialog.getException().toString(), "Close");
-		}
-		else
-			TaskDialog.show("Coverage data saved to " + file, TaskDialog.INF,
-				0, new String[] { "Close" });
+		this.file = file;
 	}
 
 	public void runJob(int jobIndex)

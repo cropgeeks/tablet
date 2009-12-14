@@ -166,14 +166,6 @@ public class WinMain extends JRibbonFrame
 			}
 		});
 
-		addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e)
-			{
-				if (e.getClickCount() == 2 && (e.getModifiers() & ActionEvent.CTRL_MASK) != 0)
-					new tablet.analysis.CoveragePrinter(assembly);
-			}
-		});
-
 		createMemoryTimer();
 	}
 

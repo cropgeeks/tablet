@@ -8,6 +8,7 @@ import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 
+import tablet.analysis.*;
 import tablet.gui.dialog.*;
 import tablet.gui.dialog.prefs.*;
 import tablet.gui.*;
@@ -32,8 +33,8 @@ public class ApplicationMenu extends RibbonApplicationMenu
 	private ResizableIcon iSave;
 	public static RibbonApplicationMenuEntryPrimary mSaveAs;
 	private ResizableIcon iSaveAs;
-	private ResizableIcon iExportImage;
-	public static RibbonApplicationMenuEntryPrimary mExportImage;
+	private ResizableIcon iExport;
+	public static RibbonApplicationMenuEntryPrimary mExport;
 	private ResizableIcon iClose;
 	public static RibbonApplicationMenuEntryPrimary mClose;
 
@@ -43,6 +44,9 @@ public class ApplicationMenu extends RibbonApplicationMenu
 	private RibbonApplicationMenuEntryFooter mOptions;
 	private ResizableIcon iExit;
 	private RibbonApplicationMenuEntryFooter mExit;
+
+	public static JCommandButton bExport;
+	public static JCommandButton bCoverage;
 
 	ApplicationMenu(WinMain winMain)
 	{
@@ -80,12 +84,12 @@ public class ApplicationMenu extends RibbonApplicationMenu
 		mSaveAs.setRolloverCallback(this);
 		mSaveAs.setActionKeyTip("A");
 
-		iExportImage = RibbonController.getIcon("IMAGE32", 32);
-		mExportImage = new RibbonApplicationMenuEntryPrimary(iExportImage,
-			RB.getString("gui.ribbon.ApplicationMenu.mExportImage"), this,
+		iExport = RibbonController.getIcon("FILEEXPORT32", 32);
+		mExport = new RibbonApplicationMenuEntryPrimary(iExport,
+			RB.getString("gui.ribbon.ApplicationMenu.mExport"), this,
 			CommandButtonKind.ACTION_ONLY);
-		mExportImage.setRolloverCallback(this);
-		mExportImage.setActionKeyTip("E");
+		mExport.setRolloverCallback(new ExportClass());
+		mExport.setActionKeyTip("E");
 
 		iClose = RibbonController.getIcon("FILECLOSE32", 32);
 		mClose = new RibbonApplicationMenuEntryPrimary(iClose,
@@ -98,7 +102,7 @@ public class ApplicationMenu extends RibbonApplicationMenu
 		addMenuEntry(mOpen);
 		addMenuEntry(mSave);
 		addMenuEntry(mSaveAs);
-		addMenuEntry(mExportImage);
+		addMenuEntry(mExport);
 		addMenuEntry(mClose);
 
 
@@ -126,7 +130,34 @@ public class ApplicationMenu extends RibbonApplicationMenu
 
 		addFooterEntry(mExit);
 
+
+		// Export menu options
+		createExportMenu();
+
 		winMain.getRibbon().addTaskbarComponent(bSave);
+	}
+
+	private void createExportMenu()
+	{
+		// Export As Image
+		bExport = new JCommandButton(
+			RB.getString("gui.ribbon.ApplicationMenu.bExport"),
+			RibbonController.getIcon("IMAGE16", 16));
+		bExport.setHorizontalAlignment(SwingUtilities.LEFT);
+		bExport.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.ApplicationMenu.bExport"),
+			RB.getString("gui.ribbon.ApplicationMenu.bExport.tooltip")));
+		bExport.addActionListener(this);
+
+		// Export Coverage Summary
+		bCoverage = new JCommandButton(
+			RB.getString("gui.ribbon.ApplicationMenu.bCoverage"),
+			RibbonController.getIcon("COVERAGE16", 16));
+		bCoverage.setHorizontalAlignment(SwingUtilities.LEFT);
+		bCoverage.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.ApplicationMenu.bCoverage"),
+			RB.getString("gui.ribbon.ApplicationMenu.bCoverage.tooltip")));
+		bCoverage.addActionListener(this);
 	}
 
 	// Creates the application menu's list of recently opened documents
@@ -135,7 +166,7 @@ public class ApplicationMenu extends RibbonApplicationMenu
 		targetPanel.removeAll();
 
 		JCommandButtonPanel recentPanel = new JCommandButtonPanel(CommandButtonDisplayState.MEDIUM);
-		String groupName = "Recent Documents";
+		String groupName = RB.getString("gui.ribbon.ApplicationMenu.recent");
 		recentPanel.addButtonGroup(groupName);
 
 		// Parse the list of recent documents
@@ -210,9 +241,6 @@ public class ApplicationMenu extends RibbonApplicationMenu
 		else if (icon == iSaveAs)
 			System.out.println("Save As");
 
-		else if (icon == iExportImage)
-			winMain.getCommands().exportImage();
-
 		else if (icon == iClose)
 		{
 			if (winMain.okToExit(true))
@@ -231,6 +259,31 @@ public class ApplicationMenu extends RibbonApplicationMenu
 		else if (icon == iExit)
 		{
 			winMain.exit();
+		}
+
+		else if (e.getSource() == bExport)
+			winMain.getCommands().exportImage();
+
+		else if (e.getSource() == bCoverage)
+			winMain.getCommands().exportCoverage();
+	}
+
+	private class ExportClass implements RibbonApplicationMenuEntryPrimary.PrimaryRolloverCallback
+	{
+		public void menuEntryActivated(JPanel targetPanel)
+		{
+			targetPanel.removeAll();
+
+			JCommandButtonPanel recentPanel = new JCommandButtonPanel(CommandButtonDisplayState.MEDIUM);
+			String groupName = RB.getString("gui.ribbon.ApplicationMenu.export");
+			recentPanel.addButtonGroup(groupName);
+
+			recentPanel.addButtonToLastGroup(bExport);
+			recentPanel.addButtonToLastGroup(bCoverage);
+
+			recentPanel.setMaxButtonColumns(1);
+			targetPanel.setLayout(new BorderLayout());
+			targetPanel.add(recentPanel, BorderLayout.CENTER);
 		}
 	}
 }
