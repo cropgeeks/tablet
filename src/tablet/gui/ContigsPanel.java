@@ -4,6 +4,7 @@
 package tablet.gui;
 
 import java.awt.*;
+import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.text.*;
 import javax.swing.*;
@@ -37,6 +38,8 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 
 		setLayout(new BorderLayout());
 		add(controls = new NBContigsPanelControls(this));
+
+		controls.table.addMouseListener(new TableMouseListener());
 	}
 
 	void setFeaturesPanel(FeaturesPanel featuresPanel)
@@ -190,5 +193,57 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 			TabletUtils.nf.format(contig.getConsensus().length()),
 			TabletUtils.nf.format(contig.readCount()),
 			TabletUtils.nf.format(contig.getFeatures().size()));
+	}
+
+	private void copyToClipboard()
+	{
+		StringBuilder text = new StringBuilder();
+		String newline = System.getProperty("line.separator");
+
+		for (int i = 0; i < controls.table.getRowCount(); i++)
+		{
+			int row = controls.table.convertRowIndexToModel(i);
+			Contig contig = (Contig) model.getValueAt(row, 0);
+
+			text.append(contig.getName() + "\t"
+				+ contig.getConsensus().length() + "\t"
+				+ contig.readCount() + "\t"
+				+ contig.getFeatures().size());
+			text.append(newline);
+		}
+
+		StringSelection selection = new StringSelection(text.toString());
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+			selection, null);
+	}
+
+	private void displayMenu(MouseEvent e)
+	{
+		JMenuItem mCopy = new JMenuItem("", Icons.getIcon("CLIPBOARD"));
+		RB.setText(mCopy, "gui.ContigsPanel.mCopy");
+		mCopy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				copyToClipboard();
+			}
+		});
+
+		JPopupMenu menu = new JPopupMenu();
+		menu.add(mCopy);
+		menu.show(e.getComponent(), e.getX(), e.getY());
+	}
+
+	private class TableMouseListener extends MouseInputAdapter
+	{
+		public void mousePressed(MouseEvent e)
+		{
+			if (e.isPopupTrigger())
+				displayMenu(e);
+		}
+
+		public void mouseReleased(MouseEvent e)
+		{
+			if (e.isPopupTrigger())
+				displayMenu(e);
+		}
 	}
 }
