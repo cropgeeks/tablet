@@ -8,6 +8,7 @@ import java.io.*;
 import javax.imageio.*;
 import javax.swing.filechooser.*;
 
+import tablet.analysis.*;
 import tablet.data.*;
 import tablet.gui.dialog.*;
 import tablet.gui.viewer.*;
@@ -106,7 +107,8 @@ public class Commands
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
 			{
 				TaskDialog.error(
-					"Error importing features from " + filename + "\n\n" + dialog.getException(),
+					RB.format("gui.Commands.importFeatures.exception",
+					dialog.getException().getMessage()),
 					RB.getString("gui.text.close"));
 			}
 
@@ -171,5 +173,44 @@ public class Commands
 				RB.format("gui.Commands.exportImage.exception", e.getMessage()),
 				RB.getString("gui.text.close"));
 		}
+	}
+
+	public void exportCoverage()
+	{
+		Assembly assembly = winMain.getAssemblyPanel().getAssembly();
+
+		String aName = assembly.getName();
+		File saveAs = new File(Prefs.guiCurrentDir, aName+".txt");
+
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+			RB.getString("gui.text.formats.txt"), "txt");
+
+		// Ask the user for a filename to save the current view as
+		String filename = TabletUtils.getSaveFilename(
+			RB.getString("gui.Commands.exportCoverage.saveDialog"), saveAs, filter);
+
+		// Quit if the user cancelled the file selection
+		if (filename == null)
+			return;
+
+		CoveragePrinter printer = new CoveragePrinter(new File(filename), assembly);
+
+		ProgressDialog dialog = new ProgressDialog(printer,
+			RB.getString("gui.Commands.exportCoverage.title"),
+			RB.getString("gui.Commands.exportCoverage.label"));
+
+		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
+			dialog.getResult() == ProgressDialog.JOB_FAILED)
+		{
+			dialog.getException().printStackTrace();
+			TaskDialog.error(
+				RB.format("gui.Commands.exportCoverage.exception",
+				dialog.getException().getMessage()),
+				RB.getString("gui.text.close"));
+		}
+		else
+			TaskDialog.info(
+				RB.format("gui.Commands.exportCoverage.success", filename),
+				RB.getString("gui.text.close"));
 	}
 }
