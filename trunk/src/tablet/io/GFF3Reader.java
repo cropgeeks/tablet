@@ -53,7 +53,7 @@ public class GFF3Reader extends TrackableReader
 			// Split the line into its 9 tokens
 			String[] tokens = str.split("\t");
 			if (tokens.length != 9)
-				throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
+				throw new ReadException(currentFile(), lineCount, TOKEN_COUNT_WRONG);
 
 			processFeature(tokens);
 		}

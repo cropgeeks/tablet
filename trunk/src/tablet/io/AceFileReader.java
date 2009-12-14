@@ -84,7 +84,7 @@ class AceFileReader extends TrackableReader
 
 		String[] AS = p.split(str);
 		if (AS.length != 3)
-			throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
+			throw new ReadException(currentFile(), lineCount, TOKEN_COUNT_WRONG);
 
 		// Initialize the vector of contigs to be at least this size
 		assembly.setContigsSize(Integer.parseInt(AS[1]));
@@ -132,7 +132,7 @@ class AceFileReader extends TrackableReader
 		String[] CO = p.split(str);
 
 		if (CO.length != 6)
-			throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
+			throw new ReadException(currentFile(), lineCount, TOKEN_COUNT_WRONG);
 
 		String name = new String(CO[1]);
 		int baseCount = Integer.parseInt(CO[2]);
@@ -200,7 +200,7 @@ class AceFileReader extends TrackableReader
 		String[] AF = p.split(str);
 
 		if (AF.length != 4)
-			throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
+			throw new ReadException(currentFile(), lineCount, TOKEN_COUNT_WRONG);
 
 		boolean isComplemented = (AF[2].charAt(0) == 'C');
 		int position = Integer.parseInt(AF[3]);
@@ -242,7 +242,7 @@ class AceFileReader extends TrackableReader
 		String[] RD = p.split(str);
 
 		if (RD.length != 5)
-			throw new ReadException(TOKEN_COUNT_WRONG, lineCount);
+			throw new ReadException(currentFile(), lineCount, TOKEN_COUNT_WRONG);
 
 		int baseCount = Integer.parseInt(RD[2]);
 
