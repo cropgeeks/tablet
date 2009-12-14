@@ -230,8 +230,7 @@ public class ApplicationMenu extends RibbonApplicationMenu
 
 		else if (icon == iExit)
 		{
-			if (winMain.okToExit(false))
-				winMain.exit();
+			winMain.exit();
 		}
 	}
 }
