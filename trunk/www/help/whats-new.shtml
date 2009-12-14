@@ -22,6 +22,20 @@ that have been made to Tablet in recent versions. For full details on all the
 changes between versions, please see the <a href="http://bioinf.scri.ac.uk/tablet/svn.txt">
 subversion change log</a>.</p>
 
+<h3>New in 1.09.12.14</h3>
+
+<ul>
+<li>NEW: Added an option to export coverage summary information to a file on disk.</li>
+<li>NEW: Added an explicit cancel option to the progress dialogs (even though closing the dialog did cancel them anyway).</li>
+<li>CHG: The Application Menu now contains an "Export" sub menu with multiple items, including the old Export Image option.</li>
+<li>CHG: Tidied up and enhanced Table's file-handling error messages, to ensure file and line number is always given.</li>
+<li>BUG: Fixed a problem with the current contig getting reselected when sorting the contigs table.</li>
+<li>BUG: Fixed an issue with the "Are you sure..." warning messages sometimes appearing multiple times.</li>
+<li>BUG: Fixed several rendering issues with the new stack-based names overlay.</li>
+<li>BUG: Fixed a problem with ACE file parsing when badly formatted consensus tags are present.</li>
+</ul>
+
+
 <h3>New in 1.09.12.08</h3>
 
 <ul>
