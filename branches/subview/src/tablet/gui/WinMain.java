@@ -38,6 +38,8 @@ public class WinMain extends JRibbonFrame
 
 	private JumpToDialog jumpToDialog;
 
+	private SubsetViewDialog subsetViewDialog;
+
 	WinMain()
 	{
 		createControls();
@@ -312,5 +314,13 @@ public class WinMain extends JRibbonFrame
 	public FeaturesPanel getFeaturesPanel()
 	{
 		return featuresPanel;
+	}
+
+	public SubsetViewDialog getSubsetViewDialog()
+	{
+		if (subsetViewDialog == null)
+			subsetViewDialog = new SubsetViewDialog(this);
+
+		return subsetViewDialog;
 	}
 }

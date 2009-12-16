@@ -20,6 +20,7 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 	// Popup menu options
 	private JCheckBoxMenuItem mHide;
 	private JCheckBoxMenuItem mScaled, mCoverage;
+	private JMenuItem mReset;
 
 	OverviewCanvasML(OverviewCanvas canvas, JComponent c)
 	{
@@ -39,6 +40,9 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 	{
 		if (SwingUtilities.isLeftMouseButton(e))
 			canvas.processMouse(e);
+
+		if(e.isControlDown() || e.isMetaDown() && canvas.dragging)
+			canvas.drawSubset(e);
 	}
 
 	public void mousePressed(MouseEvent e)
@@ -48,15 +52,28 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 
 		if (e.isPopupTrigger())
 			displayMenu(null, e);
+
+		if(e.isControlDown() || e.isMetaDown())
+		{
+			canvas.visualS = e.getX();
+			canvas.dragging = true;
+		}
 	}
 
 	public void mouseReleased(MouseEvent e)
 	{
+		canvas.dragging = false;
+		
 		if (SwingUtilities.isLeftMouseButton(e))
 			canvas.processMouse(e);
 
 		if (e.isPopupTrigger())
 			displayMenu(null, e);
+
+		if((e.isControlDown() || e.isMetaDown() )&& !e.isPopupTrigger())
+		{
+			canvas.setSubset(e);
+		}
 	}
 
 	// Create and display the popup menu
@@ -77,11 +94,17 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 		mCoverage.setSelected(Prefs.visOverviewType == COVERAGE);
 		mCoverage.addActionListener(this);
 
+		mReset = new JMenuItem();
+		RB.setText(mReset, "gui.viewer.OverviewCanvas.mReset");
+		mReset.addActionListener(this);
+
 		JPopupMenu menu = new JPopupMenu();
 		menu.add(mHide);
 		menu.addSeparator();
 		menu.add(mScaled);
 		menu.add(mCoverage);
+		menu.addSeparator();
+		menu.add(mReset);
 
 		if (button != null)
 		{
@@ -114,6 +137,13 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 		{
 			Prefs.visOverviewType = COVERAGE;
 			canvas.createImage();
+		}
+
+		//reset overview so that it displays its original information
+		else if (e.getSource() == mReset)
+		{
+			canvas.getAssemblyPanel().getContig().resetVisualContig();
+			canvas.getAssemblyPanel().setContig(canvas.getAssemblyPanel().getContig());
 		}
 	}
 }

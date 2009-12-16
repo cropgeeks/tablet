@@ -248,4 +248,30 @@ public class Contig
 	{
 		return getCoverageStart()+((visualE-visualS)+1);
 	}
+
+	public int getContigS()
+	{
+		return contigS;
+	}
+
+	public int getContigE()
+	{
+		return contigE;
+	}
+
+	public void setVisualS(int visualS)
+	{
+		this.visualS = visualS;
+	}
+
+	public void setVisualE(int visualE)
+	{
+		this.visualE = visualE;
+	}
+
+	public void resetVisualContig()
+	{
+		visualS = contigS;
+		visualE = contigE;
+	}
 }

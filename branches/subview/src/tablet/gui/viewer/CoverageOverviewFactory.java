@@ -36,7 +36,7 @@ class CoverageOverviewFactory extends OverviewBufferFactory
 			return;
 
 		// Get the coverage information to produce the correct sized coverage overview
-		int[] coverage = DisplayData.getCoverageValues(contig.getCoverageStart(), contig.getCoverageEnd());
+		int[] coverage = DisplayData.getCoverage();//Values(contig.getCoverageStart(), contig.getCoverageEnd());
 		int coverageMax = DisplayData.getMaxCoverage();
 
 		// Work out how many bases per block to average over, and hence how many

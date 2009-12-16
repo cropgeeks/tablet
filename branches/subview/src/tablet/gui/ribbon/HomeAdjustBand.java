@@ -53,7 +53,6 @@ public class HomeAdjustBand extends JRibbonBand implements ChangeListener
 			RB.getString("gui.ribbon.HomeAdjustBand.zoom.richtip")));
 		zoomSliderComponent.setKeyTip("Z");
 
-
 		// Determine the initial zoom level for the variant highlighting
 		int vLevel = Prefs.visVariantAlpha;
 		if (vLevel < 0 || vLevel > 200)

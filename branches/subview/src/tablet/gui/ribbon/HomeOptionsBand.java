@@ -29,6 +29,8 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 	private JCommandToggleButton bHideCoverage;
 	private JCommandToggleButton bHideContigs;
 
+	private JCommandButton bSubsetView;
+
 
 	HomeOptionsBand(WinMain winMain)
 	{
@@ -145,12 +147,23 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.HomeOptionsBand.bHideContigs.tooltip"),
 			RB.getString("gui.ribbon.HomeOptionsBand.bHideContigs.richtip")));
 
+		bSubsetView = new JCommandButton(RB.getString("gui.ribbon.HomeAdjustBand.bSubsetView"),
+			RibbonController.getIcon("HIDEOVERVIEW16", 16));
+		Actions.homeOptionsSubsetView = new ActionRepeatableButtonModel(bSubsetView);
+		Actions.homeOptionsSubsetView .addActionListener(this);
+		bSubsetView.setActionModel(Actions.homeOptionsSubsetView);
+		bSubsetView.setActionKeyTip("S");
+		bSubsetView.setActionRichTooltip(new RichTooltip(
+			RB.format("gui.ribbon.HomeAdjustBand.bSubsetView.tooltip", Tablet.winKey),
+			RB.getString("gui.ribbon.HomeAdjustBand.bSubsetView.richtip")));
+
 
 		JCommandButtonStrip panelsStrip = new JCommandButtonStrip();
 		panelsStrip.add(bHideConsensus);
 		panelsStrip.add(bHideScaleBar);
 		panelsStrip.add(bHideCoverage);
 		panelsStrip.add(bHideContigs);
+		panelsStrip.add(bSubsetView);
 		addFlowComponent(panelsStrip);
 	}
 
@@ -198,6 +211,10 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		{
 			Prefs.guiHideContigs = !Prefs.guiHideContigs;
 			winMain.toggleSplitterLocation();
+		}
+		else if (source == Actions.homeOptionsSubsetView)
+		{
+			winMain.getSubsetViewDialog().setVisible(true);
 		}
 	}
 }
