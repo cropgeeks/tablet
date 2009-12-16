@@ -36,6 +36,11 @@ public class OverviewCanvas extends JPanel
 	private Timer timer;
 	private float alpha;
 
+	int visualS;
+	int visualE;
+	int l, r;
+	boolean dragging = false;
+
 	OverviewCanvas()
 	{
 		setLayout(new BorderLayout());
@@ -43,7 +48,7 @@ public class OverviewCanvas extends JPanel
 		add(canvas);
 
 		setBorder(BorderFactory.createCompoundBorder(
-			BorderFactory.createEmptyBorder(0, 0, 5, 0),
+			BorderFactory.createEmptyBorder(2, 0, 5, 0),
 			BorderFactory.createLineBorder(new Color(167, 166, 170))));
 
 		// Resize listener (resized = time to redraw)
@@ -107,9 +112,9 @@ public class OverviewCanvas extends JPanel
 
 		// Before starting a new one
 		if (Prefs.visOverviewType == SCALEDDATA)
-			bufferFactory = new ScaledOverviewFactory(this, w, h, rCanvas);
+			bufferFactory = new ScaledOverviewFactory(this, w>0 ? w:1, h>0 ? h:1, rCanvas);
 		else if (Prefs.visOverviewType == COVERAGE)
-			bufferFactory = new CoverageOverviewFactory(this, w, h, rCanvas);
+			bufferFactory = new CoverageOverviewFactory(this, w>0 ? w:1, h>0 ? h:1, rCanvas);
 
 		repaint();
 	}
@@ -176,6 +181,63 @@ public class OverviewCanvas extends JPanel
 		}
 	}
 
+	/**
+	 * Once the user has ceased control dragging, we need to work out the final
+	 * positions of the subset variables, then set this information on the contig.
+	 *
+	 * @param e
+	 */
+	void setSubset(MouseEvent e)
+	{
+		int visS, visE;
+		visualE = e.getX();
+
+		if(visualS < visualE)
+		{
+			visS = (visualS - 0) * (aPanel.getContig().getVisualE() - aPanel.getContig().getVisualS()) / (w-0) + aPanel.getContig().getVisualS();
+			visE = (visualE - 0) * (aPanel.getContig().getVisualE() - aPanel.getContig().getVisualS()) / (w-0) + aPanel.getContig().getVisualS();
+		}
+		else
+		{
+			visS = (visualE - 0) * (aPanel.getContig().getVisualE() - aPanel.getContig().getVisualS()) / (w-0) + aPanel.getContig().getVisualS();
+			visE = (visualS - 0) * (aPanel.getContig().getVisualE() - aPanel.getContig().getVisualS()) / (w-0) + aPanel.getContig().getVisualS();
+		}
+		aPanel.getContig().setVisualS(visS);
+		aPanel.getContig().setVisualE(visE);
+		aPanel.setContig(aPanel.getContig());
+
+		dragging = false;
+		repaint();
+	}
+
+	/**
+	 * Updates the variables for drawing the black rectangles on the overview
+	 * display.
+	 *
+	 * @param e
+	 */
+	void drawSubset(MouseEvent e)
+	{
+		visualE = e.getX();
+
+		if(visualS < visualE)
+		{
+			l = visualS;
+			r = visualE;
+		}
+		else
+		{
+			l = visualE;
+			r = visualS;
+		}
+		repaint();
+	}
+
+	public AssemblyPanel getAssemblyPanel()
+	{
+		return aPanel;
+	}
+
 	private class Canvas2D extends JPanel
 	{
 		Canvas2D()
@@ -185,14 +247,17 @@ public class OverviewCanvas extends JPanel
 
 		private void processMouse(MouseEvent e)
 		{
-			// Compute mouse position (and adjust by wid/hgt of rectangle)
-			int x = e.getX() - (int) ((bX2-bX1+1) / 2f);
-			int y = e.getY() - (int) ((bY2-bY1+1) / 2f);
+			if(!e.isControlDown() && !e.isMetaDown())
+			{
+				// Compute mouse position (and adjust by wid/hgt of rectangle)
+				int x = e.getX() - (int) ((bX2-bX1+1) / 2f);
+				int y = e.getY() - (int) ((bY2-bY1+1) / 2f);
 
-			int rowIndex = (int) (y / yScale);
-			int colIndex = (int) (x / xScale);
+				int rowIndex = (int) (y / yScale);
+				int colIndex = (int) (x / xScale);
 
-			aPanel.moveToPosition(rowIndex, colIndex, false);
+				aPanel.moveToPosition(rowIndex, colIndex, false);
+			}
 		}
 
 		public void paintComponent(Graphics graphics)
@@ -224,7 +289,57 @@ public class OverviewCanvas extends JPanel
 				g.setColor(new Color(1f, 1f, 1f, alpha));
 				g.fillRect(0, 0, w, h);
 			}
+
+			paintSubsetOverlays(g);
 		}
+	}
+
+	/**
+	 * Carries out the painting for all subset infromation which is to be
+	 * overlayed on top of the overview canvas.
+	 *
+	 * @param g
+	 */
+	void paintSubsetOverlays(Graphics2D g)
+	{
+		if(dragging)
+		{
+			g.setPaint(new Color(0, 0, 0, 200));
+			g.fillRect(0, 0, l, h);
+			g.fillRect(r, 0, w-r, h);
+		}
+//
+//		if(aPanel.rulerCanvas.dragging || aPanel.rulerCanvas.resizeLeft || aPanel.rulerCanvas.resizeRight)
+//		{
+//			g.setPaint(new Color(255, 255, 255, 200));
+//			g.fillRect(0, 0, w, h);
+//			g.setFont(new Font("Monospaced", Font.BOLD, 18));
+//		}
+//		else
+//			g.setFont(new Font("Monospaced", Font.PLAIN, 12));
+//
+//		g.setColor(Color.black);
+//		g.drawString(""+(aPanel.rulerCanvas.getVisualS()+1), 5, h-5);
+//
+//		String rhsStr = ""+(aPanel.rulerCanvas.getVisualE()+1);
+//		int pos = getPosition(w-5, g.getFontMetrics().stringWidth(rhsStr));
+//		g.drawString(rhsStr, pos, h-5);
+	}
+
+	// Computes the best position to draw a string onscreen, assuming an optimum
+	// start position that *may* be adjusted if the text ends up partially drawn
+	// offscreen on either the LHS or the RHS
+	private int getPosition(int pos, int strWidth)
+	{
+		// Work out where the left and right hand edges of the text will be
+		int leftPos = pos-(int)(strWidth/2f);
+		int rghtPos = pos+(int)(strWidth/2f);
+
+		// Similarly if we're offscreen to the right...
+		if (rghtPos > w)
+			leftPos = w-strWidth-3;
+
+		return leftPos;
 	}
 }
 

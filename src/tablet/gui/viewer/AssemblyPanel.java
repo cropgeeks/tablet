@@ -30,6 +30,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	ProteinCanvas proteinCanvas;
 	CoverageCanvas coverageCanvas;
 	ReadsCanvas readsCanvas;
+	//RulerCanvas rulerCanvas;
 
 	private JScrollPane sp;
 	private JScrollBar hBar, vBar;
@@ -59,8 +60,12 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		topPanel.add(consensusPanel, BorderLayout.CENTER);
 		topPanel.add(scaleCanvas, BorderLayout.SOUTH);
 
+		JPanel newPanel = new JPanel(new BorderLayout());
+//		newPanel.add(rulerCanvas, BorderLayout.NORTH);
+		newPanel.add(topPanel, BorderLayout.CENTER);
+
 		JPanel visPanel = new JPanel(new BorderLayout());
-		visPanel.add(topPanel, BorderLayout.NORTH);
+		visPanel.add(newPanel, BorderLayout.NORTH);
 		visPanel.add(sp, BorderLayout.CENTER);
 
 		add(visPanel);
@@ -74,6 +79,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		scaleCanvas = new ScaleCanvas();
 		proteinCanvas = new ProteinCanvas();
 		coverageCanvas = new CoverageCanvas();
+//		rulerCanvas = new RulerCanvas();
 
 		// Passing 'this' to the canvas classes can't happen in their
 		// constructors because they often need to refer to each other too, so
@@ -84,6 +90,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		scaleCanvas.setAssemblyPanel(this);
 		proteinCanvas.setAssemblyPanel(this);
 		coverageCanvas.setAssemblyPanel(this);
+//		rulerCanvas.setAssemblyPanel(this);
 
 		sp = new JScrollPane();
 		viewport = sp.getViewport();
@@ -140,6 +147,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		scaleCanvas.setContig(contig);
 		proteinCanvas.setContig(contig);
 		coverageCanvas.setContig(contig);
+//		rulerCanvas.setContig(contig);
 
 		forceRedraw();
 		updateContigInformation();
@@ -259,6 +267,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		readsCanvas.setDimensions(zoom, zoom);
 		consensusCanvas.setDimensions();
 		proteinCanvas.setDimensions();
+//		rulerCanvas.setDimensions();
 
 		// Then after the zoom, try to get back to that position
 		isZooming = false;
@@ -286,6 +295,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		consensusCanvas.setVisible(!Prefs.guiHideConsensus);
 		scaleCanvas.setVisible(!Prefs.guiHideScaleBar);
 		coverageCanvas.setVisible(!Prefs.guiHideCoverage);
+//		rulerCanvas.setVisible(true); // ADD PREFERENCE
 	}
 
 	public void displayProteinOptions(JComponent button)

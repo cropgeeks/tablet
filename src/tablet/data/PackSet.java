@@ -37,7 +37,7 @@ public class PackSet implements Iterable<Pack>, IReadManager
 		Pack pack = packs.get(line);
 
 		start += contig.getVisualS();
-		end += contig.getVisualE();
+		end += contig.getVisualS();
 
 		return pack.getValues(start, end);
 	}

@@ -57,7 +57,7 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 					catch (InterruptedException e) {}
 
 				// Working out where each pixel maps to in the data...
-				int dataX = (int) (x * xScale) - rCanvas.offset;
+				int dataX = (int) (x * xScale) + rCanvas.offset;
 
 				// Then drawing that data (or not)
 				Read read = reads.getReadAt(dataY, dataX);

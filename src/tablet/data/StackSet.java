@@ -34,7 +34,7 @@ class StackSet implements IReadManager
 		Read read = stack.get(line);
 
 		start += contig.getVisualS();
-		end += contig.getVisualE();
+		end += contig.getVisualS();
 
 		byte[] data = new byte[end-start+1];
 
