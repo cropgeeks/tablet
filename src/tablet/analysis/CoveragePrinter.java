@@ -48,15 +48,19 @@ public class CoveragePrinter extends SimpleJob
 			int[] coverage = cc.getCoverage();
 			int s = contig.getConsensusOffset();
 			int e = s + contig.getConsensus().length() - 1;
+			Consensus consensus = contig.getConsensus();
 
 			int c = 0;
 			for (int i = s; i <= e && okToRun; i++, c++)
 			{
-				out.write(" " + coverage[i]);
-				if (c == 49)
+				if (Prefs.printPads || consensus.getStateAt(i-s) != Sequence.P)
 				{
-					out.newLine();
-					c = -1;
+					out.write(" " + coverage[i]);
+					if (c == 49)
+					{
+						out.newLine();
+						c = -1;
+					}
 				}
 			}
 
@@ -70,5 +74,10 @@ public class CoveragePrinter extends SimpleJob
 	}
 
 	public String getMessage()
-		{ return "Processing " + contig.getName(); }
+	{
+		if (contig != null)
+			return RB.format("analysis.CoveragePrinter.status", contig.getName());
+		else
+			return " ";
+	}
 }

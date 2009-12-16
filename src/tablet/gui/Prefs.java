@@ -114,6 +114,10 @@ public class Prefs extends XMLPreferences
 	public static int guiFindPanelSelectedIndex = 0;
 	public static String recentSearches = "";
 
+	// Should the CoveragePrinter class write values for consensus bases that
+	// are padded?
+	public static boolean printPads = true;
+
 	static void setDefaults()
 	{
 
