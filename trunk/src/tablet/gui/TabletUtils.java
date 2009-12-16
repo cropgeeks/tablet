@@ -61,7 +61,7 @@ public class TabletUtils
 		try
 		{
 			Desktop desktop = Desktop.getDesktop();
-			desktop.mail(new URI("mailto:bioinf@scri.ac.uk?subject=Tablet%20Feedback"));
+			desktop.mail(new URI("mailto:tablet@scri.ac.uk?subject=Tablet%20Feedback"));
 		}
 		catch (Exception e) { System.out.println(e); }
 	}
