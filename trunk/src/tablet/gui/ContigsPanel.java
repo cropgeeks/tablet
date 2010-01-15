@@ -6,12 +6,16 @@ package tablet.gui;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
+import java.io.*;
 import java.text.*;
 import javax.swing.*;
 import javax.swing.event.*;
+import javax.swing.filechooser.*;
 import javax.swing.table.*;
 
+import tablet.analysis.*;
 import tablet.data.*;
+import tablet.gui.dialog.*;
 import tablet.gui.viewer.*;
 
 import scri.commons.gui.*;
@@ -195,7 +199,7 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 			TabletUtils.nf.format(contig.getFeatures().size()));
 	}
 
-	private void copyToClipboard()
+	private void copyTableToClipboard()
 	{
 		StringBuilder text = new StringBuilder();
 		String newline = System.getProperty("line.separator");
@@ -217,18 +221,71 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 			selection, null);
 	}
 
+	private void saveReadsSummary()
+	{
+		int row = controls.table.getSelectedRow();
+		row = controls.table.convertRowIndexToModel(row);
+		Contig contig = (Contig) model.getValueAt(row, 0);
+
+		File saveAs = new File(Prefs.guiCurrentDir, contig.getName() + ".txt");
+
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+			RB.getString("gui.text.formats.txt"), "txt");
+
+		// Ask the user for a filename to save the data to
+		String filename = TabletUtils.getSaveFilename(
+			RB.getString("gui.ContigsPanel.saveReads.saveDialog"), saveAs, filter);
+
+		// Quit if the user cancelled the file selection
+		if (filename == null)
+			return;
+
+		ReadsSummarySaver summary = new ReadsSummarySaver(new File(filename), contig);
+
+		ProgressDialog dialog = new ProgressDialog(summary,
+			RB.getString("gui.ContigsPanel.saveReads.title"),
+			RB.getString("gui.ContigsPanel.saveReads.label"));
+
+		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
+			dialog.getResult() == ProgressDialog.JOB_FAILED)
+		{
+			dialog.getException().printStackTrace();
+			TaskDialog.error(
+				RB.format("gui.ContigsPanel.saveReads.exception",
+				dialog.getException().getMessage()),
+				RB.getString("gui.text.close"));
+		}
+		else
+			TaskDialog.info(
+				RB.format("gui.ContigsPanel.saveReads.success", filename),
+				RB.getString("gui.text.close"));
+	}
+
 	private void displayMenu(MouseEvent e)
 	{
-		JMenuItem mCopy = new JMenuItem("", Icons.getIcon("CLIPBOARD"));
-		RB.setText(mCopy, "gui.ContigsPanel.mCopy");
-		mCopy.addActionListener(new ActionListener() {
+		int row = controls.table.rowAtPoint(e.getPoint());
+		controls.table.setRowSelectionInterval(row, row);
+
+		JMenuItem mSaveReads = new JMenuItem("", Icons.getIcon("FILESAVE16"));
+		RB.setText(mSaveReads, "gui.ContigsPanel.mSaveReads");
+		mSaveReads.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				copyToClipboard();
+				saveReadsSummary();
 			}
 		});
 
+		JMenuItem mTableCopy = new JMenuItem("", Icons.getIcon("CLIPBOARD"));
+		RB.setText(mTableCopy, "gui.ContigsPanel.mTableCopy");
+		mTableCopy.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				copyTableToClipboard();
+			}
+		});
+
+
 		JPopupMenu menu = new JPopupMenu();
-		menu.add(mCopy);
+		menu.add(mSaveReads);
+		menu.add(mTableCopy);
 		menu.show(e.getComponent(), e.getX(), e.getY());
 	}
 
