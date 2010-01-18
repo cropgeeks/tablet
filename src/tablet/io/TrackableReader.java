@@ -4,6 +4,7 @@
 package tablet.io;
 
 import java.io.*;
+import java.util.zip.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
@@ -76,17 +77,29 @@ abstract class TrackableReader extends SimpleJob
 		return Math.round((total / (float) totalSize) * 5555);
 	}
 
-	ProgressInputStream getInputStream(int fileIndex)
+	InputStream getInputStream(int fileIndex)
 		throws Exception
 	{
 		this.fileIndex = fileIndex;
 
-		is = new ProgressInputStream(files[fileIndex].getInputStream());
-
 		// Reset the counter for this file
 		bytesRead[fileIndex] = 0;
 
-		return is;
+		// We always open the file itself (as this tracks the bytes read)
+		is = new ProgressInputStream(files[fileIndex].getInputStream());
+
+		try
+		{
+			// But we might have a gzip file, and the actual stream we want to
+			// read is inside of it
+			GZIPInputStream zis = new GZIPInputStream(is);
+			return zis;
+		}
+		catch (Exception e)
+		{
+			// If not, just return the normal stream
+			return is;
+		}
 	}
 
 	/** Returns true if this reader can understand the file given to it. */
