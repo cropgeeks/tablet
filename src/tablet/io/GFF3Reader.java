@@ -16,9 +16,10 @@ public class GFF3Reader extends TrackableReader
 	// Stores a list of features per contig (as they are found)
 	private HashMap<String, ArrayList<Feature>> contigs;
 
-	public GFF3Reader(File file, Assembly assembly)
+	public GFF3Reader(String filename, Assembly assembly)
 	{
-		setInputs(new File[] { file }, assembly);
+		AssemblyFile[] files = { new AssemblyFile(filename) };
+		setInputs(files, assembly);
 
 		contigs = new HashMap<String, ArrayList<Feature>>();
 	}

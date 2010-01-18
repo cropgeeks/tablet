@@ -85,11 +85,11 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
     	{
     		// Determine the types of the two files (regardless of whether we'll
     		// actually accept them or not
-    		File file1 = new File(doc1.getText(0, doc1.getLength()));
-    		t1 = AssemblyFileHandler.getType(file1);
+    		String filename1 = doc1.getText(0, doc1.getLength());
+    		t1 = AssemblyFileHandler.getType(filename1);
 
-	    	File file2 = new File(doc2.getText(0, doc2.getLength()));
-	    	t2 = AssemblyFileHandler.getType(file2);
+			String filename2 = doc2.getText(0, doc2.getLength());
+	    	t2 = AssemblyFileHandler.getType(filename2);
     	}
     	catch (Exception e) {}
 

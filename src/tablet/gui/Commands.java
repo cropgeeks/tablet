@@ -70,9 +70,9 @@ public class Commands
 		// See if a feature file can be loaded at this point too
 		if(filenames.length == 1)
 		{
-		    File file = new File(filenames[0]);
-		    if (getFeatureFile(file) != null)
-			    importFeatures(getFeatureFile(file).getPath());
+			File file = new File(filenames[0]);
+			if (getFeatureFile(file) != null)
+				importFeatures(getFeatureFile(file).getPath());
 		}
 	}
 
@@ -92,10 +92,8 @@ public class Commands
 				return;
 		}
 
-		File file = new File(filename);
-
 		Assembly assembly = winMain.getAssemblyPanel().getAssembly();
-		GFF3Reader reader = new GFF3Reader(file, assembly);
+		GFF3Reader reader = new GFF3Reader(filename, assembly);
 
 		String title = RB.getString("gui.Commands.importFeatures.title");
 		String label = RB.getString("gui.Commands.importFeatures.label");

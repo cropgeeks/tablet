@@ -17,7 +17,7 @@ import scri.commons.file.*;
 abstract class TrackableReader extends SimpleJob
 {
 	// Read data
-	protected File[] files;
+	protected AssemblyFile[] files;
 	protected ProgressInputStream is;
 	protected BufferedReader in;
 	protected String str;
@@ -33,14 +33,14 @@ abstract class TrackableReader extends SimpleJob
 	// The total size (in bytes) of all the files
 	private long totalSize;
 
-	void setInputs(File[] files, Assembly assembly)
+	void setInputs(AssemblyFile[] files, Assembly assembly)
 	{
 		this.files = files;
 		this.assembly = assembly;
 
 		bytesRead = new long[files.length];
 
-		for (File file: files)
+		for (AssemblyFile file: files)
 			totalSize += file.length();
 	}
 
@@ -55,7 +55,7 @@ abstract class TrackableReader extends SimpleJob
 		{ return assembly; }
 
 	public boolean isIndeterminate()
-		{ return false; }
+		{ return totalSize == 0; }
 
 	public int getMaximum()
 		{ return 5555; }
@@ -81,7 +81,7 @@ abstract class TrackableReader extends SimpleJob
 	{
 		this.fileIndex = fileIndex;
 
-		is = new ProgressInputStream(new FileInputStream(files[fileIndex]));
+		is = new ProgressInputStream(files[fileIndex].getInputStream());
 
 		// Reset the counter for this file
 		bytesRead[fileIndex] = 0;
@@ -93,7 +93,7 @@ abstract class TrackableReader extends SimpleJob
 	abstract boolean canRead()
 		throws Exception;
 
-	File currentFile()
+	AssemblyFile currentFile()
 	{
 		return files[fileIndex];
 	}

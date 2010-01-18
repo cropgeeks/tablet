@@ -26,17 +26,17 @@ public class AssemblyFileHandler extends SimpleJob
 	public static final int FASTA = 20;
 	public static final int FASTQ = 21;
 
-	private File[] files = null;
+	private AssemblyFile[] files = null;
 	private File cacheDir = null;
 	private TrackableReader reader = null;
 
 	public AssemblyFileHandler(String[] filenames, File cacheDir)
 	{
-		this.files = new File[filenames.length];
-		for(int i=0; i < filenames.length; i++)
-		{
-			files[i] = new File(filenames[i]);
-		}
+		files = new AssemblyFile[filenames.length];
+
+		for (int i=0; i < filenames.length; i++)
+			files[i] = new AssemblyFile(filenames[i]);
+
 		this.cacheDir = cacheDir;
 	}
 
@@ -123,7 +123,7 @@ public class AssemblyFileHandler extends SimpleJob
 		try
 		{
 			reader.setInputs(files, new Assembly());
-			
+
 			if (reader.canRead())
 			{
 				long s = System.currentTimeMillis();
@@ -189,38 +189,40 @@ public class AssemblyFileHandler extends SimpleJob
 	// Some additional utility methods that are used by the GUI to determine
 	// file type and report back to the user - this code is NOT used to load
 
-	public static int getType(File file)
+	public static int getType(String filename)
 	{
 		TrackableReader reader = null;
 
 		try
 		{
-			if (read(new AceFileReader(), file))
+			if (read(new AceFileReader(), filename))
 				return ACE;
 
-			if (read(new AfgFileReader(), file))
+			if (read(new AfgFileReader(), filename))
 				return AFG;
 
-			if (read(new MaqFileReader(), file))
+			if (read(new MaqFileReader(), filename))
 				return MAQ;
 
-			if (read(new SamFileReader(), file))
+			if (read(new SamFileReader(), filename))
 				return SAM;
 
-			if (read(new SoapFileReader(), file))
+			if (read(new SoapFileReader(), filename))
 				return SOAP;
 
-			return new ReferenceFileReader(null, null).canRead(file);
+			return new ReferenceFileReader(null, null).canRead(
+				new AssemblyFile(filename));
 		}
 		catch (Exception e) {}
 
 		return UNKNOWN;
 	}
 
-	private static boolean read(TrackableReader reader, File file)
+	private static boolean read(TrackableReader reader, String filename)
 		throws Exception
 	{
-		reader.setInputs(new File[] { file }, null);
+		AssemblyFile[] files = { new AssemblyFile(filename) };
+		reader.setInputs(files, null);
 
 		return reader.canRead();
 	}

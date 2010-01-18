@@ -20,7 +20,7 @@ class ReferenceFileReader
 		this.contigHash = contigHash;
 	}
 
-	int canRead(File file)
+	int canRead(AssemblyFile file)
 		throws Exception
 	{
 		if (isFastaFile(file))
@@ -32,7 +32,7 @@ class ReferenceFileReader
 		return AssemblyFileHandler.UNKNOWN;
 	}
 
-	void readReferenceFile(TrackableReader reader, File file)
+	void readReferenceFile(TrackableReader reader, AssemblyFile file)
 		throws Exception
 	{
 		if (isFastaFile(file))
@@ -43,10 +43,12 @@ class ReferenceFileReader
 	}
 
 	// Checks to see if this is a FASTA file by looking for a leading >
-	private boolean isFastaFile(File file)
+	private boolean isFastaFile(AssemblyFile file)
 		throws Exception
 	{
-		BufferedReader in = new BufferedReader(new FileReader(file));
+		BufferedReader in = new BufferedReader(
+			new InputStreamReader(file.getInputStream()));
+
 		String str = in.readLine();
 
 		boolean isFastaFile = (str != null && str.startsWith(">"));
@@ -102,10 +104,12 @@ class ReferenceFileReader
 	}
 
 	// Checks to see if this is a FASTQ file by looking for a leading @
-	private boolean isFastqFile(File file)
+	private boolean isFastqFile(AssemblyFile file)
 		throws Exception
 	{
-		BufferedReader in = new BufferedReader(new FileReader(file));
+		BufferedReader in = new BufferedReader(
+			new InputStreamReader(file.getInputStream()));
+
 		String str = in.readLine();
 
 		boolean isFastqFile = (str != null && str.startsWith("@"));
