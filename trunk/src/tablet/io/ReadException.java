@@ -13,10 +13,10 @@ public class ReadException extends Exception
 	public static final int TOKEN_COUNT_WRONG = 20;
 
 	private int lineNumber;
-	private File file;
+	private AssemblyFile file;
 	private String message;
 
-	ReadException(File file, int lineNumber, Exception exception)
+	ReadException(AssemblyFile file, int lineNumber, Exception exception)
 	{
 		this.file = file;
 		this.lineNumber = lineNumber;
@@ -24,7 +24,7 @@ public class ReadException extends Exception
 			"io.ReadException.UNKNOWN_ERROR", lineNumber, file.getName(), exception.toString());
 	}
 
-	ReadException(File file, int lineNumber, int error)
+	ReadException(AssemblyFile file, int lineNumber, int error)
 	{
 		this.file = file;
 		this.lineNumber = lineNumber;
