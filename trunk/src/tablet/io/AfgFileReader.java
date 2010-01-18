@@ -74,7 +74,7 @@ class AfgFileReader extends TrackableReader
 		for (int i = 0; i < files.length; i++)
 		{
 			// Read and check for the header
-			in = new BufferedReader(new InputStreamReader(getInputStream(0)));
+			in = new BufferedReader(new InputStreamReader(getInputStream(0, true)));
 			str = readLine();
 
 			if (str != null && str.startsWith("{"))
@@ -92,7 +92,7 @@ class AfgFileReader extends TrackableReader
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(afgIndex), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(afgIndex, true), "ASCII"));
 
 		//open the temporary file cache for the read names
 		long time = System.currentTimeMillis();

@@ -5,19 +5,20 @@ package tablet.io;
 
 import java.io.*;
 import java.net.*;
+import java.util.zip.*;
 
 /**
  * Class that represents an assembly file, that may be a traditional file on
  * disk, or a reference to a file located on the web (in http:// format).
  */
-class AssemblyFile
+public class AssemblyFile
 {
 	private String filename;
 
 	private URL url;
 	private File file;
 
-	AssemblyFile(String filename)
+	public AssemblyFile(String filename)
 	{
 		this.filename = filename;
 
@@ -31,7 +32,12 @@ class AssemblyFile
 		}
 	}
 
-	String getName()
+	public String getPath()
+	{
+		return filename;
+	}
+
+	public String getName()
 	{
 		// Return either the name of the file
 		if (file != null)
@@ -66,6 +72,7 @@ class AssemblyFile
 		catch (Exception e) { return 0; }
 	}
 
+	// Returns the input stream for this file
 	InputStream getInputStream()
 		throws Exception
 	{
@@ -73,5 +80,24 @@ class AssemblyFile
 			return new FileInputStream(file);
 
 		return url.openStream();
+	}
+
+	// Returns an input stream suitable for use by a Reference-File reader,
+	// which might be a normal input stream, or a gzipped input stream
+	InputStream getReferenceInputStream()
+		throws Exception
+	{
+		InputStream is = getInputStream();
+
+		try
+		{
+			return new GZIPInputStream(is);
+		}
+		catch (Exception e)
+		{
+			is.close();
+		}
+
+		return getInputStream();
 	}
 }

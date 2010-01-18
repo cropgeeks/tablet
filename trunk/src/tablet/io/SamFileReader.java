@@ -60,7 +60,7 @@ class SamFileReader extends TrackableReader
 	private boolean isSamFile(int fileIndex)
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(fileIndex)));
+		in = new BufferedReader(new InputStreamReader(getInputStream(fileIndex, true)));
 		str = readLine();
 
 		// Does it start with an @HD header line
@@ -102,7 +102,7 @@ class SamFileReader extends TrackableReader
 	private void readReferenceFile()
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex, true), "ASCII"));
 
 		refReader.readReferenceFile(this, files[refIndex]);
 
@@ -112,7 +112,7 @@ class SamFileReader extends TrackableReader
 	private void readSamFile()
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(samIndex), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(samIndex, true), "ASCII"));
 
 		readID = 0;
 

@@ -61,7 +61,7 @@ class AceFileReader extends TrackableReader
 		for (int i = 0; i < files.length; i++)
 		{
 			// Read and check for the header
-			in = new BufferedReader(new InputStreamReader(getInputStream(i)));
+			in = new BufferedReader(new InputStreamReader(getInputStream(i, true)));
 			str = readLine();
 
 			if (str != null && str.startsWith("AS "))
@@ -77,7 +77,7 @@ class AceFileReader extends TrackableReader
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(aceIndex), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(aceIndex, true), "ASCII"));
 
 		// Read in the header
 		str = readLine();

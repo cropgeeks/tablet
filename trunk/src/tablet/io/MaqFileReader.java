@@ -58,7 +58,7 @@ class MaqFileReader extends TrackableReader
 	private boolean isMaqFile(int fileIndex)
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(fileIndex)));
+		in = new BufferedReader(new InputStreamReader(getInputStream(fileIndex, true)));
 		str = readLine();
 
 		boolean isMaqFile = (str != null && str.split("\t").length == 16);
@@ -89,7 +89,7 @@ class MaqFileReader extends TrackableReader
 	private void readReferenceFile()
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex, true), "ASCII"));
 
 		refReader.readReferenceFile(this, files[refIndex]);
 
@@ -99,7 +99,7 @@ class MaqFileReader extends TrackableReader
 	private void readMaqFile()
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(maqIndex), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(maqIndex, true), "ASCII"));
 
 		readID = 0;
 
