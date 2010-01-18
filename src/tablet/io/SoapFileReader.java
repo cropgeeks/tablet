@@ -58,7 +58,7 @@ class SoapFileReader extends TrackableReader
 	private boolean isSoapFile(int fileIndex)
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(fileIndex)));
+		in = new BufferedReader(new InputStreamReader(getInputStream(fileIndex, true)));
 		str = readLine();
 
 		boolean isSoapFile = (str != null && str.split("\t").length >= 9);
@@ -82,7 +82,7 @@ class SoapFileReader extends TrackableReader
 	private void readReferenceFile()
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex, true), "ASCII"));
 
 		refReader.readReferenceFile(this, files[refIndex]);
 
@@ -92,7 +92,7 @@ class SoapFileReader extends TrackableReader
 	private void readSoapFile()
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(soapIndex), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(soapIndex, true), "ASCII"));
 
 		readID = 0;
 

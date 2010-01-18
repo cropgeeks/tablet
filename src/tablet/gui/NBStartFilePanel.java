@@ -5,6 +5,9 @@ package tablet.gui;
 
 import java.awt.event.*;
 import java.io.File;
+
+import tablet.io.*;
+
 import scri.commons.gui.*;
 import scri.commons.gui.matisse.HyperLinkLabel;
 
@@ -50,9 +53,9 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
 			// Split multi-file inputs
 			final String[] paths = path.split("<!TABLET!>");
 
-			File[] tempFiles = new File[paths.length];
+			AssemblyFile[] tempFiles = new AssemblyFile[paths.length];
 			for (int i = 0; i < tempFiles.length; i++)
-				tempFiles[i] = new File(paths[i]);
+				tempFiles[i] = new AssemblyFile(paths[i]);
 
 			// Button text will be "name" (or "name1" | "name2")
 			String text = tempFiles[0].getName();

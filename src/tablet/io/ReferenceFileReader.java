@@ -47,7 +47,7 @@ class ReferenceFileReader
 		throws Exception
 	{
 		BufferedReader in = new BufferedReader(
-			new InputStreamReader(file.getInputStream()));
+			new InputStreamReader(file.getReferenceInputStream()));
 
 		String str = in.readLine();
 
@@ -108,7 +108,7 @@ class ReferenceFileReader
 		throws Exception
 	{
 		BufferedReader in = new BufferedReader(
-			new InputStreamReader(file.getInputStream()));
+			new InputStreamReader(file.getReferenceInputStream()));
 
 		String str = in.readLine();
 
