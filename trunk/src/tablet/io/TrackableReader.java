@@ -4,6 +4,7 @@
 package tablet.io;
 
 import java.io.*;
+import java.text.*;
 import java.util.zip.*;
 
 import tablet.analysis.*;
@@ -17,6 +18,8 @@ import scri.commons.file.*;
  */
 abstract class TrackableReader extends SimpleJob
 {
+	private static DecimalFormat df = new DecimalFormat("0.0");
+
 	// Read data
 	protected AssemblyFile[] files;
 	protected ProgressInputStream is;
@@ -33,6 +36,10 @@ abstract class TrackableReader extends SimpleJob
 
 	// The total size (in bytes) of all the files
 	private long totalSize;
+
+	// Tracking variables for transfer rate (MB/s) info
+	private long lastBytesRead;
+	private long lastTime;
 
 	void setInputs(AssemblyFile[] files, Assembly assembly)
 	{
@@ -83,7 +90,8 @@ abstract class TrackableReader extends SimpleJob
 		this.fileIndex = fileIndex;
 
 		// Reset the counter for this file
-		bytesRead[fileIndex] = 0;
+		lastBytesRead = bytesRead[fileIndex] = 0;
+		lastTime = System.currentTimeMillis();
 
 		if (tryZipped)
 		{
@@ -113,5 +121,23 @@ abstract class TrackableReader extends SimpleJob
 	AssemblyFile currentFile()
 	{
 		return files[fileIndex];
+	}
+
+	String getTransferRate()
+	{
+		// Time between reads
+		long timeDiff = System.currentTimeMillis() - lastTime;
+		long byteDiff = bytesRead[fileIndex] - lastBytesRead;
+
+		float bytesPerSec = byteDiff / (float) (timeDiff / (float) 1000);
+		float kbPerSec = bytesPerSec / (float) 1024;
+
+		if (kbPerSec >= 1024)
+		{
+			float mbPerSec = kbPerSec / (float) 1024;
+			return df.format(mbPerSec) + " MB/sec";
+		}
+		else
+			return df.format(kbPerSec) + " KB/sec";
 	}
 }
