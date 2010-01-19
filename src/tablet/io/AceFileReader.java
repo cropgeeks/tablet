@@ -333,6 +333,6 @@ class AceFileReader extends TrackableReader
 	public String getMessage()
 	{
 		return RB.format("io.AssemblyFileHandler.status",
-			contigsAdded, readsAdded);
+			getTransferRate(), contigsAdded, readsAdded);
 	}
 }

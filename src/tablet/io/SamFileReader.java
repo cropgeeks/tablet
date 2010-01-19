@@ -184,6 +184,6 @@ class SamFileReader extends TrackableReader
 	public String getMessage()
 	{
 		return RB.format("io.AssemblyFileHandler.status",
-			contigHash.size(), readID);
+			getTransferRate(), contigHash.size(), readID);
 	}
 }
