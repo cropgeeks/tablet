@@ -68,7 +68,7 @@ class OutlinerOverlay implements IOverlayRenderer
 		// Deal with any additional features first
 		for (Feature f: rCanvas.contig.getOutlines())
 		{
-			if (f.getType() == Feature.COL_OUTLINE)
+			if (f.getTabletType() == Feature.COL_OUTLINE)
 			{
 				int position = f.getP1();
 
@@ -79,7 +79,7 @@ class OutlinerOverlay implements IOverlayRenderer
 					g.drawRect(xS, 0, xE-xS-1, rCanvas.getHeight()-1);
 			}
 
-			else if (f.getType() == Feature.ROW_OUTLINE)
+			else if (f.getTabletType() == Feature.ROW_OUTLINE)
 			{
 				int position = f.getP1();
 
