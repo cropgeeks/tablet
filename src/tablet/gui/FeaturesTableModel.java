@@ -29,8 +29,9 @@ class FeaturesTableModel extends AbstractTableModel
 		String col1 = RB.getString("gui.FeaturesTableModel.col1");
 		String col2 = RB.getString("gui.FeaturesTableModel.col2");
 		String col3 = RB.getString("gui.FeaturesTableModel.col3");
+		String col4 = RB.getString("gui.FeaturesTableModel.col4");
 
-		columnNames = new String[] { col1, col2, col3 };
+		columnNames = new String[] { col1, col2, col3, col4 };
 	}
 
 	public String getColumnName(int col)
@@ -48,7 +49,7 @@ class FeaturesTableModel extends AbstractTableModel
 
 	public Class getColumnClass(int col)
 	{
-		if (col == 0)
+		if (col <= 1)
 			return String.class;
 		else
 			return Integer.class;
@@ -58,25 +59,14 @@ class FeaturesTableModel extends AbstractTableModel
 	{
 		Feature feature = features.get(row);
 
-		if (Prefs.guiFeaturesArePadded)
+		switch (col)
 		{
-			switch (col)
-			{
-				case 0: return feature.getName();
-				case 1: return feature.getP1()+1;  // +1 back into consensus space
-				case 2: return feature.getP2()+1;  // +1 back into consensus space
-				case 9: return feature;
-			}
-		}
-		else
-		{
-			switch (col)
-			{
-				case 0: return feature.getName();
-				case 1: return feature.getP1()+1;  // +1 back into consensus space
-				case 2: return feature.getP2()+1;  // +1 back into consensus space
-				case 9: return feature;
-			}
+			case 0: return feature.getGFFType();
+			case 1: return feature.getName();
+			case 2: return feature.getP1()+1;  // +1 back into consensus space
+			case 3: return feature.getP2()+1;  // +1 back into consensus space
+
+			case 9: return feature;
 		}
 
 		return null;
