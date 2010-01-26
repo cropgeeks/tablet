@@ -27,6 +27,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 	private Contig contig;
 	private Consensus consensus;
 	private TableRowSorter<FeaturesTableModel> sorter;
+	private FeaturesTableRenderer featuresRenderer = new FeaturesTableRenderer();
 
 	FeaturesPanel(AssemblyPanel aPanel, JTabbedPane ctrlTabs)
 	{
@@ -44,6 +45,8 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 				processTableSelection();
 			}
 		});
+
+		controls.table.setDefaultRenderer(Integer.class, featuresRenderer);
 
 		controls.featuresLabel.setText(getTitle(0));
 
@@ -191,5 +194,24 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 			return "" + Sequence.PAD;
 		else
 			return TabletUtils.nf.format(padded+1);
+	}
+
+	class FeaturesTableRenderer extends DefaultTableCellRenderer
+	{
+		public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column)
+		{
+			Component c = super.getTableCellRendererComponent(table, value, isSelected,
+				hasFocus, row, column);
+
+			if((Integer)value > contig.getConsensus().length() || (Integer)value < contig.getConsensusOffset())
+			{
+				c.setForeground(Color.red);
+			}
+			else
+				c.setForeground(UIManager.getColor("Table.foreground"));
+
+			return c;
+		}
 	}
 }
