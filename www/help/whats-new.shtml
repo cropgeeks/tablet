@@ -22,6 +22,22 @@ that have been made to Tablet in recent versions. For full details on all the
 changes between versions, please see the <a href="http://bioinf.scri.ac.uk/tablet/svn.txt">
 subversion change log</a>.</p>
 
+
+<h3>New in 1.10.01.28</h3>
+
+<ul>
+<li>NEW: Added a right-click "save a summary of read information (per contig)" option to the contigs table.</li>
+<li>NEW: Tablet can now read from http streams (supported on the command line and the Open Assembly dialog).</li>
+<li>NEW: Tablet can now read from compressed gzip data streams (http or file).</li>
+<li>NEW: Features outside the scope of the current contig are now highlighted in red in the Features Table.</li>
+<li>NEW: Features with a Name= tag in a GFF3 file will now show this name in the Features Table.</li>
+<li>NEW: Added an option to toggle on or off the use of regular expressions in searches.</li>
+<li>CHG: The Importing Assembly dialog now shows its progress in MB/s too.</li>
+<li>CHG: Removed support for consensus tags in ACE files. GFF3 formatted files are now the only way to import features.</li>
+<li>BUG: Loading the same features file twice will no longer result in duplicate entries.</li>
+</ul>
+
+
 <h3>New in 1.09.12.14</h3>
 
 <ul>
