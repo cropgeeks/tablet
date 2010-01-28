@@ -83,6 +83,9 @@ public class Prefs extends XMLPreferences
 	public static int guiJumpToBase = 1;
 	public static boolean guiFeaturesArePadded = true;
 
+	// Search using regex
+	public static boolean guiRegexSearching = true;
+
 	// Colour scheme in use
 	public static int visColorScheme = ColorScheme.STANDARD;
 

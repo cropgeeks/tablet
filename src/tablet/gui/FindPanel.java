@@ -268,7 +268,8 @@ public class FindPanel extends JPanel implements ListSelectionListener
 			Pattern p = Pattern.compile(pattern);
 			Matcher m = p.matcher(rmd.getName());
 
-			if (m.matches())
+			if ((Prefs.guiRegexSearching && m.matches()) ||
+				(!Prefs.guiRegexSearching && rmd.getName().equals(pattern)))
 			{
 				results.add(new SearchResult(read, contig, rmd));
 				found++;
