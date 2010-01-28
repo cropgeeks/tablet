@@ -285,6 +285,7 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 
 		JPopupMenu menu = new JPopupMenu();
 		menu.add(mSaveReads);
+		menu.addSeparator();
 		menu.add(mTableCopy);
 		menu.show(e.getComponent(), e.getX(), e.getY());
 	}
