@@ -163,14 +163,14 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		if (Prefs.guiFeaturesArePadded)
 		{
 			return RB.format("gui.FeaturesPanel.tooltip.padded",
-				feature.getName(),
+				feature.getGFFType(), feature.getName(),
 				TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
 				getUnpadded(p1), getUnpadded(p2));
 		}
 		else
 		{
 			return RB.format("gui.FeaturesPanel.tooltip.unpadded",
-				feature.getName(),
+				feature.getGFFType(), feature.getName(),
 				TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
 				getPadded(p1), getPadded(p2));
 		}
@@ -198,18 +198,30 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 
 	class FeaturesTableRenderer extends DefaultTableCellRenderer
 	{
+		private Color fg = UIManager.getColor("Table.foreground");
+
 		public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column)
 		{
 			Component c = super.getTableCellRendererComponent(table, value, isSelected,
 				hasFocus, row, column);
 
-			if((Integer)value > contig.getConsensus().length() || (Integer)value < contig.getConsensusOffset())
+			c.setForeground(fg);
+			int pos = (Integer) value;
+
+			// Invalid if the value is lt or gt than the canvas
+			if (Prefs.guiFeaturesArePadded)
 			{
-				c.setForeground(Color.red);
+				if (pos <= (-contig.getConsensusOffset()) ||
+					pos > contig.getWidth() - contig.getConsensusOffset())
+					c.setForeground(Color.red);
 			}
+			// Invalid is the value is lt or gt than unpadded consensus length
 			else
-				c.setForeground(UIManager.getColor("Table.foreground"));
+			{
+				if (pos <= 0 || pos > contig.getConsensus().getUnpaddedLength())
+					c.setForeground(Color.red);
+			}
 
 			return c;
 		}

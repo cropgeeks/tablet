@@ -20,7 +20,7 @@ public class Feature implements Comparable<Feature>
 	// The GFF3 type of the feature
 	protected String gffType;
 	// The name of the feature (if it exists)
-	protected String name;
+	protected String name;;
 
 	// Start and end position information
 	protected int p1;
@@ -53,6 +53,23 @@ public class Feature implements Comparable<Feature>
 
 		else
 			return 1;
+	}
+
+	public boolean isSameAs(Feature other)
+	{
+		if (p1 != other.p1)
+			return false;
+		if (p2 != other.p2)
+			return false;
+		if (!gffType.equals(other.gffType))
+			return false;
+		if (!name.equals(other.name))
+			return false;
+
+		if (tabletType != other.tabletType)
+			return false;
+
+		return true;
 	}
 
 	public int getTabletType()

@@ -73,7 +73,7 @@ public class GFF3Reader extends TrackableReader
 		int end   = Integer.parseInt(tokens[4]);
 
 		String gffType = new String(tokens[2].toUpperCase());
-		Feature f = new Feature(Feature.GFF3, gffType, "NO_NAME", start-1, end-1);
+		Feature f = new Feature(Feature.GFF3, gffType, "", start-1, end-1);
 
 		getFeatures(contigName).add(f);
 	}
@@ -104,8 +104,19 @@ public class GFF3Reader extends TrackableReader
 				continue;
 
 			ArrayList<Feature> features = contig.getFeatures();
+
+			loop:
 			for (Feature newFeature: newFeatures)
+			{
+				// Check it doesn't already exist
+				for (int i = 0; i < features.size(); i++)
+					if (features.get(i).isSameAs(newFeature))
+						continue loop;
+
 				features.add(newFeature);
+			}
+
+			Collections.sort(features);
 		}
 	}
 }

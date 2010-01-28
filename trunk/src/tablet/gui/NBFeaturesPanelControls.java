@@ -73,6 +73,8 @@ class NBFeaturesPanelControls extends JPanel
 		}
 
 		Prefs.guiFeaturesArePadded = checkPadded.isSelected();
+
+		panel.repaint();
 	}
 
 	public void toggleComponentEnabled(boolean enabled)
