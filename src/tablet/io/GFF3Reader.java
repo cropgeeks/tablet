@@ -72,8 +72,25 @@ public class GFF3Reader extends TrackableReader
 		int start = Integer.parseInt(tokens[3]);
 		int end   = Integer.parseInt(tokens[4]);
 
+		// See if we can parse out a name
+		// A name must be formed from "Name=[name];" (not name=) and specical
+		// characters must be URL encoded. The ending ; won't be there if it's
+		// the last tag in the string
+		String name = "";
+		int index1 = tokens[8].indexOf("Name=");
+		if (index1 != -1)
+		{
+			int index2 = tokens[8].indexOf(";", index1);
+			if (index2 != -1)
+				name = tokens[8].substring(index1+5, index2);
+			else
+				name = tokens[8].substring(index1+5);
+
+			name = URLDecoder.decode(name, "UTF-8");
+		}
+
 		String gffType = new String(tokens[2].toUpperCase());
-		Feature f = new Feature(Feature.GFF3, gffType, "", start-1, end-1);
+		Feature f = new Feature(Feature.GFF3, gffType, name, start-1, end-1);
 
 		getFeatures(contigName).add(f);
 	}
