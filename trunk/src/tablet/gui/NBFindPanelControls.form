@@ -17,29 +17,30 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="findLabel" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="1" attributes="0">
-                      <Component id="findCombo" pref="126" max="32767" attributes="2"/>
+                  <Component id="checkUseRegex" alignment="0" max="32767" attributes="1"/>
+                  <Component id="findLabel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="findCombo" pref="129" max="32767" attributes="3"/>
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="bFind" min="-2" pref="32" max="-2" attributes="0"/>
                   </Group>
-                  <Component id="findInCombo" alignment="0" pref="164" max="32767" attributes="1"/>
+                  <Component id="findInCombo" alignment="0" pref="167" max="32767" attributes="1"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="helpLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="62" max="32767" attributes="0"/>
+              <EmptySpace pref="65" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="resultsLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="135" max="32767" attributes="0"/>
+              <EmptySpace pref="138" max="32767" attributes="0"/>
           </Group>
-          <Component id="jScrollPane1" alignment="1" pref="184" max="32767" attributes="0"/>
+          <Component id="jScrollPane1" alignment="0" pref="187" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -47,19 +48,22 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="findLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="findCombo" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="bFind" linkSize="1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="findInCombo" linkSize="1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="helpLabel" min="-2" max="-2" attributes="0"/>
+              <Component id="checkUseRegex" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="resultsLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="48" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="56" max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
+              <Component id="helpLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -144,6 +148,11 @@
           <Color blue="9c" green="6a" red="44" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Get help with searching"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JCheckBox" name="checkUseRegex">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="Use Java regular expressions"/>
       </Properties>
     </Component>
   </SubComponents>
