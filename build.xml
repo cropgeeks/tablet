@@ -45,10 +45,10 @@
 	</target>
 
 	<target name="jar" depends="clean, compile">
-		<jar jarfile="${tablet-resources.jar}">
+		<jar jarfile="${tablet-resources.jar}" index="true">
 			<zipfileset dir="${res}" prefix="res"/>
 		</jar>
-		<jar jarfile="${tablet.jar}">
+		<jar jarfile="${tablet.jar}" index="true">
 			<fileset dir="${classes}">
 				<exclude name="**/*Test.class"/>
 			</fileset>
@@ -90,6 +90,32 @@
 		<java jar="${tablet.jar}">
 			<jvmarg value="-Xmx1024m"/>
 		</java>
+	</target>
+
+	<target name="sign" depends="jar">
+		<input message="Enter the storepass:" addproperty="storepass"/>
+		<signjar alias="plantbio" storepass="${storepass}"
+			preservelastmodified="true" lazy="true"
+			tsaurl="https://timestamp.geotrust.com/tsa">
+			<fileset dir="${lib}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</signjar>
+	</target>
+
+	<target name="jnlp" depends="sign">
+		<input message="Enter the version number:" addproperty="version"/>
+		<copy
+			file="www/cgi-bin/jnlp.template"
+			tofile="\\bioinf\root\var\www\html\tablet\webstart\tablet.jnlp.template"
+			overwrite="true">
+			<filterset>
+				<filter token="VERSION" value="${version} WS"/>
+			</filterset>
+		</copy>
+		<copy todir="\\bioinf\root\var\www\html\tablet\webstart">
+			<fileset dir="${lib}"/>
+		</copy>
 	</target>
 
 </project>

@@ -20,7 +20,7 @@ public class Install4j
 {
 	private static String URL = "http://bioinf.scri.ac.uk/tablet/installers/updates.xml";
 
-	public static String VERSION = "x.xx.xx.xx";
+	public static String VERSION;
 
 	public static final int NEVER = 0;
 	public static final int STARTUP = 1;
@@ -97,15 +97,23 @@ public class Install4j
 
 	private static void getVersion()
 	{
-		try
+		// Attempt to get the version string from install4j
+		if (VERSION == null)
 		{
-			ApplicationRegistry.ApplicationInfo[] info =
-				ApplicationRegistry.getApplicationInfoById("9483-2571-4596-9336");
+			try
+			{
+				ApplicationRegistry.ApplicationInfo[] info =
+					ApplicationRegistry.getApplicationInfoById("9483-2571-4596-9336");
 
-			VERSION = info[0].getVersion();
+				VERSION = info[0].getVersion();
+			}
+			catch (Exception e) {}
+			catch (Throwable e) {}
 		}
-		catch (Exception e) {}
-		catch (Throwable e) {}
+
+		// Failing that, we must be running the development version
+		if (VERSION == null)
+			VERSION = "x.xx.xx.xx";
 	}
 
 	private static void pingServer()

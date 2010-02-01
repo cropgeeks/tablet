@@ -6,6 +6,7 @@ package tablet.gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.*;
 import javax.swing.*;
 
 import tablet.gui.dialog.*;
@@ -47,14 +48,24 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		Icons.initialize("/res/icons", ".png");
 		RB.initialize(Prefs.localeText, "res.text.tablet");
 
-		Install4j.doStartUpCheck();
-
 		if (args.length > 0)
 		{
-			initialFiles = new String[args.length];
-			for (int i = 0; i < args.length; i++)
-				initialFiles[i] = args[i];
+			if (args[0].startsWith("version:"))
+				Install4j.VERSION = args[0].substring(8);
+
+			String[] fileArgs = new String[args.length-1];
+			for (int i = 1; i < args.length; i++)
+				fileArgs[i-1] = args[i];
+
+			if (fileArgs.length > 0)
+			{
+				initialFiles = new String[fileArgs.length];
+				for (int i = 0; i < fileArgs.length; i++)
+					initialFiles[i] = fileArgs[i];
+			}
 		}
+
+		Install4j.doStartUpCheck();
 
 		new Tablet();
 	}
