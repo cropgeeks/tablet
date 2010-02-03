@@ -99,7 +99,8 @@ class AfgFileReader extends TrackableReader
 		cacheFile = new File(cacheDir, time + "-" + files[0].getName() + ".tempCache");
 		indexFile = new File(cacheDir, time + "-" + files[0].getName() + ".tempCacheIndex");
 
-		tempCache = FileCache.createWritableCache(cacheFile, indexFile);
+		tempCache = new ReadFileCache(cacheFile, indexFile);
+		tempCache.openForWriting();
 
 		// Scan for contigs
 		while ((str = readLine()) != null && okToRun)
@@ -189,8 +190,7 @@ class AfgFileReader extends TrackableReader
 		if(!firstTileFound)
 		{
 			firstTileFound = true;
-			tempCache.close();
-			tempCache = FileCache.createReadableCache(cacheFile, indexFile);
+			tempCache.openForReading();
 		}
 
 		//this contains the positions of the gap characters in this read

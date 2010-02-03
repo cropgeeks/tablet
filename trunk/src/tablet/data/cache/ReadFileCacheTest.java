@@ -9,7 +9,7 @@ import junit.framework.*;
 
 import tablet.data.*;
 
-public class FileCacheTest extends TestCase
+public class ReadFileCacheTest extends TestCase
 {
 	public static void main(String[] args)
 	{
@@ -22,18 +22,20 @@ public class FileCacheTest extends TestCase
 		File cacheFile = new File("tablet-cache.dat");
 		File indexFile = new File("tablet-index.dat");
 
-		FileCache cache = FileCache.createWritableCache(cacheFile, indexFile);
+		ReadFileCache cache = new ReadFileCache(cacheFile, indexFile);
+		cache.openForWriting();
 
 		for (int i = 0; i < 10; i++)
 		{
 			String name = "NAME_" + i;
 
-			cache.setReadMetaData(new ReadMetaData(name, i % 2 == 0, i));
+			ReadMetaData rmd = new ReadMetaData(name, i % 2 == 0, i);
+			rmd.setData("GATTACA");
+
+			cache.setReadMetaData(rmd);
 		}
 
-		cache.close();
-
-		cache = cache.createReadableCache(cacheFile, indexFile);
+		cache.openForReading();
 
 		for (int i = 0; i < 10; i++)
 		{

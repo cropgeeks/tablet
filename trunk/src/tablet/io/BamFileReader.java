@@ -99,7 +99,7 @@ public class BamFileReader extends TrackableReader
 				readID = createRead(contigToAddTo, record, readID, parser);
 			}
 		}
-		
+
 		assembly.setName(files[samIndex].getName());
 		inputSam.close();
 	}
@@ -110,20 +110,19 @@ public class BamFileReader extends TrackableReader
 		{
 			int readStartPos = record.getAlignmentStart()-1;
 			ReadMetaData rmd = new ReadMetaData(record.getReadName(), record.getReadNegativeStrandFlag());
-			
+
 			String fullRead = parser.parse(new String(record.getReadBases()), readStartPos, record.getCigarString());
 			rmd.setData(fullRead);
 			read = new Read(readID, readStartPos);
 
 			rmd.calculateUnpaddedLength();
 			read.setLength(rmd.length());
-			read.setCigar(record.getCigarString());
 			contigToAddTo.getReads().add(read);
 
 			// Do base-position comparison...
 
 			BasePositionComparator.compare(contigToAddTo.getConsensus(), rmd, readStartPos);
-			
+
 			readCache.setReadMetaData(rmd);
 			readID++;
 		}

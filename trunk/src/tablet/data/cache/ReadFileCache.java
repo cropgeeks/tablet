@@ -16,56 +16,37 @@ import scri.commons.file.*;
  * an accompanying index file (see FileCacheIndex), allowing for random
  * read-back from any location with a fixed access time.
  */
-public class FileCache implements IReadCache
+public class ReadFileCache extends TabletCache implements IReadCache
 {
-	private FileCacheIndex index = new FileCacheIndex();
-
-	// Used while writing to the cache
-	private DataOutputStream out;
-	// Used while reading from the cache
-	private BufferedRandomAccessFile rnd;
+	private ReadFileCacheIndex index;
 
 	// When writing, how many bytes have been written to the cache?
 	private long byteCount = 0;
 
-	private Semaphore fileLock = new Semaphore(1, true);
-
-	private FileCache()
+	public ReadFileCache(File cacheFile, File indexFile)
 	{
+		this.cacheFile = cacheFile;
+		index = new ReadFileCacheIndex(indexFile);
 	}
 
-	public static FileCache createWritableCache(File cacheFile, File indexFile)
+	public void openForWriting()
 		throws IOException
 	{
-		FileCache fc = new FileCache();
-
-		fc.out = new DataOutputStream(new BufferedOutputStream(
-			new FileOutputStream(cacheFile)));
-		fc.index.createWritableIndex(indexFile);
-
-		return fc;
+		super.openForWriting();
+		index.openForWriting();
 	}
 
-	public static FileCache createReadableCache(File cacheFile, File indexFile)
+	public void openForReading()
 		throws IOException
 	{
-		FileCache fc = new FileCache();
-		fc.rnd = new BufferedRandomAccessFile(cacheFile, "r", 1024);
-		fc.index.createReadableIndex(indexFile);
-
-		return fc;
+		super.openForReading();
+		index.openForReading();
 	}
 
 	public void close()
 		throws IOException
 	{
-		System.out.println("Closing cache: " + byteCount);
-
-		if (out != null)
-			out.close();
-		if (rnd != null)
-			rnd.close();
-
+		super.close();
 		index.close();
 	}
 
@@ -100,7 +81,7 @@ public class FileCache implements IReadCache
 					int unpaddedLength = rnd.readIntFromBuffer();
 
 					int dataLength = rnd.readIntFromBuffer();
-					
+
 					byte[] data;
 					if(dataLength % 2 == 0)
 						data = new byte[dataLength/2];

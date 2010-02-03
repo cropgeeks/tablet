@@ -9,32 +9,11 @@ import java.nio.*;
 /**
  * Tracks and maintains the index (on disk) to a FileCache object.
  */
-class FileCacheIndex
+class ReadFileCacheIndex extends TabletCache
 {
-	// Used while writing to the index
-	private BufferedOutputStream out;
-	// Used while reading from the index
-	private RandomAccessFile rnd;
-
-	void createWritableIndex(File indexFile)
-		throws IOException
+	ReadFileCacheIndex(File cacheFile)
 	{
-		out = new BufferedOutputStream(new FileOutputStream(indexFile));
-	}
-
-	void createReadableIndex(File indexFile)
-		throws IOException
-	{
-		rnd = new RandomAccessFile(indexFile, "r");
-	}
-
-	void close()
-		throws IOException
-	{
-		if (out != null)
-			out.close();
-		if (rnd != null)
-			rnd.close();
+		super.cacheFile = cacheFile;
 	}
 
 	// Jump id*<long 8?> bytes into the file and return the byte found there
@@ -43,7 +22,7 @@ class FileCacheIndex
 	{
 		rnd.seek(id * 8);
 
-		return rnd.readLong();
+		return rnd.readLongFromBuffer();
 	}
 
 	void setNextSeekPosition(long byteCount)

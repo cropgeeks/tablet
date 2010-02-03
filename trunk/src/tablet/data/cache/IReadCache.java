@@ -10,6 +10,16 @@ import tablet.data.*;
  */
 public interface IReadCache
 {
+	public void openForWriting()
+		throws Exception;
+
+	public void openForReading()
+		throws Exception;
+
+	/** Closes this cache and releases any resources it may be holding. */
+	public void close()
+		throws Exception;
+
 	/**
 	 * Returns the read meta data for the read that matches the given ID.
 	 * @return the read meta data for the read that matches the given ID
@@ -21,9 +31,5 @@ public interface IReadCache
 	 * @param readMetaData the meta data to add
 	 */
 	public void setReadMetaData(ReadMetaData readMetaData)
-		throws Exception;
-
-	/** Closes this cache and releases any resources it may be holding. */
-	public void close()
 		throws Exception;
 }

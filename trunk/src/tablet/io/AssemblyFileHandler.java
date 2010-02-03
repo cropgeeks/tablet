@@ -55,7 +55,9 @@ public class AssemblyFileHandler extends SimpleJob
 		String time = "" + System.currentTimeMillis();
 		File cache = new File(cacheDir, time + "-" + files[0].getName() + ".cache");
 		File index = new File(cacheDir, time + "-" + files[0].getName() + ".index");
-		IReadCache readCache = FileCache.createWritableCache(cache, index);
+
+		IReadCache readCache = new ReadFileCache(cache, index);
+		readCache.openForWriting();
 
 
 		// For each file format that we understand...
@@ -101,8 +103,8 @@ public class AssemblyFileHandler extends SimpleJob
 		{
 			Assembly assembly = reader.getAssembly();
 
-			readCache.close();
-			assembly.setReadCache(FileCache.createReadableCache(cache, index));
+			readCache.openForReading();
+			assembly.setReadCache(readCache);
 
 			// Sort the reads into order
 			System.out.print("Sorting...");
