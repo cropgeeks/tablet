@@ -14,28 +14,24 @@ public class CigarParserTest extends TestCase
 	{
 		CigarParser parser = new CigarParser();
 
-		String temp = parser.cigarDecoder("TTAGATAAAGGATACTG", 7, "8M2I4M1D3M");
-		System.out.println("TEMP = " + temp);
-		System.out.println("Expected: TTAGATAAAGGATA*CTG");
-		assertEquals(temp, "TTAGATAAAGGATA*CTG");
-		assertEquals(parser.getPosition(), 7);
+		String read = parser.parse("TTAGATAAAGGATACTG", 7, "8M2I4M1D3M");
+		System.out.println("TEMP = " + read);
+		System.out.println("Expected: TTAGATAAGATA*CTG");
+		assertEquals(read, "TTAGATAAGATA*CTG");
 
-		temp = parser.cigarDecoder("AAAAGATAAGGATA", 9, "3S6M1P1I4M");
-		System.out.println("TEMP = " + temp);
-		System.out.println("Expected: AAAAGATAA*GGATA");
-		assertEquals(temp, "AAAAGATAA*GGATA");
-		assertEquals(parser.getPosition(), 6);
+		read = parser.parse("AAAAGATAAGGATA", 9, "3S6M1P1I4M");
+		System.out.println("TEMP = " + read);
+		System.out.println("Expected: AGATAAGATA");
+		assertEquals(read, "AGATAAGATA");
 
-		temp = parser.cigarDecoder("AGCTAA", 9, "5H6M");
-		System.out.println("TEMP = " + temp);
+		read = parser.parse("AGCTAA", 9, "5H6M");
+		System.out.println("TEMP = " + read);
 		System.out.println("Expected: AGCTAA");
-		assertEquals(temp, "AGCTAA");
-		assertEquals(parser.getPosition(), 9);
+		assertEquals(read, "AGCTAA");
 
-		temp = parser.cigarDecoder("ATAGCTTCAGC", 16, "6M14N5M");
-		System.out.println("TEMP = " + temp);
+		read = parser.parse("ATAGCTTCAGC", 16, "6M14N5M");
+		System.out.println("TEMP = " + read);
 		System.out.println("Expected: ATAGCTNNNNNNNNNNNNNNTCAGC");
-		assertEquals(temp, "ATAGCTNNNNNNNNNNNNNNTCAGC");
-		assertEquals(parser.getPosition(), 16);
+		assertEquals(read, "ATAGCTNNNNNNNNNNNNNNTCAGC");
 	}
 }

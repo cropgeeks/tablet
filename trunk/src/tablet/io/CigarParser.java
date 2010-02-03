@@ -2,6 +2,8 @@
 // Use is subject to the accompanying licence terms.
 package tablet.io;
 
+import java.util.HashMap;
+
 /**
  * Class which contains the logic for parsing the CIGAR strings found in BAM to
  * give correct read strings and also an updated consensus sequence to reflect
@@ -11,6 +13,8 @@ class CigarParser
 {
 	private int position;
 	private int readPos;
+	private String currentContigName;
+	private HashMap<String, Integer> featureMap = new HashMap<String, Integer>();
 
 	/**
 	 * Constructor for CIGAR parser. Takes the reference sequence that was passed
@@ -114,6 +118,16 @@ class CigarParser
 
 	private String processInsertion(int operationLength, String read)
 	{
+		//String hashMap
+//		if(featureMap.get() == null)
+//		{
+//			featureMap.put(currentContigName + "*_*_*" + readPos+"-"+(readPos+1), 1);
+//		}
+//		else
+//		{
+//			int value = featureMap.get(currentContigName + "*_*_*" + readPos+"-"+(readPos+1));
+//			featureMap.put(currentContigName + "*_*_*" + readPos+"-"+(readPos+1), ++value);
+//		}
 		return new String(read.substring(operationLength));
 	}
 
@@ -150,7 +164,7 @@ class CigarParser
 		StringBuilder skip = new StringBuilder();
 		for(int i=0; i < operationLength; i++)
 		{
-			skip.append('*');
+			skip.append('N');
 		}
 		return skip.toString();
 	}
@@ -161,5 +175,20 @@ class CigarParser
 	public int getPosition()
 	{
 		return position;
+	}
+
+	public String getCurrentContigName()
+	{
+		return currentContigName;
+	}
+
+	public void setCurrentContigName(String currentContigName)
+	{
+		this.currentContigName = currentContigName;
+	}
+
+	public HashMap<String, Integer> getFeatureMap()
+	{
+		return featureMap;
 	}
 }
