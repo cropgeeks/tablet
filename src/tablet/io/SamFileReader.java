@@ -17,7 +17,7 @@ class SamFileReader extends TrackableReader
 	private IReadCache readCache;
 
 	private ReferenceFileReader refReader;
-	private CigarParser cigarParser = new CigarParser();
+	private CigarParser cigarParser;
 
 	// The index of the SAM file in the files[] array
 	private int samIndex = -1;
@@ -114,7 +114,11 @@ class SamFileReader extends TrackableReader
 	{
 		in = new BufferedReader(new InputStreamReader(getInputStream(samIndex, true), "ASCII"));
 
+		cigarParser = new CigarParser();
+
 		readID = 0;
+
+		HashMap<String, int[]> paddingManipulator = new HashMap<String, int[]>();
 
 		while ((str = readLine()) != null && okToRun)
 		{
@@ -141,7 +145,7 @@ class SamFileReader extends TrackableReader
 
 //			}
 
-			Read read = new Read(readID, pos);
+//			Read read = new Read(readID, pos);
 
 			Contig contigToAddTo = contigHash.get(chr);
 
@@ -156,13 +160,15 @@ class SamFileReader extends TrackableReader
 
 			if (contigToAddTo != null)
 			{
+				Read read = new Read(readID, pos);
+
 				contigToAddTo.getReads().add(read);
 
-				String readStr = cigarParser.cigarDecoder(
+				String fullRead = cigarParser.parse(
 					data.toString(), pos, cigar);
 
 				ReadMetaData rmd = new ReadMetaData(name, complemented);
-				rmd.setData(readStr);
+				rmd.setData(fullRead);
 				rmd.calculateUnpaddedLength();
 				read.setLength(rmd.length());
 

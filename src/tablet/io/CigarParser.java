@@ -2,107 +2,157 @@
 // Use is subject to the accompanying licence terms.
 package tablet.io;
 
+/**
+ * Class which contains the logic for parsing the CIGAR strings found in BAM to
+ * give correct read strings and also an updated consensus sequence to reflect
+ * any insertions which may have occurred.
+ */
 class CigarParser
 {
 	private int position;
+	private int readPos;
 
+	/**
+	 * Constructor for CIGAR parser. Takes the reference sequence that was passed
+	 * in and uses it to create a stringbuilder (allowing us to deal with insertions)
+	 * and also a padding array (again to deal with insertions, but this time from
+	 * the point of view of read positioning.
+	 */
 	CigarParser()
 	{
 	}
 
-	String cigarDecoder(String read, int position, String cigarString)
+	/**
+	 * The method to call when attempting to parse a CIGAR string.
+	 *
+	 * @param read The read string as presented in BAM.
+	 * @param position the position given by BAM.
+	 * @param cigarString the CIGAR string to decode.
+	 * @return
+	 * @throws Exception
+	 */
+	String parse(String read, int position, String cigarString)
 		throws Exception
 	{
 		this.position = position;
+		readPos = position;
 
 		StringBuilder readString = new StringBuilder();
 		boolean first = true;
 
+		// If we have been presented with an empty cigar string
 		if(cigarString.equals("*"))
 			return read;
 		else
 		{
 			String numberString = "";
+			int operationLength = 0;
+			// Loop over the cigarString
 			for(int i=0; i < cigarString.length(); i++)
 			{
+				// If the character is a digit
 				if(Character.isDigit(cigarString.charAt(i)))
+				{
 					numberString += cigarString.charAt(i);
-
+					operationLength = Integer.parseInt(numberString);
+				}
+				// If the character is any other character
 				else
 				{
 					switch (cigarString.charAt(i))
 					{
+						// For M, = and X treat as Match/Mismatch.
 						case 'M':
-							readString.append(processMatchOrInsertion(numberString, read));
-							read = new String(read.substring(Integer.parseInt(numberString)));
+							readString.append(processMatchOrMismatch(operationLength, read));
+							read = new String(read.substring(operationLength));
+							readPos += operationLength;
+							break;
+						case '=':
+							readString.append(processMatchOrMismatch(operationLength, read));
+							read = new String(read.substring(operationLength));
+							readPos += operationLength;
+							break;
+						case 'X':
+							readString.append(processMatchOrMismatch(operationLength, read));
+							read = new String(read.substring(operationLength));
+							readPos += operationLength;
 							break;
 						case 'P':
-							readString.append(processPadOrDeletion(numberString));
+							//readString.append(processPad(operationLength));
 							break;
 						case 'I':
-							readString.append(processMatchOrInsertion(numberString, read));
-							read = new String(read.substring(Integer.parseInt(numberString)));
+							read = processInsertion(operationLength, read);
 							break;
 						case 'D':
-							readString.append(processPadOrDeletion(numberString));
+							readString.append(processDeletion(operationLength));
+							readPos += operationLength;
 							break;
 						case 'N':
-							readString.append(processSkipped(numberString));
+							readString.append(processSkipped(operationLength));
+							readPos += operationLength;
 							break;
 						case 'S':
-							readString.append(processSoftClip(numberString, read, first));
-							read = new String(read.substring(Integer.parseInt(numberString)));
+							read = processSoftClip(operationLength, read);
 							break;
 						case 'H':
 //							System.out.println("Process HardClip");
 							break;
 					}
 					numberString = "";
-					if(first)
-						first = false;
 				}
 			}
+
 			return readString.toString();
 		}
 	}
 
-	private String  processMatchOrInsertion(String numberString, String read)
+	private String  processMatchOrMismatch(int operationLength, String read)
 		throws Exception
 	{
-		return new String(read.substring(0, (Integer.parseInt(numberString))));
+		return read.substring(0, operationLength);
 	}
 
-	private String processPadOrDeletion(String numberString)
+	private String processInsertion(int operationLength, String read)
+	{
+		return new String(read.substring(operationLength));
+	}
+
+	private String processDeletion(int operationLength)
 		throws Exception
 	{
-		StringBuilder padRead = new StringBuilder();
-		int num = (Integer.parseInt(numberString));
-		for(int i=0; i < num; i++)
+		StringBuilder pad = new StringBuilder();
+		for(int i=0; i < operationLength; i++)
 		{
-			padRead.append('*');
+			pad.append('*');
 		}
-		return padRead.toString();
+		return pad.toString();
 	}
 
-	private String processSoftClip(String numberString, String read, boolean first)
-		throws Exception
+	private String processPad(int operationLength)
 	{
-		if(first)
-			position -= (Integer.parseInt(numberString));
-
-		return new String(read.substring(0, (Integer.parseInt(numberString))));
-	}
-
-	private String processSkipped(String numberString)
-		throws Exception
-	{
-		StringBuilder padRead = new StringBuilder();
-		int num = (Integer.parseInt(numberString));
-		for(int i=0; i < num; i++)
+		StringBuilder pad = new StringBuilder();
+		for(int i=0; i < operationLength; i++)
 		{
-			padRead.append('N');
+			pad.append('*');
 		}
-		return padRead.toString();
+		return pad.toString();
+	}
+
+	private String processSoftClip(int operationLength, String read)
+		throws Exception
+	{
+		return new String(read.substring(operationLength));
+	}
+
+	private String processSkipped(int operationLength)
+		throws Exception
+	{
+		StringBuilder skip = new StringBuilder();
+		for(int i=0; i < operationLength; i++)
+		{
+			skip.append('*');
+		}
+		return skip.toString();
 	}
 
 	/**
