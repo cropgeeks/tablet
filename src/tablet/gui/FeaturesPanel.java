@@ -176,7 +176,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		}
 	}
 
-	String getUnpadded(int base)
+	private String getUnpadded(int base)
 	{
 		int unpadded = DisplayData.paddedToUnpadded(base);
 
@@ -186,7 +186,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 			return TabletUtils.nf.format(unpadded+1);
 	}
 
-	String getPadded(int base)
+	private String getPadded(int base)
 	{
 		int padded = DisplayData.unpaddedToPadded(base);
 
@@ -196,7 +196,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 			return TabletUtils.nf.format(padded+1);
 	}
 
-	class FeaturesTableRenderer extends DefaultTableCellRenderer
+	private class FeaturesTableRenderer extends DefaultTableCellRenderer
 	{
 		private Color fg = UIManager.getColor("Table.foreground");
 
