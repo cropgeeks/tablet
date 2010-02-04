@@ -3,8 +3,10 @@ package tablet.io;
 import java.io.*;
 import java.util.HashMap;
 import net.sf.samtools.*;
+import scri.commons.gui.RB;
 import tablet.analysis.BasePositionComparator;
 import tablet.data.*;
+import tablet.data.auxiliary.CigarFeature;
 import tablet.data.cache.IReadCache;
 
 public class BamFileReader extends TrackableReader
@@ -22,6 +24,8 @@ public class BamFileReader extends TrackableReader
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 	private int samIndex = -1;
 	private int refIndex = -1;
+
+	private int readID;
 
 	private CigarParser cigarParser;
 
@@ -70,41 +74,58 @@ public class BamFileReader extends TrackableReader
 
 	private void readBamFile() throws Exception
 	{
+		Assembly.isBam(true);
+
 		SAMFileReader inputSam = new SAMFileReader(getInputStream(samIndex, false));
-		int readID = 0;
+		readID = 0;
 		CigarParser parser = new CigarParser();
 		Contig prev = null;
 
 		boolean found = false;
 
-		for (final SAMRecord record : inputSam)
+		if(contigHash.isEmpty())
 		{
-			//If we don't have a reference file...need to grab contig names from somewhere
-			if (!contigHash.containsKey(record.getReferenceName()) && !record.getReferenceName().equals(SAMRecord.NO_ALIGNMENT_REFERENCE_NAME))
+			for(SAMSequenceRecord record : inputSam.getFileHeader().getSequenceDictionary().getSequences())
 			{
 				consensus = new Consensus();
-				consensus.setBaseQualities(record.getBaseQualities());
-				contig = new Contig(record.getReferenceName(), true, 0);
+				contig = new Contig(record.getSequenceName(), true, 0);
 				contig.setConsensusSequence(consensus);
-				contigHash.put(record.getReferenceName(), contig);
+				contigHash.put(record.getSequenceName(), contig);
 				assembly.addContig(contig);
 			}
+		}
 
+		for (final SAMRecord record : inputSam)
+		{
+			if(!okToRun)
+				break;
 
 			if (!record.getReadUnmappedFlag())
 			{
 				Contig contigToAddTo = contigHash.get(record.getReferenceName());
 
+				if(prev == null)
+				{
+					prev = contigToAddTo;
+					parser.setCurrentContigName(contigToAddTo.getName());
+				}
+				else if(prev != contigToAddTo)
+				{
+					prev = contigToAddTo;
+					parser.setCurrentContigName(contigToAddTo.getName());
+				}
+
 				//create the Read and ReadMetaData objects
-				readID = createRead(contigToAddTo, record, readID, parser);
+				createRead(contigToAddTo, record, parser);
 			}
 		}
+		processCigarFeatures(parser);
 
 		assembly.setName(files[samIndex].getName());
 		inputSam.close();
 	}
 
-	private int createRead(Contig contigToAddTo, final SAMRecord record, int readID, CigarParser parser) throws Exception
+	private void createRead(Contig contigToAddTo, final SAMRecord record, CigarParser parser) throws Exception
 	{
 		if (contigToAddTo != null)
 		{
@@ -123,10 +144,26 @@ public class BamFileReader extends TrackableReader
 
 			BasePositionComparator.compare(contigToAddTo.getConsensus(), rmd, readStartPos);
 
+			rmd.setCigar(record.getCigar().toString());
+
 			readCache.setReadMetaData(rmd);
 			readID++;
 		}
-		return readID;
+	}
+
+	private void processCigarFeatures(CigarParser parser)
+	{
+		for (String feature : parser.getFeatureMap().keySet())
+		{
+			String[] featureElements = feature.split("Tablet-Separator");
+			int count = parser.getFeatureMap().get(feature);
+			CigarFeature cigarFeature = new CigarFeature("CIGAR-I", "CIG" + featureElements[1], Integer.parseInt(featureElements[1]) - 1, Integer.parseInt(featureElements[1]), count);
+			Contig ctg = contigHash.get(featureElements[0]);
+			if (ctg != null)
+			{
+				ctg.getFeatures().add(cigarFeature);
+			}
+		}
 	}
 
 	private void addContig(Contig contig, Consensus consensus, StringBuilder bases, StringBuilder qlt)
@@ -145,5 +182,12 @@ public class BamFileReader extends TrackableReader
 		consensus.setBaseQualities(bq);
 
 		assembly.addContig(contig);
+	}
+
+	@Override
+	public String getMessage()
+	{
+		return RB.format("io.AssemblyFileHandler.status",
+			getTransferRate(), contigHash.size(), readID);
 	}
 }

@@ -52,6 +52,7 @@ public class AssemblyFileHandler extends SimpleJob
 		throws Exception
 	{
 		boolean fileParsed = false;
+		Assembly.isBam(false);
 
 		// Ensure the cache directory exists (and is valid)
 		cacheDir.mkdirs();

@@ -118,16 +118,16 @@ class CigarParser
 
 	private String processInsertion(int operationLength, String read)
 	{
-		//String hashMap
-//		if(featureMap.get() == null)
-//		{
-//			featureMap.put(currentContigName + "*_*_*" + readPos+"-"+(readPos+1), 1);
-//		}
-//		else
-//		{
-//			int value = featureMap.get(currentContigName + "*_*_*" + readPos+"-"+(readPos+1));
-//			featureMap.put(currentContigName + "*_*_*" + readPos+"-"+(readPos+1), ++value);
-//		}
+		String hashMap = currentContigName + "Tablet-Separator" + readPos;
+		if(featureMap.get(hashMap) == null)
+		{
+			featureMap.put(hashMap, 1);
+		}
+		else
+		{
+			int value = featureMap.get(hashMap);
+			featureMap.put(hashMap, ++value);
+		}
 		return new String(read.substring(operationLength));
 	}
 

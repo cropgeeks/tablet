@@ -20,7 +20,7 @@ public class Feature implements Comparable<Feature>
 	// The GFF3 type of the feature
 	protected String gffType;
 	// The name of the feature (if it exists)
-	protected String name;;
+	protected String name;
 
 	// Start and end position information
 	protected int p1;

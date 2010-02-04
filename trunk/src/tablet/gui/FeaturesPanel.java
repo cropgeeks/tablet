@@ -160,20 +160,43 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		int p1 = feature.getP1();
 		int p2 = feature.getP2();
 
-		if (Prefs.guiFeaturesArePadded)
+		if(!(feature instanceof CigarFeature))
 		{
-			return RB.format("gui.FeaturesPanel.tooltip.padded",
-				feature.getGFFType(), feature.getName(),
-				TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
-				getUnpadded(p1), getUnpadded(p2));
+			if (Prefs.guiFeaturesArePadded)
+			{
+				return RB.format("gui.FeaturesPanel.tooltip.padded",
+					feature.getGFFType(), feature.getName(),
+					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
+					getUnpadded(p1), getUnpadded(p2));
+			}
+			else
+			{
+				return RB.format("gui.FeaturesPanel.tooltip.unpadded",
+					feature.getGFFType(), feature.getName(),
+					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
+					getPadded(p1), getPadded(p2));
+			}
 		}
-		else
+		else if(feature instanceof CigarFeature)
 		{
-			return RB.format("gui.FeaturesPanel.tooltip.unpadded",
-				feature.getGFFType(), feature.getName(),
-				TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
-				getPadded(p1), getPadded(p2));
+			CigarFeature cigarFeature = (CigarFeature)feature;
+			int count = cigarFeature.getCount();
+			if (Prefs.guiFeaturesArePadded)
+			{
+				return RB.format("gui.FeaturesPanel.tooltip.padded.cigarFeature",
+					feature.getGFFType(), feature.getName(),
+					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
+					getUnpadded(p1), getUnpadded(p2), count);
+			}
+			else
+			{
+				return RB.format("gui.FeaturesPanel.tooltip.unpadded.cigarFeature",
+					feature.getGFFType(), feature.getName(),
+					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
+					getPadded(p1), getPadded(p2), count);
+			}
 		}
+		return "";
 	}
 
 	private String getUnpadded(int base)
