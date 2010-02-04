@@ -15,13 +15,16 @@ import tablet.data.cache.*;
 public class Assembly implements Iterable<Contig>
 {
 	private String name;
+
+	private String cacheID;
 	private static IReadCache cache;
 
 	private ArrayList<Contig> contigs = new ArrayList<Contig>();
 
 	/** Constructs a new, empty assembly. */
-	public Assembly()
+	public Assembly(String cacheID)
 	{
+		this.cacheID = cacheID;
 	}
 
 	/**
@@ -38,6 +41,12 @@ public class Assembly implements Iterable<Contig>
 	 */
 	public String getName()
 		{ return name; }
+
+	/**
+	 * Returns the unique ID to be used with any associated cache objects.
+	 */
+	public String getCacheID()
+		{ return cacheID; }
 
 	/**
 	 * Initializes the vector of contigs to be at least this size by default.

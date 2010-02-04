@@ -318,8 +318,8 @@ public class WinMain extends JRibbonFrame
 	public void validateCacheFolder()
 	{
 		new File(Prefs.cacheDir).mkdirs();
-		File test = new File(Prefs.cacheDir,
-			System.currentTimeMillis() + "-validate");
+		File test = new File(Prefs.cacheDir, "Tablet-"
+			+ SystemUtils.createGUID(24) + ".cache");
 
 		try
 		{
