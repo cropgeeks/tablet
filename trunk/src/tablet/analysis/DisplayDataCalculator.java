@@ -3,8 +3,12 @@
 
 package tablet.analysis;
 
+import java.io.*;
+
 import tablet.data.*;
 import tablet.data.auxiliary.*;
+import tablet.data.cache.*;
+import tablet.gui.*;
 
 import scri.commons.gui.*;
 
@@ -14,6 +18,7 @@ import scri.commons.gui.*;
  */
 public class DisplayDataCalculator extends SimpleJob
 {
+	private Assembly assembly;
 	private Contig contig;
 
 	// The objects that will run calculations as part of this job
@@ -21,9 +26,24 @@ public class DisplayDataCalculator extends SimpleJob
 	private CoverageCalculator cc;
 	private PackSetCreator ps;
 
-	public DisplayDataCalculator(Contig contig)
+	// And the objects that will hold the results
+	private IArrayIntCache unpaddedToPadded;
+
+	public DisplayDataCalculator(Assembly assembly, Contig contig)
 	{
+		this.assembly = assembly;
 		this.contig = contig;
+
+		// Create any cache objects that will be needed
+		int length = contig.getConsensus().length();
+		if (Prefs.cacheUnpaddedMap && length > 1000000)
+		{
+			File cache = new File(Prefs.cacheDir,
+				"Tablet-" + assembly.getCacheID() + ".unpaddedmap");
+			unpaddedToPadded = new ArrayIntFileCache(cache);
+		}
+		else
+		 	unpaddedToPadded = new ArrayIntMemCache(length);
 	}
 
 	public void runJob(int jobIndex)
@@ -35,11 +55,15 @@ public class DisplayDataCalculator extends SimpleJob
 		if (okToRun)
 		{
 			// Compute mappings between unpadded and padded values
-			bm = new BaseMappingCalculator(contig.getConsensus());
+			bm = new BaseMappingCalculator(contig.getConsensus(),
+				unpaddedToPadded);
+
+			unpaddedToPadded.openForWriting();
 			bm.runJob(0);
+			unpaddedToPadded.openForReading();
 
 			DisplayData.setPaddedToUnpadded(bm.getPaddedToUnpaddedArray());
-			DisplayData.setUnpaddedToPadded(bm.getUnpaddedToPaddedArray());
+			DisplayData.setUnpaddedToPadded(unpaddedToPadded);
 		}
 
 		if (okToRun)

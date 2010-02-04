@@ -3,6 +3,8 @@
 
 package tablet.data.auxiliary;
 
+import tablet.data.cache.*;
+
 /**
  * DisplayData holds information about a contig that is *only* required when
  * Tablet is displaying that contig. The information is calculated just before
@@ -14,7 +16,7 @@ public class DisplayData
 	// Contains info to map from a padded to an unpadded position
 	private static int[] paddedToUnpadded;
 	// Contains info to map from an unpadded to a padded position
-	private static int[] unpaddedToPadded;
+	private static IArrayIntCache unpaddedToPadded;
 
 	// Contains the coverage information across the contig
 	private static int[] coverage;
@@ -31,7 +33,13 @@ public class DisplayData
 	public static void clearData()
 	{
 		paddedToUnpadded = null;
-		unpaddedToPadded = null;
+
+		try
+		{
+			// TODO: EndGame
+			unpaddedToPadded.close();
+		}
+		catch (Exception e) {}
 
 		coverage = null;
 	}
@@ -94,13 +102,13 @@ public class DisplayData
 	public static int unpaddedToPadded(int unpaddedPosition)
 	{
 		try {
-			return unpaddedToPadded[unpaddedPosition];
+			return unpaddedToPadded.getValue(unpaddedPosition);
 		}
-		catch (ArrayIndexOutOfBoundsException e) {
+		catch (Exception e) {
 			return -1;
 		}
 	}
 
-	public static void setUnpaddedToPadded(int[] newUnpaddedToPadded)
-		{ unpaddedToPadded = newUnpaddedToPadded; }
+	public static void setUnpaddedToPadded(IArrayIntCache cache)
+		{ unpaddedToPadded = cache; }
 }
