@@ -11,6 +11,7 @@ import tablet.data.*;
 import tablet.data.cache.*;
 
 import scri.commons.gui.*;
+import tablet.data.auxiliary.CigarFeature;
 
 class SamFileReader extends TrackableReader
 {
@@ -112,13 +113,15 @@ class SamFileReader extends TrackableReader
 	private void readSamFile()
 		throws Exception
 	{
+		Assembly.isBam(true);
+		
 		in = new BufferedReader(new InputStreamReader(getInputStream(samIndex, true), "ASCII"));
 
 		cigarParser = new CigarParser();
 
 		readID = 0;
 
-		HashMap<String, int[]> paddingManipulator = new HashMap<String, int[]>();
+		Contig prev = null;
 
 		while ((str = readLine()) != null && okToRun)
 		{
@@ -160,6 +163,17 @@ class SamFileReader extends TrackableReader
 
 			if (contigToAddTo != null)
 			{
+				if(prev == null)
+				{
+					prev = contigToAddTo;
+					cigarParser.setCurrentContigName(contigToAddTo.getName());
+				}
+				else if(prev != contigToAddTo)
+				{
+					prev = contigToAddTo;
+					cigarParser.setCurrentContigName(contigToAddTo.getName());
+				}
+				
 				Read read = new Read(readID, pos);
 
 				contigToAddTo.getReads().add(read);
@@ -170,6 +184,7 @@ class SamFileReader extends TrackableReader
 				ReadMetaData rmd = new ReadMetaData(name, complemented);
 				rmd.setData(fullRead);
 				rmd.calculateUnpaddedLength();
+				rmd.setCigar(cigar);
 				read.setLength(rmd.length());
 
 				// Do base-position comparison...
@@ -184,7 +199,24 @@ class SamFileReader extends TrackableReader
 
 		in.close();
 
+		processCigarFeatures(cigarParser);
+
 		assembly.setName(files[samIndex].getName());
+	}
+
+	private void processCigarFeatures(CigarParser parser)
+	{
+		for (String feature : parser.getFeatureMap().keySet())
+		{
+			String[] featureElements = feature.split("Tablet-Separator");
+			int count = parser.getFeatureMap().get(feature);
+			CigarFeature cigarFeature = new CigarFeature("CIGAR-I", "CIG" + featureElements[1], Integer.parseInt(featureElements[1]) - 1, Integer.parseInt(featureElements[1]), count);
+			Contig ctg = contigHash.get(featureElements[0]);
+			if (ctg != null)
+			{
+				ctg.getFeatures().add(cigarFeature);
+			}
+		}
 	}
 
 	public String getMessage()

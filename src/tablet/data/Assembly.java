@@ -21,6 +21,8 @@ public class Assembly implements Iterable<Contig>
 
 	private ArrayList<Contig> contigs = new ArrayList<Contig>();
 
+	private static boolean isBam;
+
 	/** Constructs a new, empty assembly. */
 	public Assembly(String cacheID)
 	{
@@ -108,4 +110,14 @@ public class Assembly implements Iterable<Contig>
 	 */
 	public IReadCache getCache()
 		{ return cache; }
+
+	public static boolean isBam()
+	{
+		return isBam;
+	}
+
+	public static void isBam(boolean isBam)
+	{
+		Assembly.isBam = isBam;
+	}
 }

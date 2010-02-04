@@ -89,9 +89,18 @@ public class ReadFileCache extends TabletCache implements IReadCache
 						data = new byte[(dataLength/2)+1];
 					rnd.read(data);
 
+					int cigarLength = rnd.readIntFromBuffer();
+
+					// Make an array of this length
+					byte[] cigar = new byte[cigarLength];
+					// Then read its name from the file
+					rnd.read(cigar);
+					String cigarString = new String(cigar, "UTF8");
+
 					rmd = new ReadMetaData(name, isComplemented, unpaddedLength);
 					rmd.setRawData(data);
 					rmd.setLength(dataLength);
+					rmd.setCigar(cigarString);
 				}
 				catch (Exception e)	{
 					e.printStackTrace();
@@ -128,6 +137,12 @@ public class ReadFileCache extends TabletCache implements IReadCache
 		// And the data itself
 		out.write(data);
 
+		byte[] cigar = readMetaData.getCigar().getBytes("UTF8");
+
+		// Write the name
+		out.writeInt(cigar.length);
+		out.write(cigar);
+
 		// Bytes written:
 		//   4   - INT, length of the name to follow
 		//   [n] - BYTES, the name itself
@@ -135,7 +150,9 @@ public class ReadFileCache extends TabletCache implements IReadCache
 		//   4   - INT, unpadded length
 		//   4   - INT, data length
 		//   [d] - BYTES, the data
-		// = 13
-		byteCount += (array.length + 13 + data.length);
+		//	 4	 - INT, length of the cigar string
+		//	 [c] - BYTES, the cigar itself
+		// = 17
+		byteCount += (array.length + 17 + data.length + cigar.length);
 	}
 }

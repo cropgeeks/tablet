@@ -34,15 +34,15 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	private int x, y, w, h;
 
 	// Variables holding the data that gets drawn within the tooltip
-	private String readName, posData, lengthData;
+	private String readName, posData, lengthData, cigar;
 
 	ReadsCanvasInfoPane()
 	{
 		Color c = (Color) UIManager.get("info");
 		bgColor = new Color(c.getRed(), c.getGreen(), c.getBlue(), 190);
 
-		titleFont = new Font("SansSerif", Font.BOLD, 11);
-		labelFont = new Font("SansSerif", Font.PLAIN, 10);
+		titleFont = new Font("Dialog", Font.BOLD, 12);
+		labelFont = new Font("Dialog", Font.PLAIN, 11);
 	}
 
 	void setAssemblyPanel(AssemblyPanel aPanel)
@@ -76,6 +76,9 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		w = 300;
 		h = 90;
 
+		if(Assembly.isBam())
+			h = 105;
+
 		// Start and ending positions (against consensus)
 		int readS = read.getStartPosition();
 		int readE = read.getEndPosition();
@@ -95,6 +98,9 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		// Name
 		readName = metaData.getName();
 
+		if(Assembly.isBam())
+			cigar = "Cigar: " + metaData.getCigar();
+
 		// Determine longest string
 		if (fmTitle.stringWidth(readName) > (w-20))
 			w = fmTitle.stringWidth(readName) + 20;
@@ -102,6 +108,8 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			w = fmTitle.stringWidth(posData) + 20;
 		if (fmTitle.stringWidth(lengthData) > (w-20))
 			w = fmTitle.stringWidth(lengthData) + 20;
+		if (Assembly.isBam() && fmTitle.stringWidth(cigar) > (w-20))
+			w = fmTitle.stringWidth(cigar) + 20;
 
 		// Tell the overview canvas to paint this read too
 		int offset = rCanvas.offset;
@@ -115,6 +123,11 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	{
 		if (mouse == null || Prefs.visInfoPaneActive == false)
 			return;
+
+		int arrowHeight = 55;
+
+		if(Assembly.isBam())
+			arrowHeight = 70;
 
 		calculatePosition();
 		g.translate(x, y);
@@ -133,12 +146,17 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		g.setFont(labelFont);
 		g.drawString(posData, 10, 30);
 		g.drawString(lengthData, 10, 45);
+		if(Assembly.isBam())
+		{
+			g.setColor(Color.blue);
+			g.drawString(cigar, 10, 60);
+		}
 
 		// Complemented/uncomplemented arrow
 		if (metaData.isComplemented())
-			g.drawImage(lhArrow, w-10-lhArrow.getWidth(null), 55, null);
+			g.drawImage(lhArrow, w-10-lhArrow.getWidth(null), arrowHeight, null);
 		else
-			g.drawImage(rhArrow, 10, 55, null);
+			g.drawImage(rhArrow, 10, arrowHeight, null);
 
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		renderSequence(g);
@@ -150,6 +168,11 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 	private void renderSequence(Graphics2D g)
 	{
+		int lineStart = 70;
+
+		if(Assembly.isBam())
+			lineStart = 85;
+
 		ReadMetaData rmd = Assembly.getReadMetaData(read);
 
 		float xScale = read.length() / (float) (w - 10);
@@ -163,11 +186,11 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			byte b = rmd.getStateAt(dataX);
 
 			g.setColor(rCanvas.colors.getColor(b));
-			g.drawLine(x, 70, x, 80);
+			g.drawLine(x, lineStart, x, lineStart+10);
 		}
 
 		g.setColor(Color.darkGray);
-		g.drawRect(10, 70, w-21, 10);
+		g.drawRect(10, lineStart, w-21, 10);
 	}
 
 	private void calculatePosition()

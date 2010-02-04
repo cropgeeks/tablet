@@ -20,6 +20,8 @@ public class ReadMetaData extends Sequence
 	private int unpaddedLength;
 	private int length;
 
+	private String cigar;
+
 	public ReadMetaData()
 	{
 	}
@@ -108,5 +110,15 @@ public class ReadMetaData extends Sequence
 	{
 		super.setData(sequence);
 		length = sequence.length();
+	}
+
+	public String getCigar()
+	{
+		return cigar;
+	}
+
+	public void setCigar(String cigar)
+	{
+		this.cigar = cigar;
 	}
 }
