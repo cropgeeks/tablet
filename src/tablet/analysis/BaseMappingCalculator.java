@@ -4,6 +4,7 @@
 package tablet.analysis;
 
 import tablet.data.*;
+import tablet.data.cache.*;
 
 /**
  * Calculates the padded->unpadded and unpadded->padded translation information
@@ -18,18 +19,16 @@ public class BaseMappingCalculator extends SimpleJob
 	// Contains info to map from a padded to an unpadded position
 	private int[] paddedToUnpadded;
 	// Contains info to map from an unpadded to a padded position
-	private int[] unpaddedToPadded;
+	private IArrayIntCache unpaddedToPadded;
 
-	public BaseMappingCalculator(Consensus c)
+	public BaseMappingCalculator(Consensus c, IArrayIntCache unpaddedToPadded)
 	{
 		this.c = c;
+		this.unpaddedToPadded = unpaddedToPadded;
 	}
 
 	public int[] getPaddedToUnpaddedArray()
 		{ return paddedToUnpadded; }
-
-	public int[] getUnpaddedToPaddedArray()
-		{ return unpaddedToPadded; }
 
 	public void runJob(int jobIndex)
 		throws Exception
@@ -65,18 +64,26 @@ public class BaseMappingCalculator extends SimpleJob
 	// A * T  C
 	// 0 2 3 -1
 	private void calculateUnpaddedToPadded()
+		throws Exception
 	{
-		unpaddedToPadded = new int[c.length()];
+		long s = System.currentTimeMillis();
 
+		int length = c.length();
 		int map = 0;
-		for (int i = 0; i < unpaddedToPadded.length; i++)
+
+		for (int i = 0; i < length; i++)
 		{
 			if (c.getStateAt(i) != Sequence.P)
-				unpaddedToPadded[map++] = i;
+			{
+				unpaddedToPadded.addValue(i);
+				map++;
+			}
 		}
 
 		// Any left over positions can't map to anything
-		for (; map < unpaddedToPadded.length; map++)
-			unpaddedToPadded[map] = -1;
+		for (; map < length; map++)
+			unpaddedToPadded.addValue(-1);
+
+		System.out.println("UnPad->Pad: " + (System.currentTimeMillis()-s) + "ms");
 	}
 }

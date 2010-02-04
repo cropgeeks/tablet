@@ -305,7 +305,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		String label = RB.getString("gui.viewer.assemblyPanel.progressDialog.label");
 
 		// Run the job...
-		DisplayDataCalculator ddc = new DisplayDataCalculator(contig);
+		DisplayDataCalculator ddc = new DisplayDataCalculator(assembly, contig);
 		ProgressDialog dialog = new ProgressDialog(ddc, title, label);
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
