@@ -24,7 +24,6 @@ public abstract class TabletCache
 	public void openForWriting()
 		throws IOException
 	{
-		System.out.println("opening cache file for WRITING");
 		out = new DataOutputStream(new BufferedOutputStream(
 			new FileOutputStream(cacheFile)));
 	}
@@ -40,8 +39,6 @@ public abstract class TabletCache
 	public void close()
 		throws IOException
 	{
-		System.out.println("TabletCache.close()");
-
 		if (out != null)
 			out.close();
 

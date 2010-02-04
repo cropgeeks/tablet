@@ -9,6 +9,9 @@ import java.util.*;
 import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
+import tablet.gui.*;
+
+import scri.commons.gui.*;
 
 /**
  * The AssemblyFileHandler class is given file pointers and will attempt to
@@ -29,6 +32,8 @@ public class AssemblyFileHandler extends SimpleJob
 	private AssemblyFile[] files = null;
 	private File cacheDir = null;
 	private TrackableReader reader = null;
+
+	private String cacheid = SystemUtils.createGUID(24);
 
 	public AssemblyFileHandler(String[] filenames, File cacheDir)
 	{
@@ -52,11 +57,17 @@ public class AssemblyFileHandler extends SimpleJob
 		cacheDir.mkdirs();
 
 		// Set up the read cache
-		String time = "" + System.currentTimeMillis();
-		File cache = new File(cacheDir, time + "-" + files[0].getName() + ".cache");
-		File index = new File(cacheDir, time + "-" + files[0].getName() + ".index");
+		IReadCache readCache = null;
 
-		IReadCache readCache = new ReadFileCache(cache, index);
+		if (Prefs.cacheReads)
+		{
+			File cache = new File(cacheDir, "Tablet-" + cacheid + ".reads");
+			File index = new File(cacheDir, "Tablet-" + cacheid + ".readsndx");
+			readCache = new ReadFileCache(cache, index);
+		}
+		else
+			readCache = new ReadMemCache();
+
 		readCache.openForWriting();
 
 
@@ -130,7 +141,7 @@ public class AssemblyFileHandler extends SimpleJob
 	{
 		try
 		{
-			reader.setInputs(files, new Assembly());
+			reader.setInputs(files, new Assembly(cacheid));
 
 			if (reader.canRead())
 			{

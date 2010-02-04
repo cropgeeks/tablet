@@ -121,6 +121,9 @@ public class Prefs extends XMLPreferences
 	// are padded?
 	public static boolean printPads = true;
 
+	// Disk caching options
+	public static boolean cacheReads = true;
+
 	static void setDefaults()
 	{
 
