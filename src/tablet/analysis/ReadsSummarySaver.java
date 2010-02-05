@@ -42,7 +42,7 @@ public class ReadsSummarySaver extends SimpleJob
 			if (!okToRun)
 				break;
 
-			ReadMetaData rmd = Assembly.getReadMetaData(read);
+			ReadMetaData rmd = Assembly.getReadMetaData(read, false);
 			lastRead = rmd.getName();
 
 			out.write(lastRead + "\t" + (read.getStartPosition() + 1)

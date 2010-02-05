@@ -41,7 +41,7 @@ class StackSet implements IReadManager
 		int readS = read.getStartPosition();
 		int readE = read.getEndPosition();
 
-		ReadMetaData rmd = Assembly.getReadMetaData(read);
+		ReadMetaData rmd = Assembly.getReadMetaData(read, true);
 
 		// Fill in any blanks between the current position and the start of
 		// this read

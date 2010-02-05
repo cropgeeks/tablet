@@ -50,7 +50,7 @@ public class ReadFileCache extends TabletCache implements IReadCache
 		index.close();
 	}
 
-	public ReadMetaData getReadMetaData(int id)
+	public ReadMetaData getReadMetaData(int id, boolean dataOnly)
 	{
 		while (true)
 		{
@@ -65,21 +65,6 @@ public class ReadFileCache extends TabletCache implements IReadCache
 					long seekTo = index.getValue(id);
 					rnd.seek(seekTo);
 
-					// Read the length (in bytes) that the name takes up
-					int length = rnd.readIntFromBuffer();
-
-					// Make an array of this length
-					byte[] array = new byte[length];
-					// Then read its name from the file
-					rnd.read(array);
-					String name = new String(array, "UTF8");
-
-					// Then C or U
-					boolean isComplemented = rnd.readBooleanFromBuffer();
-
-					// Unpadded length
-					int unpaddedLength = rnd.readIntFromBuffer();
-
 					int dataLength = rnd.readIntFromBuffer();
 
 					byte[] data;
@@ -89,18 +74,41 @@ public class ReadFileCache extends TabletCache implements IReadCache
 						data = new byte[(dataLength/2)+1];
 					rnd.read(data);
 
-					int cigarLength = rnd.readIntFromBuffer();
+					if (dataOnly)
+					{
+						rmd = new ReadMetaData();
+						rmd.setRawData(data);
+					}
+					else
+					{
+						// Read the length (in bytes) that the name takes up
+						int length = rnd.readIntFromBuffer();
 
-					// Make an array of this length
-					byte[] cigar = new byte[cigarLength];
-					// Then read its name from the file
-					rnd.read(cigar);
-					String cigarString = new String(cigar, "UTF8");
+						// Make an array of this length
+						byte[] array = new byte[length];
+						// Then read its name from the file
+						rnd.read(array);
+						String name = new String(array, "UTF8");
 
-					rmd = new ReadMetaData(name, isComplemented, unpaddedLength);
-					rmd.setRawData(data);
-					rmd.setLength(dataLength);
-					rmd.setCigar(cigarString);
+						// Then C or U
+						boolean isComplemented = rnd.readBooleanFromBuffer();
+
+						// Unpadded length
+						int unpaddedLength = rnd.readIntFromBuffer();
+
+						rmd = new ReadMetaData(name, isComplemented, unpaddedLength);
+						rmd.setRawData(data);
+						rmd.setLength(dataLength);
+
+						// Read CIGAR data (but only with BAM assemblies)
+						if (Assembly.isBam())
+						{
+							byte[] cigar = new byte[rnd.readIntFromBuffer()];
+
+							rnd.read(cigar);
+							rmd.setCigar(new String(cigar, "UTF8"));
+						}
+					}
 				}
 				catch (Exception e)	{
 					e.printStackTrace();
@@ -119,6 +127,12 @@ public class ReadFileCache extends TabletCache implements IReadCache
 		// Update the index to mark the next position as in use by this Read
 		index.addValue(byteCount);
 
+		// Write out the length of the data
+		byte[] data = readMetaData.getRawData();
+		out.writeInt(readMetaData.length());
+		// And the data itself
+		out.write(data);
+
 		byte[] array = readMetaData.getName().getBytes("UTF8");
 
 		// Write the name
@@ -130,12 +144,6 @@ public class ReadFileCache extends TabletCache implements IReadCache
 
 		// Write out its unpadded length (length minus pad characters)
 		out.writeInt(readMetaData.getUnpaddedLength());
-
-		// Write out the length of the data
-		byte[] data = readMetaData.getRawData();
-		out.writeInt(readMetaData.length());
-		// And the data itself
-		out.write(data);
 
 		byte[] cigar = readMetaData.getCigar().getBytes("UTF8");
 

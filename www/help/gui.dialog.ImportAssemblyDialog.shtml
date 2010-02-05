@@ -28,7 +28,7 @@ from the <a href="application-menu.shtml">Application Menu</a>.</p>
 
 <p>Tablet can currently view assemblies/alignments which are stored in the ACE,
 AFG, MAQ, or SOAP file formats, with accompanying reference/consensus data (if needed)
-being read from either FASTA or FASTQ files. Support for SAM (but not BAM) is included,
+being read from either FASTA or FASTQ files. Support for SAM and BAM is included too,
 but is still experimental.</p>
 
  <p>
@@ -101,6 +101,13 @@ reference file is optional).</p>
 <p>Tablet will attempt to load a text-based .sam file, with or without SAM
 headers. A SAM file does not include reference/consensus information, so if it
 is to be included, it must be provided in a separate fasta/fastq file.</p>
+
+<h3>Importing BAM files</h3>
+
+<p>Tablet will attempt to load binary .bam files, however it should be noted
+that Tablet does not (yet) support bam's indexing features, which means the entire
+bam file will be read into memory. If reference/consensus information is
+to be included, it must be provided in a separate fasta/fastq file.</p>
 
 
 <!--#include virtual="footer.html" -->

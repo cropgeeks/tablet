@@ -68,7 +68,7 @@ public class NameOverlayer extends Thread implements IOverlayRenderer
 			//loop over the reads, drawing them on screen.
 			for(Read read : reads)
 			{
-				ReadMetaData rmd = Assembly.getReadMetaData(read);
+				ReadMetaData rmd = Assembly.getReadMetaData(read, false);
 				g.drawString(rmd.getName(), ((read.getStartPosition()+rCanvas.offset)*rCanvas.ntW)+5, y);
 				y += rCanvas.ntH;
 			}
@@ -94,7 +94,7 @@ public class NameOverlayer extends Thread implements IOverlayRenderer
 			try { Thread.sleep(25); }
 			catch (InterruptedException e) { isOK = false; }
 		}
-		
+
 		if(hidden)
 		{
 			rCanvas.overlays.remove(this);

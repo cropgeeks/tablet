@@ -173,7 +173,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		if(Assembly.isBam())
 			lineStart = 85;
 
-		ReadMetaData rmd = Assembly.getReadMetaData(read);
+		ReadMetaData rmd = Assembly.getReadMetaData(read, false);
 
 		float xScale = read.length() / (float) (w - 10);
 

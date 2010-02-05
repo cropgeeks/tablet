@@ -99,9 +99,9 @@ public class Assembly implements Iterable<Contig>
 	 * Finds and returns the read meta data for the given read.
 	 * @return the read meta data for the given read
 	 */
-	public static ReadMetaData getReadMetaData(Read read)
+	public static ReadMetaData getReadMetaData(Read read, boolean dataOnly)
 	{
-		return cache.getReadMetaData(read.getID());
+		return cache.getReadMetaData(read.getID(), dataOnly);
 	}
 
 	/**

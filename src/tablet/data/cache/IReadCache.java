@@ -24,7 +24,7 @@ public interface IReadCache
 	 * Returns the read meta data for the read that matches the given ID.
 	 * @return the read meta data for the read that matches the given ID
 	 */
-	public ReadMetaData getReadMetaData(int id);
+	public ReadMetaData getReadMetaData(int id, boolean dataOnly);
 
 	/**
 	 * Adds new meta data about a read to the cache.

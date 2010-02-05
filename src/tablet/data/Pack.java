@@ -112,7 +112,7 @@ public class Pack
 			int readS = read.getStartPosition();
 			int readE = read.getEndPosition();
 
-			ReadMetaData rmd = Assembly.getReadMetaData(read);
+			ReadMetaData rmd = Assembly.getReadMetaData(read, true);
 
 			// Fill in any blanks between the current index the next read
 			for (; index < readS; index++, dataI++)

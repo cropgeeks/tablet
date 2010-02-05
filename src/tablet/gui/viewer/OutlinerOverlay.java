@@ -38,7 +38,7 @@ class OutlinerOverlay implements IOverlayRenderer
 
 		if (read != null)
 		{
-			ReadMetaData data = Assembly.getReadMetaData(read);
+			ReadMetaData data = Assembly.getReadMetaData(read, false);
 
 			// Start and ending positions (against consensus)
 			readS = read.getStartPosition();
