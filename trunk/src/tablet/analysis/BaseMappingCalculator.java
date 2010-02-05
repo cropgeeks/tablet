@@ -17,18 +17,16 @@ public class BaseMappingCalculator extends SimpleJob
 	private Consensus c;
 
 	// Contains info to map from a padded to an unpadded position
-	private int[] paddedToUnpadded;
+	private IArrayIntCache paddedToUnpadded;
 	// Contains info to map from an unpadded to a padded position
 	private IArrayIntCache unpaddedToPadded;
 
-	public BaseMappingCalculator(Consensus c, IArrayIntCache unpaddedToPadded)
+	public BaseMappingCalculator(Consensus c, IArrayIntCache paddedToUnpadded, IArrayIntCache unpaddedToPadded)
 	{
 		this.c = c;
+		this.paddedToUnpadded = paddedToUnpadded;
 		this.unpaddedToPadded = unpaddedToPadded;
 	}
-
-	public int[] getPaddedToUnpaddedArray()
-		{ return paddedToUnpadded; }
 
 	public void runJob(int jobIndex)
 		throws Exception
@@ -43,17 +41,22 @@ public class BaseMappingCalculator extends SimpleJob
 	// A  * T C
 	// 0 -1 1 2
 	private void calculatePaddedToUnpadded()
+		throws Exception
 	{
-		paddedToUnpadded = new int[c.length()];
+		long s = System.currentTimeMillis();
 
-		for (int i = 0, index = 0; i < paddedToUnpadded.length; i++)
+		int length = c.length();
+
+		for (int i = 0, index = 0; i < length; i++)
 		{
 			if (c.getStateAt(i) != Sequence.P)
-				paddedToUnpadded[i] = index++;
+				paddedToUnpadded.addValue(index++);
 
 			else
-				paddedToUnpadded[i] = -1;
+				paddedToUnpadded.addValue(-1);
 		}
+
+		System.out.println("Pad->UnPad: " + (System.currentTimeMillis()-s) + "ms");
 	}
 
 	// Given an unpadded index value (0 to length-1) what index within the real

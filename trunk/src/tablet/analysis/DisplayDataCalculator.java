@@ -27,6 +27,7 @@ public class DisplayDataCalculator extends SimpleJob
 	private PackSetCreator ps;
 
 	// And the objects that will hold the results
+	private IArrayIntCache paddedToUnpadded;
 	private IArrayIntCache unpaddedToPadded;
 
 	public DisplayDataCalculator(Assembly assembly, Contig contig)
@@ -36,6 +37,17 @@ public class DisplayDataCalculator extends SimpleJob
 
 		// Create any cache objects that will be needed
 		int length = contig.getConsensus().length();
+
+		// The padded->unpadded mapping array...
+		if (Prefs.cachePaddedMap && length > 1000000)
+		{
+			File cache = new File(Prefs.cacheDir, "Tablet-" + assembly.getCacheID() + ".paddedmap");
+			paddedToUnpadded = new ArrayIntFileCache(cache);
+		}
+		else
+			paddedToUnpadded = new ArrayIntMemCache(length);
+
+		// The unpadded->padded mapping array...
 		if (Prefs.cacheUnpaddedMap && length > 1000000)
 		{
 			File cache = new File(Prefs.cacheDir, "Tablet-" + assembly.getCacheID() + ".unpaddedmap");
@@ -55,13 +67,17 @@ public class DisplayDataCalculator extends SimpleJob
 		{
 			// Compute mappings between unpadded and padded values
 			bm = new BaseMappingCalculator(contig.getConsensus(),
-				unpaddedToPadded);
+				paddedToUnpadded, unpaddedToPadded);
 
+			paddedToUnpadded.openForWriting();
 			unpaddedToPadded.openForWriting();
+
 			bm.runJob(0);
+
+			paddedToUnpadded.openForReading();
 			unpaddedToPadded.openForReading();
 
-			DisplayData.setPaddedToUnpadded(bm.getPaddedToUnpaddedArray());
+			DisplayData.setPaddedToUnpadded(paddedToUnpadded);
 			DisplayData.setUnpaddedToPadded(unpaddedToPadded);
 		}
 
