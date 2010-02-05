@@ -21,7 +21,8 @@ public class Assembly implements Iterable<Contig>
 
 	private ArrayList<Contig> contigs = new ArrayList<Contig>();
 
-	private static boolean isBam;
+	private static boolean isBam = false;
+	private static boolean hasCigar = false;
 
 	/** Constructs a new, empty assembly. */
 	public Assembly(String cacheID)
@@ -111,13 +112,19 @@ public class Assembly implements Iterable<Contig>
 	public IReadCache getCache()
 		{ return cache; }
 
+	/**
+	 * Returns true if this assembly holds data from a BAM assembly file.
+	 * @return true if this assembly holds data from a BAM assembly file
+	 */
 	public static boolean isBam()
-	{
-		return isBam;
-	}
+		{ return isBam; }
 
-	public static void isBam(boolean isBam)
-	{
-		Assembly.isBam = isBam;
-	}
+	public void setAsBamAssembly()
+		{ isBam = true; }
+
+	public static boolean hasCigar()
+		{ return hasCigar; }
+
+	public void setHasCigar()
+		{ hasCigar = true; }
 }
