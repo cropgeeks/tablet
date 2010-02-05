@@ -150,6 +150,19 @@ public class Contig
 		stackSet = new StackSet(reads);
 	}
 
+	/**
+	 * Clears any references to this contig's pack and stack sets. To be called
+	 * when a contig is no longer on screen (as these object's are only needed
+	 * at display time).
+	 */
+	public void clearPackSet()
+	{
+		readManager = null;
+
+		packSet = null;
+		stackSet = null;
+	}
+
 	public int getConsensusOffset()
 		{ return -lhsOffset; }
 
@@ -185,11 +198,4 @@ public class Contig
 		if (outlines.size() > 5)
 			outlines.remove(0);
 	}
-
-	/**
-	 * Returns true if this contig has had its reads packed.
-	 * @return true if this contig has had its reads packed
-	 */
-	public boolean isDataPacked()
-		{ return packSet != null; }
 }
