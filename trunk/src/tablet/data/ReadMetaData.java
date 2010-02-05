@@ -20,7 +20,7 @@ public class ReadMetaData extends Sequence
 	private int unpaddedLength;
 	private int length;
 
-	private String cigar;
+	private String cigar = "";
 
 	public ReadMetaData()
 	{
@@ -113,12 +113,8 @@ public class ReadMetaData extends Sequence
 	}
 
 	public String getCigar()
-	{
-		return cigar;
-	}
+		{ return cigar; }
 
 	public void setCigar(String cigar)
-	{
-		this.cigar = cigar;
-	}
+		{ this.cigar = cigar; }
 }
