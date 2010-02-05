@@ -259,7 +259,7 @@ class AceFileReader extends TrackableReader
 		read.setLength(rmd.length());
 
 		// Do base-position comparison...
-		BasePositionComparator.compare(contig.getConsensus(), rmd,
+		BasePositionComparator.compare(contig, rmd,
 			read.getStartPosition());
 
 		readCache.setReadMetaData(rmd);

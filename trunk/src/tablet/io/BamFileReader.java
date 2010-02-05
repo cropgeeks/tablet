@@ -88,9 +88,9 @@ public class BamFileReader extends TrackableReader
 
 		boolean found = false;
 
-		if(contigHash.isEmpty())
+		for(SAMSequenceRecord record : inputSam.getFileHeader().getSequenceDictionary().getSequences())
 		{
-			for(SAMSequenceRecord record : inputSam.getFileHeader().getSequenceDictionary().getSequences())
+			if(contigHash.get(record.getSequenceName()) == null)
 			{
 				consensus = new Consensus();
 				contig = new Contig(record.getSequenceName(), true, 0);
@@ -150,7 +150,7 @@ public class BamFileReader extends TrackableReader
 
 			// Do base-position comparison...
 
-			BasePositionComparator.compare(contigToAddTo.getConsensus(), rmd, readStartPos);
+			BasePositionComparator.compare(contigToAddTo, rmd, readStartPos);
 
 			rmd.setCigar(record.getCigar().toString());
 

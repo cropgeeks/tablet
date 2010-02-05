@@ -13,13 +13,14 @@ import tablet.data.*;
  */
 public class BasePositionComparator
 {
-	public static void compare(Consensus consensus, Sequence read, int start)
+	public static void compare(Contig contig, Sequence read, int start)
 		throws Exception
 	{
 		// Index start position within the consensus sequence
 		int c = start;
-		int cLength = consensus.length();
+		int cLength = contig.getConsensus().length();
 		int rLength = read.length();
+		int mismatches =0;
 
 		for (int r = 0; r < rLength; r++, c++)
 		{
@@ -31,15 +32,29 @@ public class BasePositionComparator
 				// not have a corresponding position on the consensus
 				// (and must therefore be different from it)
 				read.setStateAt(r, (byte)(value+1));
+				mismatches++;
 			}
 			else
 			{
 				// The DNATable encodes its states so that A and dA are
 				// only ever 1 byte apart, meaning we can change quickly
 				// by just incrementing the value by one
-				if (consensus.getStateAt(c) != value)
+				if (contig.getConsensus().getStateAt(c) != value)
+				{
 					read.setStateAt(r, (byte)(value+1));
+
+					mismatches++;
+				}
 			}
 		}
+		//calculate the mismatch percentage for this read
+		float mismatchPercentage = calculateMismatchPercentage(mismatches, read.length());
+		//add to the total percentage mismatch of the contig
+		contig.setMismatches(mismatchPercentage);
+	}
+
+	private static float calculateMismatchPercentage(float mismatches, float readLength)
+	{
+		return (mismatches / readLength)*100f;
 	}
 }

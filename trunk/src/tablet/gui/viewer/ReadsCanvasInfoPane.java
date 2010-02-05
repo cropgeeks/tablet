@@ -99,7 +99,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		readName = metaData.getName();
 
 		if (Assembly.hasCigar())
-			cigar = "Cigar: " + metaData.getCigar();
+			cigar = RB.format("gui.viewer.ReadsCanvasInfoPane.cigar", metaData.getCigar());
 
 		// Determine longest string
 		if (fmTitle.stringWidth(readName) > (w-20))
@@ -220,6 +220,8 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 		StringBuilder text = new StringBuilder(seq.length() + 500);
 		text.append(readName + lb + posData + lb + lengthData + lb);
+		if(Assembly.hasCigar())
+			text.append(cigar + lb);
 
 		if (metaData.isComplemented())
 			text.append("Read direction is REVERSE" + lb + lb);

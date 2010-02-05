@@ -32,6 +32,10 @@ public class Contig
 	// Supplementary set of features used purely for graphical outlining
 	private ArrayList<Feature> outlines = new ArrayList<Feature>();
 
+	private float mismatches = 0;
+
+	private float mismatchPercentage = 0;
+
 	/** Constructs a new, empty contig. */
 	public Contig()
 	{
@@ -130,6 +134,7 @@ public class Contig
 
 	public void calculateOffsets()
 	{
+		calculatePercentageMismatch();
 		// Set the rhsOffset to the final index position in the consensus seq
 		rhsOffset = consensus.length() - 1;
 
@@ -197,5 +202,22 @@ public class Contig
 		// If the number of elements is higher than 5, remove the oldest
 		if (outlines.size() > 5)
 			outlines.remove(0);
+	}
+
+	public void setMismatches(float mismatches)
+	{
+		this.mismatches += mismatches;
+	}
+
+	public float getMismatchPercentage()
+	{
+		return mismatchPercentage;
+	}
+
+	private void calculatePercentageMismatch()
+	{
+		mismatchPercentage = mismatches / (float)reads.size();
+		if(reads.size() == 0)
+			mismatchPercentage = 0;
 	}
 }
