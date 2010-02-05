@@ -38,8 +38,7 @@ public class DisplayDataCalculator extends SimpleJob
 		int length = contig.getConsensus().length();
 		if (Prefs.cacheUnpaddedMap && length > 1000000)
 		{
-			File cache = new File(Prefs.cacheDir,
-				"Tablet-" + assembly.getCacheID() + ".unpaddedmap");
+			File cache = new File(Prefs.cacheDir, "Tablet-" + assembly.getCacheID() + ".unpaddedmap");
 			unpaddedToPadded = new ArrayIntFileCache(cache);
 		}
 		else
