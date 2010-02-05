@@ -63,6 +63,10 @@ public class DisplayDataCalculator extends SimpleJob
 		// TODO: Technically, these jobs could be run in parallel but it's
 		// probably not worth it as 99% of the time they run instantly anyway
 
+		// UPDATE: (05/02/2010) - Running mapping calculations in parallel was
+		// actually slower than sequentially, because it had to create multiple
+		// simultaneous disk caches (and the HDD didn't like doing that).
+
 		if (okToRun)
 		{
 			// Compute mappings between unpadded and padded values
@@ -96,12 +100,8 @@ public class DisplayDataCalculator extends SimpleJob
 
 		if (okToRun)
 		{
-			// Pack the reads into a packset (if it's not already been done)
-			if (contig.isDataPacked() == false)
-			{
-				ps = new PackSetCreator(contig);
-				ps.runJob(0);
-			}
+			ps = new PackSetCreator(contig);
+			ps.runJob(0);
 		}
 	}
 

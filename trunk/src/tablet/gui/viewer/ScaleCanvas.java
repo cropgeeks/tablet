@@ -17,6 +17,7 @@ class ScaleCanvas extends TrackingCanvas
 {
 	private String U, C;
 
+	private Contig contig;
 	private Consensus consensus;
 
 	private int h = 22;
@@ -60,18 +61,23 @@ class ScaleCanvas extends TrackingCanvas
 
 	void setContig(Contig contig)
 	{
-		if (contig != null)
+		// Clear the packset data from any existing contig
+		if (this.contig != null)
+			this.contig.clearPackSet();
+
+		// Remove tablet.data references if nothing is going to be displayed
+		if (contig == null)
+		{
+			DisplayData.clearData();
+			consensus = null;
+		}
+		else
 		{
 			consensus = contig.getConsensus();
 			offset = contig.getConsensusOffset();
 		}
 
-		// Remove tablet.data references if nothing is going to be displayed
-		else
-		{
-			DisplayData.clearData();
-			consensus = null;
-		}
+		this.contig = contig;
 	}
 
 	void setMouseBase(Integer mouseBase, String message)
