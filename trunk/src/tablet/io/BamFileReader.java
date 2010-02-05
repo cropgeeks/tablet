@@ -29,6 +29,10 @@ public class BamFileReader extends TrackableReader
 
 	private CigarParser cigarParser;
 
+	BamFileReader()
+	{
+	}
+
 	BamFileReader(IReadCache readCache)
 	{
 		this.readCache = readCache;

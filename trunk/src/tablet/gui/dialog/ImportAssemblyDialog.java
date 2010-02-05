@@ -74,6 +74,8 @@ public class ImportAssemblyDialog extends JDialog
 			new FileNameExtensionFilter(RB.getString("gui.text.formats.ace"), "ace"),
 			new FileNameExtensionFilter(RB.getString("gui.text.formats.afg"), "afg"),
 			new FileNameExtensionFilter(RB.getString("gui.text.formats.maq"), "maq", "txt"),
+			new FileNameExtensionFilter(RB.getString("gui.text.formats.sam"), "sam"),
+			new FileNameExtensionFilter(RB.getString("gui.text.formats.bam"), "bam"),
 			new FileNameExtensionFilter(RB.getString("gui.text.formats.soap"), "soap"),
 			new FileNameExtensionFilter(RB.getString("gui.text.formats.txt"), "txt")
 		};
