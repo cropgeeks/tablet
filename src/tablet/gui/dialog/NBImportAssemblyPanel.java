@@ -94,15 +94,15 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
     	catch (Exception e) {}
 
     	// The assembly file must be ACE, AFG, SAM, MAQ, or SOAP
-    	if (t1 > SOAP)
+    	if (t1 >= FASTA)
     		t1 = UNKNOWN;
 
     	// The reference file must be FASTA or FASTQ
-    	if (t2 != FASTA && t2 != FASTQ)
+    	if (t2 < FASTA)
 	    	t2 = UNKNOWN;
 
-    	// The reference option is only needed for SAM, MAQ or SOAP
-    	setReferenceControls(t1 == SAM || t1 == MAQ || t1 == SOAP);
+    	// The reference option is only needed for SAM onwards
+    	setReferenceControls(t1 >= SAM && t1 < FASTA);
 
 
     	String str1 = RB.getString("gui.dialog.NBImportAssembly.ass.status"

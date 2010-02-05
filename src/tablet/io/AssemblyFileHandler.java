@@ -24,8 +24,9 @@ public class AssemblyFileHandler extends SimpleJob
 	public static final int ACE = 1;
 	public static final int AFG = 2;
 	public static final int SAM = 3;
-	public static final int MAQ = 4;
-	public static final int SOAP = 5;
+	public static final int BAM = 4;
+	public static final int MAQ = 5;
+	public static final int SOAP = 6;
 	public static final int FASTA = 20;
 	public static final int FASTQ = 21;
 
@@ -225,6 +226,9 @@ public class AssemblyFileHandler extends SimpleJob
 
 			if (read(new MaqFileReader(), filename))
 				return MAQ;
+
+			if (read(new BamFileReader(), filename))
+				return BAM;
 
 			if (read(new SamFileReader(), filename))
 				return SAM;
