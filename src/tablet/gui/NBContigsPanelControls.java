@@ -4,6 +4,7 @@
 package tablet.gui;
 
 import java.awt.event.*;
+import java.text.NumberFormat;
 import javax.swing.*;
 import javax.swing.RowFilter.*;
 import javax.swing.event.*;
@@ -25,7 +26,7 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
 		// i18n text
 		RB.setText(filterLabel, "gui.NBContigsPanelControls.filterLabel");
 
-		for (int i = 0; i < 7; i++)
+		for (int i = 0; i < 9; i++)
 			combo.addItem(RB.getString("gui.NBContigsPanelControls.combo" + i));
 
 		combo.setSelectedIndex(Prefs.guiContigsFilter);
@@ -62,6 +63,7 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
 	private void filter()
 	{
 		RowFilter<ContigsTableModel, Object> rf = null;
+		NumberFormat nf = NumberFormat.getNumberInstance();
 
 		try
 		{
@@ -111,6 +113,20 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
 			{
 				int number = Integer.parseInt(textField.getText());
 				rf = RowFilter.numberFilter(ComparisonType.BEFORE, number+1, 3);
+			}
+
+			// Filter by minimum mismatch %
+			else if (index == 7)
+			{
+				float number = nf.parse(textField.getText()).floatValue();
+				rf = RowFilter.numberFilter(ComparisonType.AFTER, number-1, 4);
+			}
+
+			// Filter by maximum mismatch %
+			else if (index == 8)
+			{
+				float number = nf.parse(textField.getText()).floatValue();
+				rf = RowFilter.numberFilter(ComparisonType.BEFORE, number+1, 4);
 			}
 		}
 		catch (Exception e)

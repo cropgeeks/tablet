@@ -34,6 +34,8 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 
 	private Contig prevContig = null;
 
+	private DecimalFormatRenderer floatRenderer = new DecimalFormatRenderer();
+
 	ContigsPanel(WinMain winMain, AssemblyPanel aPanel, JTabbedPane ctrlTabs)
 	{
 		this.winMain = winMain;
@@ -44,6 +46,7 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 		add(controls = new NBContigsPanelControls(this));
 
 		controls.table.addMouseListener(new TableMouseListener());
+		controls.table.setDefaultRenderer(Float.class, floatRenderer);
 	}
 
 	void setFeaturesPanel(FeaturesPanel featuresPanel)
@@ -191,12 +194,14 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 
 		Contig contig = (Contig) model.getValueAt(row, 0);
 		NumberFormat nf = TabletUtils.nf;
+		nf.setMaximumFractionDigits(1);
 
 		return RB.format("gui.ContigsPanel.tooltip",
 			contig.getName(),
 			TabletUtils.nf.format(contig.getConsensus().length()),
 			TabletUtils.nf.format(contig.readCount()),
-			TabletUtils.nf.format(contig.getFeatures().size()));
+			TabletUtils.nf.format(contig.getFeatures().size()),
+			TabletUtils.nf.format(contig.getMismatchPercentage()));
 	}
 
 	private void copyTableToClipboard()
@@ -212,7 +217,8 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 			text.append(contig.getName() + "\t"
 				+ contig.getConsensus().length() + "\t"
 				+ contig.readCount() + "\t"
-				+ contig.getFeatures().size());
+				+ contig.getFeatures().size() + "\t"
+				+ contig.getMismatchPercentage());
 			text.append(newline);
 		}
 
@@ -304,4 +310,27 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 				displayMenu(e);
 		}
 	}
+
+	static class DecimalFormatRenderer extends DefaultTableCellRenderer
+	{
+		private static final DecimalFormat formatter = new DecimalFormat( "#0.0" );
+
+		DecimalFormatRenderer()
+		{
+			setHorizontalAlignment(JLabel.RIGHT);
+		}
+
+		public Component getTableCellRendererComponent(JTable table, Object value,
+		boolean isSelected, boolean hasFocus, int row, int column)
+		{
+			super.getTableCellRendererComponent(table, value, isSelected,
+				hasFocus, row, column);
+
+				setText(formatter.format((Number)value));
+
+			return this;
+		}
+
+	}
+
 }

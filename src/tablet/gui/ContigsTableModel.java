@@ -3,6 +3,7 @@
 
 package tablet.gui;
 
+import java.text.NumberFormat;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -29,8 +30,9 @@ class ContigsTableModel extends AbstractTableModel
 		String col2 = RB.getString("gui.ContigsTableModel.col2");
 		String col3 = RB.getString("gui.ContigsTableModel.col3");
 		String col4 = RB.getString("gui.ContigsTableModel.col4");
+		String col5 = RB.getString("gui.ContigsTableModel.col5");
 
-		columnNames = new String[] { col1, col2, col3, col4 };
+		columnNames = new String[] { col1, col2, col3, col4, col5 };
 	}
 
 	public String getColumnName(int col)
@@ -50,6 +52,8 @@ class ContigsTableModel extends AbstractTableModel
 	{
 		if (col == 0)
 			return Contig.class;
+		else if(col == 4)
+			return Float.class;
 		else
 			return Integer.class;
 	}
@@ -64,6 +68,7 @@ class ContigsTableModel extends AbstractTableModel
 			case 1: return contig.getConsensus().length();
 			case 2: return contig.readCount();
 			case 3: return contig.getFeatures().size();
+			case 4: return contig.getMismatchPercentage();
 		}
 
 		return null;

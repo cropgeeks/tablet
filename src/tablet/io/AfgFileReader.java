@@ -273,7 +273,7 @@ class AfgFileReader extends TrackableReader
 		//add read to this contig
 		contig.getReads().add(read);
 
-		BasePositionComparator.compare(contig.getConsensus(), readMetaData, read.getStartPosition());
+		BasePositionComparator.compare(contig, readMetaData, read.getStartPosition());
 
 		readCache.setReadMetaData(readMetaData);
 		readsAdded++;
