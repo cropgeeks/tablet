@@ -235,7 +235,7 @@ class AfgFileReader extends TrackableReader
 
 		//retrieve the corresponding read from the array list using the internal id
 		//tile internal ID is 1-based but list is 0-based so need to subtract 1 here to get the right read
-		ReadMetaData readMetaData = tempCache.getReadMetaData(tileIID-1);
+		ReadMetaData readMetaData = tempCache.getReadMetaData(tileIID-1, false);
 		readMetaData.calculateUnpaddedLength();
 
 		Read read = new Read();

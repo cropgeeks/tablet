@@ -24,7 +24,7 @@ public class ReadMemCache implements IReadCache
 		throws IOException
 	{}
 
-	public ReadMetaData getReadMetaData(int id)
+	public ReadMetaData getReadMetaData(int id, boolean dataOnly)
 		{ return cache.get(id); }
 
 	public void setReadMetaData(ReadMetaData readMetaData)

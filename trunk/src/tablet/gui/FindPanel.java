@@ -263,7 +263,7 @@ public class FindPanel extends JPanel implements ListSelectionListener
 		 */
 		private void checkForMatches(Read read, String pattern, LinkedList<SearchResult> results, Contig contig)
 		{
-			ReadMetaData rmd = Assembly.getReadMetaData(read);
+			ReadMetaData rmd = Assembly.getReadMetaData(read, false);
 
 			Pattern p = Pattern.compile(pattern);
 			Matcher m = p.matcher(rmd.getName());

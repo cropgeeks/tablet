@@ -39,7 +39,7 @@ public class ReadFileCacheTest extends TestCase
 
 		for (int i = 0; i < 10; i++)
 		{
-			ReadMetaData rmd = cache.getReadMetaData(i);
+			ReadMetaData rmd = cache.getReadMetaData(i, false);
 
 			String expected = "NAME_" + i;
 			String fromFile = rmd.getName();

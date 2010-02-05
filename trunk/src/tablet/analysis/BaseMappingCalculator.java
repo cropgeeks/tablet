@@ -43,8 +43,6 @@ public class BaseMappingCalculator extends SimpleJob
 	private void calculatePaddedToUnpadded()
 		throws Exception
 	{
-		long s = System.currentTimeMillis();
-
 		int length = c.length();
 
 		for (int i = 0, index = 0; i < length; i++)
@@ -55,8 +53,6 @@ public class BaseMappingCalculator extends SimpleJob
 			else
 				paddedToUnpadded.addValue(-1);
 		}
-
-		System.out.println("Pad->UnPad: " + (System.currentTimeMillis()-s) + "ms");
 	}
 
 	// Given an unpadded index value (0 to length-1) what index within the real
@@ -69,8 +65,6 @@ public class BaseMappingCalculator extends SimpleJob
 	private void calculateUnpaddedToPadded()
 		throws Exception
 	{
-		long s = System.currentTimeMillis();
-
 		int length = c.length();
 		int map = 0;
 
@@ -86,7 +80,5 @@ public class BaseMappingCalculator extends SimpleJob
 		// Any left over positions can't map to anything
 		for (; map < length; map++)
 			unpaddedToPadded.addValue(-1);
-
-		System.out.println("UnPad->Pad: " + (System.currentTimeMillis()-s) + "ms");
 	}
 }
