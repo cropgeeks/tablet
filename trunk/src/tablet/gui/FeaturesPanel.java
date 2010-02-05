@@ -160,7 +160,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		int p1 = feature.getP1();
 		int p2 = feature.getP2();
 
-		if(!(feature instanceof CigarFeature))
+		if (feature instanceof CigarFeature == false)
 		{
 			if (Prefs.guiFeaturesArePadded)
 			{
@@ -184,18 +184,19 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 			if (Prefs.guiFeaturesArePadded)
 			{
 				return RB.format("gui.FeaturesPanel.tooltip.padded.cigarFeature",
-					feature.getGFFType(), feature.getName(),
+					feature.getGFFType(),
 					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
 					getUnpadded(p1), getUnpadded(p2), count);
 			}
 			else
 			{
 				return RB.format("gui.FeaturesPanel.tooltip.unpadded.cigarFeature",
-					feature.getGFFType(), feature.getName(),
+					feature.getGFFType(),
 					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
 					getPadded(p1), getPadded(p2), count);
 			}
 		}
+
 		return "";
 	}
 

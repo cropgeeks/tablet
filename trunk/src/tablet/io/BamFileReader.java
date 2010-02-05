@@ -1,13 +1,16 @@
 package tablet.io;
 
 import java.io.*;
-import java.util.HashMap;
-import net.sf.samtools.*;
-import scri.commons.gui.RB;
+import java.util.*;
+
 import tablet.analysis.BasePositionComparator;
 import tablet.data.*;
 import tablet.data.auxiliary.CigarFeature;
 import tablet.data.cache.IReadCache;
+
+import scri.commons.gui.RB;
+
+import net.sf.samtools.*;
 
 public class BamFileReader extends TrackableReader
 {
@@ -156,18 +159,23 @@ public class BamFileReader extends TrackableReader
 	}
 
 	private void processCigarFeatures(CigarParser parser)
+		throws Exception
 	{
 		for (String feature : parser.getFeatureMap().keySet())
 		{
 			String[] featureElements = feature.split("Tablet-Separator");
 			int count = parser.getFeatureMap().get(feature);
-			CigarFeature cigarFeature = new CigarFeature("CIGAR-I", "CIG" + featureElements[1], Integer.parseInt(featureElements[1]) - 1, Integer.parseInt(featureElements[1]), count);
+			CigarFeature cigarFeature = new CigarFeature("CIGAR-I", "",
+				Integer.parseInt(featureElements[1]) - 1, Integer.parseInt(featureElements[1]), count);
 			Contig ctg = contigHash.get(featureElements[0]);
 			if (ctg != null)
 			{
 				ctg.getFeatures().add(cigarFeature);
 			}
 		}
+
+		for (Contig contig: assembly)
+			Collections.sort(contig.getFeatures());
 	}
 
 	private void addContig(Contig contig, Consensus consensus, StringBuilder bases, StringBuilder qlt)

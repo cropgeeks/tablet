@@ -117,6 +117,7 @@ class CigarParser
 	}
 
 	private String processInsertion(int operationLength, String read)
+		throws Exception
 	{
 		String hashMap = currentContigName + "Tablet-Separator" + readPos;
 		if(featureMap.get(hashMap) == null)
