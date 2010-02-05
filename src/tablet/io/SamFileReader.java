@@ -113,8 +113,6 @@ class SamFileReader extends TrackableReader
 	private void readSamFile()
 		throws Exception
 	{
-		Assembly.isBam(true);
-
 		in = new BufferedReader(new InputStreamReader(getInputStream(samIndex, true), "ASCII"));
 
 		cigarParser = new CigarParser();
@@ -202,6 +200,7 @@ class SamFileReader extends TrackableReader
 		processCigarFeatures(cigarParser);
 
 		assembly.setName(files[samIndex].getName());
+		assembly.setHasCigar();
 	}
 
 	private void processCigarFeatures(CigarParser parser)

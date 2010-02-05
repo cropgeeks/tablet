@@ -76,7 +76,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		w = 300;
 		h = 90;
 
-		if(Assembly.isBam())
+		if (Assembly.hasCigar())
 			h = 105;
 
 		// Start and ending positions (against consensus)
@@ -98,7 +98,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		// Name
 		readName = metaData.getName();
 
-		if(Assembly.isBam())
+		if (Assembly.hasCigar())
 			cigar = "Cigar: " + metaData.getCigar();
 
 		// Determine longest string
@@ -108,7 +108,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			w = fmTitle.stringWidth(posData) + 20;
 		if (fmTitle.stringWidth(lengthData) > (w-20))
 			w = fmTitle.stringWidth(lengthData) + 20;
-		if (Assembly.isBam() && fmTitle.stringWidth(cigar) > (w-20))
+		if (Assembly.hasCigar() && fmTitle.stringWidth(cigar) > (w-20))
 			w = fmTitle.stringWidth(cigar) + 20;
 
 		// Tell the overview canvas to paint this read too
@@ -126,7 +126,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 		int arrowHeight = 55;
 
-		if(Assembly.isBam())
+		if (Assembly.hasCigar())
 			arrowHeight = 70;
 
 		calculatePosition();
@@ -146,7 +146,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		g.setFont(labelFont);
 		g.drawString(posData, 10, 30);
 		g.drawString(lengthData, 10, 45);
-		if(Assembly.isBam())
+		if (Assembly.hasCigar())
 		{
 			g.setColor(Color.blue);
 			g.drawString(cigar, 10, 60);
@@ -170,7 +170,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	{
 		int lineStart = 70;
 
-		if(Assembly.isBam())
+		if (Assembly.hasCigar())
 			lineStart = 85;
 
 		ReadMetaData rmd = Assembly.getReadMetaData(read, false);

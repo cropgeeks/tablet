@@ -101,7 +101,7 @@ public class ReadFileCache extends TabletCache implements IReadCache
 						rmd.setLength(dataLength);
 
 						// Read CIGAR data (but only with BAM assemblies)
-						if (Assembly.isBam())
+						if (Assembly.hasCigar())
 						{
 							byte[] cigar = new byte[rnd.readIntFromBuffer()];
 
