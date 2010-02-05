@@ -18,7 +18,7 @@ import scri.commons.file.*;
  */
 public class ReadFileCache extends TabletCache implements IReadCache
 {
-	private ReadFileCacheIndex index;
+	private ArrayLongFileCache index;
 
 	// When writing, how many bytes have been written to the cache?
 	private long byteCount = 0;
@@ -26,7 +26,7 @@ public class ReadFileCache extends TabletCache implements IReadCache
 	public ReadFileCache(File cacheFile, File indexFile)
 	{
 		this.cacheFile = cacheFile;
-		index = new ReadFileCacheIndex(indexFile);
+		index = new ArrayLongFileCache(indexFile);
 	}
 
 	public void openForWriting()
@@ -62,7 +62,7 @@ public class ReadFileCache extends TabletCache implements IReadCache
 
 				try
 				{
-					long seekTo = index.getSeekPosition(id);
+					long seekTo = index.getValue(id);
 					rnd.seek(seekTo);
 
 					// Read the length (in bytes) that the name takes up
@@ -117,7 +117,7 @@ public class ReadFileCache extends TabletCache implements IReadCache
 		throws Exception
 	{
 		// Update the index to mark the next position as in use by this Read
-		index.setNextSeekPosition(byteCount);
+		index.addValue(byteCount);
 
 		byte[] array = readMetaData.getName().getBytes("UTF8");
 

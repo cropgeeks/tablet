@@ -9,30 +9,30 @@ import java.nio.*;
 /**
  * Tracks and maintains the index (on disk) to a FileCache object.
  */
-class ReadFileCacheIndex extends TabletCache
+public class ArrayLongFileCache extends TabletCache
 {
-	ReadFileCacheIndex(File cacheFile)
+	private int length = 0;
+
+	public ArrayLongFileCache(File cacheFile)
 	{
 		super.cacheFile = cacheFile;
 	}
 
-	// Jump id*<long 8?> bytes into the file and return the byte found there
-	long getSeekPosition(int id)
+	public int length()
+		{ return length; }
+
+	public long getValue(int index)
 		throws IOException
 	{
-		rnd.seek(id * 8);
+		rnd.seek(index * 8);
 
 		return rnd.readLongFromBuffer();
 	}
 
-	void setNextSeekPosition(long byteCount)
+	public void addValue(long value)
 		throws IOException
 	{
-		byte[] array = new byte[8];
-
-		ByteBuffer buffer = ByteBuffer.wrap(array);
-		buffer.putLong(byteCount);
-
-		out.write(array);
+		out.writeLong(value);
+		length++;
 	}
 }
