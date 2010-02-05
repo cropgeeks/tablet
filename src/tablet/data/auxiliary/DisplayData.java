@@ -14,7 +14,7 @@ import tablet.data.cache.*;
 public class DisplayData
 {
 	// Contains info to map from a padded to an unpadded position
-	private static int[] paddedToUnpadded;
+	private static IArrayIntCache paddedToUnpadded;
 	// Contains info to map from an unpadded to a padded position
 	private static IArrayIntCache unpaddedToPadded;
 
@@ -32,11 +32,10 @@ public class DisplayData
 	 */
 	public static void clearData()
 	{
-		paddedToUnpadded = null;
-
 		try
 		{
 			// TODO: EndGame
+			paddedToUnpadded.close();
 			unpaddedToPadded.close();
 		}
 		catch (Exception e) {}
@@ -83,15 +82,15 @@ public class DisplayData
 	public static int paddedToUnpadded(int paddedPosition)
 	{
 		try {
-			return paddedToUnpadded[paddedPosition];
+			return paddedToUnpadded.getValue(paddedPosition);
 		}
-		catch (ArrayIndexOutOfBoundsException e) {
+		catch (Exception e) {
 			return -1;
 		}
 	}
 
-	public static void setPaddedToUnpadded(int[] newPaddedToUnpadded)
-		{ paddedToUnpadded = newPaddedToUnpadded; }
+	public static void setPaddedToUnpadded(IArrayIntCache cache)
+		{ paddedToUnpadded = cache; }
 
 	/**
 	 * Returns the padded index (within consensus index space) for the given

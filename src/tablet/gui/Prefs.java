@@ -123,6 +123,7 @@ public class Prefs extends XMLPreferences
 
 	// Disk caching options
 	public static boolean cacheReads = true;
+	public static boolean cachePaddedMap = true;
 	public static boolean cacheUnpaddedMap = true;
 
 	static void setDefaults()
