@@ -45,10 +45,10 @@
 	</target>
 
 	<target name="jar" depends="clean, compile">
-		<jar jarfile="${tablet-resources.jar}" index="true">
+		<jar jarfile="${tablet-resources.jar}">
 			<zipfileset dir="${res}" prefix="res"/>
 		</jar>
-		<jar jarfile="${tablet.jar}" index="true">
+		<jar jarfile="${tablet.jar}">
 			<fileset dir="${classes}">
 				<exclude name="**/*Test.class"/>
 			</fileset>

@@ -23,6 +23,20 @@ changes between versions, please see the <a href="http://bioinf.scri.ac.uk/table
 subversion change log</a>.</p>
 
 
+<h3>New in 1.10.02.08</h3>
+
+<ul>
+<li>NEW: Added (experimental) support for BAM, using in-memory only reading for now, NOT indexed support.</li>
+<li>NEW: Support for most CIGAR operations, with the positions of Insertions being tagged as features for now.</li>
+<li>NEW: Displayed consensus sequences now use 8 bytes per base less memory.</li>
+<li>NEW: Added a (prefs-file only) option to disable all disk caching for maximum performance at the expense of memory.</li>
+<li>NEW: The Contigs Table now lists read vs consensus mismatch percentage information.</li>
+<li>CHG: Some miscellaneous changes to cache support to speed up read retrieval.</li>
+<li>BUG: Fixed a memory-leak problem with display-time objects not being removed after closing a contig.</li>
+<li>BUG: Tablet now only deletes the cache files it creates, rather than every file in its cache directory.</li>
+</ul>
+
+
 <h3>New in 1.10.01.28</h3>
 
 <ul>
