@@ -63,7 +63,12 @@ class NavigationOverlay implements IOverlayRenderer
 			isLeftActive = true;
 		}
 
-		g.drawImage(navLeft, ix, iy, null);
+		// Extra check: are we at the far left hand side of the view?
+		if (rCanvas.pX1 == 0)
+			isLeftActive = false;
+		else
+			g.drawImage(navLeft, ix, iy, null);
+
 		g.setComposite(c);
 
 		// RIGHT HAND NAV CONTROL...
@@ -84,7 +89,12 @@ class NavigationOverlay implements IOverlayRenderer
 			isRightActive = true;
 		}
 
-		g.drawImage(navRight, ix, iy, null);
+		// Extra check: are we at the far right hand side of the view?
+		if (rCanvas.pX2 == rCanvas.canvasW-1)
+			isRightActive = false;
+		else
+			g.drawImage(navRight, ix, iy, null);
+
 		g.setComposite(c);
 
 		// Disable the tooltip if neither link is active
