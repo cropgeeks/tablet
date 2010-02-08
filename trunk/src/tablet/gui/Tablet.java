@@ -50,12 +50,17 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 		if (args.length > 0)
 		{
-			if (args[0].startsWith("version:"))
-				Install4j.VERSION = args[0].substring(8);
+			int firstArg = 0;
 
-			String[] fileArgs = new String[args.length-1];
-			for (int i = 1; i < args.length; i++)
-				fileArgs[i-1] = args[i];
+			if (args[0].startsWith("version:"))
+			{
+				Install4j.VERSION = args[0].substring(8);
+				firstArg = 1;
+			}
+
+			String[] fileArgs = new String[args.length-firstArg];
+			for (int i = firstArg; i < args.length; i++)
+				fileArgs[i-firstArg] = args[i];
 
 			if (fileArgs.length > 0)
 			{
