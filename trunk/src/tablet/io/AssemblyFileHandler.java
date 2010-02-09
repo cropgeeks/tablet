@@ -33,8 +33,13 @@ public class AssemblyFileHandler extends SimpleJob
 	private AssemblyFile[] files = null;
 	private File cacheDir = null;
 	private TrackableReader reader = null;
+	private BAIFileReader baiReader = null;
+	private IAssemblyReader reader2 = null;
 
 	private String cacheid = SystemUtils.createGUID(24);
+	private boolean bai = false;
+
+	private Assembly assembly;
 
 	public AssemblyFileHandler(String[] filenames, File cacheDir)
 	{
@@ -47,12 +52,13 @@ public class AssemblyFileHandler extends SimpleJob
 	}
 
 	public Assembly getAssembly()
-		{ return reader.getAssembly(); }
+		{ return assembly; }
 
 	public void runJob(int jobIndex)
 		throws Exception
 	{
 		boolean fileParsed = false;
+		bai = false;
 
 		// Ensure the cache directory exists (and is valid)
 		cacheDir.mkdirs();
@@ -74,46 +80,56 @@ public class AssemblyFileHandler extends SimpleJob
 
 		// For each file format that we understand...
 
+		if(okToRun && fileParsed == false)
+		{
+			reader2 = new BAIFileReader(readCache);
+			fileParsed = readFile();
+			bai = true;
+		}
+
+		if (fileParsed == false)
+			System.exit(0);
+
 		// ACE
 		if (okToRun && fileParsed == false)
 		{
-			reader = new AceFileReader(readCache);
+			reader2 = new AceFileReader(readCache);
 			fileParsed = readFile();
 		}
 		// AFG
 		if (okToRun && fileParsed == false)
 		{
-			reader = new AfgFileReader(readCache, cacheDir);
+			reader2 = new AfgFileReader(readCache, cacheDir);
 			fileParsed = readFile();
 		}
 		// Maq
 		if (okToRun && fileParsed == false)
 		{
-			reader = new MaqFileReader(readCache);
+			reader2 = new MaqFileReader(readCache);
 			fileParsed = readFile();
 		}
 		//BAM
-		if(okToRun && fileParsed == false)
-		{
-			reader = new BamFileReader(readCache);
-			fileParsed = readFile();
-		}
+//		if(okToRun && fileParsed == false)
+//		{
+//			reader = new BamFileReader(readCache);
+//			fileParsed = readFile();
+//		}
 		// SAM
 		if (okToRun && fileParsed == false)
 		{
-			reader = new SamFileReader(readCache);
+			reader2 = new SamFileReader(readCache);
 			fileParsed = readFile();
 		}
 		// SOAP
 		if (okToRun && fileParsed == false)
 		{
-			reader = new SoapFileReader(readCache);
+			reader2 = new SoapFileReader(readCache);
 			fileParsed = readFile();
 		}
 
 		if (okToRun && fileParsed)
 		{
-			Assembly assembly = reader.getAssembly();
+			assembly = reader2.getAssembly();
 
 			readCache.openForReading();
 			assembly.setReadCache(readCache);
@@ -142,12 +158,12 @@ public class AssemblyFileHandler extends SimpleJob
 	{
 		try
 		{
-			reader.setInputs(files, new Assembly(cacheid));
+			reader2.setInputs(files, new Assembly(cacheid));
 
-			if (reader.canRead())
+			if (reader2.canRead())
 			{
 				long s = System.currentTimeMillis();
-				reader.runJob(0);
+				reader2.runJob(0);
 				long e = System.currentTimeMillis();
 				System.out.println("\nRead time: " + ((e-s)/1000f) + "s");
 
@@ -166,6 +182,41 @@ public class AssemblyFileHandler extends SimpleJob
 			throw new ReadException(reader.currentFile(), reader.lineCount, e);
 		}
 	}
+
+//	private boolean readBAIFile()
+//			throws ReadException
+//	{
+//		try
+//		{
+//			baiReader.setInputs(files, new Assembly(cacheid));
+//
+//			if(baiReader.canRead())
+//			{
+//				long s = System.currentTimeMillis();
+//				baiReader.runJob();
+//				long e = System.currentTimeMillis();
+//				System.out.println("\nRead time: " + ((e-s)/1000f) + "s");
+//
+//				return true;
+//			}
+//			else
+//			{
+//				System.exit(1);
+//			}
+//			return false;
+//		}
+//		catch(ReadException e)
+//		{
+//			e.printStackTrace();
+//			throw(e);
+//		}
+//		catch(Exception e)
+//		{
+//			e.printStackTrace();
+//			//TODO update this to read off BAIFileReader
+//			throw new ReadException(files[0], 0, e);
+//		}
+//	}
 
 	public boolean isIndeterminate()
 	{
@@ -251,4 +302,15 @@ public class AssemblyFileHandler extends SimpleJob
 
 		return reader.canRead();
 	}
+}
+
+interface IAssemblyReader
+{
+	public boolean canRead() throws Exception;
+
+	public void runJob(int index) throws Exception;
+
+	public void setInputs(AssemblyFile[] files, Assembly assembly);
+
+	public Assembly getAssembly();
 }

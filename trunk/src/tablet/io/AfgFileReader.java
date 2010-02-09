@@ -68,7 +68,7 @@ class AfgFileReader extends TrackableReader
 
 	//=======================================methods==========================================
 
-	boolean canRead()
+	public boolean canRead()
 		throws Exception
 	{
 		for (int i = 0; i < files.length; i++)

@@ -16,7 +16,7 @@ import scri.commons.file.*;
  * Tracks reading from one or more files. Tracking is based on all the files
  * together so will go from 0 to (total size of all files).
  */
-abstract class TrackableReader extends SimpleJob
+abstract class TrackableReader extends SimpleJob implements IAssemblyReader
 {
 	private static DecimalFormat df = new DecimalFormat("0.0");
 
@@ -41,7 +41,7 @@ abstract class TrackableReader extends SimpleJob
 	private long lastBytesRead;
 	private long lastTime;
 
-	void setInputs(AssemblyFile[] files, Assembly assembly)
+	public void setInputs(AssemblyFile[] files, Assembly assembly)
 	{
 		this.files = files;
 		this.assembly = assembly;
@@ -59,7 +59,7 @@ abstract class TrackableReader extends SimpleJob
 		return in.readLine();
 	}
 
-	Assembly getAssembly()
+	public Assembly getAssembly()
 		{ return assembly; }
 
 	public boolean isIndeterminate()
@@ -115,7 +115,7 @@ abstract class TrackableReader extends SimpleJob
 	}
 
 	/** Returns true if this reader can understand the file given to it. */
-	abstract boolean canRead()
+	public abstract boolean canRead()
 		throws Exception;
 
 	AssemblyFile currentFile()

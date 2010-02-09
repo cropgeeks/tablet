@@ -68,7 +68,13 @@ public class AssemblyFile
 
 		// This might fail, but it doesn't matter, as any subsequent load will
 		// fail too, and the error can be caught then
-		try { return url.openConnection().getContentLength(); }
+		try
+		{
+			URLConnection conn = url.openConnection();
+			conn.getInputStream().close();
+
+			return conn.getContentLength();
+		}
 		catch (Exception e) { return 0; }
 	}
 
@@ -79,6 +85,7 @@ public class AssemblyFile
 		if (file != null)
 			return new FileInputStream(file);
 
+		System.out.println("Opening stream: " + url);
 		return url.openStream();
 	}
 
@@ -99,5 +106,10 @@ public class AssemblyFile
 		}
 
 		return getInputStream();
+	}
+
+	URL getURL()
+	{
+		return url;
 	}
 }

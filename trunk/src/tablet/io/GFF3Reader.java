@@ -24,7 +24,7 @@ public class GFF3Reader extends TrackableReader
 		contigs = new HashMap<String, ArrayList<Feature>>();
 	}
 
-	boolean canRead()
+	public boolean canRead()
 		throws Exception
 	{
 		// Read and check for the header

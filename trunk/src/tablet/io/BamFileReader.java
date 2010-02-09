@@ -41,7 +41,7 @@ public class BamFileReader extends TrackableReader
 		this.readCache = readCache;
 	}
 
-	boolean canRead() throws Exception
+	public boolean canRead() throws Exception
 	{
 		refReader = new ReferenceFileReader(assembly, contigHash);
 
