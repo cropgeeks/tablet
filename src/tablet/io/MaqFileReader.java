@@ -36,7 +36,7 @@ class MaqFileReader extends TrackableReader
 		this.readCache = readCache;
 	}
 
-	boolean canRead()
+	public boolean canRead()
 		throws Exception
 	{
 		refReader = new ReferenceFileReader(assembly, contigHash);

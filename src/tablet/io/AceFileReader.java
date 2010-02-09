@@ -55,7 +55,7 @@ class AceFileReader extends TrackableReader
 		this.readCache = readCache;
 	}
 
-	boolean canRead()
+	public boolean canRead()
 		throws Exception
 	{
 		for (int i = 0; i < files.length; i++)
