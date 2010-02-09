@@ -1,18 +1,25 @@
 package tablet.io;
 
 import java.io.*;
-import java.util.HashMap;
+import java.util.*;
 
-import tablet.analysis.SimpleJob;
+import tablet.analysis.*;
 import tablet.data.*;
-import tablet.data.cache.IReadCache;
+import tablet.data.cache.*;
+import tablet.gui.*;
 
+import scri.commons.file.*;
+
+import net.sf.samtools.SAMFileReader;
+import net.sf.samtools.SAMFormatException;
 
 public class BAIFileReader extends SimpleJob implements IAssemblyReader
 {
 	private IReadCache readCache;
+	private File cacheDir;
+	private String cacheid;
+
 	private Assembly assembly;
-	private FaiFileReader refReader;
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
 	private int bamFile = -1;
@@ -21,8 +28,8 @@ public class BAIFileReader extends SimpleJob implements IAssemblyReader
 	private AssemblyFile[] files = new AssemblyFile[2];
 	private AssemblyFile bamIndexFile, faiIndexFile;
 
-	private File cacheDir;
-	private String cacheid;
+	private long baiBytes, fastaBytes;
+	private String message;
 
 	public BAIFileReader(IReadCache readCache, File cacheDir, String cacheid)
 	{
@@ -31,20 +38,24 @@ public class BAIFileReader extends SimpleJob implements IAssemblyReader
 		this.cacheid = cacheid;
 	}
 
+	public void setInputs(AssemblyFile[] files, Assembly assembly)
+	{
+		this.files = files;
+		this.assembly = assembly;
+	}
+
+	// Checks to see if we have been given a FASTA and a BAM file
 	public boolean canRead() throws Exception
 	{
-		refReader = new FaiFileReader(assembly, contigHash);
-
-		for(int i = 0; i < files.length; i++)
+		for (int i = 0; i < files.length; i++)
 		{
-			if (refReader.canRead(files[i]))
-			{
+			if (canReadFasta(files[i]))
 				refFile = i;
-			}
+
 			else
 			{
 				// Check to see if we even have a BAM file
-				if(files[i].getName().toLowerCase().endsWith(".bam") && files[i].length() > 0)
+				if (files[i].getName().toLowerCase().endsWith(".bam") && files[i].length() > 0)
 				{
 					bamFile = i;
 
@@ -63,36 +74,28 @@ public class BAIFileReader extends SimpleJob implements IAssemblyReader
 		return (bamFile >= 0 && bamIndexFile != null && refFile >= 0);
 	}
 
+	// Checks to see if the given file is FASTA
+	private boolean canReadFasta(AssemblyFile file)
+		throws Exception
+	{
+		BufferedReader in = new BufferedReader(
+			new InputStreamReader(file.getInputStream()));
+
+		String str = in.readLine();
+		boolean isFastaFile = (str != null && str.startsWith(">"));
+		in.close();
+
+		return isFastaFile;
+	}
+
 	public void runJob(int index) throws Exception
 	{
-		if(refFile >= 0)
-			readReferenceFile();
-	}
+		// TODO: 5555?
+		maximum = (int) files[refFile].length() + (int) bamIndexFile.length();
 
-	private void readReferenceFile() throws Exception
-	{
-		refReader.readReferenceFile(files[refFile]);
-	}
+		readReferenceFile(files[refFile]);
 
-	public void setInputs(AssemblyFile[] files, Assembly assembly)
-	{
-		this.files = files;
-		this.assembly = assembly;
-	}
-
-	public Assembly getAssembly()
-	{
-		return assembly;
-	}
-
-	public int getJobCount()
-	{
-		return 1;
-	}
-
-	public String getMessage()
-	{
-		return "";
+		downloadBaiFile();
 	}
 
 	private AssemblyFile getBaiFile(AssemblyFile file, boolean typeTwo)
@@ -106,25 +109,78 @@ public class BAIFileReader extends SimpleJob implements IAssemblyReader
 		return new AssemblyFile(file.getPath().replaceAll(name, newName));
 	}
 
+	private void readReferenceFile(AssemblyFile file)
+		throws Exception
+	{
+		message = "Reading FASTA reference file...";
+
+		ProgressInputStream is = new ProgressInputStream(file.getInputStream());
+		BufferedReader in = new BufferedReader(new InputStreamReader(is));
+
+		Contig contig = null;
+		StringBuilder sb = null;
+		String str = null;
+
+		while ((str = in.readLine()) != null && okToRun)
+		{
+			fastaBytes = is.getBytesRead();
+
+			if (str.startsWith(">"))
+			{
+				if (sb != null && sb.length() > 0)
+					addContig(contig, new Consensus(), sb);
+
+				sb = new StringBuilder();
+
+				String name;
+				if (str.indexOf(" ") != -1)
+					name = str.substring(1, str.indexOf(" "));
+				else
+					name = str.substring(1);
+
+				contig = new Contig(name, true, 0);
+				contigHash.put(name, contig);
+			}
+
+			else
+				sb.append(str.trim());
+		}
+
+		if (sb != null && sb.length() > 0)
+			addContig(contig, new Consensus(), sb);
+
+		is.close();
+	}
+
+	private void addContig(Contig contig, Consensus consensus, StringBuilder sb)
+	{
+		consensus.setData(sb.toString());
+		consensus.calculateUnpaddedLength();
+		contig.setConsensusSequence(consensus);
+
+		byte[] bq = new byte[consensus.length()];
+		consensus.setBaseQualities(bq);
+
+		assembly.addContig(contig);
+	}
+
 	private void downloadBaiFile() throws Exception
 	{
 		if(bamIndexFile.isURL() == false)
 			return;
-		
+
 		File file = new File(cacheDir, "Tablet-"+cacheid+bamIndexFile.getName());
 
-		//TODO do the 5555 trick to avoid int / long problems
-		maximum = (int) bamIndexFile.length();
-		progress = 0;
+		message = "Reading BAI assembly index file...";
 
 		BufferedInputStream inputStream = new BufferedInputStream(bamIndexFile.getInputStream());
 		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file.getAbsolutePath()));
 
 		int i;
-		while((i = inputStream.read()) != -1)
+		while((i = inputStream.read()) != -1 && okToRun)
 		{
 			outputStream.write(i);
-			progress++;
+			baiBytes++;
 		}
 
 		inputStream.close();
@@ -132,4 +188,15 @@ public class BAIFileReader extends SimpleJob implements IAssemblyReader
 
 		bamIndexFile = new AssemblyFile(file.getPath());
 	}
+
+	public int getValue()
+	{
+		return (int) (baiBytes + fastaBytes);
+	}
+
+	public Assembly getAssembly()
+		{ return assembly; }
+
+	public String getMessage()
+		{ return message; }
 }
