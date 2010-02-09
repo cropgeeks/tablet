@@ -82,7 +82,7 @@ public class AssemblyFileHandler extends SimpleJob
 
 		if(okToRun && fileParsed == false)
 		{
-			reader2 = new BAIFileReader(readCache);
+			reader2 = new BAIFileReader(readCache, cacheDir, cacheid);
 			fileParsed = readFile();
 			bai = true;
 		}
