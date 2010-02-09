@@ -112,4 +112,9 @@ public class AssemblyFile
 	{
 		return url;
 	}
+
+	boolean isURL()
+	{
+		return url != null;
+	}
 }

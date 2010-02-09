@@ -1,14 +1,12 @@
 package tablet.io;
 
+import java.io.*;
 import java.util.HashMap;
-import net.sf.samtools.SAMFileReader;
-import net.sf.samtools.SAMFormatException;
+
 import tablet.analysis.SimpleJob;
-import tablet.data.Assembly;
-import tablet.data.Contig;
+import tablet.data.*;
 import tablet.data.cache.IReadCache;
 
-import tablet.gui.*;
 
 public class BAIFileReader extends SimpleJob implements IAssemblyReader
 {
@@ -23,16 +21,18 @@ public class BAIFileReader extends SimpleJob implements IAssemblyReader
 	private AssemblyFile[] files = new AssemblyFile[2];
 	private AssemblyFile bamIndexFile, faiIndexFile;
 
-	public BAIFileReader(IReadCache readCache)
+	private File cacheDir;
+	private String cacheid;
+
+	public BAIFileReader(IReadCache readCache, File cacheDir, String cacheid)
 	{
 		this.readCache = readCache;
+		this.cacheDir = cacheDir;
+		this.cacheid = cacheid;
 	}
 
 	public boolean canRead() throws Exception
 	{
-		if(files.length != 2)
-			return false;
-
 		refReader = new FaiFileReader(assembly, contigHash);
 
 		for(int i = 0; i < files.length; i++)
@@ -104,5 +104,32 @@ public class BAIFileReader extends SimpleJob implements IAssemblyReader
 			newName = name.substring(0, name.lastIndexOf(".bam")) + ".bai";
 
 		return new AssemblyFile(file.getPath().replaceAll(name, newName));
+	}
+
+	private void downloadBaiFile() throws Exception
+	{
+		if(bamIndexFile.isURL() == false)
+			return;
+		
+		File file = new File(cacheDir, "Tablet-"+cacheid+bamIndexFile.getName());
+
+		//TODO do the 5555 trick to avoid int / long problems
+		maximum = (int) bamIndexFile.length();
+		progress = 0;
+
+		BufferedInputStream inputStream = new BufferedInputStream(bamIndexFile.getInputStream());
+		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file.getAbsolutePath()));
+
+		int i;
+		while((i = inputStream.read()) != -1)
+		{
+			outputStream.write(i);
+			progress++;
+		}
+
+		inputStream.close();
+		outputStream.close();
+
+		bamIndexFile = new AssemblyFile(file.getPath());
 	}
 }
