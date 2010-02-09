@@ -85,7 +85,6 @@ public class AssemblyFile
 		if (file != null)
 			return new FileInputStream(file);
 
-		System.out.println("Opening stream: " + url);
 		return url.openStream();
 	}
 

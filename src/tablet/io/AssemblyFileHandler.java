@@ -32,9 +32,7 @@ public class AssemblyFileHandler extends SimpleJob
 
 	private AssemblyFile[] files = null;
 	private File cacheDir = null;
-	private TrackableReader reader = null;
-	private BAIFileReader baiReader = null;
-	private IAssemblyReader reader2 = null;
+	private IAssemblyReader reader = null;
 
 	private String cacheid = SystemUtils.createGUID(24);
 	private boolean bai = false;
@@ -82,7 +80,7 @@ public class AssemblyFileHandler extends SimpleJob
 
 		if(okToRun && fileParsed == false)
 		{
-			reader2 = new BAIFileReader(readCache, cacheDir, cacheid);
+			reader = new BAIFileReader(readCache, cacheDir, cacheid);
 			fileParsed = readFile();
 			bai = true;
 		}
@@ -93,19 +91,19 @@ public class AssemblyFileHandler extends SimpleJob
 		// ACE
 		if (okToRun && fileParsed == false)
 		{
-			reader2 = new AceFileReader(readCache);
+			reader = new AceFileReader(readCache);
 			fileParsed = readFile();
 		}
 		// AFG
 		if (okToRun && fileParsed == false)
 		{
-			reader2 = new AfgFileReader(readCache, cacheDir);
+			reader = new AfgFileReader(readCache, cacheDir);
 			fileParsed = readFile();
 		}
 		// Maq
 		if (okToRun && fileParsed == false)
 		{
-			reader2 = new MaqFileReader(readCache);
+			reader = new MaqFileReader(readCache);
 			fileParsed = readFile();
 		}
 		//BAM
@@ -117,19 +115,19 @@ public class AssemblyFileHandler extends SimpleJob
 		// SAM
 		if (okToRun && fileParsed == false)
 		{
-			reader2 = new SamFileReader(readCache);
+			reader = new SamFileReader(readCache);
 			fileParsed = readFile();
 		}
 		// SOAP
 		if (okToRun && fileParsed == false)
 		{
-			reader2 = new SoapFileReader(readCache);
+			reader = new SoapFileReader(readCache);
 			fileParsed = readFile();
 		}
 
 		if (okToRun && fileParsed)
 		{
-			assembly = reader2.getAssembly();
+			assembly = reader.getAssembly();
 
 			readCache.openForReading();
 			assembly.setReadCache(readCache);
@@ -158,12 +156,12 @@ public class AssemblyFileHandler extends SimpleJob
 	{
 		try
 		{
-			reader2.setInputs(files, new Assembly(cacheid));
+			reader.setInputs(files, new Assembly(cacheid));
 
-			if (reader2.canRead())
+			if (reader.canRead())
 			{
 				long s = System.currentTimeMillis();
-				reader2.runJob(0);
+				reader.runJob(0);
 				long e = System.currentTimeMillis();
 				System.out.println("\nRead time: " + ((e-s)/1000f) + "s");
 
@@ -179,7 +177,14 @@ public class AssemblyFileHandler extends SimpleJob
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			throw new ReadException(reader.currentFile(), reader.lineCount, e);
+
+			if (reader instanceof TrackableReader)
+			{
+				TrackableReader r = (TrackableReader) reader;
+				throw new ReadException(r.currentFile(), r.lineCount, e);
+			}
+			else
+				throw new ReadException(null, 0, 0);
 		}
 	}
 
@@ -313,4 +318,14 @@ interface IAssemblyReader
 	public void setInputs(AssemblyFile[] files, Assembly assembly);
 
 	public Assembly getAssembly();
+
+	public boolean isIndeterminate();
+
+	public int getMaximum();
+
+	public int getValue();
+
+	public void cancelJob();
+
+	public String getMessage();
 }
