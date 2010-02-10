@@ -13,19 +13,19 @@ import scri.commons.file.*;
 import net.sf.samtools.SAMFileReader;
 import net.sf.samtools.SAMFormatException;
 
-public class BAIFileReader extends SimpleJob implements IAssemblyReader
+public class BAIFileReader extends TrackableReader
 {
 	private IReadCache readCache;
 	private File cacheDir;
 	private String cacheid;
 
-	private Assembly assembly;
+//	private Assembly assembly;
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
 	private int bamFile = -1;
 	private int refFile = -1;
 
-	private AssemblyFile[] files = new AssemblyFile[2];
+//	private AssemblyFile[] files = new AssemblyFile[2];
 	private AssemblyFile bamIndexFile, faiIndexFile;
 
 	private long baiBytes, fastaBytes;
@@ -213,9 +213,6 @@ public class BAIFileReader extends SimpleJob implements IAssemblyReader
 	{
 		return (int) (baiBytes + fastaBytes);
 	}
-
-	public Assembly getAssembly()
-		{ return assembly; }
 
 	public String getMessage()
 		{ return message; }

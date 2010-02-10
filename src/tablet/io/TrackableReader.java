@@ -16,7 +16,7 @@ import scri.commons.file.*;
  * Tracks reading from one or more files. Tracking is based on all the files
  * together so will go from 0 to (total size of all files).
  */
-abstract class TrackableReader extends SimpleJob implements IAssemblyReader
+abstract class TrackableReader extends SimpleJob
 {
 	private static DecimalFormat df = new DecimalFormat("0.0");
 
