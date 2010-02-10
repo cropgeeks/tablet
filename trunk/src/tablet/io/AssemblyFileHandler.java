@@ -32,7 +32,7 @@ public class AssemblyFileHandler extends SimpleJob
 
 	private AssemblyFile[] files = null;
 	private File cacheDir = null;
-	private IAssemblyReader reader = null;
+	private TrackableReader reader = null;
 
 	private String cacheid = SystemUtils.createGUID(24);
 	private boolean bai = false;
@@ -178,13 +178,14 @@ public class AssemblyFileHandler extends SimpleJob
 		{
 			e.printStackTrace();
 
-			if (reader instanceof TrackableReader)
+			if (reader instanceof BAIFileReader)
+				throw e;
+
+			else
 			{
 				TrackableReader r = (TrackableReader) reader;
 				throw new ReadException(r.currentFile(), r.lineCount, e);
 			}
-			else
-				throw e;
 		}
 	}
 
@@ -272,25 +273,4 @@ public class AssemblyFileHandler extends SimpleJob
 
 		return reader.canRead();
 	}
-}
-
-interface IAssemblyReader
-{
-	public boolean canRead() throws Exception;
-
-	public void runJob(int index) throws Exception;
-
-	public void setInputs(AssemblyFile[] files, Assembly assembly);
-
-	public Assembly getAssembly();
-
-	public boolean isIndeterminate();
-
-	public int getMaximum();
-
-	public int getValue();
-
-	public void cancelJob();
-
-	public String getMessage();
 }
