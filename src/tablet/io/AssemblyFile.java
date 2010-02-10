@@ -116,4 +116,9 @@ public class AssemblyFile
 	{
 		return url != null;
 	}
+
+	File getFile()
+	{
+		return file;
+	}
 }

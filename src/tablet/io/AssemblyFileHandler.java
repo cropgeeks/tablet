@@ -152,7 +152,7 @@ public class AssemblyFileHandler extends SimpleJob
 	// Gets a reader to check if it can read a given file, and then lets it
 	// do the full read if it says it can
 	private boolean readFile()
-		throws ReadException
+		throws Exception
 	{
 		try
 		{
@@ -184,44 +184,9 @@ public class AssemblyFileHandler extends SimpleJob
 				throw new ReadException(r.currentFile(), r.lineCount, e);
 			}
 			else
-				throw new ReadException(null, 0, 0);
+				throw e;
 		}
 	}
-
-//	private boolean readBAIFile()
-//			throws ReadException
-//	{
-//		try
-//		{
-//			baiReader.setInputs(files, new Assembly(cacheid));
-//
-//			if(baiReader.canRead())
-//			{
-//				long s = System.currentTimeMillis();
-//				baiReader.runJob();
-//				long e = System.currentTimeMillis();
-//				System.out.println("\nRead time: " + ((e-s)/1000f) + "s");
-//
-//				return true;
-//			}
-//			else
-//			{
-//				System.exit(1);
-//			}
-//			return false;
-//		}
-//		catch(ReadException e)
-//		{
-//			e.printStackTrace();
-//			throw(e);
-//		}
-//		catch(Exception e)
-//		{
-//			e.printStackTrace();
-//			//TODO update this to read off BAIFileReader
-//			throw new ReadException(files[0], 0, e);
-//		}
-//	}
 
 	public boolean isIndeterminate()
 	{
