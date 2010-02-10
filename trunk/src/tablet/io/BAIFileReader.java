@@ -31,6 +31,8 @@ public class BAIFileReader extends SimpleJob implements IAssemblyReader
 	private long baiBytes, fastaBytes;
 	private String message;
 
+	private SAMFileReader bamReader;
+
 	public BAIFileReader(IReadCache readCache, File cacheDir, String cacheid)
 	{
 		this.readCache = readCache;
@@ -67,6 +69,10 @@ public class BAIFileReader extends SimpleJob implements IAssemblyReader
 						bamIndexFile = file1;
 					else if (file2.length() > 0)
 						bamIndexFile = file2;
+
+					//TODO: If index doesn't exist inform user?
+					if(bamIndexFile == null)
+						throw new Exception("Index file missing");
 				}
 			}
 		}
@@ -96,6 +102,8 @@ public class BAIFileReader extends SimpleJob implements IAssemblyReader
 		readReferenceFile(files[refFile]);
 
 		downloadBaiFile();
+
+		openBamFile();
 	}
 
 	private AssemblyFile getBaiFile(AssemblyFile file, boolean typeTwo)
@@ -187,6 +195,18 @@ public class BAIFileReader extends SimpleJob implements IAssemblyReader
 		outputStream.close();
 
 		bamIndexFile = new AssemblyFile(file.getPath());
+	}
+
+	private void openBamFile() throws Exception
+	{
+		AssemblyFile bam = files[bamFile];
+
+		if(bam.isURL())
+			bamReader = new SAMFileReader(bam.getURL(), bamIndexFile.getFile(), false);
+		else
+			bamReader = new SAMFileReader(bam.getFile(), bamIndexFile.getFile());
+
+		System.out.println("IsBinary = " + bamReader.isBinary() + " HasIndex = " + bamReader.hasIndex());
 	}
 
 	public int getValue()
