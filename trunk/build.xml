@@ -59,7 +59,7 @@
 						i4jruntime.jar
 						osxadapter.jar
 						scri-commons.jar
-						sam-1.12.jar
+						sam.jar
 						tablet-resources.jar"/>
 			</manifest>
 		</jar>

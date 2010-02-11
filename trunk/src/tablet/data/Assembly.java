@@ -6,6 +6,7 @@ package tablet.data;
 import java.util.*;
 
 import tablet.data.cache.*;
+import tablet.io.*;
 
 /**
  * The top-level of Tablet's data structures, an assembly holds a list of
@@ -21,6 +22,7 @@ public class Assembly implements Iterable<Contig>
 
 	private ArrayList<Contig> contigs = new ArrayList<Contig>();
 
+	private BamBam bambam;
 	private static boolean isBam = false;
 	private static boolean hasCigar = false;
 
@@ -127,4 +129,12 @@ public class Assembly implements Iterable<Contig>
 
 	public void setHasCigar()
 		{ hasCigar = true; }
+
+	public void setBamReader(BAIFileReader bamReader)
+		{ bambam = new BamBam(bamReader); }
+
+	public BamBam getBamBam()
+	{
+		return bambam;
+	}
 }
