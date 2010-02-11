@@ -13,7 +13,7 @@
 		<jar href="flamingo.jar"/>
 		<jar href="i4jruntime.jar"/>
 		<jar href="osxadapter.jar"/>
-		<jar href="sam-1.12.jar"/>
+		<jar href="sam.jar"/>
 		<jar href="scri-commons.jar"/>
 		<jar href="tablet.jar"/>
 		<jar href="tablet-resources.jar"/>

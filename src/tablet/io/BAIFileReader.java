@@ -10,8 +10,8 @@ import tablet.gui.*;
 
 import scri.commons.file.*;
 
-import net.sf.samtools.SAMFileReader;
-import net.sf.samtools.SAMFormatException;
+import net.sf.samtools.*;
+import net.sf.samtools.util.*;
 
 public class BAIFileReader extends TrackableReader
 {
@@ -19,15 +19,13 @@ public class BAIFileReader extends TrackableReader
 	private File cacheDir;
 	private String cacheid;
 
-//	private Assembly assembly;
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
 	private int bamFile = -1;
 	private int refFile = -1;
-
-//	private AssemblyFile[] files = new AssemblyFile[2];
 	private AssemblyFile bamIndexFile, faiIndexFile;
 
+	private boolean isIndeterminate = true;
 	private long baiBytes, fastaBytes;
 	private String message;
 
@@ -57,17 +55,20 @@ public class BAIFileReader extends TrackableReader
 			else
 			{
 				// Check to see if we even have a BAM file
-				if (files[i].getName().toLowerCase().endsWith(".bam") && files[i].length() > 0)
+				if (files[i].getName().toLowerCase().endsWith(".bam") && files[i].exists())
 				{
 					bamFile = i;
 
 					// If so, do we have an index file that goes with it?
-					AssemblyFile file1 = getBaiFile(files[i], false);
-					AssemblyFile file2 = getBaiFile(files[i], true);
+					AssemblyFile file1 = getBaiIndexFile(files[i], false);
+					AssemblyFile file2 = getBaiIndexFile(files[i], true);
 
-					if (file1.length() > 0)
+					System.out.println("Checking " + file1.getPath());
+					System.out.println("Checking " + file2.getPath());
+
+					if (file1.exists())
 						bamIndexFile = file1;
-					else if (file2.length() > 0)
+					else if (file2.exists())
 						bamIndexFile = file2;
 
 					//TODO: If index doesn't exist inform user?
@@ -76,6 +77,10 @@ public class BAIFileReader extends TrackableReader
 				}
 			}
 		}
+
+		System.out.println("bamFile = " + bamFile);
+		System.out.println("bamIndexFile==null " + (bamIndexFile==null));
+		System.out.println("refFile = " + refFile);
 
 		return (bamFile >= 0 && bamIndexFile != null && refFile >= 0);
 	}
@@ -99,14 +104,25 @@ public class BAIFileReader extends TrackableReader
 		// TODO: 5555?
 		maximum = (int) files[refFile].length() + (int) bamIndexFile.length();
 
+		System.out.println("Reading FASTA...");
+		isIndeterminate = false;
 		readReferenceFile(files[refFile]);
 
 		downloadBaiFile();
+		isIndeterminate = true;
 
+		message = "Opening BAM...";
+		System.out.println("Opening BAM...");
 		openBamFile();
+
+		if (okToRun)
+		{
+			assembly.setAsBamAssembly();
+			assembly.setBamReader(this);
+		}
 	}
 
-	private AssemblyFile getBaiFile(AssemblyFile file, boolean typeTwo)
+	private AssemblyFile getBaiIndexFile(AssemblyFile file, boolean typeTwo)
 	{
 		String name = file.getName();
 		String newName = name + ".bai";
@@ -180,6 +196,7 @@ public class BAIFileReader extends TrackableReader
 		File file = new File(cacheDir, "Tablet-"+cacheid+bamIndexFile.getName());
 
 		message = "Reading BAI assembly index file...";
+		System.out.println("Downloading BAI index file");
 
 		BufferedInputStream inputStream = new BufferedInputStream(bamIndexFile.getInputStream());
 		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file.getAbsolutePath()));
@@ -205,8 +222,6 @@ public class BAIFileReader extends TrackableReader
 			bamReader = new SAMFileReader(bam.getURL(), bamIndexFile.getFile(), false);
 		else
 			bamReader = new SAMFileReader(bam.getFile(), bamIndexFile.getFile());
-
-		System.out.println("IsBinary = " + bamReader.isBinary() + " HasIndex = " + bamReader.hasIndex());
 	}
 
 	public int getValue()
@@ -214,6 +229,31 @@ public class BAIFileReader extends TrackableReader
 		return (int) (baiBytes + fastaBytes);
 	}
 
+	public boolean isIndeterminate()
+		{ return isIndeterminate; }
+
+	public int getMaximum()
+		{ return maximum; }
+
 	public String getMessage()
 		{ return message; }
+
+	public void loadData(Contig contig, int s, int e)
+		throws Exception
+	{
+		long ts = System.currentTimeMillis();
+
+		CloseableIterator itor = bamReader.query(contig.getName(), s+1, e+1, true);
+
+		while (itor.hasNext())
+		{
+
+		}
+
+		itor.close();
+
+
+		long te = System.currentTimeMillis();
+		System.out.println("Loaded " + s + "-" + e + " in " + (te-ts) + "ms");
+	}
 }

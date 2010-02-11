@@ -78,6 +78,21 @@ public class AssemblyFile
 		catch (Exception e) { return 0; }
 	}
 
+	boolean exists()
+	{
+		if (file != null)
+			return file.exists();
+
+		try
+		{
+			URLConnection conn = url.openConnection();
+			conn.getInputStream().close();
+
+			return true;
+		}
+		catch (Exception e) { return false; }
+	}
+
 	// Returns the input stream for this file
 	InputStream getInputStream()
 		throws Exception

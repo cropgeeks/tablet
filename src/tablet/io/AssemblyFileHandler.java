@@ -85,9 +85,6 @@ public class AssemblyFileHandler extends SimpleJob
 			bai = true;
 		}
 
-		if (fileParsed == false)
-			System.exit(0);
-
 		// ACE
 		if (okToRun && fileParsed == false)
 		{
@@ -107,11 +104,11 @@ public class AssemblyFileHandler extends SimpleJob
 			fileParsed = readFile();
 		}
 		//BAM
-//		if(okToRun && fileParsed == false)
-//		{
-//			reader = new BamFileReader(readCache);
-//			fileParsed = readFile();
-//		}
+		if(okToRun && fileParsed == false)
+		{
+			reader = new BamFileReader(readCache);
+			fileParsed = readFile();
+		}
 		// SAM
 		if (okToRun && fileParsed == false)
 		{
