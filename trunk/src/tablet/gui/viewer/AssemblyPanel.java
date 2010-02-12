@@ -345,4 +345,9 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		}
 	}
 
+	public void processBamDataChange()
+	{
+		forceRedraw();
+	}
+
 }

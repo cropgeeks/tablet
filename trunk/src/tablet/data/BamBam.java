@@ -16,19 +16,47 @@ public class BamBam
 	{
 		this.bamHandler = bamHandler;
 
-		s = 30000000;
-		e = 30100000;
+		s = 10000;
+		e = 10200;
 	}
 
-	public void setBlock(int s, int e)
+	public void setBlockStart(Contig contig, int s)
 	{
-		this.s = s;
-		this.e = e;
+		System.out.println(s);
+		s = s-50;
+		e = s+9050;
+		
+		int cLength = contig.getConsensus().length();
+		if(s >= 0 && s < cLength)
+			this.s = s;
+		else
+			throw new RuntimeException("BAM S Invalid: " + s);
+
+		if(e >= 0 && e < cLength)
+			this.e = e;
+		else
+			throw new RuntimeException("BAM E Invalid: " + e);
 	}
 
 	public void loadDataBlock(Contig contig)
 		throws Exception
 	{
-		bamHandler.loadData(contig, s, e);
+		bamHandler.loadData(contig, getS(), getE());
+	}
+
+	/**
+	 * @return the s
+	 */
+	public int getS()
+	{
+		return s;
+	}
+
+	/**
+	 * @return the e
+	 */
+	public int getE()
+	{
+		return e;
 	}
 }

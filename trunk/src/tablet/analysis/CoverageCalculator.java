@@ -33,6 +33,10 @@ public class CoverageCalculator extends SimpleJob
 	{
 		coverage = new int[contig.getWidth()];
 
+		// TODO-BAM
+		if(true)
+			return;
+
 		// Maintains a count of the total number of bases across ALL reads
 		int baseCount = 0;
 
