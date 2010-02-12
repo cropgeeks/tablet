@@ -119,6 +119,11 @@ public class JumpToDialog extends JDialog
 
 	private void jumpToBase(int index)
 	{
+		if(Assembly.isBam())
+		{
+			aPanel.getAssembly().getBamBam().setBlockStart(aPanel.getContig(), index);
+			aPanel.processBamDataChange();
+		}
 		aPanel.moveToPosition(-1, index, true);
 		new ColumnHighlighter(aPanel, index, index);
 	}
@@ -139,6 +144,10 @@ public class JumpToDialog extends JDialog
 
 			return;
 		}
+
+		paddedIndex = unpaddedIndex = base-1;
+		if(true)
+			return;
 
 		Contig contig = aPanel.getContig();
 

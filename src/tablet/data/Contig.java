@@ -132,25 +132,35 @@ public class Contig
 	public ArrayList<Feature> getOutlines()
 		{ return outlines; }
 
-	public void calculateOffsets()
+	public void calculateOffsets(Assembly assembly)
 	{
 		calculatePercentageMismatch();
-		// Set the rhsOffset to the final index position in the consensus seq
-		rhsOffset = consensus.length() - 1;
 
-		// Now scan all the reads and see if any of them extend beyond the lhs
-		// or the rhs of the consensus...
-		for (Read read: reads)
+		if(assembly.isBam() == false)
 		{
-			if (read.getStartPosition() < lhsOffset)
-				lhsOffset = read.getStartPosition();
-			if (read.getEndPosition() > rhsOffset)
-				rhsOffset = read.getEndPosition();
+			// Set the rhsOffset to the final index position in the consensus seq
+			rhsOffset = consensus.length() - 1;
+
+			// Now scan all the reads and see if any of them extend beyond the lhs
+			// or the rhs of the consensus...
+			for (Read read: reads)
+			{
+				if (read.getStartPosition() < lhsOffset)
+					lhsOffset = read.getStartPosition();
+				if (read.getEndPosition() > rhsOffset)
+					rhsOffset = read.getEndPosition();
+			}
+		}
+		else
+		{
+			lhsOffset = assembly.getBamBam().getS();
+			rhsOffset = assembly.getBamBam().getE();
 		}
 	}
 
 	public void setPackSet(PackSet packSet)
 	{
+		System.out.println("Setting packset: " + (packSet == null));
 		this.packSet = packSet;
 		stackSet = new StackSet(reads);
 	}
@@ -162,6 +172,7 @@ public class Contig
 	 */
 	public void clearPackSet()
 	{
+		System.out.println("Clear PackSet");
 		readManager = null;
 
 		packSet = null;

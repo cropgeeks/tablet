@@ -37,6 +37,8 @@ public class BaiFileHandler
 
 		CigarParser parser = new CigarParser(contig.getName());
 
+		contig.getReads().clear();
+
 		CloseableIterator<SAMRecord> itor = bamReader.query(contig.getName(), s+1, e+1, false);
 
 		while(itor.hasNext())
@@ -58,13 +60,13 @@ public class BaiFileHandler
 		contig.getReads().trimToSize();
 		Collections.sort(contig.getReads());
 		// TODO-BAM is this needed? (overhanging reads shouldn't happen) [do mismatch?]
-		contig.calculateOffsets();
+		contig.calculateOffsets(assembly);
 
 		long te = System.currentTimeMillis();
 		System.out.println("Loaded " + s + "-" + e + " in " + (te-ts) + "ms");
 	}
 
-	private void createRead(Contig contigToAddTo, final SAMRecord record, CigarParser parser) throws Exception
+	private void createRead(Contig contig, final SAMRecord record, CigarParser parser) throws Exception
 	{
 		int readStartPos = record.getAlignmentStart()-1;
 		ReadMetaData rmd = new ReadMetaData(record.getReadName(), record.getReadNegativeStrandFlag());
@@ -75,11 +77,11 @@ public class BaiFileHandler
 
 		rmd.calculateUnpaddedLength();
 		read.setLength(rmd.length());
-		contigToAddTo.getReads().add(read);
+		contig.getReads().add(read);
 
 		// Do base-position comparison...
 
-		BasePositionComparator.compare(contigToAddTo, rmd, readStartPos);
+		BasePositionComparator.compare(contig, rmd, readStartPos);
 
 		rmd.setCigar(record.getCigar().toString());
 
