@@ -3,15 +3,12 @@ package tablet.io;
 import java.io.*;
 import java.util.*;
 
-import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
-import tablet.gui.*;
 
 import scri.commons.file.*;
 
 import net.sf.samtools.*;
-import net.sf.samtools.util.*;
 
 public class BAIFileReader extends TrackableReader
 {
@@ -117,8 +114,9 @@ public class BAIFileReader extends TrackableReader
 
 		if (okToRun)
 		{
+			BaiFileHandler bamHandler = new BaiFileHandler(readCache, bamReader, assembly);
 			assembly.setAsBamAssembly();
-			assembly.setBamReader(this);
+			assembly.setBamHandler(bamHandler);
 		}
 	}
 
@@ -237,23 +235,4 @@ public class BAIFileReader extends TrackableReader
 
 	public String getMessage()
 		{ return message; }
-
-	public void loadData(Contig contig, int s, int e)
-		throws Exception
-	{
-		long ts = System.currentTimeMillis();
-
-		CloseableIterator itor = bamReader.query(contig.getName(), s+1, e+1, true);
-
-		while (itor.hasNext())
-		{
-
-		}
-
-		itor.close();
-
-
-		long te = System.currentTimeMillis();
-		System.out.println("Loaded " + s + "-" + e + " in " + (te-ts) + "ms");
-	}
 }

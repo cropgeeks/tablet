@@ -7,17 +7,17 @@ import tablet.io.*;
 
 public class BamBam
 {
-	private BAIFileReader bamReader;
+	private BaiFileHandler bamHandler;
 
 	// The starting and ending indices (0-indexed) for the current data block
 	private int s, e;
 
-	BamBam(BAIFileReader bamReader)
+	BamBam(BaiFileHandler bamHandler)
 	{
-		this.bamReader = bamReader;
+		this.bamHandler = bamHandler;
 
-		s = 0;
-		e = 100;
+		s = 30000000;
+		e = 30100000;
 	}
 
 	public void setBlock(int s, int e)
@@ -29,6 +29,6 @@ public class BamBam
 	public void loadDataBlock(Contig contig)
 		throws Exception
 	{
-		bamReader.loadData(contig, s, e);
+		bamHandler.loadData(contig, s, e);
 	}
 }

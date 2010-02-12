@@ -130,8 +130,8 @@ public class Assembly implements Iterable<Contig>
 	public void setHasCigar()
 		{ hasCigar = true; }
 
-	public void setBamReader(BAIFileReader bamReader)
-		{ bambam = new BamBam(bamReader); }
+	public void setBamHandler(BaiFileHandler bamHandler)
+		{ bambam = new BamBam(bamHandler); }
 
 	public BamBam getBamBam()
 	{

@@ -26,6 +26,11 @@ class CigarParser
 	{
 	}
 
+	CigarParser(String currentContigName)
+	{
+		this.currentContigName = currentContigName;
+	}
+
 	/**
 	 * The method to call when attempting to parse a CIGAR string.
 	 *
