@@ -124,8 +124,9 @@ public class JumpToDialog extends JDialog
 			aPanel.getAssembly().getBamBam().setBlockStart(aPanel.getContig(), index);
 			aPanel.processBamDataChange();
 		}
+
 		aPanel.moveToPosition(-1, index, true);
-		new ColumnHighlighter(aPanel, index, index);
+//		new ColumnHighlighter(aPanel, index, index);
 	}
 
 	private void checkControls()
@@ -139,8 +140,8 @@ public class JumpToDialog extends JDialog
 		}
 		catch (NumberFormatException e)
 		{
-			nbPanel.bJumpPadded.setEnabled(false);
-			nbPanel.bJumpUnpadded.setEnabled(false);
+//			nbPanel.bJumpPadded.setEnabled(false);
+//			nbPanel.bJumpUnpadded.setEnabled(false);
 
 			return;
 		}
@@ -151,17 +152,18 @@ public class JumpToDialog extends JDialog
 
 		Contig contig = aPanel.getContig();
 
+		// TODO-BAM ???
 		// Work out the padded index for this base
-		paddedIndex = base + contig.getConsensusOffset() - 1;
-		if (paddedIndex < 0 || paddedIndex >= contig.getWidth())
-			nbPanel.bJumpPadded.setEnabled(false);
-		else
-			nbPanel.bJumpPadded.setEnabled(true);
+//		paddedIndex = base + contig.getConsensusOffset() - 1;
+//		if (paddedIndex < 0 || paddedIndex >= contig.getWidth())
+//			nbPanel.bJumpPadded.setEnabled(false);
+//		else
+//			nbPanel.bJumpPadded.setEnabled(true);
 
 		// Convert the unpadded index to a padded index
 		unpaddedIndex = DisplayData.unpaddedToPadded(base-1);
-		nbPanel.bJumpUnpadded.setEnabled(unpaddedIndex != -1);
-		unpaddedIndex += contig.getConsensusOffset();
+//		nbPanel.bJumpUnpadded.setEnabled(unpaddedIndex != -1);
+//		unpaddedIndex += contig.getConsensusOffset();
 	}
 
 	public void changedUpdate(DocumentEvent e)

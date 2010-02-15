@@ -19,8 +19,19 @@ public class Contig
 
 	private ArrayList<Read> reads = new ArrayList<Read>();
 
-	// Starting and ending indices of the leftmost and rightmost reads
-	private int lhsOffset, rhsOffset;
+	// Starting and ending indices of the region of data that is currently
+	// viewable. Eg, from -10 to 109 (assuming consensus length 100 and reads
+	// overhanging by 10 bases at each end). In the case of BAM subset views,
+	// these values will always be the left and right extends of whichever reads
+	// are loaded into memory.
+	int visualS, visualE;
+
+	// Starting and ending indices of all the viewable data (irrespective of
+	// whether it's actually loaded or not). For non-BAM assemblies, these
+	// values will be identical to visualS/visualE, but for BAM, they will most
+	// likely be equal to 0 (consensus start) and consensus.length()-1
+	private int dataS, dataE;
+
 
 	// Objects for handling the ordering of reads (for display)
 	private IReadManager readManager;
@@ -136,31 +147,32 @@ public class Contig
 	{
 		calculatePercentageMismatch();
 
-		if(assembly.isBam() == false)
-		{
-			// Set the rhsOffset to the final index position in the consensus seq
-			rhsOffset = consensus.length() - 1;
+		dataS = visualS = 0;
+		dataE = visualE = consensus.length() - 1;
 
-			// Now scan all the reads and see if any of them extend beyond the lhs
-			// or the rhs of the consensus...
+		if (assembly.isBam() == false)
+		{
+			// Now scan all the reads and see if any of them extend beyond the
+			// lhs or the rhs of the consensus...
 			for (Read read: reads)
 			{
-				if (read.getStartPosition() < lhsOffset)
-					lhsOffset = read.getStartPosition();
-				if (read.getEndPosition() > rhsOffset)
-					rhsOffset = read.getEndPosition();
+				if (read.getStartPosition() < dataS)
+					dataS = visualS = read.getStartPosition();
+				if (read.getEndPosition() > dataE)
+					dataE = visualE = read.getEndPosition();
 			}
 		}
 		else
 		{
-			lhsOffset = assembly.getBamBam().getS();
-			rhsOffset = assembly.getBamBam().getE();
+			// BAM cannot show beyond the extent of the data block currently
+			// loaded into memory
+			visualS = assembly.getBamBam().getS();
+			visualE = assembly.getBamBam().getE();
 		}
 	}
 
 	public void setPackSet(PackSet packSet)
 	{
-		System.out.println("Setting packset: " + (packSet == null));
 		this.packSet = packSet;
 		stackSet = new StackSet(reads);
 	}
@@ -172,26 +184,43 @@ public class Contig
 	 */
 	public void clearPackSet()
 	{
-		System.out.println("Clear PackSet");
 		readManager = null;
 
 		packSet = null;
 		stackSet = null;
 	}
 
-	public int getConsensusOffset()
-		{ return -lhsOffset; }
+	/**
+	 * Returns the (negative) value of the index of the first base to be shown,
+	 * that is, the left-most base on the display. This method should be used to
+	 * determine the offset between a given base in display coordinates and its
+	 * actual index in assembly coordinates. Eg, base 0 (left-most) base on the
+	 * display, will not always be the first base of the assembly.
+	 */
+	public int getVisualStart()
+		{ return -visualS; }
 
 	/**
-	 * Returns the width of this contig, that is, the total number of
-	 * nucleotides that span from the beginning of the left most read to the end
-	 * of the right most read, including any gaps inbetween. In most cases,
+	 * Returns the width of the data that can currently be shown, that is, the
+	 * total number of nucleotides that span from the beginning of the block to
+	 * the end of the block, including any gaps inbetween. In most cases,
 	 * the width will probably be equal to the length of the consensus sequence
 	 * but if any reads extend before or after the consensus, they will affect
-	 * the overall width.
+	 * the overall width. For BAM, the width will always be the width of the
+	 * data-block loaded into memory.
 	 */
 	public int getWidth()
-		{ return rhsOffset - lhsOffset + 1; }
+		{ return visualE - visualS + 1; }
+
+	/**
+	 * Returns the total width of the contig, ie, the extent to which the user
+	 * could scroll around the view (for BAM: assuming all the data was actually
+	 * loaded).
+	 */
+	public int getDataWidth()
+	{
+		return dataE - dataS + 1;
+	}
 
 	/**
 	 * Returns the height of this contig, that is, the total number of lines of
