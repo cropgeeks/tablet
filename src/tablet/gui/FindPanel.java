@@ -165,7 +165,7 @@ public class FindPanel extends JPanel implements ListSelectionListener
 		else
 			lineIndex = contig.getPackSetManager().getLineForRead(read);
 
-		final int startPos = read.getStartPosition() + contig.getVisualStart();
+		final int startPos = read.getStartPosition() - contig.getVisualStart();
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run()

@@ -119,7 +119,7 @@ class ProteinCanvas extends TrackingCanvas
 			int y = (rCanvas.ntH+1) * count;
 			count++;
 
-			short[] data = getRegion(translations.get(t), xS-offset, xE-offset);
+			short[] data = getRegion(translations.get(t), xS+offset, xE+offset);
 
 			for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
 				if (data[i] > 0)

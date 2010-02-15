@@ -31,25 +31,29 @@ public class CoverageCalculator extends SimpleJob
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		coverage = new int[contig.getWidth()];
-
-		// TODO-BAM
-		if(true)
-			return;
+		coverage = new int[contig.getVisualWidth()];
 
 		// Maintains a count of the total number of bases across ALL reads
 		int baseCount = 0;
+		int vS = contig.getVisualStart();
 
 		for (Read read: contig.getReads())
 		{
-			baseCount += read.length();
+			int s = read.getStartPosition() - vS;
+			int e = read.getEndPosition()   - vS;
 
-			int s = read.getStartPosition() + contig.getVisualStart();
-			int e = read.getEndPosition() + contig.getVisualStart();
+			// Extra checks that may happen with BAM (but shouldn't with non-BAM)
+			if (s < 0)
+				s = 0;
+			if (e >= coverage.length)
+				e = coverage.length-1;
 
 			// Increment the coverage count for each base covered by this read
 			for (int i = s; i <= e; i++)
+			{
 				coverage[i]++;
+				baseCount++;
+			}
 		}
 
 		int basesCovered = 0;
@@ -68,7 +72,7 @@ public class CoverageCalculator extends SimpleJob
 				basesCovered++;
 		}
 
-		averageCoverage = baseCount / (float) contig.getWidth();
+		averageCoverage = baseCount / (float) coverage.length;
 		averagePercentage = (basesCovered / (float) coverage.length) * 100;
 	}
 

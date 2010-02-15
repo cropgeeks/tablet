@@ -138,8 +138,8 @@ class ReadsCanvas extends JPanel
 		ntW = sizeX*2;
 		ntH = fm.getHeight();
 
-		ntOnCanvasX = contig.getWidth();
-		ntOnCanvasY = contig.getHeight();
+		ntOnCanvasX = contig.getVisualWidth();
+		ntOnCanvasY = contig.getVisualHeight();
 
 		canvasW = (ntOnCanvasX * ntW);
 		canvasH = (ntOnCanvasY * ntH);
@@ -245,8 +245,8 @@ class ReadsCanvas extends JPanel
 
 		// Calculate and draw the blue/gray background for offset regions
 		g.setColor(new Color(240, 240, 255));
-		g.fillRect(0, 0, offset*ntW, getHeight());
-		int cLength = offset + contig.getConsensus().length();
+		g.fillRect(0, 0, -offset*ntW, getHeight());
+		int cLength = -offset + contig.getConsensus().length();
 		g.fillRect(cLength*ntW, 0, canvasW-(cLength*ntW), getHeight());
 
 
@@ -302,7 +302,7 @@ class ReadsCanvas extends JPanel
 			// For every [nth] row, where n = number of available CPU cores...
 			for (int row = yS, y = (ntH*yS); row <= yE; row += cores, y += ntH*cores)
 			{
-				byte[] data = reads.getValues(row, xS-offset, xE-offset);
+				byte[] data = reads.getValues(row, xS+offset, xE+offset);
 				for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
 					if (data[i] != -1)
 						g.drawImage(colors.getImage(data[i]), x, y, null);

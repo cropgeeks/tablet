@@ -112,7 +112,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			w = fmTitle.stringWidth(cigar) + 20;
 
 		// Tell the overview canvas to paint this read too
-		int offset = rCanvas.offset;
+		int offset = -rCanvas.offset;
 		oCanvas.updateRead(lineIndex, readS+offset, readE+offset);
 	}
 

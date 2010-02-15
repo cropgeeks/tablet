@@ -23,7 +23,7 @@ public class Assembly implements Iterable<Contig>
 	private ArrayList<Contig> contigs = new ArrayList<Contig>();
 
 	private BamBam bambam;
-	private static boolean isBam = false;
+	private boolean isBam = false;
 	private static boolean hasCigar = false;
 
 	/** Constructs a new, empty assembly. */
@@ -118,7 +118,7 @@ public class Assembly implements Iterable<Contig>
 	 * Returns true if this assembly holds data from a BAM assembly file.
 	 * @return true if this assembly holds data from a BAM assembly file
 	 */
-	public static boolean isBam()
+	public boolean isBam()
 		{ return isBam; }
 
 	public void setAsBamAssembly()

@@ -48,7 +48,7 @@ class ScaleCanvas extends TrackingCanvas
 		{
 			public void mouseMoved(MouseEvent e)
 			{
-				int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) - offset;
+				int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) + offset;
 				setMouseBase(xIndex);
 			}
 		});
@@ -114,10 +114,10 @@ class ScaleCanvas extends TrackingCanvas
 		// And ticks at intervals of 5 and 25 bases
 		for (int i = xS; i <= xE; i++)
 		{
-			if ((i-offset+1) % 25 == 0)
+			if ((i+offset+1) % 25 == 0)
 				g.drawLine(i*ntW+(ntW/2), 0, i*ntW+(ntW/2), 8);
 
-			else if ((i-offset+1) % 5 == 0)
+			else if ((i+offset+1) % 5 == 0)
 				g.drawLine(i*ntW+(ntW/2), 3, i*ntW+(ntW/2), 8);
 		}
 
@@ -129,11 +129,11 @@ class ScaleCanvas extends TrackingCanvas
 		if (mouseBase != null)
 		{
 			// If the mouse is beyond the edge of the data, don't do anything
-			if (mouseBase+offset+1 > rCanvas.ntOnCanvasX)
+			if (mouseBase-offset+1 > rCanvas.ntOnCanvasX)
 				return;
 
 			// Work out where to start drawing: base position + 1/2 a base
-			int x = (mouseBase+offset) * ntW + (ntW/2);
+			int x = (mouseBase-offset) * ntW + (ntW/2);
 			// Draw a tick there
 			g.drawLine(x, 0, x, 8);
 
@@ -141,7 +141,7 @@ class ScaleCanvas extends TrackingCanvas
 			String str = TabletUtils.nf.format(mouseBase+1)
 				+ getUnpadded(mouseBase) + " " + C
 				+ TabletUtils.nf.format(
-					DisplayData.getCoverage()[mouseBase+offset]);
+					DisplayData.getCoverage()[mouseBase-offset]);
 
 			if (message != null)
 				str += " - " + message;
@@ -155,8 +155,8 @@ class ScaleCanvas extends TrackingCanvas
 		}
 
 		// Attempt to mark the base position on the LHS of the canvas
-		String lhsStr = TabletUtils.nf.format(xS+1-offset)
-			+ getUnpadded(xS-offset);
+		String lhsStr = TabletUtils.nf.format(xS+1+offset)
+			+ getUnpadded(xS+offset);
 		int strWidth  = g.getFontMetrics().stringWidth(lhsStr);
 		int pos = getPosition(x1, strWidth);;
 		ntL = xS;
@@ -165,8 +165,8 @@ class ScaleCanvas extends TrackingCanvas
 			g.drawString(lhsStr, pos, 20);
 
 		// Attempt to mark the base position on the RHS of the canvas
-		String rhsStr = TabletUtils.nf.format(xE+1-offset)
-			+ getUnpadded(xE-offset);
+		String rhsStr = TabletUtils.nf.format(xE+1+offset)
+			+ getUnpadded(xE+offset);
 		strWidth  = g.getFontMetrics().stringWidth(rhsStr);
 		pos = getPosition(x2, strWidth);
 		ntR = xE;

@@ -94,8 +94,7 @@ public class DisplayDataCalculator extends SimpleJob
 			DisplayData.setUnpaddedToPadded(unpaddedToPadded);
 		}
 
-		// TODO-BAM this DOES need to run with bam files
-		if (okToRun && doAll)
+		if (okToRun)
 		{
 			// Compute per-base coverage across the contig
 			cc = new CoverageCalculator(contig);
