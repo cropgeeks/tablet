@@ -107,15 +107,12 @@ class ReadsCanvas extends JPanel
 
 		if (contig != null)
 		{
-			System.out.println("readcanvas.setcontig");
 			if (Prefs.visPacked)
 				reads = contig.getPackSetManager();
 			else
 				reads = contig.getStackSetManager();
 
-			offset = contig.getConsensusOffset();
-			if(reads == null)
-				System.out.println("Reads null");
+			offset = contig.getVisualStart();
 		}
 
 		// We need to ensure that any references to tablet.data objects are

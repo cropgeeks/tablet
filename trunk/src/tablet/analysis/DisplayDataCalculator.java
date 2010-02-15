@@ -18,6 +18,7 @@ import scri.commons.gui.*;
  */
 public class DisplayDataCalculator extends SimpleJob
 {
+	private boolean doAll;
 	private Assembly assembly;
 	private Contig contig;
 
@@ -30,31 +31,35 @@ public class DisplayDataCalculator extends SimpleJob
 	private IArrayIntCache paddedToUnpadded;
 	private IArrayIntCache unpaddedToPadded;
 
-	public DisplayDataCalculator(Assembly assembly, Contig contig)
+	public DisplayDataCalculator(Assembly assembly, Contig contig, boolean doAll)
 	{
 		this.assembly = assembly;
 		this.contig = contig;
+		this.doAll = doAll;
 
-		// Create any cache objects that will be needed
-		int length = contig.getConsensus().length();
-
-		// The padded->unpadded mapping array...
-		if (Prefs.cachePaddedMap && length > 1000000)
+		if (doAll)
 		{
-			File cache = new File(Prefs.cacheDir, "Tablet-" + assembly.getCacheID() + ".paddedmap");
-			paddedToUnpadded = new ArrayIntFileCache(cache);
-		}
-		else
-			paddedToUnpadded = new ArrayIntMemCache(length);
+			// Create any cache objects that will be needed
+			int length = contig.getConsensus().length();
 
-		// The unpadded->padded mapping array...
-		if (Prefs.cacheUnpaddedMap && length > 1000000)
-		{
-			File cache = new File(Prefs.cacheDir, "Tablet-" + assembly.getCacheID() + ".unpaddedmap");
-			unpaddedToPadded = new ArrayIntFileCache(cache);
+			// The padded->unpadded mapping array...
+			if (Prefs.cachePaddedMap && length > 1000000)
+			{
+				File cache = new File(Prefs.cacheDir, "Tablet-" + assembly.getCacheID() + ".paddedmap");
+				paddedToUnpadded = new ArrayIntFileCache(cache);
+			}
+			else
+				paddedToUnpadded = new ArrayIntMemCache(length);
+
+			// The unpadded->padded mapping array...
+			if (Prefs.cacheUnpaddedMap && length > 1000000)
+			{
+				File cache = new File(Prefs.cacheDir, "Tablet-" + assembly.getCacheID() + ".unpaddedmap");
+				unpaddedToPadded = new ArrayIntFileCache(cache);
+			}
+			else
+			 	unpaddedToPadded = new ArrayIntMemCache(length);
 		}
-		else
-		 	unpaddedToPadded = new ArrayIntMemCache(length);
 	}
 
 	public void runJob(int jobIndex)
@@ -71,7 +76,7 @@ public class DisplayDataCalculator extends SimpleJob
 		// actually slower than sequentially, because it had to create multiple
 		// simultaneous disk caches (and the HDD didn't like doing that).
 
-		if (okToRun)
+		if (okToRun && doAll)
 		{
 			// Compute mappings between unpadded and padded values
 			bm = new BaseMappingCalculator(contig.getConsensus(),
@@ -89,7 +94,8 @@ public class DisplayDataCalculator extends SimpleJob
 			DisplayData.setUnpaddedToPadded(unpaddedToPadded);
 		}
 
-		if (okToRun)
+		// TODO-BAM this DOES need to run with bam files
+		if (okToRun && doAll)
 		{
 			// Compute per-base coverage across the contig
 			cc = new CoverageCalculator(contig);

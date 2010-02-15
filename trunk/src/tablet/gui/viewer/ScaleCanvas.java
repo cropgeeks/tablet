@@ -74,7 +74,7 @@ class ScaleCanvas extends TrackingCanvas
 		else
 		{
 			consensus = contig.getConsensus();
-			offset = contig.getConsensusOffset();
+			offset = contig.getVisualStart();
 		}
 
 		this.contig = contig;

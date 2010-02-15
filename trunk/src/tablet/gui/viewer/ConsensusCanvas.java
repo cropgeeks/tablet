@@ -39,7 +39,7 @@ class ConsensusCanvas extends TrackingCanvas
 		if (contig != null)
 		{
 			consensus = contig.getConsensus();
-			offset = contig.getConsensusOffset();
+			offset = contig.getVisualStart();
 		}
 
 		// Remove tablet.data references if nothing is going to be displayed

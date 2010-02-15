@@ -52,7 +52,7 @@ class CoverageCanvas extends TrackingCanvas
 	{
 		if (contig != null)
 		{
-			offset = contig.getConsensusOffset();
+			offset = contig.getVisualStart();
 
 			setToolTipText(
 				RB.format("gui.viewer.OverviewCanvas.coverageTT",

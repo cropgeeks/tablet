@@ -133,7 +133,14 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		this.contig = contig;
 		boolean setContigOK = true;
 
-		if (contig != null && ((setContigOK = updateDisplayData()) == false))
+		// Fresh BAM assembly: reset the loaded data to the start
+		if (contig != null && assembly.isBam())
+		{
+			assembly.getBamBam().reset();
+			assembly.getBamBam().setBlockStart(contig, 0);
+		}
+
+		if (contig != null && ((setContigOK = updateDisplayData(true)) == false))
 			this.contig = contig = null;
 
 		// Pass the contig to the other components for rendering
@@ -299,13 +306,13 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		overviewCanvas.displayMenu(button, null);
 	}
 
-	private boolean updateDisplayData()
+	private boolean updateDisplayData(boolean doAll)
 	{
 		String title = RB.getString("gui.viewer.assemblyPanel.progressDialog.title");
 		String label = RB.getString("gui.viewer.assemblyPanel.progressDialog.label");
 
 		// Run the job...
-		DisplayDataCalculator ddc = new DisplayDataCalculator(assembly, contig);
+		DisplayDataCalculator ddc = new DisplayDataCalculator(assembly, contig, doAll);
 		ProgressDialog dialog = new ProgressDialog(ddc, title, label);
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
@@ -347,6 +354,8 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 	public void processBamDataChange()
 	{
+		updateDisplayData(false);
+
 		forceRedraw();
 	}
 

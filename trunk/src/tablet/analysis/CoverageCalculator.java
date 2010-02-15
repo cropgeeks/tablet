@@ -44,8 +44,8 @@ public class CoverageCalculator extends SimpleJob
 		{
 			baseCount += read.length();
 
-			int s = read.getStartPosition() + contig.getConsensusOffset();
-			int e = read.getEndPosition() + contig.getConsensusOffset();
+			int s = read.getStartPosition() + contig.getVisualStart();
+			int e = read.getEndPosition() + contig.getVisualStart();
 
 			// Increment the coverage count for each base covered by this read
 			for (int i = s; i <= e; i++)
