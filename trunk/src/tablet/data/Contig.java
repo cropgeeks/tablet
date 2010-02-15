@@ -191,14 +191,14 @@ public class Contig
 	}
 
 	/**
-	 * Returns the (negative) value of the index of the first base to be shown,
+	 * Returns the value of the index of the first base to be shown,
 	 * that is, the left-most base on the display. This method should be used to
 	 * determine the offset between a given base in display coordinates and its
 	 * actual index in assembly coordinates. Eg, base 0 (left-most) base on the
 	 * display, will not always be the first base of the assembly.
 	 */
 	public int getVisualStart()
-		{ return -visualS; }
+		{ return visualS; }
 
 	/**
 	 * Returns the width of the data that can currently be shown, that is, the
@@ -209,7 +209,7 @@ public class Contig
 	 * the overall width. For BAM, the width will always be the width of the
 	 * data-block loaded into memory.
 	 */
-	public int getWidth()
+	public int getVisualWidth()
 		{ return visualE - visualS + 1; }
 
 	/**
@@ -226,7 +226,7 @@ public class Contig
 	 * Returns the height of this contig, that is, the total number of lines of
 	 * data from top to bottom, including reads, but excluding the consensus.
 	 */
-	public int getHeight()
+	public int getVisualHeight()
 		{ return readManager.size(); }
 
 	public IReadManager getPackSetManager()

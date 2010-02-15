@@ -74,7 +74,7 @@ class ConsensusCanvas extends TrackingCanvas
 		ColorScheme colors = rCanvas.colors;
 
 		// Draw the quality scores
-		byte[] bq = consensus.getBaseQualityRange(xS-offset, xE-offset);
+		byte[] bq = consensus.getBaseQualityRange(xS+offset, xE+offset);
 		int y = 0;
 
 		for (int i = 0, x = (ntW*xS); i < bq.length; i++, x += ntW)
@@ -96,7 +96,7 @@ class ConsensusCanvas extends TrackingCanvas
 
 
 
-		byte[] data = consensus.getRange(xS-offset, xE-offset);
+		byte[] data = consensus.getRange(xS+offset, xE+offset);
 		y = rCanvas.ntH/2 + 2;
 
 		// Draw the consensus sequence

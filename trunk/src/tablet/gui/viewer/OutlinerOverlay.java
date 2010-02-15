@@ -52,7 +52,7 @@ class OutlinerOverlay implements IOverlayRenderer
 
 	public void render(Graphics2D g)
 	{
-		int offset = rCanvas.offset * rCanvas.ntW;
+		int offset = -rCanvas.offset * rCanvas.ntW;
 
 		// Remember the current stroke so it can be reset afterwards
 		Stroke oldStroke = g.getStroke();

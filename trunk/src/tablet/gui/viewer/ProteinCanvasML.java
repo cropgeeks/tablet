@@ -58,7 +58,7 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 	public void mouseMoved(MouseEvent e)
 	{
 		int xIndex =
-			((rCanvas.pX1 + e.getX()) / rCanvas.ntW) - rCanvas.offset;
+			((rCanvas.pX1 + e.getX()) / rCanvas.ntW) + rCanvas.offset;
 
 		try
 		{

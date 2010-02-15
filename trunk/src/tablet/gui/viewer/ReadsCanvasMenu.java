@@ -80,14 +80,14 @@ class ReadsCanvasMenu implements ActionListener
 
 		else if (e.getSource() == mFindStart)
 		{
-			int position = infoPane.read.getStartPosition() + rCanvas.offset;
+			int position = infoPane.read.getStartPosition() - rCanvas.offset;
 
 			aPanel.moveToPosition(-1, position, true);
 			new ReadHighlighter(aPanel, infoPane.read, infoPane.lineIndex);
 		}
 		else if (e.getSource() == mFindEnd)
 		{
-			int position = infoPane.read.getEndPosition() + rCanvas.offset;
+			int position = infoPane.read.getEndPosition() - rCanvas.offset;
 
 			aPanel.moveToPosition(-1, position, true);
 			new ReadHighlighter(aPanel, infoPane.read, infoPane.lineIndex);
@@ -113,7 +113,7 @@ class ReadsCanvasMenu implements ActionListener
 	void handlePopup(MouseEvent e)
 	{
 		rowIndex = (e.getY() / rCanvas.ntH);
-		colIndex = (e.getX() / rCanvas.ntW) - rCanvas.offset;
+		colIndex = (e.getX() / rCanvas.ntW) + rCanvas.offset;
 
 		// Create the menu
 		menu = new JPopupMenu();

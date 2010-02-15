@@ -104,11 +104,11 @@ public class AssemblyFileHandler extends SimpleJob
 			fileParsed = readFile();
 		}
 		//BAM
-		if(okToRun && fileParsed == false)
-		{
-			reader = new BamFileReader(readCache);
-			fileParsed = readFile();
-		}
+//		if(okToRun && fileParsed == false)
+//		{
+//			reader = new BamFileReader(readCache);
+//			fileParsed = readFile();
+//		}
 		// SAM
 		if (okToRun && fileParsed == false)
 		{
