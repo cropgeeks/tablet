@@ -20,7 +20,8 @@ public class BasePositionComparator
 		int c = start;
 		int cLength = contig.getConsensus().length();
 		int rLength = read.length();
-		int mismatches =0;
+		int mismatches = 0;
+		int count = 0;
 
 		for (int r = 0; r < rLength; r++, c++)
 		{
@@ -32,10 +33,10 @@ public class BasePositionComparator
 				// not have a corresponding position on the consensus
 				// (and must therefore be different from it)
 				read.setStateAt(r, (byte)(value+1));
-				mismatches++;
 			}
 			else
 			{
+				count++;
 				// The DNATable encodes its states so that A and dA are
 				// only ever 1 byte apart, meaning we can change quickly
 				// by just incrementing the value by one
@@ -48,9 +49,9 @@ public class BasePositionComparator
 			}
 		}
 		//calculate the mismatch percentage for this read
-		float mismatchPercentage = calculateMismatchPercentage(mismatches, read.length());
+		float mismatchPercentage = calculateMismatchPercentage(mismatches, count);
 		//add to the total percentage mismatch of the contig
-		contig.setMismatches(mismatchPercentage);
+		contig.incrementMistmatches(mismatchPercentage);
 	}
 
 	private static float calculateMismatchPercentage(float mismatches, float readLength)
