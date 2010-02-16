@@ -244,7 +244,7 @@ public class Contig
 			outlines.remove(0);
 	}
 
-	public void setMismatches(float mismatches)
+	public void incrementMistmatches(float mismatches)
 	{
 		this.mismatches += mismatches;
 	}
