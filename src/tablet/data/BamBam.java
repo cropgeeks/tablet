@@ -22,7 +22,7 @@ public class BamBam
 
 	public void reset()
 	{
-		size = 200000;
+		size = 25000;
 
 		s = 0;
 		e = s + size - 1;
