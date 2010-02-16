@@ -152,6 +152,14 @@ public class ImportAssemblyDialog extends JDialog
 
 	private boolean referenceCheckOK()
 	{
+		if (nbPanel.isIgnoringReference() && nbPanel.detectedBAM)
+		{
+			String msg = RB.getString("gui.dialog.ImportAssemblyDialog.warnBamNoRef");
+			TaskDialog.error(msg, RB.getString("gui.text.close"));
+
+			return false;
+		}
+
 		if (nbPanel.isIgnoringReference() && Prefs.guiWarnNoRef)
 		{
 			String msg = RB.getString("gui.dialog.ImportAssemblyDialog.warnNoRef");

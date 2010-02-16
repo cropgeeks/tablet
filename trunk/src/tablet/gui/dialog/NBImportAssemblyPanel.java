@@ -19,6 +19,8 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
 {
 	private Document doc1, doc2;
 
+	boolean detectedBAM = false;
+
     NBImportAssemblyPanel(ImportAssemblyDialog parent)
 	{
 		initComponents();
@@ -31,8 +33,9 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
 		// Apply i18n text to the controls
 		panel1.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.NBImportAssemblyPanel.panel1")));
 		panel2.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.NBImportAssemblyPanel.panel2")));
-		RB.setText(label1, "gui.dialog.NBImportAssemblyPanel.label1");
-		RB.setText(label2, "gui.dialog.NBImportAssemblyPanel.label2");
+		RB.setText(note1, "gui.dialog.NBImportAssemblyPanel.note1");
+		RB.setText(note2, "gui.dialog.NBImportAssemblyPanel.note2");
+		RB.setText(note3, "gui.dialog.NBImportAssemblyPanel.note3");
 		RB.setText(assLabel, "gui.dialog.NBImportAssemblyPanel.assLabel");
 		RB.setText(refLabel, "gui.dialog.NBImportAssemblyPanel.refLabel");
 		RB.setText(bBrowse1, "gui.text.browse");
@@ -104,6 +107,8 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
     	// The reference option is only needed for SAM onwards
     	setReferenceControls(t1 >= SAM && t1 < FASTA);
 
+    	detectedBAM = (t1 == BAM);
+
 
     	String str1 = RB.getString("gui.dialog.NBImportAssembly.ass.status"
     		+ t1);
@@ -144,8 +149,9 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
         refLabel = new javax.swing.JLabel();
         assLabel = new javax.swing.JLabel();
         panel2 = new javax.swing.JPanel();
-        label1 = new javax.swing.JLabel();
-        label2 = new javax.swing.JLabel();
+        note1 = new javax.swing.JLabel();
+        note2 = new javax.swing.JLabel();
+        note3 = new javax.swing.JLabel();
 
         panel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Select assembly files:"));
 
@@ -158,10 +164,10 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
         statusLabel.setText("Current Status:");
 
         refLabel.setLabelFor(file2Combo);
-        refLabel.setText("Reference/consensus file (optional):");
+        refLabel.setText("Reference/consensus file or URL (optional):");
 
         assLabel.setLabelFor(file1Combo);
-        assLabel.setText("Primary assembly file:");
+        assLabel.setText("Primary assembly file or URL:");
 
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
@@ -174,16 +180,16 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
                     .addGroup(panel1Layout.createSequentialGroup()
                         .addComponent(statusLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(statusText, javax.swing.GroupLayout.DEFAULT_SIZE, 392, Short.MAX_VALUE))
+                        .addComponent(statusText, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
                         .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(file2Combo, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE)
+                            .addComponent(file2Combo, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
                             .addComponent(assLabel)
-                            .addComponent(file1Combo, javax.swing.GroupLayout.DEFAULT_SIZE, 388, Short.MAX_VALUE))
+                            .addComponent(file1Combo, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(bBrowse2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(bBrowse1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(bBrowse1))))
                 .addContainerGap())
         );
         panel1Layout.setVerticalGroup(
@@ -205,14 +211,16 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(statusLabel)
                     .addComponent(statusText))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         panel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Notes:"));
 
-        label1.setText("Tablet supports assemblies that are in ACE, AFG, MAQ (text), or SOAP formats. Reference");
+        note1.setText("Tablet currently supports ACE, AFG, MAQ (text), SOAP, SAM and BAM assemblies.");
 
-        label2.setText("files (if needed for MAQ or SOAP) can be in FASTA or FASTQ format.");
+        note2.setText("Reference files (if needed for MAQ, SOAP, and SAM) can be in FASTA or FASTQ format.");
+
+        note3.setText("BAM files need to have been indexed, and a FASTA reference file must be included too.");
 
         javax.swing.GroupLayout panel2Layout = new javax.swing.GroupLayout(panel2);
         panel2.setLayout(panel2Layout);
@@ -221,18 +229,21 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
             .addGroup(panel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(label1, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE)
-                    .addComponent(label2, javax.swing.GroupLayout.DEFAULT_SIZE, 473, Short.MAX_VALUE))
+                    .addComponent(note1, javax.swing.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
+                    .addComponent(note2, javax.swing.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
+                    .addComponent(note3))
                 .addContainerGap())
         );
         panel2Layout.setVerticalGroup(
             panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(label1)
+                .addComponent(note1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(label2)
-                .addContainerGap())
+                .addComponent(note2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(note3)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -242,17 +253,17 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(panel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -264,8 +275,9 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
     javax.swing.JButton bBrowse2;
     scri.commons.gui.matisse.HistoryComboBox file1Combo;
     scri.commons.gui.matisse.HistoryComboBox file2Combo;
-    private javax.swing.JLabel label1;
-    private javax.swing.JLabel label2;
+    private javax.swing.JLabel note1;
+    private javax.swing.JLabel note2;
+    private javax.swing.JLabel note3;
     private javax.swing.JPanel panel1;
     private javax.swing.JPanel panel2;
     private javax.swing.JLabel refLabel;

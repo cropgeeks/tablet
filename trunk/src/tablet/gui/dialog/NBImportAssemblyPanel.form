@@ -19,7 +19,7 @@
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="panel1" min="-2" max="32767" attributes="0"/>
+                  <Component id="panel1" alignment="1" min="-2" max="32767" attributes="0"/>
                   <Component id="panel2" alignment="0" min="-2" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
@@ -28,11 +28,11 @@
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="panel1" min="-2" max="32767" attributes="0"/>
+              <Component id="panel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="panel2" min="-2" max="32767" attributes="0"/>
+              <Component id="panel2" max="32767" attributes="0"/>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -51,25 +51,25 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="refLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="statusLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="statusText" pref="392" max="32767" attributes="0"/>
+                          <Component id="statusText" pref="409" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="file2Combo" pref="388" max="32767" attributes="0"/>
+                              <Component id="file2Combo" pref="405" max="32767" attributes="0"/>
                               <Component id="assLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="file1Combo" alignment="0" pref="388" max="32767" attributes="0"/>
+                              <Component id="file1Combo" alignment="0" pref="405" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
                               <Component id="bBrowse2" max="32767" attributes="1"/>
-                              <Component id="bBrowse1" alignment="1" max="32767" attributes="1"/>
+                              <Component id="bBrowse1" alignment="1" min="-2" max="-2" attributes="1"/>
                           </Group>
                       </Group>
                   </Group>
@@ -79,7 +79,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="assLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
@@ -99,7 +99,7 @@
                       <Component id="statusLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="statusText" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -156,7 +156,7 @@
             <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="file2Combo"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Reference/consensus file (optional):"/>
+            <Property name="text" type="java.lang.String" value="Reference/consensus file or URL (optional):"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="assLabel">
@@ -164,7 +164,7 @@
             <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
               <ComponentRef name="file1Combo"/>
             </Property>
-            <Property name="text" type="java.lang.String" value="Primary assembly file:"/>
+            <Property name="text" type="java.lang.String" value="Primary assembly file or URL:"/>
           </Properties>
         </Component>
       </SubComponents>
@@ -184,8 +184,9 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="label1" alignment="0" pref="473" max="32767" attributes="0"/>
-                      <Component id="label2" alignment="0" pref="473" max="32767" attributes="0"/>
+                      <Component id="note1" pref="490" max="32767" attributes="0"/>
+                      <Component id="note2" alignment="0" pref="490" max="32767" attributes="0"/>
+                      <Component id="note3" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -195,23 +196,30 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="label1" min="-2" max="-2" attributes="0"/>
+                  <Component id="note1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="label2" min="-2" max="-2" attributes="0"/>
+                  <Component id="note2" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Component id="note3" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JLabel" name="label1">
+        <Component class="javax.swing.JLabel" name="note1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Tablet supports assemblies that are in ACE, AFG, MAQ (text), or SOAP formats. Reference"/>
+            <Property name="text" type="java.lang.String" value="Tablet currently supports ACE, AFG, MAQ (text), SOAP, SAM and BAM assemblies."/>
           </Properties>
         </Component>
-        <Component class="javax.swing.JLabel" name="label2">
+        <Component class="javax.swing.JLabel" name="note2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="files (if needed for MAQ or SOAP) can be in FASTA or FASTQ format."/>
+            <Property name="text" type="java.lang.String" value="Reference files (if needed for MAQ, SOAP, and SAM) can be in FASTA or FASTQ format."/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JLabel" name="note3">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="BAM files need to have been indexed, and a FASTA reference file must be included too."/>
           </Properties>
         </Component>
       </SubComponents>

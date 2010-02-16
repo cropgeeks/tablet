@@ -132,6 +132,11 @@ abstract class TrackableReader extends SimpleJob
 		float bytesPerSec = byteDiff / (float) (timeDiff / (float) 1000);
 		float kbPerSec = bytesPerSec / (float) 1024;
 
+		// TODO: Uncomment for actual per second rate, rather than just the
+		// average rate since the file load/download began
+//		lastBytesRead = bytesRead[fileIndex];
+//		lastTime = System.currentTimeMillis();
+
 		if (kbPerSec >= 1024)
 		{
 			float mbPerSec = kbPerSec / (float) 1024;

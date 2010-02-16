@@ -6,6 +6,7 @@ import java.util.*;
 import tablet.data.*;
 import tablet.data.cache.*;
 
+import scri.commons.gui.*;
 import scri.commons.file.*;
 
 import net.sf.samtools.*;
@@ -50,33 +51,28 @@ public class BamFileReader extends TrackableReader
 	{
 		for (int i = 0; i < files.length; i++)
 		{
-			if (canReadFasta(files[i]))
-				refFile = i;
-
-			else
+			// Check to see if we even have a BAM file
+			if (files[i].getName().toLowerCase().endsWith(".bam") && files[i].exists())
 			{
-				// Check to see if we even have a BAM file
-				if (files[i].getName().toLowerCase().endsWith(".bam") && files[i].exists())
-				{
-					bamFile = i;
+				bamFile = i;
 
-					// If so, do we have an index file that goes with it?
-					AssemblyFile file1 = getBaiIndexFile(files[i], false);
-					AssemblyFile file2 = getBaiIndexFile(files[i], true);
+				// If so, do we have an index file that goes with it?
+				AssemblyFile file1 = getBaiIndexFile(files[i], false);
+				AssemblyFile file2 = getBaiIndexFile(files[i], true);
 
-					if (file1.exists())
-						bamIndexFile = file1;
-					else if (file2.exists())
-						bamIndexFile = file2;
+				if (file1.exists())
+					bamIndexFile = file1;
+				else if (file2.exists())
+					bamIndexFile = file2;
 
-					//TODO: If index doesn't exist inform user?
-					if(bamIndexFile == null)
-						throw new Exception("Index file missing");
-				}
+				if (bamIndexFile == null)
+					throw new IOException("An index file could not be found "
+						+ "(" + file1.getName() + " or " + file2.getName()
+						+ ")");
 			}
 		}
 
-		return (bamFile >= 0 && bamIndexFile != null && refFile >= 0);
+		return (bamFile >= 0 && bamIndexFile != null);
 	}
 
 	// Checks to see if the given file is FASTA
@@ -95,18 +91,31 @@ public class BamFileReader extends TrackableReader
 
 	public void runJob(int index) throws Exception
 	{
-		// TODO: 5555?
-		maximum = (int) files[refFile].length() + (int) bamIndexFile.length();
+		// Make sure a reference file was provided
+		for (int i = 0; i < files.length; i++)
+			if (canReadFasta(files[i]))
+				refFile = i;
 
-		System.out.println("Reading FASTA...");
-		isIndeterminate = false;
+		if (refFile == -1)
+			throw new IOException("No FASTA reference file was provided. "
+				+ "Tablet cannot load BAM files without a reference.");
+
+		int refLength = (int) files[refFile].length();
+		int baiLength = (int) bamIndexFile.length();
+
+		if (refLength > 0 && baiLength > 0)
+		{
+			isIndeterminate = false;
+			maximum = refLength;
+
+			if (bamIndexFile.isURL())
+				maximum += baiLength;
+		}
+
 		readReferenceFile(files[refFile]);
-
 		downloadBaiFile();
-		isIndeterminate = true;
 
-		message = "Opening BAM...";
-		System.out.println("Opening BAM...");
+		isIndeterminate = true;
 		openBamFile();
 
 		if (okToRun)
@@ -130,9 +139,10 @@ public class BamFileReader extends TrackableReader
 	private void readReferenceFile(AssemblyFile file)
 		throws Exception
 	{
-		message = "Reading FASTA reference file...";
+		message = RB.format("io.BamFileReader.fasta", 0);
 
-		ProgressInputStream is = new ProgressInputStream(file.getInputStream());
+		ProgressInputStream is = new ProgressInputStream(
+			file.getInputStream());
 		BufferedReader in = new BufferedReader(new InputStreamReader(is));
 
 		Contig contig = null;
@@ -167,11 +177,14 @@ public class BamFileReader extends TrackableReader
 		if (sb != null && sb.length() > 0)
 			addContig(contig, new Consensus(), sb);
 
+		in.close();
 		is.close();
 	}
 
 	private void addContig(Contig contig, Consensus consensus, StringBuilder sb)
 	{
+		message = RB.format("io.BamFileReader.fasta", contigHash.size());
+
 		consensus.setData(sb.toString());
 		consensus.calculateUnpaddedLength();
 		contig.setConsensusSequence(consensus);
@@ -184,16 +197,18 @@ public class BamFileReader extends TrackableReader
 
 	private void downloadBaiFile() throws Exception
 	{
-		if(bamIndexFile.isURL() == false)
+		message = RB.getString("io.BamFileReader.bai");
+
+		// We only need to download it if it's not already held locally
+		if (bamIndexFile.isURL() == false)
 			return;
 
 		File file = new File(cacheDir, "Tablet-"+cacheid+bamIndexFile.getName());
 
-		message = "Reading BAI assembly index file...";
-		System.out.println("Downloading BAI index file");
-
-		BufferedInputStream inputStream = new BufferedInputStream(bamIndexFile.getInputStream());
-		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file.getAbsolutePath()));
+		BufferedInputStream inputStream = new BufferedInputStream(
+			bamIndexFile.getInputStream());
+		BufferedOutputStream outputStream = new BufferedOutputStream(
+			new FileOutputStream(file.getAbsolutePath()));
 
 		int i;
 		while((i = inputStream.read()) != -1 && okToRun)
@@ -210,9 +225,11 @@ public class BamFileReader extends TrackableReader
 
 	private void openBamFile() throws Exception
 	{
+		message = RB.getString("io.BamFileReader.bam");
+
 		AssemblyFile bam = files[bamFile];
 
-		if(bam.isURL())
+		if (bam.isURL())
 			bamReader = new SAMFileReader(bam.getURL(), bamIndexFile.getFile(), false);
 		else
 			bamReader = new SAMFileReader(bam.getFile(), bamIndexFile.getFile());
