@@ -3,204 +3,232 @@ package tablet.io;
 import java.io.*;
 import java.util.*;
 
-import tablet.analysis.BasePositionComparator;
 import tablet.data.*;
-import tablet.data.auxiliary.CigarFeature;
-import tablet.data.cache.IReadCache;
+import tablet.data.cache.*;
 
-import scri.commons.gui.RB;
+import scri.commons.file.*;
 
 import net.sf.samtools.*;
 
 public class BamFileReader extends TrackableReader
 {
 	private IReadCache readCache;
+	private File cacheDir;
+	private String cacheid;
 
-	private Contig contig;
-	private Consensus consensus;
-	private Read read;
-
-	private ReferenceFileReader refReader;
-
-	// We maintain a local hashtable of contigs to help with finding a
-	// contig quickly when processing consensus tags
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
-	private int samIndex = -1;
-	private int refIndex = -1;
 
-	private int readID;
+	private int bamFile = -1;
+	private int refFile = -1;
+	private AssemblyFile bamIndexFile, faiIndexFile;
 
-	private CigarParser cigarParser;
+	private boolean isIndeterminate = true;
+	private long baiBytes, fastaBytes;
+	private String message;
+
+	private SAMFileReader bamReader;
 
 	BamFileReader()
 	{
 	}
 
-	BamFileReader(IReadCache readCache)
+	BamFileReader(IReadCache readCache, File cacheDir, String cacheid)
 	{
 		this.readCache = readCache;
+		this.cacheDir = cacheDir;
+		this.cacheid = cacheid;
 	}
 
+	public void setInputs(AssemblyFile[] files, Assembly assembly)
+	{
+		this.files = files;
+		this.assembly = assembly;
+	}
+
+	// Checks to see if we have been given a FASTA and a BAM file
 	public boolean canRead() throws Exception
 	{
-		refReader = new ReferenceFileReader(assembly, contigHash);
-
-		for(int i = 0; i < files.length; i++)
+		for (int i = 0; i < files.length; i++)
 		{
-			final SAMFileReader inputSam = new SAMFileReader(getInputStream(i, false));
-			if(inputSam.isBinary() && inputSam.getFileHeader().getVersion().equals(SAMFileHeader.CURRENT_VERSION))
+			if (canReadFasta(files[i]))
+				refFile = i;
+
+			else
 			{
-				inputSam.close();
-				samIndex = i;
-			}
-			else if (refReader.canRead(files[i]) != AssemblyFileHandler.UNKNOWN)
-			{
-				refIndex = i;
+				// Check to see if we even have a BAM file
+				if (files[i].getName().toLowerCase().endsWith(".bam") && files[i].exists())
+				{
+					bamFile = i;
+
+					// If so, do we have an index file that goes with it?
+					AssemblyFile file1 = getBaiIndexFile(files[i], false);
+					AssemblyFile file2 = getBaiIndexFile(files[i], true);
+
+					if (file1.exists())
+						bamIndexFile = file1;
+					else if (file2.exists())
+						bamIndexFile = file2;
+
+					//TODO: If index doesn't exist inform user?
+					if(bamIndexFile == null)
+						throw new Exception("Index file missing");
+				}
 			}
 		}
-		return (samIndex >= 0);
+
+		return (bamFile >= 0 && bamIndexFile != null && refFile >= 0);
 	}
 
-	public void runJob(int jobIndex) throws Exception
-	{
-		if(refIndex >= 0)
-			readReferenceFile();
-
-		readBamFile();
-	}
-
-	private void readReferenceFile()
+	// Checks to see if the given file is FASTA
+	private boolean canReadFasta(AssemblyFile file)
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex, true), "ASCII"));
+		BufferedReader in = new BufferedReader(
+			new InputStreamReader(file.getInputStream()));
 
-		refReader.readReferenceFile(this, files[refIndex]);
-
+		String str = in.readLine();
+		boolean isFastaFile = (str != null && str.startsWith(">"));
 		in.close();
+
+		return isFastaFile;
 	}
 
-	private void readBamFile() throws Exception
+	public void runJob(int index) throws Exception
 	{
-		SAMFileReader inputSam = new SAMFileReader(getInputStream(samIndex, false));
-		readID = 0;
-		CigarParser parser = new CigarParser();
-		Contig prev = null;
+		// TODO: 5555?
+		maximum = (int) files[refFile].length() + (int) bamIndexFile.length();
 
-		boolean found = false;
+		System.out.println("Reading FASTA...");
+		isIndeterminate = false;
+		readReferenceFile(files[refFile]);
 
-		for(SAMSequenceRecord record : inputSam.getFileHeader().getSequenceDictionary().getSequences())
+		downloadBaiFile();
+		isIndeterminate = true;
+
+		message = "Opening BAM...";
+		System.out.println("Opening BAM...");
+		openBamFile();
+
+		if (okToRun)
 		{
-			if(contigHash.get(record.getSequenceName()) == null)
-			{
-				consensus = new Consensus();
-				contig = new Contig(record.getSequenceName(), true, 0);
-				contig.setConsensusSequence(consensus);
-				contigHash.put(record.getSequenceName(), contig);
-				assembly.addContig(contig);
-			}
+			BamFileHandler bamHandler = new BamFileHandler(readCache, bamReader, assembly);
+			assembly.setBamHandler(bamHandler);
 		}
-
-		for (final SAMRecord record : inputSam)
-		{
-			if(!okToRun)
-				break;
-
-			if (!record.getReadUnmappedFlag())
-			{
-				Contig contigToAddTo = contigHash.get(record.getReferenceName());
-
-				if(prev == null)
-				{
-					prev = contigToAddTo;
-					parser.setCurrentContigName(contigToAddTo.getName());
-				}
-				else if(prev != contigToAddTo)
-				{
-					prev = contigToAddTo;
-					parser.setCurrentContigName(contigToAddTo.getName());
-				}
-
-				//create the Read and ReadMetaData objects
-				createRead(contigToAddTo, record, parser);
-			}
-		}
-		processCigarFeatures(parser);
-
-		assembly.setName(files[samIndex].getName());
-		assembly.setAsBamAssembly();
-		assembly.setHasCigar();
-
-		inputSam.close();
 	}
 
-	private void createRead(Contig contigToAddTo, final SAMRecord record, CigarParser parser) throws Exception
+	private AssemblyFile getBaiIndexFile(AssemblyFile file, boolean typeTwo)
 	{
-		if (contigToAddTo != null)
-		{
-			int readStartPos = record.getAlignmentStart()-1;
-			ReadMetaData rmd = new ReadMetaData(record.getReadName(), record.getReadNegativeStrandFlag());
+		String name = file.getName();
+		String newName = name + ".bai";
 
-			String fullRead = parser.parse(new String(record.getReadBases()), readStartPos, record.getCigarString());
-			rmd.setData(fullRead);
-			read = new Read(readID, readStartPos);
+		if (typeTwo)
+			newName = name.substring(0, name.lastIndexOf(".bam")) + ".bai";
 
-			rmd.calculateUnpaddedLength();
-			read.setLength(rmd.length());
-			contigToAddTo.getReads().add(read);
-
-			// Do base-position comparison...
-
-			BasePositionComparator.compare(contigToAddTo, rmd, readStartPos);
-
-			rmd.setCigar(record.getCigar().toString());
-
-			readCache.setReadMetaData(rmd);
-			readID++;
-		}
+		return new AssemblyFile(file.getPath().replaceAll(name, newName));
 	}
 
-	private void processCigarFeatures(CigarParser parser)
+	private void readReferenceFile(AssemblyFile file)
 		throws Exception
 	{
-		for (String feature : parser.getFeatureMap().keySet())
+		message = "Reading FASTA reference file...";
+
+		ProgressInputStream is = new ProgressInputStream(file.getInputStream());
+		BufferedReader in = new BufferedReader(new InputStreamReader(is));
+
+		Contig contig = null;
+		StringBuilder sb = null;
+		String str = null;
+
+		while ((str = in.readLine()) != null && okToRun)
 		{
-			String[] featureElements = feature.split("Tablet-Separator");
-			int count = parser.getFeatureMap().get(feature);
-			CigarFeature cigarFeature = new CigarFeature("CIGAR-I", "",
-				Integer.parseInt(featureElements[1]) - 1, Integer.parseInt(featureElements[1]), count);
-			Contig ctg = contigHash.get(featureElements[0]);
-			if (ctg != null)
+			fastaBytes = is.getBytesRead();
+
+			if (str.startsWith(">"))
 			{
-				ctg.getFeatures().add(cigarFeature);
+				if (sb != null && sb.length() > 0)
+					addContig(contig, new Consensus(), sb);
+
+				sb = new StringBuilder();
+
+				String name;
+				if (str.indexOf(" ") != -1)
+					name = str.substring(1, str.indexOf(" "));
+				else
+					name = str.substring(1);
+
+				contig = new Contig(name, true, 0);
+				contigHash.put(name, contig);
 			}
+
+			else
+				sb.append(str.trim());
 		}
 
-		for (Contig contig: assembly)
-			Collections.sort(contig.getFeatures());
+		if (sb != null && sb.length() > 0)
+			addContig(contig, new Consensus(), sb);
+
+		is.close();
 	}
 
-	private void addContig(Contig contig, Consensus consensus, StringBuilder bases, StringBuilder qlt)
+	private void addContig(Contig contig, Consensus consensus, StringBuilder sb)
 	{
-		consensus.setData(bases.toString());
+		consensus.setData(sb.toString());
 		consensus.calculateUnpaddedLength();
 		contig.setConsensusSequence(consensus);
 
 		byte[] bq = new byte[consensus.length()];
-		for(int i = 0; i < bq.length; i++)
-		{
-			bq[i] = (byte) (qlt.charAt(i) - 33);
-			if(bq[i] > 100)
-				bq[i] = 100;
-		}
 		consensus.setBaseQualities(bq);
 
 		assembly.addContig(contig);
 	}
 
-	@Override
-	public String getMessage()
+	private void downloadBaiFile() throws Exception
 	{
-		return RB.format("io.AssemblyFileHandler.status",
-			getTransferRate(), contigHash.size(), readID);
+		if(bamIndexFile.isURL() == false)
+			return;
+
+		File file = new File(cacheDir, "Tablet-"+cacheid+bamIndexFile.getName());
+
+		message = "Reading BAI assembly index file...";
+		System.out.println("Downloading BAI index file");
+
+		BufferedInputStream inputStream = new BufferedInputStream(bamIndexFile.getInputStream());
+		BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(file.getAbsolutePath()));
+
+		int i;
+		while((i = inputStream.read()) != -1 && okToRun)
+		{
+			outputStream.write(i);
+			baiBytes++;
+		}
+
+		inputStream.close();
+		outputStream.close();
+
+		bamIndexFile = new AssemblyFile(file.getPath());
 	}
+
+	private void openBamFile() throws Exception
+	{
+		AssemblyFile bam = files[bamFile];
+
+		if(bam.isURL())
+			bamReader = new SAMFileReader(bam.getURL(), bamIndexFile.getFile(), false);
+		else
+			bamReader = new SAMFileReader(bam.getFile(), bamIndexFile.getFile());
+	}
+
+	public int getValue()
+	{
+		return (int) (baiBytes + fastaBytes);
+	}
+
+	public boolean isIndeterminate()
+		{ return isIndeterminate; }
+
+	public int getMaximum()
+		{ return maximum; }
+
+	public String getMessage()
+		{ return message; }
 }

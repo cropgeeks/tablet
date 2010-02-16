@@ -174,7 +174,13 @@ class AceFileReader extends TrackableReader
 		String[] tokens = p.split(bqStr.toString().trim());
 		byte[] bq = new byte[consensus.length()];
 
-		for (int t = 0, i = 0; t < tokens.length; t++, i++)
+		int uLength = consensus.getUnpaddedLength();
+		if (tokens.length != uLength)
+			throw new Exception("Expected " + uLength + " base qualities but "
+				+ "found " + tokens.length + " (contig '" + contig.getName()
+				+ "' with length " + consensus.length() + ")");
+
+		for (int t = 0, i = 0; t < uLength; t++, i++)
 		{
 			// Skip padded bases, because the quality string doesn't score them
 			while (consensus.getStateAt(i) == Sequence.P)

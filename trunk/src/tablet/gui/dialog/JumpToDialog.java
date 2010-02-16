@@ -119,7 +119,7 @@ public class JumpToDialog extends JDialog
 
 	private void jumpToBase(int index)
 	{
-		if(aPanel.getAssembly().isBam())
+		if (aPanel.getAssembly().getBamBam() != null)
 		{
 			aPanel.getAssembly().getBamBam().setBlockStart(aPanel.getContig(), index);
 			aPanel.processBamDataChange();
