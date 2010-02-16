@@ -80,7 +80,7 @@ public class AssemblyFileHandler extends SimpleJob
 
 		if(okToRun && fileParsed == false)
 		{
-			reader = new BAIFileReader(readCache, cacheDir, cacheid);
+			reader = new BamFileReader(readCache, cacheDir, cacheid);
 			fileParsed = readFile();
 			bai = true;
 		}
@@ -175,7 +175,7 @@ public class AssemblyFileHandler extends SimpleJob
 		{
 			e.printStackTrace();
 
-			if (reader instanceof BAIFileReader)
+			if (reader instanceof BamFileReader)
 				throw e;
 
 			else

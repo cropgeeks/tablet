@@ -66,7 +66,7 @@ public class DisplayDataCalculator extends SimpleJob
 		throws Exception
 	{
 		// TODO: EndGame handlers?
-		if (assembly.isBam())
+		if (assembly.getBamBam() != null)
 			assembly.getBamBam().loadDataBlock(contig);
 
 		// TODO: Technically, these jobs could be run in parallel but it's

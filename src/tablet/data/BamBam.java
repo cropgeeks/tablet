@@ -7,7 +7,7 @@ import tablet.io.*;
 
 public class BamBam
 {
-	private BaiFileHandler bamHandler;
+	private BamFileHandler bamHandler;
 
 	// The starting and ending indices (0-indexed) for the current data block
 	private int s, e;
@@ -15,7 +15,7 @@ public class BamBam
 	// Size of the block of data (in bases) that we try to load
 	private int size;
 
-	BamBam(BaiFileHandler bamHandler)
+	BamBam(BamFileHandler bamHandler)
 	{
 		this.bamHandler = bamHandler;
 	}

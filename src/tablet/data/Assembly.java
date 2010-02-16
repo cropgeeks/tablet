@@ -23,13 +23,15 @@ public class Assembly implements Iterable<Contig>
 	private ArrayList<Contig> contigs = new ArrayList<Contig>();
 
 	private BamBam bambam;
-	private boolean isBam = false;
-	private static boolean hasCigar = false;
+	private boolean isBam;
+	private static boolean hasCigar;
 
 	/** Constructs a new, empty assembly. */
 	public Assembly(String cacheID)
 	{
 		this.cacheID = cacheID;
+
+		hasCigar = false;
 	}
 
 	/**
@@ -114,27 +116,24 @@ public class Assembly implements Iterable<Contig>
 	public IReadCache getCache()
 		{ return cache; }
 
-	/**
-	 * Returns true if this assembly holds data from a BAM assembly file.
-	 * @return true if this assembly holds data from a BAM assembly file
-	 */
-	public boolean isBam()
-		{ return isBam; }
-
-	public void setAsBamAssembly()
-		{ isBam = true; }
-
 	public static boolean hasCigar()
 		{ return hasCigar; }
 
 	public void setHasCigar()
 		{ hasCigar = true; }
 
-	public void setBamHandler(BaiFileHandler bamHandler)
-		{ bambam = new BamBam(bamHandler); }
-
-	public BamBam getBamBam()
+	public void setBamHandler(BamFileHandler bamHandler)
 	{
-		return bambam;
+		isBam = true;
+		hasCigar = true;
+
+		bambam = new BamBam(bamHandler);
 	}
+
+	/**
+	 * Returns a reference to the BAM handler for this assembly, or null if one
+	 * hasn't been defined (which means it's not a BAM assembly).
+	 */
+	public BamBam getBamBam()
+		{ return bambam; }
 }

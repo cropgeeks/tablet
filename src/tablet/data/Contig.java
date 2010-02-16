@@ -150,7 +150,7 @@ public class Contig
 		dataS = visualS = 0;
 		dataE = visualE = consensus.length() - 1;
 
-		if (assembly.isBam() == false)
+		if (assembly.getBamBam() == null)
 		{
 			// Now scan all the reads and see if any of them extend beyond the
 			// lhs or the rhs of the consensus...

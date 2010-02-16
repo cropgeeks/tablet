@@ -10,14 +10,14 @@ import tablet.data.auxiliary.*;
 import net.sf.samtools.*;
 import net.sf.samtools.util.*;
 
-public class BaiFileHandler
+public class BamFileHandler
 {
 	private IReadCache readCache;
 	private SAMFileReader bamReader;
 	private Assembly assembly;
 	private int readID;
 
-	BaiFileHandler(IReadCache readCache, SAMFileReader bamReader, Assembly assembly)
+	BamFileHandler(IReadCache readCache, SAMFileReader bamReader, Assembly assembly)
 	{
 		this.bamReader = bamReader;
 		this.readCache = readCache;
@@ -98,7 +98,7 @@ public class BaiFileHandler
 			int count = parser.getFeatureMap().get(feature);
 			CigarFeature cigarFeature = new CigarFeature("CIGAR-I", "",
 				Integer.parseInt(featureElements[1]) - 1, Integer.parseInt(featureElements[1]), count);
-			
+
 			contig.getFeatures().add(cigarFeature);
 		}
 		Collections.sort(contig.getFeatures());
