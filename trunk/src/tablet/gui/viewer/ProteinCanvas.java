@@ -13,6 +13,7 @@ import tablet.gui.viewer.colors.*;
 
 class ProteinCanvas extends TrackingCanvas
 {
+	private Contig contig;
 	private Consensus consensus;
 
 	private TranslationFractory factory;
@@ -44,14 +45,14 @@ class ProteinCanvas extends TrackingCanvas
 		if (contig != null)
 		{
 			consensus = contig.getConsensus();
-			offset = contig.getVisualStart();
-
 			updateTranslations();
 		}
 
 		// Remove tablet.data references if nothing is going to be displayed
 		else
 			consensus = null;
+
+		this.contig = contig;
 	}
 
 	void updateTranslations()
@@ -102,6 +103,8 @@ class ProteinCanvas extends TrackingCanvas
 
 		if (translations == null)
 			return;
+
+		offset = contig.getVisualStart();
 
 		int ntW = rCanvas.ntW;
 		int ntH = rCanvas.ntH;

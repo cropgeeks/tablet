@@ -356,7 +356,10 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	{
 		updateDisplayData(false);
 
+		// Special case to force the coverage (tooltip) information to update
+		coverageCanvas.setContig(contig);
+
+		// Finally force the main canvas to update/change
 		forceRedraw();
 	}
-
 }

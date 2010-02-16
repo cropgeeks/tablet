@@ -72,10 +72,7 @@ class ScaleCanvas extends TrackingCanvas
 			consensus = null;
 		}
 		else
-		{
 			consensus = contig.getConsensus();
-			offset = contig.getVisualStart();
-		}
 
 		this.contig = contig;
 	}
@@ -99,6 +96,8 @@ class ScaleCanvas extends TrackingCanvas
 	{
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
+
+		offset = contig.getVisualStart();
 
 		int ntW = rCanvas.ntW;
 		//int ntH = rCanvas.ntH;
