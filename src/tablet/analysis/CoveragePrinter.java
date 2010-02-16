@@ -45,10 +45,9 @@ public class CoveragePrinter extends SimpleJob
 			CoverageCalculator cc = new CoverageCalculator(contig);
 			cc.runJob(0);
 
-			// TODO-BAM ???
 			int[] coverage = cc.getCoverage();
-			int s = 0;
-			int e = contig.getConsensus().length() - 1;
+			int s = -contig.getVisualStart();
+			int e = contig.getConsensus().length() -1 -contig.getVisualStart();
 			Consensus consensus = contig.getConsensus();
 
 			int c = 0;
