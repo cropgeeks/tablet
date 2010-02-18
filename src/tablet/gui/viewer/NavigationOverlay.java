@@ -15,7 +15,8 @@ class NavigationOverlay implements IOverlayRenderer
 	private ReadsCanvas rCanvas;
 	private ReadsCanvasInfoPane infoPane;
 
-	private Image navLeft, navRight;
+	private Image navLBlu, navRBlu;
+	private Image navLGrn, navRGrn;
 	private int imgW, imgH;
 
 	private Point mouse;
@@ -27,12 +28,14 @@ class NavigationOverlay implements IOverlayRenderer
 		this.infoPane = infoPane;
 		rCanvas = aPanel.readsCanvas;
 
-		navLeft = Icons.getIcon("NAVLEFT32").getImage();
-		navRight = Icons.getIcon("NAVRIGHT32").getImage();
+		navLBlu = Icons.getIcon("NAVLBLU32").getImage();
+		navRBlu = Icons.getIcon("NAVRBLU32").getImage();
+		navLGrn = Icons.getIcon("NAVLGRN32").getImage();
+		navRGrn = Icons.getIcon("NAVRGRN32").getImage();
 
-		// Assumption being made that the two images are the same size...
-		imgW = navLeft.getWidth(null);
-		imgH = navRight.getHeight(null);
+		// Assumption being made that the images are all the same size...
+		imgW = navLBlu.getWidth(null);
+		imgH = navLBlu.getHeight(null);
 	}
 
 	void setMousePosition(Point mouse)
@@ -65,11 +68,18 @@ class NavigationOverlay implements IOverlayRenderer
 
 		// Extra check: are we at the far left hand side of the view?
 		if (rCanvas.pX1 == 0)
-			isLeftActive = false;
+		{
+			// If we are...perhaps there's still more data (not yet loaded)
+			if (rCanvas.contig.getDataStart() < rCanvas.contig.getVisualStart())
+				g.drawImage(navLGrn, ix, iy, null);
+			else
+				isLeftActive = false;
+		}
 		else
-			g.drawImage(navLeft, ix, iy, null);
+			g.drawImage(navLBlu, ix, iy, null);
 
 		g.setComposite(c);
+
 
 		// RIGHT HAND NAV CONTROL...
 		// Determine where to draw the image
@@ -91,9 +101,15 @@ class NavigationOverlay implements IOverlayRenderer
 
 		// Extra check: are we at the far right hand side of the view?
 		if (rCanvas.pX2 == rCanvas.canvasW-1)
-			isRightActive = false;
+		{
+			// If we are...perhaps there's still more data (not yet loaded)
+			if (rCanvas.contig.getDataEnd() > rCanvas.contig.getVisualEnd())
+				g.drawImage(navRGrn, ix, iy, null);
+			else
+				isRightActive = false;
+		}
 		else
-			g.drawImage(navRight, ix, iy, null);
+			g.drawImage(navRBlu, ix, iy, null);
 
 		g.setComposite(c);
 

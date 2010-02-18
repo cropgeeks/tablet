@@ -200,6 +200,9 @@ public class Contig
 	public int getVisualStart()
 		{ return visualS; }
 
+	public int getVisualEnd()
+		{ return visualE; }
+
 	/**
 	 * Returns the width of the data that can currently be shown, that is, the
 	 * total number of nucleotides that span from the beginning of the block to
@@ -211,6 +214,12 @@ public class Contig
 	 */
 	public int getVisualWidth()
 		{ return visualE - visualS + 1; }
+
+	public int getDataStart()
+		{ return dataS; }
+
+	public int getDataEnd()
+		{ return dataE; }
 
 	/**
 	 * Returns the total width of the contig, ie, the extent to which the user
