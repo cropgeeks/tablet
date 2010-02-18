@@ -37,7 +37,7 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 		// Page left
 		bPageLeft = new JCommandButton(
 			RB.getString("gui.ribbon.HomeNavigateBand.bPageLeft"),
-			RibbonController.getIcon("NAVLEFT32", 32));
+			RibbonController.getIcon("NAVLBLU32", 32));
 		Actions.homeNavigatePageLeft = new ActionRepeatableButtonModel(bPageLeft);
 		Actions.homeNavigatePageLeft.addActionListener(this);
 		bPageLeft.setActionModel(Actions.homeNavigatePageLeft);
@@ -49,7 +49,7 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 		// Page right
 		bPageRight = new JCommandButton(
 			RB.getString("gui.ribbon.HomeNavigateBand.bPageRight"),
-			RibbonController.getIcon("NAVRIGHT32", 32));
+			RibbonController.getIcon("NAVRBLU32", 32));
 		Actions.homeNavigatePageRight = new ActionRepeatableButtonModel(bPageRight);
 		Actions.homeNavigatePageRight.addActionListener(this);
 		bPageRight.setActionModel(Actions.homeNavigatePageRight);
