@@ -18,6 +18,7 @@ import scri.commons.file.*;
  */
 public class ReadFileCache extends TabletCache implements IReadCache
 {
+	private File indexFile;
 	private ArrayLongFileCache index;
 
 	// When writing, how many bytes have been written to the cache?
@@ -26,7 +27,17 @@ public class ReadFileCache extends TabletCache implements IReadCache
 	public ReadFileCache(File cacheFile, File indexFile)
 	{
 		this.cacheFile = cacheFile;
+		this.indexFile = indexFile;
+
 		index = new ArrayLongFileCache(indexFile);
+	}
+
+	public ReadFileCache resetCache()
+		throws IOException
+	{
+		close();
+
+		return new ReadFileCache(cacheFile, indexFile);
 	}
 
 	public void openForWriting()
