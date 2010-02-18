@@ -27,12 +27,17 @@ public class BamFileHandler
 	public void loadData(Contig contig, int s, int e)
 		throws Exception
 	{
-		// TODO-BAM need a way to cancel
 		long ts = System.currentTimeMillis();
 
+		// TODO-BAM: need a way to cancel
 		readID = 0;
 
-		readCache = new ReadMemCache();
+		// Reset the read cache for each new block of data
+		if (readCache instanceof ReadFileCache)
+			readCache = ((ReadFileCache)readCache).resetCache();
+		else
+			readCache = new ReadMemCache();
+
 		readCache.openForWriting();
 
 		CigarParser parser = new CigarParser(contig.getName());
@@ -59,7 +64,6 @@ public class BamFileHandler
 
 		contig.getReads().trimToSize();
 		Collections.sort(contig.getReads());
-		// TODO-BAM is this needed? (overhanging reads shouldn't happen) [do mismatch?]
 		contig.calculateOffsets(assembly);
 
 		long te = System.currentTimeMillis();
