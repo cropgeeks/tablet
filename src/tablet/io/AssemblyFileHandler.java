@@ -230,7 +230,7 @@ public class AssemblyFileHandler extends SimpleJob
 	// Some additional utility methods that are used by the GUI to determine
 	// file type and report back to the user - this code is NOT used to load
 
-	public static int getType(String filename)
+	public static int getType(String filename, Boolean okToRun)
 	{
 		TrackableReader reader = null;
 
@@ -238,21 +238,27 @@ public class AssemblyFileHandler extends SimpleJob
 		{
 			if (read(new AceFileReader(), filename))
 				return ACE;
+			if (!okToRun) return UNKNOWN;
 
 			if (read(new AfgFileReader(), filename))
 				return AFG;
+			if (!okToRun) return UNKNOWN;
 
 			if (read(new MaqFileReader(), filename))
 				return MAQ;
+			if (!okToRun) return UNKNOWN;
 
 			if (read(new BamFileReader(), filename))
 				return BAM;
+			if (!okToRun) return UNKNOWN;
 
 			if (read(new SamFileReader(), filename))
 				return SAM;
+			if (!okToRun) return UNKNOWN;
 
 			if (read(new SoapFileReader(), filename))
 				return SOAP;
+			if (!okToRun) return UNKNOWN;
 
 			return new ReferenceFileReader(null, null).canRead(
 				new AssemblyFile(filename));

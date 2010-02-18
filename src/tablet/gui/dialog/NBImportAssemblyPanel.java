@@ -21,6 +21,8 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
 
 	boolean detectedBAM = false;
 
+	private FileProcessor fileProcessor;
+
     NBImportAssemblyPanel(ImportAssemblyDialog parent)
 	{
 		initComponents();
@@ -82,43 +84,75 @@ class NBImportAssemblyPanel extends JPanel implements DocumentListener
 
     private void processFiles()
     {
-    	int t1 = UNKNOWN, t2 = UNKNOWN;
-
-    	try
+    	if (fileProcessor != null)
     	{
-    		// Determine the types of the two files (regardless of whether we'll
-    		// actually accept them or not
-    		String filename1 = doc1.getText(0, doc1.getLength());
-    		t1 = AssemblyFileHandler.getType(filename1);
-
-			String filename2 = doc2.getText(0, doc2.getLength());
-	    	t2 = AssemblyFileHandler.getType(filename2);
+    		fileProcessor.setPriority(Thread.MIN_PRIORITY);
+    		fileProcessor.okToRun = false;
     	}
-    	catch (Exception e) {}
 
-    	// The assembly file must be ACE, AFG, SAM, MAQ, or SOAP
-    	if (t1 >= FASTA)
-    		t1 = UNKNOWN;
+    	statusText.setText(
+    		RB.getString("gui.dialog.NBImportAssembly.ass.status") + "  |  " +
+    		RB.getString("gui.dialog.NBImportAssembly.ref.status"));
 
-    	// The reference file must be FASTA or FASTQ
-    	if (t2 < FASTA)
-	    	t2 = UNKNOWN;
+    	fileProcessor = new FileProcessor();
+    	fileProcessor.start();
+    }
 
-    	// The reference option is only needed for SAM onwards
-    	setReferenceControls(t1 >= SAM && t1 < FASTA);
+    private class FileProcessor extends Thread
+    {
+    	Boolean okToRun = true;
 
-    	detectedBAM = (t1 == BAM);
+    	public void run()
+    	{
+	    	int t1 = UNKNOWN, t2 = UNKNOWN;
 
+	    	try
+	    	{
+	    		// Determine the types of the two files (regardless of whether we'll
+	    		// actually accept them or not
+	    		String filename1 = doc1.getText(0, doc1.getLength());
+	    		t1 = AssemblyFileHandler.getType(filename1, okToRun);
+	    	}
+	    	catch (Exception e) {}
 
-    	String str1 = RB.getString("gui.dialog.NBImportAssembly.ass.status"
-    		+ t1);
-    	String str2 = RB.getString("gui.dialog.NBImportAssembly.ref.status"
-    		+ t2);
+	    	if (fileProcessor != this) return;
 
-		if (refLabel.isEnabled())
-    		statusText.setText(str1 + "  |  " + str2);
-    	else
-    		statusText.setText(str1);
+	    	// The assembly file must be ACE, AFG, SAM, MAQ, or SOAP
+	    	if (t1 >= FASTA)
+	    		t1 = UNKNOWN;
+
+	    	// The reference option is only needed for SAM onwards
+	    	setReferenceControls(t1 >= SAM && t1 < FASTA);
+	    	detectedBAM = (t1 == BAM);
+
+	    	String str1 = RB.getString("gui.dialog.NBImportAssembly.ass.status" + t1);
+	    	String str2 = RB.getString("gui.dialog.NBImportAssembly.ref.status");
+
+	    	if (refLabel.isEnabled())
+				statusText.setText(str1 + "  |  " + str2);
+			else
+			{
+				statusText.setText(str1);
+				return;
+			}
+
+			try
+			{
+				String filename2 = doc2.getText(0, doc2.getLength());
+			    	t2 = AssemblyFileHandler.getType(filename2, okToRun);
+	    	}
+	    	catch (Exception e) {}
+
+	    	if (fileProcessor != this) return;
+
+	    	// The reference file must be FASTA or FASTQ
+	    	if (t2 < FASTA)
+		    	t2 = UNKNOWN;
+
+		    str2 = RB.getString("gui.dialog.NBImportAssembly.ref.status" + t2);
+
+	    	statusText.setText(str1 + "  |  " + str2);
+    	}
     }
 
     public void insertUpdate(DocumentEvent e)
