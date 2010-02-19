@@ -84,7 +84,6 @@ public class BamFileHandler
 		contig.getReads().add(read);
 
 		// Do base-position comparison...
-
 		BasePositionComparator.compare(contig, rmd, readStartPos);
 
 		rmd.setCigar(record.getCigar().toString());
