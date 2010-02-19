@@ -75,4 +75,9 @@ public class BamBam
 	{
 		return e;
 	}
+
+	public int getSize()
+	{
+		return size;
+	}
 }
