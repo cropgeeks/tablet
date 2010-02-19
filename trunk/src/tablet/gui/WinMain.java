@@ -222,7 +222,7 @@ public class WinMain extends JRibbonFrame
 	public AssemblyPanel getAssemblyPanel()
 		{ return assemblyPanel; }
 
-	ContigsPanel getContigsPanel()
+	public ContigsPanel getContigsPanel()
 		{ return contigsPanel; }
 
 	public JumpToDialog getJumpToDialog()
@@ -334,8 +334,7 @@ public class WinMain extends JRibbonFrame
 
 	private void cacheInvalid(IOException e)
 	{
-		String msg = RB.format("gui.WinMain.cacheError",
-			Prefs.cacheDir, e.getMessage());
+		String msg = RB.format("gui.WinMain.cacheError", Prefs.cacheDir, e);
 
 		TaskDialog.error(msg, RB.getString("gui.text.close"));
 	}

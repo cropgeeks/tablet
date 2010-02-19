@@ -57,7 +57,7 @@ public class Commands
 					files += "\n     " + filenames[i];
 
 				TaskDialog.error(RB.format("gui.Commands.fileOpen.error",
-					dialog.getException().getMessage(), files),
+					dialog.getException(), files),
 					RB.getString("gui.text.close"));
 			}
 
@@ -106,7 +106,7 @@ public class Commands
 			{
 				TaskDialog.error(
 					RB.format("gui.Commands.importFeatures.exception",
-					dialog.getException().getMessage()),
+					dialog.getException()),
 					RB.getString("gui.text.close"));
 			}
 
@@ -168,7 +168,7 @@ public class Commands
 			e.printStackTrace();
 
 			TaskDialog.error(
-				RB.format("gui.Commands.exportImage.exception", e.getMessage()),
+				RB.format("gui.Commands.exportImage.exception", e),
 				RB.getString("gui.text.close"));
 		}
 	}
@@ -205,7 +205,7 @@ public class Commands
 				dialog.getException().printStackTrace();
 				TaskDialog.error(
 					RB.format("gui.Commands.exportCoverage.exception",
-					dialog.getException().getMessage()),
+					dialog.getException()),
 					RB.getString("gui.text.close"));
 			}
 			else
@@ -215,9 +215,9 @@ public class Commands
 		}
 		else
 		{
-			TaskDialog.error("Sorry but this feature is not currently supported " +
-					" for BAM assemblies. We hope to resolve this in the" +
-					" future.", "Close");
+			TaskDialog.warning("Sorry but this feature is not currently "
+				+ "supported for BAM assemblies. We hope to resolve this in "
+				+ "the future.", RB.getString("gui.text.close"));
 		}
 	}
 }

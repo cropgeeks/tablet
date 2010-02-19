@@ -18,6 +18,7 @@ import scri.commons.gui.*;
 
 public class AssemblyPanel extends JPanel implements AdjustmentListener
 {
+	private WinMain winMain;
 	private Assembly assembly;
 	private Contig contig;
 
@@ -42,6 +43,8 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 	public AssemblyPanel(WinMain winMain)
 	{
+		this.winMain = winMain;
+
 		createControls();
 		setVisibilities();
 
@@ -150,7 +153,6 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		coverageCanvas.setContig(contig);
 
 		forceRedraw();
-		updateContigInformation();
 
 		return setContigOK;
 	}
@@ -239,6 +241,8 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		adjustmentValueChanged(null);
 		overviewCanvas.createImage();
 
+		updateContigInformation();
+
 		repaint();
 	}
 
@@ -319,7 +323,9 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		{
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
 			{
-				System.out.println(dialog.getException());
+				String msg = RB.format("gui.viewer.assemblyPanel.ddcError",
+					dialog.getException());
+				TaskDialog.error(msg, RB.getString("gui.text.close"));
 			}
 
 			return false;
@@ -353,15 +359,20 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		}
 	}
 
-	public void processBamDataChange()
+	public boolean processBamDataChange()
 	{
-		updateDisplayData(false);
+		if (updateDisplayData(false) == false)
+		{
+			winMain.getContigsPanel().setNullContig();
+			return false;
+		}
 
 		// Special case to force the coverage (tooltip) information to update
 		coverageCanvas.setContig(contig);
-
 		// Finally force the main canvas to update/change
 		forceRedraw();
+
+		return true;
 	}
 
 	public void moveToPosition(int rowIndex, int colIndex, final boolean centre)
@@ -383,7 +394,8 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 			if (newIndex != colIndex)
 			{
 				assembly.getBamBam().setBlockStart(contig, newIndex);
-				processBamDataChange();
+				if (processBamDataChange() == false)
+					return;
 			}
 
 		}
