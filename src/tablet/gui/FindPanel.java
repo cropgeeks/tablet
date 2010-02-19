@@ -283,7 +283,7 @@ public class FindPanel extends JPanel implements ListSelectionListener
 				catch (PatternSyntaxException e)
 				{
 					TaskDialog.error(
-						RB.format("gui.FindPanel.regexError", e.getMessage()),
+						RB.format("gui.FindPanel.regexError", e),
 						RB.getString("gui.text.close"));
 					return;
 				}

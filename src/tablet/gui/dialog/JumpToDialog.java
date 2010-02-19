@@ -144,6 +144,9 @@ public class JumpToDialog extends JDialog
 
 		Contig contig = aPanel.getContig();
 
+		if (contig == null)
+			return;
+
 		padded = base;
 
 		// Is it a valid padded index?

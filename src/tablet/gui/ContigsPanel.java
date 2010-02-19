@@ -20,7 +20,7 @@ import tablet.gui.viewer.*;
 
 import scri.commons.gui.*;
 
-class ContigsPanel extends JPanel implements ListSelectionListener
+public class ContigsPanel extends JPanel implements ListSelectionListener
 {
 	private WinMain winMain;
 	private AssemblyPanel aPanel;
@@ -156,7 +156,7 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 			setNullContig();
 	}
 
-	private void setNullContig()
+	public void setNullContig()
 	{
 		aPanel.setContig(null);
 		featuresPanel.setContig(null);
@@ -258,7 +258,7 @@ class ContigsPanel extends JPanel implements ListSelectionListener
 			dialog.getException().printStackTrace();
 			TaskDialog.error(
 				RB.format("gui.ContigsPanel.saveReads.exception",
-				dialog.getException().getMessage()),
+				dialog.getException()),
 				RB.getString("gui.text.close"));
 		}
 		else
