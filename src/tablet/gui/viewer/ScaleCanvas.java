@@ -158,7 +158,7 @@ class ScaleCanvas extends TrackingCanvas
 			+ getUnpadded(xS+offset);
 		int strWidth  = g.getFontMetrics().stringWidth(lhsStr);
 		int pos = getPosition(x1, strWidth);;
-		ntL = xS;
+		ntL = xS + offset;
 
 		if (mouseBase == null || mouseBaseS > pos+strWidth-1)
 			g.drawString(lhsStr, pos, 20);
@@ -168,7 +168,7 @@ class ScaleCanvas extends TrackingCanvas
 			+ getUnpadded(xE+offset);
 		strWidth  = g.getFontMetrics().stringWidth(rhsStr);
 		pos = getPosition(x2, strWidth);
-		ntR = xE;
+		ntR = xE + offset;
 
 		if (mouseBase == null || mouseBaseE < pos)
 			g.drawString(rhsStr, pos, 20);

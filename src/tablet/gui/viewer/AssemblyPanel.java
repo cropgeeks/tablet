@@ -285,6 +285,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	public void pageRight()
 	{
 		int jumpTo = scaleCanvas.ntR + 1;
+
 		moveToPosition(-1, jumpTo, false);
 	}
 
@@ -365,28 +366,31 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 	public void moveToPosition(int rowIndex, int colIndex, final boolean centre)
 	{
-		System.out.println("Moving to " + colIndex);
-
 		// If it's a BAM assembly, we might need to load in a different block
 		// of data before the view can be moved to that position
-		// TODO-BAM: this code currently always loads...
 		if (assembly.getBamBam() != null)
 		{
-			int s = assembly.getBamBam().getS();
-			int e = assembly.getBamBam().getE();
+			BamBam bambam = assembly.getBamBam();
+			int newIndex = colIndex;
 
-			if (colIndex < s || colIndex > e)
+			// Load a new block, offset by 2/3rds to the left
+			if (colIndex < bambam.getS())
+				newIndex -= (int) (bambam.getSize() * 4f/5f);
+			// Load a new block, offset by 2/3rds to the right
+			else if (colIndex > bambam.getE())
+				newIndex -= (int) (bambam.getSize() * 1f/5f);
+
+			if (newIndex != colIndex)
 			{
-				assembly.getBamBam().setBlockStart(contig, colIndex);
+				assembly.getBamBam().setBlockStart(contig, newIndex);
 				processBamDataChange();
 			}
+
 		}
 
 		final int row = rowIndex;
 		// Adjust the colIndex so that it is valid for the current (visual) data
 		final int col = colIndex += (-contig.getVisualStart());
-
-		System.out.println("  visual index: " + colIndex);
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
