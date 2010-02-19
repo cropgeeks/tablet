@@ -80,14 +80,14 @@ class ReadsCanvasMenu implements ActionListener
 
 		else if (e.getSource() == mFindStart)
 		{
-			int position = infoPane.read.getStartPosition() - rCanvas.offset;
+			int position = infoPane.read.getStartPosition();
 
 			aPanel.moveToPosition(-1, position, true);
 			new ReadHighlighter(aPanel, infoPane.read, infoPane.lineIndex);
 		}
 		else if (e.getSource() == mFindEnd)
 		{
-			int position = infoPane.read.getEndPosition() - rCanvas.offset;
+			int position = infoPane.read.getEndPosition();
 
 			aPanel.moveToPosition(-1, position, true);
 			new ReadHighlighter(aPanel, infoPane.read, infoPane.lineIndex);

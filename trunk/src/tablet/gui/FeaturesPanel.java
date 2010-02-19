@@ -120,10 +120,6 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 			end = DisplayData.unpaddedToPadded(end);
 		}
 
-		// TODO-BAM
-//		start = start + contig.getConsensusOffset();
-//		end = end + contig.getConsensusOffset();
-
 		aPanel.moveToPosition(-1, start, true);
 		highlighter = new ColumnHighlighter(aPanel, start, end);
 	}
@@ -237,15 +233,13 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 			// Invalid if the value is lt or gt than the canvas
 			if (Prefs.guiFeaturesArePadded)
 			{
-				// TODO-BAM ???
-//				if (pos <= (-contig.getConsensusOffset()) ||
-//					pos > contig.getWidth() - contig.getConsensusOffset())
-//					c.setForeground(Color.red);
+				if (pos < contig.getDataStart() || pos > contig.getDataEnd())
+					c.setForeground(Color.red);
 			}
-			// Invalid is the value is lt or gt than unpadded consensus length
+			// Invalid if the value is lt or gt than unpadded consensus length
 			else
 			{
-				if (pos <= 0 || pos > contig.getConsensus().getUnpaddedLength())
+				if (pos < 0 || pos >= contig.getConsensus().getUnpaddedLength())
 					c.setForeground(Color.red);
 			}
 
