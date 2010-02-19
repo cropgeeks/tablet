@@ -225,8 +225,9 @@ class ReadsCanvas extends JPanel
 			repaint();
 		}
 
-		g.setColor(Color.black);
-		g.drawLine(pX1 + ((pX2Max-pX1)/2), pY1, pX1+((pX2Max-pX1)/2), pY2);
+		// Draws a vertical line down the middle of the display
+//		g.setColor(Color.black);
+//		g.drawLine(pX1 + ((pX2Max-pX1)/2), pY1, pX1+((pX2Max-pX1)/2), pY2);
 
 		long e = System.nanoTime();
 		//System.out.println("Render time: " + ((e-s)/1000000f) + "ms");
