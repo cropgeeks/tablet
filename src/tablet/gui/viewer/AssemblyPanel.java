@@ -201,7 +201,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	}
 
 	// Jumps to a position relative to the given row and column
-	public void moveToPosition(int rowIndex, int colIndex, boolean centre)
+	void moveTo(int rowIndex, int colIndex, boolean centre)
 	{
 		// If 'centre' is true, offset by half the screen
 		int offset = 0;
@@ -256,7 +256,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		// generating endless resize events that affect the scrollbars
 		Runnable r = new Runnable() {
 			public void run() {
-				moveToPosition(Math.round(ntCenterY), Math.round(ntCenterX), true);
+				moveTo(Math.round(ntCenterY), Math.round(ntCenterX), true);
 			}
 		};
 		SwingUtilities.invokeLater(r);
@@ -270,7 +270,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 		// Then after the zoom, try to get back to that position
 		isZooming = false;
-		moveToPosition(Math.round(ntCenterY), Math.round(ntCenterX), true);
+		moveTo(Math.round(ntCenterY), Math.round(ntCenterX), true);
 	}
 
 	// Jumps the screen left by one "page"
@@ -361,5 +361,37 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 		// Finally force the main canvas to update/change
 		forceRedraw();
+	}
+
+	public void moveToPosition(int rowIndex, int colIndex, final boolean centre)
+	{
+		System.out.println("Moving to " + colIndex);
+
+		// If it's a BAM assembly, we might need to load in a different block
+		// of data before the view can be moved to that position
+		// TODO-BAM: this code currently always loads...
+		if (assembly.getBamBam() != null)
+		{
+			int s = assembly.getBamBam().getS();
+			int e = assembly.getBamBam().getE();
+
+			if (colIndex < s || colIndex > e)
+			{
+				assembly.getBamBam().setBlockStart(contig, colIndex);
+				processBamDataChange();
+			}
+		}
+
+		final int row = rowIndex;
+		// Adjust the colIndex so that it is valid for the current (visual) data
+		final int col = colIndex += (-contig.getVisualStart());
+
+		System.out.println("  visual index: " + colIndex);
+
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				moveTo(row, col, centre);
+			}
+		});
 	}
 }

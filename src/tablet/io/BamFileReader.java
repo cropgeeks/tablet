@@ -122,6 +122,8 @@ public class BamFileReader extends TrackableReader
 		{
 			BamFileHandler bamHandler = new BamFileHandler(readCache, bamReader, assembly);
 			assembly.setBamHandler(bamHandler);
+
+			assembly.setName(files[bamFile].getName());
 		}
 	}
 

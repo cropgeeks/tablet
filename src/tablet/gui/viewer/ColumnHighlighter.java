@@ -26,10 +26,10 @@ public class ColumnHighlighter extends AlphaOverlay
 	{
 		g.setPaint(new Color(20, 20, 20, alphaEffect));
 
-		int x1 = start * rCanvas.ntW;
+		int x1 = (start - rCanvas.offset) * rCanvas.ntW;
 		int x2 = x1 + (end-start+1) * rCanvas.ntW;
 
-		g.fillRect(0, 0, x1, rCanvas.pY2);
-		g.fillRect(x2, 0, rCanvas.pX2Max, rCanvas.pY2);
+		g.fillRect(0, 0, x1, rCanvas.pY2+1);
+		g.fillRect(x2, 0, rCanvas.pX2Max, rCanvas.pY2+1);
 	}
 }
