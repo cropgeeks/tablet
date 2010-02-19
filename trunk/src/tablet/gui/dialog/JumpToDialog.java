@@ -24,8 +24,8 @@ public class JumpToDialog extends JDialog
 	private NBJumpToPanel nbPanel;
 
 	// The indices within the dataset we'll ultimately try to jump to
-	private int paddedIndex = 0;
-	private int unpaddedIndex = 0;
+	private int padded = 0;
+	private int unpadded = 0;
 
 	public JumpToDialog(WinMain winMain)
 	{
@@ -105,7 +105,7 @@ public class JumpToDialog extends JDialog
 			getRootPane().setDefaultButton(nbPanel.bJumpPadded);
 			Prefs.guiUsePaddedJumpToBases = true;
 
-			jumpToBase(paddedIndex);
+			jumpToBase(padded);
 		}
 
 		else if (e.getSource() == nbPanel.bJumpUnpadded)
@@ -113,20 +113,14 @@ public class JumpToDialog extends JDialog
 			getRootPane().setDefaultButton(nbPanel.bJumpUnpadded);
 			Prefs.guiUsePaddedJumpToBases = false;
 
-			jumpToBase(unpaddedIndex);
+			jumpToBase(unpadded);
 		}
 	}
 
 	private void jumpToBase(int index)
 	{
-		if (aPanel.getAssembly().getBamBam() != null)
-		{
-			aPanel.getAssembly().getBamBam().setBlockStart(aPanel.getContig(), index);
-			aPanel.processBamDataChange();
-		}
-
 		aPanel.moveToPosition(-1, index, true);
-//		new ColumnHighlighter(aPanel, index, index);
+		new ColumnHighlighter(aPanel, index, index);
 	}
 
 	private void checkControls()
@@ -137,33 +131,30 @@ public class JumpToDialog extends JDialog
 		{
 			base = Integer.parseInt(nbPanel.getInputText());
 			Prefs.guiJumpToBase = base;
+
+			base = base - 1;
 		}
 		catch (NumberFormatException e)
 		{
-//			nbPanel.bJumpPadded.setEnabled(false);
-//			nbPanel.bJumpUnpadded.setEnabled(false);
+			nbPanel.bJumpPadded.setEnabled(false);
+			nbPanel.bJumpUnpadded.setEnabled(false);
 
 			return;
 		}
 
-		paddedIndex = unpaddedIndex = base-1;
-		if(true)
-			return;
-
 		Contig contig = aPanel.getContig();
 
-		// TODO-BAM ???
-		// Work out the padded index for this base
-//		paddedIndex = base + contig.getConsensusOffset() - 1;
-//		if (paddedIndex < 0 || paddedIndex >= contig.getWidth())
-//			nbPanel.bJumpPadded.setEnabled(false);
-//		else
-//			nbPanel.bJumpPadded.setEnabled(true);
+		padded = base;
 
-		// Convert the unpadded index to a padded index
-		unpaddedIndex = DisplayData.unpaddedToPadded(base-1);
-//		nbPanel.bJumpUnpadded.setEnabled(unpaddedIndex != -1);
-//		unpaddedIndex += contig.getConsensusOffset();
+		// Is it a valid padded index?
+		if (padded < contig.getDataStart() || padded >= contig.getDataEnd())
+			nbPanel.bJumpPadded.setEnabled(false);
+		else
+			nbPanel.bJumpPadded.setEnabled(true);
+
+		// Is it a valid unpadded index?
+		unpadded = DisplayData.unpaddedToPadded(base);
+		nbPanel.bJumpUnpadded.setEnabled(unpadded != -1);
 	}
 
 	public void changedUpdate(DocumentEvent e)

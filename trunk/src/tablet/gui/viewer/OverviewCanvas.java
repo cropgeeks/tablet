@@ -207,7 +207,7 @@ public class OverviewCanvas extends JPanel
 			int rowIndex = (int) (y / yScale);
 			int colIndex = (int) (x / xScale);
 
-			aPanel.moveToPosition(rowIndex, colIndex, false);
+			aPanel.moveTo(rowIndex, colIndex, false);
 		}
 
 		public void paintComponent(Graphics graphics)
