@@ -31,6 +31,8 @@ public class DisplayDataCalculator extends SimpleJob
 	private IArrayIntCache paddedToUnpadded;
 	private IArrayIntCache unpaddedToPadded;
 
+	private int status = 0;
+
 	public DisplayDataCalculator(Assembly assembly, Contig contig, boolean doAll)
 	{
 		this.assembly = assembly;
@@ -65,9 +67,11 @@ public class DisplayDataCalculator extends SimpleJob
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		// TODO: EndGame handlers?
 		if (assembly.getBamBam() != null)
+		{
+			status = 1;
 			assembly.getBamBam().loadDataBlock(contig);
+		}
 
 		// TODO: Technically, these jobs could be run in parallel but it's
 		// probably not worth it as 99% of the time they run instantly anyway
@@ -78,6 +82,8 @@ public class DisplayDataCalculator extends SimpleJob
 
 		if (okToRun && doAll)
 		{
+			status = 0;
+
 			// Compute mappings between unpadded and padded values
 			bm = new BaseMappingCalculator(contig.getConsensus(),
 				paddedToUnpadded, unpaddedToPadded);
@@ -96,6 +102,8 @@ public class DisplayDataCalculator extends SimpleJob
 
 		if (okToRun)
 		{
+			status = 2;
+
 			// Compute per-base coverage across the contig
 			cc = new CoverageCalculator(contig);
 			cc.runJob(0);
@@ -111,6 +119,8 @@ public class DisplayDataCalculator extends SimpleJob
 		{
 			ps = new PackSetCreator(contig);
 			ps.runJob(0);
+
+			status = 3;
 		}
 	}
 
@@ -144,9 +154,18 @@ public class DisplayDataCalculator extends SimpleJob
 
 	public String getMessage()
 	{
-		if (ps != null)
-			return ps.getMessage();
+		switch (status)
+		{
+			case 1: return
+				RB.format("analysis.DisplayDataCalculator.bamming",
+				contig.readCount());
+			case 2: return
+				RB.getString("analysis.DisplayDataCalculator.coverage");
+			case 4: return
+				ps.getMessage();
 
-		return RB.getString("analysis.DisplayDataCalculator.status");
+			default:
+				return RB.getString("analysis.DisplayDataCalculator.mapping");
+		}
 	}
 }
