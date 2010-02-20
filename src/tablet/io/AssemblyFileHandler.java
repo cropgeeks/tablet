@@ -230,38 +230,70 @@ public class AssemblyFileHandler extends SimpleJob
 	// Some additional utility methods that are used by the GUI to determine
 	// file type and report back to the user - this code is NOT used to load
 
-	public static int getType(String filename, Boolean okToRun)
+	public static int getType(String file, Boolean okToRun)
 	{
 		TrackableReader reader = null;
 
 		try
 		{
-			if (read(new AceFileReader(), filename))
+			// Step 1: See if we can get an extension for the file...
+			String ext = null;
+			try { ext = file.substring(file.lastIndexOf(".")+1).toLowerCase(); }
+			catch (Exception e) {}
+
+			// Step 2: Try the readers based on the extension...
+			if (ext != null)
+			{
+				if (ext.equals("ace") && read(new AceFileReader(), file))
+					return ACE;
+				else if (ext.equals("afg") && read(new AfgFileReader(), file))
+					return AFG;
+				else if (ext.equals("txt") && read(new MaqFileReader(), file))
+					return MAQ;
+				else if (ext.equals("bam") && read(new BamFileReader(), file))
+					return BAM;
+				else if (ext.equals("sam") && read(new SamFileReader(), file))
+					return SAM;
+				else if (ext.equals("soap") && read(new SoapFileReader(), file))
+					return SOAP;
+
+				else if (ext.equals("fasta") || ext.equals("fastq"))
+				{
+					int type = new ReferenceFileReader(null, null).canRead(
+						new AssemblyFile(file));
+					if (type != UNKNOWN)
+						return type;
+				}
+			}
+
+			// Step 3: Just try all the readers...
+
+			if (read(new AceFileReader(), file))
 				return ACE;
 			if (!okToRun) return UNKNOWN;
 
-			if (read(new AfgFileReader(), filename))
+			if (read(new AfgFileReader(), file))
 				return AFG;
 			if (!okToRun) return UNKNOWN;
 
-			if (read(new MaqFileReader(), filename))
+			if (read(new MaqFileReader(), file))
 				return MAQ;
 			if (!okToRun) return UNKNOWN;
 
-			if (read(new BamFileReader(), filename))
+			if (read(new BamFileReader(), file))
 				return BAM;
 			if (!okToRun) return UNKNOWN;
 
-			if (read(new SamFileReader(), filename))
+			if (read(new SamFileReader(), file))
 				return SAM;
 			if (!okToRun) return UNKNOWN;
 
-			if (read(new SoapFileReader(), filename))
+			if (read(new SoapFileReader(), file))
 				return SOAP;
 			if (!okToRun) return UNKNOWN;
 
 			return new ReferenceFileReader(null, null).canRead(
-				new AssemblyFile(filename));
+				new AssemblyFile(file));
 		}
 		catch (Exception e) {}
 
