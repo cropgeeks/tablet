@@ -150,7 +150,7 @@ public class JumpToDialog extends JDialog
 		padded = base;
 
 		// Is it a valid padded index?
-		if (padded < contig.getDataStart() || padded >= contig.getDataEnd())
+		if (padded < contig.getDataStart() || padded > contig.getDataEnd())
 			nbPanel.bJumpPadded.setEnabled(false);
 		else
 			nbPanel.bJumpPadded.setEnabled(true);

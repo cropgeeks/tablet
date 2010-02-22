@@ -95,27 +95,31 @@ public class ProgressDialog extends JDialog
 			return;
 		}
 
-		nbPanel.pBar.setIndeterminate(job.isIndeterminate());
-		nbPanel.pBar.setStringPainted(!job.isIndeterminate());
-
-		int val = job.getValue();
-		int max = job.getMaximum();
-		nbPanel.pBar.setMaximum(max);
-		nbPanel.pBar.setValue(val);
-
-		String message = job.getMessage();
-		if (message != null)
-			nbPanel.msgLabel.setText(message);
-
-		// If the job doesn't know its maximum (yet), this would
-		// have caused a 0 divided by 0 which isn't pretty
-		if (max == 0)
-			nbPanel.pBar.setString(d.format(0) + "%");
-		else
+		try
 		{
-			float value = ((float) val / (float) max) * 100;
-			nbPanel.pBar.setString(d.format(value) + "%");
+			nbPanel.pBar.setIndeterminate(job.isIndeterminate());
+			nbPanel.pBar.setStringPainted(!job.isIndeterminate());
+
+			int val = job.getValue();
+			int max = job.getMaximum();
+			nbPanel.pBar.setMaximum(max);
+			nbPanel.pBar.setValue(val);
+
+			String message = job.getMessage();
+			if (message != null)
+				nbPanel.msgLabel.setText(message);
+
+			// If the job doesn't know its maximum (yet), this would
+			// have caused a 0 divided by 0 which isn't pretty
+			if (max == 0)
+				nbPanel.pBar.setString(d.format(0) + "%");
+			else
+			{
+				float value = ((float) val / (float) max) * 100;
+				nbPanel.pBar.setString(d.format(value) + "%");
+			}
 		}
+		catch (Exception ex) {}
 	}
 
 	private void startJob()
