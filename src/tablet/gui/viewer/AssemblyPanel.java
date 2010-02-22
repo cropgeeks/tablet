@@ -27,6 +27,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	ConsensusCanvas consensusCanvas;
 	ProteinCanvas proteinCanvas;
 	CoverageCanvas coverageCanvas;
+	BamBamBar bambamBar;
 	ReadsCanvas readsCanvas;
 
 	private JScrollPane sp;
@@ -56,8 +57,12 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		consensusPanel.add(consensusCanvas);
 		consensusPanel.add(coverageCanvas, BorderLayout.SOUTH);
 
+		JPanel overCanvas = new JPanel(new BorderLayout());
+		overCanvas.add(bambamBar, BorderLayout.NORTH);
+		overCanvas.add(overviewCanvas, BorderLayout.CENTER);
+
 		JPanel topPanel = new JPanel(new BorderLayout());
-		topPanel.add(overviewCanvas, BorderLayout.NORTH);
+		topPanel.add(overCanvas, BorderLayout.NORTH);
 		topPanel.add(consensusPanel, BorderLayout.CENTER);
 		topPanel.add(scaleCanvas, BorderLayout.SOUTH);
 
@@ -76,6 +81,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		scaleCanvas = new ScaleCanvas();
 		proteinCanvas = new ProteinCanvas();
 		coverageCanvas = new CoverageCanvas();
+		bambamBar = new BamBamBar();
 
 		// Passing 'this' to the canvas classes can't happen in their
 		// constructors because they often need to refer to each other too, so
@@ -86,6 +92,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		scaleCanvas.setAssemblyPanel(this);
 		proteinCanvas.setAssemblyPanel(this);
 		coverageCanvas.setAssemblyPanel(this);
+		bambamBar.setAssemblyPanel(this);
 
 		sp = new JScrollPane();
 		viewport = sp.getViewport();
@@ -151,6 +158,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		scaleCanvas.setContig(contig);
 		proteinCanvas.setContig(contig);
 		coverageCanvas.setContig(contig);
+		bambamBar.setContig(contig);
 
 		forceRedraw();
 
