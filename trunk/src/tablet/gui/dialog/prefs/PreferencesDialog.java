@@ -23,13 +23,16 @@ public class PreferencesDialog extends JDialog implements ActionListener
 	private NBVisualizationPanel visualizationPanel;
 	private NBWarningPanel warningPanel;
 
-	public PreferencesDialog()
+	public PreferencesDialog(Integer newTab)
 	{
 		super(
 			Tablet.winMain,
 			RB.getString("gui.dialog.prefs.PreferencesDialog.title"),
 			true
 		);
+
+		if (newTab != null)
+			lastTab = newTab;
 
 		generalPanel = new NBGeneralPanel();
 		visualizationPanel = new NBVisualizationPanel();

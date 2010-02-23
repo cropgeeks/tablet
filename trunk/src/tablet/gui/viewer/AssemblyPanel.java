@@ -146,7 +146,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		// Fresh BAM assembly: reset the loaded data to the start
 		if (contig != null && assembly.getBamBam() != null)
 		{
-			assembly.getBamBam().reset();
+			assembly.getBamBam().reset(Prefs.bamSize);
 			assembly.getBamBam().setBlockStart(contig, 0);
 		}
 

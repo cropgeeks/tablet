@@ -20,9 +20,9 @@ public class BamBam
 		this.bamHandler = bamHandler;
 	}
 
-	public void reset()
+	public void reset(int newSize)
 	{
-		size = 25000;
+		size = newSize;
 
 		s = 0;
 		e = s + size - 1;
@@ -36,6 +36,8 @@ public class BamBam
 		// the total amount of data that could be loaded anyway
 		if (size > dataWidth)
 			size = dataWidth;
+		// Extra safety check
+		if (size < 1) size = 1;
 
 		s = startIndex;
 		e = s + size - 1;
@@ -81,8 +83,9 @@ public class BamBam
 		return size;
 	}
 
+	public void setSize(int size)
+		{ this.size = size; }
+
 	public BamFileHandler getBamFileHandler()
-	{
-		return bamHandler;
-	}
+		{ return bamHandler; }
 }
