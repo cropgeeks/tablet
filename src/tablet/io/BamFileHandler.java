@@ -46,7 +46,7 @@ public class BamFileHandler
 
 		CigarParser parser = new CigarParser(contig.getName());
 
-		contig.getReads().clear();
+		contig.clearContigData(true);
 
 		CloseableIterator<SAMRecord> itor = bamReader.query(contig.getName(), s+1, e+1, false);
 

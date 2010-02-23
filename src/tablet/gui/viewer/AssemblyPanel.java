@@ -10,6 +10,7 @@ import javax.swing.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
+import tablet.data.auxiliary.*;
 import tablet.gui.*;
 import tablet.gui.dialog.*;
 import tablet.gui.ribbon.*;
@@ -140,6 +141,14 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 	public boolean setContig(Contig contig)
 	{
+		// Clear data from the PREVIOUS contig
+		if (this.contig != null)
+			this.contig.clearContigData(assembly.getBamBam() != null);
+
+		// If no contig is being displayed, clear DisplayData
+		if (contig == null)
+			DisplayData.clearData();
+
 		this.contig = contig;
 		boolean setContigOK = true;
 
@@ -379,6 +388,9 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		coverageCanvas.setContig(contig);
 		// Finally force the main canvas to update/change
 		forceRedraw();
+
+		// And this'll force a repaint of any table's that might need to update
+		winMain.repaint();
 
 		return true;
 	}
