@@ -45,7 +45,7 @@ public class BaseMappingCalculator extends SimpleJob
 	{
 		int length = c.length();
 
-		for (int i = 0, index = 0; i < length; i++)
+		for (int i = 0, index = 0; i < length && okToRun; i++)
 		{
 			if (c.getStateAt(i) != Sequence.P)
 				paddedToUnpadded.addValue(index++);
@@ -68,7 +68,7 @@ public class BaseMappingCalculator extends SimpleJob
 		int length = c.length();
 		int map = 0;
 
-		for (int i = 0; i < length; i++)
+		for (int i = 0; i < length && okToRun; i++)
 		{
 			if (c.getStateAt(i) != Sequence.P)
 			{
