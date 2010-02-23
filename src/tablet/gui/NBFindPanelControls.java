@@ -3,15 +3,13 @@ package tablet.gui;
 import java.awt.event.*;
 import javax.swing.*;
 import scri.commons.gui.*;
-import tablet.gui.dialog.ProgressDialog;
 
-public class NBFindPanelControls extends javax.swing.JPanel implements ActionListener
+public class NBFindPanelControls extends javax.swing.JPanel
 {
 	private FindPanel panel;
-	private TitlePanel3 title;
 
     /** Creates new form NBFindPanel */
-    public NBFindPanelControls(FindPanel panel)
+    public NBFindPanelControls(final FindPanel panel)
 	{
         initComponents();
 
@@ -36,7 +34,7 @@ public class NBFindPanelControls extends javax.swing.JPanel implements ActionLis
 		bFind.setText("");
 		bFind.setIcon(Icons.getIcon("FIND"));
 
-		bFind.addActionListener(this);
+		bFind.addActionListener(panel);
 		if(!SystemUtils.isMacOS())
 			bFind.setBorder(BorderFactory.createEmptyBorder(0, 11, 0, 11));
 
@@ -46,64 +44,19 @@ public class NBFindPanelControls extends javax.swing.JPanel implements ActionLis
 
 		RB.setText(checkUseRegex, "gui.NBFindPanelControls.checkUseRegex");
 		checkUseRegex.setSelected(Prefs.guiRegexSearching);
-		checkUseRegex.addActionListener(this);
+		checkUseRegex.addActionListener(panel);
 
 
 		findCombo.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
 		public void keyReleased(KeyEvent e)
 		{
 			if(e.getKeyCode() == KeyEvent.VK_ENTER)
-				runSearch();
+				panel.runSearch();
 		}});
 
 		helpLabel.setIcon(Icons.getIcon("WEB"));
-		helpLabel.addActionListener(this);
+		helpLabel.addActionListener(panel);
     }
-
-	public void actionPerformed(ActionEvent e)
-	{
-		if (e.getSource() == bFind)
-		{
-			runSearch();
-		}
-
-		else if(e.getSource() == helpLabel)
-		{
-			// TODO: This should be a link to a section of Tablet help
-			TabletUtils.visitURL("http://java.sun.com/javase/7/docs/api/java/util/regex/Pattern.html#sum");
-		}
-
-		else if (e.getSource() == checkUseRegex)
-		{
-			Prefs.guiRegexSearching = checkUseRegex.isSelected();
-		}
-	}
-
-	public void runSearch()
-	{
-		try
-		{
-			panel.resetFinder();
-			if (findCombo.getText() != null)
-			{
-				findCombo.updateComboBox((String) findCombo.getSelectedItem());
-				Prefs.recentSearches = findCombo.getHistory();
-			}
-			ProgressDialog dialog = new ProgressDialog(panel.finder, RB.getString("gui.NBFindPanelControls.progressTitle"), RB.getString("gui.NBFindPanelControls.progressLabel"));
-			if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
-			{
-				if (dialog.getResult() == ProgressDialog.JOB_FAILED)
-				{
-					System.out.println(dialog.getException());
-				}
-			}
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-		}
-		Prefs.guiFindPanelSelectedIndex = findInCombo.getSelectedIndex();
-	}
 
 	public void toggleComponentEnabled(boolean visible)
 	{
@@ -235,11 +188,11 @@ public class NBFindPanelControls extends javax.swing.JPanel implements ActionLis
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     public javax.swing.JButton bFind;
-    private javax.swing.JCheckBox checkUseRegex;
+    javax.swing.JCheckBox checkUseRegex;
     public scri.commons.gui.matisse.HistoryComboBox findCombo;
     public javax.swing.JComboBox findInCombo;
     public javax.swing.JLabel findLabel;
-    private scri.commons.gui.matisse.HyperLinkLabel helpLabel;
+    scri.commons.gui.matisse.HyperLinkLabel helpLabel;
     private javax.swing.JScrollPane jScrollPane1;
     public javax.swing.JLabel resultsLabel;
     public javax.swing.JTable table;

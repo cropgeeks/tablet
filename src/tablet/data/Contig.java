@@ -39,7 +39,7 @@ public class Contig
 	private StackSet stackSet;
 
 	// Main set of features associated with this contig
-	private ArrayList<Feature> features = new ArrayList<Feature>();
+	FeaturesList features = new FeaturesList();
 	// Supplementary set of features used purely for graphical outlining
 	private ArrayList<Feature> outlines = new ArrayList<Feature>();
 
@@ -127,7 +127,7 @@ public class Contig
 	 * @return the features held by this contig as a vector
 	 */
 	public ArrayList<Feature> getFeatures()
-		{ return features; }
+		{ return features.getFeatures(); }
 
 	/**
 	 * Returns a count of the number of features held within this contig.
@@ -268,5 +268,10 @@ public class Contig
 		mismatchPercentage = mismatches / (float)reads.size();
 		if(reads.size() == 0)
 			mismatchPercentage = 0;
+	}
+
+	public void addFeature(Feature newFeature)
+	{
+		features.addFeature(newFeature);
 	}
 }

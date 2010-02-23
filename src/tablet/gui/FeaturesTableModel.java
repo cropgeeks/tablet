@@ -17,7 +17,7 @@ import scri.commons.gui.*;
 class FeaturesTableModel extends AbstractTableModel
 {
 	private FeaturesPanel panel;
-	private ArrayList<Feature> features;
+	ArrayList<Feature> features;
 
 	private String[] columnNames;
 

@@ -3,25 +3,24 @@ package tablet.gui;
 import java.awt.BorderLayout;
 import java.awt.event.*;
 import java.util.LinkedList;
-import java.util.regex.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 
-import tablet.analysis.SimpleJob;
-import tablet.data.*;
-import tablet.data.auxiliary.DisplayData;
-import tablet.gui.viewer.*;
-
 import scri.commons.gui.*;
 
-public class FindPanel extends JPanel implements ListSelectionListener
+import tablet.data.*;
+import tablet.gui.viewer.*;
+import tablet.analysis.*;
+import tablet.analysis.Finder.*;
+import tablet.gui.dialog.*;
+
+public class FindPanel extends JPanel implements ListSelectionListener, ActionListener
 {
 	private NBFindPanelControls controls;
 	private AssemblyPanel aPanel;
 	private FindTableModel tableModel;
 	private ContigsPanel cPanel;
-	private WinMain winMain;
 	private int found;
 	Finder finder;
 
@@ -30,12 +29,11 @@ public class FindPanel extends JPanel implements ListSelectionListener
 	public FindPanel(AssemblyPanel aPanel, WinMain winMain, final JTabbedPane ctrlTabs)
 	{
 		this.aPanel = aPanel;
-		this.winMain = winMain;
 		this.cPanel = winMain.getContigsPanel();
 
 		controls = new NBFindPanelControls(this);
 
-		finder = new Finder();
+		finder = new Finder(aPanel);
 
 		// Additional (duplicate) table-clicked handler to catch the user
 		// re-clicking on the same row. This doesn't generate a table event, but
@@ -71,7 +69,7 @@ public class FindPanel extends JPanel implements ListSelectionListener
 	void setTableModel(LinkedList<SearchResult> results)
 	{
 		// Note: the model is created to be non-editable
-		tableModel = new FindTableModel(results) {
+		tableModel = new FindTableModel(results, this) {
         	public boolean isCellEditable(int rowIndex, int mColIndex) {
         		return false;
         }};
@@ -103,12 +101,16 @@ public class FindPanel extends JPanel implements ListSelectionListener
 
 		// Convert from view->model (deals with user-sorted table)
 		row = controls.table.convertRowIndexToModel(row);
-
-		Read read = (Read) tableModel.getValueAt(row, 8);
 		Contig contig = (Contig) tableModel.getValueAt(row, 9);
+		int pos = (Integer)tableModel.getValueAt(row, 1)-1;
 
 		updateContigsTable(contig);
-		highlightRead(read, contig);
+
+		aPanel.moveToPosition(0, pos, true);
+		
+		Read read = getRead(pos, (String)tableModel.getValueAt(row, 0));
+		if(read != null)
+			highlightRead(read, contig);
 	}
 
 	String getTableToolTip(MouseEvent e)
@@ -116,12 +118,13 @@ public class FindPanel extends JPanel implements ListSelectionListener
 		int row = controls.table.rowAtPoint(e.getPoint());
 		row = controls.table.convertRowIndexToModel(row);
 
+		int end = ((Integer)tableModel.getValueAt(row, 1)+(Integer)tableModel.getValueAt(row, 2));
+
 		return RB.format("gui.NBFindPanelControls.tooltip",
 			tableModel.getValueAt(row, 0),
 			tableModel.getValueAt(row, 3),
 			TabletUtils.nf.format(tableModel.getValueAt(row, 1)),
-			TabletUtils.nf.format(
-				((Read)tableModel.getValueAt(row, 8)).getEndPosition()+1),
+			TabletUtils.nf.format(end),
 			tableModel.getValueAt(row, 2));
 	}
 
@@ -138,7 +141,7 @@ public class FindPanel extends JPanel implements ListSelectionListener
 			if(cPanel.getTable().getValueAt(i, 0).equals(contig))
 			{
 				cPanel.getTable().setRowSelectionInterval(i, i);
-				Contig ctg = (Contig) cPanel.getTable().getValueAt(i, 0);
+				//Contig ctg = (Contig) cPanel.getTable().getValueAt(i, 0);
 				foundInTable = true;
 				break;
 			}
@@ -165,8 +168,8 @@ public class FindPanel extends JPanel implements ListSelectionListener
 		else
 			lineIndex = contig.getPackSetManager().getLineForRead(read);
 
-		final int startPos = read.getStartPosition() - contig.getVisualStart();
-
+		final int startPos = read.getStartPosition()/* - contig.getVisualStart()*/;
+		
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run()
 			{
@@ -183,7 +186,10 @@ public class FindPanel extends JPanel implements ListSelectionListener
 
 	public void resetFinder()
 	{
-		finder = new Finder();
+		if(aPanel.getAssembly().getBamBam() == null)
+			finder = new Finder(aPanel);
+		else
+			finder = new BamFinder(aPanel);
 	}
 
 	public void toggleComponentEnabled(boolean enabled)
@@ -196,152 +202,98 @@ public class FindPanel extends JPanel implements ListSelectionListener
 		if(assembly == null)
 			toggleComponentEnabled(false);
 
-		finder.results = null;
+		finder.setResults(null);
 		controls.table.setModel(new DefaultTableModel());
 		controls.table.invalidate();
 	}
-
-	/**
-	 * Class extends Simplejob such that a search on reads can be run
-	 * that keeps track of its progress.
-	 */
-	class Finder extends SimpleJob
+	
+	public void runSearch()
 	{
-		LinkedList<SearchResult> results;
-
-		private LinkedList<SearchResult> search(String str, int selectedIndex)
+		try
 		{
-			found = 0;
-			progress = 0;
-			maximum = 0;
-			results = new LinkedList<SearchResult>();
-
-			//Work out the total number of reads across all contigs
-			for(Contig contig : aPanel.getAssembly())
+			resetFinder();
+			setTableModel(null);
+			finder.setSearchTerm(controls.findCombo.getText());
+			if(controls.findInCombo.getSelectedIndex() == 0)
 			{
-				maximum += contig.getReads().size();
+				finder.setSearchType(Finder.CURRENT_CONTIG);
 			}
-
-			//Loop over contigs checking for matches
-			for(Contig contig : aPanel.getAssembly())
+			else if(controls.findInCombo.getSelectedIndex() == 1)
 			{
-				if(selectedIndex == 1 || (selectedIndex == 0 && contig == aPanel.getContig()))
+				finder.setSearchType(Finder.ALL_CONTIGS);
+			}
+			if (controls.findCombo.getText() != null)
+			{
+				controls.findCombo.updateComboBox((String) controls.findCombo.getSelectedItem());
+				Prefs.recentSearches = controls.findCombo.getHistory();
+			}
+			ProgressDialog dialog = new ProgressDialog(finder, RB.getString("gui.NBFindPanelControls.progressTitle"), RB.getString("gui.NBFindPanelControls.progressLabel"));
+			if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
+			{
+				if (dialog.getResult() == ProgressDialog.JOB_FAILED)
 				{
-					if(selectedIndex == 0)
-					{
-						maximum = contig.getReads().size();
-					}
-					for(Read read : contig.getReads())
-					{
-						if(okToRun)
-						{
-							checkForMatches(read, str, results, contig);
-							//if we've had 500 matches stop searching
-							if (results.size() >= 500)
-								break;
-						}
-					}
+					System.out.println(dialog.getException());
 				}
 
-				if (results.size() >= 500)
-				{
-					break;
-				}
+				return;
 			}
-			controls.resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", results.size()));
+		}
+		catch (Exception ex)
+		{
+			ex.printStackTrace();
+		}
+		Prefs.guiFindPanelSelectedIndex = controls.findInCombo.getSelectedIndex();
 
-			return results;
+		LinkedList<SearchResult> results = finder.getResults();
+		controls.resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", results.size()));
+		setTableModel(results);
+	}
+
+	public void actionPerformed(ActionEvent e)
+	{
+		if (e.getSource() == controls.bFind)
+		{
+			runSearch();
 		}
 
-		/**
-		 * Method which collates the results which match the search query
-		 *
-		 * @param read
-		 * @param str
-		 * @param results
-		 * @param contig
-		 */
-		private void checkForMatches(Read read, String pattern, LinkedList<SearchResult> results, Contig contig)
+		else if(e.getSource() == controls.helpLabel)
 		{
-			ReadMetaData rmd = Assembly.getReadMetaData(read, false);
-
-			Pattern p = Pattern.compile(pattern);
-			Matcher m = p.matcher(rmd.getName());
-
-			if ((Prefs.guiRegexSearching && m.matches()) ||
-				(!Prefs.guiRegexSearching && rmd.getName().equals(pattern)))
-			{
-				results.add(new SearchResult(read, contig, rmd));
-				found++;
-			}
-			progress++;
+			// TODO: This should be a link to a section of Tablet help
+			TabletUtils.visitURL("http://java.sun.com/javase/7/docs/api/java/util/regex/Pattern.html#sum");
 		}
 
-		public void runJob(int jobIndex) throws Exception
+		else if (e.getSource() == controls.checkUseRegex)
 		{
-			try { Pattern.compile(controls.findCombo.getText()); }
-				catch (PatternSyntaxException e)
-				{
-					TaskDialog.error(
-						RB.format("gui.FindPanel.regexError", e),
-						RB.getString("gui.text.close"));
-					return;
-				}
-
-			results = search(controls.findCombo.getText(), controls.findInCombo.getSelectedIndex());
-
-			setTableModel(results);
-
-			//if we've had 500 matches stop searching
-			if (results.size() >= 500)
-				showWarning();
-		}
-
-		public String getMessage()
-		{
-			return RB.getString("gui.NBFindPanelControls.progressMessage")+ " " + found;
-		}
-
-		private void showWarning()
-		{
-			if (Prefs.guiWarnSearchLimitExceeded)
-			{
-				String msg = RB.getString("gui.findPanel.guiWarnSearchLimitExceeded");
-				JCheckBox checkbox = new JCheckBox();
-				RB.setText(checkbox, "gui.findPanel.checkWarning");
-				String[] options = new String[]{RB.getString("gui.text.ok")};
-				TaskDialog.show(msg, TaskDialog.QST, 0, checkbox, options);
-				Prefs.guiWarnSearchLimitExceeded = !checkbox.isSelected();
-			}
+			Prefs.guiRegexSearching = controls.checkUseRegex.isSelected();
 		}
 	}
 
-	class SearchResult
+	public Read getRead(int position, String name)
 	{
-		private Read read;
-		private ReadMetaData rmd;
-		private Contig contig;
+		IReadManager manager;
 
-		SearchResult(Read read, Contig contig, ReadMetaData rmd)
-		{
-			this.read = read;
-			this.contig = contig;
-			this.rmd = rmd;
-		}
+		// Get the pack or stack set for searching in
+		if(Prefs.visPacked)
+			manager = aPanel.getContig().getPackSetManager();
+		else
+			manager = aPanel.getContig().getStackSetManager();
 
-		public Read getRead()
+		int i = 0;
+		// Loop over the rows of the packset until we find out read (with an
+		// insurance step to ensure that we never search for a number of times
+		// greater than the packset size.
+		while(i < manager.size())
 		{
-			return read;
+			// Get the read at this row and position.
+			Read read = manager.getReadAt(i, position);
+			ReadMetaData rmd = Assembly.getReadMetaData(read, false);
+			// Check if this is the read we are looking for
+			if(rmd.getName().equals(name))
+			{
+				return read;
+			}
+			i++;
 		}
-
-		public ReadMetaData getReadMetaData()
-		{
-			return rmd;
-		}
-
-		public Contig getContig()
-		{
-			return contig;
-		}
+		return null;
 	}
 }

@@ -120,20 +120,10 @@ public class GFF3Reader extends TrackableReader
 			if (newFeatures == null)
 				continue;
 
-			ArrayList<Feature> features = contig.getFeatures();
-
-			loop:
-			for (Feature newFeature: newFeatures)
-			{
-				// Check it doesn't already exist
-				for (int i = 0; i < features.size(); i++)
-					if (features.get(i).isSameAs(newFeature))
-						continue loop;
-
-				features.add(newFeature);
-			}
-
-			Collections.sort(features);
+			for(Feature feature : newFeatures)
+				contig.addFeature(feature);
+			
+			Collections.sort(contig.getFeatures());
 		}
 	}
 }
