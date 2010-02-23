@@ -45,7 +45,7 @@ public class DisplayDataCalculator extends SimpleJob
 			int length = contig.getConsensus().length();
 
 			// The padded->unpadded mapping array...
-			if (Prefs.cachePaddedMap && length > 1000000)
+			if (Prefs.cacheMappings && length > 1000000)
 			{
 				File cache = new File(Prefs.cacheDir, "Tablet-" + assembly.getCacheID() + ".paddedmap");
 				paddedToUnpadded = new ArrayIntFileCache(cache);
@@ -54,7 +54,7 @@ public class DisplayDataCalculator extends SimpleJob
 				paddedToUnpadded = new ArrayIntMemCache(length);
 
 			// The unpadded->padded mapping array...
-			if (Prefs.cacheUnpaddedMap && length > 1000000)
+			if (Prefs.cacheMappings && length > 1000000)
 			{
 				File cache = new File(Prefs.cacheDir, "Tablet-" + assembly.getCacheID() + ".unpaddedmap");
 				unpaddedToPadded = new ArrayIntFileCache(cache);

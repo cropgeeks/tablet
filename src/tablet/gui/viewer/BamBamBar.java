@@ -6,14 +6,23 @@ package tablet.gui.viewer;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.text.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
 import tablet.data.*;
+import tablet.gui.*;
+import tablet.gui.dialog.prefs.*;
+import tablet.gui.ribbon.*;
 
-class BamBamBar extends JPanel
+import scri.commons.gui.*;
+
+class BamBamBar extends JPanel implements IOverlayRenderer
 {
+	private static DecimalFormat d = new DecimalFormat("0.000");
+
 	private AssemblyPanel aPanel;
+	private ReadsCanvas rCanvas;
 	private BamBam bambam;
 	private Contig contig;
 
@@ -46,6 +55,7 @@ class BamBamBar extends JPanel
 	void setAssemblyPanel(AssemblyPanel aPanel)
 	{
 		this.aPanel = aPanel;
+		rCanvas = aPanel.readsCanvas;
 	}
 
 	void setContig(Contig contig)
@@ -60,6 +70,45 @@ class BamBamBar extends JPanel
 			gVS = gVE = null;
 			isNewContig = true;
 		}
+	}
+
+	private void updateOverlay()
+	{
+		if (isDragging)
+			rCanvas.overlays.addLast(this);
+		else
+			rCanvas.overlays.remove(this);
+	}
+
+	public void render(Graphics2D g)
+	{
+		FontMetrics fm = g.getFontMetrics();
+
+		// Fade out the main canvas so the text can be seen clearly
+		g.setPaint(new Color(255, 255, 255, 200));
+		g.fillRect(0, 0, rCanvas.getWidth(), rCanvas.getHeight());
+
+		String label = TabletUtils.nf.format(vS+1) + " - "
+			+ TabletUtils.nf.format(vE+1);
+		int width = fm.stringWidth(label);
+		int x = rCanvas.pX1 + ((rCanvas.pX2Max-rCanvas.pX1)/2) - (width/2);
+		g.setColor(Color.red);
+		g.drawString(label, x, 50);
+
+		label = RB.format("gui.viewer.BamBamBar.label2",
+			TabletUtils.nf.format(vE-vS+1),
+			d.format((vE-vS+1)/(float)contig.getDataWidth()*100));
+		width = fm.stringWidth(label);
+		x = rCanvas.pX1 + ((rCanvas.pX2Max-rCanvas.pX1)/2) - (width/2);
+		g.setColor(Color.gray);
+		g.drawString(label, x, 80);
+
+		String ctrl = SystemUtils.isMacOS() ? RB.getString("gui.text.cmnd") :
+			RB.getString("gui.text.ctrl");
+		label = RB.format("gui.viewer.BamBamBar.label3", ctrl);
+		width = fm.stringWidth(label);
+		x = rCanvas.pX1 + ((rCanvas.pX2Max-rCanvas.pX1)/2) - (width/2);
+		g.drawString(label, x, 100);
 	}
 
 	private void trackVariables()
@@ -160,36 +209,59 @@ class BamBamBar extends JPanel
 		}
 	}
 
-	private class MouseHandler extends MouseInputAdapter
+	private class MouseHandler extends MouseInputAdapter implements ActionListener
 	{
+		private JMenuItem mOptions;
+		private JMenuItem mGhost;
+
 		// Width of a visual block (updated on mouseDown)
 		private int vW;
 
 		public void mousePressed(MouseEvent e)
 		{
-			// Update the ghost bar
-			gVS = vS;
-			gVE = vE;
+			if (e.isPopupTrigger())
+				displayMenu(e);
 
-			// Track what the current width is
-			vW = vE - vS + 1;
+			else if (SwingUtilities.isLeftMouseButton(e))
+			{
+				// Update the ghost bar
+				gVS = vS;
+				gVE = vE;
 
-			isDragging = true;
-			mouseDragged(e);
+				// Track what the current width is
+				vW = vE - vS + 1;
+
+				isDragging = true;
+				updateOverlay();
+
+				mouseDragged(e);
+			}
 		}
 
 		public void mouseReleased(MouseEvent e)
 		{
-			// Update contig
-			aPanel.processBamDataChange();
-			aPanel.moveToPosition(-1, vS, false);
+			if (e.isPopupTrigger())
+				displayMenu(e);
 
-			isDragging = false;
-			repaint();
+			else if (isDragging)
+			{
+				// Update contig
+				aPanel.processBamDataChange();
+				aPanel.moveToPosition(-1, vS, false);
+
+				isDragging = false;
+				updateOverlay();
+
+				rCanvas.repaint();
+				repaint();
+			}
 		}
 
 		public void mouseDragged(MouseEvent e)
 		{
+			if (isDragging == false)
+				return;
+
 			// Visual start must be the mouse position minus half a block width
 			vS = (int) (e.getPoint().x / xScale) - (vW / 2);
 
@@ -199,9 +271,44 @@ class BamBamBar extends JPanel
 			vS = bambam.getS();
 			vE = bambam.getE();
 
-			System.out.println(vS + " to " + vE);
-
+			rCanvas.repaint();
 			repaint();
+		}
+
+		private void displayMenu(MouseEvent e)
+		{
+			JPopupMenu menu = new JPopupMenu();
+
+			mGhost = new JMenuItem("", Icons.getIcon("RETURNTOGHOST16"));
+			RB.setText(mGhost, "gui.viewer.BamBamBar.mGhost");
+			mGhost.addActionListener(this);
+			mGhost.setEnabled(gVS != null);
+			menu.add(mGhost);
+			menu.addSeparator();
+
+			mOptions = new JMenuItem("", Icons.getIcon("OPTIONS16"));
+			RB.setText(mOptions, "gui.viewer.BamBamBar.mOptions");
+			mOptions.addActionListener(this);
+			menu.add(mOptions);
+
+			menu.show(e.getComponent(), e.getX(), e.getY());
+		}
+
+		public void actionPerformed(ActionEvent e)
+		{
+			// Open up Prefs, then force an update with a new window size
+			if (e.getSource() == mOptions)
+			{
+				ApplicationMenu.displayPreferences(1);
+			}
+
+			// Jump the display back to the position of the ghost bar
+			else if (e.getSource() == mGhost)
+			{
+				bambam.setBlockStart(contig, gVS);
+				aPanel.processBamDataChange();
+				aPanel.moveToPosition(-1, gVS, false);
+			}
 		}
 	}
 }

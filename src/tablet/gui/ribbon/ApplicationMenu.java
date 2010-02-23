@@ -251,10 +251,7 @@ public class ApplicationMenu extends RibbonApplicationMenu
 			new AboutDialog();
 
 		else if (icon == iOptions)
-		{
-			new PreferencesDialog();
-			winMain.validateCacheFolder();
-		}
+			displayPreferences(null);
 
 		else if (icon == iExit)
 		{
@@ -266,6 +263,12 @@ public class ApplicationMenu extends RibbonApplicationMenu
 
 		else if (e.getSource() == bCoverage)
 			winMain.getCommands().exportCoverage();
+	}
+
+	public static void displayPreferences(Integer tab)
+	{
+		new PreferencesDialog(tab);
+		Tablet.winMain.validateCacheFolder();
 	}
 
 	private class ExportClass implements RibbonApplicationMenuEntryPrimary.PrimaryRolloverCallback

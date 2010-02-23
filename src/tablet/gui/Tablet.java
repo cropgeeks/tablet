@@ -11,6 +11,7 @@ import javax.swing.*;
 
 import tablet.gui.dialog.*;
 import tablet.gui.dialog.prefs.*;
+import tablet.gui.ribbon.*;
 
 import scri.commons.gui.*;
 import scri.commons.file.*;
@@ -211,7 +212,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 	/** "Preferences" on the OS X system menu. */
 	public void osxPreferences()
 	{
-		new PreferencesDialog();
+		ApplicationMenu.displayPreferences(null);
 	}
 
 	/** "About Tablet" on the OS X system menu. */

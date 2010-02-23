@@ -123,8 +123,10 @@ public class Prefs extends XMLPreferences
 
 	// Disk caching options
 	public static boolean cacheReads = true;
-	public static boolean cachePaddedMap = true;
-	public static boolean cacheUnpaddedMap = true;
+	public static boolean cacheMappings = true;
+
+	// Bam assembly options
+	public static int bamSize = 25000;
 
 	static void setDefaults()
 	{
