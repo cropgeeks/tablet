@@ -139,6 +139,9 @@ class BamBamBar extends JPanel implements IOverlayRenderer
 		}
 
 		isNewContig = false;
+
+		canvas.setToolTipText(RB.format("gui.viewer.BamBamBar.tooltip",
+			vS+1, vE+1));
 	}
 
 	private class Canvas2D extends JPanel
@@ -246,8 +249,11 @@ class BamBamBar extends JPanel implements IOverlayRenderer
 			else if (isDragging)
 			{
 				// Update contig
-				aPanel.processBamDataChange();
-				aPanel.moveToPosition(-1, vS, false);
+				if (vS != gVS || vE != gVE)
+				{
+					aPanel.processBamDataChange();
+					aPanel.moveToPosition(-1, vS, false);
+				}
 
 				isDragging = false;
 				updateOverlay();
