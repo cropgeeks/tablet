@@ -43,8 +43,9 @@ public class Contig
 	// Supplementary set of features used purely for graphical outlining
 	private ArrayList<Feature> outlines = new ArrayList<Feature>();
 
-	private float mismatches = 0;
-
+	// A count of how many reads (so far) have supplied mismatch data
+	private float mismatchedReads = 0;
+	// And the overall average mismatch percentage
 	private float mismatchPercentage = 0;
 
 	/** Constructs a new, empty contig. */
@@ -145,8 +146,6 @@ public class Contig
 
 	public void calculateOffsets(Assembly assembly)
 	{
-		calculatePercentageMismatch();
-
 		dataS = visualS = 0;
 		dataE = visualE = consensus.length() - 1;
 
@@ -180,14 +179,22 @@ public class Contig
 	/**
 	 * Clears any references to this contig's pack and stack sets. To be called
 	 * when a contig is no longer on screen (as these object's are only needed
-	 * at display time).
+	 * at display time). Is also called by the BAM loader as it loads in a new
+	 * block of data (with doFullReset=true) to clear some of the stat values.
 	 */
-	public void clearPackSet()
+	public void clearContigData(boolean doFullReset)
 	{
 		readManager = null;
 
 		packSet = null;
 		stackSet = null;
+
+		if (doFullReset)
+		{
+			reads.clear();
+			mismatchedReads = 0;
+			mismatchPercentage = 0;
+		}
 	}
 
 	/**
@@ -253,21 +260,18 @@ public class Contig
 			outlines.remove(0);
 	}
 
-	public void incrementMistmatches(float mismatches)
-	{
-		this.mismatches += mismatches;
-	}
-
 	public float getMismatchPercentage()
-	{
-		return mismatchPercentage;
-	}
+		{ return mismatchPercentage; }
 
-	private void calculatePercentageMismatch()
+	public void addReadMismatch(float value)
 	{
-		mismatchPercentage = mismatches / (float)reads.size();
-		if(reads.size() == 0)
-			mismatchPercentage = 0;
+		// Average of averages:
+		//  avg = ( (oldAvg * (n-1)) + value ) / n
+
+		mismatchedReads++;
+
+		mismatchPercentage = ((mismatchPercentage * (mismatchedReads-1))
+			+ value) / mismatchedReads;
 	}
 
 	public void addFeature(Feature newFeature)

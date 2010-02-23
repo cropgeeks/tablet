@@ -36,26 +36,28 @@ public class BasePositionComparator
 			}
 			else
 			{
-				count++;
 				// The DNATable encodes its states so that A and dA are
 				// only ever 1 byte apart, meaning we can change quickly
 				// by just incrementing the value by one
 				if (contig.getConsensus().getStateAt(c) != value)
 				{
 					read.setStateAt(r, (byte)(value+1));
-
 					mismatches++;
 				}
+
+				count++;
 			}
 		}
-		//calculate the mismatch percentage for this read
-		float mismatchPercentage = calculateMismatchPercentage(mismatches, count);
-		//add to the total percentage mismatch of the contig
-		contig.incrementMistmatches(mismatchPercentage);
-	}
 
-	private static float calculateMismatchPercentage(float mismatches, float readLength)
-	{
-		return (mismatches / readLength)*100f;
+		//calculate the mismatch percentage for this read
+		if (count > 0)
+		{
+			float mismatchPercentage = (mismatches / (float)count) * 100f;
+
+			//add to the total percentage mismatch of the contig
+			contig.addReadMismatch(mismatchPercentage);
+		}
+		else
+			contig.addReadMismatch(100);
 	}
 }

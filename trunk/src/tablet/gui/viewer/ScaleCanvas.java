@@ -61,16 +61,10 @@ class ScaleCanvas extends TrackingCanvas
 
 	void setContig(Contig contig)
 	{
-		// Clear the packset data from any existing contig
-		if (this.contig != null)
-			this.contig.clearPackSet();
-
 		// Remove tablet.data references if nothing is going to be displayed
 		if (contig == null)
-		{
-			DisplayData.clearData();
 			consensus = null;
-		}
+
 		else
 			consensus = contig.getConsensus();
 
