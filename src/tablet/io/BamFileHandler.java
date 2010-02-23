@@ -18,6 +18,8 @@ public class BamFileHandler
 	private Assembly assembly;
 	private int readID;
 
+	private boolean okToRun = true;
+
 	BamFileHandler(IReadCache readCache, SAMFileReader bamReader, Assembly assembly)
 	{
 		this.bamReader = bamReader;
@@ -25,12 +27,13 @@ public class BamFileHandler
 		this.assembly = assembly;
 	}
 
+	public void cancel()
+		{ okToRun = false; }
+
 	public void loadData(Contig contig, int s, int e)
 		throws Exception
 	{
-		long ts = System.currentTimeMillis();
-
-		// TODO-BAM: need a way to cancel
+		okToRun = true;
 		readID = 0;
 
 		// Reset the read cache for each new block of data
@@ -47,7 +50,7 @@ public class BamFileHandler
 
 		CloseableIterator<SAMRecord> itor = bamReader.query(contig.getName(), s+1, e+1, false);
 
-		while(itor.hasNext())
+		while(itor.hasNext() && okToRun)
 		{
 			SAMRecord record = itor.next();
 			if (!record.getReadUnmappedFlag())
@@ -58,17 +61,21 @@ public class BamFileHandler
 
 		itor.close();
 
-		processCigarFeatures(parser, contig);
+		if (okToRun)
+			processCigarFeatures(parser, contig);
 
-		readCache.openForReading();
-		assembly.setReadCache(readCache);
+		if (okToRun)
+		{
+			readCache.openForReading();
+			assembly.setReadCache(readCache);
+		}
 
-		contig.getReads().trimToSize();
-		Collections.sort(contig.getReads());
-		contig.calculateOffsets(assembly);
-
-		long te = System.currentTimeMillis();
-		System.out.println("Loaded " + s + "-" + e + " in " + (te-ts) + "ms");
+		if (okToRun)
+		{
+			contig.getReads().trimToSize();
+			Collections.sort(contig.getReads());
+			contig.calculateOffsets(assembly);
+		}
 	}
 
 	private void createRead(Contig contig, final SAMRecord record, CigarParser parser) throws Exception

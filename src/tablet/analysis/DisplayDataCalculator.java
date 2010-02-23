@@ -134,6 +134,9 @@ public class DisplayDataCalculator extends SimpleJob
 			cc.cancelJob();
 		if (ps != null)
 			ps.cancelJob();
+
+		if (assembly.getBamBam() != null)
+			assembly.getBamBam().getBamFileHandler().cancel();
 	}
 
 	public int getMaximum()
