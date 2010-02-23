@@ -80,4 +80,9 @@ public class BamBam
 	{
 		return size;
 	}
+
+	public BamFileHandler getBamFileHandler()
+	{
+		return bamHandler;
+	}
 }

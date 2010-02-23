@@ -212,10 +212,10 @@ class SamFileReader extends TrackableReader
 			int count = parser.getFeatureMap().get(feature);
 			CigarFeature cigarFeature = new CigarFeature("CIGAR-I", "",
 				Integer.parseInt(featureElements[1]) - 1, Integer.parseInt(featureElements[1]), count);
-			Contig ctg = contigHash.get(featureElements[0]);
-			if (ctg != null)
+			Contig contig = contigHash.get(featureElements[0]);
+			if (contig != null)
 			{
-				ctg.getFeatures().add(cigarFeature);
+				contig.addFeature(cigarFeature);
 			}
 		}
 

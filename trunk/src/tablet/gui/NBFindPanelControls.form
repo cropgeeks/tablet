@@ -149,11 +149,17 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Get help with searching"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
     </Component>
     <Component class="javax.swing.JCheckBox" name="checkUseRegex">
       <Properties>
         <Property name="text" type="java.lang.String" value="Use Java regular expressions"/>
       </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+      </AuxValues>
     </Component>
   </SubComponents>
 </Form>

@@ -1,5 +1,6 @@
 package tablet.io;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 import tablet.analysis.*;
@@ -102,8 +103,14 @@ public class BamFileHandler
 			CigarFeature cigarFeature = new CigarFeature("CIGAR-I", "",
 				Integer.parseInt(featureElements[1]) - 1, Integer.parseInt(featureElements[1]), count);
 
-			contig.getFeatures().add(cigarFeature);
+			contig.addFeature(cigarFeature);
 		}
+
 		Collections.sort(contig.getFeatures());
+	}
+
+	public SAMFileReader getBamReader()
+	{
+		return bamReader;
 	}
 }
