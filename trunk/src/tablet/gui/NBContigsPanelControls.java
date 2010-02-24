@@ -128,13 +128,13 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
 				float number = nf.parse(textField.getText()).floatValue();
 				rf = RowFilter.numberFilter(ComparisonType.BEFORE, number+1, 4);
 			}
+			
+			panel.setTableFilter(rf);
 		}
 		catch (Exception e)
 		{
 			System.out.println(e);
 		}
-
-		panel.setTableFilter(rf);
 	}
 
 	void setEnabledState(boolean state)
