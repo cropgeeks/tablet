@@ -31,8 +31,18 @@ public class GFF3Reader extends TrackableReader
 		in = new BufferedReader(new InputStreamReader(getInputStream(0, true)));
 		str = readLine();
 
-		boolean isGFF3File = (str != null
-			&& str.trim().toLowerCase().startsWith("##gff-version3"));
+		boolean isGFF3File = false;
+
+		if (str != null && str.trim().toLowerCase().startsWith("##gff-version"))
+		{
+			try
+			{
+				// Deals with "##gff-version3" "##gff-version 3" etc
+				if (Integer.parseInt(str.substring(13).trim()) == 3)
+					isGFF3File = true;
+			}
+			catch (Exception e) {}
+		}
 
 		in.close();
 		is.close();
@@ -122,7 +132,7 @@ public class GFF3Reader extends TrackableReader
 
 			for(Feature feature : newFeatures)
 				contig.addFeature(feature);
-			
+
 			Collections.sort(contig.getFeatures());
 		}
 	}
