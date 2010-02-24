@@ -49,15 +49,6 @@ public class BasePositionComparator
 			}
 		}
 
-		//calculate the mismatch percentage for this read
-		if (count > 0)
-		{
-			float mismatchPercentage = (mismatches / (float)count) * 100f;
-
-			//add to the total percentage mismatch of the contig
-			contig.addReadMismatch(mismatchPercentage);
-		}
-		else
-			contig.addReadMismatch(100);
+		contig.incrementMismatchData(count, mismatches);
 	}
 }
