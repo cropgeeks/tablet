@@ -43,10 +43,10 @@ public class Contig
 	// Supplementary set of features used purely for graphical outlining
 	private ArrayList<Feature> outlines = new ArrayList<Feature>();
 
-	// A count of how many reads (so far) have supplied mismatch data
-	private float mismatchedReads = 0;
-	// And the overall average mismatch percentage
-	private float mismatchPercentage = 0;
+	// A count of how many bases (so far) have had mismatch data counted
+	private long mmTotalBases = 0;
+	// And the overall average mismatch count
+	private long mmMismatches = 0;
 
 	/** Constructs a new, empty contig. */
 	public Contig()
@@ -192,8 +192,8 @@ public class Contig
 		if (doFullReset)
 		{
 			reads.clear();
-			mismatchedReads = 0;
-			mismatchPercentage = 0;
+			mmTotalBases = 0;
+			mmMismatches = 0;
 		}
 	}
 
@@ -261,17 +261,12 @@ public class Contig
 	}
 
 	public float getMismatchPercentage()
-		{ return mismatchPercentage; }
+		{ return mmMismatches / (float) mmTotalBases * 100f; }
 
-	public void addReadMismatch(float value)
+	public void incrementMismatchData(long bases, long mismatches)
 	{
-		// Average of averages:
-		//  avg = ( (oldAvg * (n-1)) + value ) / n
-
-		mismatchedReads++;
-
-		mismatchPercentage = ((mismatchPercentage * (mismatchedReads-1))
-			+ value) / mismatchedReads;
+		mmTotalBases += bases;
+		mmMismatches += mismatches;
 	}
 
 	public void addFeature(Feature newFeature)
