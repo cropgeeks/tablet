@@ -139,11 +139,14 @@ public class ImportAssemblyDialog extends JDialog
 		String filename = null;
 		String title = RB.getString("gui.dialog.ImportAssemblyDialog.browse");
 
-		if (combo.getText().length() > 0)
+		String str = combo.getText();
+		// Only use the existing entry if its length > 0 && not a web address
+		if (str.length() > 0 && !str.toLowerCase().startsWith("http://"))
 		{
-			File file = new File(combo.getText());
+			File file = new File(str);
 			filename = TabletUtils.getOpenFilename(title, file, filters, -1);
 		}
+		// Otherwise pass null to the dialog which will use the last used dir
 		else
 			filename = TabletUtils.getOpenFilename(title, null, filters, -1);
 
