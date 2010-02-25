@@ -45,6 +45,13 @@ public class Consensus extends Sequence
 		{ this.bq = bq; }
 
 	/**
+	 * Returns true if this consensus sequence contains quality scores for its
+	 * bases.
+	 */
+	public boolean hasBaseQualities()
+		{ return bq != null; }
+
+	/**
 	 * Returns an array of base quality data, starting at start and ending at
 	 * end. These values may be outside of the actual start and end values for
 	 * the consensus, in which case -1 will be returned for those positions.

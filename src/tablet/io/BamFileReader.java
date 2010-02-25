@@ -194,9 +194,6 @@ public class BamFileReader extends TrackableReader
 		consensus.calculateUnpaddedLength();
 		contig.setConsensusSequence(consensus);
 
-		byte[] bq = new byte[consensus.length()];
-		consensus.setBaseQualities(bq);
-
 		assembly.addContig(contig);
 	}
 
