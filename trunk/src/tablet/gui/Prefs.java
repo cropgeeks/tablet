@@ -128,6 +128,8 @@ public class Prefs extends XMLPreferences
 	// Bam assembly options
 	public static int bamSize = 25000;
 
+	public static boolean guiHideOverviewPositions = false;
+
 	static void setDefaults()
 	{
 
