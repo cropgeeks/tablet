@@ -23,14 +23,13 @@ public class SequenceTest extends TestCase
 			for (int s = 0; s < i; s++)
 				sb.append(rndNucleotide());
 
-			String str1 = sb.toString();
-			System.out.println(str1);
-			c.setData(str1);
+			System.out.println(sb);
+			c.setData(sb);
 
 			String str2 = c.toString();
 			System.out.println(str2);
 
-			assertEquals(str1, str2);
+			assertEquals(sb.toString(), str2);
 		}
 	}
 
@@ -44,9 +43,8 @@ public class SequenceTest extends TestCase
 		for (int s = 0; s < 10; s++)
 			sb.append(rndNucleotide());
 
-		String str1 = sb.toString();
-		System.out.println(str1);
-		c.setData(str1);
+		System.out.println(sb);
+		c.setData(sb);
 
 		for (int i = 0; i < c.length(); i++)
 		{
@@ -57,7 +55,7 @@ public class SequenceTest extends TestCase
 		String str2 = c.toString();
 		System.out.println(str2);
 
-		assertEquals(str1, str2);
+		assertEquals(sb.toString(), str2);
 	}
 
 	private String rndNucleotide()

@@ -176,8 +176,8 @@ class SamFileReader extends TrackableReader
 
 				contigToAddTo.getReads().add(read);
 
-				String fullRead = cigarParser.parse(
-					data.toString(), pos, cigar);
+				StringBuilder fullRead = new StringBuilder(cigarParser.parse(
+					data.toString(), pos, cigar));
 
 				ReadMetaData rmd = new ReadMetaData(name, complemented);
 				rmd.setData(fullRead);

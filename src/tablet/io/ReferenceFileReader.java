@@ -93,7 +93,7 @@ class ReferenceFileReader
 
 	private void addContig(Contig contig, Consensus consensus, StringBuilder sb)
 	{
-		consensus.setData(sb.toString());
+		consensus.setData(sb);
 		consensus.calculateUnpaddedLength();
 		contig.setConsensusSequence(consensus);
 
@@ -162,7 +162,7 @@ class ReferenceFileReader
 
 	private void addContig(Contig contig, Consensus consensus, StringBuilder sb, StringBuilder qlt)
 	{
-		consensus.setData(sb.toString());
+		consensus.setData(sb);
 		consensus.calculateUnpaddedLength();
 		contig.setConsensusSequence(consensus);
 

@@ -83,7 +83,8 @@ public class BamFileHandler
 		int readStartPos = record.getAlignmentStart()-1;
 		ReadMetaData rmd = new ReadMetaData(record.getReadName(), record.getReadNegativeStrandFlag());
 
-		String fullRead = parser.parse(new String(record.getReadBases()), readStartPos, record.getCigarString());
+		StringBuilder fullRead = new StringBuilder(
+			parser.parse(new String(record.getReadBases()), readStartPos, record.getCigarString()));
 		rmd.setData(fullRead);
 		Read read = new Read(readID, readStartPos);
 

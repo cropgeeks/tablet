@@ -108,7 +108,7 @@ class MaqFileReader extends TrackableReader
 			String[] tokens = str.split("\t");
 
 			String name = new String(tokens[0]);
-			String data = new String(tokens[14]);
+			StringBuilder data = new StringBuilder(tokens[14]);
 			String chr  = tokens[1];
 			boolean complemented = tokens[3].equals("-");
 			int pos = Integer.parseInt(tokens[2]) - 1;
@@ -131,7 +131,7 @@ class MaqFileReader extends TrackableReader
 				contigToAddTo.getReads().add(read);
 
 				ReadMetaData rmd = new ReadMetaData(name, complemented);
-				rmd.setData(data.toString());
+				rmd.setData(data);
 				rmd.calculateUnpaddedLength();
 				read.setLength(rmd.length());
 

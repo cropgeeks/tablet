@@ -120,7 +120,6 @@ class AfgFileReader extends TrackableReader
 	//parses a CTG tag -- this contains contig information (internal ID, external ID i.e. name, unpadded sequence, quality scores)
 	private void processContig() throws Exception
 	{
-		String consensusSeq = null; // the consensus sequence itself
 		String qualScores = null; // quality scores for consensus sequence
 
 		Consensus consensus = new Consensus();
@@ -156,10 +155,9 @@ class AfgFileReader extends TrackableReader
 				{
 					seqBuf.append(str);
 				}
-				consensusSeq = seqBuf.toString();
 
 				//deal with the consensus sequence
-				consensus.setData(consensusSeq);
+				consensus.setData(seqBuf);
 				consensus.calculateUnpaddedLength();
 				contig.setConsensusSequence(consensus);
 			}
@@ -267,7 +265,7 @@ class AfgFileReader extends TrackableReader
 			{
 				buf.insert(i, gapChar);
 			}
-			readMetaData.setData(buf.toString());
+			readMetaData.setData(buf);
 		}
 
 		//add read to this contig
@@ -309,7 +307,7 @@ class AfgFileReader extends TrackableReader
 				{
 					seqBuf.append(str);
 				}
-				readMetaData.setData(seqBuf.toString());
+				readMetaData.setData(seqBuf);
 			}
 		}
 
@@ -373,7 +371,7 @@ class AfgFileReader extends TrackableReader
 			sb.append(rmd.getComplementaryDNA(state));
 		}
 
-		rmd.setData(sb.toString());
+		rmd.setData(sb);
 	}
 
 	public String getMessage()
