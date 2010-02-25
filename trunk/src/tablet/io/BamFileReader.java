@@ -112,11 +112,14 @@ public class BamFileReader extends TrackableReader
 				maximum += baiLength;
 		}
 
-		readReferenceFile(files[refFile]);
-		downloadBaiFile();
+		if (okToRun)
+			readReferenceFile(files[refFile]);
+		if (okToRun)
+			downloadBaiFile();
 
 		isIndeterminate = true;
-		openBamFile();
+		if (okToRun)
+			openBamFile();
 
 		if (okToRun)
 		{

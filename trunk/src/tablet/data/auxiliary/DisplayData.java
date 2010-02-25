@@ -30,7 +30,7 @@ public class DisplayData
 	 * information by this consensus sequence. It is only needed at display time
 	 * and if this contig isn't visible it can be a massive waste of memory.
 	 */
-	public static void clearData()
+	public static void clearDisplayData()
 	{
 		try
 		{
@@ -40,6 +40,8 @@ public class DisplayData
 		}
 		catch (Exception e) {}
 
+		paddedToUnpadded = null;
+		unpaddedToPadded = null;
 		coverage = null;
 	}
 
@@ -72,6 +74,14 @@ public class DisplayData
 
 	public static void setAveragePercentage(float newAveragePercentage)
 		{ averagePercentage = newAveragePercentage; }
+
+	/** Returns true if paddedToUnpadded mapping data is available. */
+	public static boolean hasPaddedToUnpadded()
+		{ return paddedToUnpadded != null; }
+
+	/** Returns true if paddedToUnpadded mapping data is available. */
+	public static boolean hasUnpaddedToPadded()
+		{ return unpaddedToPadded != null; }
 
 	/**
 	 * Returns the unpadded index (within consensus index space) for the given

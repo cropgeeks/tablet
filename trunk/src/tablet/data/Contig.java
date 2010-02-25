@@ -261,7 +261,12 @@ public class Contig
 	}
 
 	public float getMismatchPercentage()
-		{ return mmMismatches / (float) mmTotalBases * 100f; }
+	{
+		if (mmTotalBases > 0)
+			return mmMismatches / (float) mmTotalBases * 100f;
+		else
+			return 0;
+	}
 
 	public void incrementMismatchData(long bases, long mismatches)
 	{

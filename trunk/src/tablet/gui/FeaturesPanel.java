@@ -116,6 +116,16 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		// Override position if we're using unpadded values
 		if (Prefs.guiFeaturesArePadded == false)
 		{
+			// Quick check in case the data isn't actually ready yet!
+			if (DisplayData.hasUnpaddedToPadded() == false)
+			{
+				TaskDialog.info(RB.getString("gui.FeaturesPanel.unavailable"),
+					RB.getString("gui.text.close"));
+
+				controls.table.clearSelection();
+				return;
+			}
+
 			start = DisplayData.unpaddedToPadded(start);
 			end = DisplayData.unpaddedToPadded(end);
 		}

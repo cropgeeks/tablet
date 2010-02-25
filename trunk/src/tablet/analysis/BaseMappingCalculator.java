@@ -4,6 +4,7 @@
 package tablet.analysis;
 
 import tablet.data.*;
+import tablet.data.auxiliary.*;
 import tablet.data.cache.*;
 
 /**
@@ -12,7 +13,7 @@ import tablet.data.cache.*;
  * SimpleJob it doesn't currently supply progress or maximum details as it runs
  * (mainly because it's so fast it's not worth it).
  */
-public class BaseMappingCalculator extends SimpleJob
+public class BaseMappingCalculator extends BackgroundJob
 {
 	private Consensus c;
 
@@ -28,12 +29,49 @@ public class BaseMappingCalculator extends SimpleJob
 		this.unpaddedToPadded = unpaddedToPadded;
 	}
 
-	public void runJob(int jobIndex)
+	public Boolean call()
 		throws Exception
 	{
+		Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+		Thread.currentThread().setName("BaseMappingCalculator");
+
+		// Because the BaseMappingCalculator (might) be accessing files, it's
+		// best to let any previous instances completely finish before starting
+		if (previous != null)
+			while (previous.isRunning)
+				try { Thread.sleep(50); }
+				catch (InterruptedException e) {}
+
+		paddedToUnpadded.openForWriting();
+		unpaddedToPadded.openForWriting();
+
 		calculatePaddedToUnpadded();
 		calculateUnpaddedToPadded();
+
+		if (okToRun)
+		{
+			paddedToUnpadded.openForReading();
+			unpaddedToPadded.openForReading();
+
+			DisplayData.setPaddedToUnpadded(paddedToUnpadded);
+			DisplayData.setUnpaddedToPadded(unpaddedToPadded);
+		}
+		else
+		{
+			paddedToUnpadded.close();
+			unpaddedToPadded.close();
+		}
+
+		// Remove any references to objects that were in use (to free memory)
+		c = null;
+		paddedToUnpadded = null;
+		unpaddedToPadded = null;
+
+		cleanup();
+
+		return true;
 	}
+
 
 	// Given a padded index value (0 to length-1) what is the unpadded value at
 	// that position?
@@ -78,7 +116,7 @@ public class BaseMappingCalculator extends SimpleJob
 		}
 
 		// Any left over positions can't map to anything
-		for (; map < length; map++)
+		for (; map < length && okToRun; map++)
 			unpaddedToPadded.addValue(-1);
 	}
 }

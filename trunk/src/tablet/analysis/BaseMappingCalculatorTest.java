@@ -23,7 +23,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		IArrayIntCache paddedToUnpadded = new ArrayIntMemCache(5);
 		IArrayIntCache unpaddedToPadded = new ArrayIntMemCache(5);
 		BaseMappingCalculator bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
-		bm.runJob(0);
+		bm.call();
 
 		int[] test1 = { -1, 0, 1, -1, 2 };
 		for (int i = 0; i < paddedToUnpadded.length(); i++)
@@ -35,7 +35,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
-		bm.runJob(0);
+		bm.call();
 
 		int[] test2 = { -1, -1, 0, -1, -1 };
 		for (int i = 0; i < paddedToUnpadded.length(); i++)
@@ -47,7 +47,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
-		bm.runJob(0);
+		bm.call();
 
 		int[] test3 = { 0, 1, -1, 2, 3 };
 		for (int i = 0; i < paddedToUnpadded.length(); i++)
@@ -59,7 +59,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
-		bm.runJob(0);
+		bm.call();
 
 		int[] test4 = { 0, 1, 2, -1, -1 };
 		for (int i = 0; i < paddedToUnpadded.length(); i++)
@@ -76,7 +76,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		IArrayIntCache paddedToUnpadded = new ArrayIntMemCache(5);
 		IArrayIntCache unpaddedToPadded = new ArrayIntMemCache(5);
 		BaseMappingCalculator bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
-		bm.runJob(0);
+		bm.call();
 
 		int[] test1 = { 1, 2, 4, -1, -1 };
 		for (int i = 0; i < unpaddedToPadded.length(); i++)
@@ -88,7 +88,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
-		bm.runJob(0);
+		bm.call();
 
 		int[] test2 = { -1, -1, -1, -1, -1 };
 		for (int i = 0; i < unpaddedToPadded.length(); i++)
@@ -100,7 +100,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
-		bm.runJob(0);
+		bm.call();
 
 		int[] test3 = { 0, 1, 2, 3, 4 };
 		for (int i = 0; i < unpaddedToPadded.length(); i++)
@@ -112,7 +112,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
-		bm.runJob(0);
+		bm.call();
 
 		int[] test4 = { 0, 2, 3, 4, -1 };
 		for (int i = 0; i < unpaddedToPadded.length(); i++)
