@@ -6,6 +6,7 @@ package tablet.gui.ribbon;
 import java.awt.event.*;
 import javax.swing.*;
 
+import tablet.data.auxiliary.*;
 import tablet.gui.*;
 
 import org.jvnet.flamingo.common.model.*;
@@ -117,6 +118,15 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 
 		else if (e.getSource() == Actions.homeNavigateJumpTo)
 		{
+			if (DisplayData.hasPaddedToUnpadded() == false &&
+				DisplayData.hasUnpaddedToPadded() == false)
+			{
+				TaskDialog.info(
+					RB.getString("gui.ribbon.HomeNavigateBand.jumpError"),
+					RB.getString("gui.text.close"));
+				return;
+			}
+
 			winMain.getJumpToDialog().setVisible(true);
 		}
 

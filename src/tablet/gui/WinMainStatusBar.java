@@ -6,16 +6,23 @@ package tablet.gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 import javax.swing.*;
 
 import scri.commons.gui.*;
 
 class WinMainStatusBar extends JPanel implements ActionListener
 {
-	private JLabel tipsLabel, helpLabel;
+	private JLabel tipsLabel, helpLabel, threadLabel;
 	private ArrayList<String> helpHints = new ArrayList<String>();
 
 	private int bgColor;
+
+	private AtomicInteger tCounter = TaskManager.getThreadCounter();
+	private int oldCounter = 0;
+
+	private javax.swing.Timer tipsTimer;
+	private javax.swing.Timer threadTimer;
 
 	WinMainStatusBar()
 	{
@@ -43,19 +50,59 @@ class WinMainStatusBar extends JPanel implements ActionListener
 		helpPanel.add(tipsLabel);
 		helpPanel.add(helpLabel);
 
+		// Start the timer
+		tipsTimer = new javax.swing.Timer(30000, this);
+		tipsTimer.setInitialDelay(0);
+		tipsTimer.start();
+
+
+		// Threads label code
+		threadLabel = new JLabel();
+		threadLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 5));
+		threadLabel.setHorizontalTextPosition(SwingConstants.LEFT);
+		threadTimer = new javax.swing.Timer(1000, this);
+		threadTimer.setInitialDelay(0);
+		threadTimer.start();
+		setThreadsLabel(0);
+
+
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createMatteBorder(1, 0, 0, 0, Color.gray));
 		add(helpPanel, BorderLayout.WEST);
-
-		// Start the timer
-		javax.swing.Timer timer = new javax.swing.Timer(30000, this);
-		timer.setInitialDelay(0);
-		timer.start();
+		add(threadLabel, BorderLayout.EAST);
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
-		new TipsThread().start();
+		if (e.getSource() == tipsTimer)
+			new TipsThread().start();
+
+		else if (e.getSource() == threadTimer)
+		{
+			int counter = tCounter.get();
+
+			if (counter != oldCounter)
+			{
+				setThreadsLabel(counter);
+				oldCounter = counter;
+			}
+		}
+	}
+
+	private void setThreadsLabel(int count)
+	{
+		threadLabel.setText("" + count);
+
+		if (count > 0)
+		{
+			threadLabel.setToolTipText(RB.format("gui.StatusBar.running", count));
+			threadLabel.setIcon(Icons.getIcon("TIMERON"));
+		}
+		else
+		{
+			threadLabel.setToolTipText(RB.getString("gui.StatusBar.notRunning"));
+			threadLabel.setIcon(Icons.getIcon("TIMEROFF"));
+		}
 	}
 
 	private class TipsThread extends Thread

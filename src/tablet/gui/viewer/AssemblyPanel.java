@@ -147,7 +147,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 		// If no contig is being displayed, clear DisplayData
 		if (contig == null)
-			DisplayData.clearData();
+			DisplayData.clearDisplayData();
 
 		this.contig = contig;
 		boolean setContigOK = true;

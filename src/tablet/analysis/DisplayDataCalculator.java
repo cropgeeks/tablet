@@ -4,6 +4,7 @@
 package tablet.analysis;
 
 import java.io.*;
+import java.util.concurrent.*;
 
 import tablet.data.*;
 import tablet.data.auxiliary.*;
@@ -13,7 +14,7 @@ import tablet.gui.*;
 import scri.commons.gui.*;
 
 /**
- * Computes a fills the tablet.data.auxiliary.DisplayData object with the
+ * Computes and fills the tablet.data.auxiliary.DisplayData object with the
  * values it needs to hold before a contig can be displayed to the screen.
  */
 public class DisplayDataCalculator extends SimpleJob
@@ -23,7 +24,6 @@ public class DisplayDataCalculator extends SimpleJob
 	private Contig contig;
 
 	// The objects that will run calculations as part of this job
-	private BaseMappingCalculator bm;
 	private CoverageCalculator cc;
 	private PackSetCreator ps;
 
@@ -82,22 +82,11 @@ public class DisplayDataCalculator extends SimpleJob
 
 		if (okToRun && doAll)
 		{
-			status = 0;
-
 			// Compute mappings between unpadded and padded values
-			bm = new BaseMappingCalculator(contig.getConsensus(),
-				paddedToUnpadded, unpaddedToPadded);
+			BaseMappingCalculator bm = new BaseMappingCalculator(
+				contig.getConsensus(), paddedToUnpadded, unpaddedToPadded);
 
-			paddedToUnpadded.openForWriting();
-			unpaddedToPadded.openForWriting();
-
-			bm.runJob(0);
-
-			paddedToUnpadded.openForReading();
-			unpaddedToPadded.openForReading();
-
-			DisplayData.setPaddedToUnpadded(paddedToUnpadded);
-			DisplayData.setUnpaddedToPadded(unpaddedToPadded);
+			TaskManager.submit(bm);
 		}
 
 		if (okToRun)
@@ -128,8 +117,6 @@ public class DisplayDataCalculator extends SimpleJob
 	{
 		super.cancelJob();
 
-		if (bm != null)
-			bm.cancelJob();
 		if (cc != null)
 			cc.cancelJob();
 		if (ps != null)
@@ -168,7 +155,7 @@ public class DisplayDataCalculator extends SimpleJob
 				ps.getMessage();
 
 			default:
-				return RB.getString("analysis.DisplayDataCalculator.mapping");
+				return "";
 		}
 	}
 }

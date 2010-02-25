@@ -110,6 +110,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 			return;
 
 		Actions.openedNoContigSelected();
+		TaskManager.cancelAll();
 
 		int row = controls.table.getSelectedRow();
 
@@ -154,6 +155,8 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		// If the set failed, then act the same as a table de-selection
 		else
 			setNullContig();
+
+		winMain.getJumpToDialog().setVisible(false);
 	}
 
 	public void setNullContig()
@@ -163,7 +166,6 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		findPanel.toggleComponentEnabled(true);
 
 		winMain.setAssemblyPanelVisible(false);
-		winMain.getJumpToDialog().setVisible(false);
 	}
 
 	// Forces the panel to recreate the table then reselect the row
