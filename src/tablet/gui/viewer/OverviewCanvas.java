@@ -6,6 +6,7 @@ package tablet.gui.viewer;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
+import java.text.DecimalFormat;
 import javax.swing.*;
 
 import tablet.data.auxiliary.*;
@@ -38,6 +39,10 @@ public class OverviewCanvas extends JPanel
 	// Animation timer and an alpha value used when the buffer is ready
 	private Timer timer;
 	private float alpha;
+
+	private String overviewCoordinates;
+
+	private DecimalFormat dc = new DecimalFormat("#.#");
 
 	OverviewCanvas()
 	{
@@ -126,6 +131,8 @@ public class OverviewCanvas extends JPanel
 				TabletUtils.nf.format(DisplayData.getMaxCoverage())));
 		}
 
+		overviewCoordinates = TabletUtils.nf.format(aPanel.getContig().getVisualStart()+1) + " to " + TabletUtils.nf.format(aPanel.getContig().getVisualEnd()+1) + getBasePairString(aPanel.getContig().getVisualWidth());
+
 		repaint();
 	}
 
@@ -191,6 +198,22 @@ public class OverviewCanvas extends JPanel
 		}
 	}
 
+	private String getBasePairString(int width)
+	{
+		String basePairs = "";
+
+		if(width < 1000)
+			basePairs += " (" + width + " bp)";
+		else if(width < 1000000)
+			basePairs += " (" + dc.format(width / (float) 1000) + " Kbp)";
+		else if(width < 1000000000)
+			basePairs += " (" + dc.format(width / (float) 1000000) + " Mbp)";
+		else
+			basePairs += " (" + dc.format(width / (float) 1000000000) + " Gbp)";
+
+		return basePairs;
+	}
+
 	private class Canvas2D extends JPanel
 	{
 		Canvas2D()
@@ -221,6 +244,9 @@ public class OverviewCanvas extends JPanel
 			// Paint the image of the alignment
 			g.drawImage(image, 0, 0, null);
 
+			// Draw the base information text
+			paintCoordinatesText(g);
+
 			// Then draw the tracking rectangle
 			g.setPaint(new Color(0, 0, 255, 50));
 			g.fillRect(bX1, bY1, bX2-bX1, bY2-bY1);
@@ -238,6 +264,27 @@ public class OverviewCanvas extends JPanel
 			{
 				g.setColor(new Color(1f, 1f, 1f, alpha));
 				g.fillRect(0, 0, w, h);
+			}
+		}
+
+		private void paintCoordinatesText(Graphics2D g)
+		{
+			if (!Prefs.guiHideOverviewPositions)
+			{
+				// lhs
+				g.setPaint(new Color(255, 255, 255, 130));
+				FontMetrics fm = g.getFontMetrics();
+				g.fillRect(0, h - 6 - fm.getHeight(), fm.stringWidth(overviewCoordinates) + 10, fm.getHeight() + 6);
+				g.setColor(Color.BLACK);
+				g.drawString(overviewCoordinates, 5, h - 6);
+				// rhs
+				int rCanvasL = (rCanvas.pX1 / rCanvas.ntW) + 1 + rCanvas.offset;
+				int rCanvasR = (rCanvas.pX2 / rCanvas.ntW) + 1 + rCanvas.offset;
+				String rCanvasCoordinates = "" + TabletUtils.nf.format(rCanvasL) + " to " + TabletUtils.nf.format(rCanvasR) + getBasePairString(rCanvasR - rCanvasL + 1);
+				g.setPaint(new Color(255, 255, 255, 130));
+				g.fillRect(w - (fm.stringWidth(rCanvasCoordinates) + 10), h - 6 - fm.getHeight(), fm.stringWidth(rCanvasCoordinates) + 10, fm.getHeight() + 6);
+				g.setColor(Color.red);
+				g.drawString(rCanvasCoordinates, w - (fm.stringWidth(rCanvasCoordinates) + 5), h - 6);
 			}
 		}
 	}

@@ -93,7 +93,7 @@ class BamBamBar extends JPanel implements IOverlayRenderer
 		int width = fm.stringWidth(label);
 		int x = rCanvas.pX1 + ((rCanvas.pX2Max-rCanvas.pX1)/2) - (width/2);
 		g.setColor(Color.red);
-		g.drawString(label, x, 50);
+		g.drawString(label, x, rCanvas.pY1+50);
 
 		label = RB.format("gui.viewer.BamBamBar.label2",
 			TabletUtils.nf.format(vE-vS+1),
@@ -101,14 +101,14 @@ class BamBamBar extends JPanel implements IOverlayRenderer
 		width = fm.stringWidth(label);
 		x = rCanvas.pX1 + ((rCanvas.pX2Max-rCanvas.pX1)/2) - (width/2);
 		g.setColor(Color.gray);
-		g.drawString(label, x, 80);
+		g.drawString(label, x, rCanvas.pY1+80);
 
 		String ctrl = SystemUtils.isMacOS() ? RB.getString("gui.text.cmnd") :
 			RB.getString("gui.text.ctrl");
 		label = RB.format("gui.viewer.BamBamBar.label3", ctrl);
 		width = fm.stringWidth(label);
 		x = rCanvas.pX1 + ((rCanvas.pX2Max-rCanvas.pX1)/2) - (width/2);
-		g.drawString(label, x, 100);
+		g.drawString(label, x, rCanvas.pY1+100);
 	}
 
 	private void trackVariables()

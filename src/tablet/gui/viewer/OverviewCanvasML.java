@@ -18,7 +18,7 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 	private OverviewCanvas canvas;
 
 	// Popup menu options
-	private JCheckBoxMenuItem mHide;
+	private JCheckBoxMenuItem mHide, mHideCoordinates;
 	private JCheckBoxMenuItem mScaled, mCoverage;
 
 	OverviewCanvasML(OverviewCanvas canvas, JComponent c)
@@ -67,6 +67,11 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 		mHide.setSelected(!Prefs.guiHideOverview);
 		mHide.addActionListener(this);
 
+		mHideCoordinates = new JCheckBoxMenuItem();
+		RB.setText(mHideCoordinates, "gui.viewer.OverviewCanvas.mHideCoordinates");
+		mHideCoordinates.setSelected(!Prefs.guiHideOverviewPositions);
+		mHideCoordinates.addActionListener(this);
+
 		mScaled = new JCheckBoxMenuItem();
 		RB.setText(mScaled, "gui.viewer.OverviewCanvas.mScaled");
 		mScaled.setSelected(Prefs.visOverviewType == SCALEDDATA);
@@ -79,6 +84,8 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 
 		JPopupMenu menu = new JPopupMenu();
 		menu.add(mHide);
+		menu.addSeparator();
+		menu.add(mHideCoordinates);
 		menu.addSeparator();
 		menu.add(mScaled);
 		menu.add(mCoverage);
@@ -100,6 +107,13 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 		{
 			Prefs.guiHideOverview = !Prefs.guiHideOverview;
 			Tablet.winMain.getAssemblyPanel().setVisibilities();
+		}
+
+		// Show or hide the position values
+		else if (e.getSource() == mHideCoordinates)
+		{
+			Prefs.guiHideOverviewPositions = !Prefs.guiHideOverviewPositions;
+			canvas.repaint();
 		}
 
 		// Switch overview rendering to the scaled overview

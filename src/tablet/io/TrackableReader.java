@@ -41,7 +41,7 @@ abstract class TrackableReader extends SimpleJob
 	private long lastBytesRead;
 	private long lastTime;
 
-	public void setInputs(AssemblyFile[] files, Assembly assembly)
+	void setInputs(AssemblyFile[] files, Assembly assembly)
 	{
 		this.files = files;
 		this.assembly = assembly;
@@ -115,7 +115,7 @@ abstract class TrackableReader extends SimpleJob
 	}
 
 	/** Returns true if this reader can understand the file given to it. */
-	public abstract boolean canRead()
+	abstract boolean canRead()
 		throws Exception;
 
 	AssemblyFile currentFile()
