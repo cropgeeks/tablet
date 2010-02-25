@@ -13,6 +13,9 @@ class ConsensusCanvas extends TrackingCanvas
 	private Contig contig;
 	private Consensus consensus;
 
+	private boolean hasBaseQualities;
+	private int qualityH;
+
 	// Low/high colour information used to draw the base quality scores
 	private int[] c1;
 	private int[] c2;
@@ -38,7 +41,10 @@ class ConsensusCanvas extends TrackingCanvas
 	void setContig(Contig contig)
 	{
 		if (contig != null)
+		{
 			consensus = contig.getConsensus();
+			hasBaseQualities = consensus.hasBaseQualities();
+		}
 
 		// Remove tablet.data references if nothing is going to be displayed
 		else
@@ -49,7 +55,11 @@ class ConsensusCanvas extends TrackingCanvas
 
 	void setDimensions()
 	{
-		dimension = new Dimension(0, (rCanvas.ntH/2 + 2 + rCanvas.ntH) + 5);
+		qualityH = rCanvas.ntH/2 + 2;
+		if (hasBaseQualities == false)
+			qualityH = 0;
+
+		dimension = new Dimension(0, (qualityH + rCanvas.ntH) + 5);
 
 		setPreferredSize(dimension);
 		revalidate();
@@ -75,31 +85,35 @@ class ConsensusCanvas extends TrackingCanvas
 
 		ColorScheme colors = rCanvas.colors;
 
-		// Draw the quality scores
-		byte[] bq = consensus.getBaseQualityRange(xS+offset, xE+offset);
 		int y = 0;
 
-		for (int i = 0, x = (ntW*xS); i < bq.length; i++, x += ntW)
+		// Draw the quality scores
+		if (hasBaseQualities)
 		{
-			if (bq[i] != -1)
+			byte[] bq = consensus.getBaseQualityRange(xS+offset, xE+offset);
+
+			for (int i = 0, x = (ntW*xS); i < bq.length; i++, x += ntW)
 			{
-				// Determine the low/high intensity colour to use
-				float f1 = (float) (100 - bq[i]) / 100;
-				float f2 = (float) bq[i] / 100;
+				if (bq[i] != -1)
+				{
+					// Determine the low/high intensity colour to use
+					float f1 = (float) (100 - bq[i]) / 100;
+					float f2 = (float) bq[i] / 100;
 
-				g.setColor(new Color(
-	          		(int) (f1 * c1[0] + f2 * c2[0]),
-          			(int) (f1 * c1[1] + f2 * c2[1]),
-          			(int) (f1 * c1[2] + f2 * c2[2])));
+					g.setColor(new Color(
+		          		(int) (f1 * c1[0] + f2 * c2[0]),
+	          			(int) (f1 * c1[1] + f2 * c2[1]),
+	          			(int) (f1 * c1[2] + f2 * c2[2])));
 
-				g.fillRect(x, y, ntW, ntH/2);
+					g.fillRect(x, y, ntW, ntH/2);
+				}
 			}
 		}
 
 
 
 		byte[] data = consensus.getRange(xS+offset, xE+offset);
-		y = rCanvas.ntH/2 + 2;
+		y += qualityH;
 
 		// Draw the consensus sequence
 		for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
