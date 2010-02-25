@@ -190,7 +190,7 @@ public class BamFileReader extends TrackableReader
 	{
 		message = RB.format("io.BamFileReader.fasta", contigHash.size());
 
-		consensus.setData(sb.toString());
+		consensus.setData(sb);
 		consensus.calculateUnpaddedLength();
 		contig.setConsensusSequence(consensus);
 

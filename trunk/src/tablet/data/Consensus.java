@@ -140,7 +140,7 @@ public class Consensus extends Sequence
 	}
 
 	@Override
-	public void setData(String sequence)
+	public void setData(StringBuilder sequence)
 	{
 		super.setData(sequence);
 		length = sequence.length();

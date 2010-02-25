@@ -30,7 +30,7 @@ public class ReadFileCacheTest extends TestCase
 			String name = "NAME_" + i;
 
 			ReadMetaData rmd = new ReadMetaData(name, i % 2 == 0, i);
-			rmd.setData("GATTACA");
+			rmd.setData(new StringBuilder("GATTACA"));
 
 			cache.setReadMetaData(rmd);
 		}

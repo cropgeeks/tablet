@@ -37,7 +37,7 @@ public class ProteinTranslatorTest extends TestCase
 			Consensus c = null;
 
 			c = new Consensus();
-			c.setData(dna[i]);
+			c.setData(new StringBuilder(dna[i]));
 
 			ProteinTranslator pt = new ProteinTranslator(
 				c, ProteinTranslator.Direction.FORWARD, 1);
@@ -71,7 +71,7 @@ public class ProteinTranslatorTest extends TestCase
 			Consensus c = null;
 
 			c = new Consensus();
-			c.setData(dna[i]);
+			c.setData(new StringBuilder(dna[i]));
 
 			ProteinTranslator pt = new ProteinTranslator(
 				c, ProteinTranslator.Direction.FORWARD, 2);
@@ -105,7 +105,7 @@ public class ProteinTranslatorTest extends TestCase
 			Consensus c = null;
 
 			c = new Consensus();
-			c.setData(dna[i]);
+			c.setData(new StringBuilder(dna[i]));
 
 			ProteinTranslator pt = new ProteinTranslator(
 				c, ProteinTranslator.Direction.REVERSE, 1);

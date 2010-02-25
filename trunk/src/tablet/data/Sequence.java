@@ -22,7 +22,7 @@ public abstract class Sequence
 	// VERY IMPORTANT: The order of these definitions is used elsewhere (WITHOUT
 	// CHECKS) so they must be kept this way.
 	//   29/06/09: Used by TextColorScheme and StandardColorScheme
-	
+
 
 	/** Base whose nucleotide is unknown. **/
 	public static final byte UNKNOWN = 0;
@@ -68,7 +68,7 @@ public abstract class Sequence
 	 * Sets the DNA data for this sequence.
 	 * @param sequence the DNA string to store
 	 */
-	public void setData(String sequence)
+	public void setData(StringBuilder sequence)
 	{
 		int baseCount = sequence.length();
 

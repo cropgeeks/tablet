@@ -148,7 +148,7 @@ class AceFileReader extends TrackableReader
 			ref.append(str);
 
 		consensus = new Consensus();
-		consensus.setData(ref.toString());
+		consensus.setData(ref);
 		consensus.calculateUnpaddedLength();
 		contig.setConsensusSequence(consensus);
 
@@ -260,7 +260,7 @@ class AceFileReader extends TrackableReader
 
 		// Store the metadata about the read in the cache
 		ReadMetaData rmd = new ReadMetaData(RD[1], ucCache[rdIndex]);
-		rmd.setData(seq.toString());
+		rmd.setData(seq);
 		rmd.calculateUnpaddedLength();
 		read.setLength(rmd.length());
 
