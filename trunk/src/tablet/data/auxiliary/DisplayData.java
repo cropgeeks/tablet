@@ -30,18 +30,14 @@ public class DisplayData
 	 * information by this consensus sequence. It is only needed at display time
 	 * and if this contig isn't visible it can be a massive waste of memory.
 	 */
-	public static void clearDisplayData()
+	public static void clearDisplayData(boolean clearAll)
 	{
-		try
+		if (clearAll)
 		{
-			// TODO: EndGame
-			paddedToUnpadded.close();
-			unpaddedToPadded.close();
+			paddedToUnpadded = null;
+			unpaddedToPadded = null;
 		}
-		catch (Exception e) {}
 
-		paddedToUnpadded = null;
-		unpaddedToPadded = null;
 		coverage = null;
 	}
 
@@ -75,13 +71,13 @@ public class DisplayData
 	public static void setAveragePercentage(float newAveragePercentage)
 		{ averagePercentage = newAveragePercentage; }
 
+
+	public static void setPaddedToUnpadded(IArrayIntCache cache)
+		{ paddedToUnpadded = cache; }
+
 	/** Returns true if paddedToUnpadded mapping data is available. */
 	public static boolean hasPaddedToUnpadded()
 		{ return paddedToUnpadded != null; }
-
-	/** Returns true if paddedToUnpadded mapping data is available. */
-	public static boolean hasUnpaddedToPadded()
-		{ return unpaddedToPadded != null; }
 
 	/**
 	 * Returns the unpadded index (within consensus index space) for the given
@@ -99,8 +95,12 @@ public class DisplayData
 		}
 	}
 
-	public static void setPaddedToUnpadded(IArrayIntCache cache)
-		{ paddedToUnpadded = cache; }
+	public static void setUnpaddedToPadded(IArrayIntCache cache)
+		{ unpaddedToPadded = cache; }
+
+	/** Returns true if paddedToUnpadded mapping data is available. */
+	public static boolean hasUnpaddedToPadded()
+		{ return unpaddedToPadded != null; }
 
 	/**
 	 * Returns the padded index (within consensus index space) for the given
@@ -117,7 +117,4 @@ public class DisplayData
 			return -1;
 		}
 	}
-
-	public static void setUnpaddedToPadded(IArrayIntCache cache)
-		{ unpaddedToPadded = cache; }
 }

@@ -14,6 +14,7 @@ import javax.swing.filechooser.*;
 import javax.swing.table.*;
 
 import tablet.analysis.*;
+import tablet.analysis.tasks.*;
 import tablet.data.*;
 import tablet.gui.dialog.*;
 import tablet.gui.viewer.*;

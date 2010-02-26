@@ -4,8 +4,10 @@
 package tablet.analysis;
 
 import java.io.*;
+import java.util.*;
 import java.util.concurrent.*;
 
+import tablet.analysis.tasks.*;
 import tablet.data.*;
 import tablet.data.auxiliary.*;
 import tablet.data.cache.*;
@@ -17,7 +19,7 @@ import scri.commons.gui.*;
  * Computes and fills the tablet.data.auxiliary.DisplayData object with the
  * values it needs to hold before a contig can be displayed to the screen.
  */
-public class DisplayDataCalculator extends SimpleJob
+public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 {
 	private boolean doAll;
 	private Assembly assembly;
@@ -86,7 +88,9 @@ public class DisplayDataCalculator extends SimpleJob
 			BaseMappingCalculator bm = new BaseMappingCalculator(
 				contig.getConsensus(), paddedToUnpadded, unpaddedToPadded);
 
-			TaskManager.submit(bm);
+			bm.addTaskListener(this);
+
+			TaskManager.submit("BaseMappingCalculator", bm);
 		}
 
 		if (okToRun)
@@ -156,6 +160,17 @@ public class DisplayDataCalculator extends SimpleJob
 
 			default:
 				return "";
+		}
+	}
+
+	public void taskCompleted(EventObject e)
+	{
+		if (e.getSource() instanceof BaseMappingCalculator)
+		{
+			BaseMappingCalculator bm = (BaseMappingCalculator) e.getSource();
+
+			DisplayData.setPaddedToUnpadded(bm.getPaddedToUnpadded());
+			DisplayData.setUnpaddedToPadded(bm.getUnpaddedToPadded());
 		}
 	}
 }
