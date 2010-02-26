@@ -1,8 +1,9 @@
 // Copyright 2009 Plant Bioinformatics Group, SCRI. All rights reserved.
 // Use is subject to the accompanying licence terms.
 
-package tablet.analysis;
+package tablet.analysis.tasks;
 
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
@@ -10,15 +11,31 @@ import java.util.concurrent.atomic.*;
  * BackgroundJob is the super-class of all low-priority background jobs that
  * Tablet runs (mainly DisplayData related calculations). See also TaskManager.
  */
-public abstract class BackgroundJob implements Callable<Boolean>
+public abstract class BackgroundTask implements Runnable
 {
-	protected AtomicInteger tCounter = new AtomicInteger();
+	// A listener to be notified when this task is completed
+	protected ITaskListener listener;
+
+	private AtomicInteger tCounter = new AtomicInteger();
 
 	// A reference to (a possible) previous instance of this job
-	protected BackgroundJob previous;
+	protected BackgroundTask previous;
 
 	protected boolean okToRun = true;
 	protected boolean isRunning = true;
+
+	public void addTaskListener(ITaskListener listener)
+		{ this.listener = listener; }
+
+	protected void notifyAndFinish()
+	{
+		if (listener != null && okToRun)
+			listener.taskCompleted(new EventObject(this));
+
+		isRunning = false;
+
+		tCounter.decrementAndGet();
+	}
 
 	/**
 	 * Gives the (system-wide) thread counter to this job, which also increments
@@ -33,12 +50,9 @@ public abstract class BackgroundJob implements Callable<Boolean>
 	public void cancel()
 		{ okToRun = false; }
 
-	public void setPrevious(BackgroundJob previous)
+	public void setPrevious(BackgroundTask previous)
 		{ this.previous = previous; }
 
-	protected void cleanup()
-	{
-		this.tCounter.decrementAndGet();
-		isRunning = false;
-	}
+	public boolean isRunning()
+		{ return isRunning; }
 }

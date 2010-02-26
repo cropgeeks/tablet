@@ -3,17 +3,15 @@
 
 package tablet.analysis;
 
+import tablet.analysis.tasks.*;
 import tablet.data.*;
-import tablet.data.auxiliary.*;
 import tablet.data.cache.*;
 
 /**
  * Calculates the padded->unpadded and unpadded->padded translation information
- * for a contig's consensus sequence. Note: although this class extends from
- * SimpleJob it doesn't currently supply progress or maximum details as it runs
- * (mainly because it's so fast it's not worth it).
+ * for a contig's consensus sequence.
  */
-public class BaseMappingCalculator extends BackgroundJob
+public class BaseMappingCalculator extends BackgroundTask
 {
 	private Consensus c;
 
@@ -29,8 +27,7 @@ public class BaseMappingCalculator extends BackgroundJob
 		this.unpaddedToPadded = unpaddedToPadded;
 	}
 
-	public Boolean call()
-		throws Exception
+	public void run()
 	{
 		Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
 		Thread.currentThread().setName("BaseMappingCalculator");
@@ -38,39 +35,39 @@ public class BaseMappingCalculator extends BackgroundJob
 		// Because the BaseMappingCalculator (might) be accessing files, it's
 		// best to let any previous instances completely finish before starting
 		if (previous != null)
-			while (previous.isRunning)
+			while (previous.isRunning())
 				try { Thread.sleep(50); }
 				catch (InterruptedException e) {}
 
-		paddedToUnpadded.openForWriting();
-		unpaddedToPadded.openForWriting();
-
-		calculatePaddedToUnpadded();
-		calculateUnpaddedToPadded();
-
-		if (okToRun)
+		try
 		{
-			paddedToUnpadded.openForReading();
-			unpaddedToPadded.openForReading();
+			paddedToUnpadded.openForWriting();
+			unpaddedToPadded.openForWriting();
 
-			DisplayData.setPaddedToUnpadded(paddedToUnpadded);
-			DisplayData.setUnpaddedToPadded(unpaddedToPadded);
+			calculatePaddedToUnpadded();
+			calculateUnpaddedToPadded();
+
+			if (okToRun)
+			{
+				paddedToUnpadded.openForReading();
+				unpaddedToPadded.openForReading();
+			}
+			else
+			{
+				paddedToUnpadded.close();
+				unpaddedToPadded.close();
+			}
 		}
-		else
-		{
-			paddedToUnpadded.close();
-			unpaddedToPadded.close();
-		}
+		catch (Exception e) {}
 
-		// Remove any references to objects that were in use (to free memory)
-		c = null;
-		paddedToUnpadded = null;
-		unpaddedToPadded = null;
-
-		cleanup();
-
-		return true;
+		notifyAndFinish();
 	}
+
+	public IArrayIntCache getPaddedToUnpadded()
+		{ return paddedToUnpadded; }
+
+	public IArrayIntCache getUnpaddedToPadded()
+		{ return unpaddedToPadded; }
 
 
 	// Given a padded index value (0 to length-1) what is the unpadded value at

@@ -9,6 +9,8 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 import javax.swing.*;
 
+import tablet.analysis.tasks.*;
+
 import scri.commons.gui.*;
 
 class WinMainStatusBar extends JPanel implements ActionListener

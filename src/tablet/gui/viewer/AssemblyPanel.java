@@ -145,9 +145,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		if (this.contig != null)
 			this.contig.clearContigData(assembly.getBamBam() != null);
 
-		// If no contig is being displayed, clear DisplayData
-		if (contig == null)
-			DisplayData.clearDisplayData();
+		DisplayData.clearDisplayData(true);
 
 		this.contig = contig;
 		boolean setContigOK = true;
@@ -378,6 +376,8 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 	public boolean processBamDataChange()
 	{
+		DisplayData.clearDisplayData(false);
+
 		if (updateDisplayData(false) == false)
 		{
 			winMain.getContigsPanel().setNullContig();
