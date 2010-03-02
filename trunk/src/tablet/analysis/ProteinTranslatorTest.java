@@ -40,8 +40,9 @@ public class ProteinTranslatorTest extends TestCase
 			c.setData(new StringBuilder(dna[i]));
 
 			ProteinTranslator pt = new ProteinTranslator(
-				c, ProteinTranslator.Direction.FORWARD, 1);
-			pt.runJob(0);
+				0, c, ProteinTranslator.Direction.FORWARD, 1);
+			pt.enableUnitTest();
+			pt.run();
 
 			String translation = pt.getTranslationAsString();
 			assertEquals(protein[i], translation);
@@ -74,8 +75,9 @@ public class ProteinTranslatorTest extends TestCase
 			c.setData(new StringBuilder(dna[i]));
 
 			ProteinTranslator pt = new ProteinTranslator(
-				c, ProteinTranslator.Direction.FORWARD, 2);
-			pt.runJob(0);
+				0, c, ProteinTranslator.Direction.FORWARD, 2);
+			pt.enableUnitTest();
+			pt.run();
 
 			String translation = pt.getTranslationAsString();
 			assertEquals(protein[i], translation);
@@ -108,8 +110,9 @@ public class ProteinTranslatorTest extends TestCase
 			c.setData(new StringBuilder(dna[i]));
 
 			ProteinTranslator pt = new ProteinTranslator(
-				c, ProteinTranslator.Direction.REVERSE, 1);
-			pt.runJob(0);
+				0, c, ProteinTranslator.Direction.REVERSE, 1);
+			pt.enableUnitTest();
+			pt.run();
 
 			String translation = pt.getTranslationAsString();
 			assertEquals(protein[i], translation);

@@ -163,7 +163,7 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 
 		else
 		{
-			pCanvas.updateTranslations();
+			pCanvas.createTranslations();
 			pCanvas.setDimensions();
 
 			// Update the preferences string that tracks the enabled states
@@ -195,7 +195,7 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 	private void copyToClipboard()
 	{
 		// Stores the symbol table -> human readable translation
-		String[] codes = ProteinTranslator.codes;
+		String[] codes = new ProteinTranslator().codes;
 
 		// Work out what track was actually clicked on
 		int actualTrack = getActualTrack(track);

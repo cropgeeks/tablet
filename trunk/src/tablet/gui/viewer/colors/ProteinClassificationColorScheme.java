@@ -26,7 +26,7 @@ public class ProteinClassificationColorScheme extends ColorScheme
 		// VERY IMPORTANT: These MUST be in the same order as the codes within
 		// the string array from the ProteinTranslator
 
-		String[] codes = ProteinTranslator.codes;
+		String[] codes = new ProteinTranslator().codes;
 
 		states.add(new StandardColorState("", Color.white, w, h, false, false));
 

@@ -54,19 +54,24 @@ public class BaseMappingCalculator extends BackgroundTask
 				paddedToUnpadded.openForReading();
 				unpaddedToPadded.openForReading();
 			}
-			else
-			{
-				paddedToUnpadded.close();
-				unpaddedToPadded.close();
-			}
 		}
-		catch (Exception e)
+		catch (Throwable e)
 		{
 			System.out.println("BaseMappingCalculator: " + e);
 			okToRun = false;
 		}
 
 		notifyAndFinish();
+	}
+
+	protected void doCleanup()
+	{
+		try
+		{
+			paddedToUnpadded.close();
+			unpaddedToPadded.close();
+		}
+		catch (Exception e) {}
 	}
 
 	public IArrayIntCache getPaddedToUnpadded()
@@ -82,7 +87,7 @@ public class BaseMappingCalculator extends BackgroundTask
 	 * data, then the data is put into the appropriate IArrayCache objects.
 	 */
 	private void calculateMappings()
-			throws Exception
+		throws Exception
 	{
 		int padCount = 0;
 		int length = c.length();
@@ -129,7 +134,7 @@ public class BaseMappingCalculator extends BackgroundTask
 	}
 
 	private void setupMappingArrays(ArrayList<Integer> padToUnpad, ArrayList<Integer> unpadToPad)
-			throws Exception
+		throws Exception
 	{
 		// Determine if we should disk cache or not
 		if (padToUnpad.size() < 1000000)
@@ -147,8 +152,11 @@ public class BaseMappingCalculator extends BackgroundTask
 		for(int i = 0; i < unpadToPad.size() && okToRun; i++)
 			unpaddedToPadded.addValue(unpadToPad.get(i));
 
-		mappingData.setPaddedToUnpaddedCache(paddedToUnpadded);
-		mappingData.setUnpaddedToPaddedCache(unpaddedToPadded);
+		if (okToRun)
+		{
+			mappingData.setPaddedToUnpaddedCache(paddedToUnpadded);
+			mappingData.setUnpaddedToPaddedCache(unpaddedToPadded);
+		}
 	}
 
 	public MappingData getMappingData()
