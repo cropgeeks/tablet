@@ -13,10 +13,8 @@ import tablet.data.cache.*;
  */
 public class DisplayData
 {
-	// Contains info to map from a padded to an unpadded position
-	private static IArrayIntCache paddedToUnpadded;
-	// Contains info to map from an unpadded to a padded position
-	private static IArrayIntCache unpaddedToPadded;
+	// Contains info to map from an unpadded to a padded position and vice versa
+	private static MappingData mappingData;
 
 	// Contains the coverage information across the contig
 	private static int[] coverage;
@@ -34,8 +32,9 @@ public class DisplayData
 	{
 		if (clearAll)
 		{
-			paddedToUnpadded = null;
-			unpaddedToPadded = null;
+//			paddedToUnpadded = null;
+//			unpaddedToPadded = null;
+			mappingData = null;
 		}
 
 		coverage = null;
@@ -73,11 +72,11 @@ public class DisplayData
 
 
 	public static void setPaddedToUnpadded(IArrayIntCache cache)
-		{ paddedToUnpadded = cache; }
+		{ mappingData.setPaddedToUnpaddedCache(cache); }
 
 	/** Returns true if paddedToUnpadded mapping data is available. */
 	public static boolean hasPaddedToUnpadded()
-		{ return paddedToUnpadded != null; }
+		{ return mappingData != null; }
 
 	/**
 	 * Returns the unpadded index (within consensus index space) for the given
@@ -88,7 +87,7 @@ public class DisplayData
 	public static int paddedToUnpadded(int paddedPosition)
 	{
 		try {
-			return paddedToUnpadded.getValue(paddedPosition);
+			return mappingData.getPaddedToUnpadded(paddedPosition);
 		}
 		catch (Exception e) {
 			return -1;
@@ -96,11 +95,11 @@ public class DisplayData
 	}
 
 	public static void setUnpaddedToPadded(IArrayIntCache cache)
-		{ unpaddedToPadded = cache; }
+		{ mappingData.setUnpaddedToPaddedCache(cache); }
 
 	/** Returns true if paddedToUnpadded mapping data is available. */
 	public static boolean hasUnpaddedToPadded()
-		{ return unpaddedToPadded != null; }
+		{ return mappingData != null; }
 
 	/**
 	 * Returns the padded index (within consensus index space) for the given
@@ -111,10 +110,15 @@ public class DisplayData
 	public static int unpaddedToPadded(int unpaddedPosition)
 	{
 		try {
-			return unpaddedToPadded.getValue(unpaddedPosition);
+			return mappingData.getUnpaddedToPadded(unpaddedPosition);
 		}
 		catch (Exception e) {
 			return -1;
 		}
+	}
+
+	public static void setMappingData(MappingData newMappingData)
+	{
+		mappingData = newMappingData;
 	}
 }
