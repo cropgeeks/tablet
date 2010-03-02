@@ -3,8 +3,11 @@
 
 package tablet.analysis;
 
+import java.util.*;
+
 import tablet.analysis.tasks.*;
 import tablet.data.*;
+import tablet.data.auxiliary.*;
 import tablet.data.cache.*;
 
 /**
@@ -20,11 +23,14 @@ public class BaseMappingCalculator extends BackgroundTask
 	// Contains info to map from an unpadded to a padded position
 	private IArrayIntCache unpaddedToPadded;
 
+	private MappingData mappingData;
+
 	public BaseMappingCalculator(Consensus c, IArrayIntCache paddedToUnpadded, IArrayIntCache unpaddedToPadded)
 	{
 		this.c = c;
 		this.paddedToUnpadded = paddedToUnpadded;
 		this.unpaddedToPadded = unpaddedToPadded;
+		mappingData = new MappingData(c);
 	}
 
 	public void run()
@@ -41,11 +47,7 @@ public class BaseMappingCalculator extends BackgroundTask
 
 		try
 		{
-			paddedToUnpadded.openForWriting();
-			unpaddedToPadded.openForWriting();
-
-			calculatePaddedToUnpadded();
-			calculateUnpaddedToPadded();
+			calculateMappings();
 
 			if (okToRun)
 			{
@@ -58,7 +60,11 @@ public class BaseMappingCalculator extends BackgroundTask
 				unpaddedToPadded.close();
 			}
 		}
-		catch (Exception e) {}
+		catch (Exception e)
+		{
+			System.out.println("BaseMappingCalculator: " + e);
+			okToRun = false;
+		}
 
 		notifyAndFinish();
 	}
@@ -70,50 +76,83 @@ public class BaseMappingCalculator extends BackgroundTask
 		{ return unpaddedToPadded; }
 
 
-	// Given a padded index value (0 to length-1) what is the unpadded value at
-	// that position?
-	//
-	// A  * T C
-	// 0 -1 1 2
-	private void calculatePaddedToUnpadded()
-		throws Exception
+	/**
+	 * Calculate the mappings from padded to unpadded space and unpadded to
+	 * padded space. Two ArrayLists are built up until we have the final set of
+	 * data, then the data is put into the appropriate IArrayCache objects.
+	 */
+	private void calculateMappings()
+			throws Exception
 	{
+		int padCount = 0;
 		int length = c.length();
+		boolean hasPad = false;
 
-		for (int i = 0, index = 0; i < length && okToRun; i++)
+		ArrayList<Integer> padToUnpad = new ArrayList<Integer>();
+		ArrayList<Integer> unpadToPad = new ArrayList<Integer>();
+
+		// Loop over the consensus bases
+		for (int baseCount =0; baseCount < length && okToRun; baseCount++)
 		{
-			if (c.getStateAt(i) != Sequence.P)
-				paddedToUnpadded.addValue(index++);
-
-			else
-				paddedToUnpadded.addValue(-1);
-		}
-	}
-
-	// Given an unpadded index value (0 to length-1) what index within the real
-	// data array does that map back to? In other words, given the first
-	// unpadded value (unpadded index=0), where does this lie = padded 0 (the
-	// A). Given the second unpadded value (unpadded index=1), this time it maps
-	// to the T, which is padded value 2.
-	// A * T  C
-	// 0 2 3 -1
-	private void calculateUnpaddedToPadded()
-		throws Exception
-	{
-		int length = c.length();
-		int map = 0;
-
-		for (int i = 0; i < length && okToRun; i++)
-		{
-			if (c.getStateAt(i) != Sequence.P)
+			// If the base isn't a pad
+			if (c.getStateAt(baseCount) != Sequence.P)
 			{
-				unpaddedToPadded.addValue(i);
-				map++;
+				// If the previous base(s) was a pad
+				if(hasPad)
+				{
+					// Add the appropriate base number to the ArrayList, with the
+					// appropriate pad number.
+					unpadToPad.add(baseCount-padCount);
+					unpadToPad.add(padCount);
+					hasPad = false;
+				}
+			}
+			// If the base is a pad
+			else
+			{
+				hasPad = true;
+				// Add the appropriate base number to the ArrayList, with the
+				// appropriate pad number.
+				padToUnpad.add(baseCount);
+				padToUnpad.add(++padCount);
 			}
 		}
+		// Deals with case where last bases are padded.
+		if(hasPad)
+		{
+			unpadToPad.add(length-padCount);
+			unpadToPad.add(padCount);
+		}
 
-		// Any left over positions can't map to anything
-		for (; map < length && okToRun; map++)
-			unpaddedToPadded.addValue(-1);
+		// Call the method which sets up the mappings caches which will be used.
+		setupMappingArrays(padToUnpad, unpadToPad);
+	}
+
+	private void setupMappingArrays(ArrayList<Integer> padToUnpad, ArrayList<Integer> unpadToPad)
+			throws Exception
+	{
+		// Determine if we should disk cache or not
+		if (padToUnpad.size() < 1000000)
+			paddedToUnpadded = new ArrayIntMemCache(padToUnpad.size());
+		if (unpadToPad.size() < 1000000)
+			unpaddedToPadded = new ArrayIntMemCache(unpadToPad.size());
+
+		// Create the cache and pass it to the MappingData object
+		paddedToUnpadded.openForWriting();
+		for (int i = 0; i < padToUnpad.size() && okToRun; i++)
+			paddedToUnpadded.addValue(padToUnpad.get(i));
+
+		// Create the cache and pass it to the MappindData object
+		unpaddedToPadded.openForWriting();
+		for(int i = 0; i < unpadToPad.size() && okToRun; i++)
+			unpaddedToPadded.addValue(unpadToPad.get(i));
+
+		mappingData.setPaddedToUnpaddedCache(paddedToUnpadded);
+		mappingData.setUnpaddedToPaddedCache(unpaddedToPadded);
+	}
+
+	public MappingData getMappingData()
+	{
+		return mappingData;
 	}
 }

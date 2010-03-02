@@ -169,8 +169,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 		{
 			BaseMappingCalculator bm = (BaseMappingCalculator) e.getSource();
 
-			DisplayData.setPaddedToUnpadded(bm.getPaddedToUnpadded());
-			DisplayData.setUnpaddedToPadded(bm.getUnpaddedToPadded());
+			DisplayData.setMappingData(bm.getMappingData());
 		}
 	}
 }
