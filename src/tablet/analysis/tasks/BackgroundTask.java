@@ -5,7 +5,6 @@ package tablet.analysis.tasks;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
 
 /**
  * BackgroundJob is the super-class of all low-priority background jobs that
@@ -15,8 +14,6 @@ public abstract class BackgroundTask implements Runnable
 {
 	// A listener to be notified when this task is completed
 	protected ITaskListener listener;
-
-	private AtomicInteger tCounter = new AtomicInteger();
 
 	// A reference to (a possible) previous instance of this job
 	protected BackgroundTask previous;
@@ -32,19 +29,10 @@ public abstract class BackgroundTask implements Runnable
 		if (listener != null && okToRun)
 			listener.taskCompleted(new EventObject(this));
 
+		if (okToRun == false)
+			doCleanup();
+
 		isRunning = false;
-
-		tCounter.decrementAndGet();
-	}
-
-	/**
-	 * Gives the (system-wide) thread counter to this job, which also increments
-	 * its value by one, as this job will now be ready to run.
-	 */
-	public void setThreadCounter(AtomicInteger tCounter)
-	{
-		this.tCounter = tCounter;
-		this.tCounter.incrementAndGet();
 	}
 
 	public void cancel()
@@ -55,4 +43,7 @@ public abstract class BackgroundTask implements Runnable
 
 	public boolean isRunning()
 		{ return isRunning; }
+
+	/** Cleanup operations that only happen if the job was cancelled. */
+	protected abstract void doCleanup();
 }

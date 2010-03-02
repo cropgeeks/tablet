@@ -5,19 +5,21 @@ package tablet.analysis;
 
 import java.util.*;
 
+import tablet.analysis.tasks.*;
 import tablet.data.*;
 import static tablet.data.Sequence.*;
 
-public class ProteinTranslator extends SimpleJob
+public class ProteinTranslator extends BackgroundTask
 {
 	public static enum Direction { FORWARD, REVERSE };
 
-	public static HashMap<String, Integer> acids;
-	public static String[] codes;
+	public HashMap<String, Integer> acids;
+	public String[] codes;
 
 	private Sequence sequence;
 	private static String STOP = ".";
 
+	private int index;
 	private Direction direction;
 	private int readingFrame;
 	private short[] protein;
@@ -33,41 +35,68 @@ public class ProteinTranslator extends SimpleJob
 	// Only needed for the unit test (stores a human readable translation)
 	private StringBuilder translation;
 
-	static { createTranslationTable(); }
+	public ProteinTranslator()
+	{
+		createTranslationTable();
+	}
 
 	/**
 	 * Creates a new ProteinTranslator, ready to translate a sequence with the
 	 * specified Direction and reading frame.
 	 */
 	public ProteinTranslator(
-		Sequence sequence, Direction direction, int readingFrame)
+		int index, Sequence sequence, Direction direction, int readingFrame)
 	{
+		this();
+
+		this.index = index;
 		this.sequence = sequence;
 		this.direction = direction;
 		this.readingFrame = readingFrame - 1;
-
-		if (acids == null)
-			createTranslationTable();
 	}
+
+	void enableUnitTest()
+	{
+		int length = sequence.length();
+		translation = new StringBuilder(length);
+	}
+
+	public int getIndex()
+		{ return index; }
 
 	public static void setStopCharacter(String stopChar)
 	{
 		STOP = stopChar;
-		createTranslationTable();
 	}
 
-	public void runJob(int jobIndex)
-		throws Exception
+	public void run()
 	{
-		int length = sequence.length();
+		Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
+		Thread.currentThread().setName("ProteinTranslator:" + index);
 
-		protein = new short[length];
-		translation = new StringBuilder(length);
+		try
+		{
+			int length = sequence.length();
 
-		if (direction == Direction.FORWARD)
-			translateForward();
-		else
-			translateReverse();
+			protein = new short[length];
+
+			if (direction == Direction.FORWARD)
+				translateForward();
+			else
+				translateReverse();
+		}
+		catch (Throwable e)
+		{
+			System.out.println("ProteinTranslator: " + index + ": " + e);
+			okToRun = false;
+		}
+
+		notifyAndFinish();
+	}
+
+	protected void doCleanup()
+	{
+		protein = null;
 	}
 
 	private void translateForward()
@@ -81,11 +110,11 @@ public class ProteinTranslator extends SimpleJob
 		int startAt = 0;
 
 		// Find the first "real" base (skips translating NNNNN etc at start)
-		for (startAt = 0; startAt < length; startAt++)
+		for (startAt = 0; startAt < length && okToRun; startAt++)
 			if (sequence.getStateAt(startAt) >= A)
 				break;
 
-		for (int i = startAt + readingFrame; i < length; i++)
+		for (int i = startAt + readingFrame; i < length && okToRun; i++)
 		{
 			byte state = sequence.getStateAt(i);
 
@@ -110,7 +139,8 @@ public class ProteinTranslator extends SimpleJob
 				protein[dna[1]] = (short) code;
 				protein[dna[2]] = (short) (code + 42);
 
-				translation.append(codes[code]);
+				if (translation != null)
+					translation.append(codes[code]);
 			}
 		}
 	}
@@ -128,11 +158,11 @@ public class ProteinTranslator extends SimpleJob
 		int startAt = length - 1;
 
 		// Find the first "real" base (skips translating NNNNN etc at start)
-		for (; startAt >= 0; startAt--)
+		for (; startAt >= 0 && okToRun; startAt--)
 			if (sequence.getStateAt(startAt) >= A)
 				break;
 
-		for (int i = startAt-readingFrame; i >= 0; i--)
+		for (int i = startAt-readingFrame; i >= 0 && okToRun; i--)
 		{
 			byte state = sequence.getStateAt(i);
 
@@ -157,7 +187,8 @@ public class ProteinTranslator extends SimpleJob
 				protein[dna[1]] = (short) code;
 				protein[dna[0]] = (short) (code + 42);
 
-				translation.append(codes[code]);
+				if (translation != null)
+					translation.append(codes[code]);
 			}
 		}
 	}
@@ -168,7 +199,7 @@ public class ProteinTranslator extends SimpleJob
 	String getTranslationAsString()
 		{ return translation.toString(); }
 
-	private static void createTranslationTable()
+	private void createTranslationTable()
 	{
 		acids = new HashMap<String, Integer>();
 		codes = new String[22];

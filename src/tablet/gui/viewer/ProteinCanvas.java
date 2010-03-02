@@ -7,16 +7,15 @@ import java.awt.*;
 import java.util.*;
 
 import tablet.analysis.*;
+import tablet.analysis.tasks.*;
 import tablet.data.*;
 import tablet.gui.*;
 import tablet.gui.viewer.colors.*;
 
-class ProteinCanvas extends TrackingCanvas
+class ProteinCanvas extends TrackingCanvas implements ITaskListener
 {
 	private Contig contig;
 	private Consensus consensus;
-
-	private TranslationFractory factory;
 
 	boolean[] enabled = new boolean[6];
 	ArrayList<short[]> translations;
@@ -45,7 +44,8 @@ class ProteinCanvas extends TrackingCanvas
 		if (contig != null)
 		{
 			consensus = contig.getConsensus();
-			updateTranslations();
+
+			createTranslations();
 		}
 
 		// Remove tablet.data references if nothing is going to be displayed
@@ -53,20 +53,6 @@ class ProteinCanvas extends TrackingCanvas
 			consensus = null;
 
 		this.contig = contig;
-	}
-
-	void updateTranslations()
-	{
-		// Clear the existing translations (if any)
-		translations = null;
-		repaint();
-
-		// Start a new thread to generate the translations in the background
-		if (factory != null)
-			factory.killMe = true;
-
-		factory = new TranslationFractory(consensus);
-		factory.start();
 	}
 
 	void setDimensions()
@@ -116,7 +102,7 @@ class ProteinCanvas extends TrackingCanvas
 		for (int t = 0, count = 0; t < translations.size(); t++)
 		{
 			// If this translation isn't needed, skip it...
-			if (enabled[t] == false)
+			if (enabled[t] == false || translations.get(t) == null)
 				continue;
 
 			int y = (rCanvas.ntH+1) * count;
@@ -153,61 +139,49 @@ class ProteinCanvas extends TrackingCanvas
 		return data;
 	}
 
-	/**
-	 * This class generates the DNA->Protein translations in real-time as they
-	 * are needed by the canvas. Whenever a new consensus is displayed, the
-	 * existing translations are thrown away and new ones are calculated.
-	 */
-	private class TranslationFractory extends Thread
+	void createTranslations()
 	{
-		private Consensus consensus;
-		private ArrayList<short[]> translations = new ArrayList<short[]>(6);
+		translations = new ArrayList<short[]>(6);
+		System.out.println();
 
-		boolean killMe = false;
-
-		TranslationFractory(Consensus consensus)
-			{ this.consensus = consensus; }
-
-		public void run()
+		// Forward and reverse...
+		for (int i = 0, tIndex = 0; i < 2; i++)
 		{
-			setPriority(Thread.MIN_PRIORITY);
-			setName("ProteinCanvas-TranslationFractory");
+			ProteinTranslator.Direction direction = i == 0 ?
+				ProteinTranslator.Direction.FORWARD :
+				ProteinTranslator.Direction.REVERSE;
 
-			try { Thread.sleep(250); } catch (Exception e) {}
-
-			// Forward and reverse...
-			for (int i = 0, t = 0; i < 2 && !killMe; i++)
+			// ...three reading frames in each direction
+			for (int j = 1; j <= 3; j++, tIndex++)
 			{
-				ProteinTranslator.Direction direction = i == 0 ?
-					ProteinTranslator.Direction.FORWARD :
-					ProteinTranslator.Direction.REVERSE;
+				translations.add(null);
 
-				// ...three reading frames in each direction
-				for (int j = 1; j <= 3 && !killMe; j++)
+				// Cancel any previous invocation
+				String name = "ProteinTranslator:" + tIndex;
+				TaskManager.cancel(name);
+
+				// Only do the translation if it needs to be shown
+				if (enabled[tIndex])
 				{
-					// Only do the translation if it needs to be shown
-					if (enabled[t++])
-					{
-						ProteinTranslator pt = new ProteinTranslator(
-							consensus, direction, j);
+					ProteinTranslator pt = new ProteinTranslator(
+						tIndex, consensus, direction, j);
 
-						try
-						{
-							pt.runJob(0);
-							translations.add(pt.getTranslation());
-						}
-						catch (Exception e) {}
-					}
-					else
-						translations.add(null);
+					pt.addTaskListener(this);
+					TaskManager.submit(name, pt);
 				}
 			}
+		}
+	}
 
-			// Remove any references to tablet.data objects we were tracking
-			consensus = null;
+	public void taskCompleted(EventObject e)
+	{
+		if (e.getSource() instanceof ProteinTranslator)
+		{
+			ProteinTranslator pt = (ProteinTranslator) e.getSource();
 
-			if (killMe == false)
-				setTranslations(translations);
+			translations.set(pt.getIndex(), pt.getTranslation());
+
+			repaint();
 		}
 	}
 }

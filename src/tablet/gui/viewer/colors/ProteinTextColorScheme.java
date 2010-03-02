@@ -17,7 +17,7 @@ public class ProteinTextColorScheme extends ColorScheme
 	{
 		super();
 
-		String[] codes = ProteinTranslator.codes;
+		String[] codes = new ProteinTranslator().codes;
 
 		states.add(new StandardColorState("", Color.white, w, h, false, false));
 

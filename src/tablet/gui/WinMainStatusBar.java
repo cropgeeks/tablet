@@ -6,7 +6,6 @@ package tablet.gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
-import java.util.concurrent.atomic.*;
 import javax.swing.*;
 
 import tablet.analysis.tasks.*;
@@ -20,7 +19,6 @@ class WinMainStatusBar extends JPanel implements ActionListener
 
 	private int bgColor;
 
-	private AtomicInteger tCounter = TaskManager.getThreadCounter();
 	private int oldCounter = 0;
 
 	private javax.swing.Timer tipsTimer;
@@ -81,7 +79,7 @@ class WinMainStatusBar extends JPanel implements ActionListener
 
 		else if (e.getSource() == threadTimer)
 		{
-			int counter = tCounter.get();
+			int counter = TaskManager.count();
 
 			if (counter != oldCounter)
 			{

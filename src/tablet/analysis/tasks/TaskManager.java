@@ -21,23 +21,22 @@ import java.util.concurrent.atomic.*;
  */
 public class TaskManager
 {
-	private static ExecutorService executor;
-	private static AtomicInteger tCounter;
+	private static ThreadPoolExecutor executor;
 
-	private static Hashtable<String, BackgroundTask> tasks;
+	private static ConcurrentHashMap<String, BackgroundTask> tasks;
 
 	static
 	{
 		int cores = Runtime.getRuntime().availableProcessors();
+		executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(cores);
 
-		executor = Executors.newFixedThreadPool(cores);
-		tCounter = new AtomicInteger(0);
-
-		tasks = new Hashtable<String, BackgroundTask>();
+		tasks = new ConcurrentHashMap<String, BackgroundTask>();
 	}
 
-	public static AtomicInteger getThreadCounter()
-		{ return tCounter; }
+	public static int count()
+	{
+		return (int)(executor.getTaskCount() - executor.getCompletedTaskCount());
+	}
 
 	public static void cancelAll()
 	{
@@ -48,13 +47,18 @@ public class TaskManager
 			String name = keys.nextElement();
 			BackgroundTask task = tasks.get(name);
 
-			if (task.isRunning())
-				System.out.println("Stopping " + name);
-
 			task.cancel();
 		}
 
 		tasks.clear();
+	}
+
+	public static void cancel(String name)
+	{
+		BackgroundTask task = tasks.get(name);
+
+		if (task != null)
+			task.cancel();
 	}
 
 	public static void submit(String name, BackgroundTask task)
@@ -72,7 +76,6 @@ public class TaskManager
 		}
 
 		tasks.put(name, task);
-		task.setThreadCounter(tCounter);
 
 		executor.submit(task);
 	}
