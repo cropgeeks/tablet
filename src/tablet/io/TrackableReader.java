@@ -34,6 +34,8 @@ abstract class TrackableReader extends SimpleJob
 	// Tracks the current file being read from
 	private int fileIndex;
 
+	private boolean isIndeterminate = false;
+
 	// The total size (in bytes) of all the files
 	private long totalSize;
 
@@ -49,7 +51,16 @@ abstract class TrackableReader extends SimpleJob
 		bytesRead = new long[files.length];
 
 		for (AssemblyFile file: files)
-			totalSize += file.length();
+		{
+			long length = file.length();
+
+			// Special check to deal with files whose length can't be determined
+			// (usually happens with web server files returning -1 for length)
+			if (length <= 0)
+				isIndeterminate = true;
+
+			totalSize += length;
+		}
 	}
 
 	String readLine()
@@ -63,7 +74,7 @@ abstract class TrackableReader extends SimpleJob
 		{ return assembly; }
 
 	public boolean isIndeterminate()
-		{ return totalSize == 0; }
+		{ return isIndeterminate; }
 
 	public int getMaximum()
 		{ return 5555; }

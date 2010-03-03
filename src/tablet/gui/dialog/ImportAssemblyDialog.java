@@ -81,7 +81,7 @@ public class ImportAssemblyDialog extends JDialog
 		};
 
 		refFilters = new FileNameExtensionFilter[] {
-			new FileNameExtensionFilter(RB.getString("gui.text.formats.fasta"), "fasta"),
+			new FileNameExtensionFilter(RB.getString("gui.text.formats.fasta"), "fasta", "fa"),
 			new FileNameExtensionFilter(RB.getString("gui.text.formats.fastq"), "fastq"),
 			new FileNameExtensionFilter(RB.getString("gui.text.formats.txt"), "txt")
 		};
