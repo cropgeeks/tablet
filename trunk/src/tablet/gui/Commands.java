@@ -82,7 +82,7 @@ public class Commands
 		if (filename == null)
 		{
 			FileNameExtensionFilter[] filters = new FileNameExtensionFilter[] {
-				new FileNameExtensionFilter(RB.getString("gui.text.formats.gff"), "gff"),
+				new FileNameExtensionFilter(RB.getString("gui.text.formats.gff"), "gff", "gff3"),
 				new FileNameExtensionFilter(RB.getString("gui.text.formats.txt"), "txt") };
 
 			filename = TabletUtils.getOpenFilename(RB.getString(

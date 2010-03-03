@@ -35,7 +35,6 @@ public class AssemblyFileHandler extends SimpleJob
 	private TrackableReader reader = null;
 
 	private String cacheid = SystemUtils.createGUID(24);
-	private boolean bai = false;
 
 	private Assembly assembly;
 
@@ -56,7 +55,6 @@ public class AssemblyFileHandler extends SimpleJob
 		throws Exception
 	{
 		boolean fileParsed = false;
-		bai = false;
 
 		// Ensure the cache directory exists (and is valid)
 		cacheDir.mkdirs();
@@ -78,13 +76,12 @@ public class AssemblyFileHandler extends SimpleJob
 
 		// For each file format that we understand...
 
-		if(okToRun && fileParsed == false)
+		// BAM
+		if (okToRun && fileParsed == false)
 		{
 			reader = new BamFileReader(readCache, cacheDir, cacheid);
 			fileParsed = readFile();
-			bai = true;
 		}
-
 		// ACE
 		if (okToRun && fileParsed == false)
 		{
@@ -103,12 +100,6 @@ public class AssemblyFileHandler extends SimpleJob
 			reader = new MaqFileReader(readCache);
 			fileParsed = readFile();
 		}
-		//BAM
-//		if(okToRun && fileParsed == false)
-//		{
-//			reader = new BamFileReader(readCache);
-//			fileParsed = readFile();
-//		}
 		// SAM
 		if (okToRun && fileParsed == false)
 		{
