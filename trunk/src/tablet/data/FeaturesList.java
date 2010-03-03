@@ -1,23 +1,20 @@
 package tablet.data;
 
-import java.util.ArrayList;
+import java.util.*;
+
 import tablet.data.auxiliary.Feature;
 
 public class FeaturesList
 {
-	// Main set of features
 	private ArrayList<Feature> features = new ArrayList<Feature>();
 
 	public void addFeature(Feature newFeature)
 	{
-		boolean found = false;
-		// Check it doesn't already exist
-		for (int i = 0; i < features.size(); i++)
-			if (features.get(i).isSameAs(newFeature))
-				found = true;
+		int result = Collections.binarySearch(features, newFeature);
 
-		if(!found)
-			features.add(newFeature);
+		// If result >= 0 we've found a duplicat and don't add. Otherwise add.
+		if(result < 0)
+			features.add((-result)-1, newFeature);
 	}
 	
 	public int size()

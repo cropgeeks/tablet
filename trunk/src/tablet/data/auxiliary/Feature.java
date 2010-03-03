@@ -46,30 +46,20 @@ public class Feature implements Comparable<Feature>
 			if (p2 < other.p2)
 				return -1;
 			else if (p2 == other.p2)
-				return 0;
-			else
-				return 1;
+			{
+				if(gffType.compareTo(other.gffType) < 0)
+					return -1;
+				else if(gffType.compareTo(other.gffType) == 0)
+				{
+					if(name.compareTo(other.name) < 0)
+						return -1;
+					else if(name.compareTo(other.name) == 0)
+						return 0;
+				}
+			}
 		}
 
-		else
-			return 1;
-	}
-
-	public boolean isSameAs(Feature other)
-	{
-		if (p1 != other.p1)
-			return false;
-		if (p2 != other.p2)
-			return false;
-		if (!gffType.equals(other.gffType))
-			return false;
-		if (!name.equals(other.name))
-			return false;
-
-		if (tabletType != other.tabletType)
-			return false;
-
-		return true;
+		return 1;
 	}
 
 	public int getTabletType()
