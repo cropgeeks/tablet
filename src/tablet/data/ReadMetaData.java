@@ -63,17 +63,14 @@ public class ReadMetaData extends Sequence
 	 * information is part of the ReadMetaData class and this method is purely
 	 * for calculation to fill that class - it shouldn't be used for any other
 	 * purpose.
-	 * @return the unpadded length of this sequence
 	 */
-	public int calculateUnpaddedLength()
+	public void calculateUnpaddedLength()
 	{
-		int baseCount = 0;
+		unpaddedLength = 0;
 
 		for (int i = 0; i < length; i++)
 			if (getStateAt(i) != P)
-				baseCount++;
-
-		return baseCount;
+				unpaddedLength++;
 	}
 
 	public int length()
@@ -93,7 +90,6 @@ public class ReadMetaData extends Sequence
 	@Override
 	public String toString()
 	{
-		System.out.println("Length: " + length);
 		StringBuilder sb = new StringBuilder(length);
 
 		for (int i = 0; i < length; i++)
