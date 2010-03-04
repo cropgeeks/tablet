@@ -16,14 +16,13 @@ import scri.commons.gui.*;
 class AfgFileReader extends TrackableReader
 {
 	private IReadCache readCache;
+	private HashMap<Integer, Integer> iids = new HashMap<Integer, Integer>();
+	private int tmpCacheID = 0;
 
 	private Contig contig;
 
 	// The index of the AFG file in the files[] array
 	private int afgIndex = -1;
-
-	// Incrementing count of the number of reads processed
-//	private int readsFound = 0;
 
 	// Pretty much all the tokenizing we do is based on this one pattern
 	private Pattern p = Pattern.compile("\\s+");
@@ -223,7 +222,9 @@ class AfgFileReader extends TrackableReader
 			{
 				while ((str = readLine()) != null && str.length() > 0 && str.charAt(0) != '.')
 				{
-					gapPositions.add(Integer.parseInt(str.trim()));
+					String[] gaps = str.trim().split(" ");
+					for (String gap: gaps)
+						gapPositions.add(Integer.parseInt(gap));
 				}
 			}
 		}
@@ -231,9 +232,13 @@ class AfgFileReader extends TrackableReader
 		//if the clear range values start with the largest first, the read is complemented
 		boolean isComplemented = clearRangeStart > clearRangeEnd;
 
+		// Offset amount for the first gap
+		int gapOffset = 0;
+
 		//retrieve the corresponding read from the array list using the internal id
-		//tile internal ID is 1-based but list is 0-based so need to subtract 1 here to get the right read
-		ReadMetaData readMetaData = tempCache.getReadMetaData(tileIID-1, false);
+		int id = iids.get(tileIID);
+		ReadMetaData readMetaData = tempCache.getReadMetaData(id, false);
+
 		readMetaData.calculateUnpaddedLength();
 
 		Read read = new Read();
@@ -241,10 +246,25 @@ class AfgFileReader extends TrackableReader
 		//set Tablet read id on the current read
 		read.setID(currReadID);
 
+		// Modify the start position of the read by the amount specified using
+		// the clear range data. Also compute the gapOffset which (in the same
+		// way) needs to be modified by this amount to get the correct starting
+		// position for the first gap.
+		// Forward read...
+		if (clearRangeEnd > clearRangeStart)
+		{
+			offset = offset - clearRangeStart;
+			gapOffset = clearRangeStart;
+		}
+		// Reverse read...
+		else
+		{
+			offset = offset - (readMetaData.getUnpaddedLength() - clearRangeStart);
+			gapOffset = readMetaData.getUnpaddedLength() - clearRangeStart;
+		}
+
 		//set start pos
 		read.setStartPosition(offset);
-
-		read.setLength(readMetaData.length());
 
 		//now deal with the gap positions
 		//first check whether we have any gaps in the existing sequence and remove them if there are
@@ -261,12 +281,16 @@ class AfgFileReader extends TrackableReader
 		if(gapPositions != null && gapPositions.size() > 0)
 		{
 			StringBuilder buf = new StringBuilder(readMetaData.toString());
+			int gapCount = 0;
 			for(Integer i : gapPositions)
 			{
-				buf.insert(i, gapChar);
+				buf.insert(i + gapOffset + gapCount, gapChar);
+				gapCount++;
 			}
 			readMetaData.setData(buf);
 		}
+
+		read.setLength(readMetaData.length());
 
 		//add read to this contig
 		contig.getReads().add(read);
@@ -299,6 +323,12 @@ class AfgFileReader extends TrackableReader
 				readMetaData.setName(str.substring(str.indexOf(":") + 1));
 			}
 
+			else if (str.startsWith("iid"))
+			{
+				int iid = Integer.parseInt(str.substring(str.indexOf(":") + 1));
+				iids.put(iid, tmpCacheID);
+			}
+
 			// the  sequence itself
 			else if (str.startsWith("seq"))
 			{
@@ -318,6 +348,8 @@ class AfgFileReader extends TrackableReader
 		//consensus sequence
 		//at this point the read is not complemented so we can set the boolean (3rd param) to false accordingly
 		tempCache.setReadMetaData(readMetaData);
+
+		tmpCacheID++;
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------
@@ -347,13 +379,6 @@ class AfgFileReader extends TrackableReader
 
 		for (int t = 0, i = 0; t < tokens.length; t++, i++)
 		{
-			// Skip padded bases, because the quality string doesn't score them
-			while (consensus.getStateAt(i) == Sequence.P)
-			{
-				bq[i] = -1;
-				i++;
-			}
-
 			bq[i] = Byte.parseByte(tokens[t]);
 		}
 
