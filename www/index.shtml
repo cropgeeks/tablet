@@ -27,7 +27,7 @@ generation sequence assemblies and alignments.</p>
 <ul>
 <li>High-performance visualization and data navigation.</li>
 <li>Display of reads in both packed and stacked formats.</li>
-<li>File format support for ACE, AFG, MAQ, and SOAP, with experimental SAM.</li>
+<li>File format support for ACE, AFG, MAQ, SOAP, SAM and BAM.</li>
 <li>Import GFF3 features and quickly find/highlight them.</li>
 <li>Search and locate reads by name across entire data sets.</li>
 <li>Entire-contig overviews, showing data layout or coverage information.</li>

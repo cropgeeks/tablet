@@ -56,6 +56,21 @@ way Tablet is used and is displayed.</p>
 	codon.</li>
 </ul>
 
+<ul>
+  <li><b>Default BAM data window size (in bp)</b><br>
+  This specifies the window size to be used when loading BAM data. A larger window
+	size will require more memory, but allow you to see more of the data at once.</li>
+
+<li><b>Cache read data to disk</b><br>
+  Selecting this option will ensure Tablet keeps the majority of read data for
+  an assembly in a disk-based cache, rather than in memory. This marginally
+  reduces performance, but has a significant saving on memory.</li>
+
+<li><b>Cache padded/unpadded mapping data to disk</b><br>
+  As above, selecting this option will ensure Tablet keeps the data for mapping between
+  padded and unpadded locations in a disk-based cache, rather than in memory.</li>
+</ul>
+
 
 <h3>Warnings</h3>
 
