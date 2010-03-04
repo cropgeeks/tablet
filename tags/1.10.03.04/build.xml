@@ -1,0 +1,122 @@
+<project name="Tablet" default="compile" basedir=".">
+
+	<property name="src"       location="src"/>
+	<property name="lib"       location="lib"/>
+	<property name="res"       location="res"/>
+	<property name="lib-devel" location="lib-devel"/>
+	<property name="classes"   location="classes"/>
+
+	<property name="tablet.jar" value="${lib}/tablet.jar"/>
+	<property name="tablet-resources.jar" value="${lib}/tablet-resources.jar"/>
+
+	<target name="init">
+	</target>
+
+	<path id="project.classpath">
+		<pathelement path="${classes}"/>
+		<fileset dir="${lib}"/>
+		<fileset dir="${lib-devel}"/>
+	</path>
+
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset dir="${classes}" includes="**/*"/>
+			<fileset file="${tablet.jar}"/>
+			<fileset file="${tablet-resources.jar}"/>
+		</delete>
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src}" destdir="${classes}" debug="true">
+			<classpath refid="project.classpath"/>
+			<exclude name="**/package-info.java"/>
+		</javac>
+	</target>
+
+	<target name="test" depends="compile">
+		<junit printsummary="on" haltonerror="true" haltonfailure="true" dir="." fork="true">
+			<jvmarg value="-Xmx1024m"/>
+			<classpath refid="project.classpath"/>
+			<formatter type="plain" usefile="false"/>
+			<batchtest>
+				<fileset dir="${classes}" includes="**/*Test.class"/>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="jar" depends="clean, compile">
+		<jar jarfile="${tablet-resources.jar}">
+			<zipfileset dir="${res}" prefix="res"/>
+		</jar>
+		<jar jarfile="${tablet.jar}">
+			<fileset dir="${classes}">
+				<exclude name="**/*Test.class"/>
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="tablet.gui.Tablet"/>
+				<attribute name="Class-Path"
+					value="flamingo.jar
+						i4jruntime.jar
+						osxadapter.jar
+						scri-commons.jar
+						sam.jar
+						tablet-resources.jar"/>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="install4j" depends="jar">
+		<taskdef name="install4j"
+			classname="com.install4j.Install4JTask"
+			classpath="C:\Program Files\Install4j\bin\ant.jar"/>
+		<delete>
+			<fileset dir="installer" includes="**/*.exe"/>
+			<fileset dir="installer" includes="**/*.sh"/>
+			<fileset dir="installer" includes="**/*.dmg"/>
+		</delete>
+		<input message="Enter the version number:" addproperty="version"/>
+		<install4j projectfile="installer/tablet.install4j" release="${version}"/>
+	</target>
+
+	<target name="javadoc">
+		<javadoc destdir="docs/api" author="true" version="true" use="true">
+			<fileset dir="${src}" defaultexcludes="yes">
+				<include name="**/*.java"/>
+			</fileset>
+			<classpath refid="project.classpath"/>
+		</javadoc>
+	</target>
+
+	<target name="run" depends="jar">
+		<java jar="${tablet.jar}">
+			<jvmarg value="-Xmx1024m"/>
+		</java>
+	</target>
+
+	<target name="sign" depends="jar">
+		<input message="Enter the storepass:" addproperty="storepass"/>
+		<signjar alias="plantbio" storepass="${storepass}"
+			preservelastmodified="true" lazy="true"
+			tsaurl="https://timestamp.geotrust.com/tsa">
+			<fileset dir="${lib}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</signjar>
+	</target>
+
+	<target name="jnlp" depends="sign">
+		<input message="Enter the version number:" addproperty="version"/>
+		<copy
+			file="www/cgi-bin/jnlp.template"
+			tofile="\\bioinf\root\var\www\html\tablet\webstart\tablet.jnlp.template"
+			overwrite="true">
+			<filterset>
+				<filter token="VERSION" value="${version} WS"/>
+			</filterset>
+		</copy>
+		<copy todir="\\bioinf\root\var\www\html\tablet\webstart">
+			<fileset dir="${lib}"/>
+		</copy>
+	</target>
+
+</project>
