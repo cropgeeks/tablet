@@ -55,22 +55,8 @@
 
 <p>The BAM bar also has a right click context menu. This menu contains an option
 	for returning to the previous location in the data set and an option for
-	adjusting the BAM window size.</p>
-	<p><img class="capture" src="images/bamrightclick.png" alt="Tablet Screenshot"></p>
-<p>Return to previous location returns the BAM data window to its previous location,
-	which is the location of the "ghost" on the BAM bar. The option for adjusting
-	the BAM window size opens up a preferences dialog like the one below.</p>
-<p><a href="images/bamwindowoptions.png">
-<img class="capture" src="images/bamwindowoptions2.png" alt="Tablet Screenshot"></a></p>
-<p>To change the number of bases which are included in a BAM data window, alter
-	the number in the "Default BAM data window size (in bp)" field. A larger window
-	size will require more memory, but allow you to see more of the data at once.
-	For both the "Cache read data to disk" and "Cache padded/unpadded mapping data
-	to disk" options, unchecking these options will increase the speed of
-	visualization relatively marginally, but will require a significant amount of
-	extra memory to display. In most cases it is better to leave these checked by
-	default.</p>
-
+	adjusting the BAM window size using the <a href="gui.dialog.prefs.PreferencesDialog.shtml">
+	Tablet Options</a> dialog.</p>
 
 
 <h3>Changes to the reads canvas</h3>
@@ -96,7 +82,7 @@
 	they are when viewing other assembly files. They are overviews of the data
 	in the current BAM data window. Whole data set overviews are not available for
 	BAM alignments. In all other regards the information on overviews in the
-	<a href="overviews.shtml">overviews</a> section relates to BAM data overviews 
+	<a href="overviews.shtml">overviews</a> section relates to BAM data overviews
 	as well.</p>
 
 <h3>Contigs panel</h3>

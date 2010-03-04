@@ -22,6 +22,25 @@ that have been made to Tablet in recent versions. For full details on all the
 changes between versions, please see the <a href="http://bioinf.scri.ac.uk/tablet/svn.txt">
 subversion change log</a>.</p>
 
+<h3>New in 1.10.03.04</h3>
+
+<ul>
+<li>NEW: Added support for indexed BAM assemblies.</li>
+<li>NEW: Added a new navigation bar for moving the viewing window around within a larger BAM assembly.</li>
+<li>NEW: Implemented background (multicore) thread support for calculating auxiliary display data, meaning large contigs can now be viewed instantly.</li>
+<li>NEW: Various implementation changes mean less memory is now used for large contigs.</li>
+<li>NEW: The Open Assembly dialog is now significantly quicker at detecting the assembly type.</li>
+<li>NEW: The page left/right controls now hide when the edges of the display are reached.</li>
+<li>NEW: Added options to the Preferences Dialog to enable/disable disk caching (where supported).</li>
+<li>NEW: Loading a very large number of features is now much faster.</li>
+<li>NEW: The bp coordinates (data set/BAM window and current view) are now shown on the overview images.</li>
+<li>CHG: Updated the mismatch code to ignore regions of reads that extend beyond the left or right ends of the consensus.</li>
+<li>BUG: Fixed a problem with files being ignored when passed to Tablet on the command line.</li>
+<li>BUG: Fixed a bug which caused Tablet to not exit correctly when a filter had been applied in the Contigs Table.</li>
+<li>BUG: Fixed multiple issues with AFG parsing related to clr and gap tags.</li>
+<li>BUG: The unpadded read length was no longer being shown in the popup information box.</li>
+</ul>
+
 
 <h3>New in 1.10.02.08</h3>
 
