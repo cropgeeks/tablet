@@ -12,7 +12,7 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 	private ReadsCanvas rCanvas;
 	private IReadManager reads;
 
-	private int ntOnCanvasX, ntOnCanvasY;
+	private int ntOnCanvasX, ntOnCanvasY, oS, oE;
 
 	ScaledOverviewFactory(OverviewCanvas canvas, int w, int h, ReadsCanvas rCanvas)
 	{
@@ -24,6 +24,9 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 		reads = rCanvas.reads;
 		ntOnCanvasX = rCanvas.ntOnCanvasX;
 		ntOnCanvasY = rCanvas.ntOnCanvasY;
+
+		oS = rCanvas.contig.getVisualStart();
+		oE = rCanvas.contig.getVisualEnd();
 
 		start();
 	}
@@ -42,7 +45,7 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 		Graphics2D g = createBuffer();
 
 		// Scaling factors
-		float xScale = ntOnCanvasX / (float) w;
+		float xScale = (oE-oS+1) / (float) w;
 		float yScale = ntOnCanvasY / (float) h;
 
 		// Loop over every pixel that makes up the overview...
@@ -57,7 +60,7 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 					catch (InterruptedException e) {}
 
 				// Working out where each pixel maps to in the data...
-				int dataX = (int) (x * xScale) + rCanvas.offset;
+				int dataX = (int) (x * xScale) + oS;
 
 				// Then drawing that data (or not)
 				Read read = reads.getReadAt(dataY, dataX);
