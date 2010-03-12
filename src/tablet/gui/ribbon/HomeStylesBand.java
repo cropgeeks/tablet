@@ -22,6 +22,7 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 	private WinMain winMain;
 
 	private JCommandToggleButton bStandard;
+	private JCommandToggleButton bDirection;
 	private JCommandToggleButton bText;
 
 	private CommandToggleButtonGroup group;
@@ -108,14 +109,32 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 		bStandard.setActionModel(Actions.homeStylesStandard);
 		bStandard.setActionKeyTip("E");
 		bStandard.addMouseListener(styleListener);
-//		bStandard.setActionRichTooltip(new RichTooltip(
-//			RB.getString("gui.ribbon.HomeStylesBand.bStandard.tooltip"),
-//			RB.getString("gui.ribbon.HomeStylesBand.bStandard.richtip")));
+		bStandard.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeStylesBand.bStandard.tooltip"),
+			RB.getString("gui.ribbon.HomeStylesBand.bStandard.richtip")));
 		styleButtons.add(bStandard);
 
 
-		// Text ("classic" colour scheme button
-		boolean textOn = Prefs.visColorScheme == ColorScheme.TEXT;
+		// Orientation/direction colour scheme button
+		boolean directionOn = Prefs.visColorScheme == ColorScheme.DIRECTION;
+
+		bDirection = new JCommandToggleButton(
+			RB.getString("gui.ribbon.HomeStylesBand.bDirection"),
+			RibbonController.getIcon("DIRECTION32", 32));
+		Actions.homeStylesDirection = new ActionToggleButtonModel(false);
+		Actions.homeStylesDirection.setSelected(directionOn);
+		Actions.homeStylesDirection.addActionListener(this);
+		bDirection.setActionModel(Actions.homeStylesDirection);
+		bDirection.setActionKeyTip("D");
+		bDirection.addMouseListener(styleListener);
+		bDirection.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeStylesBand.bDirection.tooltip"),
+			RB.getString("gui.ribbon.HomeStylesBand.bDirection.richtip")));
+		styleButtons.add(bDirection);
+
+
+		// Text ("classic") colour scheme button
+		boolean textOn = Prefs.visColorScheme == ColorScheme.CLASSIC;
 
 		bText = new JCommandToggleButton(
 			RB.getString("gui.ribbon.HomeStylesBand.bText"),
@@ -126,18 +145,18 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 		bText.setActionModel(Actions.homeStylesText);
 		bText.setActionKeyTip("C");
 		bText.addMouseListener(styleListener);
-//		bText.setActionRichTooltip(new RichTooltip(
-//			RB.getString("gui.ribbon.HomeStylesBand.bText.tooltip"),
-//			RB.getString("gui.ribbon.HomeStylesBand.bText.richtip")));
+		bText.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeStylesBand.bText.tooltip"),
+			RB.getString("gui.ribbon.HomeStylesBand.bText.richtip")));
 		styleButtons.add(bText);
 
 
 		// Set up the ribbon gallery (gawd knows what this code is doing)
 		Map<RibbonElementPriority, Integer> counts =
 			new HashMap<RibbonElementPriority, Integer>();
-		counts.put(RibbonElementPriority.LOW, 2);
-		counts.put(RibbonElementPriority.MEDIUM,2);
-		counts.put(RibbonElementPriority.TOP, 2);
+		counts.put(RibbonElementPriority.LOW, 3);
+		counts.put(RibbonElementPriority.MEDIUM, 3);
+		counts.put(RibbonElementPriority.TOP, 3);
 
 		List<StringValuePair<List<JCommandToggleButton>>> galleryButtons =
 			new ArrayList<StringValuePair<List<JCommandToggleButton>>>();
@@ -145,7 +164,7 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 		galleryButtons.add(
 			new StringValuePair<List<JCommandToggleButton>>(null, styleButtons));
 		addRibbonGallery(
-			"Style", galleryButtons, counts, 3, 2, RibbonElementPriority.TOP);
+			"Style", galleryButtons, counts, 4, 4, RibbonElementPriority.TOP);
 	}
 
 
@@ -163,10 +182,19 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 			Actions.homeStylesStandard.setSelected(true);
 		}
 
+		else if (e.getSource() == Actions.homeStylesDirection)
+		{
+			setColorScheme(ColorScheme.DIRECTION);
+			styleListener.previousScheme = ColorScheme.DIRECTION;
+
+			// BUG: Workaround for API allowing toggle groups to be unselected
+			Actions.homeStylesDirection.setSelected(true);
+		}
+
 		else if (e.getSource() == Actions.homeStylesText)
 		{
-			setColorScheme(ColorScheme.TEXT);
-			styleListener.previousScheme = ColorScheme.TEXT;
+			setColorScheme(ColorScheme.CLASSIC);
+			styleListener.previousScheme = ColorScheme.CLASSIC;
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
 			Actions.homeStylesText.setSelected(true);
@@ -213,9 +241,13 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 				previousScheme != ColorScheme.STANDARD)
 				setColorScheme(ColorScheme.STANDARD);
 
+			else if (e.getSource() == bDirection && Actions.homeStylesDirection.isEnabled() &&
+				previousScheme != ColorScheme.DIRECTION)
+				setColorScheme(ColorScheme.DIRECTION);
+
 			else if (e.getSource() == bText && Actions.homeStylesText.isEnabled() &&
-				previousScheme != ColorScheme.TEXT)
-				setColorScheme(ColorScheme.TEXT);
+				previousScheme != ColorScheme.CLASSIC)
+				setColorScheme(ColorScheme.CLASSIC);
 		}
 
 		// On mouse exit we can just reinstate the previous scheme (if it's not

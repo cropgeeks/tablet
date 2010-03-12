@@ -71,6 +71,15 @@ public class TextColorScheme extends ColorScheme
 		// Sequence.dT
 		statesRD.add(new TextState("T", w, h, true, true));
 		statesCS.add(null);
+
+
+		// Duplicate the second half (to deal/ignore with orientation
+		//  add 6 to get us up to "20"
+		for (int i = 0; i < 6; i++)
+			statesRD.add(null);
+		//  then add the same pre-created states all over again
+		for (int i = 0; i < 14; i++)
+			statesRD.add(statesRD.get(i));
 	}
 
 	public BufferedImage getImage(int data)

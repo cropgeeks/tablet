@@ -29,6 +29,7 @@ public class Actions
 	public static ActionRepeatableButtonModel homeOptionsHideProteins;
 
 	public static ActionToggleButtonModel homeStylesStandard;
+	public static ActionToggleButtonModel homeStylesDirection;
 	public static ActionToggleButtonModel homeStylesText;
 	public static ActionToggleButtonModel homeStylesPacked;
 	public static ActionToggleButtonModel homeStylesStacked;
@@ -64,6 +65,7 @@ public class Actions
 		homeOptionsOverlayReadNames.setEnabled(false);
 
 		homeStylesStandard.setEnabled(false);
+		homeStylesDirection.setEnabled(false);
 		homeStylesText.setEnabled(false);
 		homeStylesPacked.setEnabled(false);
 		homeStylesStacked.setEnabled(false);
@@ -100,6 +102,7 @@ public class Actions
 		homeOptionsOverlayReadNames.setEnabled(false);
 
 		homeStylesStandard.setEnabled(false);
+		homeStylesDirection.setEnabled(false);
 		homeStylesText.setEnabled(false);
 		homeStylesPacked.setEnabled(false);
 		homeStylesStacked.setEnabled(false);
@@ -136,6 +139,7 @@ public class Actions
 		homeOptionsOverlayReadNames.setEnabled(!Prefs.visPacked);
 
 		homeStylesStandard.setEnabled(true);
+		homeStylesDirection.setEnabled(true);
 		homeStylesText.setEnabled(true);
 		homeStylesPacked.setEnabled(true);
 		homeStylesStacked.setEnabled(true);

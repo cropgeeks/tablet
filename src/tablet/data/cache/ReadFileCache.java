@@ -78,6 +78,7 @@ public class ReadFileCache extends TabletCache implements IReadCache
 
 					int dataLength = rnd.readIntFromBuffer();
 
+					// Data first
 					byte[] data;
 					if(dataLength % 2 == 0)
 						data = new byte[dataLength/2];
@@ -85,10 +86,14 @@ public class ReadFileCache extends TabletCache implements IReadCache
 						data = new byte[(dataLength/2)+1];
 					rnd.read(data);
 
+					// Then C or U
+					boolean isComplemented = rnd.readBooleanFromBuffer();
+
 					if (dataOnly)
 					{
 						rmd = new ReadMetaData();
 						rmd.setRawData(data);
+						rmd.setComplmented(isComplemented);
 					}
 					else
 					{
@@ -100,9 +105,6 @@ public class ReadFileCache extends TabletCache implements IReadCache
 						// Then read its name from the file
 						rnd.read(array);
 						String name = new String(array, "UTF8");
-
-						// Then C or U
-						boolean isComplemented = rnd.readBooleanFromBuffer();
 
 						// Unpadded length
 						int unpaddedLength = rnd.readIntFromBuffer();
@@ -144,14 +146,14 @@ public class ReadFileCache extends TabletCache implements IReadCache
 		// And the data itself
 		out.write(data);
 
+		// Write a single byte for C or U
+		out.writeBoolean(readMetaData.isComplemented());
+
 		byte[] array = readMetaData.getName().getBytes("UTF8");
 
 		// Write the name
 		out.writeInt(array.length);
 		out.write(array);
-
-		// Write a single byte for C or U
-		out.writeBoolean(readMetaData.isComplemented());
 
 		// Write out its unpadded length (length minus pad characters)
 		out.writeInt(readMetaData.getUnpaddedLength());
@@ -164,8 +166,8 @@ public class ReadFileCache extends TabletCache implements IReadCache
 
 		// Bytes written:
 		//   4   - INT, length of the name to follow
-		//   [n] - BYTES, the name itself
 		//   1   - BYTE, 0 or 1 (for C or U)
+		//   [n] - BYTES, the name itself
 		//   4   - INT, unpadded length
 		//   4   - INT, data length
 		//   [d] - BYTES, the data

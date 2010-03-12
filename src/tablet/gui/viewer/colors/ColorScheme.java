@@ -13,7 +13,8 @@ import tablet.gui.*;
 public abstract class ColorScheme
 {
 	public static final int STANDARD = 10;
-	public static final int TEXT = 20;
+	public static final int CLASSIC = 20;
+	public static final int DIRECTION = 30;
 
 	ColorScheme()
 	{
@@ -38,10 +39,13 @@ public abstract class ColorScheme
 		ColorScheme scheme = null;
 
 		if (type == STANDARD)
-			scheme = new StandardColorScheme(w, h);
+			scheme = new StandardColorScheme(w, h, false);
 
-		else
+		else if (type == CLASSIC)
 			scheme = new TextColorScheme(w, h);
+
+		else if (type == DIRECTION)
+			scheme = new DirectionColorScheme(w, h);
 
 		return scheme;
 	}
