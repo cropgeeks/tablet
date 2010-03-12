@@ -118,9 +118,12 @@ public class Pack
 			for (; index < readS; index++, dataI++)
 				data[dataI] = -1;
 
+			// Determine orientation (and offset by 20 if reversed)
+			byte value = (byte) (rmd.isComplemented() ? 20 : 0);
+
 			// Fill in the read data
 			for (; index <= end && index <= readE; index++, dataI++)
-				data[dataI] = rmd.getStateAt(index-readS);
+				data[dataI] = (byte) (value + rmd.getStateAt(index-readS));
 		}
 
 		// If no more reads are within the window, fill in any blanks between

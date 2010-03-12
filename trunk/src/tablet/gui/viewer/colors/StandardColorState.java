@@ -29,7 +29,10 @@ class StandardColorState extends ColorState
 		{
 			// Overlay for bases that are different from the consensus
 			if (isDeltaBase)
+			{
 				g.setPaint(new Color(255, 255, 255, 130));
+				color = Color.red;
+			}
 			// Overlay for bases that are identical to the consensus
 			else
 				g.setPaint(new Color(20, 20, 20, Prefs.visVariantAlpha));

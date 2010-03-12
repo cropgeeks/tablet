@@ -177,13 +177,15 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 		float xScale = read.length() / (float) (w - 10);
 
+		byte isComplemented = (byte) (rmd.isComplemented() ? 20 : 0);
+
 		for (int x = 10; x < w-10; x++)
 		{
 			// Working out where each pixel maps to in the data...
 			int dataX = (int) (x * xScale);
 
 			// Then drawing that data
-			byte b = rmd.getStateAt(dataX);
+			byte b = (byte) (isComplemented + rmd.getStateAt(dataX));
 
 			g.setColor(rCanvas.colors.getColor(b));
 			g.drawLine(x, lineStart, x, lineStart+10);

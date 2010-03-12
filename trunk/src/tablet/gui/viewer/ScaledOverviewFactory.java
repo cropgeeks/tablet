@@ -67,7 +67,8 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 				if (read != null)
 				{
 					ReadMetaData rmd = Assembly.getReadMetaData(read, true);
-					byte b = rmd.getStateAt(dataX-read.getStartPosition());
+					byte b = (byte) (rmd.getStateAt(dataX-read.getStartPosition())
+						+ (rmd.isComplemented() ? 20 : 0));
 
 					g.setColor(rCanvas.colors.getColor(b));
 					g.drawLine(x, y, x, y);

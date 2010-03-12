@@ -50,9 +50,10 @@ all information on an assembly.</li>
 <li><b>SAM</b> - SAM aims to be a generic format for storing large nucleotide sequence
 alignments, which many assemblers are converging towards using. It is
 a tab-delimited text format, with optional header information.
-(Experimentally) supported by  <a href="index.shtml">Tablet</a>.</li>
+Supported by  <a href="index.shtml">Tablet</a>.</li>
 
-<li><b>BAM</b> - A BAM file is a highly compressed, binary version of SAM.</li>
+<li><b>BAM</b> - A BAM file is a highly compressed, binary version of SAM. Supported by
+<a href="index.shtml">Tablet</a>.</li>
 
 <li><b>SOAP</b> - The SOAP format is a tab-delimited text assembly, usually accompanied by
 reference data stored in a .fasta file.

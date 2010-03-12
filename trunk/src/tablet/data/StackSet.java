@@ -48,9 +48,12 @@ class StackSet implements IReadManager
 		for (; index <= end && index < readS; index++, dataI++)
 			data[dataI] = -1;
 
+		// Determine orientation (and offset by 20 if reversed)
+		byte value = (byte) (rmd.isComplemented() ? 20 : 0);
+
 		// Fill in any read data
 		for (; index <= end && index <= readE; index++, dataI++)
-			data[dataI] = rmd.getStateAt(index-readS);
+			data[dataI] = (byte) (value + rmd.getStateAt(index-readS));
 
 		// If no more reads are within the window, fill in any blanks between
 		// the final read and the end of the array
