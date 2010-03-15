@@ -28,6 +28,7 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 	private CommandToggleButtonGroup group;
 	private JCommandToggleButton bPacked;
 	private JCommandToggleButton bStacked;
+	private JCommandToggleButton bTagVariants;
 	private JCommandButton bSort;
 
 	private StyleListener styleListener = new StyleListener();
@@ -73,8 +74,21 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.HomeStylesBand.bStacked.tooltip"),
 			RB.getString("gui.ribbon.HomeStylesBand.bStacked.richtip")));
 
+		// "Tag" variants in the overviews
+		bTagVariants = new JCommandToggleButton(
+			RB.getString("gui.ribbon.HomeStylesBand.bTagVariants"),
+			RibbonController.getIcon("TAGVARIANTS16", 16));
+		Actions.homeStylesTagVariants = new ActionToggleButtonModel(false);
+		Actions.homeStylesTagVariants.setSelected(Prefs.visTagVariants);
+		Actions.homeStylesTagVariants.addActionListener(this);
+		bTagVariants.setActionModel(Actions.homeStylesTagVariants);
+		bTagVariants.setActionKeyTip("T");
+		bTagVariants.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.HomeStylesBand.bTagVariants.tooltip"),
+			RB.getString("gui.ribbon.HomeStylesBand.bTagVariants.richtip")));
+
 		// TODO: Sort
-		bSort = new JCommandButton(
+/*		bSort = new JCommandButton(
 			RB.getString("gui.ribbon.HomeStylesBand.bSort"),
 			RibbonController.getIcon("SORT16", 16));
 		bSort.setActionKeyTip("SO");
@@ -82,7 +96,7 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.HomeStylesBand.bSort.tooltip"),
 			RB.getString("gui.ribbon.HomeStylesBand.bSort.richtip")));
 		bSort.setEnabled(false);
-
+*/
 		group = new CommandToggleButtonGroup();
 		group.add(bPacked);
 		group.add(bStacked);
@@ -90,7 +104,8 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 //		startGroup();
 		addCommandButton(bPacked, RibbonElementPriority.MEDIUM);
 		addCommandButton(bStacked, RibbonElementPriority.MEDIUM);
-		addCommandButton(bSort, RibbonElementPriority.MEDIUM);
+		addCommandButton(bTagVariants, RibbonElementPriority.MEDIUM);
+//		addCommandButton(bSort, RibbonElementPriority.MEDIUM);
 	}
 
 	private void createRibbonGallery()
@@ -218,6 +233,12 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
 			Actions.homeStylesStacked.setSelected(true);
+		}
+
+		else if (e.getSource() == Actions.homeStylesTagVariants)
+		{
+			Prefs.visTagVariants = !Prefs.visTagVariants;
+			winMain.getAssemblyPanel().forceRedraw();
 		}
 	}
 

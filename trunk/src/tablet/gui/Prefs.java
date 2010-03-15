@@ -92,6 +92,9 @@ public class Prefs extends XMLPreferences
 	// Display reads in packed or stacked form?
 	public static boolean visPacked = true;
 
+	// "Tag" variants in red
+	public static boolean visTagVariants = true;
+
 	// Overview canvas type
 	public static int visOverviewType = OverviewCanvas.SCALEDDATA;
 

@@ -33,6 +33,7 @@ public class Actions
 	public static ActionToggleButtonModel homeStylesText;
 	public static ActionToggleButtonModel homeStylesPacked;
 	public static ActionToggleButtonModel homeStylesStacked;
+	public static ActionToggleButtonModel homeStylesTagVariants;
 
 	public static ActionRepeatableButtonModel homeNavigatePageLeft;
 	public static ActionRepeatableButtonModel homeNavigatePageRight;
@@ -69,6 +70,7 @@ public class Actions
 		homeStylesText.setEnabled(false);
 		homeStylesPacked.setEnabled(false);
 		homeStylesStacked.setEnabled(false);
+		homeStylesTagVariants.setEnabled(false);
 
 		homeNavigatePageLeft.setEnabled(false);
 		homeNavigatePageRight.setEnabled(false);
@@ -106,6 +108,7 @@ public class Actions
 		homeStylesText.setEnabled(false);
 		homeStylesPacked.setEnabled(false);
 		homeStylesStacked.setEnabled(false);
+		homeStylesTagVariants.setEnabled(false);
 
 		homeNavigatePageLeft.setEnabled(false);
 		homeNavigatePageRight.setEnabled(false);
@@ -143,6 +146,7 @@ public class Actions
 		homeStylesText.setEnabled(true);
 		homeStylesPacked.setEnabled(true);
 		homeStylesStacked.setEnabled(true);
+		homeStylesTagVariants.setEnabled(true);
 
 		homeNavigatePageLeft.setEnabled(true);
 		homeNavigatePageRight.setEnabled(true);

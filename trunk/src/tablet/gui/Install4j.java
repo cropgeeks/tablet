@@ -107,8 +107,8 @@ public class Install4j
 
 				VERSION = info[0].getVersion();
 			}
-			catch (Exception e) {}
-			catch (Throwable e) {}
+			catch (Exception e) { System.out.println(e); }
+			catch (Throwable e) { System.out.println(e); }
 		}
 
 		// Failing that, we must be running the development version

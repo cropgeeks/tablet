@@ -167,12 +167,20 @@ class AceFileReader extends TrackableReader
 		// after the final BQ score on a line, eg: "50 99\n68 45" etc
 		// What we really want to read is "50 99 \n68 45"
 
-		StringBuilder bqStr = new StringBuilder(consensus.length());
-		while ((str = readLine()) != null && str.length() > 0)
-			bqStr.append(" " + str);
+//		StringBuilder bqStr = new StringBuilder(consensus.length());
+		StringBuilder bqStr = null;
+		while ((str = readLine()) != null && str.length() > 0);
+//			bqStr.append(" " + str);
+
+		if (true)
+			return;
 
 		String[] tokens = p.split(bqStr.toString().trim());
 		byte[] bq = new byte[consensus.length()];
+
+		// Deal with (ignore) **** in consensus sequence and no base qualities
+		if (tokens.length == 1 && tokens[0].length() == 0)
+			return;
 
 		int uLength = consensus.getUnpaddedLength();
 		if (tokens.length != uLength)
