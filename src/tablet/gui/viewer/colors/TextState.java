@@ -13,12 +13,7 @@ class TextState extends ColorState
 {
 	TextState(String text, int w, int h, boolean useAlpha, boolean isDeltaBase)
 	{
-		super(null, w, h);
-
-		if (isDeltaBase)
-			color = Color.red;
-		else
-			color = Color.lightGray;
+		super(Color.lightGray, w, h);
 
 		image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
 		Graphics2D g = image.createGraphics();
@@ -31,7 +26,11 @@ class TextState extends ColorState
 		{
 			// Overlay for bases that are different from the consensus
 			if (isDeltaBase)
+			{
 				g.setPaint(new Color(255, 255, 255, 130));
+				if (Prefs.visTagVariants)
+					color = Color.red;
+			}
 			// Overlay for bases that are identical to the consensus
 			else
 				g.setPaint(new Color(20, 20, 20, Prefs.visVariantAlpha));
