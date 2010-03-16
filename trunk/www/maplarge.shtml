@@ -19,9 +19,9 @@
 		if (GBrowserIsCompatible())
 		{
 			var map = new GMap2(document.getElementById("map"));
-			map.setCenter(new GLatLng(35, 5), 1);
+			map.setCenter(new GLatLng(35, 5), 2);
 			map.enableScrollWheelZoom();
-			map.setMapType(G_SATELLITE_MAP);
+			map.setMapType(G_HYBRID_MAP);
 
 			var mapControl = new GMapTypeControl();
 			map.addControl(mapControl);
@@ -59,26 +59,8 @@
 </head>
 <body onload="load()" onunload="GUnload()">
 
-<!--#include virtual="header.shtml" -->
+<center><div id="map" style="width: 1400px; height: 800px"></div></center>
 
-
-<h2>Tablet - World Map</h2>
-
-<p>The map below shows where in the world users have been running Tablet.
-<a href="maplarge.shtml" target="_new">View Larger Map</a>.</p>
-
-<div id="map" style="width: 650px; height: 400px"></div>
-
-<p>Map data is updated once every 24 hours.</p>
-
-<p>We use the geolocation service at <a href="http://www.infosniper.net">
-www.infosniper.net</a> to map IP addresses to cities. It's not always accurate,
-but we think it gives a fairly good overview. The pins don't show visits to
-our website, but actual locations where users have downloaded - <i>and
-run</i> - Tablet.</p>
-
-
-<!--#include virtual="footer.html" -->
 
 </body>
 </html>
