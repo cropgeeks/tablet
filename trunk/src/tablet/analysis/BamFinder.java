@@ -1,14 +1,14 @@
 package tablet.analysis;
 
 import java.util.*;
-import java.util.regex.*;
 
 import net.sf.samtools.*;
 import net.sf.samtools.util.CloseableIterator;
 
 import tablet.data.*;
-import tablet.gui.*;
+import tablet.gui.Prefs;
 import tablet.gui.viewer.*;
+import tablet.io.CigarParser;
 
 /**
  * Class for searching for reads in BAM files.
@@ -27,94 +27,121 @@ public class BamFinder extends Finder
 	/**
 	 * Search over either a BAM contig, or whole BAM file. Overrides the search
 	 * in Finder.
+	 *
+	 * @param searchTerm	The string being compared against.
 	 */
 	@Override
-	protected LinkedList<SearchResult> search(String str, int selectedIndex)
+	protected void search(String searchTerm)
 	{
 		found = 0;
 		progress = 0;
-		maximum = 0;
 		results = new LinkedList<SearchResult>();
 
 		//Temporary SAMFileReader for iterating over whole contig / whole data set
 		SAMFileReader reader = aPanel.getAssembly().getBamBam().getBamFileHandler().getBamReader();
 
-		if(searchType == CURRENT_CONTIG)
-		{
-			totalSize = aPanel.getContig().getDataWidth();
-			// Grab iterator for whole contig
-			CloseableIterator<SAMRecord> itor = reader.queryOverlapping(aPanel.getContig().getName(), 0, 0);
-
-			// For each read check for matches
-			while(itor.hasNext() && okToRun)
-			{
-				SAMRecord record = itor.next();
+		if(Prefs.guiFindPanelSelectedIndex == CURRENT_CONTIG)
+			searchSingleContig(reader, searchTerm);
 		
-				checkForMatches(record, str, results, aPanel.getContig());
-				// If we've had 500 matches stop searching
-				if (results.size() >= 500)
-					break;
-			}
-			// Need to close the iterator as only one is allowed
-			itor.close();
-		}
-		else if(searchType == ALL_CONTIGS)
-		{
-			// HashMap to allow us to get Contig objects from Contig names
-			HashMap<String, Contig> contigs = new HashMap<String, Contig>();
-
-			// Iterate over contigs to get totalSize of all contigs for progress
-			// bar. Also to get references to contig objects for the hash.
-			for (Contig contig: aPanel.getAssembly())
-			{
-				totalSize += contig.getDataWidth();
-				contigs.put(contig.getName(), contig);
-			}
-
-			CloseableIterator<SAMRecord> itor = reader.iterator();
-			// For each read check for matches
-			while(itor.hasNext() && okToRun)
-			{
-				SAMRecord record = itor.next();
-				
-				checkForMatches(record, str, results, contigs.get(record.getReferenceName()));
-				//if we've had 500 matches stop searching
-				if (results.size() >= 500)
-					break;
-			}
-			// Need to close the iterator as only one is allowed
-			itor.close();
-		}
-
-		return results;
+		else if(Prefs.guiFindPanelSelectedIndex == ALL_CONTIGS)
+			searchAllContigs(reader, searchTerm);
 	}
 
 	/**
-	 * Check for matches is the SAM/BAM version of the checkForMatches method in
-	 * Finder. This takes a SAMRecord instead of a Read as its first argument.
+	 * Search over all the contigs in the BAM file.
+	 *
+	 * @param reader	The SAMFileReader which gives access to the BAM file.
+	 * @param searchTerm	The term being compared against.
 	 */
-	protected void checkForMatches(SAMRecord record, String pattern, LinkedList<SearchResult> results, Contig contig)
+	private void searchAllContigs(SAMFileReader reader, String searchTerm)
 	{
-		Pattern p = Pattern.compile(pattern);
-		Matcher m = p.matcher(record.getReadName());
-
-		if ((Prefs.guiRegexSearching && m.matches()) ||
-			(!Prefs.guiRegexSearching && record.getReadName().equals(pattern)))
+		// HashMap to allow us to get Contig objects from Contig names
+		HashMap<String, Contig> contigs = new HashMap<String, Contig>();
+		// Iterate over contigs to get totalSize of all contigs for progress
+		// bar. Also to get references to contig objects for the hash.
+		for (Contig contig : aPanel.getAssembly())
 		{
-			results.add(new SearchResult(record.getReadName(), record.getUnclippedStart()-1, record.getReadLength(), contig));
-			found++;
+			totalSize += contig.getDataWidth();
+			contigs.put(contig.getName(), contig);
 		}
-		if(!prevContig.equals(record.getReferenceName()))
+		
+		CloseableIterator<SAMRecord> itor = reader.iterator();
+		// For each read check for matches
+		CigarParser parser = new CigarParser();
+		while (itor.hasNext() && okToRun && results.size() <= 500)
+		{
+			SAMRecord record = itor.next();
+			checkRecordForMatches(record, searchTerm, parser, contigs.get(record.getReferenceName()));
+		}
+		// Need to close the iterator as only one is allowed
+		itor.close();
+	}
+
+	/**
+	 * Search for results in the current contig only.
+	 *
+	 * @param reader	The SAMFileReader which gives access to the BAM file.
+	 * @param searchTerm	The term being compared against.
+	 */
+	private void searchSingleContig(SAMFileReader reader, String searchTerm)
+	{
+		totalSize = aPanel.getContig().getDataWidth();
+		// Grab iterator for whole contig
+		CloseableIterator<SAMRecord> itor = reader.queryOverlapping(aPanel.getContig().getName(), 0, 0);
+		// For each read check for matches
+		CigarParser parser = new CigarParser();
+		while (itor.hasNext() && okToRun && results.size() <= 500)
+		{
+			SAMRecord record = itor.next();
+			checkRecordForMatches(record, searchTerm, parser, aPanel.getContig());
+		}
+		// Need to close the iterator as only one is allowed
+		itor.close();
+	}
+
+	/**
+	 * Carry out the steps to check if the provided record contains any matches
+	 * to our search term.
+	 *
+	 * @param record	The record being checked for matches.
+	 * @param searchTerm	The term we are checking against.
+	 * @param parser	The cigar parser (Required to get full BAM readString).
+	 * @param contig	The contig this read / record is contained in.
+	 */
+	private void checkRecordForMatches(SAMRecord record, String searchTerm, CigarParser parser, Contig contig)
+	{
+		if (searchReads)
+		{
+			checkForReadMatches(record.getReadName(), record.getUnclippedStart() - 1, record.getReadLength(), searchTerm, contig);
+		}
+		else
+		{
+			try
+			{
+				String fullRead = parser.parse(record.getReadString(), record.getUnclippedStart() - 1, record.getCigarString());
+				checkForSubsequenceMatches(record.getReadName(), record.getUnclippedStart() - 1, record.getReadLength(), searchTerm, contig, fullRead);
+			}
+			catch (Exception ex)
+			{
+			}
+		}
+		updateProgress(record);
+	}
+
+	/**
+	 * Update the progress bar.
+	 * 
+	 * @param record
+	 */
+	private void updateProgress(SAMRecord record)
+	{
+		if (!prevContig.equals(record.getReferenceName()))
 		{
 			totalProgress += progress;
 			prevContig = record.getReferenceName();
 		}
 		progress = record.getUnclippedStart();
 	}
-
-	@Override
-	public int getMaximum()
-	{ return 5555; }
 
 	@Override
 	public boolean isIndeterminate()

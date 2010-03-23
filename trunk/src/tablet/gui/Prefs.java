@@ -118,6 +118,7 @@ public class Prefs extends XMLPreferences
 	public static boolean visOverlayNames = false;
 
 	public static int guiFindPanelSelectedIndex = 0;
+	public static int guiFindPanelSearchType = 0;
 	public static String recentSearches = "";
 
 	// Should the CoveragePrinter class write values for consensus bases that
@@ -132,6 +133,7 @@ public class Prefs extends XMLPreferences
 	public static int bamSize = 25000;
 
 	public static boolean guiHideOverviewPositions = false;
+
 
 	static void setDefaults()
 	{

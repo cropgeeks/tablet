@@ -19,12 +19,11 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 {
 	private NBFindPanelControls controls;
 	private AssemblyPanel aPanel;
-	private FindTableModel tableModel;
+	private AbstractTableModel tableModel;
 	private ContigsPanel cPanel;
 	private int found;
-	Finder finder;
-
-	private TableRowSorter<FindTableModel> sorter;
+	private Finder finder;
+	private TableRowSorter<AbstractTableModel> sorter;
 
 	public FindPanel(AssemblyPanel aPanel, WinMain winMain, final JTabbedPane ctrlTabs)
 	{
@@ -70,11 +69,11 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 	{
 		// Note: the model is created to be non-editable
 		tableModel = new FindTableModel(results, this) {
-        	public boolean isCellEditable(int rowIndex, int mColIndex) {
-        		return false;
-        }};
+			public boolean isCellEditable(int rowIndex, int mColIndex) {
+				return false;
+		}};
 
-        sorter = new TableRowSorter<FindTableModel>(tableModel);
+		sorter = new TableRowSorter<AbstractTableModel>(tableModel);
 		controls.table.setModel(tableModel);
 		controls.table.setRowSorter(sorter);
 	}
@@ -106,11 +105,33 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 
 		updateContigsTable(contig);
 
-		aPanel.moveToPosition(0, pos, true);
-		
-		Read read = getRead(pos, (String)tableModel.getValueAt(row, 0));
-		if(read != null)
-			highlightRead(read, contig);
+		// If we are searching for reads
+		if((Integer) tableModel.getValueAt(row, 4) == null)
+		{
+			// If we are searching a BAM assembly, we need to load up the correct
+			// section of the BAM file before we can search for the read.
+			if (aPanel.getAssembly().getBamBam() != null)
+				aPanel.moveToPosition(0, pos, true);
+
+			Read read = getRead(pos, (String)tableModel.getValueAt(row, 0));
+			if(read != null)
+				highlightRead(read, contig);
+		}
+		// If we are searching for read subsequences
+		else
+		{
+			int sPos = (Integer)tableModel.getValueAt(row, 4);
+			int ePos = (Integer)tableModel.getValueAt(row, 5)-1;
+			// If we are searching a BAM assembly, we need to load up the correct
+			// section of the BAM file before we can search for the read.
+			if (aPanel.getAssembly().getBamBam() != null)
+				aPanel.moveToPosition(0, sPos, true);
+
+			Read read = getRead(pos, (String)tableModel.getValueAt(row, 0));
+
+			if(read != null)
+				highlightSubsequence(read, contig, sPos, ePos);
+		}
 	}
 
 	String getTableToolTip(MouseEvent e)
@@ -141,7 +162,6 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 			if(cPanel.getTable().getValueAt(i, 0).equals(contig))
 			{
 				cPanel.getTable().setRowSelectionInterval(i, i);
-				//Contig ctg = (Contig) cPanel.getTable().getValueAt(i, 0);
 				foundInTable = true;
 				break;
 			}
@@ -155,7 +175,6 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 	 * Carries out the steps required to highlight and move to a read in the
 	 * dataset.
 	 *
-	 * @param start The start position of the read as presented in the table.
 	 * @param read The read object itself.
 	 * @param contig The contig associated with this read.
 	 */
@@ -175,6 +194,33 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 			{
 				aPanel.moveToPosition(lineIndex, startPos, true);
 				new ReadHighlighter(aPanel, read, lineIndex);
+			}
+		});
+	}
+
+	/**
+	 * Carries out the steps required to highlight and move to a subsequence of
+	 * a read in the dataset.
+	 *
+	 * @param read	The read which the subsequence is part of.
+	 * @param contig	The contig the read is part of.
+	 * @param sPos	The starting position of the subsequence.
+	 * @param ePos	The ending position of the subsequence.
+	 */
+	private void highlightSubsequence(final Read read, final Contig contig, final int sPos, final int ePos)
+	{
+		final int lineIndex;
+
+		if(Prefs.visPacked == false)
+			lineIndex = contig.getStackSetManager().getLineForRead(read);
+		else
+			lineIndex = contig.getPackSetManager().getLineForRead(read);
+		
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run()
+			{
+				aPanel.moveToPosition(lineIndex, sPos, true);
+				new ReadHighlighter(aPanel, lineIndex, sPos, ePos);
 			}
 		});
 	}
@@ -213,27 +259,24 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		{
 			resetFinder();
 			setTableModel(null);
+
 			finder.setSearchTerm(controls.findCombo.getText());
-			if(controls.findInCombo.getSelectedIndex() == 0)
-			{
-				finder.setSearchType(Finder.CURRENT_CONTIG);
-			}
-			else if(controls.findInCombo.getSelectedIndex() == 1)
-			{
-				finder.setSearchType(Finder.ALL_CONTIGS);
-			}
+			// Set if we are searching the current contig, or all contigs
+			Prefs.guiFindPanelSelectedIndex = controls.findInCombo.getSelectedIndex();
+			// Set if we are searching for reads, or subsequences
+			finder.setSearchReads((String)controls.searchTypeCombo.getSelectedItem());
+
 			if (controls.findCombo.getText() != null)
 			{
 				controls.findCombo.updateComboBox((String) controls.findCombo.getSelectedItem());
 				Prefs.recentSearches = controls.findCombo.getHistory();
 			}
+
 			ProgressDialog dialog = new ProgressDialog(finder, RB.getString("gui.NBFindPanelControls.progressTitle"), RB.getString("gui.NBFindPanelControls.progressLabel"));
 			if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 			{
 				if (dialog.getResult() == ProgressDialog.JOB_FAILED)
-				{
 					System.out.println(dialog.getException());
-				}
 
 				return;
 			}
@@ -242,7 +285,6 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		{
 			ex.printStackTrace();
 		}
-		Prefs.guiFindPanelSelectedIndex = controls.findInCombo.getSelectedIndex();
 
 		LinkedList<SearchResult> results = finder.getResults();
 		controls.resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", results.size()));
@@ -253,18 +295,28 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 	{
 		if (e.getSource() == controls.bFind)
 		{
+			if(Prefs.guiFindPanelSelectedIndex == Finder.CURRENT_CONTIG && aPanel.getContig() == null)
+			{
+				TaskDialog.error("A Contig must be selected before searching over a single contig can occur.", "OK");
+				return;
+			}
 			runSearch();
 		}
 
+		// TODO: This should be a link to a section of Tablet help
 		else if(e.getSource() == controls.helpLabel)
-		{
-			// TODO: This should be a link to a section of Tablet help
 			TabletUtils.visitURL("http://java.sun.com/javase/7/docs/api/java/util/regex/Pattern.html#sum");
-		}
 
 		else if (e.getSource() == controls.checkUseRegex)
-		{
 			Prefs.guiRegexSearching = controls.checkUseRegex.isSelected();
+
+		else if (e.getSource() == controls.searchTypeCombo)
+		{
+			Prefs.guiFindPanelSearchType = controls.searchTypeCombo.getSelectedIndex();
+			if(controls.searchTypeCombo.getSelectedItem().equals(RB.getString("gui.NBFindPanelControls.findLabel1")))
+				controls.checkUseRegex.setEnabled(true);
+			else
+				controls.checkUseRegex.setEnabled(false);
 		}
 	}
 
@@ -286,11 +338,12 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		{
 			// Get the read at this row and position.
 			Read read = manager.getReadAt(i, position);
-			ReadMetaData rmd = Assembly.getReadMetaData(read, false);
-			// Check if this is the read we are looking for
-			if(rmd.getName().equals(name))
+			if(read != null)
 			{
-				return read;
+				ReadMetaData rmd = Assembly.getReadMetaData(read, false);
+				// Check if this is the read we are looking for
+				if(rmd.getName().equals(name))
+					return read;
 			}
 			i++;
 		}
