@@ -28,6 +28,26 @@ public class ReadHighlighter extends AlphaOverlay
 		start();
 	}
 
+	/**
+	 * Constructor used to highlight a subsequence of a read.
+	 *
+	 * @param aPanel	The current assembly panel.
+	 * @param lineIndex	The line (y) index of the subsequence to be highlighted.
+	 * @param start	The starting index of the subsequence.
+	 * @param end	The end index of the subsequence.
+	 */
+	public ReadHighlighter(AssemblyPanel aPanel, int lineIndex, int start, int end)
+	{
+		super(aPanel);
+
+		this.lineIndex = lineIndex;
+
+		this.start = start - rCanvas.offset;
+		this.end = end - rCanvas.offset;
+
+		start();
+	}
+
 	public void render(Graphics2D g)
 	{
 		g.setPaint(new Color(20, 20, 20, alphaEffect));

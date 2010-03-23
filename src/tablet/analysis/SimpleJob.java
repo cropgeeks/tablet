@@ -22,7 +22,7 @@ public abstract class SimpleJob implements ITrackableJob
 		{ okToRun = false; }
 
 	public boolean isIndeterminate()
-		{ return maximum == 0; }
+		{ return maximum > 0; }
 
 	public int getMaximum()
 		{ return maximum; }

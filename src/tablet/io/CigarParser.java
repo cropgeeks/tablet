@@ -9,7 +9,7 @@ import java.util.HashMap;
  * give correct read strings and also an updated consensus sequence to reflect
  * any insertions which may have occurred.
  */
-class CigarParser
+public class CigarParser
 {
 	private int position;
 	private int readPos;
@@ -22,7 +22,7 @@ class CigarParser
 	 * and also a padding array (again to deal with insertions, but this time from
 	 * the point of view of read positioning.
 	 */
-	CigarParser()
+	public CigarParser()
 	{
 	}
 
@@ -40,7 +40,7 @@ class CigarParser
 	 * @return
 	 * @throws Exception
 	 */
-	String parse(String read, int position, String cigarString)
+	public String parse(String read, int position, String cigarString)
 		throws Exception
 	{
 		this.position = position;
