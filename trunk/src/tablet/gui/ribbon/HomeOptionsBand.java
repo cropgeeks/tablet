@@ -31,6 +31,10 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 	private JCommandToggleButton bHideContigs;
 	private JCommandToggleButton bOverlayReadNames;
 
+	private JCommandToggleButton bReadShadower;
+	private JCommandToggleButton bShadowerCentred;
+	private JCommandToggleButton bHideBaseText;
+
 
 	HomeOptionsBand(WinMain winMain)
 	{
@@ -162,11 +166,35 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.HomeOptionsBand.bHideContigs.tooltip"),
 			RB.getString("gui.ribbon.HomeOptionsBand.bHideContigs.richtip")));
 
+		bReadShadower = new JCommandToggleButton("",
+			RibbonController.getIcon("HIDEPROTEINS16", 16));
+		Actions.homeOptionsReadShadower = new ActionToggleButtonModel(false);
+		Actions.homeOptionsReadShadower.setSelected(Prefs.visReadShadower);
+		Actions.homeOptionsReadShadower.addActionListener(this);
+		bReadShadower.setActionModel(Actions.homeOptionsReadShadower);
+
+		bShadowerCentred = new JCommandToggleButton("",
+			RibbonController.getIcon("HIDEPROTEINS16", 16));
+		Actions.homeOptionsShadowerCentred = new ActionToggleButtonModel(false);
+		Actions.homeOptionsShadowerCentred.setSelected(Prefs.visCentreReadShadower);
+		Actions.homeOptionsShadowerCentred.addActionListener(this);
+		bShadowerCentred.setActionModel(Actions.homeOptionsShadowerCentred);
+
+		bHideBaseText = new JCommandToggleButton("",
+			RibbonController.getIcon("HIDEPROTEINS16", 16));
+		Actions.homeOptionsHideBaseText = new ActionToggleButtonModel(false);
+		Actions.homeOptionsHideBaseText.setSelected(Prefs.renderBaseText);
+		Actions.homeOptionsHideBaseText.addActionListener(this);
+		bHideBaseText.setActionModel(Actions.homeOptionsHideBaseText);
+
 		JCommandButtonStrip panelsStrip = new JCommandButtonStrip();
 		panelsStrip.add(bHideConsensus);
 		panelsStrip.add(bHideScaleBar);
 		panelsStrip.add(bHideCoverage);
 		panelsStrip.add(bHideContigs);
+		panelsStrip.add(bReadShadower);
+		panelsStrip.add(bShadowerCentred);
+		panelsStrip.add(bHideBaseText);
 		addFlowComponent(panelsStrip);
 	}
 
@@ -219,6 +247,21 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		{
 			Prefs.visOverlayNames = !Prefs.visOverlayNames;
 			winMain.getAssemblyPanel().toggleNameOverlay();
+		}
+		else if(source == Actions.homeOptionsReadShadower)
+		{
+			Prefs.visReadShadower = !Prefs.visReadShadower;
+			winMain.getAssemblyPanel().toggleReadCentreOverlay();
+		}
+		else if(source == Actions.homeOptionsHideBaseText)
+		{
+			Prefs.renderBaseText = !Prefs.renderBaseText;
+			winMain.getAssemblyPanel().updateColorScheme();
+		}
+		else if(source == Actions.homeOptionsShadowerCentred)
+		{
+			Prefs.visCentreReadShadower = !Prefs.visCentreReadShadower;
+			winMain.getAssemblyPanel().updateShadower();
 		}
 	}
 }

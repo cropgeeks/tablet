@@ -41,7 +41,10 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	// Tracks the base to zoom in on
 	private float ntCenterX, ntCenterY;
 
-	NameOverlayer nameOverlayer;
+	private NameOverlayer nameOverlayer;
+	ReadShadower readShadower;
+
+	private VisualAssembly visualAssembly;
 
 	public AssemblyPanel(WinMain winMain)
 	{
@@ -109,6 +112,11 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	public void setAssembly(Assembly assembly)
 	{
 		this.assembly = assembly;
+
+		if(assembly != null)
+			visualAssembly = new VisualAssembly();
+		else
+			visualAssembly = null;
 	}
 
 	public Assembly getAssembly()
@@ -159,6 +167,12 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 		if (contig != null && ((setContigOK = updateDisplayData(true)) == false))
 			this.contig = contig = null;
+
+		if(contig != null)
+		{
+			if(getVisualContig() == null)
+				visualAssembly.getVisualContigs().put(contig, new VisualContig());
+		}
 
 		// Pass the contig to the other components for rendering
 		consensusCanvas.setContig(contig);
@@ -429,5 +443,40 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 				moveTo(row, col, centre);
 			}
 		});
+	}
+
+	public void toggleReadCentreOverlay()
+	{
+		//start fade in animation for overlay
+		if(Prefs.visReadShadower)
+		{
+			readShadower = new ReadShadower(this, false);
+			readsCanvas.overlays.addFirst(readShadower);
+		}
+		//start fade out animation for overlay
+		else
+		{
+			if(readShadower != null)
+			{
+				readsCanvas.overlays.remove(readShadower);
+			}
+		}
+		readsCanvas.repaint();
+	}
+
+	public void updateColorScheme()
+	{
+		readsCanvas.updateColorScheme();
+		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
+	}
+
+	public void updateShadower()
+	{
+		readsCanvas.repaint();
+	}
+
+	public VisualContig getVisualContig()
+	{
+		return visualAssembly.getVisualContigs().get(contig);
 	}
 }

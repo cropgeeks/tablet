@@ -40,6 +40,9 @@ public class Actions
 	public static ActionRepeatableButtonModel homeNavigateJumpTo;
 	public static ActionRepeatableButtonModel homeNavigateNextFeature;
 	public static ActionRepeatableButtonModel homeNavigatePrevFeature;
+	public static ActionToggleButtonModel homeOptionsReadShadower;
+	public static ActionToggleButtonModel homeOptionsHideBaseText;
+	public static ActionToggleButtonModel homeOptionsShadowerCentred;
 
 	public static void closed()
 	{
@@ -77,6 +80,9 @@ public class Actions
 		homeNavigateJumpTo.setEnabled(false);
 		homeNavigateNextFeature.setEnabled(false);
 		homeNavigatePrevFeature.setEnabled(false);
+		homeOptionsReadShadower.setEnabled(false);
+		homeOptionsHideBaseText.setEnabled(false);
+		homeOptionsShadowerCentred.setEnabled(false);
 	}
 
 	public static void openedNoContigSelected()
@@ -115,6 +121,9 @@ public class Actions
 		homeNavigateJumpTo.setEnabled(false);
 		homeNavigateNextFeature.setEnabled(false);
 		homeNavigatePrevFeature.setEnabled(false);
+		homeOptionsReadShadower.setEnabled(false);
+		homeOptionsHideBaseText.setEnabled(false);
+		homeOptionsShadowerCentred.setEnabled(false);
 	}
 
 	public static void openedContigSelected()
@@ -153,5 +162,8 @@ public class Actions
 		homeNavigateJumpTo.setEnabled(true);
 		homeNavigateNextFeature.setEnabled(true);
 		homeNavigatePrevFeature.setEnabled(true);
+		homeOptionsReadShadower.setEnabled(true);
+		homeOptionsHideBaseText.setEnabled(true);
+		homeOptionsShadowerCentred.setEnabled(true);
 	}
 }
