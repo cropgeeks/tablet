@@ -24,6 +24,7 @@ class ReadsCanvasMenu implements ActionListener
 	private JMenuItem mOutlineCol;
 	private JMenuItem mOutlineRow;
 	private JMenuItem mOutlineClear;
+	private JMenuItem mIntersectLock;
 
 	// Row and column under the mouse at the time the menu appears
 	private int rowIndex, colIndex;
@@ -65,6 +66,9 @@ class ReadsCanvasMenu implements ActionListener
 		RB.setText(mOutlineClear, "gui.viewer.ReadsCanvasMenu.mOutlineClear");
 		mOutlineClear.addActionListener(this);
 
+		mIntersectLock = new JCheckBoxMenuItem("Lock intersection line");
+		mIntersectLock.addActionListener(this);
+
 		mOutline.add(mOutlineRow);
 		mOutline.add(mOutlineCol);
 		mOutline.addSeparator();
@@ -105,6 +109,14 @@ class ReadsCanvasMenu implements ActionListener
 		}
 		else if (e.getSource() == mOutlineClear)
 			rCanvas.contig.getOutlines().clear();
+		else if (e.getSource() == mIntersectLock)
+		{
+			if( !mIntersectLock.isSelected() )
+			{
+				aPanel.getVisualContig().setLockedBase(null);
+			}
+			aPanel.readShadower.setLocked(mIntersectLock.isSelected());
+		}
 	}
 
 	boolean isShowingMenu()
@@ -124,6 +136,8 @@ class ReadsCanvasMenu implements ActionListener
 		menu.addSeparator();
 		menu.add(mFindStart);
 		menu.add(mFindEnd);
+		menu.addSeparator();
+		menu.add(mIntersectLock);
 
 		// Check enabled states
 		boolean isOverRead = infoPane.isOverRead();
@@ -134,5 +148,10 @@ class ReadsCanvasMenu implements ActionListener
 		mOutlineClear.setEnabled(rCanvas.contig.getOutlines().size() > 0);
 
 		menu.show(e.getComponent(), e.getX(), e.getY());
+	}
+
+	JMenuItem getMIntersectLock()
+	{
+		return mIntersectLock;
 	}
 }

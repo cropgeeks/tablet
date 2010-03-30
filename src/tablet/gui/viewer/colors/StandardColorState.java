@@ -41,20 +41,23 @@ class StandardColorState extends ColorState
 			g.fillRect(0, 0, w, h);
 		}
 
-		Font font = g.getFont().deriveFont(Font.PLAIN, h-3);
-		g.setFont(font);
-		FontMetrics fm = g.getFontMetrics();
+		if(Prefs.renderBaseText)
+		{
+			Font font = g.getFont().deriveFont(Font.PLAIN, h-3);
+			g.setFont(font);
+			FontMetrics fm = g.getFontMetrics();
 
-		Rectangle2D bounds = fm.getStringBounds(text, g);
+			Rectangle2D bounds = fm.getStringBounds(text, g);
 
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		if (isDeltaBase)
-			g.setColor(Color.red);
-		else
-			g.setColor(Color.black);
-		g.drawString(text,
-			(int)((float)w/2-bounds.getWidth()/2),
-			h - fm.getMaxDescent());
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			if (isDeltaBase)
+				g.setColor(Color.red);
+			else
+				g.setColor(Color.black);
+			g.drawString(text,
+				(int)((float)w/2-bounds.getWidth()/2),
+				h - fm.getMaxDescent());
+		}
 
 		g.dispose();
 	}

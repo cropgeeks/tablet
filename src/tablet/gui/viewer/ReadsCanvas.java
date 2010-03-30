@@ -69,6 +69,8 @@ class ReadsCanvas extends JPanel
 	// Set to true if the canvas is rendered (ie, generated the back buffer)
 	boolean isRendering = false;
 
+	ReadsCanvasML readsCanvasML;
+	
 	ReadsCanvas()
 	{
 		setOpaque(false);
@@ -97,8 +99,9 @@ class ReadsCanvas extends JPanel
 	void setAssemblyPanel(AssemblyPanel aPanel)
 	{
 		this.aPanel = aPanel;
-		new ReadsCanvasML(aPanel);
+		readsCanvasML = new ReadsCanvasML(aPanel);
 		aPanel.toggleNameOverlay();
+		aPanel.toggleReadCentreOverlay();
 	}
 
 	void setContig(Contig contig)
@@ -188,7 +191,7 @@ class ReadsCanvas extends JPanel
 		aPanel.updateOverview(xS, ntOnScreenX, yS, ntOnScreenY);
 	}
 
-	private void updateColorScheme()
+	void updateColorScheme()
 	{
 		colors = ColorScheme.getDNA(Prefs.visColorScheme, ntW, ntH);
 		proteins = ColorScheme.getProtein(Prefs.visColorScheme, ntW, ntH);
@@ -224,10 +227,6 @@ class ReadsCanvas extends JPanel
 		catch (ConcurrentModificationException e) {
 			repaint();
 		}
-
-		// Draws a vertical line down the middle of the display
-//		g.setColor(Color.black);
-//		g.drawLine(pX1 + ((pX2Max-pX1)/2), pY1, pX1+((pX2Max-pX1)/2), pY2);
 
 		long e = System.nanoTime();
 		//System.out.println("Render time: " + ((e-s)/1000000f) + "ms");
