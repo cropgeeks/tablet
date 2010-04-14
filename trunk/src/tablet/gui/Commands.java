@@ -37,7 +37,9 @@ public class Commands
 
 			if (importDialog.useExamples())
 			{
-				// filenames = ...
+				ExampleDatasetDialog exampleDialog = new ExampleDatasetDialog();
+				if((filenames = exampleDialog.getFilenames()) == null)
+					return;
 			}
 
 			else if ((filenames = importDialog.getFilenames()) == null)
