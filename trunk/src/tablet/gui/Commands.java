@@ -34,7 +34,13 @@ public class Commands
 		if (filenames == null)
 		{
 			ImportAssemblyDialog importDialog = new ImportAssemblyDialog();
-			if ((filenames = importDialog.getFilenames()) == null)
+
+			if (importDialog.useExamples())
+			{
+				// filenames = ...
+			}
+
+			else if ((filenames = importDialog.getFilenames()) == null)
 				return;
 		}
 
