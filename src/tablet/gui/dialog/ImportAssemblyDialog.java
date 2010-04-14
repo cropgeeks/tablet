@@ -26,6 +26,7 @@ public class ImportAssemblyDialog extends JDialog
 	private NBImportAssemblyPanel nbPanel;
 
 	private String[] filenames;
+	private boolean useExamples;
 
 	public ImportAssemblyDialog()
 	{
@@ -90,6 +91,9 @@ public class ImportAssemblyDialog extends JDialog
 	public String[] getFilenames()
 		{ return filenames; }
 
+	public boolean useExamples()
+		{ return useExamples; }
+
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == bCancel)
@@ -130,6 +134,12 @@ public class ImportAssemblyDialog extends JDialog
 		else if (e.getSource() == nbPanel.bBrowse2)
 		{
 			browse(nbPanel.file2Combo, refFilters);
+		}
+
+		else if (e.getSource() == nbPanel.exampleLabel)
+		{
+			useExamples = true;
+			setVisible(false);
 		}
 	}
 
