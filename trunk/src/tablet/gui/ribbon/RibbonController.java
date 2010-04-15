@@ -28,11 +28,11 @@ public class RibbonController
 
 		RibbonTask homeTask = new RibbonTask(
 			RB.getString("gui.ribbon.RibbonController.home"),
-			new HomeAssembliesBand(winMain),
-			new HomeStylesBand(winMain),
-			new HomeAdjustBand(winMain),
-			new HomeNavigateBand(winMain),
-			new HomeOptionsBand(winMain));
+			new BandAssemblies(winMain),
+			new BandStyles(winMain),
+			new BandAdjust(winMain),
+			new BandNavigate(winMain),
+			new BandOptions(winMain));
 
 		homeTask.setKeyTip("H");
 		ribbon.addTask(homeTask);

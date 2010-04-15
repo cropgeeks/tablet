@@ -122,13 +122,13 @@ public class WinMain extends JRibbonFrame
 				if (splitter.getDividerLocation() != splitterMin)
 				{
 					Prefs.guiSplitterLocation = splitter.getDividerLocation();
-					Actions.homeOptionsHideContigs.setSelected(false);
+					Actions.optionsHideContigs.setSelected(false);
 					Prefs.guiHideContigs = false;
 				}
 				// If the splitter IS hidden...
 				else
 				{
-					Actions.homeOptionsHideContigs.setSelected(true);
+					Actions.optionsHideContigs.setSelected(true);
 					Prefs.guiHideContigs = true;
 				}
 			}

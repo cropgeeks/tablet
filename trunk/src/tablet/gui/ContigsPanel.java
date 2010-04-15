@@ -146,8 +146,8 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 
 			if(contig.getFeatures().size() == 0)
 			{
-				Actions.homeNavigateNextFeature.setEnabled(false);
-				Actions.homeNavigatePrevFeature.setEnabled(false);
+				Actions.navigateNextFeature.setEnabled(false);
+				Actions.navigatePrevFeature.setEnabled(false);
 			}
 
 			winMain.setAssemblyPanelVisible(true);

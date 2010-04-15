@@ -17,7 +17,7 @@ import org.jvnet.flamingo.ribbon.resize.*;
 
 import scri.commons.gui.*;
 
-public class HomeStylesBand extends JRibbonBand implements ActionListener
+public class BandStyles extends JRibbonBand implements ActionListener
 {
 	private WinMain winMain;
 
@@ -33,9 +33,9 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 
 	private StyleListener styleListener = new StyleListener();
 
-	HomeStylesBand(WinMain winMain)
+	BandStyles(WinMain winMain)
 	{
-		super(RB.getString("gui.ribbon.HomeStylesBand.title"),
+		super(RB.getString("gui.ribbon.BandStyles.title"),
 			new EmptyResizableIcon(32));
 
 		this.winMain = winMain;
@@ -50,51 +50,51 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 	{
 		// Set the display to use a packed layout
 		bPacked = new JCommandToggleButton(
-			RB.getString("gui.ribbon.HomeStylesBand.bPacked"),
+			RB.getString("gui.ribbon.BandStyles.bPacked"),
 			RibbonController.getIcon("PACKED16", 16));
-		Actions.homeStylesPacked = new ActionToggleButtonModel(false);
-		Actions.homeStylesPacked.setSelected(Prefs.visPacked);
-		Actions.homeStylesPacked.addActionListener(this);
-		bPacked.setActionModel(Actions.homeStylesPacked);
+		Actions.stylesPacked = new ActionToggleButtonModel(false);
+		Actions.stylesPacked.setSelected(Prefs.visPacked);
+		Actions.stylesPacked.addActionListener(this);
+		bPacked.setActionModel(Actions.stylesPacked);
 		bPacked.setActionKeyTip("P");
 		bPacked.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeStylesBand.bPacked.tooltip"),
-			RB.getString("gui.ribbon.HomeStylesBand.bPacked.richtip")));
+			RB.getString("gui.ribbon.BandStyles.bPacked.tooltip"),
+			RB.getString("gui.ribbon.BandStyles.bPacked.richtip")));
 
 		// Set the display to use a stacked layout
 		bStacked = new JCommandToggleButton(
-			RB.getString("gui.ribbon.HomeStylesBand.bStacked"),
+			RB.getString("gui.ribbon.BandStyles.bStacked"),
 			RibbonController.getIcon("STACKED16", 16));
-		Actions.homeStylesStacked = new ActionToggleButtonModel(false);
-		Actions.homeStylesStacked.setSelected(!Prefs.visPacked);
-		Actions.homeStylesStacked.addActionListener(this);
-		bStacked.setActionModel(Actions.homeStylesStacked);
+		Actions.stylesStacked = new ActionToggleButtonModel(false);
+		Actions.stylesStacked.setSelected(!Prefs.visPacked);
+		Actions.stylesStacked.addActionListener(this);
+		bStacked.setActionModel(Actions.stylesStacked);
 		bStacked.setActionKeyTip("S");
 		bStacked.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeStylesBand.bStacked.tooltip"),
-			RB.getString("gui.ribbon.HomeStylesBand.bStacked.richtip")));
+			RB.getString("gui.ribbon.BandStyles.bStacked.tooltip"),
+			RB.getString("gui.ribbon.BandStyles.bStacked.richtip")));
 
 		// "Tag" variants in the overviews
 		bTagVariants = new JCommandToggleButton(
-			RB.getString("gui.ribbon.HomeStylesBand.bTagVariants"),
+			RB.getString("gui.ribbon.BandStyles.bTagVariants"),
 			RibbonController.getIcon("TAGVARIANTS16", 16));
-		Actions.homeStylesTagVariants = new ActionToggleButtonModel(false);
-		Actions.homeStylesTagVariants.setSelected(Prefs.visTagVariants);
-		Actions.homeStylesTagVariants.addActionListener(this);
-		bTagVariants.setActionModel(Actions.homeStylesTagVariants);
+		Actions.stylesTagVariants = new ActionToggleButtonModel(false);
+		Actions.stylesTagVariants.setSelected(Prefs.visTagVariants);
+		Actions.stylesTagVariants.addActionListener(this);
+		bTagVariants.setActionModel(Actions.stylesTagVariants);
 		bTagVariants.setActionKeyTip("T");
 		bTagVariants.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeStylesBand.bTagVariants.tooltip"),
-			RB.getString("gui.ribbon.HomeStylesBand.bTagVariants.richtip")));
+			RB.getString("gui.ribbon.BandStyles.bTagVariants.tooltip"),
+			RB.getString("gui.ribbon.BandStyles.bTagVariants.richtip")));
 
 		// TODO: Sort
 /*		bSort = new JCommandButton(
-			RB.getString("gui.ribbon.HomeStylesBand.bSort"),
+			RB.getString("gui.ribbon.BandStyles.bSort"),
 			RibbonController.getIcon("SORT16", 16));
 		bSort.setActionKeyTip("SO");
 		bSort.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeStylesBand.bSort.tooltip"),
-			RB.getString("gui.ribbon.HomeStylesBand.bSort.richtip")));
+			RB.getString("gui.ribbon.BandStyles.bSort.tooltip"),
+			RB.getString("gui.ribbon.BandStyles.bSort.richtip")));
 		bSort.setEnabled(false);
 */
 		group = new CommandToggleButtonGroup();
@@ -116,17 +116,17 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 		boolean standardOn = Prefs.visColorScheme == ColorScheme.STANDARD;
 
 		bStandard = new JCommandToggleButton(
-			RB.getString("gui.ribbon.HomeStylesBand.bStandard"),
+			RB.getString("gui.ribbon.BandStyles.bStandard"),
 			RibbonController.getIcon("ENHANCED32", 32));
-		Actions.homeStylesStandard = new ActionToggleButtonModel(false);
-		Actions.homeStylesStandard.setSelected(standardOn);
-		Actions.homeStylesStandard.addActionListener(this);
-		bStandard.setActionModel(Actions.homeStylesStandard);
+		Actions.stylesStandard = new ActionToggleButtonModel(false);
+		Actions.stylesStandard.setSelected(standardOn);
+		Actions.stylesStandard.addActionListener(this);
+		bStandard.setActionModel(Actions.stylesStandard);
 		bStandard.setActionKeyTip("E");
 		bStandard.addMouseListener(styleListener);
 		bStandard.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeStylesBand.bStandard.tooltip"),
-			RB.getString("gui.ribbon.HomeStylesBand.bStandard.richtip")));
+			RB.getString("gui.ribbon.BandStyles.bStandard.tooltip"),
+			RB.getString("gui.ribbon.BandStyles.bStandard.richtip")));
 		styleButtons.add(bStandard);
 
 
@@ -134,17 +134,17 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 		boolean directionOn = Prefs.visColorScheme == ColorScheme.DIRECTION;
 
 		bDirection = new JCommandToggleButton(
-			RB.getString("gui.ribbon.HomeStylesBand.bDirection"),
+			RB.getString("gui.ribbon.BandStyles.bDirection"),
 			RibbonController.getIcon("DIRECTION32", 32));
-		Actions.homeStylesDirection = new ActionToggleButtonModel(false);
-		Actions.homeStylesDirection.setSelected(directionOn);
-		Actions.homeStylesDirection.addActionListener(this);
-		bDirection.setActionModel(Actions.homeStylesDirection);
+		Actions.stylesDirection = new ActionToggleButtonModel(false);
+		Actions.stylesDirection.setSelected(directionOn);
+		Actions.stylesDirection.addActionListener(this);
+		bDirection.setActionModel(Actions.stylesDirection);
 		bDirection.setActionKeyTip("D");
 		bDirection.addMouseListener(styleListener);
 		bDirection.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeStylesBand.bDirection.tooltip"),
-			RB.getString("gui.ribbon.HomeStylesBand.bDirection.richtip")));
+			RB.getString("gui.ribbon.BandStyles.bDirection.tooltip"),
+			RB.getString("gui.ribbon.BandStyles.bDirection.richtip")));
 		styleButtons.add(bDirection);
 
 
@@ -152,17 +152,17 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 		boolean textOn = Prefs.visColorScheme == ColorScheme.CLASSIC;
 
 		bText = new JCommandToggleButton(
-			RB.getString("gui.ribbon.HomeStylesBand.bText"),
+			RB.getString("gui.ribbon.BandStyles.bText"),
 			RibbonController.getIcon("CLASSIC32", 32));
-		Actions.homeStylesText = new ActionToggleButtonModel(false);
-		Actions.homeStylesText.setSelected(textOn);
-		Actions.homeStylesText.addActionListener(this);
-		bText.setActionModel(Actions.homeStylesText);
+		Actions.stylesText = new ActionToggleButtonModel(false);
+		Actions.stylesText.setSelected(textOn);
+		Actions.stylesText.addActionListener(this);
+		bText.setActionModel(Actions.stylesText);
 		bText.setActionKeyTip("C");
 		bText.addMouseListener(styleListener);
 		bText.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeStylesBand.bText.tooltip"),
-			RB.getString("gui.ribbon.HomeStylesBand.bText.richtip")));
+			RB.getString("gui.ribbon.BandStyles.bText.tooltip"),
+			RB.getString("gui.ribbon.BandStyles.bText.richtip")));
 		styleButtons.add(bText);
 
 
@@ -188,54 +188,54 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == Actions.homeStylesStandard)
+		if (e.getSource() == Actions.stylesStandard)
 		{
 			setColorScheme(ColorScheme.STANDARD);
 			styleListener.previousScheme = ColorScheme.STANDARD;
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
-			Actions.homeStylesStandard.setSelected(true);
+			Actions.stylesStandard.setSelected(true);
 		}
 
-		else if (e.getSource() == Actions.homeStylesDirection)
+		else if (e.getSource() == Actions.stylesDirection)
 		{
 			setColorScheme(ColorScheme.DIRECTION);
 			styleListener.previousScheme = ColorScheme.DIRECTION;
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
-			Actions.homeStylesDirection.setSelected(true);
+			Actions.stylesDirection.setSelected(true);
 		}
 
-		else if (e.getSource() == Actions.homeStylesText)
+		else if (e.getSource() == Actions.stylesText)
 		{
 			setColorScheme(ColorScheme.CLASSIC);
 			styleListener.previousScheme = ColorScheme.CLASSIC;
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
-			Actions.homeStylesText.setSelected(true);
+			Actions.stylesText.setSelected(true);
 		}
 
-		else if (e.getSource() == Actions.homeStylesPacked)
+		else if (e.getSource() == Actions.stylesPacked)
 		{
 			Prefs.visPacked = true;
-			Actions.homeOptionsOverlayReadNames.setEnabled(false);
+			Actions.optionsOverlayReadNames.setEnabled(false);
 			winMain.getAssemblyPanel().forceRedraw();
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
-			Actions.homeStylesPacked.setSelected(true);
+			Actions.stylesPacked.setSelected(true);
 		}
 
-		else if (e.getSource() == Actions.homeStylesStacked)
+		else if (e.getSource() == Actions.stylesStacked)
 		{
 			Prefs.visPacked = false;
-			Actions.homeOptionsOverlayReadNames.setEnabled(true);
+			Actions.optionsOverlayReadNames.setEnabled(true);
 			winMain.getAssemblyPanel().forceRedraw();
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
-			Actions.homeStylesStacked.setSelected(true);
+			Actions.stylesStacked.setSelected(true);
 		}
 
-		else if (e.getSource() == Actions.homeStylesTagVariants)
+		else if (e.getSource() == Actions.stylesTagVariants)
 		{
 			Prefs.visTagVariants = !Prefs.visTagVariants;
 			winMain.getAssemblyPanel().forceRedraw();
@@ -258,15 +258,15 @@ public class HomeStylesBand extends JRibbonBand implements ActionListener
 		// changing to it (and would result in the overview redrawing)
 		public void mouseEntered(MouseEvent e)
 		{
-			if (e.getSource() == bStandard && Actions.homeStylesStandard.isEnabled() &&
+			if (e.getSource() == bStandard && Actions.stylesStandard.isEnabled() &&
 				previousScheme != ColorScheme.STANDARD)
 				setColorScheme(ColorScheme.STANDARD);
 
-			else if (e.getSource() == bDirection && Actions.homeStylesDirection.isEnabled() &&
+			else if (e.getSource() == bDirection && Actions.stylesDirection.isEnabled() &&
 				previousScheme != ColorScheme.DIRECTION)
 				setColorScheme(ColorScheme.DIRECTION);
 
-			else if (e.getSource() == bText && Actions.homeStylesText.isEnabled() &&
+			else if (e.getSource() == bText && Actions.stylesText.isEnabled() &&
 				previousScheme != ColorScheme.CLASSIC)
 				setColorScheme(ColorScheme.CLASSIC);
 		}

@@ -17,7 +17,7 @@ import org.jvnet.flamingo.ribbon.resize.*;
 
 import scri.commons.gui.*;
 
-class HomeNavigateBand extends JRibbonBand implements ActionListener
+class BandNavigate extends JRibbonBand implements ActionListener
 {
 	private WinMain winMain;
 	private JCommandButton bPageLeft;
@@ -26,9 +26,9 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 	private JCommandButton bNextFeature;
 	private JCommandButton bPrevFeature;
 
-	HomeNavigateBand(WinMain winMain)
+	BandNavigate(WinMain winMain)
 	{
-		super(RB.getString("gui.ribbon.HomeNavigateBand.title"),
+		super(RB.getString("gui.ribbon.BandNavigate.title"),
 			new EmptyResizableIcon(32));
 
 		this.winMain = winMain;
@@ -37,67 +37,67 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 
 		// Page left
 		bPageLeft = new JCommandButton(
-			RB.getString("gui.ribbon.HomeNavigateBand.bPageLeft"),
+			RB.getString("gui.ribbon.BandNavigate.bPageLeft"),
 			RibbonController.getIcon("NAVLBLU32", 32));
-		Actions.homeNavigatePageLeft = new ActionRepeatableButtonModel(bPageLeft);
-		Actions.homeNavigatePageLeft.addActionListener(this);
-		bPageLeft.setActionModel(Actions.homeNavigatePageLeft);
+		Actions.navigatePageLeft = new ActionRepeatableButtonModel(bPageLeft);
+		Actions.navigatePageLeft.addActionListener(this);
+		bPageLeft.setActionModel(Actions.navigatePageLeft);
 		bPageLeft.setActionKeyTip("L");
 		bPageLeft.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeNavigateBand.bPageLeft.tooltip"),
-			RB.getString("gui.ribbon.HomeNavigateBand.bPageLeft.richtip")));
+			RB.getString("gui.ribbon.BandNavigate.bPageLeft.tooltip"),
+			RB.getString("gui.ribbon.BandNavigate.bPageLeft.richtip")));
 
 		// Page right
 		bPageRight = new JCommandButton(
-			RB.getString("gui.ribbon.HomeNavigateBand.bPageRight"),
+			RB.getString("gui.ribbon.BandNavigate.bPageRight"),
 			RibbonController.getIcon("NAVRBLU32", 32));
-		Actions.homeNavigatePageRight = new ActionRepeatableButtonModel(bPageRight);
-		Actions.homeNavigatePageRight.addActionListener(this);
-		bPageRight.setActionModel(Actions.homeNavigatePageRight);
+		Actions.navigatePageRight = new ActionRepeatableButtonModel(bPageRight);
+		Actions.navigatePageRight.addActionListener(this);
+		bPageRight.setActionModel(Actions.navigatePageRight);
 		bPageRight.setActionKeyTip("R");
 		bPageRight.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeNavigateBand.bPageRight.tooltip"),
-			RB.getString("gui.ribbon.HomeNavigateBand.bPageRight.richtip")));
+			RB.getString("gui.ribbon.BandNavigate.bPageRight.tooltip"),
+			RB.getString("gui.ribbon.BandNavigate.bPageRight.richtip")));
 
 		// Jump to base...
 		bJumpTo = new JCommandButton(
-			RB.getString("gui.ribbon.HomeNavigateBand.bJumpTo"),
+			RB.getString("gui.ribbon.BandNavigate.bJumpTo"),
 			RibbonController.getIcon("JUMPTO32", 32));
-		Actions.homeNavigateJumpTo = new ActionRepeatableButtonModel(bJumpTo);
-		Actions.homeNavigateJumpTo.addActionListener(this);
-		bJumpTo.setActionModel(Actions.homeNavigateJumpTo);
+		Actions.navigateJumpTo = new ActionRepeatableButtonModel(bJumpTo);
+		Actions.navigateJumpTo.addActionListener(this);
+		bJumpTo.setActionModel(Actions.navigateJumpTo);
 		bJumpTo.setActionKeyTip("J");
 		bJumpTo.setActionRichTooltip(new RichTooltip(
-			RB.format("gui.ribbon.HomeNavigateBand.bJumpTo.tooltip", Tablet.winKey),
-			RB.getString("gui.ribbon.HomeNavigateBand.bJumpTo.richtip")));
+			RB.format("gui.ribbon.BandNavigate.bJumpTo.tooltip", Tablet.winKey),
+			RB.getString("gui.ribbon.BandNavigate.bJumpTo.richtip")));
 		RibbonController.assignShortcut(bJumpTo,
 			KeyStroke.getKeyStroke(KeyEvent.VK_J, Tablet.menuShortcut));
 
 		// Next Feature...
 		bNextFeature = new JCommandButton(
-			RB.getString("gui.ribbon.HomeNavigateBand.bNextFeature"),
+			RB.getString("gui.ribbon.BandNavigate.bNextFeature"),
 			RibbonController.getIcon("NEXTFEATURE32", 32));
-		Actions.homeNavigateNextFeature = new ActionRepeatableButtonModel(bNextFeature);
-		Actions.homeNavigateNextFeature.addActionListener(this);
-		bNextFeature.setActionModel(Actions.homeNavigateNextFeature);
+		Actions.navigateNextFeature = new ActionRepeatableButtonModel(bNextFeature);
+		Actions.navigateNextFeature.addActionListener(this);
+		bNextFeature.setActionModel(Actions.navigateNextFeature);
 		bNextFeature.setActionKeyTip(".");
 		bNextFeature.setActionRichTooltip(new RichTooltip(
-			RB.format("gui.ribbon.HomeNavigateBand.bNextFeature.tooltip", Tablet.winKey),
-			RB.getString("gui.ribbon.HomeNavigateBand.bNextFeature.richtip")));
+			RB.format("gui.ribbon.BandNavigate.bNextFeature.tooltip", Tablet.winKey),
+			RB.getString("gui.ribbon.BandNavigate.bNextFeature.richtip")));
 //		RibbonController.assignShortcut(bNextFeature,
 //			KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, Tablet.menuShortcut));
 
 		// Previous Feature...
 		bPrevFeature = new JCommandButton(
-			RB.getString("gui.ribbon.HomeNavigateBand.bPrevFeature"),
+			RB.getString("gui.ribbon.BandNavigate.bPrevFeature"),
 			RibbonController.getIcon("PREVIOUSFEATURE32", 32));
-		Actions.homeNavigatePrevFeature = new ActionRepeatableButtonModel(bPrevFeature);
-		Actions.homeNavigatePrevFeature.addActionListener(this);
-		bPrevFeature.setActionModel(Actions.homeNavigatePrevFeature);
+		Actions.navigatePrevFeature = new ActionRepeatableButtonModel(bPrevFeature);
+		Actions.navigatePrevFeature.addActionListener(this);
+		bPrevFeature.setActionModel(Actions.navigatePrevFeature);
 		bPrevFeature.setActionKeyTip(",");
 		bPrevFeature.setActionRichTooltip(new RichTooltip(
-			RB.format("gui.ribbon.HomeNavigateBand.bPrevFeature.tooltip", Tablet.winKey),
-			RB.getString("gui.ribbon.HomeNavigateBand.bPrevFeature.richtip")));
+			RB.format("gui.ribbon.BandNavigate.bPrevFeature.tooltip", Tablet.winKey),
+			RB.getString("gui.ribbon.BandNavigate.bPrevFeature.richtip")));
 //		RibbonController.assignShortcut(bPrevFeature,
 //			KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Tablet.menuShortcut));
 
@@ -110,19 +110,19 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == Actions.homeNavigatePageLeft)
+		if (e.getSource() == Actions.navigatePageLeft)
 			winMain.getAssemblyPanel().pageLeft();
 
-		else if (e.getSource() == Actions.homeNavigatePageRight)
+		else if (e.getSource() == Actions.navigatePageRight)
 			winMain.getAssemblyPanel().pageRight();
 
-		else if (e.getSource() == Actions.homeNavigateJumpTo)
+		else if (e.getSource() == Actions.navigateJumpTo)
 		{
 			if (DisplayData.hasPaddedToUnpadded() == false &&
 				DisplayData.hasUnpaddedToPadded() == false)
 			{
 				TaskDialog.info(
-					RB.getString("gui.ribbon.HomeNavigateBand.jumpError"),
+					RB.getString("gui.ribbon.BandNavigate.jumpError"),
 					RB.getString("gui.text.close"));
 				return;
 			}
@@ -130,12 +130,12 @@ class HomeNavigateBand extends JRibbonBand implements ActionListener
 			winMain.getJumpToDialog().setVisible(true);
 		}
 
-		else if(e.getSource() == Actions.homeNavigateNextFeature)
+		else if(e.getSource() == Actions.navigateNextFeature)
 		{
 			winMain.getFeaturesPanel().nextFeature();
 		}
 
-		else if(e.getSource() == Actions.homeNavigatePrevFeature)
+		else if(e.getSource() == Actions.navigatePrevFeature)
 		{
 			winMain.getFeaturesPanel().prevFeature();
 		}

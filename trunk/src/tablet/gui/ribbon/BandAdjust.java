@@ -15,7 +15,7 @@ import org.jvnet.flamingo.ribbon.*;
 
 import scri.commons.gui.*;
 
-public class HomeAdjustBand extends JRibbonBand implements ChangeListener
+public class BandAdjust extends JRibbonBand implements ChangeListener
 {
 	private WinMain winMain;
 
@@ -28,9 +28,9 @@ public class HomeAdjustBand extends JRibbonBand implements ChangeListener
 	private static final int ZOOM_DEF = 7;
 	private static final int ZOOM_MAX = 25;
 
-	HomeAdjustBand(WinMain winMain)
+	BandAdjust(WinMain winMain)
 	{
-		super(RB.getString("gui.ribbon.HomeAdjustBand.title"),
+		super(RB.getString("gui.ribbon.BandAdjust.title"),
 			new EmptyResizableIcon(32));
 
 		this.winMain = winMain;
@@ -45,12 +45,12 @@ public class HomeAdjustBand extends JRibbonBand implements ChangeListener
 
 		zoomSliderComponent = new JRibbonComponent(
 			RibbonController.getIcon("ZOOM16", 16),
-			RB.getString("gui.ribbon.HomeAdjustBand.zoom"),
+			RB.getString("gui.ribbon.BandAdjust.zoom"),
 			zoomSlider);
 		zoomSliderComponent.setRichTooltip(new RichTooltip(
-			RB.format("gui.ribbon.HomeAdjustBand.zoom.tooltip",
+			RB.format("gui.ribbon.BandAdjust.zoom.tooltip",
 			Tablet.winKey, Tablet.winKey),
-			RB.getString("gui.ribbon.HomeAdjustBand.zoom.richtip")));
+			RB.getString("gui.ribbon.BandAdjust.zoom.richtip")));
 		zoomSliderComponent.setKeyTip("Z");
 
 
@@ -64,11 +64,11 @@ public class HomeAdjustBand extends JRibbonBand implements ChangeListener
 
 		variantSliderComponent = new JRibbonComponent(
 			RibbonController.getIcon("VARIANT16", 16),
-			RB.getString("gui.ribbon.HomeAdjustBand.variants"),
+			RB.getString("gui.ribbon.BandAdjust.variants"),
 			variantSlider);
 		variantSliderComponent.setRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeAdjustBand.variants.tooltip"),
-			RB.getString("gui.ribbon.HomeAdjustBand.variants.richtip")));
+			RB.getString("gui.ribbon.BandAdjust.variants.tooltip"),
+			RB.getString("gui.ribbon.BandAdjust.variants.richtip")));
 		variantSliderComponent.setKeyTip("V");
 
 		addRibbonComponent(zoomSliderComponent);
