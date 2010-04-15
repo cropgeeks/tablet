@@ -89,6 +89,12 @@ directory). We may design a GUI for this tool in the near future.</p>
 <pre><strong>    maqtoace -maqtxt=assembly.txt -fastq=consensus.fastq -dir=. -filename=assembly.ace</strong></pre>
 </p>
 
+<p>For OS X users, maqtoace must be run as follows using the terminal:
+<pre><strong>    cd /Applications/Tablet.app/Contents/Resources/app/lib
+    java -Xmx1024m -cp tablet.jar tablet.io.utils.MaqToAce &lt;options as above&gt;</strong></pre>
+</p>
+
+
 
 <h3>ACE to AFG</h3>
 
