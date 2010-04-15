@@ -15,7 +15,7 @@ import org.jvnet.flamingo.ribbon.*;
 
 import scri.commons.gui.*;
 
-public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
+public class BandOptions extends JFlowRibbonBand implements ActionListener
 {
 	private WinMain winMain;
 
@@ -36,9 +36,9 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 	private JCommandToggleButton bHideBaseText;
 
 
-	HomeOptionsBand(WinMain winMain)
+	BandOptions(WinMain winMain)
 	{
-		super(RB.getString("gui.ribbon.HomeOptionsBand.title"),
+		super(RB.getString("gui.ribbon.BandOptions.title"),
 			new EmptyResizableIcon(32));
 
 		this.winMain = winMain;
@@ -46,26 +46,26 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		// Toggle the infoPane tooltips on or off
 		bInfoPane = new JCommandToggleButton("",
 			RibbonController.getIcon("INFOPANE16", 16));
-		Actions.homeOptionsInfoPane16 = new ActionToggleButtonModel(false);
-		Actions.homeOptionsInfoPane16.setSelected(Prefs.visInfoPaneActive);
-		Actions.homeOptionsInfoPane16.addActionListener(this);
-		bInfoPane.setActionModel(Actions.homeOptionsInfoPane16);
+		Actions.optionsInfoPane16 = new ActionToggleButtonModel(false);
+		Actions.optionsInfoPane16.setSelected(Prefs.visInfoPaneActive);
+		Actions.optionsInfoPane16.addActionListener(this);
+		bInfoPane.setActionModel(Actions.optionsInfoPane16);
 		bInfoPane.setActionKeyTip("I");
 		bInfoPane.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeOptionsBand.bInfoPane.tooltip"),
-			RB.getString("gui.ribbon.HomeOptionsBand.bInfoPane.richtip")));
+			RB.getString("gui.ribbon.BandOptions.bInfoPane.tooltip"),
+			RB.getString("gui.ribbon.BandOptions.bInfoPane.richtip")));
 
 		// Toggle the display of unpadded scores/values on or off
 		bHidePads = new JCommandToggleButton("",
 			RibbonController.getIcon("PADDED16", 16));
-		Actions.homeOptionsHidePads16 = new ActionToggleButtonModel(false);
-		Actions.homeOptionsHidePads16.setSelected(Prefs.visHideUnpaddedValues);
-		Actions.homeOptionsHidePads16.addActionListener(this);
-		bHidePads.setActionModel(Actions.homeOptionsHidePads16);
+		Actions.optionsHidePads16 = new ActionToggleButtonModel(false);
+		Actions.optionsHidePads16.setSelected(Prefs.visHideUnpaddedValues);
+		Actions.optionsHidePads16.addActionListener(this);
+		bHidePads.setActionModel(Actions.optionsHidePads16);
 		bHidePads.setActionKeyTip("U");
 		bHidePads.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeOptionsBand.bHidePads.tooltip"),
-			RB.getString("gui.ribbon.HomeOptionsBand.bHidePads.richtip")));
+			RB.getString("gui.ribbon.BandOptions.bHidePads.tooltip"),
+			RB.getString("gui.ribbon.BandOptions.bHidePads.richtip")));
 
 
 		JCommandButtonStrip optionsStrip = new JCommandButtonStrip();
@@ -77,37 +77,37 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		// Hide the overview panel
 		bHideOverview = new JCommandButton("",
 			RibbonController.getIcon("HIDEOVERVIEW16", 16));
-		Actions.homeOptionsHideOverview = new ActionRepeatableButtonModel(bHideOverview);
-		Actions.homeOptionsHideOverview.setSelected(Prefs.guiHideOverview);
-		Actions.homeOptionsHideOverview.addActionListener(this);
-		bHideOverview.setActionModel(Actions.homeOptionsHideOverview);
+		Actions.optionsHideOverview = new ActionRepeatableButtonModel(bHideOverview);
+		Actions.optionsHideOverview.setSelected(Prefs.guiHideOverview);
+		Actions.optionsHideOverview.addActionListener(this);
+		bHideOverview.setActionModel(Actions.optionsHideOverview);
 		bHideOverview.setActionKeyTip("HO");
 		bHideOverview.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeOptionsBand.bHideOverview.tooltip"),
-			RB.getString("gui.ribbon.HomeOptionsBand.bHideOverview.richtip")));
+			RB.getString("gui.ribbon.BandOptions.bHideOverview.tooltip"),
+			RB.getString("gui.ribbon.BandOptions.bHideOverview.richtip")));
 
 		// Open the proteins option menu
 		bHideProteins = new JCommandButton("",
 			RibbonController.getIcon("HIDEPROTEINS16", 16));
-		Actions.homeOptionsHideProteins = new ActionRepeatableButtonModel(bHideProteins);
-		Actions.homeOptionsHideProteins.addActionListener(this);
-		bHideProteins.setActionModel(Actions.homeOptionsHideProteins);
+		Actions.optionsHideProteins = new ActionRepeatableButtonModel(bHideProteins);
+		Actions.optionsHideProteins.addActionListener(this);
+		bHideProteins.setActionModel(Actions.optionsHideProteins);
 		bHideProteins.setActionKeyTip("HP");
 		bHideProteins.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeOptionsBand.bHideProteins.tooltip"),
-			RB.getString("gui.ribbon.HomeOptionsBand.bHideProteins.richtip")));
+			RB.getString("gui.ribbon.BandOptions.bHideProteins.tooltip"),
+			RB.getString("gui.ribbon.BandOptions.bHideProteins.richtip")));
 
 		// Hide the contigs panel
 		bOverlayReadNames = new JCommandToggleButton("",
 			RibbonController.getIcon("OVERLAYNAMES16", 16));
-		Actions.homeOptionsOverlayReadNames = new ActionToggleButtonModel(false);
-		Actions.homeOptionsOverlayReadNames.setSelected(Prefs.visOverlayNames);
-		Actions.homeOptionsOverlayReadNames.addActionListener(this);
-		bOverlayReadNames.setActionModel(Actions.homeOptionsOverlayReadNames);
+		Actions.optionsOverlayReadNames = new ActionToggleButtonModel(false);
+		Actions.optionsOverlayReadNames.setSelected(Prefs.visOverlayNames);
+		Actions.optionsOverlayReadNames.addActionListener(this);
+		bOverlayReadNames.setActionModel(Actions.optionsOverlayReadNames);
 		bOverlayReadNames.setActionKeyTip("HN");
 		bOverlayReadNames.setActionRichTooltip(new RichTooltip(
-			RB.format("gui.ribbon.HomeOptionsBand.bOverlayReadNames.tooltip", Tablet.winKey),
-			RB.getString("gui.ribbon.HomeOptionsBand.bOverlayReadNames.richtip")));
+			RB.format("gui.ribbon.BandOptions.bOverlayReadNames.tooltip", Tablet.winKey),
+			RB.getString("gui.ribbon.BandOptions.bOverlayReadNames.richtip")));
 		RibbonController.assignShortcut(bOverlayReadNames,
 			KeyStroke.getKeyStroke(KeyEvent.VK_N, Tablet.menuShortcut));
 
@@ -121,71 +121,71 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		// Hide the consensus canvas
 		bHideConsensus = new JCommandToggleButton("",
 			RibbonController.getIcon("HIDECONSENSUS16", 16));
-		Actions.homeOptionsHideConsensus = new ActionToggleButtonModel(false);
-		Actions.homeOptionsHideConsensus.setSelected(Prefs.guiHideConsensus);
-		Actions.homeOptionsHideConsensus.addActionListener(this);
-		bHideConsensus.setActionModel(Actions.homeOptionsHideConsensus);
+		Actions.optionsHideConsensus = new ActionToggleButtonModel(false);
+		Actions.optionsHideConsensus.setSelected(Prefs.guiHideConsensus);
+		Actions.optionsHideConsensus.addActionListener(this);
+		bHideConsensus.setActionModel(Actions.optionsHideConsensus);
 		bHideConsensus.setActionKeyTip("HC");
 		bHideConsensus.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeOptionsBand.bHideConsensus.tooltip"),
-			RB.getString("gui.ribbon.HomeOptionsBand.bHideConsensus.richtip")));
+			RB.getString("gui.ribbon.BandOptions.bHideConsensus.tooltip"),
+			RB.getString("gui.ribbon.BandOptions.bHideConsensus.richtip")));
 
 		// Hide the scale bar
 		bHideScaleBar = new JCommandToggleButton("",
 			RibbonController.getIcon("HIDESCALEBAR16", 16));
-		Actions.homeOptionsHideScaleBar = new ActionToggleButtonModel(false);
-		Actions.homeOptionsHideScaleBar.setSelected(Prefs.guiHideScaleBar);
-		Actions.homeOptionsHideScaleBar.addActionListener(this);
-		bHideScaleBar.setActionModel(Actions.homeOptionsHideScaleBar);
+		Actions.optionsHideScaleBar = new ActionToggleButtonModel(false);
+		Actions.optionsHideScaleBar.setSelected(Prefs.guiHideScaleBar);
+		Actions.optionsHideScaleBar.addActionListener(this);
+		bHideScaleBar.setActionModel(Actions.optionsHideScaleBar);
 		bHideScaleBar.setActionKeyTip("HS");
 		bHideScaleBar.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeOptionsBand.bHideScaleBar.tooltip"),
-			RB.getString("gui.ribbon.HomeOptionsBand.bHideScaleBar.richtip")));
+			RB.getString("gui.ribbon.BandOptions.bHideScaleBar.tooltip"),
+			RB.getString("gui.ribbon.BandOptions.bHideScaleBar.richtip")));
 
 		// Hide the coverage display
 		bHideCoverage = new JCommandToggleButton("",
 			RibbonController.getIcon("HIDECOVERAGE16", 16));
-		Actions.homeOptionsHideCoverage = new ActionToggleButtonModel(false);
-		Actions.homeOptionsHideCoverage.setSelected(Prefs.guiHideCoverage);
-		Actions.homeOptionsHideCoverage.addActionListener(this);
-		bHideCoverage.setActionModel(Actions.homeOptionsHideCoverage);
+		Actions.optionsHideCoverage = new ActionToggleButtonModel(false);
+		Actions.optionsHideCoverage.setSelected(Prefs.guiHideCoverage);
+		Actions.optionsHideCoverage.addActionListener(this);
+		bHideCoverage.setActionModel(Actions.optionsHideCoverage);
 		bHideCoverage.setActionKeyTip("HV");
 		bHideCoverage.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeOptionsBand.bHideCoverage.tooltip"),
-			RB.getString("gui.ribbon.HomeOptionsBand.bHideCoverage.richtip")));
+			RB.getString("gui.ribbon.BandOptions.bHideCoverage.tooltip"),
+			RB.getString("gui.ribbon.BandOptions.bHideCoverage.richtip")));
 
 		// Hide the contigs panel
 		bHideContigs = new JCommandToggleButton("",
 			RibbonController.getIcon("HIDECONTIGS16", 16));
-		Actions.homeOptionsHideContigs = new ActionToggleButtonModel(false);
-		Actions.homeOptionsHideContigs.setSelected(Prefs.guiHideContigs);
-		Actions.homeOptionsHideContigs.addActionListener(this);
-		bHideContigs.setActionModel(Actions.homeOptionsHideContigs);
+		Actions.optionsHideContigs = new ActionToggleButtonModel(false);
+		Actions.optionsHideContigs.setSelected(Prefs.guiHideContigs);
+		Actions.optionsHideContigs.addActionListener(this);
+		bHideContigs.setActionModel(Actions.optionsHideContigs);
 		bHideContigs.setActionKeyTip("HT");
 		bHideContigs.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.HomeOptionsBand.bHideContigs.tooltip"),
-			RB.getString("gui.ribbon.HomeOptionsBand.bHideContigs.richtip")));
+			RB.getString("gui.ribbon.BandOptions.bHideContigs.tooltip"),
+			RB.getString("gui.ribbon.BandOptions.bHideContigs.richtip")));
 
 		bReadShadower = new JCommandToggleButton("",
 			RibbonController.getIcon("HIDEPROTEINS16", 16));
-		Actions.homeOptionsReadShadower = new ActionToggleButtonModel(false);
-		Actions.homeOptionsReadShadower.setSelected(Prefs.visReadShadower);
-		Actions.homeOptionsReadShadower.addActionListener(this);
-		bReadShadower.setActionModel(Actions.homeOptionsReadShadower);
+		Actions.optionsReadShadower = new ActionToggleButtonModel(false);
+		Actions.optionsReadShadower.setSelected(Prefs.visReadShadower);
+		Actions.optionsReadShadower.addActionListener(this);
+		bReadShadower.setActionModel(Actions.optionsReadShadower);
 
 		bShadowerCentred = new JCommandToggleButton("",
 			RibbonController.getIcon("HIDEPROTEINS16", 16));
-		Actions.homeOptionsShadowerCentred = new ActionToggleButtonModel(false);
-		Actions.homeOptionsShadowerCentred.setSelected(Prefs.visCentreReadShadower);
-		Actions.homeOptionsShadowerCentred.addActionListener(this);
-		bShadowerCentred.setActionModel(Actions.homeOptionsShadowerCentred);
+		Actions.optionsShadowerCentred = new ActionToggleButtonModel(false);
+		Actions.optionsShadowerCentred.setSelected(Prefs.visCentreReadShadower);
+		Actions.optionsShadowerCentred.addActionListener(this);
+		bShadowerCentred.setActionModel(Actions.optionsShadowerCentred);
 
 		bHideBaseText = new JCommandToggleButton("",
 			RibbonController.getIcon("HIDEPROTEINS16", 16));
-		Actions.homeOptionsHideBaseText = new ActionToggleButtonModel(false);
-		Actions.homeOptionsHideBaseText.setSelected(Prefs.renderBaseText);
-		Actions.homeOptionsHideBaseText.addActionListener(this);
-		bHideBaseText.setActionModel(Actions.homeOptionsHideBaseText);
+		Actions.optionsHideBaseText = new ActionToggleButtonModel(false);
+		Actions.optionsHideBaseText.setSelected(Prefs.renderBaseText);
+		Actions.optionsHideBaseText.addActionListener(this);
+		bHideBaseText.setActionModel(Actions.optionsHideBaseText);
 
 		JCommandButtonStrip panelsStrip = new JCommandButtonStrip();
 		panelsStrip.add(bHideConsensus);
@@ -203,10 +203,10 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		Object source = e.getSource();
 
 		// Primary options
-		if (source == Actions.homeOptionsInfoPane16)
+		if (source == Actions.optionsInfoPane16)
 			Prefs.visInfoPaneActive = !Prefs.visInfoPaneActive;
 
-		else if (source == Actions.homeOptionsHidePads16)
+		else if (source == Actions.optionsHidePads16)
 		{
 			Prefs.visHideUnpaddedValues = !Prefs.visHideUnpaddedValues;
 
@@ -215,50 +215,50 @@ public class HomeOptionsBand extends JFlowRibbonBand implements ActionListener
 		}
 
 		// Panel controls
-		else if (source == Actions.homeOptionsHideOverview)
+		else if (source == Actions.optionsHideOverview)
 		{
 			winMain.getAssemblyPanel().displayOverviewOptions(bHideOverview);
 		}
-		else if (source == Actions.homeOptionsHideProteins)
+		else if (source == Actions.optionsHideProteins)
 		{
 			winMain.getAssemblyPanel().displayProteinOptions(bHideProteins);
 		}
-		else if (source == Actions.homeOptionsHideConsensus)
+		else if (source == Actions.optionsHideConsensus)
 		{
 			Prefs.guiHideConsensus = !Prefs.guiHideConsensus;
 			winMain.getAssemblyPanel().setVisibilities();
 		}
-		else if (source == Actions.homeOptionsHideScaleBar)
+		else if (source == Actions.optionsHideScaleBar)
 		{
 			Prefs.guiHideScaleBar = !Prefs.guiHideScaleBar;
 			winMain.getAssemblyPanel().setVisibilities();
 		}
-		else if (source == Actions.homeOptionsHideCoverage)
+		else if (source == Actions.optionsHideCoverage)
 		{
 			Prefs.guiHideCoverage = !Prefs.guiHideCoverage;
 			winMain.getAssemblyPanel().setVisibilities();
 		}
-		else if (source == Actions.homeOptionsHideContigs)
+		else if (source == Actions.optionsHideContigs)
 		{
 			Prefs.guiHideContigs = !Prefs.guiHideContigs;
 			winMain.toggleSplitterLocation();
 		}
-		else if(source == Actions.homeOptionsOverlayReadNames)
+		else if(source == Actions.optionsOverlayReadNames)
 		{
 			Prefs.visOverlayNames = !Prefs.visOverlayNames;
 			winMain.getAssemblyPanel().toggleNameOverlay();
 		}
-		else if(source == Actions.homeOptionsReadShadower)
+		else if(source == Actions.optionsReadShadower)
 		{
 			Prefs.visReadShadower = !Prefs.visReadShadower;
 			winMain.getAssemblyPanel().toggleReadCentreOverlay();
 		}
-		else if(source == Actions.homeOptionsHideBaseText)
+		else if(source == Actions.optionsHideBaseText)
 		{
 			Prefs.renderBaseText = !Prefs.renderBaseText;
 			winMain.getAssemblyPanel().updateColorScheme();
 		}
-		else if(source == Actions.homeOptionsShadowerCentred)
+		else if(source == Actions.optionsShadowerCentred)
 		{
 			Prefs.visCentreReadShadower = !Prefs.visCentreReadShadower;
 			winMain.getAssemblyPanel().updateShadower();

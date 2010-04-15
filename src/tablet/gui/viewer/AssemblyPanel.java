@@ -219,7 +219,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		ntCenterX = (e.getX() / readsCanvas.ntW);
 		ntCenterY = (e.getY() / readsCanvas.ntH);
 
-		HomeAdjustBand.zoomIn(6);
+		BandAdjust.zoomIn(6);
 
 		isClickZooming = false;
 	}

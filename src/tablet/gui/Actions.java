@@ -13,36 +13,37 @@ import org.jvnet.flamingo.common.model.*;
  */
 public class Actions
 {
-	public static ActionRepeatableButtonModel homeAssembliesOpen16;
-	public static ActionRepeatableButtonModel homeAssembliesOpen32;
+	public static ActionRepeatableButtonModel assembliesOpen16;
+	public static ActionRepeatableButtonModel assembliesOpen32;
 	public static ActionRepeatableButtonModel applicationMenuSave16;
-	public static ActionRepeatableButtonModel homeAssembliesImportFeatures;
+	public static ActionRepeatableButtonModel assembliesImportFeatures;
 
-	public static ActionToggleButtonModel homeOptionsInfoPane16;
-	public static ActionToggleButtonModel homeOptionsHidePads16;
-	public static ActionToggleButtonModel homeOptionsHideConsensus;
-	public static ActionToggleButtonModel homeOptionsHideScaleBar;
-	public static ActionToggleButtonModel homeOptionsHideCoverage;
-	public static ActionToggleButtonModel homeOptionsHideContigs;
-	public static ActionToggleButtonModel homeOptionsOverlayReadNames;
-	public static ActionRepeatableButtonModel homeOptionsHideOverview;
-	public static ActionRepeatableButtonModel homeOptionsHideProteins;
+	public static ActionToggleButtonModel optionsInfoPane16;
+	public static ActionToggleButtonModel optionsHidePads16;
+	public static ActionToggleButtonModel optionsHideConsensus;
+	public static ActionToggleButtonModel optionsHideScaleBar;
+	public static ActionToggleButtonModel optionsHideCoverage;
+	public static ActionToggleButtonModel optionsHideContigs;
+	public static ActionToggleButtonModel optionsOverlayReadNames;
+	public static ActionRepeatableButtonModel optionsHideOverview;
+	public static ActionRepeatableButtonModel optionsHideProteins;
+	public static ActionToggleButtonModel optionsReadShadower;
+	public static ActionToggleButtonModel optionsHideBaseText;
+	public static ActionToggleButtonModel optionsShadowerCentred;
 
-	public static ActionToggleButtonModel homeStylesStandard;
-	public static ActionToggleButtonModel homeStylesDirection;
-	public static ActionToggleButtonModel homeStylesText;
-	public static ActionToggleButtonModel homeStylesPacked;
-	public static ActionToggleButtonModel homeStylesStacked;
-	public static ActionToggleButtonModel homeStylesTagVariants;
+	public static ActionToggleButtonModel stylesStandard;
+	public static ActionToggleButtonModel stylesDirection;
+	public static ActionToggleButtonModel stylesText;
+	public static ActionToggleButtonModel stylesPacked;
+	public static ActionToggleButtonModel stylesStacked;
+	public static ActionToggleButtonModel stylesTagVariants;
 
-	public static ActionRepeatableButtonModel homeNavigatePageLeft;
-	public static ActionRepeatableButtonModel homeNavigatePageRight;
-	public static ActionRepeatableButtonModel homeNavigateJumpTo;
-	public static ActionRepeatableButtonModel homeNavigateNextFeature;
-	public static ActionRepeatableButtonModel homeNavigatePrevFeature;
-	public static ActionToggleButtonModel homeOptionsReadShadower;
-	public static ActionToggleButtonModel homeOptionsHideBaseText;
-	public static ActionToggleButtonModel homeOptionsShadowerCentred;
+	public static ActionRepeatableButtonModel navigatePageLeft;
+	public static ActionRepeatableButtonModel navigatePageRight;
+	public static ActionRepeatableButtonModel navigateJumpTo;
+	public static ActionRepeatableButtonModel navigateNextFeature;
+	public static ActionRepeatableButtonModel navigatePrevFeature;
+	
 
 	public static void closed()
 	{
@@ -53,36 +54,36 @@ public class Actions
 		ApplicationMenu.bExport.setEnabled(false);
 		ApplicationMenu.bCoverage.setEnabled(false);
 		applicationMenuSave16.setEnabled(false);
-		homeAssembliesImportFeatures.setEnabled(false);
+		assembliesImportFeatures.setEnabled(false);
 
 		// Ribbon controls
-		HomeAdjustBand.zoomSliderComponent.setEnabled(false);
-		HomeAdjustBand.variantSliderComponent.setEnabled(false);
+		BandAdjust.zoomSliderComponent.setEnabled(false);
+		BandAdjust.variantSliderComponent.setEnabled(false);
 
-		homeOptionsInfoPane16.setEnabled(false);
-		homeOptionsHidePads16.setEnabled(false);
-		homeOptionsHideOverview.setEnabled(false);
-		homeOptionsHideConsensus.setEnabled(false);
-		homeOptionsHideScaleBar.setEnabled(false);
-		homeOptionsHideCoverage.setEnabled(false);
-		homeOptionsHideProteins.setEnabled(false);
-		homeOptionsOverlayReadNames.setEnabled(false);
+		optionsInfoPane16.setEnabled(false);
+		optionsHidePads16.setEnabled(false);
+		optionsHideOverview.setEnabled(false);
+		optionsHideConsensus.setEnabled(false);
+		optionsHideScaleBar.setEnabled(false);
+		optionsHideCoverage.setEnabled(false);
+		optionsHideProteins.setEnabled(false);
+		optionsOverlayReadNames.setEnabled(false);
+		optionsReadShadower.setEnabled(false);
+		optionsHideBaseText.setEnabled(false);
+		optionsShadowerCentred.setEnabled(false);
 
-		homeStylesStandard.setEnabled(false);
-		homeStylesDirection.setEnabled(false);
-		homeStylesText.setEnabled(false);
-		homeStylesPacked.setEnabled(false);
-		homeStylesStacked.setEnabled(false);
-		homeStylesTagVariants.setEnabled(false);
+		stylesStandard.setEnabled(false);
+		stylesDirection.setEnabled(false);
+		stylesText.setEnabled(false);
+		stylesPacked.setEnabled(false);
+		stylesStacked.setEnabled(false);
+		stylesTagVariants.setEnabled(false);
 
-		homeNavigatePageLeft.setEnabled(false);
-		homeNavigatePageRight.setEnabled(false);
-		homeNavigateJumpTo.setEnabled(false);
-		homeNavigateNextFeature.setEnabled(false);
-		homeNavigatePrevFeature.setEnabled(false);
-		homeOptionsReadShadower.setEnabled(false);
-		homeOptionsHideBaseText.setEnabled(false);
-		homeOptionsShadowerCentred.setEnabled(false);
+		navigatePageLeft.setEnabled(false);
+		navigatePageRight.setEnabled(false);
+		navigateJumpTo.setEnabled(false);
+		navigateNextFeature.setEnabled(false);
+		navigatePrevFeature.setEnabled(false);
 	}
 
 	public static void openedNoContigSelected()
@@ -94,36 +95,36 @@ public class Actions
 		ApplicationMenu.bExport.setEnabled(false);
 		ApplicationMenu.bCoverage.setEnabled(true);
 		applicationMenuSave16.setEnabled(false);
-		homeAssembliesImportFeatures.setEnabled(true);
+		assembliesImportFeatures.setEnabled(true);
 
 		// Ribbon controls
-		HomeAdjustBand.zoomSliderComponent.setEnabled(false);
-		HomeAdjustBand.variantSliderComponent.setEnabled(false);
+		BandAdjust.zoomSliderComponent.setEnabled(false);
+		BandAdjust.variantSliderComponent.setEnabled(false);
 
-		homeOptionsInfoPane16.setEnabled(false);
-		homeOptionsHidePads16.setEnabled(false);
-		homeOptionsHideOverview.setEnabled(false);
-		homeOptionsHideConsensus.setEnabled(false);
-		homeOptionsHideScaleBar.setEnabled(false);
-		homeOptionsHideCoverage.setEnabled(false);
-		homeOptionsHideProteins.setEnabled(false);
-		homeOptionsOverlayReadNames.setEnabled(false);
+		optionsInfoPane16.setEnabled(false);
+		optionsHidePads16.setEnabled(false);
+		optionsHideOverview.setEnabled(false);
+		optionsHideConsensus.setEnabled(false);
+		optionsHideScaleBar.setEnabled(false);
+		optionsHideCoverage.setEnabled(false);
+		optionsHideProteins.setEnabled(false);
+		optionsOverlayReadNames.setEnabled(false);
+		optionsReadShadower.setEnabled(false);
+		optionsHideBaseText.setEnabled(false);
+		optionsShadowerCentred.setEnabled(false);
 
-		homeStylesStandard.setEnabled(false);
-		homeStylesDirection.setEnabled(false);
-		homeStylesText.setEnabled(false);
-		homeStylesPacked.setEnabled(false);
-		homeStylesStacked.setEnabled(false);
-		homeStylesTagVariants.setEnabled(false);
+		stylesStandard.setEnabled(false);
+		stylesDirection.setEnabled(false);
+		stylesText.setEnabled(false);
+		stylesPacked.setEnabled(false);
+		stylesStacked.setEnabled(false);
+		stylesTagVariants.setEnabled(false);
 
-		homeNavigatePageLeft.setEnabled(false);
-		homeNavigatePageRight.setEnabled(false);
-		homeNavigateJumpTo.setEnabled(false);
-		homeNavigateNextFeature.setEnabled(false);
-		homeNavigatePrevFeature.setEnabled(false);
-		homeOptionsReadShadower.setEnabled(false);
-		homeOptionsHideBaseText.setEnabled(false);
-		homeOptionsShadowerCentred.setEnabled(false);
+		navigatePageLeft.setEnabled(false);
+		navigatePageRight.setEnabled(false);
+		navigateJumpTo.setEnabled(false);
+		navigateNextFeature.setEnabled(false);
+		navigatePrevFeature.setEnabled(false);
 	}
 
 	public static void openedContigSelected()
@@ -135,35 +136,35 @@ public class Actions
 		ApplicationMenu.bExport.setEnabled(true);
 		ApplicationMenu.bCoverage.setEnabled(true);
 		applicationMenuSave16.setEnabled(false);
-		homeAssembliesImportFeatures.setEnabled(true);
+		assembliesImportFeatures.setEnabled(true);
 
 		// Ribbon controls
-		HomeAdjustBand.zoomSliderComponent.setEnabled(true);
-		HomeAdjustBand.variantSliderComponent.setEnabled(true);
+		BandAdjust.zoomSliderComponent.setEnabled(true);
+		BandAdjust.variantSliderComponent.setEnabled(true);
 
-		homeOptionsInfoPane16.setEnabled(true);
-		homeOptionsHidePads16.setEnabled(true);
-		homeOptionsHideOverview.setEnabled(true);
-		homeOptionsHideConsensus.setEnabled(true);
-		homeOptionsHideScaleBar.setEnabled(true);
-		homeOptionsHideCoverage.setEnabled(true);
-		homeOptionsHideProteins.setEnabled(true);
-		homeOptionsOverlayReadNames.setEnabled(!Prefs.visPacked);
+		optionsInfoPane16.setEnabled(true);
+		optionsHidePads16.setEnabled(true);
+		optionsHideOverview.setEnabled(true);
+		optionsHideConsensus.setEnabled(true);
+		optionsHideScaleBar.setEnabled(true);
+		optionsHideCoverage.setEnabled(true);
+		optionsHideProteins.setEnabled(true);
+		optionsOverlayReadNames.setEnabled(!Prefs.visPacked);
+		optionsReadShadower.setEnabled(true);
+		optionsHideBaseText.setEnabled(true);
+		optionsShadowerCentred.setEnabled(true);
 
-		homeStylesStandard.setEnabled(true);
-		homeStylesDirection.setEnabled(true);
-		homeStylesText.setEnabled(true);
-		homeStylesPacked.setEnabled(true);
-		homeStylesStacked.setEnabled(true);
-		homeStylesTagVariants.setEnabled(true);
+		stylesStandard.setEnabled(true);
+		stylesDirection.setEnabled(true);
+		stylesText.setEnabled(true);
+		stylesPacked.setEnabled(true);
+		stylesStacked.setEnabled(true);
+		stylesTagVariants.setEnabled(true);
 
-		homeNavigatePageLeft.setEnabled(true);
-		homeNavigatePageRight.setEnabled(true);
-		homeNavigateJumpTo.setEnabled(true);
-		homeNavigateNextFeature.setEnabled(true);
-		homeNavigatePrevFeature.setEnabled(true);
-		homeOptionsReadShadower.setEnabled(true);
-		homeOptionsHideBaseText.setEnabled(true);
-		homeOptionsShadowerCentred.setEnabled(true);
+		navigatePageLeft.setEnabled(true);
+		navigatePageRight.setEnabled(true);
+		navigateJumpTo.setEnabled(true);
+		navigateNextFeature.setEnabled(true);
+		navigatePrevFeature.setEnabled(true);
 	}
 }
