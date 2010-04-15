@@ -14,7 +14,6 @@ public class ExampleDatasetDialog extends JDialog implements ActionListener
 {
 	private NBExampleDataset panel;
 	private Properties properties;
-	private String URI;
 	private JButton bClose, bLoad;
 	private String[] filenames;
 	
@@ -36,8 +35,7 @@ public class ExampleDatasetDialog extends JDialog implements ActionListener
 		{
 			properties = new Properties();
 			// The folder on the server
-			URI = "http://bioinf.scri.ac.uk/tablet/sample-data/";
-			URL url = new URL(URI+"exampledata.xml");
+			URL url = new URL("http://bioinf.scri.ac.uk/tablet/sample-data/exampledata.xml");
 			properties.loadFromXML(url.openStream());
 		}
 		catch(Exception e)
@@ -121,7 +119,7 @@ public class ExampleDatasetDialog extends JDialog implements ActionListener
 		{
 			if(element.startsWith(desiredElement))
 			{
-				String [] subelements = element.split(":");
+				String [] subelements = element.split("=");
 				return subelements[1];
 			}
 		}
@@ -138,13 +136,13 @@ public class ExampleDatasetDialog extends JDialog implements ActionListener
 		if (referenceFile == null)
 		{
 			filenames = new String[1];
-			filenames[0] = URI + assemblyFile;
+			filenames[0] = assemblyFile;
 		}
 		else
 		{
 			filenames = new String[2];
-			filenames[0] = URI + assemblyFile;
-			filenames[1] = URI + referenceFile;
+			filenames[0] = assemblyFile;
+			filenames[1] = referenceFile;
 		}
 	}
 
