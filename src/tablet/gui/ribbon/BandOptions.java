@@ -23,7 +23,6 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 	private JCommandToggleButton bHidePads;
 
 	private JCommandButton bHideOverview;
-	private JCommandButton bHideProteins;
 
 	private JCommandToggleButton bHideConsensus;
 	private JCommandToggleButton bHideScaleBar;
@@ -86,17 +85,6 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.BandOptions.bHideOverview.tooltip"),
 			RB.getString("gui.ribbon.BandOptions.bHideOverview.richtip")));
 
-		// Open the proteins option menu
-		bHideProteins = new JCommandButton("",
-			RibbonController.getIcon("HIDEPROTEINS16", 16));
-		Actions.optionsHideProteins = new ActionRepeatableButtonModel(bHideProteins);
-		Actions.optionsHideProteins.addActionListener(this);
-		bHideProteins.setActionModel(Actions.optionsHideProteins);
-		bHideProteins.setActionKeyTip("HP");
-		bHideProteins.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.BandOptions.bHideProteins.tooltip"),
-			RB.getString("gui.ribbon.BandOptions.bHideProteins.richtip")));
-
 		// Hide the contigs panel
 		bOverlayReadNames = new JCommandToggleButton("",
 			RibbonController.getIcon("OVERLAYNAMES16", 16));
@@ -113,7 +101,6 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 
 		JCommandButtonStrip menuStrip = new JCommandButtonStrip();
 		menuStrip.add(bHideOverview);
-		menuStrip.add(bHideProteins);
 		menuStrip.add(bOverlayReadNames);
 		addFlowComponent(menuStrip);
 
@@ -167,21 +154,21 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.BandOptions.bHideContigs.richtip")));
 
 		bReadShadower = new JCommandToggleButton("",
-			RibbonController.getIcon("HIDEPROTEINS16", 16));
+			RibbonController.getIcon("HIDEPROTEINS0", 16));
 		Actions.optionsReadShadower = new ActionToggleButtonModel(false);
 		Actions.optionsReadShadower.setSelected(Prefs.visReadShadower);
 		Actions.optionsReadShadower.addActionListener(this);
 		bReadShadower.setActionModel(Actions.optionsReadShadower);
 
 		bShadowerCentred = new JCommandToggleButton("",
-			RibbonController.getIcon("HIDEPROTEINS16", 16));
+			RibbonController.getIcon("HIDEPROTEINS0", 16));
 		Actions.optionsShadowerCentred = new ActionToggleButtonModel(false);
 		Actions.optionsShadowerCentred.setSelected(Prefs.visCentreReadShadower);
 		Actions.optionsShadowerCentred.addActionListener(this);
 		bShadowerCentred.setActionModel(Actions.optionsShadowerCentred);
 
 		bHideBaseText = new JCommandToggleButton("",
-			RibbonController.getIcon("HIDEPROTEINS16", 16));
+			RibbonController.getIcon("HIDEPROTEINS0", 16));
 		Actions.optionsHideBaseText = new ActionToggleButtonModel(false);
 		Actions.optionsHideBaseText.setSelected(Prefs.renderBaseText);
 		Actions.optionsHideBaseText.addActionListener(this);
@@ -218,10 +205,6 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 		else if (source == Actions.optionsHideOverview)
 		{
 			winMain.getAssemblyPanel().displayOverviewOptions(bHideOverview);
-		}
-		else if (source == Actions.optionsHideProteins)
-		{
-			winMain.getAssemblyPanel().displayProteinOptions(bHideProteins);
 		}
 		else if (source == Actions.optionsHideConsensus)
 		{

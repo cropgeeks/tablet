@@ -26,6 +26,7 @@ public class RibbonController
 	{
 		RibbonController.ribbon = winMain.getRibbon();
 
+		// The Home ribbon
 		RibbonTask homeTask = new RibbonTask(
 			RB.getString("gui.ribbon.RibbonController.home"),
 			new BandAssemblies(winMain),
@@ -37,6 +38,17 @@ public class RibbonController
 		homeTask.setKeyTip("H");
 		ribbon.addTask(homeTask);
 
+
+		// The Advanced ribbon
+		RibbonTask advancedTask = new RibbonTask(
+			RB.getString("gui.ribbon.RibbonController.advanced"),
+			new BandProtein(winMain));
+
+		advancedTask.setKeyTip("A");
+		ribbon.addTask(advancedTask);
+
+
+		// Add application menu
 		ribbon.setApplicationMenu(new ApplicationMenu(winMain));
 		ribbon.setApplicationMenuKeyTip("F");
 

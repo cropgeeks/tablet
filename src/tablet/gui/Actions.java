@@ -26,7 +26,6 @@ public class Actions
 	public static ActionToggleButtonModel optionsHideContigs;
 	public static ActionToggleButtonModel optionsOverlayReadNames;
 	public static ActionRepeatableButtonModel optionsHideOverview;
-	public static ActionRepeatableButtonModel optionsHideProteins;
 	public static ActionToggleButtonModel optionsReadShadower;
 	public static ActionToggleButtonModel optionsHideBaseText;
 	public static ActionToggleButtonModel optionsShadowerCentred;
@@ -43,7 +42,9 @@ public class Actions
 	public static ActionRepeatableButtonModel navigateJumpTo;
 	public static ActionRepeatableButtonModel navigateNextFeature;
 	public static ActionRepeatableButtonModel navigatePrevFeature;
-	
+
+	public static ActionToggleButtonModel[] proteinEnable;
+
 
 	public static void closed()
 	{
@@ -66,7 +67,6 @@ public class Actions
 		optionsHideConsensus.setEnabled(false);
 		optionsHideScaleBar.setEnabled(false);
 		optionsHideCoverage.setEnabled(false);
-		optionsHideProteins.setEnabled(false);
 		optionsOverlayReadNames.setEnabled(false);
 		optionsReadShadower.setEnabled(false);
 		optionsHideBaseText.setEnabled(false);
@@ -84,6 +84,9 @@ public class Actions
 		navigateJumpTo.setEnabled(false);
 		navigateNextFeature.setEnabled(false);
 		navigatePrevFeature.setEnabled(false);
+
+		for (ActionToggleButtonModel b: proteinEnable)
+			b.setEnabled(false);
 	}
 
 	public static void openedNoContigSelected()
@@ -107,7 +110,6 @@ public class Actions
 		optionsHideConsensus.setEnabled(false);
 		optionsHideScaleBar.setEnabled(false);
 		optionsHideCoverage.setEnabled(false);
-		optionsHideProteins.setEnabled(false);
 		optionsOverlayReadNames.setEnabled(false);
 		optionsReadShadower.setEnabled(false);
 		optionsHideBaseText.setEnabled(false);
@@ -125,6 +127,9 @@ public class Actions
 		navigateJumpTo.setEnabled(false);
 		navigateNextFeature.setEnabled(false);
 		navigatePrevFeature.setEnabled(false);
+
+		for (ActionToggleButtonModel b: proteinEnable)
+			b.setEnabled(false);
 	}
 
 	public static void openedContigSelected()
@@ -148,7 +153,6 @@ public class Actions
 		optionsHideConsensus.setEnabled(true);
 		optionsHideScaleBar.setEnabled(true);
 		optionsHideCoverage.setEnabled(true);
-		optionsHideProteins.setEnabled(true);
 		optionsOverlayReadNames.setEnabled(!Prefs.visPacked);
 		optionsReadShadower.setEnabled(true);
 		optionsHideBaseText.setEnabled(true);
@@ -166,5 +170,8 @@ public class Actions
 		navigateJumpTo.setEnabled(true);
 		navigateNextFeature.setEnabled(true);
 		navigatePrevFeature.setEnabled(true);
+
+		for (ActionToggleButtonModel b: proteinEnable)
+			b.setEnabled(true);
 	}
 }

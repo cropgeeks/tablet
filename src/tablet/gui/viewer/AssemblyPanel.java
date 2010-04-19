@@ -330,9 +330,9 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		coverageCanvas.setVisible(!Prefs.guiHideCoverage);
 	}
 
-	public void displayProteinOptions(JComponent button)
+	public void setProteinStates(boolean[] states)
 	{
-		proteinCanvas.mouseListener.displayMenu(button, null);
+		proteinCanvas.mouseListener.setStates(states);
 	}
 
 	public void displayOverviewOptions(JComponent button)
