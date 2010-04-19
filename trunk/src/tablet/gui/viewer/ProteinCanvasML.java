@@ -158,19 +158,34 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 			if (e.getSource() == mToggleTracks[i])
 				pCanvas.enabled[i] = !pCanvas.enabled[i];
 
-		if (e.getSource() == mClipboard)
+		if (e != null && e.getSource() == mClipboard)
 			copyToClipboard();
 
 		else
-		{
-			pCanvas.createTranslations();
-			pCanvas.setDimensions();
+			updateCanvas();
+	}
 
-			// Update the preferences string that tracks the enabled states
-			Prefs.visProteins = new String();
-			for (int i = 0; i < pCanvas.enabled.length; i++)
-				Prefs.visProteins += pCanvas.enabled[i] ? "1 " : "0 ";
+	private void updateCanvas()
+	{
+		pCanvas.createTranslations();
+		pCanvas.setDimensions();
+
+		// Update the preferences string that tracks the enabled states
+		Prefs.visProteins = new String();
+		for (int i = 0; i < pCanvas.enabled.length; i++)
+		{
+			Prefs.visProteins += pCanvas.enabled[i] ? "1 " : "0 ";
+			Actions.proteinEnable[i].setSelected(pCanvas.enabled[i]);
 		}
+	}
+
+	// Called by the ribbon bar when the button states have changed
+	void setStates(boolean[] states)
+	{
+		for (int i = 0; i < states.length; i++)
+			pCanvas.enabled[i] = states[i];
+
+		updateCanvas();
 	}
 
 	// Works out what the actual track (from 1-6) is when an onscreen track
