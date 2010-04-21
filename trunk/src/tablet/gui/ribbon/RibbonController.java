@@ -42,6 +42,7 @@ public class RibbonController
 		// The Advanced ribbon
 		RibbonTask advancedTask = new RibbonTask(
 			RB.getString("gui.ribbon.RibbonController.advanced"),
+			new BandBAM(winMain),
 			new BandProtein(winMain));
 
 		advancedTask.setKeyTip("A");

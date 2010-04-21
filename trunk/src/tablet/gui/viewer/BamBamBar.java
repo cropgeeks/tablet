@@ -212,6 +212,13 @@ class BamBamBar extends JPanel implements IOverlayRenderer
 		}
 	}
 
+	void bamPrevious()
+	{
+		bambam.setBlockStart(contig, gVS);
+		aPanel.processBamDataChange();
+		aPanel.moveToPosition(-1, gVS, false);
+	}
+
 	private class MouseHandler extends MouseInputAdapter implements ActionListener
 	{
 		private JMenuItem mOptions;
@@ -285,14 +292,14 @@ class BamBamBar extends JPanel implements IOverlayRenderer
 		{
 			JPopupMenu menu = new JPopupMenu();
 
-			mGhost = new JMenuItem("", Icons.getIcon("RETURNTOGHOST16"));
+			mGhost = new JMenuItem("", Icons.getIcon("BAMPREVIOUS16"));
 			RB.setText(mGhost, "gui.viewer.BamBamBar.mGhost");
 			mGhost.addActionListener(this);
 			mGhost.setEnabled(gVS != null);
 			menu.add(mGhost);
 			menu.addSeparator();
 
-			mOptions = new JMenuItem("", Icons.getIcon("OPTIONS16"));
+			mOptions = new JMenuItem("", Icons.getIcon("BAMWINDOW16"));
 			RB.setText(mOptions, "gui.viewer.BamBamBar.mOptions");
 			mOptions.addActionListener(this);
 			menu.add(mOptions);
@@ -302,19 +309,12 @@ class BamBamBar extends JPanel implements IOverlayRenderer
 
 		public void actionPerformed(ActionEvent e)
 		{
-			// Open up Prefs, then force an update with a new window size
 			if (e.getSource() == mOptions)
-			{
-				ApplicationMenu.displayPreferences(1);
-			}
+				BandBAM.bWindow.doActionClick();
 
 			// Jump the display back to the position of the ghost bar
 			else if (e.getSource() == mGhost)
-			{
-				bambam.setBlockStart(contig, gVS);
-				aPanel.processBamDataChange();
-				aPanel.moveToPosition(-1, gVS, false);
-			}
+				bamPrevious();
 		}
 	}
 }

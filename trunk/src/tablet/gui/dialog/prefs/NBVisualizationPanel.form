@@ -32,8 +32,8 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="panel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="panel2" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <Component id="panel2" min="-2" max="-2" attributes="0"/>
+              <EmptySpace pref="35" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -134,13 +134,8 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="cacheReads" min="-2" max="-2" attributes="0"/>
                       <Component id="cacheMappings" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Group type="102" alignment="0" attributes="0">
-                          <Component id="bamLabel" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="bamSpinner" pref="133" max="32767" attributes="0"/>
-                      </Group>
                   </Group>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace pref="90" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -148,11 +143,6 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="bamLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="bamSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
-                  </Group>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="cacheReads" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="cacheMappings" min="-2" max="-2" attributes="0"/>
@@ -170,18 +160,6 @@
         <Component class="javax.swing.JCheckBox" name="cacheMappings">
           <Properties>
             <Property name="text" type="java.lang.String" value="Cache padded/unpadded mapping data to disk"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="bamLabel">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Default BAM data window size (in bp):"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JSpinner" name="bamSpinner">
-          <Properties>
-            <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
-              <SpinnerModel initial="100" minimum="100" numberType="java.lang.Integer" stepSize="1000" type="number"/>
-            </Property>
           </Properties>
         </Component>
       </SubComponents>

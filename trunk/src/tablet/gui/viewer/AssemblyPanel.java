@@ -289,7 +289,9 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		// generating endless resize events that affect the scrollbars
 		Runnable r = new Runnable() {
 			public void run() {
-				moveTo(Math.round(ntCenterY), Math.round(ntCenterX), true);
+	//			moveTo(Math.round(ntCenterY), Math.round(ntCenterX), true);
+				moveTo(Math.round(ntCenterY)-1, Math.round(ntCenterX), true);
+
 			}
 		};
 		SwingUtilities.invokeLater(r);
@@ -303,7 +305,9 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 		// Then after the zoom, try to get back to that position
 		isZooming = false;
-		moveTo(Math.round(ntCenterY), Math.round(ntCenterX), true);
+//		moveTo(Math.round(ntCenterY), Math.round(ntCenterX), true);
+		moveTo(Math.round(ntCenterY)-1, Math.round(ntCenterX), true);
+
 	}
 
 	// Jumps the screen left by one "page"
@@ -328,16 +332,6 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		consensusCanvas.setVisible(!Prefs.guiHideConsensus);
 		scaleCanvas.setVisible(!Prefs.guiHideScaleBar);
 		coverageCanvas.setVisible(!Prefs.guiHideCoverage);
-	}
-
-	public void setProteinStates(boolean[] states)
-	{
-		proteinCanvas.mouseListener.setStates(states);
-	}
-
-	public void displayOverviewOptions(JComponent button)
-	{
-		overviewCanvas.displayMenu(button, null);
 	}
 
 	private boolean updateDisplayData(boolean doAll)
@@ -470,13 +464,26 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
 	}
 
-	public void updateShadower()
-	{
-		readsCanvas.repaint();
-	}
-
 	public VisualContig getVisualContig()
 	{
 		return visualAssembly.getVisualContigs().get(contig);
+	}
+
+
+	// Methods called by Ribbon controls to interact with the display
+
+	public void setProteinStates(boolean[] states)
+	{
+		proteinCanvas.mouseListener.setStates(states);
+	}
+
+	public void displayOverviewOptions(JComponent button)
+	{
+		overviewCanvas.displayMenu(button, null);
+	}
+
+	public void bamPrevious()
+	{
+		bambamBar.bamPrevious();
 	}
 }

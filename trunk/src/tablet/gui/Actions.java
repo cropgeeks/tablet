@@ -3,6 +3,7 @@
 
 package tablet.gui;
 
+import tablet.data.*;
 import tablet.gui.ribbon.*;
 
 import org.jvnet.flamingo.common.model.*;
@@ -42,6 +43,9 @@ public class Actions
 	public static ActionRepeatableButtonModel navigateJumpTo;
 	public static ActionRepeatableButtonModel navigateNextFeature;
 	public static ActionRepeatableButtonModel navigatePrevFeature;
+
+	public static ActionRepeatableButtonModel bamWindow;
+	public static ActionRepeatableButtonModel bamPrevious;
 
 	public static ActionToggleButtonModel[] proteinEnable;
 
@@ -87,6 +91,8 @@ public class Actions
 
 		for (ActionToggleButtonModel b: proteinEnable)
 			b.setEnabled(false);
+
+		bamPrevious.setEnabled(false);
 	}
 
 	public static void openedNoContigSelected()
@@ -130,6 +136,8 @@ public class Actions
 
 		for (ActionToggleButtonModel b: proteinEnable)
 			b.setEnabled(false);
+
+		bamPrevious.setEnabled(false);
 	}
 
 	public static void openedContigSelected()
@@ -173,5 +181,8 @@ public class Actions
 
 		for (ActionToggleButtonModel b: proteinEnable)
 			b.setEnabled(true);
+
+		Assembly assembly = Tablet.winMain.getAssemblyPanel().getAssembly();
+		bamPrevious.setEnabled(assembly.getBamBam() != null);
 	}
 }
