@@ -140,14 +140,20 @@ public class BandAdjust extends JRibbonBand implements ChangeListener
 		if (e.getSource() == zoomSlider)
 		{
 			Prefs.visReadsCanvasZoom = zoomSlider.getValue();
+
+			winMain.getAssemblyPanel().doZoom();
 			winMain.getAssemblyPanel().computePanelSizes();
+
+			winMain.getAssemblyPanel().repaint();
 		}
 
 		else if (e.getSource() == variantSlider)
 		{
 			Prefs.visVariantAlpha = variantSlider.getValue();
 
+			winMain.getAssemblyPanel().doZoom();
 			winMain.getAssemblyPanel().computePanelSizes();
+
 			winMain.getAssemblyPanel().repaint();
 		}
 	}

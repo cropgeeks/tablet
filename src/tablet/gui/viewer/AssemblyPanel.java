@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.image.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
@@ -17,7 +18,7 @@ import tablet.gui.ribbon.*;
 
 import scri.commons.gui.*;
 
-public class AssemblyPanel extends JPanel implements AdjustmentListener
+public class AssemblyPanel extends JPanel implements ChangeListener
 {
 	private WinMain winMain;
 	private Assembly assembly;
@@ -100,10 +101,9 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 
 		sp = new JScrollPane();
 		viewport = sp.getViewport();
+		viewport.addChangeListener(this);
 		hBar = sp.getHorizontalScrollBar();
 		vBar = sp.getVerticalScrollBar();
-		hBar.addAdjustmentListener(this);
-		vBar.addAdjustmentListener(this);
 
 		sp.setViewportView(readsCanvas);
 		sp.getViewport().setBackground(Color.white);
@@ -189,13 +189,9 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 	public Contig getContig()
 		{ return contig; }
 
-	public void adjustmentValueChanged(AdjustmentEvent e)
+	public void stateChanged(ChangeEvent e)
 	{
-		// Each time the scollbars are moved, the canvas must be redrawn, with
-		// the new dimensions of the canvas being passed to it (window size
-		// changes will cause scrollbar movement events)
-		if (isZooming == false)
-			readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
+		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
 	}
 
 	void setScrollbarAdjustmentValues(int xIncrement, int yIncrement)
@@ -265,9 +261,6 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		readsCanvas.setContig(contig);
 
 		computePanelSizes();
-		// adjustmentValueChanged needed to deal with contigs that don't (need
-		// to) force the scrollbars to change meaning the panel sizes are wrong
-		adjustmentValueChanged(null);
 		overviewCanvas.createImage();
 
 		updateContigInformation();
@@ -275,7 +268,7 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		repaint();
 	}
 
-	public void computePanelSizes()
+	public void doZoom()
 	{
 		// Track the center of the screen (before the zoom)
 		if (isClickZooming == false)
@@ -287,27 +280,21 @@ public class AssemblyPanel extends JPanel implements AdjustmentListener
 		// This is needed because for some crazy reason the moveToPosition call
 		// further down will not work correctly until after Swing has stopped
 		// generating endless resize events that affect the scrollbars
-		Runnable r = new Runnable() {
+		SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
-	//			moveTo(Math.round(ntCenterY), Math.round(ntCenterX), true);
-				moveTo(Math.round(ntCenterY)-1, Math.round(ntCenterX), true);
+				moveTo(Math.round(ntCenterY), Math.round(ntCenterX), true);
 
 			}
-		};
-		SwingUtilities.invokeLater(r);
+		});
+	}
 
-		isZooming = true;
-
+	public void computePanelSizes()
+	{
 		int zoom = Prefs.visReadsCanvasZoom;
+
 		readsCanvas.setDimensions(zoom, zoom);
 		consensusCanvas.setDimensions();
 		proteinCanvas.setDimensions();
-
-		// Then after the zoom, try to get back to that position
-		isZooming = false;
-//		moveTo(Math.round(ntCenterY), Math.round(ntCenterX), true);
-		moveTo(Math.round(ntCenterY)-1, Math.round(ntCenterX), true);
-
 	}
 
 	// Jumps the screen left by one "page"

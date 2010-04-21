@@ -70,7 +70,7 @@ class ReadsCanvas extends JPanel
 	boolean isRendering = false;
 
 	ReadsCanvasML readsCanvasML;
-	
+
 	ReadsCanvas()
 	{
 		setOpaque(false);
@@ -147,7 +147,7 @@ class ReadsCanvas extends JPanel
 		canvasW = (ntOnCanvasX * ntW);
 		canvasH = (ntOnCanvasY * ntH);
 
-		setSize(dimension = new Dimension(canvasW, canvasH));
+		dimension = new Dimension(canvasW, canvasH);
 		aPanel.setScrollbarAdjustmentValues(ntW, ntH);
 
 		updateColorScheme();
