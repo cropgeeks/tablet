@@ -49,11 +49,9 @@ class NBVisualizationPanel extends JPanel
 
 		RB.setText(cacheReads, "gui.dialog.prefs.NBVisualizationPanel.cacheReads");
 		RB.setText(cacheMappings, "gui.dialog.prefs.NBVisualizationPanel.cacheMappings");
-		RB.setText(bamLabel, "gui.dialog.prefs.NBVisualizationPanel.bamLabel");
 
 		cacheReads.setSelected(Prefs.cacheReads);
 		cacheMappings.setSelected(Prefs.cacheMappings);
-		bamSpinner.setValue(Prefs.bamSize);
 
     }
 
@@ -64,38 +62,12 @@ class NBVisualizationPanel extends JPanel
 
 		Prefs.cacheReads = cacheReads.isSelected();
 		Prefs.cacheMappings = cacheMappings.isSelected();
-		Prefs.bamSize = (Integer) bamSpinner.getValue();
-
-		reloadBam();
 
 		// This will force the visualization area to recreate its color schemes
 		// which will change the rendered characters to their new states
 		Tablet.winMain.getAssemblyPanel().forceRedraw();
 		Tablet.winMain.getAssemblyPanel().repaint();
 	}
-
-	// TODO: I don't like this: it's messy and I don't trust it
-	private void reloadBam()
-	{
-		AssemblyPanel aPanel = Tablet.winMain.getAssemblyPanel();
-		Assembly assembly = aPanel.getAssembly();
-		Contig contig = aPanel.getContig();
-
-		if (contig != null)
-		{
-			BamBam bambam = assembly.getBamBam();
-
-			if (bambam != null)
-			{
-				int s = bambam.getS();
-				bambam.reset(Prefs.bamSize);
-				bambam.setBlockStart(contig, s);
-
-				aPanel.processBamDataChange();
-			}
-		}
-	}
-
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -113,8 +85,6 @@ class NBVisualizationPanel extends JPanel
         panel2 = new javax.swing.JPanel();
         cacheReads = new javax.swing.JCheckBox();
         cacheMappings = new javax.swing.JCheckBox();
-        bamLabel = new javax.swing.JLabel();
-        bamSpinner = new javax.swing.JSpinner();
 
         panel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Display options:"));
 
@@ -159,10 +129,6 @@ class NBVisualizationPanel extends JPanel
 
         cacheMappings.setText("Cache padded/unpadded mapping data to disk");
 
-        bamLabel.setText("Default BAM data window size (in bp):");
-
-        bamSpinner.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(100), Integer.valueOf(100), null, Integer.valueOf(1000)));
-
         javax.swing.GroupLayout panel2Layout = new javax.swing.GroupLayout(panel2);
         panel2.setLayout(panel2Layout);
         panel2Layout.setHorizontalGroup(
@@ -171,21 +137,13 @@ class NBVisualizationPanel extends JPanel
                 .addContainerGap()
                 .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(cacheReads)
-                    .addComponent(cacheMappings)
-                    .addGroup(panel2Layout.createSequentialGroup()
-                        .addComponent(bamLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(bamSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 133, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addComponent(cacheMappings))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
         panel2Layout.setVerticalGroup(
             panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bamLabel)
-                    .addComponent(bamSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
                 .addComponent(cacheReads)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(cacheMappings)
@@ -209,14 +167,12 @@ class NBVisualizationPanel extends JPanel
                 .addContainerGap()
                 .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(panel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(35, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel bamLabel;
-    private javax.swing.JSpinner bamSpinner;
     private javax.swing.JCheckBox cacheMappings;
     private javax.swing.JCheckBox cacheReads;
     private javax.swing.JComboBox dnaCombo;

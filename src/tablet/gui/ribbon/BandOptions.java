@@ -244,7 +244,7 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 		else if(source == Actions.optionsShadowerCentred)
 		{
 			Prefs.visCentreReadShadower = !Prefs.visCentreReadShadower;
-			winMain.getAssemblyPanel().updateShadower();
+			winMain.getAssemblyPanel().repaint();
 		}
 	}
 }
