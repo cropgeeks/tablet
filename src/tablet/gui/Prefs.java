@@ -95,6 +95,9 @@ public class Prefs extends XMLPreferences
 	// "Tag" variants in red
 	public static boolean visTagVariants = true;
 
+	// Pad reads with the following gap between each read
+	public static int visPadReads = 0;
+
 	// Overview canvas type
 	public static int visOverviewType = OverviewCanvas.SCALEDDATA;
 

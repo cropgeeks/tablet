@@ -5,6 +5,8 @@ package tablet.data;
 
 import java.util.*;
 
+import tablet.gui.*;
+
 /**
  * A pack represents an ordered collection of reads, from left-to-right in terms
  * of a sequence's nucleotide positions. Each pack forms one "line" of data when
@@ -28,7 +30,7 @@ public class Pack
 		if (reads.size() == 0 || read.getStartPosition() > positionE)
 		{
 			reads.add(read);
-			positionE = read.getEndPosition();
+			positionE = read.getEndPosition() + Prefs.visPadReads;
 			return true;
 		}
 
