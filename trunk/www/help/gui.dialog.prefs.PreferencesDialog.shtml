@@ -49,6 +49,10 @@ way Tablet is used and is displayed.</p>
 <img class="capture" src="images/gui.dialog.prefs.NBVisualizationPanel2.png" alt="Tablet Screenshot"></a></p>
 
 <ul>
+    <li><b>Always allow at least this number of bases between reads</b><br>
+    Forces Tablet to ensure that adjoining reads are always separated by at least
+    the number of bases specified. As this affects how the data are packed, reopen
+    the current contig to see any changes.</li>
 	<li><b>Character to display for DNA pad/gap bases</b><br>
 	Determines what character will be shown whenever a padded base is displayed.</li>
 	<li><b>Character to display for Protein stop codons</b><br>
@@ -95,6 +99,11 @@ item means that Tablet will proceed with the action without warning you.</p>
 	either a padded or unpadded position. Depending on the data, the difference
 	between a padded or unpadded position can be significant, and you may wish
 	Tablet to remind you of this.</li>
+	<li><b>When a search has stopped after finding 500 results</b><br>
+	Continuing to search after 500 matching hits have been found has a negative
+	impact on memory consumption. Disable this option to stop Tablet from
+	reminding you of this fact each time it searches.</li>
+
 </ul>
 
 
