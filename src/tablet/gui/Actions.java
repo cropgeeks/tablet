@@ -19,7 +19,6 @@ public class Actions
 	public static ActionRepeatableButtonModel applicationMenuSave16;
 	public static ActionRepeatableButtonModel assembliesImportFeatures;
 
-	public static ActionToggleButtonModel optionsInfoPane16;
 	public static ActionToggleButtonModel optionsHidePads16;
 	public static ActionToggleButtonModel optionsHideConsensus;
 	public static ActionToggleButtonModel optionsHideScaleBar;
@@ -28,7 +27,6 @@ public class Actions
 	public static ActionToggleButtonModel optionsOverlayReadNames;
 	public static ActionRepeatableButtonModel optionsHideOverview;
 	public static ActionToggleButtonModel optionsReadShadower;
-	public static ActionToggleButtonModel optionsHideBaseText;
 	public static ActionToggleButtonModel optionsShadowerCentred;
 
 	public static ActionToggleButtonModel stylesStandard;
@@ -46,6 +44,9 @@ public class Actions
 
 	public static ActionRepeatableButtonModel bamWindow;
 	public static ActionRepeatableButtonModel bamPrevious;
+
+	public static ActionToggleButtonModel overlaysInfoPane;
+	public static ActionToggleButtonModel overlaysEnableText;
 
 	public static ActionToggleButtonModel[] proteinEnable;
 
@@ -65,7 +66,6 @@ public class Actions
 		BandAdjust.zoomSliderComponent.setEnabled(false);
 		BandAdjust.variantSliderComponent.setEnabled(false);
 
-		optionsInfoPane16.setEnabled(false);
 		optionsHidePads16.setEnabled(false);
 		optionsHideOverview.setEnabled(false);
 		optionsHideConsensus.setEnabled(false);
@@ -73,7 +73,6 @@ public class Actions
 		optionsHideCoverage.setEnabled(false);
 		optionsOverlayReadNames.setEnabled(false);
 		optionsReadShadower.setEnabled(false);
-		optionsHideBaseText.setEnabled(false);
 		optionsShadowerCentred.setEnabled(false);
 
 		stylesStandard.setEnabled(false);
@@ -93,6 +92,9 @@ public class Actions
 			b.setEnabled(false);
 
 		bamPrevious.setEnabled(false);
+
+		overlaysInfoPane.setEnabled(false);
+		overlaysEnableText.setEnabled(false);
 	}
 
 	public static void openedNoContigSelected()
@@ -110,7 +112,6 @@ public class Actions
 		BandAdjust.zoomSliderComponent.setEnabled(false);
 		BandAdjust.variantSliderComponent.setEnabled(false);
 
-		optionsInfoPane16.setEnabled(false);
 		optionsHidePads16.setEnabled(false);
 		optionsHideOverview.setEnabled(false);
 		optionsHideConsensus.setEnabled(false);
@@ -118,7 +119,6 @@ public class Actions
 		optionsHideCoverage.setEnabled(false);
 		optionsOverlayReadNames.setEnabled(false);
 		optionsReadShadower.setEnabled(false);
-		optionsHideBaseText.setEnabled(false);
 		optionsShadowerCentred.setEnabled(false);
 
 		stylesStandard.setEnabled(false);
@@ -138,6 +138,9 @@ public class Actions
 			b.setEnabled(false);
 
 		bamPrevious.setEnabled(false);
+
+		overlaysInfoPane.setEnabled(false);
+		overlaysEnableText.setEnabled(false);
 	}
 
 	public static void openedContigSelected()
@@ -155,7 +158,6 @@ public class Actions
 		BandAdjust.zoomSliderComponent.setEnabled(true);
 		BandAdjust.variantSliderComponent.setEnabled(true);
 
-		optionsInfoPane16.setEnabled(true);
 		optionsHidePads16.setEnabled(true);
 		optionsHideOverview.setEnabled(true);
 		optionsHideConsensus.setEnabled(true);
@@ -163,7 +165,6 @@ public class Actions
 		optionsHideCoverage.setEnabled(true);
 		optionsOverlayReadNames.setEnabled(!Prefs.visPacked);
 		optionsReadShadower.setEnabled(true);
-		optionsHideBaseText.setEnabled(true);
 		optionsShadowerCentred.setEnabled(true);
 
 		stylesStandard.setEnabled(true);
@@ -184,5 +185,8 @@ public class Actions
 
 		Assembly assembly = Tablet.winMain.getAssemblyPanel().getAssembly();
 		bamPrevious.setEnabled(assembly.getBamBam() != null);
+
+		overlaysInfoPane.setEnabled(true);
+		overlaysEnableText.setEnabled(true);
 	}
 }

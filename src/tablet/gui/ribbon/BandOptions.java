@@ -19,7 +19,6 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 {
 	private WinMain winMain;
 
-	private JCommandToggleButton bInfoPane;
 	private JCommandToggleButton bHidePads;
 
 	private JCommandButton bHideOverview;
@@ -32,7 +31,6 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 
 	private JCommandToggleButton bReadShadower;
 	private JCommandToggleButton bShadowerCentred;
-	private JCommandToggleButton bHideBaseText;
 
 
 	BandOptions(WinMain winMain)
@@ -41,18 +39,6 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 			new EmptyResizableIcon(32));
 
 		this.winMain = winMain;
-
-		// Toggle the infoPane tooltips on or off
-		bInfoPane = new JCommandToggleButton("",
-			RibbonController.getIcon("INFOPANE16", 16));
-		Actions.optionsInfoPane16 = new ActionToggleButtonModel(false);
-		Actions.optionsInfoPane16.setSelected(Prefs.visInfoPaneActive);
-		Actions.optionsInfoPane16.addActionListener(this);
-		bInfoPane.setActionModel(Actions.optionsInfoPane16);
-		bInfoPane.setActionKeyTip("I");
-		bInfoPane.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.BandOptions.bInfoPane.tooltip"),
-			RB.getString("gui.ribbon.BandOptions.bInfoPane.richtip")));
 
 		// Toggle the display of unpadded scores/values on or off
 		bHidePads = new JCommandToggleButton("",
@@ -68,7 +54,6 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 
 
 		JCommandButtonStrip optionsStrip = new JCommandButtonStrip();
-		optionsStrip.add(bInfoPane);
 		optionsStrip.add(bHidePads);
 		addFlowComponent(optionsStrip);
 
@@ -167,13 +152,6 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 		Actions.optionsShadowerCentred.addActionListener(this);
 		bShadowerCentred.setActionModel(Actions.optionsShadowerCentred);
 
-		bHideBaseText = new JCommandToggleButton("",
-			RibbonController.getIcon("HIDEPROTEINS0", 16));
-		Actions.optionsHideBaseText = new ActionToggleButtonModel(false);
-		Actions.optionsHideBaseText.setSelected(Prefs.renderBaseText);
-		Actions.optionsHideBaseText.addActionListener(this);
-		bHideBaseText.setActionModel(Actions.optionsHideBaseText);
-
 		JCommandButtonStrip panelsStrip = new JCommandButtonStrip();
 		panelsStrip.add(bHideConsensus);
 		panelsStrip.add(bHideScaleBar);
@@ -181,7 +159,6 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 		panelsStrip.add(bHideContigs);
 		panelsStrip.add(bReadShadower);
 		panelsStrip.add(bShadowerCentred);
-		panelsStrip.add(bHideBaseText);
 		addFlowComponent(panelsStrip);
 	}
 
@@ -190,10 +167,7 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 		Object source = e.getSource();
 
 		// Primary options
-		if (source == Actions.optionsInfoPane16)
-			Prefs.visInfoPaneActive = !Prefs.visInfoPaneActive;
-
-		else if (source == Actions.optionsHidePads16)
+		if (source == Actions.optionsHidePads16)
 		{
 			Prefs.visHideUnpaddedValues = !Prefs.visHideUnpaddedValues;
 
@@ -236,11 +210,7 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 			Prefs.visReadShadower = !Prefs.visReadShadower;
 			winMain.getAssemblyPanel().toggleReadCentreOverlay();
 		}
-		else if(source == Actions.optionsHideBaseText)
-		{
-			Prefs.renderBaseText = !Prefs.renderBaseText;
-			winMain.getAssemblyPanel().updateColorScheme();
-		}
+
 		else if(source == Actions.optionsShadowerCentred)
 		{
 			Prefs.visCentreReadShadower = !Prefs.visCentreReadShadower;

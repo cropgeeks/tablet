@@ -61,11 +61,11 @@ public abstract class ColorScheme
 
 		ColorScheme scheme = null;
 
-		if (type == STANDARD)
-			scheme = new ProteinClassificationColorScheme(w, h);
+		if (type == CLASSIC)
+			scheme = new ProteinTextColorScheme(w, h);
 
 		else
-			scheme = new ProteinTextColorScheme(w, h);
+			scheme = new ProteinClassificationColorScheme(w, h);
 
 		return scheme;
 	}

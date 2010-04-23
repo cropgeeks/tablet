@@ -49,6 +49,7 @@ class TextState extends ColorState
 			g.setColor(Color.red);
 		else
 			g.setColor(Color.black);
+
 		g.drawString(text,
 			(int)((float)w/2-bounds.getWidth()/2),
 			h - fm.getMaxDescent());

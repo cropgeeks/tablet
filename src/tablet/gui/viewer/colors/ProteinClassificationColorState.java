@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.geom.*;
 import java.awt.image.*;
 
+import tablet.gui.*;
+
 class ProteinClassificationColorState extends ColorState
 {
 	ProteinClassificationColorState(String txt, Color c, int w, int h, int chop)
@@ -34,11 +36,14 @@ class ProteinClassificationColorState extends ColorState
 
 		Rectangle2D bounds = fm.getStringBounds(txt, g);
 
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		g.setColor(Color.black);
-		g.drawString(txt,
-			(int)((float)w3/2-bounds.getWidth()/2),
-			h - fm.getMaxDescent());
+		if (Prefs.visEnableText)
+		{
+			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+			g.setColor(Color.black);
+			g.drawString(txt,
+				(int)((float)w3/2-bounds.getWidth()/2),
+				h - fm.getMaxDescent());
+		}
 
 		g.dispose();
 
