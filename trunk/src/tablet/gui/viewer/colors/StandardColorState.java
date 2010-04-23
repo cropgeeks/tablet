@@ -41,7 +41,7 @@ class StandardColorState extends ColorState
 			g.fillRect(0, 0, w, h);
 		}
 
-		if(Prefs.renderBaseText)
+		if (Prefs.visEnableText)
 		{
 			Font font = g.getFont().deriveFont(Font.PLAIN, h-3);
 			g.setFont(font);
@@ -54,6 +54,7 @@ class StandardColorState extends ColorState
 				g.setColor(Color.red);
 			else
 				g.setColor(Color.black);
+
 			g.drawString(text,
 				(int)((float)w/2-bounds.getWidth()/2),
 				h - fm.getMaxDescent());

@@ -33,7 +33,7 @@ public class RibbonController
 			new BandStyles(winMain),
 			new BandAdjust(winMain),
 			new BandNavigate(winMain),
-			new BandOptions(winMain));
+			new BandOverlays(winMain));
 
 		homeTask.setKeyTip("H");
 		ribbon.addTask(homeTask);
@@ -42,8 +42,9 @@ public class RibbonController
 		// The Advanced ribbon
 		RibbonTask advancedTask = new RibbonTask(
 			RB.getString("gui.ribbon.RibbonController.advanced"),
+			new BandProtein(winMain),
 			new BandBAM(winMain),
-			new BandProtein(winMain));
+			new BandOptions(winMain));
 
 		advancedTask.setKeyTip("A");
 		ribbon.addTask(advancedTask);
