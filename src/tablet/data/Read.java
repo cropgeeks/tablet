@@ -71,15 +71,6 @@ public class Read implements Comparable<Read>
 	public int getEndPosition()
 		{ return position + length() -1; }
 
-	/** Currently unused (Ace file format related). */
-	public void setQAData(int qa_start, int qa_end, int al_start, int al_end)
-	{
-//		this.qa_start = qa_start;
-//		this.qa_end = qa_end;
-//		this.al_start = al_start;
-//		this.al_end = al_end;
-	}
-
 	/**
 	 * Compares this read against another. The sort is performed so that reads
 	 * will be ordered left-to-right by starting position, with any reads that

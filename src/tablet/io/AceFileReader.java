@@ -11,6 +11,7 @@ import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
 import tablet.data.auxiliary.*;
+import tablet.gui.*;
 import static tablet.io.ReadException.*;
 
 import scri.commons.gui.*;
@@ -45,6 +46,13 @@ class AceFileReader extends TrackableReader
 
 	// Pretty much all the tokenizing we do is based on this one pattern
 	private Pattern p = Pattern.compile("\\s+");
+
+	// Collection of read related variables that are filled by various methods
+	// as we attempt to process a read
+	private String[] RD;
+	private StringBuilder seq;
+	private int qa_start, qa_end;
+
 
 	AceFileReader()
 	{
@@ -98,8 +106,8 @@ class AceFileReader extends TrackableReader
 			else if (str.startsWith("RD "))
 				processRead();
 
-//			else if (str.startsWith("QA "))
-//				processReadQualities();
+			else if (str.startsWith("QA "))
+				processReadQualities();
 
 			else if (str.startsWith("CO "))
 				processContig();
@@ -122,6 +130,19 @@ class AceFileReader extends TrackableReader
 		}
 
 		assembly.setName(files[0].getName());
+
+
+		// Remove any reads that got marked as null due to being poor quality
+		if (Prefs.ioAceProcessQA)
+		{
+			for (Contig contig: assembly)
+			{
+				ArrayList<Read> reads = contig.getReads();
+				for (int i = reads.size()-1; i >= 0; i--)
+					if (reads.get(i) == null)
+						reads.remove(i);
+			}
+		}
 	}
 
 	private void processContig()
@@ -252,19 +273,52 @@ class AceFileReader extends TrackableReader
 		throws Exception
 	{
 		// RD <read name> <# of padded bases> <# of whole read info items> <# of read tags>
-		String[] RD = p.split(str);
+		RD = p.split(str);
 
 		if (RD.length != 5)
 			throw new ReadException(currentFile(), lineCount, TOKEN_COUNT_WRONG);
 
 		int baseCount = Integer.parseInt(RD[2]);
 
-		StringBuilder seq = new StringBuilder(baseCount);
+		// Read the data
+		seq = new StringBuilder(baseCount);
 		while ((str = readLine()) != null && str.length() > 0)
 			seq.append(str);
+	}
 
+	private void processReadQualities()
+		throws Exception
+	{
+		// QA <qual clipping start> <qual clipping end> <align clipping start> <align clipping end>
+		String[] QA = p.split(str);
+
+		qa_start = Integer.parseInt(QA[1]) - 1;
+		qa_end = Integer.parseInt(QA[2]) - 1;
+
+//		int al_start = Integer.parseInt(QA[3]);
+//		int al_end = Integer.parseInt(QA[4]);
+
+		addRead();
+	}
+
+	// Adds a read, once all info on it has been gathered
+	private void addRead()
+		throws Exception
+	{
 		// Fetch the read for this location
-		Read read = contig.getReads().get(rdIndex);
+		read = contig.getReads().get(rdIndex);
+
+		if (Prefs.ioAceProcessQA)
+		{
+			// Totally crap read has QA values of -1 (or -2 as seen by Tablet)
+			if (qa_start != -2 && qa_end != -2)
+			{
+				seq = new StringBuilder(seq.substring(qa_start, qa_end+1));
+				read.setStartPosition(read.getStartPosition() + qa_start);
+			}
+			else
+				contig.getReads().set(rdIndex, null);
+		}
 
 		// Store the metadata about the read in the cache
 		ReadMetaData rmd = new ReadMetaData(RD[1], ucCache[rdIndex]);
@@ -280,21 +334,6 @@ class AceFileReader extends TrackableReader
 
 		rdIndex++;
 		readsAdded++;
-	}
-
-	private void processReadQualities()
-		throws Exception
-	{
-		// QA <qual clipping start> <qual clipping end> <align clipping start> <align clipping end>
-		String[] QA = p.split(str);
-
-		int qa_start = Integer.parseInt(QA[1]);
-		int qa_end = Integer.parseInt(QA[2]);
-
-		int al_start = Integer.parseInt(QA[3]);
-		int al_end = Integer.parseInt(QA[4]);
-
-		read.setQAData(qa_start, qa_end, al_start, al_end);
 	}
 
 	public String getMessage()
