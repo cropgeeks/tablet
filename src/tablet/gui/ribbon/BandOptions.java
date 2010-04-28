@@ -27,7 +27,6 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 	private JCommandToggleButton bHideScaleBar;
 	private JCommandToggleButton bHideCoverage;
 	private JCommandToggleButton bHideContigs;
-	private JCommandToggleButton bOverlayReadNames;
 
 	private JCommandToggleButton bReadShadower;
 	private JCommandToggleButton bShadowerCentred;
@@ -70,23 +69,8 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.BandOptions.bHideOverview.tooltip"),
 			RB.getString("gui.ribbon.BandOptions.bHideOverview.richtip")));
 
-		// Hide the contigs panel
-		bOverlayReadNames = new JCommandToggleButton("",
-			RibbonController.getIcon("OVERLAYNAMES16", 16));
-		Actions.optionsOverlayReadNames = new ActionToggleButtonModel(false);
-		Actions.optionsOverlayReadNames.setSelected(Prefs.visOverlayNames);
-		Actions.optionsOverlayReadNames.addActionListener(this);
-		bOverlayReadNames.setActionModel(Actions.optionsOverlayReadNames);
-		bOverlayReadNames.setActionKeyTip("HN");
-		bOverlayReadNames.setActionRichTooltip(new RichTooltip(
-			RB.format("gui.ribbon.BandOptions.bOverlayReadNames.tooltip", Tablet.winKey),
-			RB.getString("gui.ribbon.BandOptions.bOverlayReadNames.richtip")));
-		RibbonController.assignShortcut(bOverlayReadNames,
-			KeyStroke.getKeyStroke(KeyEvent.VK_N, Tablet.menuShortcut));
-
 		JCommandButtonStrip menuStrip = new JCommandButtonStrip();
 		menuStrip.add(bHideOverview);
-		menuStrip.add(bOverlayReadNames);
 		addFlowComponent(menuStrip);
 
 
@@ -200,11 +184,7 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 			Prefs.guiHideContigs = !Prefs.guiHideContigs;
 			winMain.toggleSplitterLocation();
 		}
-		else if(source == Actions.optionsOverlayReadNames)
-		{
-			Prefs.visOverlayNames = !Prefs.visOverlayNames;
-			winMain.getAssemblyPanel().toggleNameOverlay();
-		}
+
 		else if(source == Actions.optionsReadShadower)
 		{
 			Prefs.visReadShadower = !Prefs.visReadShadower;

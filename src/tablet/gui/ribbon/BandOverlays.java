@@ -23,6 +23,7 @@ class BandOverlays extends JRibbonBand implements ActionListener
 
 	private JCommandToggleButton bInfoPane;
 	private JCommandToggleButton bEnableText;
+	private JCommandToggleButton bReadNames;
 
 	private JCommandButton bPageLeft;
 
@@ -57,10 +58,26 @@ class BandOverlays extends JRibbonBand implements ActionListener
 		Actions.overlaysEnableText.setSelected(Prefs.visEnableText);
 		Actions.overlaysEnableText.addActionListener(this);
 		bEnableText.setActionModel(Actions.overlaysEnableText);
-		bEnableText.setActionKeyTip("T");
+		bEnableText.setActionKeyTip("B");
 		bEnableText.setActionRichTooltip(new RichTooltip(
 			RB.getString("gui.ribbon.BandOverlays.bEnableText.tooltip"),
 			RB.getString("gui.ribbon.BandOverlays.bEnableText.richtip")));
+
+
+		// Toggle overlaying read names on or off
+		bReadNames = new JCommandToggleButton(
+			RB.getString("gui.ribbon.BandOverlays.bReadNames"),
+			RibbonController.getIcon("OVERLAYNAMES16", 16));
+		Actions.overlayReadNames = new ActionToggleButtonModel(false);
+		Actions.overlayReadNames.setSelected(Prefs.visOverlayNames);
+		Actions.overlayReadNames.addActionListener(this);
+		bReadNames.setActionModel(Actions.overlayReadNames);
+		bReadNames.setActionKeyTip("N");
+		bReadNames.setActionRichTooltip(new RichTooltip(
+			RB.format("gui.ribbon.BandOverlays.bReadNames.tooltip", Tablet.winKey),
+			RB.getString("gui.ribbon.BandOverlays.bReadNames.richtip")));
+		RibbonController.assignShortcut(bReadNames,
+			KeyStroke.getKeyStroke(KeyEvent.VK_N, Tablet.menuShortcut));
 
 
 		// Page left
@@ -75,8 +92,10 @@ class BandOverlays extends JRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.BandNavigate.bPageLeft.tooltip"),
 			RB.getString("gui.ribbon.BandNavigate.bPageLeft.richtip")));
 */
+
 		addCommandButton(bInfoPane, RibbonElementPriority.MEDIUM);
 		addCommandButton(bEnableText, RibbonElementPriority.MEDIUM);
+		addCommandButton(bReadNames, RibbonElementPriority.MEDIUM);
 
 //		addCommandButton(bPageLeft, RibbonElementPriority.MEDIUM);
 	}
@@ -90,6 +109,12 @@ class BandOverlays extends JRibbonBand implements ActionListener
 		{
 			Prefs.visEnableText = !Prefs.visEnableText;
 			winMain.getAssemblyPanel().updateColorScheme();
+		}
+
+		else if (e.getSource() == Actions.overlayReadNames)
+		{
+			Prefs.visOverlayNames = !Prefs.visOverlayNames;
+			winMain.getAssemblyPanel().toggleNameOverlay();
 		}
 	}
 }

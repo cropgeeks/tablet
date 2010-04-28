@@ -218,7 +218,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 		else if (e.getSource() == Actions.stylesPacked)
 		{
 			Prefs.visPacked = true;
-			Actions.optionsOverlayReadNames.setEnabled(false);
+			Actions.overlayReadNames.setEnabled(false);
 			winMain.getAssemblyPanel().forceRedraw();
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
@@ -228,7 +228,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 		else if (e.getSource() == Actions.stylesStacked)
 		{
 			Prefs.visPacked = false;
-			Actions.optionsOverlayReadNames.setEnabled(true);
+			Actions.overlayReadNames.setEnabled(true);
 			winMain.getAssemblyPanel().forceRedraw();
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
