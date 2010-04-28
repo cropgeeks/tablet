@@ -24,7 +24,7 @@ public class Actions
 	public static ActionToggleButtonModel optionsHideScaleBar;
 	public static ActionToggleButtonModel optionsHideCoverage;
 	public static ActionToggleButtonModel optionsHideContigs;
-	public static ActionToggleButtonModel optionsOverlayReadNames;
+	public static ActionToggleButtonModel overlayReadNames;
 	public static ActionRepeatableButtonModel optionsHideOverview;
 	public static ActionToggleButtonModel optionsReadShadower;
 	public static ActionToggleButtonModel optionsShadowerCentred;
@@ -71,7 +71,6 @@ public class Actions
 		optionsHideConsensus.setEnabled(false);
 		optionsHideScaleBar.setEnabled(false);
 		optionsHideCoverage.setEnabled(false);
-		optionsOverlayReadNames.setEnabled(false);
 		optionsReadShadower.setEnabled(false);
 		optionsShadowerCentred.setEnabled(false);
 
@@ -95,6 +94,7 @@ public class Actions
 
 		overlaysInfoPane.setEnabled(false);
 		overlaysEnableText.setEnabled(false);
+		overlayReadNames.setEnabled(false);
 	}
 
 	public static void openedNoContigSelected()
@@ -117,7 +117,6 @@ public class Actions
 		optionsHideConsensus.setEnabled(false);
 		optionsHideScaleBar.setEnabled(false);
 		optionsHideCoverage.setEnabled(false);
-		optionsOverlayReadNames.setEnabled(false);
 		optionsReadShadower.setEnabled(false);
 		optionsShadowerCentred.setEnabled(false);
 
@@ -141,6 +140,7 @@ public class Actions
 
 		overlaysInfoPane.setEnabled(false);
 		overlaysEnableText.setEnabled(false);
+		overlayReadNames.setEnabled(false);
 	}
 
 	public static void openedContigSelected()
@@ -163,7 +163,6 @@ public class Actions
 		optionsHideConsensus.setEnabled(true);
 		optionsHideScaleBar.setEnabled(true);
 		optionsHideCoverage.setEnabled(true);
-		optionsOverlayReadNames.setEnabled(!Prefs.visPacked);
 		optionsReadShadower.setEnabled(true);
 		optionsShadowerCentred.setEnabled(true);
 
@@ -188,5 +187,6 @@ public class Actions
 
 		overlaysInfoPane.setEnabled(true);
 		overlaysEnableText.setEnabled(true);
+		overlayReadNames.setEnabled(!Prefs.visPacked);
 	}
 }
