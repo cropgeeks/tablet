@@ -9,7 +9,7 @@ import tablet.gui.Prefs;
 
 class ReadShadower implements IOverlayRenderer
 {
-	private int overlayOpacity = 100;
+	private int overlayOpacity = 75;
 	private Integer mouseBase;
 	private AssemblyPanel aPanel;
 	private ReadsCanvas rCanvas;
@@ -115,7 +115,7 @@ class ReadShadower implements IOverlayRenderer
 	public void setLocked(boolean locked)
 	{
 		Prefs.visReadShadowerLocked = locked;
-		
+
 		if(Prefs.visReadShadowerLocked)
 		{
 			VisualContig vContig = aPanel.getVisualContig();
