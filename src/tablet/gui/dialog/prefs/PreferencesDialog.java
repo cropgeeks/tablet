@@ -21,6 +21,7 @@ public class PreferencesDialog extends JDialog implements ActionListener
 	private JTabbedPane tabs;
 	private NBGeneralPanel generalPanel;
 	private NBVisualizationPanel visualizationPanel;
+	private NBFormatsPanel formatsPanel;
 	private NBWarningPanel warningPanel;
 
 	public PreferencesDialog(Integer newTab)
@@ -36,6 +37,7 @@ public class PreferencesDialog extends JDialog implements ActionListener
 
 		generalPanel = new NBGeneralPanel();
 		visualizationPanel = new NBVisualizationPanel();
+		formatsPanel = new NBFormatsPanel();
 		warningPanel = new NBWarningPanel();
 
 		tabs = new JTabbedPane();
@@ -44,6 +46,8 @@ public class PreferencesDialog extends JDialog implements ActionListener
 			Icons.getIcon("GENERALTAB"), generalPanel);
 		tabs.addTab(RB.getString("gui.dialog.prefs.PreferencesDialog.visualizationTab"),
 			Icons.getIcon("VISUALIZATIONTAB"), visualizationPanel);
+		tabs.addTab(RB.getString("gui.dialog.prefs.PreferencesDialog.formatsTab"),
+			Icons.getIcon("FORMATSTAB"), formatsPanel);
 		tabs.addTab(RB.getString("gui.dialog.prefs.PreferencesDialog.warningTab"),
 			Icons.getIcon("WARNINGSTAB"), warningPanel);
 		tabs.setSelectedIndex(lastTab);
@@ -85,6 +89,7 @@ public class PreferencesDialog extends JDialog implements ActionListener
 		{
 			generalPanel.applySettings();
 			visualizationPanel.applySettings();
+			formatsPanel.applySettings();
 			warningPanel.applySettings();
 
 			lastTab = tabs.getSelectedIndex();
