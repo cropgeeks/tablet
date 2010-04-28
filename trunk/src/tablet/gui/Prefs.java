@@ -144,6 +144,8 @@ public class Prefs extends XMLPreferences
 	public static boolean visEnableText = true;
 
 
+	public static boolean ioAceProcessQA = false;
+
 	static void setDefaults()
 	{
 
