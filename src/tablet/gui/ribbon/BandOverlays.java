@@ -17,7 +17,7 @@ import org.jvnet.flamingo.ribbon.resize.*;
 
 import scri.commons.gui.*;
 
-class BandOverlays extends JRibbonBand implements ActionListener
+public class BandOverlays extends JRibbonBand implements ActionListener
 {
 	private WinMain winMain;
 
@@ -25,7 +25,10 @@ class BandOverlays extends JRibbonBand implements ActionListener
 	private JCommandToggleButton bEnableText;
 	private JCommandToggleButton bReadNames;
 
-	private JCommandButton bPageLeft;
+	private CommandToggleButtonGroup shadowGroup;
+	private JCommandToggleButton bShadowingOff;
+	private JCommandToggleButton bShadowingCenter;
+	private JCommandToggleButton bShadowingCustom;
 
 	BandOverlays(WinMain winMain)
 	{
@@ -80,24 +83,59 @@ class BandOverlays extends JRibbonBand implements ActionListener
 			KeyStroke.getKeyStroke(KeyEvent.VK_N, Tablet.menuShortcut));
 
 
-		// Page left
-/*		bPageLeft = new JCommandButton(
-			RB.getString("gui.ribbon.BandNavigate.bPageLeft"),
-			RibbonController.getIcon("NAVLBLU32", 32));
-		Actions.navigatePageLeft = new ActionRepeatableButtonModel(bPageLeft);
-		Actions.navigatePageLeft.addActionListener(this);
-		bPageLeft.setActionModel(Actions.navigatePageLeft);
-		bPageLeft.setActionKeyTip("L");
-		bPageLeft.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.BandNavigate.bPageLeft.tooltip"),
-			RB.getString("gui.ribbon.BandNavigate.bPageLeft.richtip")));
-*/
-
 		addCommandButton(bInfoPane, RibbonElementPriority.MEDIUM);
 		addCommandButton(bEnableText, RibbonElementPriority.MEDIUM);
 		addCommandButton(bReadNames, RibbonElementPriority.MEDIUM);
 
-//		addCommandButton(bPageLeft, RibbonElementPriority.MEDIUM);
+
+
+		// Read shadowing - OFF
+		bShadowingOff = new JCommandToggleButton(
+			RB.getString("gui.ribbon.BandOverlays.bShadowingOff"),
+			RibbonController.getIcon("SHADOWOFF16", 16));
+		Actions.overlayShadowingOff = new ActionToggleButtonModel(false);
+		Actions.overlayShadowingOff.setSelected(Prefs.visReadShadowing == 0);
+		Actions.overlayShadowingOff.addActionListener(this);
+		bShadowingOff.setActionModel(Actions.overlayShadowingOff);
+		bShadowingOff.setActionKeyTip("RO");
+		bShadowingOff.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.BandOverlays.bShadowingOff.tooltip"),
+			RB.getString("gui.ribbon.BandOverlays.bShadowingOff.richtip")));
+
+		// Read shadowing - CENTER
+		bShadowingCenter = new JCommandToggleButton(
+			RB.getString("gui.ribbon.BandOverlays.bShadowingCenter"),
+			RibbonController.getIcon("SHADOWCENTER16", 16));
+		Actions.overlayShadowingCenter = new ActionToggleButtonModel(false);
+		Actions.overlayShadowingCenter.setSelected(Prefs.visReadShadowing == 1);
+		Actions.overlayShadowingCenter.addActionListener(this);
+		bShadowingCenter.setActionModel(Actions.overlayShadowingCenter);
+		bShadowingCenter.setActionKeyTip("RT");
+		bShadowingCenter.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.BandOverlays.bShadowingCenter.tooltip"),
+			RB.getString("gui.ribbon.BandOverlays.bShadowingCenter.richtip")));
+
+		// Read shadowing - CUSTOM
+		bShadowingCustom = new JCommandToggleButton(
+			RB.getString("gui.ribbon.BandOverlays.bShadowingCustom"),
+			RibbonController.getIcon("SHADOWCUSTOM16", 16));
+		Actions.overlayShadowingCustom = new ActionToggleButtonModel(false);
+		Actions.overlayShadowingCustom.setSelected(Prefs.visReadShadowing == 2);
+		Actions.overlayShadowingCustom.addActionListener(this);
+		bShadowingCustom.setActionModel(Actions.overlayShadowingCustom);
+		bShadowingCustom.setActionKeyTip("RC");
+		bShadowingCustom.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.BandOverlays.bShadowingCustom.tooltip"),
+			RB.getString("gui.ribbon.BandOverlays.bShadowingCustom.richtip")));
+
+		shadowGroup = new CommandToggleButtonGroup();
+		shadowGroup.add(bShadowingOff);
+		shadowGroup.add(bShadowingCenter);
+		shadowGroup.add(bShadowingCustom);
+
+		addCommandButton(bShadowingOff, RibbonElementPriority.MEDIUM);
+		addCommandButton(bShadowingCenter, RibbonElementPriority.MEDIUM);
+		addCommandButton(bShadowingCustom, RibbonElementPriority.MEDIUM);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -116,5 +154,41 @@ class BandOverlays extends JRibbonBand implements ActionListener
 			Prefs.visOverlayNames = !Prefs.visOverlayNames;
 			winMain.getAssemblyPanel().toggleNameOverlay();
 		}
+
+		else if (e.getSource() == Actions.overlayShadowingOff)
+			actionShadowingOff();
+
+		else if (e.getSource() == Actions.overlayShadowingCenter)
+			actionShadowingCenter();
+
+		else if (e.getSource() == Actions.overlayShadowingCustom)
+			actionShadowingCustom();
+	}
+
+	public void actionShadowingOff()
+	{
+		Prefs.visReadShadowing = 0;
+		winMain.getAssemblyPanel().repaint();
+
+		// BUG: Workaround for API allowing toggle groups to be unselected
+		Actions.overlayShadowingOff.setSelected(true);
+	}
+
+	public void actionShadowingCenter()
+	{
+		Prefs.visReadShadowing = 1;
+		winMain.getAssemblyPanel().repaint();
+
+		// BUG: Workaround for API allowing toggle groups to be unselected
+		Actions.overlayShadowingCenter.setSelected(true);
+	}
+
+	public void actionShadowingCustom()
+	{
+		Prefs.visReadShadowing = 2;
+		winMain.getAssemblyPanel().repaint();
+
+		// BUG: Workaround for API allowing toggle groups to be unselected
+		Actions.overlayShadowingCustom.setSelected(true);
 	}
 }

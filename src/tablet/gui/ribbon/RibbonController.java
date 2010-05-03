@@ -22,6 +22,16 @@ public class RibbonController
 	private static JLabel titleLabel = new JLabel(" ");
 	private static JLabel memoryLabel = new JLabel(" ");
 
+	public static BandAssemblies bandAssemblies;
+	public static BandStyles bandStyles;
+	public static BandAdjust bandAdjust;
+	public static BandNavigate bandNavigate;
+	public static BandOverlays bandOverlays;
+
+	public static BandProtein bandProtein;
+	public static BandBAM bandBAM;
+	public static BandOptions bandOptions;
+
 	public RibbonController(WinMain winMain)
 	{
 		RibbonController.ribbon = winMain.getRibbon();
@@ -29,11 +39,11 @@ public class RibbonController
 		// The Home ribbon
 		RibbonTask homeTask = new RibbonTask(
 			RB.getString("gui.ribbon.RibbonController.home"),
-			new BandAssemblies(winMain),
-			new BandStyles(winMain),
-			new BandAdjust(winMain),
-			new BandNavigate(winMain),
-			new BandOverlays(winMain));
+			bandAssemblies = new BandAssemblies(winMain),
+			bandStyles = new BandStyles(winMain),
+			bandAdjust = new BandAdjust(winMain),
+			bandNavigate = new BandNavigate(winMain),
+			bandOverlays = new BandOverlays(winMain));
 
 		homeTask.setKeyTip("H");
 		ribbon.addTask(homeTask);
@@ -42,9 +52,9 @@ public class RibbonController
 		// The Advanced ribbon
 		RibbonTask advancedTask = new RibbonTask(
 			RB.getString("gui.ribbon.RibbonController.advanced"),
-			new BandProtein(winMain),
-			new BandBAM(winMain),
-			new BandOptions(winMain));
+			bandProtein = new BandProtein(winMain),
+			bandBAM = new BandBAM(winMain),
+			bandOptions = new BandOptions(winMain));
 
 		advancedTask.setKeyTip("A");
 		ribbon.addTask(advancedTask);

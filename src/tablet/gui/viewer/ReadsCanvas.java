@@ -100,8 +100,8 @@ class ReadsCanvas extends JPanel
 	{
 		this.aPanel = aPanel;
 		readsCanvasML = new ReadsCanvasML(aPanel);
+
 		aPanel.toggleNameOverlay();
-		aPanel.toggleReadCentreOverlay();
 	}
 
 	void setContig(Contig contig)

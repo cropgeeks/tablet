@@ -30,8 +30,6 @@ class ReadsCanvasML extends MouseInputAdapter
 	private ReadsCanvasInfoPane infoPane = new ReadsCanvasInfoPane();
 	private OutlinerOverlay outliner;
 
-	private boolean showShadower = false;
-
 	ReadsCanvasML(AssemblyPanel aPanel)
 	{
 		this.aPanel = aPanel;
@@ -47,6 +45,7 @@ class ReadsCanvasML extends MouseInputAdapter
 		// Then add listeners and overlays to the canvas
 		rCanvas.addMouseListener(this);
 		rCanvas.addMouseMotionListener(this);
+		rCanvas.overlays.add(new ReadShadower(aPanel));
 		rCanvas.overlays.add(outliner);
 		rCanvas.overlays.add(nOverlay);
 		rCanvas.overlays.add(infoPane);
@@ -63,8 +62,8 @@ class ReadsCanvasML extends MouseInputAdapter
 		infoPane.setMousePosition(null);
 		nOverlay.setMousePosition(null);
 
-		if(aPanel.readShadower != null && !showShadower)
-			aPanel.readShadower.setMouseBase(null);
+		if (rCanvasMenu.isShowingMenu() == false)
+			ReadShadower.setMouseBase(null);
 
 		sCanvas.setMouseBase(null);
 		rCanvas.repaint();
@@ -101,10 +100,7 @@ class ReadsCanvasML extends MouseInputAdapter
 		trackMouse(e);
 
 		if (e.isPopupTrigger())
-		{
 			rCanvasMenu.handlePopup(e);
-			showShadower = true;
-		}
 
 		nHandler.mouseReleased(e);
 	}
@@ -122,8 +118,6 @@ class ReadsCanvasML extends MouseInputAdapter
 
 	private void trackMouse(MouseEvent e)
 	{
-		showShadower = false;
-		
 		int xIndex = (e.getX() / rCanvas.ntW) + rCanvas.offset;
 		int yIndex = (e.getY() / rCanvas.ntH);
 
@@ -132,8 +126,7 @@ class ReadsCanvasML extends MouseInputAdapter
 		infoPane.setMousePosition(e.getPoint());
 		nOverlay.setMousePosition(e.getPoint());
 
-		if(aPanel.readShadower != null)
-			aPanel.readShadower.setMouseBase(xIndex);
+		ReadShadower.setMouseBase(xIndex);
 
 		// Track the read under the mouse (if any)
 		Read read = rCanvas.reads.getReadAt(yIndex, xIndex);
@@ -172,10 +165,5 @@ class ReadsCanvasML extends MouseInputAdapter
 				aPanel.moveBy(diffX, diffY);
 			}
 		}
-	}
-
-	ReadsCanvasMenu getRCanvasMenu()
-	{
-		return rCanvasMenu;
 	}
 }
