@@ -7,6 +7,8 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import tablet.data.auxiliary.*;
+import tablet.gui.*;
+import static tablet.gui.ribbon.RibbonController.*;
 
 import scri.commons.gui.*;
 
@@ -24,7 +26,13 @@ class ReadsCanvasMenu implements ActionListener
 	private JMenuItem mOutlineCol;
 	private JMenuItem mOutlineRow;
 	private JMenuItem mOutlineClear;
-	private JMenuItem mIntersectLock;
+
+	private JMenu mShadowing;
+	private JCheckBoxMenuItem mShadowingOff;
+	private JCheckBoxMenuItem mShadowingCenter;
+	private JCheckBoxMenuItem mShadowingCustom;
+	private JCheckBoxMenuItem mShadowingLock;
+	private JMenuItem mShadowingJump;
 
 	// Row and column under the mouse at the time the menu appears
 	private int rowIndex, colIndex;
@@ -66,13 +74,54 @@ class ReadsCanvasMenu implements ActionListener
 		RB.setText(mOutlineClear, "gui.viewer.ReadsCanvasMenu.mOutlineClear");
 		mOutlineClear.addActionListener(this);
 
-		mIntersectLock = new JCheckBoxMenuItem("Lock intersection line");
-		mIntersectLock.addActionListener(this);
+		mShadowing = new JMenu("");
+		RB.setText(mShadowing, "gui.viewer.ReadsCanvasMenu.mShadowing");
+
+		mShadowingOff = new JCheckBoxMenuItem("");
+		RB.setText(mShadowingOff, "gui.viewer.ReadsCanvasMenu.mShadowingOff");
+		mShadowingOff.addActionListener(this);
+
+		mShadowingCenter = new JCheckBoxMenuItem("");
+		RB.setText(mShadowingCenter, "gui.viewer.ReadsCanvasMenu.mShadowingCenter");
+		mShadowingCenter.addActionListener(this);
+
+		mShadowingCustom = new JCheckBoxMenuItem("");
+		RB.setText(mShadowingCustom, "gui.viewer.ReadsCanvasMenu.mShadowingCustom");
+		mShadowingCustom.addActionListener(this);
+
+		mShadowingLock = new JCheckBoxMenuItem("");
+		RB.setText(mShadowingLock, "gui.viewer.ReadsCanvasMenu.mShadowingLock");
+		mShadowingLock.addActionListener(this);
+
+		mShadowingJump = new JMenuItem("");
+		RB.setText(mShadowingJump, "gui.viewer.ReadsCanvasMenu.mShadowingJump");
+		mShadowingJump.addActionListener(this);
+
+
+		// Create the menu
+		menu = new JPopupMenu();
 
 		mOutline.add(mOutlineRow);
 		mOutline.add(mOutlineCol);
 		mOutline.addSeparator();
 		mOutline.add(mOutlineClear);
+
+		mShadowing.add(mShadowingOff);
+		mShadowing.addSeparator();
+		mShadowing.add(mShadowingCenter);
+		mShadowing.add(mShadowingCustom);
+		mShadowing.addSeparator();
+		mShadowing.add(mShadowingLock);
+		mShadowing.add(mShadowingJump);
+
+		menu.add(mOutline);
+		menu.add(mShadowing);
+		menu.addSeparator();
+		menu.add(mClipboardName);
+		menu.add(mClipboardData);
+		menu.addSeparator();
+		menu.add(mFindStart);
+		menu.add(mFindEnd);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -109,14 +158,29 @@ class ReadsCanvasMenu implements ActionListener
 		}
 		else if (e.getSource() == mOutlineClear)
 			rCanvas.contig.getOutlines().clear();
-		else if (e.getSource() == mIntersectLock)
+
+		else if (e.getSource() == mShadowingOff)
+			bandOverlays.actionShadowingOff();
+
+		else if (e.getSource() == mShadowingCenter)
+			bandOverlays.actionShadowingCenter();
+
+		else if (e.getSource() == mShadowingCustom)
+			bandOverlays.actionShadowingCustom();
+
+		// Toggle shadowing locking on/off
+		else if (e.getSource() == mShadowingLock)
 		{
-			if( !mIntersectLock.isSelected() )
-			{
+			if (aPanel.getVisualContig().getLockedBase() != null)
 				aPanel.getVisualContig().setLockedBase(null);
-			}
-			aPanel.readShadower.setLocked(mIntersectLock.isSelected());
+			else
+				aPanel.getVisualContig().setLockedBase(ReadShadower.mouseBase);
 		}
+
+		// Jump to base...
+		else if (e.getSource() == mShadowingJump)
+			aPanel.moveToPosition(-1,
+				aPanel.getVisualContig().getLockedBase(), true);
 	}
 
 	boolean isShowingMenu()
@@ -127,18 +191,6 @@ class ReadsCanvasMenu implements ActionListener
 		rowIndex = (e.getY() / rCanvas.ntH);
 		colIndex = (e.getX() / rCanvas.ntW) + rCanvas.offset;
 
-		// Create the menu
-		menu = new JPopupMenu();
-		menu.add(mOutline);
-		menu.addSeparator();
-		menu.add(mClipboardName);
-		menu.add(mClipboardData);
-		menu.addSeparator();
-		menu.add(mFindStart);
-		menu.add(mFindEnd);
-		menu.addSeparator();
-		menu.add(mIntersectLock);
-
 		// Check enabled states
 		boolean isOverRead = infoPane.isOverRead();
 		mClipboardName.setEnabled(isOverRead);
@@ -147,11 +199,15 @@ class ReadsCanvasMenu implements ActionListener
 		mFindEnd.setEnabled(isOverRead);
 		mOutlineClear.setEnabled(rCanvas.contig.getOutlines().size() > 0);
 
-		menu.show(e.getComponent(), e.getX(), e.getY());
-	}
+		// Shadowing options
+		mShadowingOff.setSelected(Prefs.visReadShadowing == 0);
+		mShadowingCenter.setSelected(Prefs.visReadShadowing == 1);
+		mShadowingCustom.setSelected(Prefs.visReadShadowing == 2);
+		Integer base = aPanel.getVisualContig().getLockedBase();
+		mShadowingLock.setSelected(base != null);
+		mShadowingLock.setEnabled(Prefs.visReadShadowing == 2);
+		mShadowingJump.setEnabled(Prefs.visReadShadowing == 2 && base != null);
 
-	JMenuItem getMIntersectLock()
-	{
-		return mIntersectLock;
+		menu.show(e.getComponent(), e.getX(), e.getY());
 	}
 }

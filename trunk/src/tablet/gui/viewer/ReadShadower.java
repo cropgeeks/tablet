@@ -10,11 +10,14 @@ import tablet.gui.Prefs;
 class ReadShadower implements IOverlayRenderer
 {
 	private int overlayOpacity = 75;
-	private Integer mouseBase;
 	private AssemblyPanel aPanel;
 	private ReadsCanvas rCanvas;
 
-	public ReadShadower(AssemblyPanel aPanel, boolean hidden)
+	private Color lineColor = new Color(25, 75, 100);
+
+	static Integer mouseBase;
+
+	public ReadShadower(AssemblyPanel aPanel)
 	{
 		this.aPanel = aPanel;
 		this.rCanvas = aPanel.readsCanvas;
@@ -25,9 +28,14 @@ class ReadShadower implements IOverlayRenderer
 	 */
 	public void render(Graphics2D g)
 	{
+		if (Prefs.visReadShadowing == 0)
+			return;
+
 		g.setPaint(new Color(0, 0, 0, overlayOpacity));
-		if(Prefs.visCentreReadShadower)
+
+		if (Prefs.visReadShadowing == 1)
 			renderLockedToMiddle(g);
+
 		else
 			renderFreeFlowing(g);
 	}
@@ -51,7 +59,7 @@ class ReadShadower implements IOverlayRenderer
 			}
 		}
 		// Draws a vertical line down the middle of the display
-		g.setColor(Color.black);
+		g.setColor(lineColor);
 		g.drawLine(mid, rCanvas.pY1, mid, rCanvas.pY2);
 	}
 
@@ -61,65 +69,31 @@ class ReadShadower implements IOverlayRenderer
 	 */
 	private void renderFreeFlowing(Graphics2D g)
 	{
-		Integer intersectPosition = determineIntersectPosition();
+		// Start by setting the position equal to the locked base
+		Integer iPosition = aPanel.getVisualContig().getLockedBase();
 
-		if(intersectPosition != null)
+		// But change to the mouse base if it's not locked
+		if (iPosition == null)
+			iPosition = mouseBase;
+		// And quit if that is null too (eg, mouse not over the canvas)
+		if (iPosition == null)
+			return;
+
+		int yS = rCanvas.pY1 / rCanvas.ntH;
+		int yE = rCanvas.pY2 / rCanvas.ntH;
+		for (int row = yS; row <= yE; row++)
 		{
-			int yS = rCanvas.pY1 / rCanvas.ntH;
-			int yE = rCanvas.pY2 / rCanvas.ntH;
-			for (int row = yS; row <= yE; row++)
+			Read read = rCanvas.reads.getReadAt(row, iPosition);
+			if (read != null)
 			{
-				Read read = rCanvas.reads.getReadAt(row, intersectPosition);
-				if (read != null)
-				{
-					g.fillRect((read.getStartPosition() - rCanvas.offset) * rCanvas.ntW, row * rCanvas.ntH, ((read.getEndPosition() - rCanvas.offset) - (read.getStartPosition() - rCanvas.offset) + 1) * rCanvas.ntW, rCanvas.ntH);
-				}
+				g.fillRect((read.getStartPosition() - rCanvas.offset) * rCanvas.ntW, row * rCanvas.ntH, ((read.getEndPosition() - rCanvas.offset) - (read.getStartPosition() - rCanvas.offset) + 1) * rCanvas.ntW, rCanvas.ntH);
 			}
-			// Draws a vertical line down the display
-			g.setColor(Color.black);
-			g.drawLine((intersectPosition - rCanvas.offset) * rCanvas.ntW + rCanvas.ntW / 2, rCanvas.pY1, (intersectPosition - rCanvas.offset) * rCanvas.ntW + rCanvas.ntW / 2, rCanvas.pY2);
 		}
+		// Draws a vertical line down the display
+		g.setColor(lineColor);
+		g.drawLine((iPosition - rCanvas.offset) * rCanvas.ntW + rCanvas.ntW / 2, rCanvas.pY1, (iPosition - rCanvas.offset) * rCanvas.ntW + rCanvas.ntW / 2, rCanvas.pY2);
 	}
 
-	/**
-	 * Works out if we are drawing relative to the current mouse position, or a
-	 * position the shadowing has been locked to.
-	 */
-	private Integer determineIntersectPosition()
-	{
-		Integer intersectPosition;
-		VisualContig vContig = aPanel.getVisualContig();
-
-		// The shadowing has been locked to a base
-		if(vContig.getLockedBase() != null)
-		{
-			intersectPosition = vContig.getLockedBase();
-			Prefs.visReadShadowerLocked = true;
-			rCanvas.readsCanvasML.getRCanvasMenu().getMIntersectLock().setSelected(Prefs.visReadShadowerLocked);
-		}
-
-		// The shadowing was locked to a base, but on another contig...set to free flowing
-		else
-		{
-			Prefs.visReadShadowerLocked = false;
-			rCanvas.readsCanvasML.getRCanvasMenu().getMIntersectLock().setSelected(Prefs.visReadShadowerLocked);
-			intersectPosition = mouseBase;
-		}
-
-		return intersectPosition;
-	}
-
-	public void setMouseBase(Integer mouseBase)
-		{	this.mouseBase = mouseBase;	}
-
-	public void setLocked(boolean locked)
-	{
-		Prefs.visReadShadowerLocked = locked;
-
-		if(Prefs.visReadShadowerLocked)
-		{
-			VisualContig vContig = aPanel.getVisualContig();
-			vContig.setLockedBase(mouseBase);
-		}
-	}
+	public static void setMouseBase(Integer newBase)
+		{ mouseBase = newBase; }
 }

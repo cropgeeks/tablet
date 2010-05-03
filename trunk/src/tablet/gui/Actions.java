@@ -24,10 +24,7 @@ public class Actions
 	public static ActionToggleButtonModel optionsHideScaleBar;
 	public static ActionToggleButtonModel optionsHideCoverage;
 	public static ActionToggleButtonModel optionsHideContigs;
-	public static ActionToggleButtonModel overlayReadNames;
 	public static ActionRepeatableButtonModel optionsHideOverview;
-	public static ActionToggleButtonModel optionsReadShadower;
-	public static ActionToggleButtonModel optionsShadowerCentred;
 
 	public static ActionToggleButtonModel stylesStandard;
 	public static ActionToggleButtonModel stylesDirection;
@@ -47,6 +44,10 @@ public class Actions
 
 	public static ActionToggleButtonModel overlaysInfoPane;
 	public static ActionToggleButtonModel overlaysEnableText;
+	public static ActionToggleButtonModel overlayReadNames;
+	public static ActionToggleButtonModel overlayShadowingOff;
+	public static ActionToggleButtonModel overlayShadowingCenter;
+	public static ActionToggleButtonModel overlayShadowingCustom;
 
 	public static ActionToggleButtonModel[] proteinEnable;
 
@@ -71,8 +72,6 @@ public class Actions
 		optionsHideConsensus.setEnabled(false);
 		optionsHideScaleBar.setEnabled(false);
 		optionsHideCoverage.setEnabled(false);
-		optionsReadShadower.setEnabled(false);
-		optionsShadowerCentred.setEnabled(false);
 
 		stylesStandard.setEnabled(false);
 		stylesDirection.setEnabled(false);
@@ -95,6 +94,9 @@ public class Actions
 		overlaysInfoPane.setEnabled(false);
 		overlaysEnableText.setEnabled(false);
 		overlayReadNames.setEnabled(false);
+		overlayShadowingOff.setEnabled(false);
+		overlayShadowingCenter.setEnabled(false);
+		overlayShadowingCustom.setEnabled(false);
 	}
 
 	public static void openedNoContigSelected()
@@ -117,8 +119,6 @@ public class Actions
 		optionsHideConsensus.setEnabled(false);
 		optionsHideScaleBar.setEnabled(false);
 		optionsHideCoverage.setEnabled(false);
-		optionsReadShadower.setEnabled(false);
-		optionsShadowerCentred.setEnabled(false);
 
 		stylesStandard.setEnabled(false);
 		stylesDirection.setEnabled(false);
@@ -141,6 +141,9 @@ public class Actions
 		overlaysInfoPane.setEnabled(false);
 		overlaysEnableText.setEnabled(false);
 		overlayReadNames.setEnabled(false);
+		overlayShadowingOff.setEnabled(false);
+		overlayShadowingCenter.setEnabled(false);
+		overlayShadowingCustom.setEnabled(false);
 	}
 
 	public static void openedContigSelected()
@@ -163,8 +166,6 @@ public class Actions
 		optionsHideConsensus.setEnabled(true);
 		optionsHideScaleBar.setEnabled(true);
 		optionsHideCoverage.setEnabled(true);
-		optionsReadShadower.setEnabled(true);
-		optionsShadowerCentred.setEnabled(true);
 
 		stylesStandard.setEnabled(true);
 		stylesDirection.setEnabled(true);
@@ -188,5 +189,8 @@ public class Actions
 		overlaysInfoPane.setEnabled(true);
 		overlaysEnableText.setEnabled(true);
 		overlayReadNames.setEnabled(!Prefs.visPacked);
+		overlayShadowingOff.setEnabled(true);
+		overlayShadowingCenter.setEnabled(true);
+		overlayShadowingCustom.setEnabled(true);
 	}
 }

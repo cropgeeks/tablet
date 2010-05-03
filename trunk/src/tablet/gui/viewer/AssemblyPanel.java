@@ -43,7 +43,6 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 	private float ntCenterX, ntCenterY;
 
 	private NameOverlayer nameOverlayer;
-	ReadShadower readShadower;
 
 	private VisualAssembly visualAssembly;
 
@@ -424,25 +423,6 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 				moveTo(row, col, centre);
 			}
 		});
-	}
-
-	public void toggleReadCentreOverlay()
-	{
-		//start fade in animation for overlay
-		if(Prefs.visReadShadower)
-		{
-			readShadower = new ReadShadower(this, false);
-			readsCanvas.overlays.addFirst(readShadower);
-		}
-		//start fade out animation for overlay
-		else
-		{
-			if(readShadower != null)
-			{
-				readsCanvas.overlays.remove(readShadower);
-			}
-		}
-		readsCanvas.repaint();
 	}
 
 	public void updateColorScheme()

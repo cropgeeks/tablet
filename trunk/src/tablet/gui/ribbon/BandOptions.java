@@ -28,10 +28,6 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 	private JCommandToggleButton bHideCoverage;
 	private JCommandToggleButton bHideContigs;
 
-	private JCommandToggleButton bReadShadower;
-	private JCommandToggleButton bShadowerCentred;
-
-
 	BandOptions(WinMain winMain)
 	{
 		super(RB.getString("gui.ribbon.BandOptions.title"),
@@ -122,27 +118,11 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.BandOptions.bHideContigs.tooltip"),
 			RB.getString("gui.ribbon.BandOptions.bHideContigs.richtip")));
 
-		bReadShadower = new JCommandToggleButton("",
-			RibbonController.getIcon("HIDEPROTEINS0", 16));
-		Actions.optionsReadShadower = new ActionToggleButtonModel(false);
-		Actions.optionsReadShadower.setSelected(Prefs.visReadShadower);
-		Actions.optionsReadShadower.addActionListener(this);
-		bReadShadower.setActionModel(Actions.optionsReadShadower);
-
-		bShadowerCentred = new JCommandToggleButton("",
-			RibbonController.getIcon("HIDEPROTEINS0", 16));
-		Actions.optionsShadowerCentred = new ActionToggleButtonModel(false);
-		Actions.optionsShadowerCentred.setSelected(Prefs.visCentreReadShadower);
-		Actions.optionsShadowerCentred.addActionListener(this);
-		bShadowerCentred.setActionModel(Actions.optionsShadowerCentred);
-
 		JCommandButtonStrip panelsStrip = new JCommandButtonStrip();
 		panelsStrip.add(bHideConsensus);
 		panelsStrip.add(bHideScaleBar);
 		panelsStrip.add(bHideCoverage);
 		panelsStrip.add(bHideContigs);
-		panelsStrip.add(bReadShadower);
-		panelsStrip.add(bShadowerCentred);
 		addFlowComponent(panelsStrip);
 	}
 
@@ -183,18 +163,6 @@ public class BandOptions extends JFlowRibbonBand implements ActionListener
 		{
 			Prefs.guiHideContigs = !Prefs.guiHideContigs;
 			winMain.toggleSplitterLocation();
-		}
-
-		else if(source == Actions.optionsReadShadower)
-		{
-			Prefs.visReadShadower = !Prefs.visReadShadower;
-			winMain.getAssemblyPanel().toggleReadCentreOverlay();
-		}
-
-		else if(source == Actions.optionsShadowerCentred)
-		{
-			Prefs.visCentreReadShadower = !Prefs.visCentreReadShadower;
-			winMain.getAssemblyPanel().repaint();
 		}
 	}
 }
