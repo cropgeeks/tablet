@@ -255,20 +255,27 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 	
 	public void runSearch()
 	{
+		// Set if we are searching the current contig, or all contigs
+		Prefs.guiFindPanelSelectedIndex = controls.findInCombo.getSelectedIndex();
+		
+		if(Prefs.guiFindPanelSelectedIndex == Finder.CURRENT_CONTIG && aPanel.getContig() == null)
+		{
+			TaskDialog.error("A Contig must be selected before searching over a single contig can occur.", "OK");
+			return;
+		}
 		try
 		{
 			resetFinder();
 			setTableModel(null);
 
-			finder.setSearchTerm(controls.findCombo.getText());
-			// Set if we are searching the current contig, or all contigs
-			Prefs.guiFindPanelSelectedIndex = controls.findInCombo.getSelectedIndex();
+			// Work around for History Combo Box return selection bug.
+			finder.setSearchTerm((String) controls.findCombo.getEditor().getItem());
 			// Set if we are searching for reads, or subsequences
 			finder.setSearchReads((String)controls.searchTypeCombo.getSelectedItem());
 
 			if (controls.findCombo.getText() != null)
 			{
-				controls.findCombo.updateComboBox((String) controls.findCombo.getSelectedItem());
+				controls.findCombo.updateComboBox((String) controls.findCombo.getEditor().getItem());
 				Prefs.recentSearches = controls.findCombo.getHistory();
 			}
 
@@ -287,19 +294,17 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		}
 
 		LinkedList<SearchResult> results = finder.getResults();
-		controls.resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", results.size()));
-		setTableModel(results);
+		if(results != null && results.size() > 0)
+		{
+			controls.resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", results.size()));
+			setTableModel(results);
+		}
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == controls.bFind)
 		{
-			if(Prefs.guiFindPanelSelectedIndex == Finder.CURRENT_CONTIG && aPanel.getContig() == null)
-			{
-				TaskDialog.error("A Contig must be selected before searching over a single contig can occur.", "OK");
-				return;
-			}
 			runSearch();
 		}
 

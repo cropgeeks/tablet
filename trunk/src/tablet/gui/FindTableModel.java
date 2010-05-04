@@ -29,7 +29,7 @@ public class FindTableModel extends AbstractTableModel
 
 		columnNames = new String[] { col1, col2, col3, col4 };
 
-		if(results != null && results.get(0) instanceof SubsequenceSearchResult)
+		if(results != null && results.size() != 0 && results.get(0) instanceof SubsequenceSearchResult)
 		{
 			String col5 = "Start Index";
 			String col6 = "End Index";

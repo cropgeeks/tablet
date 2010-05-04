@@ -46,6 +46,9 @@ public class Finder extends SimpleJob
 		// Calculate the maximum value for the progress bar.
 		calculateMaximum(Prefs.guiFindPanelSelectedIndex);
 
+		if(str.equals(""))
+			return;
+
 		//Loop over contigs checking for matches
 		for(Contig contig : aPanel.getAssembly())
 		{
