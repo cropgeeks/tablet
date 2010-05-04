@@ -68,7 +68,7 @@ class SamFileReader extends TrackableReader
 		boolean isSamFile = false;
 
 		// Check the header (but @ might match on a FASTQ file too)
-		if (str != null && str.startsWith("@HD"))
+		if (str != null && (str.startsWith("@HD") || str.startsWith("@SQ") || str.startsWith("@RG") || str.startsWith("@PG") || str.startsWith("@CO")))
 			// Keep reading past the header
 			while ((str = readLine()) != null && str.length() > 0 && str.startsWith("@"));
 
