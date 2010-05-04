@@ -15,6 +15,7 @@ public class NBFindPanelControls extends javax.swing.JPanel
 
 		this.panel = panel;
 
+		// Setup the various visual components and fill with the correct data / options
 		searchTypeCombo.addItem(RB.getString("gui.NBFindPanelControls.findLabel1"));
 		searchTypeCombo.addItem(RB.getString("gui.NBFindPanelControls.findLabel2"));
 		searchTypeCombo.setSelectedIndex(Prefs.guiFindPanelSearchType);
@@ -37,9 +38,11 @@ public class NBFindPanelControls extends javax.swing.JPanel
 		bFind.setIcon(Icons.getIcon("FIND"));
 
 		bFind.addActionListener(panel);
+
 		if(!SystemUtils.isMacOS())
 			bFind.setBorder(BorderFactory.createEmptyBorder(0, 11, 0, 11));
 
+		// Setup the table with the desired properties
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getSelectionModel().addListSelectionListener(panel);
@@ -48,9 +51,10 @@ public class NBFindPanelControls extends javax.swing.JPanel
 		checkUseRegex.setSelected(Prefs.guiRegexSearching);
 		checkUseRegex.addActionListener(panel);
 
-
+		// Setup a keyboard listener on  the findCombo combo box. This was to allow
+		// the user to hit return from the combo box to run the search.
 		findCombo.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
-		public void keyReleased(KeyEvent e)
+		public void keyPressed(KeyEvent e)
 		{
 			if(e.getKeyCode() == KeyEvent.VK_ENTER)
 				panel.runSearch();
@@ -62,15 +66,23 @@ public class NBFindPanelControls extends javax.swing.JPanel
 		searchTypeCombo.addActionListener(panel);
     }
 
-	public void toggleComponentEnabled(boolean visible)
+	/**
+	 * Toggle which components are enabled to ensure that the correct components
+	 * are enabled / disabled at any given time. 
+	 */
+	public void toggleComponentEnabled(boolean enabled)
 	{
-		label.setEnabled(visible);
-		bFind.setEnabled(visible);
-		findCombo.setEnabled(visible);
-		findInCombo.setEnabled(visible);
-		searchTypeCombo.setEnabled(visible);
-		resultsLabel.setEnabled(visible);
-		table.setEnabled(visible);
+		label.setEnabled(enabled);
+		bFind.setEnabled(enabled);
+		findCombo.setEnabled(enabled);
+		findInCombo.setEnabled(enabled);
+		searchTypeCombo.setEnabled(enabled);
+		resultsLabel.setEnabled(enabled);
+		table.setEnabled(enabled);
+		if(searchTypeCombo.getSelectedItem().equals(RB.getString("gui.NBFindPanelControls.findLabel2")))
+			checkUseRegex.setEnabled(false);
+		else
+			checkUseRegex.setEnabled(enabled);
 	}
 
     /** This method is called from within the constructor to
