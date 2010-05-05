@@ -76,7 +76,7 @@ class NBBamWindowPanel extends JPanel
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel bamLabel;
-    private javax.swing.JSpinner bamSpinner;
+    javax.swing.JSpinner bamSpinner;
     private javax.swing.JLabel label1;
     private javax.swing.JLabel label2;
     // End of variables declaration//GEN-END:variables
