@@ -150,7 +150,7 @@ public class Finder extends SimpleJob
 		Pattern p = Pattern.compile(searchString);
 		Matcher m = p.matcher(readString);
 
-		int index = readString.indexOf(searchString);
+		int index = readString.toLowerCase().indexOf(searchString.toLowerCase());
 
 		// Having found one occurrence in the read string, search for more.
 		while(index != -1)
@@ -158,7 +158,7 @@ public class Finder extends SimpleJob
 			results.add(new SubsequenceSearchResult(readName, startPos, length, contig, startPos+index, (startPos+index+searchString.length())));
 			found++;
 			
-			index = readString.indexOf(searchString, ++index);
+			index = readString.toLowerCase().indexOf(searchString.toLowerCase(), ++index);
 		}
 	}
 
