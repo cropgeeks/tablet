@@ -180,6 +180,9 @@ public class Finder extends SimpleJob
 				return;
 			}
 
+		if(searchTerm.equals(""))
+			return;
+
 		search(searchTerm);
 
 		//if we've had 500 matches stop searching
