@@ -251,6 +251,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		finder.setResults(null);
 		controls.table.setModel(new DefaultTableModel());
 		controls.table.invalidate();
+		controls.resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", 0));
 	}
 	
 	public void runSearch()
@@ -279,7 +280,19 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 				Prefs.recentSearches = controls.findCombo.getHistory();
 			}
 
-			ProgressDialog dialog = new ProgressDialog(finder, RB.getString("gui.NBFindPanelControls.progressTitle"), RB.getString("gui.NBFindPanelControls.progressLabel"));
+			String title, label;
+			if(controls.searchTypeCombo.getSelectedItem().equals(RB.getString("gui.NBFindPanelControls.findLabel1")))
+			{
+				title = RB.getString("gui.NBFindPanelControls.progressReadsTitle");
+				label = RB.getString("gui.NBFindPanelControls.progressReadsLabel");
+			}
+			else
+			{
+				title = RB.getString("gui.NBFindPanelControls.progressSubsequenceTitle");
+				label = RB.getString("gui.NBFindPanelControls.progressSubsequenceLabel");
+			}
+
+			ProgressDialog dialog = new ProgressDialog(finder, title, label);
 			if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 			{
 				if (dialog.getResult() == ProgressDialog.JOB_FAILED)
@@ -299,6 +312,8 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 			controls.resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", results.size()));
 			setTableModel(results);
 		}
+		else
+			controls.resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", 0));
 	}
 
 	public void actionPerformed(ActionEvent e)
