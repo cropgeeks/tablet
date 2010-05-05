@@ -72,6 +72,22 @@ way Tablet is used and is displayed.</p>
 </ul>
 
 
+<h3>Importing</h3>
+
+<p>The <b>Importing</b> tab allows you to modify how Tablet reads from data files.</p>
+
+<p><a href="images/gui.dialog.prefs.NBFormatsPanel.png">
+<img class="capture" src="images/gui.dialog.prefs.NBFormatsPanel2.png" alt="Tablet Screenshot"></a></p>
+
+<ul>
+    <li><b>Trim poor quality tags using QA tags (ACE only)</b><br>
+    If selected, this option will cause Tablet to parse the QA tags found within
+    ACE files. These tags cause reads to be trimmed for quality. The resultant
+    read once loaded into Tablet may be shorter than if the option is left
+    unselected and regions of low quality will no longer be displayed.</li>
+</ul>
+
+
 <h3>Warnings</h3>
 
 <p>The <b>Warnings</b> tab allows you to switch on or off the various warnings that
