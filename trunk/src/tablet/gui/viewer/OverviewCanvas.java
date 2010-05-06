@@ -6,13 +6,13 @@ package tablet.gui.viewer;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
-import java.text.DecimalFormat;
+import java.text.*;
 import javax.swing.*;
+
+import scri.commons.gui.*;
 
 import tablet.data.auxiliary.*;
 import tablet.gui.*;
-
-import scri.commons.gui.*;
 
 public class OverviewCanvas extends JPanel
 {
@@ -20,14 +20,16 @@ public class OverviewCanvas extends JPanel
 	public static final int COVERAGE = 1;
 
 	private AssemblyPanel aPanel;
-	private ReadsCanvas rCanvas;
+	private static ReadsCanvas rCanvas;
 
 	private Canvas2D canvas = new Canvas2D();
 	private OverviewCanvasML canvasML;
 
 	private OverviewBufferFactory bufferFactory = null;
 	private BufferedImage image = null;
-	private int w, h;
+	private int w, h, l, r;
+	// Subsetting variables
+	static int tempOS, tempOE, oS, oE;
 
 	// Scaling factors from main canvas back to the overview
 	private float xScale, yScale;
@@ -43,6 +45,9 @@ public class OverviewCanvas extends JPanel
 	private String overviewCoordinates;
 
 	private DecimalFormat dc = new DecimalFormat("#.#");
+	
+	boolean dragging = false;
+	boolean isOSX = SystemUtils.isMacOS();
 
 	OverviewCanvas()
 	{
@@ -96,7 +101,7 @@ public class OverviewCanvas extends JPanel
 		timer.setInitialDelay(0);
 	}
 
-	void createImage()
+	public void createImage()
 	{
 		w = canvas.getSize().width;
 		h = canvas.getSize().height;
@@ -131,8 +136,7 @@ public class OverviewCanvas extends JPanel
 				TabletUtils.nf.format(DisplayData.getMaxCoverage())));
 		}
 
-		overviewCoordinates = TabletUtils.nf.format(aPanel.getContig().getVisualStart()+1) + " to " + TabletUtils.nf.format(aPanel.getContig().getVisualEnd()+1) + getBasePairString(aPanel.getContig().getVisualWidth());
-
+		overviewCoordinates = (oS+1) + " to " + (oE+1) + getBasePairString((oE-oS)+1);
 		repaint();
 	}
 
@@ -141,7 +145,7 @@ public class OverviewCanvas extends JPanel
 		this.image = image;
 
 		// Scaling factors for mouse/mapping
-		xScale = w / (float) rCanvas.ntOnCanvasX;
+		xScale = w / (float) (oE-oS+1);
 		yScale = h / (float) rCanvas.ntOnCanvasY;
 
 		// Force the main canvas to send its view size dimensions so we can draw
@@ -159,7 +163,7 @@ public class OverviewCanvas extends JPanel
 
 		// Work out the x1 position for the outline box
 		bX1 = Math.round(xScale * xIndex);
-		if (bX1 >= w) bX1 = w - 1;
+		//if (bX1 >= w) bX1 = w - 1;
 
 		// Work out the y1 position for the outline box
 		bY1 = Math.round(yScale * yIndex);
@@ -167,7 +171,7 @@ public class OverviewCanvas extends JPanel
 
 		// Work out the x2 position for the outline box
 		bX2 = bX1 + Math.round(xNum * xScale);
-		if (bX2 >= w) bX2 = w - 1;
+		//if (bX2 >= w) bX2 = w - 1;
 
 		// Work out the y2 position for the outline box
 		bY2 = bY1 + Math.round(yNum * yScale);
@@ -203,16 +207,117 @@ public class OverviewCanvas extends JPanel
 		String basePairs = "";
 
 		if(width < 1000)
-			basePairs += " (" + width + " bp)";
+			basePairs += " (" + width + " bp";
 		else if(width < 1000000)
-			basePairs += " (" + dc.format(width / (float) 1000) + " Kbp)";
+			basePairs += " (" + dc.format(width / (float) 1000) + " Kb";
 		else if(width < 1000000000)
-			basePairs += " (" + dc.format(width / (float) 1000000) + " Mbp)";
+			basePairs += " (" + dc.format(width / (float) 1000000) + " Mbp";
 		else
-			basePairs += " (" + dc.format(width / (float) 1000000000) + " Gbp)";
+			basePairs += " (" + dc.format(width / (float) 1000000000) + " Gbp";
+
+		if(oS != rCanvas.contig.getVisualStart() || oE != rCanvas.contig.getVisualEnd())
+			basePairs += ", Subsetted)";
+		else
+			basePairs += ")";
 
 		return basePairs;
 	}
+
+	/**
+	 * Map one range of values onto another. x is the value being mapped, with
+	 * inMin and inMax being the minimum and maximum values in x's range. outMin
+	 * and outMax are the minimum and maximum values of the range the value is
+	 * being scaled on to.
+	 */
+	int map(int x, int inMin, int inMax, int outMin, int outMax)
+	{
+		int inSpan = inMax - inMin;
+		int outSpan = outMax - outMin;
+
+		float valueScaled = (x - inMin) / (float) inSpan;
+
+		return (int) (outMin + (valueScaled * outSpan));
+	}
+
+	/**
+	 * Called to update the variables used to draw the shaded out sections when
+	 * meta-dragging to select a subset overview area.
+	 */
+	void updateSubsetVariables(MouseEvent e)
+	{
+		tempOE = e.getX();
+
+		if(tempOS < tempOE)
+		{
+			l = tempOS;
+			r = tempOE;
+		}
+		else
+		{
+			l = tempOE;
+			r = tempOS;
+		}
+		repaint();
+	}
+
+	/**
+	 * Actually set the subset on mouse release. This sets the oS and oE
+	 * variables and calls the method to create a new overview image.
+	 */
+	void setSubset(MouseEvent e)
+	{
+		tempOE = e.getX();
+		
+		if(tempOE > w)
+			tempOE = w;
+		else if(tempOE < 0)
+			tempOE = 0;
+
+		if(tempOS < tempOE)
+		{	
+			oS = map(tempOS, 0, w, oS, oE);
+			oE = map(tempOE, 0, w, oS, oE);
+		}
+		else
+		{
+			oS = map(tempOE, 0, w, oS, oE);
+			oE = map(tempOS, 0, w, oS, oE);
+		}
+		createImage();
+
+		Actions.overviewReset.setEnabled(true);
+	}
+	
+	public void setSubset(int oS, int oE)
+	{
+		this.oS = oS;
+		this.oE = oE;
+
+		createImage();
+		
+		Actions.overviewReset.setEnabled(true);
+	}
+
+	public void resetOverview()
+	{
+		oS = aPanel.getContig().getVisualStart();
+		oE = aPanel.getContig().getVisualEnd();
+		createImage();
+
+		Actions.overviewReset.setEnabled(false);
+	}
+
+	public static boolean isSubsetted()
+	{
+		return oS != rCanvas.contig.getVisualStart() || oE != rCanvas.contig.getVisualEnd();
+	}
+
+	public int getOS()
+		{	return oS;	}
+
+	public int getOE()
+		{	return oE;	}
+	
 
 	private class Canvas2D extends JPanel
 	{
@@ -221,16 +326,26 @@ public class OverviewCanvas extends JPanel
 			setBackground(Color.white);
 		}
 
+		private boolean isMetaClick(MouseEvent e)
+		{
+			return isOSX && e.isMetaDown() || !isOSX && e.isControlDown();
+		}
+
 		private void processMouse(MouseEvent e)
 		{
-			// Compute mouse position (and adjust by wid/hgt of rectangle)
-			int x = e.getX() - (int) ((bX2-bX1+1) / 2f);
-			int y = e.getY() - (int) ((bY2-bY1+1) / 2f);
+			if(!isMetaClick(e))
+			{
+				// Compute mouse position (and adjust by wid/hgt of rectangle)
+				int x = e.getX() - (int) ((bX2-bX1+1) / 2f);
+				int y = e.getY() - (int) ((bY2-bY1+1) / 2f);
 
-			int rowIndex = (int) (y / yScale);
-			int colIndex = (int) (x / xScale);
+				int rowIndex = (int) (y / yScale);
+				int colIndex = (int) (x / xScale);
 
-			aPanel.moveTo(rowIndex, colIndex, false);
+				colIndex += Math.abs(rCanvas.contig.getVisualStart()-oS);
+
+				aPanel.moveTo(rowIndex, colIndex, false);
+			}
 		}
 
 		public void paintComponent(Graphics graphics)
@@ -249,14 +364,20 @@ public class OverviewCanvas extends JPanel
 
 			// Then draw the tracking rectangle
 			g.setPaint(new Color(0, 0, 255, 50));
-			g.fillRect(bX1, bY1, bX2-bX1, bY2-bY1);
+
+			// The scaled adjust figure required when the overview has been subsetted
+			int scaledAdjust = Math.round(Math.abs(rCanvas.contig.getVisualStart()-oS)*xScale);
+			int bXL = bX1 - scaledAdjust;
+			int bXR = bX2 - scaledAdjust;
+
+			g.fillRect(bXL, bY1, bXR-bXL, bY2-bY1);
 			g.setColor(Color.red);
-			g.drawRect(bX1, bY1, bX2-bX1, bY2-bY1);
+			g.drawRect(bXL, bY1, bXR-bXL, bY2-bY1);
 
 			if (readX >= 0)
 			{
 				g.setColor(Color.blue);
-				g.drawRect(readX, readY, readW-1, readH-1);
+				g.drawRect(readX-scaledAdjust, readY, readW-1, readH-1);
 			}
 
 			// White overlay that gives the fade-in effect
@@ -265,6 +386,8 @@ public class OverviewCanvas extends JPanel
 				g.setColor(new Color(1f, 1f, 1f, alpha));
 				g.fillRect(0, 0, w, h);
 			}
+
+			paintSubsetOverlays(g);
 		}
 
 		private void paintCoordinatesText(Graphics2D g)
@@ -285,6 +408,20 @@ public class OverviewCanvas extends JPanel
 				g.fillRect(w - (fm.stringWidth(rCanvasCoordinates) + 10), h - 6 - fm.getHeight(), fm.stringWidth(rCanvasCoordinates) + 10, fm.getHeight() + 6);
 				g.setColor(Color.red);
 				g.drawString(rCanvasCoordinates, w - (fm.stringWidth(rCanvasCoordinates) + 5), h - 6);
+			}
+		}
+
+		/**
+		 * Carries out the painting for all subset information which is to be
+		 * overlayed on top of the overview canvas.
+		 */
+		void paintSubsetOverlays(Graphics2D g)
+		{
+			if(dragging)
+			{
+				g.setPaint(new Color(0, 0, 0, 125));
+				g.fillRect(0, 0, l, h);
+				g.fillRect(r, 0, w-r, h);
 			}
 		}
 	}

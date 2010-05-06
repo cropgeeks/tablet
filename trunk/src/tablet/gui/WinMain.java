@@ -233,6 +233,11 @@ public class WinMain extends JRibbonFrame
 		return jumpToDialog;
 	}
 
+	public SubsetOverviewDialog getSubsetOverviewDialog()
+	{
+		return new SubsetOverviewDialog(this);
+	}
+
 	void setAssembly(Assembly assembly)
 	{
 		this.assembly = assembly;

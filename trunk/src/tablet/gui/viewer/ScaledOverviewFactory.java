@@ -12,7 +12,7 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 	private ReadsCanvas rCanvas;
 	private IReadManager reads;
 
-	private int ntOnCanvasX, ntOnCanvasY, oS, oE;
+	private int ntOnCanvasY, oS, oE, overviewWidth;
 
 	ScaledOverviewFactory(OverviewCanvas canvas, int w, int h, ReadsCanvas rCanvas)
 	{
@@ -22,11 +22,11 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 		// Make private references to certain values now, as they MAY change
 		// while the buffer is still being created, which will create problems
 		reads = rCanvas.reads;
-		ntOnCanvasX = rCanvas.ntOnCanvasX;
 		ntOnCanvasY = rCanvas.ntOnCanvasY;
 
-		oS = rCanvas.contig.getVisualStart();
-		oE = rCanvas.contig.getVisualEnd();
+		this.oS = canvas.oS;
+		this.oE = canvas.oE;
+		overviewWidth = (oE-oS+1);
 
 		start();
 	}
@@ -45,7 +45,7 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 		Graphics2D g = createBuffer();
 
 		// Scaling factors
-		float xScale = (oE-oS+1) / (float) w;
+		float xScale = overviewWidth / (float) w;
 		float yScale = ntOnCanvasY / (float) h;
 
 		// Loop over every pixel that makes up the overview...

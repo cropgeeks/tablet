@@ -7,6 +7,7 @@ import tablet.data.*;
 import tablet.gui.ribbon.*;
 
 import org.jvnet.flamingo.common.model.*;
+import tablet.gui.viewer.OverviewCanvas;
 
 /**
  * Contains static links to all the action models for the controls in the
@@ -50,6 +51,12 @@ public class Actions
 	public static ActionToggleButtonModel overlayShadowingCustom;
 
 	public static ActionToggleButtonModel[] proteinEnable;
+
+	public static ActionToggleButtonModel overviewScaled;
+	public static ActionToggleButtonModel overviewCoverage;
+	public static ActionRepeatableButtonModel overviewReset;
+	public static ActionToggleButtonModel overviewCoordinates;
+	public static ActionRepeatableButtonModel overviewSubset;
 
 
 	public static void closed()
@@ -97,6 +104,12 @@ public class Actions
 		overlayShadowingOff.setEnabled(false);
 		overlayShadowingCenter.setEnabled(false);
 		overlayShadowingCustom.setEnabled(false);
+
+		overviewScaled.setEnabled(false);
+		overviewCoverage.setEnabled(false);
+		overviewReset.setEnabled(false);
+		overviewCoordinates.setEnabled(false);
+		overviewSubset.setEnabled(false);
 	}
 
 	public static void openedNoContigSelected()
@@ -144,6 +157,12 @@ public class Actions
 		overlayShadowingOff.setEnabled(false);
 		overlayShadowingCenter.setEnabled(false);
 		overlayShadowingCustom.setEnabled(false);
+
+		overviewScaled.setEnabled(false);
+		overviewCoverage.setEnabled(false);
+		overviewReset.setEnabled(false);
+		overviewCoordinates.setEnabled(false);
+		overviewSubset.setEnabled(false);
 	}
 
 	public static void openedContigSelected()
@@ -192,5 +211,11 @@ public class Actions
 		overlayShadowingOff.setEnabled(true);
 		overlayShadowingCenter.setEnabled(true);
 		overlayShadowingCustom.setEnabled(true);
+
+		overviewScaled.setEnabled(true);
+		overviewCoverage.setEnabled(true);
+		overviewReset.setEnabled(OverviewCanvas.isSubsetted());
+		overviewCoordinates.setEnabled(true);
+		overviewSubset.setEnabled(true);
 	}
 }
