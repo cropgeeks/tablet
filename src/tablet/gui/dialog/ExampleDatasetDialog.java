@@ -16,7 +16,7 @@ public class ExampleDatasetDialog extends JDialog implements ActionListener
 	private Properties properties;
 	private JButton bClose, bLoad;
 	private String[] filenames;
-	
+
 	public ExampleDatasetDialog()
 	{
 		super(
@@ -48,7 +48,7 @@ public class ExampleDatasetDialog extends JDialog implements ActionListener
 
 		SwingUtils.addCloseHandler(this, bClose);
 		getRootPane().setDefaultButton(bLoad);
-		
+
 		pack();
 		setResizable(false);
 		setLocationRelativeTo(Tablet.winMain);
@@ -159,7 +159,7 @@ public class ExampleDatasetDialog extends JDialog implements ActionListener
 			setVisible(false);
 			setupFilenames();
 		}
-			
+
 		if(e.getSource() == bClose)
 			setVisible(false);
 	}
