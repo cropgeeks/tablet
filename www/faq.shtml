@@ -42,6 +42,18 @@ The format of the command should resemble <i>maq cns2fq input.cns > output.fastq
 that covers coverting between several common assembly formats.</p>
 
 
+<p>&nbsp;</p>
+
+<p><b>Why does every contig in my BAM assembly show the number of reads as "0"?</b></p>
+<p>BAM assemblies are treated differently to other file formats in Tablet (to allow
+instant access to portions of very large assemblies) and because of this it means
+that Tablet is not able to provide summary information simply because Tablet hasn't
+yet read all of the contig (and it most cases it never will). Once you view a contig,
+information on the region you view will
+become available, but please be aware that the numbers you see will change as
+you move around the contig using the BAM controls. See
+<a href="help/bam-data-visualization.shtml">BAM Data Visualization</a> for more information.</p>
+
 <!--#include virtual="footer.html" -->
 
 </body>
