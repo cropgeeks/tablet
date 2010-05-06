@@ -22,6 +22,27 @@ that have been made to Tablet in recent versions. For full details on all the
 changes between versions, please see the <a href="http://bioinf.scri.ac.uk/tablet/svn.txt">
 subversion change log</a>.</p>
 
+
+<h3>New in 1.10.05.06</h3>
+
+<ul>
+<li>NEW: Added a new colouring scheme based on read direction/orientation.</li>
+<li>NEW: The overview displays can now be "subsetted", forcing them to show only an overview of whatever region you define for them.</li>
+<li>NEW: Variant highlighting (in red) can now be turned on or off for the overviews or popups.</li>
+<li>NEW: Added the ability to search for sequence substrings within reads.</li>
+<li>NEW: Added a new graphical layer that performs "read shadowing", highlighting any reads under the a given column or mouse
+position.</li>
+<li>NEW: Example files (linked to on the web) can now be opened directly from within Tablet.</li>
+<li>NEW: The nucleotide text for each base can now be shown or hidden.</li>
+<li>NEW: Added (optional) support for trimming reads in ACE files based on the QA tags.</li>
+<li>CHG: Redesigned and added additional options to the control ribbon.</li>
+<li>CHG: The ACE parser now ignores base quality information, making it more compatible with badly formatted files.</li>
+<li>BUG: The SAM parser now looks for all possible header tags to determine if a file is SAM or not.</li>
+<li>BUG: Fixed various issues with searching for reads.</li>
+<li>BUG: Fixed some miscellaneous rendering issues when switching between contigs.</li>
+</ul>
+
+
 <h3>New in 1.10.03.04</h3>
 
 <ul>
