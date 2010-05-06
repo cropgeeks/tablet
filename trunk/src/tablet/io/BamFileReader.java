@@ -72,7 +72,7 @@ public class BamFileReader extends TrackableReader
 				if (baiFile == null)
 					throw new IOException("An index file could not be found "
 						+ "(" + file1.getName() + " or " + file2.getName()
-						+ ")");
+						+ ").\nYou may need to use samtools to generate one.");
 			}
 
 			else if (refReader.canRead(files[i]) != AssemblyFileHandler.UNKNOWN)
