@@ -21,7 +21,7 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 	// Popup menu options
 	private JCheckBoxMenuItem mHide, mHideCoordinates;
 	private JCheckBoxMenuItem mScaled, mCoverage;
-	private JMenuItem mReset;
+	private JMenuItem mSubset, mReset;
 
 	OverviewCanvasML(OverviewCanvas canvas, JComponent c)
 	{
@@ -107,8 +107,13 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 		mCoverage.setSelected(Prefs.visOverviewType == COVERAGE);
 		mCoverage.addActionListener(this);
 
+		mSubset = new JMenuItem();
+		RB.setText(mSubset, "gui.viewer.OverviewCanvas.mSubset");
+		mSubset.addActionListener(this);
+
 		mReset = new JMenuItem();
 		RB.setText(mReset, "gui.viewer.OverviewCanvas.mReset");
+		mReset.setEnabled(Actions.overviewReset.isEnabled());
 		mReset.addActionListener(this);
 
 		JPopupMenu menu = new JPopupMenu();
@@ -119,6 +124,7 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 		menu.add(mScaled);
 		menu.add(mCoverage);
 		menu.addSeparator();
+		menu.add(mSubset);
 		menu.add(mReset);
 
 		if (button != null)
@@ -156,6 +162,11 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 		else if (e.getSource() == mCoverage && Prefs.visOverviewType != COVERAGE)
 		{
 			bandOverview.actionToggleCoverage();
+		}
+
+		else if (e.getSource() == mSubset)
+		{
+			bandOverview.actionShowSubsetDialog();
 		}
 
 		else if (e.getSource() == mReset)
