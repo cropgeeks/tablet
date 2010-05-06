@@ -31,6 +31,7 @@ public class RibbonController
 	public static BandProtein bandProtein;
 	public static BandBAM bandBAM;
 	public static BandOptions bandOptions;
+	public static BandOverview bandOverview;
 
 	public RibbonController(WinMain winMain)
 	{
@@ -52,8 +53,9 @@ public class RibbonController
 		// The Advanced ribbon
 		RibbonTask advancedTask = new RibbonTask(
 			RB.getString("gui.ribbon.RibbonController.advanced"),
-			bandProtein = new BandProtein(winMain),
 			bandBAM = new BandBAM(winMain),
+			bandProtein = new BandProtein(winMain),
+			bandOverview = new BandOverview(winMain),
 			bandOptions = new BandOptions(winMain));
 
 		advancedTask.setKeyTip("A");

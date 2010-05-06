@@ -180,6 +180,9 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		coverageCanvas.setContig(contig);
 		bambamBar.setContig(contig);
 
+		if(contig != null)
+			overviewCanvas.setSubset(contig.getVisualStart(), contig.getVisualEnd());
+
 		forceRedraw();
 
 		return setContigOK;
@@ -380,6 +383,8 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 
 		// Special case to force the coverage (tooltip) information to update
 		coverageCanvas.setContig(contig);
+
+		winMain.getAssemblyPanel().getOverviewCanvas().resetOverview();
 		// Finally force the main canvas to update/change
 		forceRedraw();
 
@@ -452,5 +457,10 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 	public void bamPrevious()
 	{
 		bambamBar.bamPrevious();
+	}
+
+	public OverviewCanvas getOverviewCanvas()
+	{
+		return overviewCanvas;
 	}
 }

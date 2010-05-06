@@ -9,6 +9,7 @@ import javax.swing.event.*;
 
 import tablet.gui.*;
 import static tablet.gui.viewer.OverviewCanvas.*;
+import static tablet.gui.ribbon.RibbonController.*;
 
 import scri.commons.gui.*;
 
@@ -20,6 +21,7 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 	// Popup menu options
 	private JCheckBoxMenuItem mHide, mHideCoordinates;
 	private JCheckBoxMenuItem mScaled, mCoverage;
+	private JMenuItem mReset;
 
 	OverviewCanvasML(OverviewCanvas canvas, JComponent c)
 	{
@@ -39,6 +41,9 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 	{
 		if (SwingUtilities.isLeftMouseButton(e))
 			canvas.processMouse(e);
+
+		if(isMetaClick(e) && canvas.dragging)
+			canvas.updateSubsetVariables(e);
 	}
 
 	public void mousePressed(MouseEvent e)
@@ -47,7 +52,16 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 			canvas.processMouse(e);
 
 		if (e.isPopupTrigger())
+		{
 			displayMenu(null, e);
+			canvas.dragging = false;
+		}
+		else if(isMetaClick(e))
+		{
+			canvas.tempOS = e.getX();
+			canvas.tempOE = e.getX();
+			canvas.dragging = true;
+		}
 	}
 
 	public void mouseReleased(MouseEvent e)
@@ -57,6 +71,17 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 
 		if (e.isPopupTrigger())
 			displayMenu(null, e);
+		else if(isMetaClick(e) && canvas.dragging)
+		{
+			canvas.setSubset(e);
+		}
+
+		canvas.dragging = false;
+	}
+
+	private boolean isMetaClick(MouseEvent e)
+	{
+		return canvas.isOSX && e.isMetaDown() || !canvas.isOSX && e.isControlDown();
 	}
 
 	// Create and display the popup menu
@@ -82,6 +107,10 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 		mCoverage.setSelected(Prefs.visOverviewType == COVERAGE);
 		mCoverage.addActionListener(this);
 
+		mReset = new JMenuItem();
+		RB.setText(mReset, "gui.viewer.OverviewCanvas.mReset");
+		mReset.addActionListener(this);
+
 		JPopupMenu menu = new JPopupMenu();
 		menu.add(mHide);
 		menu.addSeparator();
@@ -89,6 +118,8 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 		menu.addSeparator();
 		menu.add(mScaled);
 		menu.add(mCoverage);
+		menu.addSeparator();
+		menu.add(mReset);
 
 		if (button != null)
 		{
@@ -112,22 +143,24 @@ class OverviewCanvasML extends MouseInputAdapter implements ActionListener
 		// Show or hide the position values
 		else if (e.getSource() == mHideCoordinates)
 		{
-			Prefs.guiHideOverviewPositions = !Prefs.guiHideOverviewPositions;
-			canvas.repaint();
+			bandOverview.actionToggleCoordinates();
 		}
 
 		// Switch overview rendering to the scaled overview
 		else if (e.getSource() == mScaled && Prefs.visOverviewType != SCALEDDATA)
 		{
-			Prefs.visOverviewType = SCALEDDATA;
-			canvas.createImage();
+			bandOverview.actionToggleScaled();
 		}
 
-		// Switch overvie rendering to the coverage overview
+		// Switch overview rendering to the coverage overview
 		else if (e.getSource() == mCoverage && Prefs.visOverviewType != COVERAGE)
 		{
-			Prefs.visOverviewType = COVERAGE;
-			canvas.createImage();
+			bandOverview.actionToggleCoverage();
+		}
+
+		else if (e.getSource() == mReset)
+		{
+			bandOverview.actionReset();
 		}
 	}
 }
