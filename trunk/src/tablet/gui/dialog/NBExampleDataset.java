@@ -15,8 +15,12 @@ public class NBExampleDataset extends javax.swing.JPanel
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 		setBackground(Color.white);
 
-		panel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.ExampleDatasetDialog.label")));
+		panel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.ExampleDatasetDialog.panel.title")));
 		panel.setBackground(Color.white);
+
+                RB.setText(lblT, "gui.dialog.ExampleDatasetDialog.lblT");
+                RB.setText(lblD, "gui.dialog.ExampleDatasetDialog.lblD");
+                RB.setText(labelMore, "gui.dialog.ExampleDatasetDialog.labelMore");
 
 		datasetCombo.addActionListener(parent);
 	}
@@ -35,41 +39,48 @@ public class NBExampleDataset extends javax.swing.JPanel
         jScrollPane1 = new javax.swing.JScrollPane();
         descriptionTextArea = new javax.swing.JTextArea();
         lblT = new javax.swing.JLabel();
+        lblType = new javax.swing.JLabel();
         lblD = new javax.swing.JLabel();
         lblDetails = new javax.swing.JLabel();
-        lblType = new javax.swing.JLabel();
+        labelMore = new javax.swing.JLabel();
+
+        panel.setBorder(javax.swing.BorderFactory.createTitledBorder("Select an example assembly:"));
 
         descriptionTextArea.setColumns(20);
         descriptionTextArea.setEditable(false);
         descriptionTextArea.setLineWrap(true);
         descriptionTextArea.setRows(2);
+        descriptionTextArea.setWrapStyleWord(true);
         jScrollPane1.setViewportView(descriptionTextArea);
 
         lblT.setText("Type:");
+
+        lblType.setText("jLabel1");
 
         lblD.setText("Details:");
 
         lblDetails.setText("jLabel1");
 
-        lblType.setText("jLabel1");
+        labelMore.setText("More example files may be made available at a later date.");
 
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+            .addGroup(panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 469, Short.MAX_VALUE)
-                    .addComponent(datasetCombo, 0, 469, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelLayout.createSequentialGroup()
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE)
+                    .addComponent(datasetCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 409, Short.MAX_VALUE)
+                    .addGroup(panelLayout.createSequentialGroup()
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblD)
                             .addComponent(lblT))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(lblType)
-                            .addComponent(lblDetails))))
+                            .addComponent(lblDetails)))
+                    .addComponent(labelMore))
                 .addContainerGap())
         );
         panelLayout.setVerticalGroup(
@@ -87,6 +98,8 @@ public class NBExampleDataset extends javax.swing.JPanel
                     .addComponent(lblDetails))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 59, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(labelMore)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -96,15 +109,15 @@ public class NBExampleDataset extends javax.swing.JPanel
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -113,6 +126,7 @@ public class NBExampleDataset extends javax.swing.JPanel
     javax.swing.JComboBox datasetCombo;
     javax.swing.JTextArea descriptionTextArea;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel labelMore;
     javax.swing.JLabel lblD;
     javax.swing.JLabel lblDetails;
     javax.swing.JLabel lblT;
