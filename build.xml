@@ -107,7 +107,7 @@
 	<target name="jnlp" depends="sign">
 		<input message="Enter the version number:" addproperty="version"/>
 		<copy
-			file="www/cgi-bin/jnlp.template"
+			file="www/cgi-bin/tablet.jnlp.template"
 			tofile="\\bioinf\root\var\www\html\tablet\webstart\tablet.jnlp.template"
 			overwrite="true">
 			<filterset>
