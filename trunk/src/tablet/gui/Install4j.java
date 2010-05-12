@@ -6,6 +6,7 @@ package tablet.gui;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.jar.*;
 
 import com.install4j.api.*;
 import com.install4j.api.launcher.*;
@@ -97,21 +98,10 @@ public class Install4j
 
 	private static void getVersion()
 	{
-		// Attempt to get the version string from install4j
-		if (VERSION == null)
-		{
-			try
-			{
-				ApplicationRegistry.ApplicationInfo[] info =
-					ApplicationRegistry.getApplicationInfoById("9483-2571-4596-9336");
+		// Attempt to get the version string from the jar's manifest
+		VERSION = Tablet.class.getPackage().getImplementationVersion();
 
-				VERSION = info[0].getVersion();
-			}
-			catch (Exception e) { System.out.println(e); }
-			catch (Throwable e) { System.out.println(e); }
-		}
-
-		// Failing that, we must be running the development version
+		// If it's not found, we must be running the development version
 		if (VERSION == null)
 			VERSION = "x.xx.xx.xx";
 	}

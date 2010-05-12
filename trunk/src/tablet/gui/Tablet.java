@@ -26,7 +26,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 	public static WinMain winMain;
 
-	// Optional path to a file to be loaded when Tablet opens
+	// Optional path to any files to be loaded when Tablet opens
 	private static String[] initialFiles = null;
 
 	// Returns value for "CTRL" under most OSs, and the "apple" key for OS X
@@ -51,24 +51,9 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 		if (args.length > 0)
 		{
-			int firstArg = 0;
-
-			if (args[0].startsWith("version:"))
-			{
-				Install4j.VERSION = args[0].substring(8);
-				firstArg = 1;
-			}
-
-			String[] fileArgs = new String[args.length-firstArg];
-			for (int i = firstArg; i < args.length; i++)
-				fileArgs[i-firstArg] = args[i];
-
-			if (fileArgs.length > 0)
-			{
-				initialFiles = new String[fileArgs.length];
-				for (int i = 0; i < fileArgs.length; i++)
-					initialFiles[i] = fileArgs[i];
-			}
+			initialFiles = new String[args.length];
+			for (int i = 0; i < args.length; i++)
+				initialFiles[i] = args[i];
 		}
 
 		Install4j.doStartUpCheck();
