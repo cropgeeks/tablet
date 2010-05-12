@@ -19,7 +19,6 @@
 		<jar href="tablet-resources.jar"/>
 	</resources>
 	<application-desc main-class="tablet.gui.Tablet">
-		<argument>version:@VERSION@</argument>
 		@ARGUMENTS@
 	</application-desc>
 	<security>
