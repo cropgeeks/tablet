@@ -19,8 +19,10 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="tabletLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="18" max="32767" attributes="0"/>
+              <EmptySpace pref="114" max="32767" attributes="0"/>
               <Component id="feedbackLabel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace type="separate" max="-2" attributes="0"/>
+              <Component id="twitterLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
@@ -31,6 +33,7 @@
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="tabletLabel" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="twitterLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="feedbackLabel" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
@@ -50,6 +53,14 @@
           <Color blue="9c" green="6a" red="44" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Send feedback"/>
+      </Properties>
+    </Component>
+    <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="twitterLabel">
+      <Properties>
+        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+          <Color blue="9c" green="6a" red="44" type="rgb"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="Follow us"/>
       </Properties>
     </Component>
   </SubComponents>
