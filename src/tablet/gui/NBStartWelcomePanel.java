@@ -18,17 +18,21 @@ public class NBStartWelcomePanel extends javax.swing.JPanel implements ActionLis
 
 		tabletLabel.setText("<html>" + RB.format("gui.NBStartWelcomePanel.panel.label", Install4j.VERSION));
 		feedbackLabel.setText(RB.getString("gui.NBStartWelcomePanel.panel.feedback"));
+		twitterLabel.setText(RB.getString("gui.NBStartWelcomePanel.panel.twitter"));
 
 		feedbackLabel.setIcon(Icons.getIcon("FEEDBACK"));
+		twitterLabel.setIcon(Icons.getIcon("TWITTER"));
 		feedbackLabel.addActionListener(this);
+		twitterLabel.addActionListener(this);
     }
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if(e.getSource() == feedbackLabel)
-		{
+		if (e.getSource() == feedbackLabel)
 			TabletUtils.sendFeedback();
-		}
+
+		else if (e.getSource() == twitterLabel)
+			TabletUtils.visitURL("http://twitter.com/cropgeeks");
 	}
 
     /** This method is called from within the constructor to
@@ -42,31 +46,36 @@ public class NBStartWelcomePanel extends javax.swing.JPanel implements ActionLis
 
         tabletLabel = new javax.swing.JLabel();
         feedbackLabel = new scri.commons.gui.matisse.HyperLinkLabel();
+        twitterLabel = new scri.commons.gui.matisse.HyperLinkLabel();
 
         tabletLabel.setText("<html>Tablet x.xx.xx.xx - &copy; Plant Bioinformatics Group, SCRI.");
 
         feedbackLabel.setForeground(new java.awt.Color(68, 106, 156));
         feedbackLabel.setText("Send feedback");
 
+        twitterLabel.setForeground(new java.awt.Color(68, 106, 156));
+        twitterLabel.setText("Follow us");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 379, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(tabletLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addComponent(tabletLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 114, Short.MAX_VALUE)
                 .addComponent(feedbackLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(twitterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 36, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(tabletLabel)
+                    .addComponent(tabletLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(twitterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(feedbackLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -76,6 +85,7 @@ public class NBStartWelcomePanel extends javax.swing.JPanel implements ActionLis
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private scri.commons.gui.matisse.HyperLinkLabel feedbackLabel;
     private javax.swing.JLabel tabletLabel;
+    private scri.commons.gui.matisse.HyperLinkLabel twitterLabel;
     // End of variables declaration//GEN-END:variables
 
 
