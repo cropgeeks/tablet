@@ -59,7 +59,7 @@ public class BamBam
 	public void loadDataBlock(Contig contig)
 		throws Exception
 	{
-		bamHandler.loadData(contig, s, e);
+		bamHandler.loadDataBlock(contig, s, e);
 	}
 
 	/**

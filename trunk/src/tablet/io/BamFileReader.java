@@ -7,7 +7,6 @@ import tablet.data.*;
 import tablet.data.cache.*;
 
 import scri.commons.gui.*;
-import scri.commons.file.*;
 
 import net.sf.samtools.*;
 
@@ -26,10 +25,7 @@ public class BamFileReader extends TrackableReader
 	private AssemblyFile refFile;
 
 	// Status tracks what's happening (0=get ref, 1=get bai, 2=open bam)
-	private int status = 0;
-
-	// The Picard object we're ultimately trying to create
-	private SAMFileReader bamReader;
+	private static int status = 0;
 
 	BamFileReader()
 	{
@@ -101,12 +97,12 @@ public class BamFileReader extends TrackableReader
 			readReferenceFile();
 		if (okToRun)
 			downloadBaiFile();
-		if (okToRun)
-			openBamFile();
 
 		if (okToRun)
 		{
-			BamFileHandler bamHandler = new BamFileHandler(readCache, bamReader, assembly);
+			BamFileHandler bamHandler = new BamFileHandler(readCache, bamFile, baiFile, assembly);
+			status = 2;
+			bamHandler.openBamFile();
 			assembly.setBamHandler(bamHandler);
 
 			assembly.setName(bamFile.getName());
@@ -157,19 +153,6 @@ public class BamFileReader extends TrackableReader
 		outputStream.close();
 
 		baiFile = new AssemblyFile(file.getPath());
-	}
-
-	private void openBamFile() throws Exception
-	{
-		status = 2;
-
-		AssemblyFile bam = bamFile;
-		AssemblyFile bai = baiFile;
-
-		if (bam.isURL())
-			bamReader = new SAMFileReader(bam.getURL(), bai.getFile(), false);
-		else
-			bamReader = new SAMFileReader(bam.getFile(), bai.getFile());
 	}
 
 	public String getMessage()
