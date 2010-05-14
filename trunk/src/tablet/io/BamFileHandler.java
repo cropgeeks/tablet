@@ -6,13 +6,14 @@ import tablet.analysis.*;
 import tablet.data.cache.*;
 import tablet.data.*;
 import tablet.data.auxiliary.*;
-import tablet.gui.*;
 
 import net.sf.samtools.*;
 import net.sf.samtools.util.*;
 
 public class BamFileHandler
 {
+	public static boolean VALIDATION_LENIENT = false;
+
 	private IReadCache readCache;
 	private AssemblyFile bamFile, baiFile;
 	private SAMFileReader bamReader;
@@ -140,7 +141,7 @@ public class BamFileHandler
 		else
 			bamReader = new SAMFileReader(bamFile.getFile(), baiFile.getFile());
 
-		if(Prefs.ioBamValidationLenient)
+		if (VALIDATION_LENIENT)
 			bamReader.setValidationStringency(SAMFileReader.ValidationStringency.LENIENT);
 	}
 

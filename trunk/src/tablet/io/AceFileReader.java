@@ -11,13 +11,14 @@ import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
 import tablet.data.auxiliary.*;
-import tablet.gui.*;
 import static tablet.io.ReadException.*;
 
 import scri.commons.gui.*;
 
-class AceFileReader extends TrackableReader
+public class AceFileReader extends TrackableReader
 {
+	public static boolean PROCESS_QA = true;
+
 	private IReadCache readCache;
 
 	private Contig contig;
@@ -133,7 +134,7 @@ class AceFileReader extends TrackableReader
 
 
 		// Remove any reads that got marked as null due to being poor quality
-		if (Prefs.ioAceProcessQA)
+		if (PROCESS_QA)
 		{
 			for (Contig contig: assembly)
 			{
@@ -308,7 +309,7 @@ class AceFileReader extends TrackableReader
 		// Fetch the read for this location
 		read = contig.getReads().get(rdIndex);
 
-		if (Prefs.ioAceProcessQA)
+		if (PROCESS_QA)
 		{
 			// Totally crap read has QA values of -1 (or -2 as seen by Tablet)
 			if (qa_start != -2 && qa_end != -2)
