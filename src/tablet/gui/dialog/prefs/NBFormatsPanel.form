@@ -16,7 +16,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="panel" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -28,7 +28,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="panel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="79" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -46,9 +46,12 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="checkAceQA" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Component id="checkAceQA" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="checkBamValidation" alignment="0" min="-2" max="-2" attributes="0"/>
+                  </Group>
                   <EmptySpace pref="132" max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -59,6 +62,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="checkAceQA" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
+                  <Component id="checkBamValidation" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -67,6 +71,11 @@
         <Component class="javax.swing.JCheckBox" name="checkAceQA">
           <Properties>
             <Property name="text" type="java.lang.String" value="Trim poor quality reads using QA tags (ACE only)"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="checkBamValidation">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Set BAM validation stringency to lenient"/>
           </Properties>
         </Component>
       </SubComponents>

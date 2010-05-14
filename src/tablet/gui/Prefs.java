@@ -143,6 +143,7 @@ public class Prefs extends XMLPreferences
 
 
 	public static boolean ioAceProcessQA = true;
+	public static boolean ioBamValidationLenient = false;
 
 	static void setDefaults()
 	{

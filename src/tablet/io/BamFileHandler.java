@@ -1,12 +1,12 @@
 package tablet.io;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 import tablet.analysis.*;
 import tablet.data.cache.*;
 import tablet.data.*;
 import tablet.data.auxiliary.*;
+import tablet.gui.*;
 
 import net.sf.samtools.*;
 import net.sf.samtools.util.*;
@@ -14,21 +14,37 @@ import net.sf.samtools.util.*;
 public class BamFileHandler
 {
 	private IReadCache readCache;
+	private AssemblyFile bamFile, baiFile;
 	private SAMFileReader bamReader;
 	private Assembly assembly;
 	private int readID;
 
 	private boolean okToRun = true;
 
-	BamFileHandler(IReadCache readCache, SAMFileReader bamReader, Assembly assembly)
+	BamFileHandler(IReadCache readCache, AssemblyFile bamFile, AssemblyFile baiFile, Assembly assembly)
 	{
-		this.bamReader = bamReader;
+		this.bamFile = bamFile;
+		this.baiFile = baiFile;
 		this.readCache = readCache;
 		this.assembly = assembly;
 	}
 
 	public void cancel()
 		{ okToRun = false; }
+
+	public void loadDataBlock(Contig contig, int s, int e)
+			throws Exception
+	{
+		try
+		{
+			loadData(contig, s, e);
+		}
+		catch(Exception ex)
+		{
+			openBamFile();
+			throw new Exception(ex);
+		}
+	}
 
 	public void loadData(Contig contig, int s, int e)
 		throws Exception
@@ -117,8 +133,17 @@ public class BamFileHandler
 		Collections.sort(contig.getFeatures());
 	}
 
-	public SAMFileReader getBamReader()
+	public void openBamFile() throws Exception
 	{
-		return bamReader;
+		if (bamFile.isURL())
+			bamReader = new SAMFileReader(bamFile.getURL(), baiFile.getFile(), false);
+		else
+			bamReader = new SAMFileReader(bamFile.getFile(), baiFile.getFile());
+
+		if(Prefs.ioBamValidationLenient)
+			bamReader.setValidationStringency(SAMFileReader.ValidationStringency.LENIENT);
 	}
+
+	public SAMFileReader getBamReader()
+		{	return bamReader;	}
 }
