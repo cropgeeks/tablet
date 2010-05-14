@@ -21,7 +21,7 @@ public class ProteinTextColorScheme extends ColorScheme
 
 		states.add(new StandardColorState("", Color.white, w, h, false, false));
 
-		// The 21 proteins as images WITH text
+		// The 22 proteins as images WITH text
 		states.add(new TextState(codes[1],  w, h, false, false));	// I
 		states.add(new TextState(codes[2],  w, h, false, false));	// L
 		states.add(new TextState(codes[3],  w, h, false, false));	// V
@@ -43,11 +43,12 @@ public class ProteinTextColorScheme extends ColorScheme
 		states.add(new TextState(codes[19], w, h, false, false));	// K
 		states.add(new TextState(codes[20], w, h, false, false));	// R
 		states.add(new TextState(codes[21], w, h, false, true));	// .
+		states.add(new TextState(codes[22], w, h, false, false));	// X
 
-		// The 21 proteins as images WITHOUT text
+		// The 22 proteins as images WITHOUT text
 		// We can reuse the same image for each group
 		TextState empty = new TextState("", w, h, false, false);
-		for (int i = 0; i < 42; i++)
+		for (int i = 0; i < ProteinTranslator.RBASE; i++)
 			states.add(empty);
 	}
 
