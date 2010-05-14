@@ -5,8 +5,10 @@ package tablet.gui;
 
 import java.util.*;
 
+import tablet.data.*;
 import tablet.gui.viewer.*;
 import tablet.gui.viewer.colors.*;
+import tablet.io.*;
 
 import scri.commons.gui.*;
 
@@ -144,11 +146,8 @@ public class Prefs extends XMLPreferences
 
 	public static boolean ioAceProcessQA = true;
 	public static boolean ioBamValidationLenient = false;
+	public static boolean ioAmbiguousToN = false;
 
-	static void setDefaults()
-	{
-
-	}
 
 	// Updates the array of recently accessed documents so that 'document' is
 	// the first element, even if it has been accessed previously
@@ -170,5 +169,17 @@ public class Prefs extends XMLPreferences
 
 		for (int i = 0; i < guiRecentDocs.length; i++)
 			guiRecentDocs[i] = list.get(i);
+	}
+
+	// Sets some static variables within other classes to their correct values.
+	// Done for classes that we'd prefer not to have direct access to Prefs.
+	public static void setVariables()
+	{
+		// tablet.data:
+		Sequence.AMBIGUOUS_TO_N = Prefs.ioAmbiguousToN;
+
+		// tablet.io:
+		AceFileReader.PROCESS_QA = Prefs.ioAceProcessQA;
+		BamFileHandler.VALIDATION_LENIENT = Prefs.ioBamValidationLenient;
 	}
 }

@@ -16,7 +16,7 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="panel" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
@@ -28,7 +28,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="panel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace pref="39" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -46,13 +46,14 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" attributes="0">
+              <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="checkAceQA" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="checkAmbiguousToN" min="-2" max="-2" attributes="0"/>
+                      <Component id="checkAceQA" min="-2" max="-2" attributes="0"/>
                       <Component id="checkBamValidation" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="132" max="32767" attributes="0"/>
+                  <EmptySpace pref="10" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -60,14 +61,22 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
+                  <Component id="checkAmbiguousToN" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="checkAceQA" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="checkBamValidation" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
       </Layout>
       <SubComponents>
+        <Component class="javax.swing.JCheckBox" name="checkAmbiguousToN">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Convert all DNA ambuiguity codes to &apos;N&apos;, rather than treating as unknowns"/>
+          </Properties>
+        </Component>
         <Component class="javax.swing.JCheckBox" name="checkAceQA">
           <Properties>
             <Property name="text" type="java.lang.String" value="Trim poor quality reads using QA tags (ACE only)"/>
@@ -75,7 +84,7 @@
         </Component>
         <Component class="javax.swing.JCheckBox" name="checkBamValidation">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Set BAM validation stringency to lenient"/>
+            <Property name="text" type="java.lang.String" value="Set BAM validation stringency to lenient rather than strict (BAM only)"/>
           </Properties>
         </Component>
       </SubComponents>

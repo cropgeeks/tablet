@@ -92,6 +92,8 @@ public class PreferencesDialog extends JDialog implements ActionListener
 			formatsPanel.applySettings();
 			warningPanel.applySettings();
 
+			Prefs.setVariables();
+
 			lastTab = tabs.getSelectedIndex();
 			isOK = true;
 		}

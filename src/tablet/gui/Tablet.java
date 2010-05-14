@@ -42,9 +42,9 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		// - see: http://www.allaboutbalance.com/articles/disableprefs
 //		System.setProperty("java.util.prefs.PreferencesFactory", "scri.commons.gui.DisabledPreferencesFactory");
 
-		Prefs.setDefaults();
 		prefs.loadPreferences(prefsFile, Prefs.class);
 		prefs.savePreferences(prefsFile, Prefs.class);
+		prefs.setVariables();
 
 		Icons.initialize("/res/icons", ".png");
 		RB.initialize(Prefs.localeText, "res.text.tablet");

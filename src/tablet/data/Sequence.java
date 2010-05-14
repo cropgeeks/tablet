@@ -12,7 +12,8 @@ public abstract class Sequence
 	// Defines what the pad character will be (can be changed if need be)
 	public static String PAD = "*";
 
-	public static boolean ambiguityN = false;
+	// If true, any DNA ambuguity codes will be read as N rather than unknown
+	public static boolean AMBIGUOUS_TO_N = false;
 
 	// The codes that we store for each "state".
 	// There are obvious codes for ATCG*N, but also codes for when the base
@@ -163,7 +164,7 @@ public abstract class Sequence
 			case 'x': return N;
 		}
 
-		if (ambiguityN)
+		if (AMBIGUOUS_TO_N)
 		{
 			switch (dnaCode)
 			{
