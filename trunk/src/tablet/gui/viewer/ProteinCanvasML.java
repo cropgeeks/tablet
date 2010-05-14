@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import tablet.analysis.*;
+import static tablet.analysis.ProteinTranslator.*;
 import tablet.gui.*;
 
 import scri.commons.gui.*;
@@ -69,9 +70,9 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 			// And get the data value at that point
 			short value = pCanvas.translations.get(track)[(xIndex)];
 
-			// Values greater than 21/42 are positions without the text
-			if (value > 42) value -= 42;
-			if (value > 21) value -= 21;
+			// Values greater than LBASE/RBASE are positions without the text
+			if (value > RBASE) value -= RBASE;
+			if (value > LBASE) value -= LBASE;
 
 			// Values equal to zero don't have a value that can be displayed
 			if (value > 0)
@@ -220,7 +221,7 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 
 		// NOTE: the translation array holds different numbers for the same
 		// protein depending on whether it is the 1st/3rd digit or the 2nd.
-		// Below, we are checking on the third which will be a value 21 higher
+		// Below, we are checking on the third which will be a value 22 higher
 		// than the actual ProteinTranslator.codes[] mapping.
 
 		// Translate forwards...
@@ -233,7 +234,7 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 
 				if (found == 3)
 				{
-					str.append(codes[translation[i] - 42]);
+					str.append(codes[translation[i] - RBASE]);
 					found = 0;
 				}
 			}
@@ -248,7 +249,7 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 
 				if (found == 3)
 				{
-					str.append(codes[translation[i] - 42]);
+					str.append(codes[translation[i] - LBASE]);
 					found = 0;
 				}
 			}

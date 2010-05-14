@@ -13,6 +13,9 @@ public class ProteinTranslator extends BackgroundTask
 {
 	public static enum Direction { FORWARD, REVERSE };
 
+	public static int LBASE = 22;
+	public static int RBASE = 44;
+
 	public HashMap<String, Integer> acids;
 	public String[] codes;
 
@@ -118,7 +121,7 @@ public class ProteinTranslator extends BackgroundTask
 		{
 			byte state = sequence.getStateAt(i);
 
-			if (state >= A)
+			if (state >= N)
 			{
 				dna[s] = i;
 				seq[s] = Sequence.getDNA(state);
@@ -131,13 +134,16 @@ public class ProteinTranslator extends BackgroundTask
 			{
 				s = 0;
 
-				int code = acids.get(seq[0] + seq[1] + seq[2]);
+				Integer code = acids.get(seq[0] + seq[1] + seq[2]);
+
+				if (code == null) // null returned when we get codons with N
+					code = 22;
 
 				// Assign the protein to the first nucleotide of the three
-				protein[dna[0]] = (short) (code + 21);
+				protein[dna[0]] = (short) ((int)code + LBASE);
 				// Assign the protein (colour info only) to the other two
-				protein[dna[1]] = (short) code;
-				protein[dna[2]] = (short) (code + 42);
+				protein[dna[1]] = (short) (int)code;
+				protein[dna[2]] = (short) ((int)code + RBASE);
 
 				if (translation != null)
 					translation.append(codes[code]);
@@ -166,7 +172,7 @@ public class ProteinTranslator extends BackgroundTask
 		{
 			byte state = sequence.getStateAt(i);
 
-			if (state >= A)
+			if (state >= N)
 			{
 				dna[s] = i;
 				seq[s] = Sequence.getComplementaryDNA(state);
@@ -179,13 +185,16 @@ public class ProteinTranslator extends BackgroundTask
 			{
 				s = 0;
 
-				int code = acids.get(seq[0] + seq[1] + seq[2]);
+				Integer code = acids.get(seq[0] + seq[1] + seq[2]);
+
+				if (code == null)
+					code = 22;
 
 				// Assign the protein to the first nucleotide of the three
-				protein[dna[2]] = (short) (code + 21);
+				protein[dna[2]] = (short) ((int)code + LBASE);
 				// Assign the protein (colour info only) to the other two
-				protein[dna[1]] = (short) code;
-				protein[dna[0]] = (short) (code + 42);
+				protein[dna[1]] = (short) (int)code;
+				protein[dna[0]] = (short) (int)(code + RBASE);
 
 				if (translation != null)
 					translation.append(codes[code]);
@@ -202,7 +211,7 @@ public class ProteinTranslator extends BackgroundTask
 	private void createTranslationTable()
 	{
 		acids = new HashMap<String, Integer>();
-		codes = new String[22];
+		codes = new String[23];
 
 		codes[0] = "?";
 
@@ -332,5 +341,8 @@ public class ProteinTranslator extends BackgroundTask
 		acids.put("TAA", 21);
 		acids.put("TAG", 21);
 		acids.put("TGA", 21);
+
+		// 22 = X
+		codes[22] = "X";
 	}
 }

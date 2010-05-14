@@ -12,6 +12,8 @@ public abstract class Sequence
 	// Defines what the pad character will be (can be changed if need be)
 	public static String PAD = "*";
 
+	public static boolean ambiguityN = false;
+
 	// The codes that we store for each "state".
 	// There are obvious codes for ATCG*N, but also codes for when the base
 	// in a read is different (d) from the same base in the consensus.
@@ -143,8 +145,9 @@ public abstract class Sequence
 			case 'C': return C;
 			case 'G': return G;
 			case 'T': return T;
-
+			case 'U': return T;
 			case 'N': return N;
+			case 'X': return N;
 
 			// TODO: Any other potential pad characters in use in file types?
 			// "*" is used in ACE files, "-" is used often elsewhere
@@ -155,10 +158,29 @@ public abstract class Sequence
 			case 'c': return C;
 			case 'g': return G;
 			case 't': return T;
+			case 'u': return T;
 			case 'n': return N;
-
-			default: return UNKNOWN;
+			case 'x': return N;
 		}
+
+		if (ambiguityN)
+		{
+			switch (dnaCode)
+			{
+				case 'K': return N;
+				case 'M': return N;
+				case 'R': return N;
+				case 'Y': return N;
+				case 'S': return N;
+				case 'W': return N;
+				case 'B': return N;
+				case 'V': return N;
+				case 'H': return N;
+				case 'D': return N;
+			}
+		}
+
+		return UNKNOWN;
 	}
 
 	public static String getDNA(byte state)
