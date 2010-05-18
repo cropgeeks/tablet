@@ -1,0 +1,60 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="stylesheet/styles.css" type="text/css">
+
+<title>Tablet - Frequently Asked Questions</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.shtml" -->
+
+
+<h2>Tablet - Frequently Asked Questions</h2>
+
+<p><b>Tablet only seems to be using up to 1GB of memory even though I have much
+more than that installed on my PC.</b></p>
+<p>Due to the way the Java runtime works, we have developed Tablet to run with a
+maximum memory allocation of 1GB. This is decribed in more
+detail in the <a href="help/memory.shtml">Allocating Memory</a> help topic,
+along with instructions on how to adjust (higher or lower) the amount of memory
+Tablet will use.</p>
+
+
+<p>&nbsp;</p>
+
+<p><b>Maq assemblies do not appear to be loading. Which Maq files does Tablet require?</b></p>
+<p>The Maq files that Tablet expects are the text file which can be generated from the .map
+file and the fastq file which can be generated from the .cns maq file (see the
+<a href="http://maq.sourceforge.net/maq-manpage.shtml#3">Maq Reference Manual</a> for
+more details).</p>
+<p>To produce the text file from the .map file, you should execute the mapview command.
+The format of the command should resemble <i>maq mapview input.map > output.txt</i>.</p>
+<p>To produce the fastq file from the .cns file, you should execute the cns2fq command.
+The format of the command should resemble <i>maq cns2fq input.cns > output.fastq</i>.</p>
+
+<p>Also see our <a href="assembly-conversion.shtml">Assembly Conversion</a> guide
+that covers coverting between several common assembly formats.</p>
+
+
+<p>&nbsp;</p>
+
+<p><b>Why does every contig in my BAM assembly show the number of reads as "0"?</b></p>
+<p>BAM assemblies are treated differently to other file formats in Tablet (to allow
+instant access to portions of very large assemblies) and because of this it means
+that Tablet is not able to provide summary information simply because Tablet hasn't
+yet read all of the contig (and it most cases it never will). Once you view a contig,
+information on the region you view will
+become available, but please be aware that the numbers you see will change as
+you move around the contig using the BAM controls. See
+<a href="help/bam-data-visualization.shtml">BAM Data Visualization</a> for more information.</p>
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>
