@@ -80,11 +80,22 @@ way Tablet is used and is displayed.</p>
 <img class="capture" src="images/gui.dialog.prefs.NBFormatsPanel2.png" alt="Tablet Screenshot"></a></p>
 
 <ul>
+    <li><b>Convert all DNA ambuiguity codes to 'N', rather than treating as unknowns</b><br>
+    If selected, any nucleotides encoded using ambuiguity codes will be read as N rather
+    than being treated as unknown (Tablet has no support for ambuiguity codes). This will
+    affect how the protein translations are displayed.</li>
+
     <li><b>Trim poor quality tags using QA tags (ACE only)</b><br>
-    If selected, this option will cause Tablet to parse the QA tags found within
+    Affecting the import of ACE files only, if selected, this option will cause Tablet to parse the QA tags found within
     ACE files. These tags cause reads to be trimmed for quality. The resultant
     read once loaded into Tablet may be shorter than if the option is left
     unselected and regions of low quality will no longer be displayed.</li>
+
+    <li><b>Set BAM validation stringency to lenient rather than strict (BAM only)</b><br>
+    Affecting the import of BAM files only, if selected, Tablet will ignore any errors often associated with malformed BAM
+    assemblies and will attempt to display the file as if it was OK. Any errors that
+    are found will be written to the output.log file in Tablet's install directory.
+    See samtools/picard documentation for more details on strict/lenient parsing options.</li>
 </ul>
 
 
