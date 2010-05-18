@@ -23,6 +23,18 @@ changes between versions, please see the <a href="http://bioinf.scri.ac.uk/table
 subversion change log</a>.</p>
 
 
+<h3>New in 1.10.05.18</h3>
+
+<ul>
+<li>NEW: Implemented a new, hopefully more robust, method of determining the version number for update purposes.</li>
+<li>NEW: Added an option to set Picard's SAMFileReader validation stringency to lenient to suppress SamValidation errors.</li>
+<li>NEW: Added a parse-time option force DNA ambiguity codes to be read as N.</li>
+<li>CHG: Changed the protein translator to treat any base with an N as ok (codon will translate to X) rather than having it skip the base.</li>
+<li>BUG: Fixed a problem copying any of the reverse strand protein translations to the clipboard.</li>
+<li>BUG: Fixed problems relating to Tablet not re-initialising its BAM reader after encountering SamValidation error.</li>
+</ul>
+
+
 <h3>New in 1.10.05.06</h3>
 
 <ul>
