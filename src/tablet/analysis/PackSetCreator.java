@@ -36,6 +36,8 @@ public class PackSetCreator extends SimpleJob
 
 		for (Read read: contig.getReads())
 		{
+			added = false;
+
 			startRow=0;
 			// Check for quit/cancel on the job...
 			if (okToRun == false)
