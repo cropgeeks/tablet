@@ -23,6 +23,13 @@ changes between versions, please see the <a href="http://bioinf.scri.ac.uk/table
 subversion change log</a>.</p>
 
 
+<h3>New in 1.10.05.21</h3>
+
+<ul>
+<li>BUG: Fixed a critical bug that was resulting in some contigs hiding reads when in packed mode.</li>
+</ul>
+
+
 <h3>New in 1.10.05.18</h3>
 
 <ul>
