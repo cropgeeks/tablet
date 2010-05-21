@@ -1,0 +1,27 @@
+<!-- Tablet Web Start JNLP (Generated @DATE@) -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="6.0+" codebase="http://bioinf.scri.ac.uk/tablet/webstart">
+	<information>
+		<title>Tablet</title>
+		<vendor>The Scottish Crop Research Institute</vendor>
+		<homepage href="http://bioinf.scri.ac.uk/tablet"/>
+		<icon href="tablet.png" width="64" height="64" kind="default"/>
+	</information>
+	<resources>
+		<java version="1.6+" java-vm-args="@JAVA_VM_ARGS@"/>
+		<jar href="flamingo.jar"/>
+		<jar href="i4jruntime.jar"/>
+		<jar href="osxadapter.jar"/>
+		<jar href="sam.jar"/>
+		<jar href="scri-commons.jar"/>
+		<jar href="tablet.jar"/>
+		<jar href="tablet-resources.jar"/>
+	</resources>
+	<application-desc main-class="tablet.gui.Tablet">
+		@ARGUMENTS@
+	</application-desc>
+	<security>
+		<all-permissions/>
+	</security>
+</jnlp>
