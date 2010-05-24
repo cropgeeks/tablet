@@ -3,6 +3,8 @@
 
 package tablet.data.auxiliary;
 
+import java.util.*;
+
 import tablet.data.cache.*;
 
 /**
@@ -23,6 +25,9 @@ public class DisplayData
 	private static float averageCoverage;
 	private static float averagePercentage;
 
+	// Holds the assembly wide list of feature types that should be plotted
+	private static ArrayList<String> featureTypes = new ArrayList<String>();
+
 	/**
 	 * Clears the memory allocated for the storage of padded/unpadded mapping
 	 * information by this consensus sequence. It is only needed at display time
@@ -39,6 +44,9 @@ public class DisplayData
 
 		coverage = null;
 	}
+
+	public static ArrayList<String> getFeatureTypes()
+		{ return featureTypes; }
 
 	public static int[] getCoverage()
 		{ return coverage; }

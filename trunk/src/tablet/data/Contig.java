@@ -38,8 +38,9 @@ public class Contig
 	private PackSet packSet;
 	private StackSet stackSet;
 
-	// Main set of features associated with this contig
-	FeaturesList features = new FeaturesList();
+	// Main set of features associated with this contig (basically every feature
+	// held in a single FeatureTrack object)
+	private FeatureTrack features = new FeatureTrack();
 	// Supplementary set of features used purely for graphical outlining
 	private ArrayList<Feature> outlines = new ArrayList<Feature>();
 
@@ -276,6 +277,6 @@ public class Contig
 
 	public void addFeature(Feature newFeature)
 	{
-		features.addFeature(newFeature);
+		features.addFeatureDoSort(newFeature);
 	}
 }
