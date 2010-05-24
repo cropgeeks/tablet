@@ -29,6 +29,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 	ConsensusCanvas consensusCanvas;
 	ProteinCanvas proteinCanvas;
 	CoverageCanvas coverageCanvas;
+	FeaturesCanvas featuresCanvas;
 	BamBamBar bambamBar;
 	ReadsCanvas readsCanvas;
 
@@ -56,10 +57,14 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		setLayout(new BorderLayout());
 		setBorder(BorderFactory.createEmptyBorder(1, 2, 0, 2));
 
-		JPanel consensusPanel = new JPanel(new BorderLayout());
-		consensusPanel.add(proteinCanvas, BorderLayout.NORTH);
-		consensusPanel.add(consensusCanvas);
-		consensusPanel.add(coverageCanvas, BorderLayout.SOUTH);
+		JPanel conPanel1 = new JPanel(new BorderLayout());
+		conPanel1.add(proteinCanvas, BorderLayout.NORTH);
+		conPanel1.add(consensusCanvas);
+		conPanel1.add(featuresCanvas, BorderLayout.SOUTH);
+
+		JPanel conPanel2 = new JPanel(new BorderLayout());
+		conPanel2.add(conPanel1, BorderLayout.NORTH);
+		conPanel2.add(coverageCanvas, BorderLayout.SOUTH);
 
 		JPanel overCanvas = new JPanel(new BorderLayout());
 		overCanvas.add(bambamBar, BorderLayout.NORTH);
@@ -67,7 +72,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 
 		JPanel topPanel = new JPanel(new BorderLayout());
 		topPanel.add(overCanvas, BorderLayout.NORTH);
-		topPanel.add(consensusPanel, BorderLayout.CENTER);
+		topPanel.add(conPanel2, BorderLayout.CENTER);
 		topPanel.add(scaleCanvas, BorderLayout.SOUTH);
 
 		JPanel visPanel = new JPanel(new BorderLayout());
@@ -85,6 +90,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		scaleCanvas = new ScaleCanvas();
 		proteinCanvas = new ProteinCanvas();
 		coverageCanvas = new CoverageCanvas();
+		featuresCanvas = new FeaturesCanvas();
 		bambamBar = new BamBamBar();
 
 		// Passing 'this' to the canvas classes can't happen in their
@@ -96,6 +102,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		scaleCanvas.setAssemblyPanel(this);
 		proteinCanvas.setAssemblyPanel(this);
 		coverageCanvas.setAssemblyPanel(this);
+		featuresCanvas.setAssemblyPanel(this);
 		bambamBar.setAssemblyPanel(this);
 
 		sp = new JScrollPane();
@@ -175,6 +182,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 
 		// Pass the contig to the other components for rendering
 		consensusCanvas.setContig(contig);
+		featuresCanvas.setContig(contig);
 		scaleCanvas.setContig(contig);
 		proteinCanvas.setContig(contig);
 		coverageCanvas.setContig(contig);
