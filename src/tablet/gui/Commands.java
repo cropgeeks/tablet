@@ -80,11 +80,11 @@ public class Commands
 		{
 			File file = new File(filenames[0]);
 			if (getFeatureFile(file) != null)
-				importFeatures(getFeatureFile(file).getPath());
+				importFeatures(getFeatureFile(file).getPath(), false);
 		}
 	}
 
-	public void importFeatures(String filename)
+	public void importFeatures(String filename, boolean showSummary)
 	{
 		// If no file was passed in then we need to prompt the user to pick one
 		if (filename == null)
@@ -122,6 +122,11 @@ public class Commands
 		}
 
 		winMain.getContigsPanel().updateTable(assembly);
+
+		if (showSummary)
+			TaskDialog.info(RB.format("gui.Commands.importFeatures.summary",
+				reader.getFeaturesRead(), reader.getFeaturesAdded()),
+				RB.getString("gui.text.close"));
 	}
 
 	// Given assemblyfile.<ext> see if there is a featurefile.gff file that is
