@@ -6,7 +6,7 @@ public class CigarFeature extends Feature
 
 	public CigarFeature(String gffType, String name, int p1, int p2, int count)
 	{
-		super(Feature.UNKNOWN, gffType, name, p1, p2);
+		super(Feature.GFF3, gffType, name, p1, p2);
 		this.count = count;
 	}
 

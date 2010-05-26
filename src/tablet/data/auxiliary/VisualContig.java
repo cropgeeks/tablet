@@ -19,6 +19,9 @@ public class VisualContig
 	public Integer getLockedBase()
 		{	return lockedBase;	}
 
+	public int getTrackCount()
+		{ return tracks.size(); }
+
 	public void removeTracks()
 	{
 		tracks.clear();

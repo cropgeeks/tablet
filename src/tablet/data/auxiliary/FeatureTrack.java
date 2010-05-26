@@ -10,13 +10,18 @@ import tablet.data.*;
 /**
  * Simple class to encapsulate a list of features (on one "track").
  */
-public class FeatureTrack
+public class FeatureTrack implements Comparator<Feature>
 {
+	private String name;
+
 	private ArrayList<Feature> features = new ArrayList<Feature>();
 
 	public FeatureTrack()
 	{
 	}
+
+	public FeatureTrack(String name)
+		{ this.name = name; }
 
 	/**
 	 * Adds a new feature to this track without performing checks to ensure it
@@ -50,5 +55,61 @@ public class FeatureTrack
 	public ArrayList<Feature> getFeatures()
 	{
 		return features;
+	}
+
+	public String getName()
+		{ return name; }
+
+	/**
+	 * Returns a list of features between the given start and end points
+	 * (inclusive). Uses a binary search to locate them as quickly as possible,
+	 * using the compare() method defined below.
+	 */
+	public ArrayList<Feature> getFeatures(int s, int e)
+	{
+		ArrayList<Feature> list = new ArrayList<Feature>();
+
+		// Start by finding ANY feature that is inside the window
+		int index = Collections.binarySearch(features, new Feature(s, e), this);
+
+		if (index >= 0)
+		{
+			// Then search left to find the FIRST feature within the window
+			while (index > 0 && features.get(index-1).getP2() >= s)
+				index--;
+
+			// Now add all the features from here until the RHS of the window
+			for (int i = index; i < features.size(); i++)
+			{
+				Feature toAdd = features.get(i);
+
+				if (toAdd.getP1() <= e)
+					list.add(toAdd);
+				else
+					break;
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Returns an integer representing the inclusion state of a feature when
+	 * compared against the given start and end values for a "window". The
+	 * methods returns -1 if it is to the left of it, 0 if any part of it is
+	 * within the window, and 1 if it is to the right of it.
+	 */
+	public int compare(Feature feature, Feature window)
+	{
+		// RHS of the window...
+		if (feature.getP1() > window.getP2())
+			return 1;
+
+		// LHS of the window...
+		if (feature.getP2() < window.getP1())
+			return -1;
+
+		// Otherwise must be within the window
+		return 0;
 	}
 }

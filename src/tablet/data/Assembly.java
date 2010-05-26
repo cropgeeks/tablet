@@ -5,6 +5,7 @@ package tablet.data;
 
 import java.util.*;
 
+import tablet.data.auxiliary.*;
 import tablet.data.cache.*;
 import tablet.io.*;
 
@@ -32,6 +33,8 @@ public class Assembly implements Iterable<Contig>
 		this.cacheID = cacheID;
 
 		hasCigar = false;
+
+		Feature.clearTypes();
 	}
 
 	/**
