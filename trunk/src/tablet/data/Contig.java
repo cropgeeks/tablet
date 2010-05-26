@@ -275,8 +275,8 @@ public class Contig
 		mmMismatches += mismatches;
 	}
 
-	public void addFeature(Feature newFeature)
+	public boolean addFeature(Feature newFeature)
 	{
-		features.addFeatureDoSort(newFeature);
+		return features.addFeatureDoSort(newFeature);
 	}
 }

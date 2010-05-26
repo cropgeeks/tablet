@@ -13,6 +13,8 @@ import static tablet.io.ReadException.*;
 
 public class GFF3Reader extends TrackableReader
 {
+	private int cRead, cAdded;
+
 	// Stores a list of features per contig (as they are found)
 	private HashMap<String, ArrayList<Feature>> contigs;
 
@@ -103,6 +105,7 @@ public class GFF3Reader extends TrackableReader
 		Feature f = new Feature(Feature.GFF3, gffType, name, start-1, end-1);
 
 		getFeatures(contigName).add(f);
+		cRead++;
 	}
 
 	// Searches and returns an existing list of features (for a contig). If a
@@ -130,10 +133,17 @@ public class GFF3Reader extends TrackableReader
 			if (newFeatures == null)
 				continue;
 
-			for(Feature feature : newFeatures)
-				contig.addFeature(feature);
+			for (Feature feature : newFeatures)
+				if (contig.addFeature(feature))
+					cAdded++;
 
 			Collections.sort(contig.getFeatures());
 		}
 	}
+
+	public int getFeaturesAdded()
+		{ return cAdded; }
+
+	public int getFeaturesRead()
+		{ return cRead; }
 }

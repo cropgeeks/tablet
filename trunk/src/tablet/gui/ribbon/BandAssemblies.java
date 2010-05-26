@@ -84,6 +84,6 @@ class BandAssemblies extends JRibbonBand implements ActionListener
 		}
 
 		else if (e.getSource() == Actions.assembliesImportFeatures)
-			winMain.getCommands().importFeatures(null);
+			winMain.getCommands().importFeatures(null, true);
 	}
 }
