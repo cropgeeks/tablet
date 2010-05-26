@@ -4,6 +4,8 @@
 package tablet.gui.viewer;
 
 import java.awt.*;
+import static java.awt.RenderingHints.*;
+import java.util.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
@@ -15,9 +17,17 @@ class FeaturesCanvas extends TrackingCanvas
 	private AssemblyPanel aPanel;
 
 	private Contig contig;
+	private VisualContig vContig;
 	private Consensus consensus;
 
 	private Dimension dimension = new Dimension();
+
+	// The height of a SINGLE track
+	private static final int H = 20;
+
+	private BasicStroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT,
+		BasicStroke.JOIN_MITER, 10, new float[] { 5,2 }, 0);
+	private BasicStroke solid = new BasicStroke(1);
 
 	FeaturesCanvas()
 	{
@@ -36,15 +46,17 @@ class FeaturesCanvas extends TrackingCanvas
 			consensus = contig.getConsensus();
 
 			prepareTracks(contig);
+			dimension = new Dimension(0, vContig.getTrackCount()*H+5);
 		}
 
 		// Remove tablet.data references if nothing is going to be displayed
 		else
+		{
 			consensus = null;
+			dimension = new Dimension(0, 0);
+		}
 
 		this.contig = contig;
-
-		dimension = new Dimension(0, 20);
 
 		setPreferredSize(dimension);
 		revalidate();
@@ -55,7 +67,7 @@ class FeaturesCanvas extends TrackingCanvas
 		try
 		{
 			// Set up the tracks for this contig
-			VisualContig vContig = aPanel.getVisualContig();
+			vContig = aPanel.getVisualContig();
 
 			FeatureTrackCreator ftc = new FeatureTrackCreator(vContig, contig);
 			ftc.runJob(0);
@@ -77,11 +89,44 @@ class FeaturesCanvas extends TrackingCanvas
 		offset = contig.getVisualStart();
 
 		int ntW = rCanvas.ntW;
-		int xS = rCanvas.xS;
-		int xE = rCanvas.xE;
+		int xS = rCanvas.xS + offset;
+		int xE = rCanvas.xE + offset;
 
-//		byte[] bq = consensus.getBaseQualityRange(xS+offset, xE+offset);
 
-		g.drawString("features", 10, 10);
+		for (int trackNum = 0; trackNum < vContig.getTrackCount(); trackNum++)
+		{
+			FeatureTrack track = vContig.getTrack(trackNum);
+			ArrayList<Feature> features = track.getFeatures(xS, xE);
+
+			if (trackNum > 0)
+				g.translate(0, H);
+
+			g.setColor(Color.lightGray);
+			g.setStroke(dashed);
+			g.drawLine(x1, H/2, x2, H/2);
+			g.setStroke(solid);
+			g.setColor(Color.red);
+
+			for (Feature f: features)
+			{
+				int p1 = f.getP1() - offset;
+				int p2 = f.getP2() - offset;
+
+				g.setPaint(new Color(255, 0, 0, 50));
+				g.fillRect(p1*ntW, H/4, (p2-p1+1)*ntW-1, H/2);
+				g.setPaint(new Color(0, 0, 0, 50));
+				g.drawRect(p1*ntW, H/4, (p2-p1+1)*ntW-1, H/2);
+
+//				int w = p2-p1+1;
+//				int[] xx = new int[] { p1*ntW, (p1+w)*ntW, ((p1+w)*ntW - p1*ntW)/2 };
+//				int[] yy = new int[] { 0, 0, H };
+//				g.fillPolygon(xx, yy, 3);
+			}
+
+			g.setColor(Color.black);
+			g.setFont(new Font("Dialog", Font.PLAIN, 7));
+			g.setRenderingHint(KEY_TEXT_ANTIALIASING, VALUE_TEXT_ANTIALIAS_ON);
+			g.drawString(track.getName(), x1, 6);
+		}
 	}
 }
