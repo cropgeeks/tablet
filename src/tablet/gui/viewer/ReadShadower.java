@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import tablet.data.Read;
-import tablet.data.auxiliary.VisualContig;
 import tablet.gui.Prefs;
 
 class ReadShadower implements IOverlayRenderer

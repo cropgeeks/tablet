@@ -38,7 +38,6 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 	private JViewport viewport;
 
 	// Normal or click zooming (affects which base to zoom in on)
-	private boolean isZooming = false;
 	private boolean isClickZooming = false;
 	// Tracks the base to zoom in on
 	private float ntCenterX, ntCenterY;

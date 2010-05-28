@@ -3,7 +3,6 @@
 
 package tablet.io;
 
-import java.io.File;
 import scri.commons.gui.*;
 
 public class ReadException extends Exception

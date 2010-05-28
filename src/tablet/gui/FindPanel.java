@@ -21,7 +21,6 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 	private AssemblyPanel aPanel;
 	private AbstractTableModel tableModel;
 	private ContigsPanel cPanel;
-	private int found;
 	private Finder finder;
 	private TableRowSorter<AbstractTableModel> sorter;
 
@@ -188,7 +187,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 			lineIndex = contig.getPackSetManager().getLineForRead(read);
 
 		final int startPos = read.getStartPosition()/* - contig.getVisualStart()*/;
-		
+
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run()
 			{
@@ -215,7 +214,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 			lineIndex = contig.getStackSetManager().getLineForRead(read);
 		else
 			lineIndex = contig.getPackSetManager().getLineForRead(read);
-		
+
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run()
 			{
@@ -253,12 +252,12 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		controls.table.invalidate();
 		controls.resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", 0));
 	}
-	
+
 	public void runSearch()
 	{
 		// Set if we are searching the current contig, or all contigs
 		Prefs.guiFindPanelSelectedIndex = controls.findInCombo.getSelectedIndex();
-		
+
 		if(Prefs.guiFindPanelSelectedIndex == Finder.CURRENT_CONTIG && aPanel.getContig() == null)
 		{
 			TaskDialog.error("A Contig must be selected before searching over a single contig can occur.", "OK");

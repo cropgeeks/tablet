@@ -5,7 +5,6 @@ package tablet.gui.ribbon;
 
 import java.awt.event.*;
 
-import javax.swing.KeyStroke;
 import tablet.gui.*;
 
 import org.jvnet.flamingo.common.model.*;
@@ -69,8 +68,6 @@ public class BandProtein extends JFlowRibbonBand implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		Object source = e.getSource();
-
 		boolean[] states = new boolean[6];
 
 		for (int i = 0; i < states.length; i++)

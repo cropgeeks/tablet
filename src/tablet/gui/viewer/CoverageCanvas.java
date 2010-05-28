@@ -90,7 +90,7 @@ class CoverageCanvas extends TrackingCanvas
 		}
 
 		// Overlay the average value across all the data
-		float percent = DisplayData.getAverageCoverage() / (float) maxCoverage;
+		float percent = avgCoverage / (float) maxCoverage;
 		int avgY = (int) (percent * h);
 		g.setColor(new Color(45, 100, 162));
 		g.setStroke(dashed);

@@ -147,9 +147,6 @@ public class Finder extends SimpleJob
 	 */
 	protected void checkForSubsequenceMatches(String readName, int startPos, int length, String searchString, Contig contig, String readString)
 	{
-		Pattern p = Pattern.compile(searchString);
-		Matcher m = p.matcher(readString);
-
 		int index = readString.toLowerCase().indexOf(searchString.toLowerCase());
 
 		// Having found one occurrence in the read string, search for more.
