@@ -5,8 +5,6 @@ package tablet.data.auxiliary;
 
 import java.util.*;
 
-import tablet.gui.*;
-
 /**
  * A feature is a region of interest from point pS to pE (inclusive) in
  * consensus space (including offset positions). However, a feature can also be
@@ -19,17 +17,20 @@ import tablet.gui.*;
  */
 public class Feature implements Comparable<Feature>
 {
-	// Tracks all known GFF types for the current data set. The hash is cleared
-	// by Assembly's constructor whenever new data is imported/loaded. The
-	// boolean value stores whether this feature type is being visualized or not
-	private static HashMap<String, Boolean> types = new HashMap<String, Boolean>();
-
+	// True if features are to use padded coordinates, false if unpadded
+	public static boolean ISPADDED = true;
 
 	// Defined "Tablet Types" for supported featured
 	public final static byte GFF3 = 0;
 
 	public final static byte ROW_OUTLINE = 100;
 	public final static byte COL_OUTLINE = 101;
+
+
+	// Tracks all known GFF types for the current data set. The hash is cleared
+	// by Assembly's constructor whenever new data is imported/loaded. The
+	// boolean value stores whether this feature type is being visualized or not
+	private static HashMap<String, Boolean> types = new HashMap<String, Boolean>();
 
 	protected byte tabletType;
 
@@ -149,7 +150,7 @@ public class Feature implements Comparable<Feature>
 	 */
 	public int getVisualPS()
 	{
-		if (Prefs.guiFeaturesArePadded)
+		if (ISPADDED)
 			return pS;
 
 		// Convert the value from unpadded to padded space (and store it)
@@ -166,7 +167,7 @@ public class Feature implements Comparable<Feature>
 
 	public int getVisualPE()
 	{
-		if (Prefs.guiFeaturesArePadded)
+		if (ISPADDED)
 			return pE;
 
 		// Convert the value from unpadded to padded space (and store it)

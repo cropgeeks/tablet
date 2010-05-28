@@ -157,6 +157,6 @@ class FeaturesCanvas extends TrackingCanvas
 		}
 
 		long e = System.currentTimeMillis();
-		System.out.println("FeaturesCanvas: " + (e-s) + "ms");
+//		System.out.println("FeaturesCanvas: " + (e-s) + "ms");
 	}
 }

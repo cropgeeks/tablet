@@ -5,6 +5,8 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import tablet.data.auxiliary.*;
+
 import scri.commons.gui.*;
 
 class NBFeaturesPanelControls extends JPanel
@@ -73,6 +75,7 @@ class NBFeaturesPanelControls extends JPanel
 		}
 
 		Prefs.guiFeaturesArePadded = checkPadded.isSelected();
+		Feature.ISPADDED = Prefs.guiFeaturesArePadded;
 
 		Tablet.winMain.repaint();
 	}
