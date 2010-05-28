@@ -6,6 +6,7 @@ package tablet.gui;
 import java.util.*;
 
 import tablet.data.*;
+import tablet.data.auxiliary.*;
 import tablet.gui.viewer.*;
 import tablet.gui.viewer.colors.*;
 import tablet.io.*;
@@ -177,6 +178,9 @@ public class Prefs extends XMLPreferences
 	{
 		// tablet.data:
 		Sequence.AMBIGUOUS_TO_N = Prefs.ioAmbiguousToN;
+
+		// tablet.data.auxiliary
+		Feature.ISPADDED = Prefs.guiFeaturesArePadded;
 
 		// tablet.io:
 		AceFileReader.PROCESS_QA = Prefs.ioAceProcessQA;
