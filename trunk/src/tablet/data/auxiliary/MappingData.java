@@ -1,3 +1,6 @@
+// Copyright 2009-2010 Plant Bioinformatics Group, SCRI. All rights reserved.
+// Use is subject to the accompanying licence terms.
+
 package tablet.data.auxiliary;
 
 import tablet.data.*;
