@@ -10,7 +10,6 @@ public class AceFileWriter
 {
 	private BufferedWriter out;
 	private File filepath;
-	private String lineSeparator = System.getProperty("line.separator");
 
 	/**
 	 * Constructor which takes the filepath for the potential production of ACE

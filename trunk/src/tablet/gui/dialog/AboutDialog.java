@@ -73,7 +73,6 @@ public class AboutDialog extends JDialog implements ActionListener
 				public void mouseMoved(MouseEvent e)
 				{
 					int x = e.getX();
-					int y = e.getY();
 
 					String tooltip = "<html>";
 

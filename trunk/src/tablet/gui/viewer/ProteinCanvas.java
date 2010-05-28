@@ -76,12 +76,6 @@ class ProteinCanvas extends TrackingCanvas implements ITaskListener
 	public Dimension getPreferredSize()
 		{ return dimension; }
 
-	private void setTranslations(ArrayList<short[]> translations)
-	{
-		this.translations = translations;
-		repaint();
-	}
-
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
@@ -105,7 +99,7 @@ class ProteinCanvas extends TrackingCanvas implements ITaskListener
 			if (enabled[t] == false || translations.get(t) == null)
 				continue;
 
-			int y = (rCanvas.ntH+1) * count;
+			int y = (ntH+1) * count;
 			count++;
 
 			short[] data = getRegion(translations.get(t), xS+offset, xE+offset);

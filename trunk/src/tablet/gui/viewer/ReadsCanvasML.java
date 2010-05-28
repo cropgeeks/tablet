@@ -14,8 +14,6 @@ import scri.commons.gui.*;
 
 class ReadsCanvasML extends MouseInputAdapter
 {
-	private boolean isOSX = SystemUtils.isMacOS();
-
 	private AssemblyPanel aPanel;
 	private ReadsCanvas rCanvas;
 	private ScaleCanvas sCanvas;
@@ -49,11 +47,6 @@ class ReadsCanvasML extends MouseInputAdapter
 		rCanvas.overlays.add(outliner);
 		rCanvas.overlays.add(nOverlay);
 		rCanvas.overlays.add(infoPane);
-	}
-
-	private boolean isMetaClick(MouseEvent e)
-	{
-		return isOSX && e.isMetaDown() || !isOSX && e.isControlDown();
 	}
 
 	public void mouseExited(MouseEvent e)

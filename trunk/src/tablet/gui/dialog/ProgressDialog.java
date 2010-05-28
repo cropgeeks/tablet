@@ -122,9 +122,6 @@ public class ProgressDialog extends JDialog
 		catch (Exception ex) {}
 	}
 
-	private void startJob()
-		{ new Thread(this).start(); }
-
 	private void cancelJob()
 	{
 		job.cancelJob();

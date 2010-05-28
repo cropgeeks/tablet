@@ -30,8 +30,6 @@ public class ProteinTranslator extends BackgroundTask
 	// Builds up a DNA string as we go along, eg, AC**T will eventually fill the
 	// array with A, C, and T (reading forward), or T, C, A (in reverse)
 	private	String[] seq;
-	// Index within the seq array where the next nucleotide found will go
-	private int s;
 	// The indices of the three nucleotides that make up the current codon
 	private int[] dna;
 

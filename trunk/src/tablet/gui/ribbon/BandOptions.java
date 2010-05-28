@@ -5,7 +5,6 @@ package tablet.gui.ribbon;
 
 import java.awt.event.*;
 
-import javax.swing.KeyStroke;
 import tablet.gui.*;
 
 import org.jvnet.flamingo.common.model.*;

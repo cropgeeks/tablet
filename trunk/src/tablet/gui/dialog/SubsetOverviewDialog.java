@@ -2,9 +2,7 @@ package tablet.gui.dialog;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.Integer;
 import javax.swing.*;
-import javax.swing.event.*;
 
 import scri.commons.gui.*;
 

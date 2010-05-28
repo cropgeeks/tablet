@@ -24,7 +24,6 @@ public class Assembly implements Iterable<Contig>
 	private ArrayList<Contig> contigs = new ArrayList<Contig>();
 
 	private BamBam bambam;
-	private boolean isBam;
 	private static boolean hasCigar;
 
 	/** Constructs a new, empty assembly. */
@@ -127,7 +126,6 @@ public class Assembly implements Iterable<Contig>
 
 	public void setBamHandler(BamFileHandler bamHandler)
 	{
-		isBam = true;
 		hasCigar = true;
 
 		bambam = new BamBam(bamHandler);

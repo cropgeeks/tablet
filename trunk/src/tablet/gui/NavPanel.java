@@ -88,7 +88,6 @@ class NavPanel
 			Graphics2D g = (Graphics2D) graphics;
 
 			int w = getWidth();
-			int h = getHeight();
 
 			g.drawImage(logo.getImage(), 0, 0, w, w, null);
 		}

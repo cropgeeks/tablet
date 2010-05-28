@@ -15,7 +15,6 @@ import tablet.gui.*;
  */
 class OutlinerOverlay implements IOverlayRenderer
 {
-	private AssemblyPanel aPanel;
 	private ReadsCanvasInfoPane infoPane;
 	private ReadsCanvas rCanvas;
 
@@ -25,7 +24,6 @@ class OutlinerOverlay implements IOverlayRenderer
 
 	OutlinerOverlay(AssemblyPanel aPanel, ReadsCanvasInfoPane infoPane)
 	{
-		this.aPanel = aPanel;
 		this.infoPane = infoPane;
 
 		rCanvas = aPanel.readsCanvas;

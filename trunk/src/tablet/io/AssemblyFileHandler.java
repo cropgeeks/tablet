@@ -223,8 +223,6 @@ public class AssemblyFileHandler extends SimpleJob
 
 	public static int getType(String file, Boolean okToRun)
 	{
-		TrackableReader reader = null;
-
 		try
 		{
 			// Step 1: See if we can get an extension for the file...

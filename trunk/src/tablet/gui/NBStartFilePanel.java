@@ -4,7 +4,6 @@
 package tablet.gui;
 
 import java.awt.event.*;
-import java.io.File;
 
 import tablet.io.*;
 

@@ -47,7 +47,6 @@ public class CigarParser
 		readPos = position;
 
 		StringBuilder readString = new StringBuilder();
-		boolean first = true;
 
 		// If we have been presented with an empty cigar string
 		if(cigarString.equals("*"))

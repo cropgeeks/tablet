@@ -3,7 +3,6 @@
 
 package tablet.gui;
 
-import java.text.NumberFormat;
 import javax.swing.*;
 import javax.swing.table.*;
 
