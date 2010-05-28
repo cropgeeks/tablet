@@ -70,7 +70,7 @@ class OutlinerOverlay implements IOverlayRenderer
 		{
 			if (f.getTabletType() == Feature.COL_OUTLINE)
 			{
-				int position = f.getP1();
+				int position = f.getDataPS();
 
 				int xS = position * rCanvas.ntW + offset;
 				int xE = xS + rCanvas.ntW;
@@ -81,7 +81,7 @@ class OutlinerOverlay implements IOverlayRenderer
 
 			else if (f.getTabletType() == Feature.ROW_OUTLINE)
 			{
-				int position = f.getP1();
+				int position = f.getDataPS();
 
 				int yS = position * rCanvas.ntH;
 				int yE = yS + rCanvas.ntH;
