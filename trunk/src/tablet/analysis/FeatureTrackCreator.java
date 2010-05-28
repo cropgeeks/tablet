@@ -22,14 +22,10 @@ public class FeatureTrackCreator extends SimpleJob
 	{
 		long s = System.currentTimeMillis();
 
-		DisplayData.getFeatureTypes().clear();
-		for (String type: Feature.getTypes())
-			DisplayData.getFeatureTypes().add(type);
-
 		vContig.removeTracks();
 
 		// For each type of feature to be given a track...
-		for (String type: DisplayData.getFeatureTypes())
+		for (String type: Feature.getTypes(true))
 		{
 			FeatureTrack track = new FeatureTrack(type);
 			vContig.addTrack(track);

@@ -63,8 +63,8 @@ class FeaturesTableModel extends AbstractTableModel
 		{
 			case 0: return feature.getGFFType();
 			case 1: return feature.getName();
-			case 2: return feature.getP1()+1;  // +1 back into consensus space
-			case 3: return feature.getP2()+1;  // +1 back into consensus space
+			case 2: return feature.getDataPS()+1;  // +1 back into consensus space
+			case 3: return feature.getDataPE()+1;  // +1 back into consensus space
 
 			case 9: return feature;
 		}

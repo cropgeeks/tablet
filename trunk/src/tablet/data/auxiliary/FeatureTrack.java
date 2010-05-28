@@ -14,7 +14,12 @@ public class FeatureTrack implements Comparator<Feature>
 {
 	private String name;
 
+	// A "track" might be a container for sub tracks...
+	private ArrayList<FeatureTrack> tracks = new ArrayList<FeatureTrack>();
+
+	// ... or just a standard track with some features on it
 	private ArrayList<Feature> features = new ArrayList<Feature>();
+
 
 	public FeatureTrack()
 	{
@@ -22,6 +27,9 @@ public class FeatureTrack implements Comparator<Feature>
 
 	public FeatureTrack(String name)
 		{ this.name = name; }
+
+	public int getSubTrackCount()
+		{ return tracks.size(); }
 
 	/**
 	 * Adds a new feature to this track without performing checks to ensure it
@@ -38,13 +46,18 @@ public class FeatureTrack implements Comparator<Feature>
 	 * or not, and if it doesn't, also ensuring it is added at the correct
 	 * location. Use when importing features to a data set.
 	 */
-	public void addFeatureDoSort(Feature feature)
+	public boolean addFeatureDoSort(Feature feature)
 	{
 		int result = Collections.binarySearch(features, feature);
 
 		// If result >= 0 we've found a duplicate and don't add. Otherwise add.
 		if (result < 0)
+		{
 			features.add((-result)-1, feature);
+			return true;
+		}
+
+		return false;
 	}
 
 	public int size()
@@ -75,7 +88,7 @@ public class FeatureTrack implements Comparator<Feature>
 		if (index >= 0)
 		{
 			// Then search left to find the FIRST feature within the window
-			while (index > 0 && features.get(index-1).getP2() >= s)
+			while (index > 0 && features.get(index-1).getVisualPE() >= s)
 				index--;
 
 			// Now add all the features from here until the RHS of the window
@@ -83,7 +96,7 @@ public class FeatureTrack implements Comparator<Feature>
 			{
 				Feature toAdd = features.get(i);
 
-				if (toAdd.getP1() <= e)
+				if (toAdd.getVisualPS() <= e)
 					list.add(toAdd);
 				else
 					break;
@@ -102,11 +115,11 @@ public class FeatureTrack implements Comparator<Feature>
 	public int compare(Feature feature, Feature window)
 	{
 		// RHS of the window...
-		if (feature.getP1() > window.getP2())
+		if (feature.getVisualPS() > window.getDataPE())
 			return 1;
 
 		// LHS of the window...
-		if (feature.getP2() < window.getP1())
+		if (feature.getVisualPE() < window.getDataPS())
 			return -1;
 
 		// Otherwise must be within the window

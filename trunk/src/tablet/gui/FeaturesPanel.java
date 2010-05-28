@@ -110,8 +110,8 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		// Pull the feature out of the model
 		Feature feature = (Feature) model.getValueAt(row, 9);
 
-		int start = feature.getP1();
-		int end   = feature.getP2();
+		int start = feature.getDataPS();
+		int end   = feature.getDataPE();
 
 		// Override position if we're using unpadded values
 		if (Prefs.guiFeaturesArePadded == false)
@@ -164,8 +164,8 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		// Pull the feature out of the model
 		Feature feature = (Feature) model.getValueAt(row, 9);
 
-		int p1 = feature.getP1();
-		int p2 = feature.getP2();
+		int p1 = feature.getDataPS();
+		int p2 = feature.getDataPE();
 
 		if (feature instanceof CigarFeature == false)
 		{

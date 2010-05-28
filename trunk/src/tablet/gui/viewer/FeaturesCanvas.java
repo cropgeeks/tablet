@@ -4,12 +4,15 @@
 package tablet.gui.viewer;
 
 import java.awt.*;
+import java.awt.geom.*;
+import java.awt.image.*;
 import static java.awt.RenderingHints.*;
 import java.util.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.auxiliary.*;
+import tablet.gui.*;
 import tablet.gui.viewer.colors.*;
 
 class FeaturesCanvas extends TrackingCanvas
@@ -29,8 +32,14 @@ class FeaturesCanvas extends TrackingCanvas
 		BasicStroke.JOIN_MITER, 10, new float[] { 5,2 }, 0);
 	private BasicStroke solid = new BasicStroke(1);
 
+	private Paint snpPaint;
+
 	FeaturesCanvas()
 	{
+//		snpPaint = new GradientPaint(0, 0, new Color(255, 255, 255, 50),
+//			0, H, new Color(200, 0, 0, 50));
+
+		snpPaint = new Color(0, 200, 0, 150);
 	}
 
 	void setAssemblyPanel(AssemblyPanel aPanel)
@@ -83,6 +92,8 @@ class FeaturesCanvas extends TrackingCanvas
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
 
+		long s = System.currentTimeMillis();
+
 		if (consensus.length() == 0)
 			return;
 
@@ -105,22 +116,38 @@ class FeaturesCanvas extends TrackingCanvas
 			g.setStroke(dashed);
 			g.drawLine(x1, H/2, x2, H/2);
 			g.setStroke(solid);
-			g.setColor(Color.red);
 
 			for (Feature f: features)
 			{
-				int p1 = f.getP1() - offset;
-				int p2 = f.getP2() - offset;
+				int p1 = f.getVisualPS() - offset;
+				int p2 = f.getVisualPS() - offset;
 
-				g.setPaint(new Color(255, 0, 0, 50));
-				g.fillRect(p1*ntW, H/4, (p2-p1+1)*ntW-1, H/2);
-				g.setPaint(new Color(0, 0, 0, 50));
-				g.drawRect(p1*ntW, H/4, (p2-p1+1)*ntW-1, H/2);
+				if (f.getGFFType().equals("SNP"))
+				{
+					g.translate(p1*ntW, 0);
+					int w = (p2-p1+1)*ntW;
 
-//				int w = p2-p1+1;
-//				int[] xx = new int[] { p1*ntW, (p1+w)*ntW, ((p1+w)*ntW - p1*ntW)/2 };
-//				int[] yy = new int[] { 0, 0, H };
-//				g.fillPolygon(xx, yy, 3);
+					Path2D.Double path = new Path2D.Double();
+					path.moveTo(0, H/4);
+					path.lineTo(w, H/4);
+					path.lineTo(w/2, H-H/4);
+					path.closePath();
+
+					g.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
+					g.setPaint(snpPaint);
+					g.fill(path);
+					g.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_OFF);
+
+					g.translate(-(p1*ntW), 0);
+				}
+
+				else
+				{
+					g.setPaint(new Color(255, 0, 0, 50));
+					g.fillRect(p1*ntW, H/4, (p2-p1+1)*ntW-1, H/2);
+					g.setPaint(new Color(0, 0, 0, 50));
+					g.drawRect(p1*ntW, H/4, (p2-p1+1)*ntW-1, H/2);
+				}
 			}
 
 			g.setColor(Color.black);
@@ -128,5 +155,8 @@ class FeaturesCanvas extends TrackingCanvas
 			g.setRenderingHint(KEY_TEXT_ANTIALIASING, VALUE_TEXT_ANTIALIAS_ON);
 			g.drawString(track.getName(), x1, 6);
 		}
+
+		long e = System.currentTimeMillis();
+		System.out.println("FeaturesCanvas: " + (e-s) + "ms");
 	}
 }

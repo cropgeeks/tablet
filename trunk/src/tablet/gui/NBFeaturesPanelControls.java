@@ -74,7 +74,7 @@ class NBFeaturesPanelControls extends JPanel
 
 		Prefs.guiFeaturesArePadded = checkPadded.isSelected();
 
-		panel.repaint();
+		Tablet.winMain.repaint();
 	}
 
 	public void toggleComponentEnabled(boolean enabled)
