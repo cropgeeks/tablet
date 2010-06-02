@@ -104,12 +104,12 @@ public class StandardColorScheme extends ColorScheme
 		statesRD.add(new StandardColorState("T", new Color(120, 120, 255), w, h, true, true));
 	}
 
-	public BufferedImage getImage(int data)
+	public Image getImage(int data)
 	{
 		return statesRD.get(data).getImage();
 	}
 
-	public BufferedImage getConsensusImage(int data)
+	public Image getConsensusImage(int data)
 	{
 		return statesCS.get(data).getImage();
 	}
