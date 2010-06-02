@@ -20,9 +20,9 @@ public abstract class ColorScheme
 	{
 	}
 
-	public abstract BufferedImage getImage(int data);
+	public abstract Image getImage(int data);
 
-	public abstract BufferedImage getConsensusImage(int data);
+	public abstract Image getConsensusImage(int data);
 
 	public abstract Color getColor(int data);
 

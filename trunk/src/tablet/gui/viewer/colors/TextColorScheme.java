@@ -82,12 +82,12 @@ public class TextColorScheme extends ColorScheme
 			statesRD.add(statesRD.get(i));
 	}
 
-	public BufferedImage getImage(int data)
+	public Image getImage(int data)
 	{
 		return statesRD.get(data).getImage();
 	}
 
-	public BufferedImage getConsensusImage(int data)
+	public Image getConsensusImage(int data)
 	{
 		return statesCS.get(data).getImage();
 	}

@@ -52,12 +52,12 @@ public class ProteinTextColorScheme extends ColorScheme
 			states.add(empty);
 	}
 
-	public BufferedImage getImage(int data)
+	public Image getImage(int data)
 	{
 		return states.get(data).getImage();
 	}
 
-	public BufferedImage getConsensusImage(int data)
+	public Image getConsensusImage(int data)
 	{
 		return states.get(data).getImage();
 	}
