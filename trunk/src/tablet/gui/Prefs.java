@@ -89,6 +89,8 @@ public class Prefs extends XMLPreferences
 	// Search using regex
 	public static boolean guiRegexSearching = true;
 
+	public static int guiSearchLimit = 500;
+
 	// Colour scheme in use
 	public static int visColorScheme = ColorScheme.STANDARD;
 
