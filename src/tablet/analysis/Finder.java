@@ -60,7 +60,7 @@ public class Finder extends SimpleJob
 				if((Prefs.guiFindPanelSelectedIndex == ALL_CONTIGS || (Prefs.guiFindPanelSelectedIndex == CURRENT_CONTIG && contig == aPanel.getContig())) && okToRun)
 					searchReadsInContig(contig, str);
 
-				if (results.size() >= 500)
+				if (results.size() >= Prefs.guiSearchLimit)
 					break;
 			}
 		}
@@ -107,7 +107,7 @@ public class Finder extends SimpleJob
 
 			progress++;
 			//if we've had 500 matches stop searching
-			if (results.size() >= 500)
+			if (results.size() >= Prefs.guiSearchLimit)
 				break;
 
 			readNo++;
@@ -157,7 +157,7 @@ public class Finder extends SimpleJob
 		{
 			results.add(new SubsequenceSearchResult(readName, startPos, length, contig, startPos+index, (startPos+index+searchString.length())));
 			found++;
-			
+
 			index = readString.toLowerCase().indexOf(searchString.toLowerCase(), ++index);
 		}
 	}
@@ -186,7 +186,7 @@ public class Finder extends SimpleJob
 		search(searchTerm);
 
 		//if we've had 500 matches stop searching
-		if (results.size() >= 500)
+		if (results.size() >= Prefs.guiSearchLimit)
 			showWarning();
 	}
 
@@ -199,7 +199,8 @@ public class Finder extends SimpleJob
 	{
 		if (Prefs.guiWarnSearchLimitExceeded)
 		{
-			String msg = RB.getString("gui.findPanel.guiWarnSearchLimitExceeded");
+			String msg = RB.format("gui.findPanel.guiWarnSearchLimitExceeded",
+				Prefs.guiSearchLimit);
 			JCheckBox checkbox = new JCheckBox();
 			RB.setText(checkbox, "gui.findPanel.checkWarning");
 			String[] options = new String[]{RB.getString("gui.text.ok")};
@@ -270,7 +271,7 @@ public class Finder extends SimpleJob
 	}
 
 
-	
+
 	public class SubsequenceSearchResult extends SearchResult
 	{
 		private int sIndex;

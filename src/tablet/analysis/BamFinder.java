@@ -45,7 +45,7 @@ public class BamFinder extends Finder
 
 		if(Prefs.guiFindPanelSelectedIndex == CURRENT_CONTIG)
 			searchSingleContig(reader, searchTerm);
-		
+
 		else if(Prefs.guiFindPanelSelectedIndex == ALL_CONTIGS)
 			searchAllContigs(reader, searchTerm);
 	}
@@ -67,11 +67,11 @@ public class BamFinder extends Finder
 			totalSize += contig.getDataWidth();
 			contigs.put(contig.getName(), contig);
 		}
-		
+
 		CloseableIterator<SAMRecord> itor = reader.iterator();
 		// For each read check for matches
 		CigarParser parser = new CigarParser();
-		while (itor.hasNext() && okToRun && results.size() < 500)
+		while (itor.hasNext() && okToRun && results.size() < Prefs.guiSearchLimit)
 		{
 			SAMRecord record = itor.next();
 			checkRecordForMatches(record, searchTerm, parser, contigs.get(record.getReferenceName()));
@@ -93,7 +93,7 @@ public class BamFinder extends Finder
 		CloseableIterator<SAMRecord> itor = reader.queryOverlapping(aPanel.getContig().getName(), 0, 0);
 		// For each read check for matches
 		CigarParser parser = new CigarParser();
-		while (itor.hasNext() && okToRun && results.size() < 500)
+		while (itor.hasNext() && okToRun && results.size() < Prefs.guiSearchLimit)
 		{
 			SAMRecord record = itor.next();
 			checkRecordForMatches(record, searchTerm, parser, aPanel.getContig());
@@ -133,7 +133,7 @@ public class BamFinder extends Finder
 
 	/**
 	 * Update the progress bar.
-	 * 
+	 *
 	 * @param record
 	 */
 	private void updateProgress(SAMRecord record)
