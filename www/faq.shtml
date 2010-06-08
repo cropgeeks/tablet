@@ -54,6 +54,36 @@ become available, but please be aware that the numbers you see will change as
 you move around the contig using the BAM controls. See
 <a href="help/bam-data-visualization.shtml">BAM Data Visualization</a> for more information.</p>
 
+
+<p>&nbsp;</p>
+
+<p><b>What are the "CIGAR-I" features that Tablet adds to SAM and BAM files?</b></p>
+<p>Tablet automatically adds these features types for column positions where an
+insertion into the reference has occurred (and has been marked up in the CIGAR formatting of the
+original SAM or BAM file). If you hover the mouse over the feature in the Features
+Table, then a tooltip will appear that also informs you how many reads at that
+position were tagged in this way.</p>
+
+
+<p>&nbsp;</p>
+
+<p><b>How do I run more than one instance of Tablet on OS X?</b></p>
+<p>You can start the first instance using the normal shortcut. Any additional
+copies can be started by using the Terminal and typing<br>
+<pre>  open -n /Applications/Tablet.app</pre></p>
+
+
+<p>&nbsp;</p>
+
+<p><b>How do I run the maqtoace program when using OS X?</b></p>
+<p>A launcher for maqtoace isn't distributed with Tablet for OS X due to the way
+the Apple package format works. However, you can manually start the program by
+opening a Terminal window, and typing:<br>
+<pre>  cd /Applications/Tablet.app/Contents/Resources/app/lib
+  java -Xmx1024m -cp tablet.jar tablet.io.utils.MaqToAce</pre></p>
+
+
+
 <!--#include virtual="footer.html" -->
 
 </body>
