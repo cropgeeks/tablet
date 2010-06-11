@@ -7,6 +7,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import tablet.gui.*;
+import tablet.gui.scanner.*;
 
 import org.jvnet.flamingo.common.model.*;
 import org.jvnet.flamingo.common.*;
@@ -21,6 +22,7 @@ class BandAssemblies extends JRibbonBand implements ActionListener
 	private WinMain winMain;
 	private JCommandButton bOpen16, bOpen32;
 	private JCommandButton bImportFeatures;
+	private JCommandButton bScanner;
 
 	BandAssemblies(WinMain winMain)
 	{
@@ -68,9 +70,21 @@ class BandAssemblies extends JRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.BandAssemblies.bImportFeatures.tooltip"),
 			RB.getString("gui.ribbon.BandAssemblies.bImportFeatures.richtip")));
 
+		bScanner = new JCommandButton(
+			RB.getString("gui.ribbon.BandAssemblies.bScanner"),
+			RibbonController.getIcon("SCANNER16", 16));
+		Actions.assembliesScanner = new ActionRepeatableButtonModel(bScanner);
+		Actions.assembliesScanner.addActionListener(this);
+		bScanner.setActionModel(Actions.assembliesScanner);
+		bScanner.setActionKeyTip("AB");
+		bScanner.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.BandAssemblies.bScanner.tooltip"),
+			RB.getString("gui.ribbon.BandAssemblies.bScanner.richtip")));
+
 
 		addCommandButton(bOpen32, RibbonElementPriority.TOP);
-		addCommandButton(bImportFeatures, RibbonElementPriority.TOP);
+		addCommandButton(bImportFeatures, RibbonElementPriority.MEDIUM);
+		addCommandButton(bScanner, RibbonElementPriority.MEDIUM);
 
 		winMain.getRibbon().addTaskbarComponent(bOpen16);
 	}
@@ -85,5 +99,8 @@ class BandAssemblies extends JRibbonBand implements ActionListener
 
 		else if (e.getSource() == Actions.assembliesImportFeatures)
 			winMain.getCommands().importFeatures(null, true);
+
+		else if (e.getSource() == Actions.assembliesScanner)
+			new ScannerFrame();
 	}
 }
