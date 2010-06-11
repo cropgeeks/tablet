@@ -19,6 +19,7 @@ public class Actions
 	public static ActionRepeatableButtonModel assembliesOpen32;
 	public static ActionRepeatableButtonModel applicationMenuSave16;
 	public static ActionRepeatableButtonModel assembliesImportFeatures;
+	public static ActionRepeatableButtonModel assembliesScanner;
 
 	public static ActionToggleButtonModel optionsHidePads16;
 	public static ActionToggleButtonModel optionsHideConsensus;

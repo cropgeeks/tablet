@@ -69,6 +69,8 @@ public class Prefs extends XMLPreferences
 	public static boolean refNotUsed = true;
 	public static boolean guiWarnNoRef = true;
 
+	public static String guiScannerRecent = "";
+
 	public static boolean guiWarnSearchLimitExceeded = true;
 
 	// What filtering option was last in use for the contigs panel
