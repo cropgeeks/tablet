@@ -30,7 +30,7 @@ public class GFF3Reader extends TrackableReader
 		throws Exception
 	{
 		// Read and check for the header
-		in = new BufferedReader(new InputStreamReader(getInputStream(0, true)));
+		in = new BufferedReader(new InputStreamReader(getInputStream(0)));
 		str = readLine();
 
 		boolean isGFF3File = false;
@@ -55,7 +55,7 @@ public class GFF3Reader extends TrackableReader
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(0, true)));
+		in = new BufferedReader(new InputStreamReader(getInputStream(0)));
 
 		while ((str = readLine()) != null && okToRun)
 		{

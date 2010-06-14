@@ -18,11 +18,6 @@ class SoapFileReader extends TrackableReader
 
 	private ReferenceFileReader refReader;
 
-	// The index of the SOAP file in the files[] array
-	private int soapIndex = -1;
-	// The index of the reference file in the files[] array
-	private int refIndex = -1;
-
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
 	private int readID = 0;
@@ -36,63 +31,29 @@ class SoapFileReader extends TrackableReader
 		this.readCache = readCache;
 	}
 
-	public boolean canRead()
+	private void readReferenceFile()
 		throws Exception
 	{
-		refReader = new ReferenceFileReader(assembly, contigHash);
-
-		// We need to check each file to see if it is readable
-		for (int i = 0; i < files.length; i++)
+		if (files.length > 1 && files[REFINDEX].isReferenceFile())
 		{
-			if (isSoapFile(i))
-				soapIndex = i;
+			refReader = new ReferenceFileReader(assembly, contigHash);
 
-			else if (refReader.canRead(files[i]) != AssemblyFileHandler.UNKNOWN)
-				refIndex = i;
+			in = new BufferedReader(new InputStreamReader(getInputStream(REFINDEX), "ASCII"));
+
+			refReader.readReferenceFile(this, files[1]);
+
+			in.close();
 		}
-
-		return (soapIndex >= 0);
-	}
-
-	// Checks to see if this is a SOAP file by assuming 10 columns of \t data
-	private boolean isSoapFile(int fileIndex)
-		throws Exception
-	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(fileIndex, true)));
-		str = readLine();
-
-		boolean isSoapFile = (str != null && str.split("\t").length >= 9);
-		in.close();
-		is.close();
-
-		return isSoapFile;
 	}
 
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		// Read reference information (if it exists)
-		if (refIndex >= 0)
-			readReferenceFile();
+		// Try and read the reference file (if there is one)
+		readReferenceFile();
 
-		// Then read the main assembly/read data file
-		readSoapFile();
-	}
 
-	private void readReferenceFile()
-		throws Exception
-	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex, true), "ASCII"));
-
-		refReader.readReferenceFile(this, files[refIndex]);
-
-		in.close();
-	}
-
-	private void readSoapFile()
-		throws Exception
-	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(soapIndex, true), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(ASBINDEX), "ASCII"));
 
 		readID = 0;
 
@@ -111,7 +72,7 @@ class SoapFileReader extends TrackableReader
 			Contig contigToAddTo = contigHash.get(chr);
 
 			// If it wasn't found (and we don't have ref data), make it
-			if (contigToAddTo == null && refIndex == -1)
+			if (contigToAddTo == null && refReader == null)
 			{
 				contigToAddTo = new Contig(chr);
 				contigHash.put(chr, contigToAddTo);
@@ -140,7 +101,7 @@ class SoapFileReader extends TrackableReader
 
 		in.close();
 
-		assembly.setName(files[soapIndex].getName());
+		assembly.setName(files[ASBINDEX].getName());
 	}
 
 	public String getMessage()

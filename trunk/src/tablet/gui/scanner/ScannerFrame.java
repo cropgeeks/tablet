@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
+import javax.swing.table.*;
 
 import tablet.gui.*;
 import tablet.io.*;
@@ -20,12 +21,21 @@ public class ScannerFrame extends JFrame implements ActionListener
 	private File targetFile;
 	private JTable table;
 	private ResultsTableModel model;
+	private TableRowSorter<ResultsTableModel> sorter;
 
 	private ScanAnalysis scanner;
 
 	public ScannerFrame()
 	{
 		nbPanel = new NBScannerPanel(this);
+
+		model = new ResultsTableModel();
+		sorter = new TableRowSorter<ResultsTableModel>(model);
+		nbPanel.table.setModel(model);
+		nbPanel.table.setRowSorter(sorter);
+
+		sorter.toggleSortOrder(1);
+		sorter.toggleSortOrder(1);
 
 		add(nbPanel);
 		pack();
@@ -49,9 +59,8 @@ public class ScannerFrame extends JFrame implements ActionListener
 
 	void scan()
 	{
-		model = new ResultsTableModel();
-		nbPanel.table.setModel(model);
-		nbPanel.bScan.setText("Cancel");
+		while (model.getRowCount() > 0)
+			model.removeRow(0);
 
 		targetFile = new File(nbPanel.fileCombo.getText());
 		Prefs.guiScannerRecent = nbPanel.fileCombo.getHistory();
@@ -59,37 +68,46 @@ public class ScannerFrame extends JFrame implements ActionListener
 		Runnable r = new Runnable() {
 			public void run()
 			{
-				try
+				long s = System.currentTimeMillis();
+
+				nbPanel.bScan.setText("Cancel");
+				nbPanel.bScan.setIcon(Icons.getIcon("TIMERON"));
+
+				scanner = new ScanAnalysis(targetFile, model);
+
+				Timer timer = new Timer(100, new ActionListener()
 				{
-					scanner = new ScanAnalysis(targetFile, model);
-
-					Timer timer = new Timer(100, new ActionListener()
+					public void actionPerformed(ActionEvent e)
 					{
-						public void actionPerformed(ActionEvent e)
-						{
-							nbPanel.scanLabel.setText(
-								RB.format("gui.scanner.NBScannerPanel.scanLabel2",
-								scanner.getScanCount(),
-								scanner.getAssemblyCount(),
-								scanner.getMessage()));
-						}
-					});
+						nbPanel.scanLabel.setText(
+							RB.format("gui.scanner.NBScannerPanel.scanLabel2",
+							scanner.getScanCount(),
+							scanner.getAssemblyCount(),
+							scanner.getMessage()));
+					}
+				});
 
-					timer.start();
-					scanner.runJob(0);
-					timer.stop();
+				timer.start();
 
-					nbPanel.scanLabel.setText(
-						RB.format("gui.scanner.NBScannerPanel.scanLabel1",
-						scanner.getScanCount(), scanner.getAssemblyCount()));
-
-					scanner = null;
-					nbPanel.bScan.setText("Run scan");
-				}
+				try { scanner.runJob(0); }
 				catch (Exception e)
 				{
 					e.printStackTrace();
 				}
+
+				timer.stop();
+
+				nbPanel.scanLabel.setText(
+					RB.format("gui.scanner.NBScannerPanel.scanLabel1",
+					scanner.getScanCount(), scanner.getAssemblyCount()));
+
+				scanner = null;
+
+				nbPanel.bScan.setText("Run scan");
+				nbPanel.bScan.setIcon(Icons.getIcon("TIMEROFF"));
+
+				long e = System.currentTimeMillis();
+				System.out.println("Scan time: " + ((e-s)/1000f) + "s");
 			}
 		};
 

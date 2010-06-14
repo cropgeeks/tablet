@@ -20,11 +20,6 @@ class SamFileReader extends TrackableReader
 	private ReferenceFileReader refReader;
 	private CigarParser cigarParser;
 
-	// The index of the SAM file in the files[] array
-	private int samIndex = -1;
-	// The index of the reference file in the files[] array
-	private int refIndex = -1;
-
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
 	private int readID = 0;
@@ -38,82 +33,29 @@ class SamFileReader extends TrackableReader
 		this.readCache = readCache;
 	}
 
-	public boolean canRead()
+	private void readReferenceFile()
 		throws Exception
 	{
-		refReader = new ReferenceFileReader(assembly, contigHash);
-
-		// We need to check each file to see if it is readable
-		for (int i = 0; i < files.length; i++)
+		if (files.length > 1 && files[REFINDEX].isReferenceFile())
 		{
-			if (isSamFile(i))
-				samIndex = i;
+			refReader = new ReferenceFileReader(assembly, contigHash);
 
-			else if (refReader.canRead(files[i]) != AssemblyFileHandler.UNKNOWN)
-				refIndex = i;
+			in = new BufferedReader(new InputStreamReader(getInputStream(REFINDEX), "ASCII"));
+
+			refReader.readReferenceFile(this, files[1]);
+
+			in.close();
 		}
-
-		return (samIndex >= 0);
-	}
-
-	// Checks to see if this is a SAM file by assuming 11 columns of \t data and
-	// a second column containing an integer (crude I know!)
-	private boolean isSamFile(int fileIndex)
-		throws Exception
-	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(fileIndex, true)));
-		str = readLine();
-
-		// Does it start with an @HD header line
-		boolean isSamFile = false;
-
-		// Check the header (but @ might match on a FASTQ file too)
-		if (str != null && (str.startsWith("@HD") || str.startsWith("@SQ") || str.startsWith("@RG") || str.startsWith("@PG") || str.startsWith("@CO")))
-			// Keep reading past the header
-			while ((str = readLine()) != null && str.length() > 0 && str.startsWith("@"));
-
-		String[] tokens = str.split("\t");
-		if (tokens.length >= 11)
-		{
-			// The 2nd column should be a number
-			try	{
-				Integer.parseInt(tokens[1]);
-				isSamFile = true;
-			}
-			catch (Exception e) {}
-		}
-
-		in.close();
-		is.close();
-
-		return isSamFile;
 	}
 
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		// Read reference information (if it exists)
-		if (refIndex >= 0)
-			readReferenceFile();
+		// Try and read the reference file (if there is one)
+		readReferenceFile();
 
-		// Then read the main assembly/read data file
-		readSamFile();
-	}
 
-	private void readReferenceFile()
-		throws Exception
-	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex, true), "ASCII"));
-
-		refReader.readReferenceFile(this, files[refIndex]);
-
-		in.close();
-	}
-
-	private void readSamFile()
-		throws Exception
-	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(samIndex, true), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(ASBINDEX), "ASCII"));
 
 		cigarParser = new CigarParser();
 
@@ -151,7 +93,7 @@ class SamFileReader extends TrackableReader
 			Contig contigToAddTo = contigHash.get(chr);
 
 			// If it wasn't found (and we don't have ref data), make it
-			if (contigToAddTo == null && refIndex == -1)
+			if (contigToAddTo == null && refReader == null)
 			{
 				contigToAddTo = new Contig(chr);
 				contigHash.put(chr, contigToAddTo);
@@ -199,7 +141,7 @@ class SamFileReader extends TrackableReader
 
 		processCigarFeatures(cigarParser);
 
-		assembly.setName(files[samIndex].getName());
+		assembly.setName(files[ASBINDEX].getName());
 		assembly.setHasCigar();
 	}
 

@@ -23,12 +23,14 @@ class NBScannerPanel extends JPanel implements ActionListener
 		scanLabel.setText(RB.format("gui.scanner.NBScannerPanel.scanLabel1", 0, 0));
 
 		bBrowse.addActionListener(this);
+
 		bScan.addActionListener(parent);
+		bScan.setIcon(Icons.getIcon("TIMEROFF"));
 	}
 
 	JTable createTable()
 	{
-		return new JTable()
+		JTable table = new JTable()
 		{
 			public TableCellRenderer getCellRenderer(int row, int column)
 			{
@@ -41,6 +43,10 @@ class NBScannerPanel extends JPanel implements ActionListener
 				return super.getCellRenderer(row, column);
 			}
 		};
+
+		table.setDefaultRenderer(Integer.class, ResultsTableModel.intRenderer);
+
+		return table;
 	}
 
 	public void actionPerformed(ActionEvent e)

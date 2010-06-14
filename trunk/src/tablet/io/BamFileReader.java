@@ -74,7 +74,7 @@ public class BamFileReader extends TrackableReader
 						+ ").\nYou may need to use samtools to generate one.");
 			}
 
-			else if (refReader.canRead(files[i]) != AssemblyFileHandler.UNKNOWN)
+			else if (refReader.canRead(files[i]))
 				refFile = files[i];
 		}
 
@@ -126,7 +126,7 @@ public class BamFileReader extends TrackableReader
 	private void readReferenceFile()
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(0, true), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(0), "ASCII"));
 
 		refReader.readReferenceFile(this, refFile);
 
@@ -144,7 +144,7 @@ public class BamFileReader extends TrackableReader
 		File file = new File(cacheDir, "Tablet-"+cacheid+baiFile.getName());
 
 		BufferedInputStream inputStream = new BufferedInputStream(
-			getInputStream(1, true));
+			getInputStream(1));
 		BufferedOutputStream outputStream = new BufferedOutputStream(
 			new FileOutputStream(file.getAbsolutePath()));
 
