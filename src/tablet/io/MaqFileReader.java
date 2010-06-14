@@ -18,11 +18,6 @@ class MaqFileReader extends TrackableReader
 
 	private ReferenceFileReader refReader;
 
-	// The index of the Maq file in the files[] array
-	private int maqIndex = -1;
-	// The index of the reference file in the files[] array
-	private int refIndex = -1;
-
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
 	private int readID = 0;
@@ -36,70 +31,29 @@ class MaqFileReader extends TrackableReader
 		this.readCache = readCache;
 	}
 
-	public boolean canRead()
+	private void readReferenceFile()
 		throws Exception
 	{
-		refReader = new ReferenceFileReader(assembly, contigHash);
-
-		// We need to check each file to see if it is readable
-		for (int i = 0; i < files.length; i++)
+		if (files.length > 1 && files[REFINDEX].isReferenceFile())
 		{
-			if (isMaqFile(i))
-				maqIndex = i;
+			refReader = new ReferenceFileReader(assembly, contigHash);
 
-			else if (refReader.canRead(files[i]) != AssemblyFileHandler.UNKNOWN)
-				refIndex = i;
+			in = new BufferedReader(new InputStreamReader(getInputStream(REFINDEX), "ASCII"));
+
+			refReader.readReferenceFile(this, files[1]);
+
+			in.close();
 		}
-
-		return (maqIndex >= 0);
-	}
-
-	// Checks to see if this is a Maq file by assuming 16 columns of \t data
-	private boolean isMaqFile(int fileIndex)
-		throws Exception
-	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(fileIndex, true)));
-		str = readLine();
-
-		boolean isMaqFile = (str != null && str.split("\t").length == 16);
-		if (isMaqFile)
-		{
-			String strand = str.split("\t")[3];
-			if (!strand.equals("-") && !strand.equals("+"))
-				isMaqFile = false;
-		}
-
-		in.close();
-		is.close();
-
-		return isMaqFile;
 	}
 
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		// Read reference information (if it exists)
-		if (refIndex >= 0)
-			readReferenceFile();
+		// Try and read the reference file (if there is one)
+		readReferenceFile();
 
-		// Then read the main assembly/read data file
-		readMaqFile();
-	}
 
-	private void readReferenceFile()
-		throws Exception
-	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(refIndex, true), "ASCII"));
-
-		refReader.readReferenceFile(this, files[refIndex]);
-
-		in.close();
-	}
-
-	private void readMaqFile()
-		throws Exception
-	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(maqIndex, true), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(ASBINDEX), "ASCII"));
 
 		readID = 0;
 
@@ -118,7 +72,7 @@ class MaqFileReader extends TrackableReader
 			Contig contigToAddTo = contigHash.get(chr);
 
 			// If it wasn't found (and we don't have ref data), make it
-			if (contigToAddTo == null && refIndex == -1)
+			if (contigToAddTo == null && refReader == null)
 			{
 				contigToAddTo = new Contig(chr);
 				contigHash.put(chr, contigToAddTo);
@@ -147,7 +101,7 @@ class MaqFileReader extends TrackableReader
 
 		in.close();
 
-		assembly.setName(files[maqIndex].getName());
+		assembly.setName(files[0].getName());
 	}
 
 	public String getMessage()

@@ -7,10 +7,12 @@ import java.io.*;
 
 import tablet.analysis.*;
 import tablet.gui.scanner.*;
-import static tablet.io.AssemblyFileHandler.*;
+import static tablet.io.AssemblyFile.*;
 
 public class ScanAnalysis extends SimpleJob
 {
+	private FileScanner scanner = null;
+
 	// File (or folder) that is to be scanned
 	private File target;
 	// File that is currently *being* scanned
@@ -35,7 +37,12 @@ public class ScanAnalysis extends SimpleJob
 		{ return assemblyCount; }
 
 	public String getMessage()
-		{ return scanFile.getPath(); }
+	{
+		if (scanFile != null)
+			return scanFile.getPath();
+
+		return "";
+	}
 
 	public void runJob(int jobIndex)
 		throws Exception
@@ -49,7 +56,7 @@ public class ScanAnalysis extends SimpleJob
 		if (okToRun == false)
 			return;
 
-		if (file.isDirectory())
+		if (file.isDirectory() && file.listFiles() != null)
 		{
 			for (File f: file.listFiles())
 			{
@@ -75,14 +82,24 @@ public class ScanAnalysis extends SimpleJob
 			if (type == UNKNOWN)
 				return;
 
-			FileScanner scanner = new FileScanner(aFile, type);
-			scanner.scan();
+			scanner = new FileScanner(aFile, type);
+			scanner.runJob(0);
 			assemblyCount++;
 
 			results.addNewResult(
 				scanner.file,
 				scanner.getType(),
+				scanner.contigCount,
+				scanner.readCount,
 				scanner.isPaired);
 		}
+	}
+
+	public void cancelJob()
+	{
+		super.cancelJob();
+
+		if (scanner != null)
+			scanner.cancelJob();
 	}
 }

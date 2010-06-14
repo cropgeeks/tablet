@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.*;
 
 import tablet.data.*;
+import static tablet.io.AssemblyFile.*;
 
 /**
  * Utility class that helps the main readers when they need to read reference
@@ -23,42 +24,22 @@ class ReferenceFileReader
 		this.contigHash = contigHash;
 	}
 
-	int canRead(AssemblyFile file)
+	boolean canRead(AssemblyFile file)
 		throws Exception
 	{
-		if (isFastaFile(file))
-			return AssemblyFileHandler.FASTA;
-
-		if (isFastqFile(file))
-			return AssemblyFileHandler.FASTQ;
-
-		return AssemblyFileHandler.UNKNOWN;
+		return (file.getType() == FASTA || file.getType() == FASTQ);
 	}
 
 	void readReferenceFile(TrackableReader reader, AssemblyFile file)
 		throws Exception
 	{
-		if (isFastaFile(file))
+		if (file.getType() == AssemblyFile.FASTA)
 			readFastaFile(reader);
 
-		else if (isFastqFile(file))
+		else if (file.getType() == AssemblyFile.FASTQ)
 			readFastqFile(reader);
 	}
 
-	// Checks to see if this is a FASTA file by looking for a leading >
-	private boolean isFastaFile(AssemblyFile file)
-		throws Exception
-	{
-		BufferedReader in = new BufferedReader(
-			new InputStreamReader(file.getReferenceInputStream()));
-
-		String str = in.readLine();
-
-		boolean isFastaFile = (str != null && str.startsWith(">"));
-		in.close();
-
-		return isFastaFile;
-	}
 
 	private void readFastaFile(TrackableReader reader)
 		throws Exception
@@ -101,21 +82,6 @@ class ReferenceFileReader
 		contig.setConsensusSequence(consensus);
 
 		assembly.addContig(contig);
-	}
-
-	// Checks to see if this is a FASTQ file by looking for a leading @
-	private boolean isFastqFile(AssemblyFile file)
-		throws Exception
-	{
-		BufferedReader in = new BufferedReader(
-			new InputStreamReader(file.getReferenceInputStream()));
-
-		String str = in.readLine();
-
-		boolean isFastqFile = (str != null && str.startsWith("@"));
-		in.close();
-
-		return isFastqFile;
 	}
 
 	private void readFastqFile(TrackableReader reader)

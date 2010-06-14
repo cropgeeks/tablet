@@ -10,6 +10,7 @@ import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
 import tablet.gui.*;
+import static tablet.io.AssemblyFile.*;
 
 import scri.commons.gui.*;
 
@@ -20,16 +21,6 @@ import scri.commons.gui.*;
  */
 public class AssemblyFileHandler extends SimpleJob
 {
-	public static final int UNKNOWN = 0;
-	public static final int ACE = 1;
-	public static final int AFG = 2;
-	public static final int SAM = 3;
-	public static final int BAM = 4;
-	public static final int MAQ = 5;
-	public static final int SOAP = 6;
-	public static final int FASTA = 20;
-	public static final int FASTQ = 21;
-
 	private AssemblyFile[] files = null;
 	private File cacheDir = null;
 	private TrackableReader reader = null;
@@ -54,8 +45,6 @@ public class AssemblyFileHandler extends SimpleJob
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		boolean fileParsed = false;
-
 		// Ensure the cache directory exists (and is valid)
 		cacheDir.mkdirs();
 
@@ -73,48 +62,48 @@ public class AssemblyFileHandler extends SimpleJob
 
 		readCache.openForWriting();
 
+		// Determine assembly type and sort into order (assembly before ref)
+		for (AssemblyFile aFile: files)
+			aFile.canDetermineType();
+
+		Arrays.sort(files);
+
 
 		// For each file format that we understand...
+		switch (files[0].getType())
+		{
+			case ACE:
+				reader = new AceFileReader(readCache);
+				break;
 
-		// BAM
-		if (okToRun && fileParsed == false)
-		{
-			reader = new BamFileReader(readCache, cacheDir, cacheid);
-			fileParsed = readFile();
-		}
-		// ACE
-		if (okToRun && fileParsed == false)
-		{
-			reader = new AceFileReader(readCache);
-			fileParsed = readFile();
-		}
-		// AFG
-		if (okToRun && fileParsed == false)
-		{
-			reader = new AfgFileReader(readCache, cacheDir);
-			fileParsed = readFile();
-		}
-		// Maq
-		if (okToRun && fileParsed == false)
-		{
-			reader = new MaqFileReader(readCache);
-			fileParsed = readFile();
-		}
-		// SAM
-		if (okToRun && fileParsed == false)
-		{
-			reader = new SamFileReader(readCache);
-			fileParsed = readFile();
-		}
-		// SOAP
-		if (okToRun && fileParsed == false)
-		{
-			reader = new SoapFileReader(readCache);
-			fileParsed = readFile();
+			case AFG:
+				reader = new AfgFileReader(readCache, cacheDir);
+				break;
+
+			case SAM:
+				reader = new SamFileReader(readCache);
+				break;
+
+			case BAM:
+				reader = new BamFileReader(readCache, cacheDir, cacheid);
+				break;
+
+			case MAQ:
+				reader = new MaqFileReader(readCache);
+				break;
+
+			case SOAP:
+				reader = new SoapFileReader(readCache);
+				break;
 		}
 
-		if (okToRun && fileParsed)
+		if (reader != null)
 		{
+			readFile();
+
+			if (okToRun == false)
+				return;
+
 			assembly = reader.getAssembly();
 
 			readCache.openForReading();
@@ -132,30 +121,22 @@ public class AssemblyFileHandler extends SimpleJob
 			System.out.println((System.currentTimeMillis()-s) + "ms");
 		}
 
-		// If the file couldn't be understand then throw an exception
+		// If the file couldn't be understood then throw an exception
 		else if (okToRun)
 			throw new ReadException(null, 0, ReadException.UNKNOWN_FORMAT);
 	}
 
-	// Gets a reader to check if it can read a given file, and then lets it
-	// do the full read if it says it can
-	private boolean readFile()
+	private void readFile()
 		throws Exception
 	{
 		try
 		{
 			reader.setInputs(files, new Assembly(cacheid));
 
-			if (reader.canRead())
-			{
-				long s = System.currentTimeMillis();
-				reader.runJob(0);
-				long e = System.currentTimeMillis();
-				System.out.println("\nRead time: " + ((e-s)/1000f) + "s");
-
-				return true;
-			}
-			return false;
+			long s = System.currentTimeMillis();
+			reader.runJob(0);
+			long e = System.currentTimeMillis();
+			System.out.println("\nRead time: " + ((e-s)/1000f) + "s");
 		}
 		catch(ReadException e)
 		{
@@ -223,78 +204,10 @@ public class AssemblyFileHandler extends SimpleJob
 
 	public static int getType(String file, Boolean okToRun)
 	{
-		try
-		{
-			// Step 1: See if we can get an extension for the file...
-			String ext = null;
-			try { ext = file.substring(file.lastIndexOf(".")+1).toLowerCase(); }
-			catch (Exception e) {}
+		AssemblyFile aFile = new AssemblyFile(file);
 
-			// Step 2: Try the readers based on the extension...
-			if (ext != null)
-			{
-				if (ext.equals("ace") && read(new AceFileReader(), file))
-					return ACE;
-				else if (ext.equals("afg") && read(new AfgFileReader(), file))
-					return AFG;
-				else if (ext.equals("txt") && read(new MaqFileReader(), file))
-					return MAQ;
-				else if (ext.equals("bam") && read(new BamFileReader(), file))
-					return BAM;
-				else if (ext.equals("sam") && read(new SamFileReader(), file))
-					return SAM;
-				else if (ext.equals("soap") && read(new SoapFileReader(), file))
-					return SOAP;
+		aFile.canDetermineType();
 
-				else if (ext.equals("fasta") || ext.equals("fastq"))
-				{
-					int type = new ReferenceFileReader(null, null).canRead(
-						new AssemblyFile(file));
-					if (type != UNKNOWN)
-						return type;
-				}
-			}
-
-			// Step 3: Just try all the readers...
-
-			if (read(new AceFileReader(), file))
-				return ACE;
-			if (!okToRun) return UNKNOWN;
-
-			if (read(new AfgFileReader(), file))
-				return AFG;
-			if (!okToRun) return UNKNOWN;
-
-			if (read(new MaqFileReader(), file))
-				return MAQ;
-			if (!okToRun) return UNKNOWN;
-
-			if (read(new BamFileReader(), file))
-				return BAM;
-			if (!okToRun) return UNKNOWN;
-
-			if (read(new SamFileReader(), file))
-				return SAM;
-			if (!okToRun) return UNKNOWN;
-
-			if (read(new SoapFileReader(), file))
-				return SOAP;
-			if (!okToRun) return UNKNOWN;
-
-			return new ReferenceFileReader(null, null).canRead(
-				new AssemblyFile(file));
-		}
-		catch (Exception e) {}
-
-		return UNKNOWN;
-	}
-
-	private static boolean read(TrackableReader reader, String filename)
-		throws Exception
-	{
-		AssemblyFile[] files = { new AssemblyFile(filename) };
-		reader.setInputs(files, null);
-
-		return reader.canRead();
+		return aFile.getType();
 	}
 }

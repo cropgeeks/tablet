@@ -12,7 +12,7 @@ import javax.swing.text.*;
 
 import tablet.gui.*;
 import tablet.io.*;
-import static tablet.io.AssemblyFileHandler.*;
+import static tablet.io.AssemblyFile.*;
 
 import scri.commons.gui.*;
 

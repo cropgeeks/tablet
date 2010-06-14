@@ -25,9 +25,6 @@ public class AceFileReader extends TrackableReader
 	private Consensus consensus;
 	private Read read;
 
-	// The index of the ACE file in the files[] array
-	private int aceIndex = -1;
-
 	// Index trackers for counting AF and RD lines as they are parsed
 	private int afIndex = 0, rdIndex = 0;
 
@@ -64,36 +61,15 @@ public class AceFileReader extends TrackableReader
 		this.readCache = readCache;
 	}
 
-	public boolean canRead()
-		throws Exception
-	{
-		for (int i = 0; i < files.length; i++)
-		{
-			// Read and check for the header
-			in = new BufferedReader(new InputStreamReader(getInputStream(i, true)));
-			str = readLine();
-
-			if (str != null && str.startsWith("AS "))
-				aceIndex = i;
-
-			in.close();
-			is.close();
-		}
-
-		return (aceIndex >= 0);
-	}
-
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(aceIndex, true), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(ASBINDEX), "ASCII"));
 
 		// Read in the header
 		str = readLine();
 
 		String[] AS = p.split(str);
-		if (AS.length != 3)
-			throw new ReadException(currentFile(), lineCount, TOKEN_COUNT_WRONG);
 
 		// Initialize the vector of contigs to be at least this size
 		assembly.setContigsSize(Integer.parseInt(AS[1]));
@@ -130,7 +106,7 @@ public class AceFileReader extends TrackableReader
 				while ((str = readLine()) != null && str.length() > 0);
 		}
 
-		assembly.setName(files[0].getName());
+		assembly.setName(files[ASBINDEX].getName());
 
 
 		// Remove any reads that got marked as null due to being poor quality

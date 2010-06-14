@@ -21,9 +21,6 @@ class AfgFileReader extends TrackableReader
 
 	private Contig contig;
 
-	// The index of the AFG file in the files[] array
-	private int afgIndex = -1;
-
 	// Pretty much all the tokenizing we do is based on this one pattern
 	private Pattern p = Pattern.compile("\\s+");
 
@@ -53,8 +50,6 @@ class AfgFileReader extends TrackableReader
 	private int contigsAdded = 0;
 	private int readsAdded = 0;
 
-	//=======================================c'tor==========================================
-
 	AfgFileReader()
 	{
 	}
@@ -65,33 +60,10 @@ class AfgFileReader extends TrackableReader
 		this.cacheDir = cacheDir;
 	}
 
-	//=======================================methods==========================================
-
-	public boolean canRead()
-		throws Exception
-	{
-		for (int i = 0; i < files.length; i++)
-		{
-			// Read and check for the header
-			in = new BufferedReader(new InputStreamReader(getInputStream(0, true)));
-			str = readLine();
-
-			if (str != null && str.startsWith("{"))
-				afgIndex = i;
-
-			in.close();
-			is.close();
-		}
-
-		return (afgIndex >= 0);
-	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------
-
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		in = new BufferedReader(new InputStreamReader(getInputStream(afgIndex, true), "ASCII"));
+		in = new BufferedReader(new InputStreamReader(getInputStream(ASBINDEX), "ASCII"));
 
 		//open the temporary file cache for the read names
 		long time = System.currentTimeMillis();
@@ -111,10 +83,8 @@ class AfgFileReader extends TrackableReader
 				processContig();
 		}
 
-		assembly.setName(files[0].getName());
+		assembly.setName(files[ASBINDEX].getName());
 	}
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------
 
 	//parses a CTG tag -- this contains contig information (internal ID, external ID i.e. name, unpadded sequence, quality scores)
 	private void processContig() throws Exception

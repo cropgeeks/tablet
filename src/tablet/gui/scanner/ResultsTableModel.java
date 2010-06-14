@@ -12,8 +12,9 @@ import javax.swing.table.*;
 
 public class ResultsTableModel extends DefaultTableModel
 {
-	private String[] columns = { "Folder", "File", "Size", "Date", "Type", "Paired-end" };
+	private String[] columns = { "File", "Folder", "Size", "Date", "Contigs", "Reads", "Type", "Paired-end" };
 
+	static IntRenderer intRenderer = new IntRenderer();
 	static SizeRenderer sizeRenderer = new SizeRenderer();
 	static DateRenderer dateRenderer = new DateRenderer();
 
@@ -31,8 +32,10 @@ public class ResultsTableModel extends DefaultTableModel
 			case 1: return String.class;
 			case 2: return Long.class;
 			case 3: return Long.class;
-			case 4: return String.class;
-			case 5: return Boolean.class;
+			case 4: return Integer.class;
+			case 5: return Integer.class;
+			case 6: return String.class;
+			case 7: return Boolean.class;
 
 			default: return Object.class;
 		}
@@ -41,18 +44,24 @@ public class ResultsTableModel extends DefaultTableModel
 	public boolean isCellEditable(int row, int col)
 		{ return false; }
 
-	public void addNewResult(File file, String type, boolean isPaired)
+	public void addNewResult(File file, String type, Integer contigCount, Integer readCount, boolean isPaired)
 	{
-		Object[] data = new Object[] {
-			file.getParent(),
+		final Object[] data = new Object[] {
 			file.getName(),
+			file.getParent(),
 			file.length(),
 			file.lastModified(),
+			contigCount,
+			readCount,
 			type,
 			isPaired
 		};
 
-		addRow(data);
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				addRow(data);
+			}
+		});
 	}
 
 	// Custom cell renderer for displaying right-aligned file sizes (in KB)
@@ -88,6 +97,26 @@ public class ResultsTableModel extends DefaultTableModel
 			long modified = (Long) value;
 
 			setText(df.format(new Date(modified)));
+
+			return c;
+		}
+	}
+
+	static class IntRenderer extends DefaultTableCellRenderer
+	{
+		NumberFormat nf = NumberFormat.getInstance();
+
+		public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSelected, boolean hasFocus, int row, int column)
+		{
+			Component c = super.getTableCellRendererComponent(table, value, isSelected,
+				hasFocus, row, column);
+
+			if (value != null)
+			{
+				setText(nf.format((Integer)value));
+				setHorizontalAlignment(JLabel.RIGHT);
+			}
 
 			return c;
 		}

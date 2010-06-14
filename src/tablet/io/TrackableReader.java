@@ -20,6 +20,10 @@ abstract class TrackableReader extends SimpleJob
 {
 	private static DecimalFormat df = new DecimalFormat("0.0");
 
+	// With multiple files in the array (max of 2), which is which?
+	protected static int ASBINDEX = 0;
+	protected static int REFINDEX = 1;
+
 	// Read data
 	protected AssemblyFile[] files;
 	protected ProgressInputStream is;
@@ -95,7 +99,7 @@ abstract class TrackableReader extends SimpleJob
 		return Math.round((total / (float) totalSize) * 5555);
 	}
 
-	InputStream getInputStream(int fileIndex, boolean tryZipped)
+	InputStream getInputStream(int fileIndex)
 		throws Exception
 	{
 		this.fileIndex = fileIndex;
@@ -104,30 +108,23 @@ abstract class TrackableReader extends SimpleJob
 		lastBytesRead = bytesRead[fileIndex] = 0;
 		lastTime = System.currentTimeMillis();
 
-		if (tryZipped)
+		try
 		{
 			// We always open the file itself (as this tracks the bytes read)
 			is = new ProgressInputStream(files[fileIndex].getInputStream());
 
-			try
-			{
-				// But we might have a gzip file, and the actual stream we want to
-				// read is inside of it
-				GZIPInputStream zis = new GZIPInputStream(is);
-				return zis;
-			}
-			catch (Exception e) { is.close(); }
+			// But we might have a gzip file, and the actual stream we want to
+			// read is inside of it
+			GZIPInputStream zis = new GZIPInputStream(is);
+			return zis;
 		}
+		catch (Exception e) { is.close(); }
 
 		// If not, just return the normal stream
 		is = new ProgressInputStream(files[fileIndex].getInputStream());
 
 		return is;
 	}
-
-	/** Returns true if this reader can understand the file given to it. */
-	abstract boolean canRead()
-		throws Exception;
 
 	AssemblyFile currentFile()
 	{
