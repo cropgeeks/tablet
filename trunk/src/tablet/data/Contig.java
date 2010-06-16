@@ -145,7 +145,7 @@ public class Contig
 	public void calculateOffsets(Assembly assembly)
 	{
 		dataS = visualS = 0;
-		dataE = visualE = consensus.length() - 1;
+		dataE = visualE = tableData.consensusLength - 1;
 
 		if (assembly.getBamBam() == null)
 		{
@@ -272,6 +272,8 @@ public class Contig
 		/** True if the consensus data exists (its length > 0). */
 		public boolean consensusDefined = false;
 
+		private int consensusLength;
+
 		/**
 		 * True if this contig has properly defined reads, that is, it always
 		 * has its list of reads and it never changes. A BAM file may cause
@@ -290,7 +292,24 @@ public class Contig
 			mmMismatches += mismatches;
 		}
 
-		public Float getMismatchPercentage()
+		public int consensusLength()
+			{ return consensusLength; }
+
+		public void setConsensusLength(int consensusLength)
+			{ this.consensusLength = consensusLength; }
+
+
+		// TODO: These may be changed to return different values at some point
+		// (eg, if we know the actual BAM read count when it differs from
+		// reads.size()
+
+		public int readCount()
+			{ return reads.size(); }
+
+		public int featureCount()
+			{ return getFeatures().size(); }
+
+		public Float mismatchPercentage()
 		{
 			if (mmTotalBases > 0)
 				return mmMismatches / (float) mmTotalBases * 100f;

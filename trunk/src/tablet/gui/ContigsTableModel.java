@@ -72,10 +72,10 @@ class ContigsTableModel extends AbstractTableModel
 		switch (col)
 		{
 			case 0: return contig;
-			case 1: return contig.getConsensus().length();
-			case 2: return contig.readCount();
-			case 3: return contig.getFeatures().size();
-			case 4: return contig.getTableData().getMismatchPercentage();
+			case 1: return contig.getTableData().consensusLength();
+			case 2: return contig.getTableData().readCount();
+			case 3: return contig.getTableData().featureCount();
+			case 4: return contig.getTableData().mismatchPercentage();
 		}
 
 		return null;

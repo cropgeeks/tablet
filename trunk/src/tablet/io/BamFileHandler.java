@@ -46,6 +46,7 @@ public class BamFileHandler
 		catch(Exception ex)
 		{
 			openBamFile(null);
+
 			throw new Exception(ex);
 		}
 	}
@@ -158,13 +159,26 @@ public class BamFileHandler
 				String contigName = record.getSequenceName();
 				int length = record.getSequenceLength();
 
-				if (contigHash.get(contigName) == null)
+				Contig contigToAdd = contigHash.get(contigName);
+
+				if (contigToAdd == null)
 				{
 					Contig contig = new Contig(contigName);
-					contig.getConsensus().setLength(length);
+					contig.getTableData().setConsensusLength(length);
 
 					contigHash.put(contigName, contig);
 					assembly.addContig(contig);
+				}
+
+				// If it *is* in the imported reference, check the lengths
+				else
+				{
+					int cLength = contigToAdd.getConsensus().length();
+
+					if (length != cLength)
+						System.out.println("Contig " + contigToAdd.getName()
+							+ " lengths do not match: " + cLength + " (ref "
+							+ "file), " + length + " (BAM file)");
 				}
 			}
 
