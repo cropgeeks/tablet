@@ -145,7 +145,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 				contig.getName(),
 				length,
 				TabletUtils.nf.format(contig.readCount()),
-				TabletUtils.nf.format(contig.featureCount()));
+				TabletUtils.nf.format(contig.getFeatures().size()));
 			RibbonController.setTitleLabel(label);
 		}
 		else

@@ -19,6 +19,8 @@ public class Contig
 
 	private ArrayList<Read> reads = new ArrayList<Read>();
 
+	private TableData tableData = new TableData();
+
 	// Starting and ending indices of the region of data that is currently
 	// viewable. Eg, from -10 to 109 (assuming consensus length 100 and reads
 	// overhanging by 10 bases at each end). In the case of BAM subset views,
@@ -44,10 +46,8 @@ public class Contig
 	// Supplementary set of features used purely for graphical outlining
 	private ArrayList<Feature> outlines = new ArrayList<Feature>();
 
-	// A count of how many bases (so far) have had mismatch data counted
-	private long mmTotalBases = 0;
-	// And the overall average mismatch count
-	private long mmMismatches = 0;
+
+
 
 	/** Constructs a new, empty contig. */
 	public Contig()
@@ -108,7 +108,11 @@ public class Contig
 	 * @param consensus the consensus to be set
 	 */
 	public void setConsensusSequence(Consensus consensus)
-		{ this.consensus = consensus; }
+	{
+		this.consensus = consensus;
+
+		tableData.consensusDefined = true;
+	}
 
 	/**
 	 * Returns the reads held by this contig as a vector.
@@ -130,13 +134,6 @@ public class Contig
 	 */
 	public ArrayList<Feature> getFeatures()
 		{ return features.getFeatures(); }
-
-	/**
-	 * Returns a count of the number of features held within this contig.
-	 * @return a count of the number of features held within this contig
-	 */
-	public int featureCount()
-		{ return features.size(); }
 
 	/**
 	 * Returns the supplementary (outliner) features held within this contig.
@@ -193,8 +190,8 @@ public class Contig
 		if (doFullReset)
 		{
 			reads.clear();
-			mmTotalBases = 0;
-			mmMismatches = 0;
+			tableData.mmTotalBases = 0;
+			tableData.mmMismatches = 0;
 		}
 	}
 
@@ -261,22 +258,48 @@ public class Contig
 			outlines.remove(0);
 	}
 
-	public float getMismatchPercentage()
-	{
-		if (mmTotalBases > 0)
-			return mmMismatches / (float) mmTotalBases * 100f;
-		else
-			return 0;
-	}
-
-	public void incrementMismatchData(long bases, long mismatches)
-	{
-		mmTotalBases += bases;
-		mmMismatches += mismatches;
-	}
-
 	public boolean addFeature(Feature newFeature)
 	{
 		return features.addFeatureDoSort(newFeature);
+	}
+
+	public TableData getTableData()
+		{ return tableData; }
+
+	/** Holds information required to properly render the contigs table. */
+	public class TableData
+	{
+		/** True if the consensus data exists (its length > 0). */
+		public boolean consensusDefined = false;
+
+		/**
+		 * True if this contig has properly defined reads, that is, it always
+		 * has its list of reads and it never changes. A BAM file may cause
+		 * a contig to have an undefined read list.
+		*/
+		public boolean readsDefined = true;
+
+		// A count of how many bases (so far) have had mismatch data counted
+		private long mmTotalBases = 0;
+		// And the overall average mismatch count
+		private long mmMismatches = 0;
+
+		public void incrementMismatchData(long bases, long mismatches)
+		{
+			mmTotalBases += bases;
+			mmMismatches += mismatches;
+		}
+
+		public Float getMismatchPercentage()
+		{
+			if (mmTotalBases > 0)
+				return mmMismatches / (float) mmTotalBases * 100f;
+
+			else if (readsDefined)
+				return 0f;
+
+			else
+				return null;
+		}
 	}
 }
