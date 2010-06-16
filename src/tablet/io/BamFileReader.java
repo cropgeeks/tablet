@@ -72,7 +72,6 @@ public class BamFileReader extends TrackableReader
 				+ ").\nYou may need to use samtools to generate one.");
 
 
-
 		// Fake up an AssemblyFile[] array for TrackableReader
 		if (baiFile.isURL() && refFile != null)
 			files = new AssemblyFile[] { refFile, baiFile };
@@ -134,10 +133,13 @@ public class BamFileReader extends TrackableReader
 		if (baiFile.isURL() == false)
 			return;
 
+		// Are we after the first or second entry in the array?
+		int baiIndex = files.length == 1 ? 0 : 1;
+
 		File file = new File(cacheDir, "Tablet-"+cacheid+baiFile.getName());
 
 		BufferedInputStream inputStream = new BufferedInputStream(
-			getInputStream(1));
+			getInputStream(baiIndex));
 		BufferedOutputStream outputStream = new BufferedOutputStream(
 			new FileOutputStream(file.getAbsolutePath()));
 

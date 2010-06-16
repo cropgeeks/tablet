@@ -293,7 +293,12 @@ public class Contig
 		}
 
 		public int consensusLength()
-			{ return consensusLength; }
+		{
+			if (consensusDefined)
+				return consensus.length();
+
+			return consensusLength;
+		}
 
 		public void setConsensusLength(int consensusLength)
 			{ this.consensusLength = consensusLength; }

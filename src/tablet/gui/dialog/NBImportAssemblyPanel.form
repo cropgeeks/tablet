@@ -16,11 +16,11 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
+          <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="panel1" alignment="1" min="-2" max="32767" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="panel2" alignment="0" min="-2" max="32767" attributes="0"/>
+                  <Component id="panel1" alignment="0" min="-2" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -33,7 +33,7 @@
               <Component id="panel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="panel2" max="32767" attributes="0"/>
-              <EmptySpace min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -186,10 +186,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="note1" pref="490" max="32767" attributes="0"/>
                       <Component id="note2" alignment="0" pref="490" max="32767" attributes="0"/>
-                      <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="exampleLabel" alignment="0" max="32767" attributes="1"/>
-                          <Component id="note3" alignment="0" max="32767" attributes="1"/>
-                      </Group>
+                      <Component id="exampleLabel" alignment="0" min="-2" max="-2" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -202,8 +199,6 @@
                   <Component id="note1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="note2" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
-                  <Component id="note3" min="-2" max="-2" attributes="0"/>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="exampleLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
@@ -214,20 +209,18 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="note1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Tablet currently supports ACE, AFG, MAQ (text), SOAP, SAM and BAM assemblies."/>
+            <Property name="text" type="java.lang.String" value="Tablet currently supports ACE, AFG, MAQ (text), SOAP, SAM and (indexed) BAM assemblies."/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="note2">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Reference files (if needed for MAQ, SOAP, and SAM) can be in FASTA or FASTQ format."/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="note3">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="BAM files need to have been indexed, and a FASTA reference file must be included too."/>
+            <Property name="text" type="java.lang.String" value="Reference files (if needed for MAQ, SOAP, SAM and BAM) can be in FASTA or FASTQ format."/>
           </Properties>
         </Component>
         <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="exampleLabel">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="exampleLabel"/>
+          </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
           </AuxValues>
