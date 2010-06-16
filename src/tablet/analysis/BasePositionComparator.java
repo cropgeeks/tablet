@@ -49,6 +49,6 @@ public class BasePositionComparator
 			}
 		}
 
-		contig.incrementMismatchData(count, mismatches);
+		contig.getTableData().incrementMismatchData(count, mismatches);
 	}
 }

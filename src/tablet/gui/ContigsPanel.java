@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.io.*;
-import java.text.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.*;
@@ -35,8 +34,6 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 
 	private Contig prevContig = null;
 
-	private DecimalFormatRenderer floatRenderer = new DecimalFormatRenderer();
-
 	ContigsPanel(WinMain winMain, AssemblyPanel aPanel, JTabbedPane ctrlTabs)
 	{
 		this.winMain = winMain;
@@ -47,7 +44,6 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		add(controls = new NBContigsPanelControls(this));
 
 		controls.table.addMouseListener(new TableMouseListener());
-		controls.table.setDefaultRenderer(Float.class, floatRenderer);
 	}
 
 	void setFeaturesPanel(FeaturesPanel featuresPanel)
@@ -196,15 +192,27 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		row = controls.table.convertRowIndexToModel(row);
 
 		Contig contig = (Contig) model.getValueAt(row, 0);
-		NumberFormat nf = TabletUtils.nf;
-		nf.setMaximumFractionDigits(1);
+		String UNKNOWN = RB.getString("gui.ContigsPanel.unknown");
+
+		// Decide how to format the length, based on the available data
+		int length = contig.getConsensus().length();
+		String lengthStr = TabletUtils.nf.format(length);
+		if (contig.getTableData().consensusDefined == false && length == 0)
+			lengthStr = UNKNOWN;
+
+		// Decide how to format the read count, based on the available data
+		int reads = contig.readCount();
+		String readsStr = TabletUtils.nf.format(reads);
+		if (contig.getTableData().readsDefined == false && reads == 0)
+			readsStr = UNKNOWN;
+
+		// Decide how to format the mismatch value
+		Float mf = contig.getTableData().getMismatchPercentage();
+		String mm = mf != null ? TabletUtils.nf.format(mf) + "%" : UNKNOWN;
 
 		return RB.format("gui.ContigsPanel.tooltip",
-			contig.getName(),
-			TabletUtils.nf.format(contig.getConsensus().length()),
-			TabletUtils.nf.format(contig.readCount()),
-			TabletUtils.nf.format(contig.getFeatures().size()),
-			TabletUtils.nf.format(contig.getMismatchPercentage()));
+			contig.getName(), lengthStr, readsStr,
+			TabletUtils.nf.format(contig.getFeatures().size()), mm);
 	}
 
 	private void copyTableToClipboard()
@@ -221,7 +229,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 				+ contig.getConsensus().length() + "\t"
 				+ contig.readCount() + "\t"
 				+ contig.getFeatures().size() + "\t"
-				+ contig.getMismatchPercentage());
+				+ contig.getTableData().getMismatchPercentage());
 			text.append(newline);
 		}
 
@@ -314,26 +322,6 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		}
 	}
 
-	static class DecimalFormatRenderer extends DefaultTableCellRenderer
-	{
-		private static final DecimalFormat formatter = new DecimalFormat( "#0.0" );
 
-		DecimalFormatRenderer()
-		{
-			setHorizontalAlignment(JLabel.RIGHT);
-		}
-
-		public Component getTableCellRendererComponent(JTable table, Object value,
-		boolean isSelected, boolean hasFocus, int row, int column)
-		{
-			super.getTableCellRendererComponent(table, value, isSelected,
-				hasFocus, row, column);
-
-				setText(formatter.format((Number)value));
-
-			return this;
-		}
-
-	}
 
 }

@@ -47,57 +47,46 @@ public class BamFileReader extends TrackableReader
 		this.assembly = assembly;
 	}
 
-	// Checks to see if we have been given a FASTA and a BAM file
-	public boolean canRead() throws Exception
-	{
-		refReader = new ReferenceFileReader(assembly, contigHash);
-
-		for (int i = 0; i < files.length; i++)
-		{
-			// Check to see if we even have a BAM file
-			if (files[i].getName().toLowerCase().endsWith(".bam") && files[i].exists())
-			{
-				bamFile = files[i];
-
-				// If so, do we have an index file that goes with it?
-				AssemblyFile file1 = getBaiIndexFile(files[i], false);
-				AssemblyFile file2 = getBaiIndexFile(files[i], true);
-
-				if (file1.exists())
-					baiFile = file1;
-				else if (file2.exists())
-					baiFile = file2;
-
-				if (baiFile == null)
-					throw new IOException("An index file could not be found "
-						+ "(" + file1.getName() + " or " + file2.getName()
-						+ ").\nYou may need to use samtools to generate one.");
-			}
-
-			else if (refReader.canRead(files[i]))
-				refFile = files[i];
-		}
-
-		return (bamFile != null && baiFile != null);
-	}
-
 	public void runJob(int index) throws Exception
 	{
-		if (refFile == null)
-			throw new IOException("No FASTA reference file was provided. "
-				+ "Tablet cannot load BAM files without a reference.");
+		// Get a reference to the BAM file
+		bamFile = files[ASBINDEX];
+
+		// Get a reference to the reference file (if it exists)
+		if (files.length > 1 && files[REFINDEX].isReferenceFile())
+			refFile = files[REFINDEX];
+
+
+		// Do we have an index file?
+		AssemblyFile bai1 = getBaiIndexFile(bamFile, false);
+		AssemblyFile bai2 = getBaiIndexFile(bamFile, true);
+
+		if (bai1.exists())
+			baiFile = bai1;
+		else if (bai2.exists())
+			baiFile = bai2;
+
+		if (baiFile == null)
+			throw new IOException("An index file could not be found "
+				+ "(" + bai1.getName() + " or " + bai2.getName()
+				+ ").\nYou may need to use samtools to generate one.");
+
+
 
 		// Fake up an AssemblyFile[] array for TrackableReader
-		if (baiFile.isURL())
+		if (baiFile.isURL() && refFile != null)
 			files = new AssemblyFile[] { refFile, baiFile };
-		else
+		else if (baiFile.isURL())
+			files = new AssemblyFile[] { baiFile };
+		else if (refFile != null)
 			files = new AssemblyFile[] { refFile };
 
 		super.setInputs(files, assembly);
 
 
-		if (okToRun)
+		if (okToRun && refFile != null)
 			readReferenceFile();
+
 		if (okToRun)
 			downloadBaiFile();
 
@@ -105,7 +94,7 @@ public class BamFileReader extends TrackableReader
 		{
 			BamFileHandler bamHandler = new BamFileHandler(readCache, bamFile, baiFile, assembly);
 			status = 2;
-			bamHandler.openBamFile();
+			bamHandler.openBamFile(contigHash);
 			assembly.setBamHandler(bamHandler);
 
 			assembly.setName(bamFile.getName());
@@ -126,6 +115,10 @@ public class BamFileReader extends TrackableReader
 	private void readReferenceFile()
 		throws Exception
 	{
+		status = 0;
+
+		refReader = new ReferenceFileReader(assembly, contigHash);
+
 		in = new BufferedReader(new InputStreamReader(getInputStream(0), "ASCII"));
 
 		refReader.readReferenceFile(this, refFile);

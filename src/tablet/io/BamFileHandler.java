@@ -3,7 +3,7 @@
 
 package tablet.io;
 
-import java.util.Collections;
+import java.util.*;
 
 import tablet.analysis.*;
 import tablet.data.cache.*;
@@ -45,7 +45,7 @@ public class BamFileHandler
 		}
 		catch(Exception ex)
 		{
-			openBamFile();
+			openBamFile(null);
 			throw new Exception(ex);
 		}
 	}
@@ -137,7 +137,8 @@ public class BamFileHandler
 		Collections.sort(contig.getFeatures());
 	}
 
-	public void openBamFile() throws Exception
+	public void openBamFile(HashMap<String, Contig> contigHash)
+		throws Exception
 	{
 		if (bamFile.isURL())
 			bamReader = new SAMFileReader(bamFile.getURL(), baiFile.getFile(), false);
@@ -146,6 +147,31 @@ public class BamFileHandler
 
 		if (VALIDATION_LENIENT)
 			bamReader.setValidationStringency(SAMFileReader.ValidationStringency.LENIENT);
+
+
+		// contigHash will be non-null on first open, so add information on any
+		// contigs that weren't in the reference file but are in the BAM file
+		if (contigHash != null)
+		{
+			for(SAMSequenceRecord record : bamReader.getFileHeader().getSequenceDictionary().getSequences())
+			{
+				String contigName = record.getSequenceName();
+				int length = record.getSequenceLength();
+
+				if (contigHash.get(contigName) == null)
+				{
+					Contig contig = new Contig(contigName);
+					contig.getConsensus().setLength(length);
+
+					contigHash.put(contigName, contig);
+					assembly.addContig(contig);
+				}
+			}
+
+			// Finally, set every contig to have undefined reads
+			for (Contig contig: assembly)
+				contig.getTableData().readsDefined = false;
+		}
 	}
 
 	public SAMFileReader getBamReader()

@@ -140,13 +140,10 @@ public class AssemblyFileHandler extends SimpleJob
 		}
 		catch(ReadException e)
 		{
-			e.printStackTrace();
 			throw(e);
 		}
 		catch(Exception e)
 		{
-			e.printStackTrace();
-
 			if (reader instanceof BamFileReader)
 				throw e;
 

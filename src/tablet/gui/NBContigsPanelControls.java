@@ -4,10 +4,11 @@
 package tablet.gui;
 
 import java.awt.event.*;
-import java.text.NumberFormat;
+import java.text.*;
 import javax.swing.*;
-import javax.swing.RowFilter.*;
 import javax.swing.event.*;
+import javax.swing.RowFilter.*;
+import javax.swing.table.*;
 
 import scri.commons.gui.*;
 
@@ -128,7 +129,7 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
 				float number = nf.parse(textField.getText()).floatValue();
 				rf = RowFilter.numberFilter(ComparisonType.BEFORE, number+1, 4);
 			}
-			
+
 			panel.setTableFilter(rf);
 		}
 		catch (Exception e)
@@ -145,6 +146,27 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
 		contigsLabel.setEnabled(state);
 	}
 
+	private JTable createTable()
+	{
+		return new JTable()
+		{
+			public TableCellRenderer getCellRenderer(int row, int col)
+			{
+				TableCellRenderer tcr = ContigsTableModel.getCellRenderer(this, row, col);
+
+				if (tcr != null)
+					return tcr;
+
+				return super.getCellRenderer(row, col);
+			}
+
+			public String getToolTipText(MouseEvent e)
+			{
+				return panel.getTableToolTip(e);
+			}
+		};
+	}
+
     /** This method is called from within the constructor to
      * initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is
@@ -158,11 +180,7 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
         textField = new javax.swing.JTextField();
         filterLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        table = new JTable() {
-            public String getToolTipText(MouseEvent e) {
-                return panel.getTableToolTip(e);
-            }
-        };
+        table = createTable();
         contigsLabel = new javax.swing.JLabel();
 
         filterLabel.setLabelFor(combo);
