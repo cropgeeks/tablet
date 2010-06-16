@@ -10,13 +10,13 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 
-import scri.commons.gui.*;
-
 import tablet.data.*;
 import tablet.gui.viewer.*;
 import tablet.analysis.*;
 import tablet.analysis.Finder.*;
 import tablet.gui.dialog.*;
+
+import scri.commons.gui.*;
 
 public class FindPanel extends JPanel implements ListSelectionListener, ActionListener
 {
@@ -60,6 +60,8 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		ctrlTabs.getActionMap().put("find", openFind);
 
 		controls.toggleComponentEnabled(false);
+
+		controls.table.setDefaultRenderer(Number.class, new NumberFormatCellRenderer());
 	}
 
 	public NBFindPanelControls getFindPanel()

@@ -11,6 +11,7 @@ import javax.swing.table.*;
 
 import tablet.data.*;
 import tablet.data.auxiliary.*;
+import tablet.gui.*;
 import tablet.gui.viewer.*;
 
 import scri.commons.gui.*;
@@ -227,33 +228,33 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 			return TabletUtils.nf.format(padded+1);
 	}
 
-	private class FeaturesTableRenderer extends DefaultTableCellRenderer
+	private class FeaturesTableRenderer extends NumberFormatCellRenderer
 	{
 		private Color fg = UIManager.getColor("Table.foreground");
 
 		public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column)
 		{
-			Component c = super.getTableCellRendererComponent(table, value, isSelected,
+			super.getTableCellRendererComponent(table, value, isSelected,
 				hasFocus, row, column);
 
-			c.setForeground(fg);
+			setForeground(fg);
 			int pos = (Integer) value;
 
 			// Invalid if the value is lt or gt than the canvas
 			if (Prefs.guiFeaturesArePadded)
 			{
 				if (pos < contig.getDataStart() || pos > contig.getDataEnd())
-					c.setForeground(Color.red);
+					setForeground(TabletUtils.nimbusRed);
 			}
 			// Invalid if the value is lt or gt than unpadded consensus length
 			else
 			{
 				if (pos < 0 || pos >= contig.getConsensus().getUnpaddedLength())
-					c.setForeground(Color.red);
+					setForeground(TabletUtils.nimbusRed);
 			}
 
-			return c;
+			return this;
 		}
 	}
 }
