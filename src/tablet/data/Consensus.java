@@ -116,11 +116,6 @@ public class Consensus extends Sequence
 		return length;
 	}
 
-	public void setLength(int length)
-	{
-		this.length = length;
-	}
-
 	/**
 	 * Returns a string representation of this sequence.
 	 * @return a string representation of this thread

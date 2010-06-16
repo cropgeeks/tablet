@@ -195,24 +195,24 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		String UNKNOWN = RB.getString("gui.ContigsPanel.unknown");
 
 		// Decide how to format the length, based on the available data
-		int length = contig.getConsensus().length();
+		int length = contig.getTableData().consensusLength();
 		String lengthStr = TabletUtils.nf.format(length);
 		if (contig.getTableData().consensusDefined == false && length == 0)
 			lengthStr = UNKNOWN;
 
 		// Decide how to format the read count, based on the available data
-		int reads = contig.readCount();
+		int reads = contig.getTableData().readCount();
 		String readsStr = TabletUtils.nf.format(reads);
 		if (contig.getTableData().readsDefined == false && reads == 0)
 			readsStr = UNKNOWN;
 
 		// Decide how to format the mismatch value
-		Float mf = contig.getTableData().getMismatchPercentage();
+		Float mf = contig.getTableData().mismatchPercentage();
 		String mm = mf != null ? TabletUtils.nf.format(mf) + "%" : UNKNOWN;
 
 		return RB.format("gui.ContigsPanel.tooltip",
 			contig.getName(), lengthStr, readsStr,
-			TabletUtils.nf.format(contig.getFeatures().size()), mm);
+			TabletUtils.nf.format(contig.getTableData().featureCount()), mm);
 	}
 
 	private void copyTableToClipboard()
@@ -226,10 +226,10 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 			Contig contig = (Contig) model.getValueAt(row, 0);
 
 			text.append(contig.getName() + "\t"
-				+ contig.getConsensus().length() + "\t"
-				+ contig.readCount() + "\t"
-				+ contig.getFeatures().size() + "\t"
-				+ contig.getTableData().getMismatchPercentage());
+				+ contig.getTableData().consensusLength() + "\t"
+				+ contig.getTableData().readCount() + "\t"
+				+ contig.getTableData().featureCount() + "\t"
+				+ contig.getTableData().mismatchPercentage());
 			text.append(newline);
 		}
 
@@ -321,7 +321,4 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 				displayMenu(e);
 		}
 	}
-
-
-
 }
