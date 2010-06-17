@@ -108,7 +108,7 @@ class ContigsTableModel extends AbstractTableModel
 			// The consensus exists and has a length
 			if (contig.getTableData().consensusDefined)
 			{
-				setForeground(Color.black);
+				setForeground(isSelected ? Color.white : Color.black);
 				setText(TabletUtils.nf.format((Integer)value));
 			}
 			else
@@ -142,7 +142,7 @@ class ContigsTableModel extends AbstractTableModel
 
 			if (contig.getTableData().readsDefined)
 			{
-				setForeground(Color.black);
+				setForeground(isSelected ? Color.white : Color.black);
 				setText(TabletUtils.nf.format((Integer)value));
 			}
 			else
@@ -181,7 +181,7 @@ class ContigsTableModel extends AbstractTableModel
 			Contig contig = assembly.getContig(row);
 
 			if (contig.getTableData().readsDefined)
-				setForeground(Color.black);
+				setForeground(isSelected ? Color.white : Color.black);
 			else
 				setForeground(TabletUtils.nimbusRed);
 

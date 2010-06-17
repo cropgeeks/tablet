@@ -45,7 +45,7 @@ public class OverviewCanvas extends JPanel
 	private String overviewCoordinates;
 
 	private DecimalFormat dc = new DecimalFormat("#.#");
-	
+
 	boolean dragging = false;
 	boolean isOSX = SystemUtils.isMacOS();
 
@@ -267,14 +267,14 @@ public class OverviewCanvas extends JPanel
 	void setSubset(MouseEvent e)
 	{
 		tempOE = e.getX();
-		
+
 		if(tempOE > w)
 			tempOE = w;
 		else if(tempOE < 0)
 			tempOE = 0;
 
 		if(tempOS < tempOE)
-		{	
+		{
 			oS = map(tempOS, 0, w, oS, oE);
 			oE = map(tempOE, 0, w, oS, oE);
 		}
@@ -287,14 +287,14 @@ public class OverviewCanvas extends JPanel
 
 		Actions.overviewReset.setEnabled(true);
 	}
-	
+
 	public void setSubset(int oS, int oE)
 	{
 		this.oS = oS;
 		this.oE = oE;
 
 		createImage();
-		
+
 		Actions.overviewReset.setEnabled(true);
 	}
 
@@ -317,7 +317,7 @@ public class OverviewCanvas extends JPanel
 
 	public int getOE()
 		{	return oE;	}
-	
+
 
 	private class Canvas2D extends JPanel
 	{
@@ -371,12 +371,12 @@ public class OverviewCanvas extends JPanel
 			int bXR = bX2 - scaledAdjust;
 
 			g.fillRect(bXL, bY1, bXR-bXL, bY2-bY1);
-			g.setColor(Color.red);
+			g.setColor(Color.gray);
 			g.drawRect(bXL, bY1, bXR-bXL, bY2-bY1);
 
 			if (readX >= 0)
 			{
-				g.setColor(Color.blue);
+				g.setColor(new Color(115, 200, 250));
 				g.drawRect(readX-scaledAdjust, readY, readW-1, readH-1);
 			}
 
