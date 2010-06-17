@@ -230,28 +230,26 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 
 	private class FeaturesTableRenderer extends NumberFormatCellRenderer
 	{
-		private Color fg = UIManager.getColor("Table.foreground");
-
 		public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column)
+			boolean isSel, boolean hasFocus, int row, int column)
 		{
-			super.getTableCellRendererComponent(table, value, isSelected,
-				hasFocus, row, column);
+			super.getTableCellRendererComponent(table, value, isSel, hasFocus,
+				row, column);
 
-			setForeground(fg);
+			setForeground(isSel ? Color.white : Color.black);
 			int pos = (Integer) value;
 
 			// Invalid if the value is lt or gt than the canvas
 			if (Prefs.guiFeaturesArePadded)
 			{
 				if (pos < contig.getDataStart() || pos > contig.getDataEnd())
-					setForeground(TabletUtils.nimbusRed);
+					setForeground(isSel ? TabletUtils.red2 : TabletUtils.red1);
 			}
 			// Invalid if the value is lt or gt than unpadded consensus length
 			else
 			{
 				if (pos < 0 || pos >= contig.getConsensus().getUnpaddedLength())
-					setForeground(TabletUtils.nimbusRed);
+					setForeground(isSel ? TabletUtils.red2 : TabletUtils.red1);
 			}
 
 			return this;

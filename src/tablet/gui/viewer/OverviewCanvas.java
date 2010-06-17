@@ -371,12 +371,12 @@ public class OverviewCanvas extends JPanel
 			int bXR = bX2 - scaledAdjust;
 
 			g.fillRect(bXL, bY1, bXR-bXL, bY2-bY1);
-			g.setColor(Color.gray);
+			g.setColor(TabletUtils.red1);
 			g.drawRect(bXL, bY1, bXR-bXL, bY2-bY1);
 
 			if (readX >= 0)
 			{
-				g.setColor(new Color(115, 200, 250));
+				g.setColor(TabletUtils.red1);
 				g.drawRect(readX-scaledAdjust, readY, readW-1, readH-1);
 			}
 
