@@ -152,15 +152,23 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 			RibbonController.setTitleLabel("");
 	}
 
-	public boolean setContig(Contig contig)
+	private void clearContig()
 	{
 		// Clear data from the PREVIOUS contig
-		if (this.contig != null)
-			this.contig.clearContigData(assembly.getBamBam() != null);
+		if (contig != null)
+			contig.clearContigData(assembly.getBamBam() != null);
 
 		DisplayData.clearDisplayData(true);
 
-		this.contig = contig;
+		// Forces the contigs table to update its numbers properly
+		winMain.getContigsPanel().repaint();
+	}
+
+	public boolean setContig(Contig newContig)
+	{
+		clearContig();
+		contig = newContig;
+
 		boolean setContigOK = true;
 
 		// Fresh BAM assembly: reset the loaded data to the start
@@ -171,9 +179,12 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		}
 
 		if (contig != null && ((setContigOK = updateDisplayData(true)) == false))
-			this.contig = contig = null;
+		{
+			clearContig();
+			contig = null;
+		}
 
-		if(contig != null)
+		if (contig != null)
 		{
 			if(getVisualContig() == null)
 				visualAssembly.getVisualContigs().put(contig, new VisualContig());
@@ -187,7 +198,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		coverageCanvas.setContig(contig);
 		bambamBar.setContig(contig);
 
-		if(contig != null)
+		if (contig != null)
 			overviewCanvas.setSubset(contig.getVisualStart(), contig.getVisualEnd());
 
 		forceRedraw();
@@ -346,6 +357,8 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 					dialog.getException());
 				TaskDialog.error(msg, RB.getString("gui.text.close"));
 			}
+
+			System.out.println("contig load failed for " + contig.getName());
 
 			return false;
 		}
