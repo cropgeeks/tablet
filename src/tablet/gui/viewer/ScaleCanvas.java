@@ -134,7 +134,7 @@ class ScaleCanvas extends TrackingCanvas
 			String str = TabletUtils.nf.format(mouseBase+1)
 				+ getUnpadded(mouseBase) + " " + C
 				+ TabletUtils.nf.format(
-					DisplayData.getCoverage()[mouseBase-offset]);
+					DisplayData.getCoverageAt(mouseBase-offset));
 
 			if (message != null)
 				str += " - " + message;
