@@ -45,6 +45,12 @@ public class DisplayData
 	public static int[] getCoverage()
 		{ return coverage; }
 
+	public static int getCoverageAt(int position)
+	{
+		try { return coverage[position]; }
+		catch (Exception e) { return 0; }
+	}
+
 	public static void setCoverage(int[] newCoverage)
 		{ coverage = newCoverage; }
 

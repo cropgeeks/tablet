@@ -145,7 +145,7 @@ public class Contig
 	public void calculateOffsets(Assembly assembly)
 	{
 		dataS = visualS = 0;
-		dataE = visualE = tableData.consensusLength - 1;
+		dataE = visualE = tableData.consensusLength() - 1;
 
 		if (assembly.getBamBam() == null)
 		{
