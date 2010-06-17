@@ -17,7 +17,8 @@ public class TabletUtils
 {
 	public static NumberFormat nf = NumberFormat.getInstance();
 
-	public static Color nimbusRed = new Color(169,46,34);
+	public static Color red1 = new Color(169, 46, 34);
+	public static Color red2 = new Color(255, 170, 170);
 
 	public static JPanel getButtonPanel()
 	{

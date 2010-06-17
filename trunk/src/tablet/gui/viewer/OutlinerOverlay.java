@@ -96,7 +96,7 @@ class OutlinerOverlay implements IOverlayRenderer
 			int xS = readS * rCanvas.ntW + offset;
 			int xE = readE * rCanvas.ntW + rCanvas.ntW + offset;
 
-			g.setColor(Color.red);
+			g.setColor(TabletUtils.red1);
 			g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);
 		}
 

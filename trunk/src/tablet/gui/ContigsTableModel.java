@@ -113,7 +113,7 @@ class ContigsTableModel extends AbstractTableModel
 			}
 			else
 			{
-				setForeground(TabletUtils.nimbusRed);
+				setForeground(isSelected ? TabletUtils.red2 : TabletUtils.red1);
 
 				// The consensus doesn't exist, but we know its length (BAM)
 				if (((Integer)value) > 0)
@@ -147,7 +147,7 @@ class ContigsTableModel extends AbstractTableModel
 			}
 			else
 			{
-				setForeground(TabletUtils.nimbusRed);
+				setForeground(isSelected ? TabletUtils.red2 : TabletUtils.red1);
 
 				if (((Integer)value) > 0)
 					setText(TabletUtils.nf.format((Integer)value));
@@ -183,7 +183,7 @@ class ContigsTableModel extends AbstractTableModel
 			if (contig.getTableData().readsDefined)
 				setForeground(isSelected ? Color.white : Color.black);
 			else
-				setForeground(TabletUtils.nimbusRed);
+				setForeground(isSelected ? TabletUtils.red2 : TabletUtils.red1);
 
 			if (value != null)
 				setText(nf.format((Float)value));
