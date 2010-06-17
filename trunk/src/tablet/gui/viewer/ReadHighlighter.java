@@ -50,6 +50,8 @@ public class ReadHighlighter extends AlphaOverlay
 
 	public void render(Graphics2D g)
 	{
+		aPanel.overviewCanvas.updateRead(lineIndex, start, end);
+
 		g.setPaint(new Color(20, 20, 20, alphaEffect));
 
 		// Top-left corner of the read
