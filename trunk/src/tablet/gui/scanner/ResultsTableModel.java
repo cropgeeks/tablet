@@ -10,11 +10,13 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
+import scri.commons.gui.*;
+
 public class ResultsTableModel extends DefaultTableModel
 {
-	private String[] columns = { "File", "Folder", "Size", "Date", "Contigs", "Reads", "Type", "Paired-end" };
+	private String[] columns = { "File", "Folder", "Size", "Date", "Contigs", "Reads", "Type", "Paired-end", "Compressed" };
 
-	static IntRenderer intRenderer = new IntRenderer();
+	static NumberFormatCellRenderer nfRenderer = new NumberFormatCellRenderer();
 	static SizeRenderer sizeRenderer = new SizeRenderer();
 	static DateRenderer dateRenderer = new DateRenderer();
 
@@ -36,6 +38,7 @@ public class ResultsTableModel extends DefaultTableModel
 			case 5: return Integer.class;
 			case 6: return String.class;
 			case 7: return Boolean.class;
+			case 8: return Boolean.class;
 
 			default: return Object.class;
 		}
@@ -44,7 +47,7 @@ public class ResultsTableModel extends DefaultTableModel
 	public boolean isCellEditable(int row, int col)
 		{ return false; }
 
-	public void addNewResult(File file, String type, Integer contigCount, Integer readCount, boolean isPaired)
+	public void addNewResult(File file, String type, Integer contigCount, Integer readCount, boolean isPaired, boolean isCompressed)
 	{
 		final Object[] data = new Object[] {
 			file.getName(),
@@ -54,7 +57,8 @@ public class ResultsTableModel extends DefaultTableModel
 			contigCount,
 			readCount,
 			type,
-			isPaired
+			isPaired,
+			isCompressed
 		};
 
 		SwingUtilities.invokeLater(new Runnable() {
@@ -97,26 +101,6 @@ public class ResultsTableModel extends DefaultTableModel
 			long modified = (Long) value;
 
 			setText(df.format(new Date(modified)));
-
-			return c;
-		}
-	}
-
-	static class IntRenderer extends DefaultTableCellRenderer
-	{
-		NumberFormat nf = NumberFormat.getInstance();
-
-		public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column)
-		{
-			Component c = super.getTableCellRendererComponent(table, value, isSelected,
-				hasFocus, row, column);
-
-			if (value != null)
-			{
-				setText(nf.format((Integer)value));
-				setHorizontalAlignment(JLabel.RIGHT);
-			}
 
 			return c;
 		}

@@ -44,7 +44,7 @@ class NBScannerPanel extends JPanel implements ActionListener
 			}
 		};
 
-		table.setDefaultRenderer(Integer.class, ResultsTableModel.intRenderer);
+		table.setDefaultRenderer(Number.class, ResultsTableModel.nfRenderer);
 
 		return table;
 	}

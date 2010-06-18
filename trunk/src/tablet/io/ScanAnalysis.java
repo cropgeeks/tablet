@@ -73,11 +73,11 @@ public class ScanAnalysis extends SimpleJob
 			scanCount++;
 
 			scanFile = file;
-			AssemblyFile aFile = new AssemblyFile(file.getPath());
 
 			// Determine assembly type:
-			Boolean okToRun = Boolean.TRUE;
-			int type = AssemblyFileHandler.getType(file.getPath(), okToRun);
+			AssemblyFile aFile = new AssemblyFile(file.getPath());
+			aFile.canDetermineType();
+			int type = aFile.getType();
 
 			if (type == UNKNOWN)
 				return;
@@ -91,7 +91,8 @@ public class ScanAnalysis extends SimpleJob
 				scanner.getType(),
 				scanner.contigCount,
 				scanner.readCount,
-				scanner.isPaired);
+				scanner.isPaired,
+				scanner.isCompressed);
 		}
 	}
 
