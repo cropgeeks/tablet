@@ -13,6 +13,7 @@ import tablet.data.*;
 import tablet.gui.dialog.*;
 import tablet.gui.viewer.*;
 import tablet.io.*;
+import javax.swing.*;
 
 import scri.commons.gui.*;
 
@@ -81,6 +82,19 @@ public class Commands
 			File file = new File(filenames[0]);
 			if (getFeatureFile(file) != null)
 				importFeatures(getFeatureFile(file).getPath(), false);
+		}
+
+		// Pop up a warning if the ref lengths don't match
+		if (!assemblyFileHandler.refLengthsOK() && Prefs.guiWarnRefLengths)
+		{
+			String msg = RB.getString("gui.commands.fileOpen.refLengthsOK");
+			JCheckBox chkbox = new JCheckBox();
+			RB.setText(chkbox, "gui.commands.fileOpen.checkWarning");
+
+			String[] options = new String[] { RB.getString("gui.text.close") };
+
+			int response = TaskDialog.show(msg, TaskDialog.WAR, 0, chkbox, options);
+			Prefs.guiWarnRefLengths = !chkbox.isSelected();
 		}
 	}
 

@@ -130,7 +130,11 @@ item means that Tablet will proceed with the action without warning you.</p>
 	Continuing to search after 500 matching hits have been found has a negative
 	impact on memory consumption. Disable this option to stop Tablet from
 	reminding you of this fact each time it searches.</li>
-
+	<li><b>If sequence lengths specified in SAM/BAM files don't match those imported</b><br>
+	Assemblies in SAM or BAM formats - although they do not store reference
+	data - do store the name and length of the each reference sequence. Check this
+	option to have Tablet warn whenever these specified lengths do not match
+	the actual lengths of any reference sequences that you import.</li>
 </ul>
 
 

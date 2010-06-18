@@ -61,6 +61,9 @@ public class Prefs extends XMLPreferences
 	// The warning shown when toggling between padded/unpadded feature values
 	public static boolean guiWarnOnPaddedFeatureToggle = true;
 
+	// Warn when SAM/BAM expected reference lengths don't match what's provided
+	public static boolean guiWarnRefLengths = true;
+
 	// A list of previously accessed assembly documents
 	public static String assRecentDocs = "";
 	// A list of previously accessed referebce documents

@@ -153,4 +153,7 @@ abstract class TrackableReader extends SimpleJob
 		else
 			return df.format(kbPerSec) + " KB/sec";
 	}
+
+	protected boolean refLengthsOK()
+		{ return true; }
 }

@@ -24,6 +24,7 @@ public class BamFileHandler
 	private int readID;
 
 	private boolean okToRun = true;
+	private boolean refLengthsOK = true;
 
 	BamFileHandler(IReadCache readCache, AssemblyFile bamFile, AssemblyFile baiFile, Assembly assembly)
 	{
@@ -176,9 +177,13 @@ public class BamFileHandler
 					int cLength = contigToAdd.getConsensus().length();
 
 					if (length != cLength)
+					{
 						System.out.println("Contig " + contigToAdd.getName()
 							+ " lengths do not match: " + cLength + " (ref "
 							+ "file), " + length + " (BAM file)");
+
+						refLengthsOK = false;
+					}
 				}
 			}
 
@@ -189,5 +194,8 @@ public class BamFileHandler
 	}
 
 	public SAMFileReader getBamReader()
-		{	return bamReader;	}
+		{ return bamReader; }
+
+	boolean refLengthsOK()
+		{ return refLengthsOK; }
 }

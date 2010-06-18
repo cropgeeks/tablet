@@ -28,7 +28,7 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="panel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="18" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -54,8 +54,9 @@
                       <Component id="warnNoRef" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="warnOnPaddedFeatureToggle" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="warnSearchLimitExceeded" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="warnRefLengths" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="16" max="32767" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -70,8 +71,11 @@
                   <Component id="warnNoRef" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="warnOnPaddedFeatureToggle" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="warnSearchLimitExceeded" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="warnRefLengths" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -100,6 +104,11 @@
         <Component class="javax.swing.JCheckBox" name="warnSearchLimitExceeded">
           <Properties>
             <Property name="text" type="java.lang.String" value="When a search has stopped after finding 500 results"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="warnRefLengths">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="If sequence lengths specified in SAM/BAM files don&apos;t match those imported"/>
           </Properties>
         </Component>
       </SubComponents>
