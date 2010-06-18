@@ -24,6 +24,7 @@ class FileScanner extends SimpleJob
 	Integer contigCount;
 	Integer readCount;
 	boolean isPaired;
+	boolean isCompressed;
 
 	FileScanner(AssemblyFile aFile, int type)
 	{
@@ -36,6 +37,8 @@ class FileScanner extends SimpleJob
 	{
 		// Determine basic file information:
 		file = aFile.getFile();
+
+		isCompressed = aFile.isCompressed();
 
 		switch (type)
 		{
@@ -51,7 +54,7 @@ class FileScanner extends SimpleJob
 		throws Exception
 	{
 		BufferedReader in = new BufferedReader(new InputStreamReader(
-			aFile.getReferenceInputStream()));
+			aFile.getDataStream()));
 
 		String str = in.readLine();
 		String[] AS = p.split(str);
@@ -74,8 +77,13 @@ class FileScanner extends SimpleJob
 		SAMFileReader bamReader = new SAMFileReader(aFile.getFile());
 		bamReader.setValidationStringency(SAMFileReader.ValidationStringency.LENIENT);
 
-		int count = 0;
+		// Count the contigs
+		contigCount = 0;
+		for (SAMSequenceRecord record : bamReader.getFileHeader().getSequenceDictionary().getSequences())
+			contigCount++;
 
+		// Scan for paired end data (first 5000 records only)
+		int count = 0;
 		for (SAMRecord record: bamReader)
 		{
 			count++;
@@ -96,17 +104,18 @@ class FileScanner extends SimpleJob
 	void scanFASTA()
 		throws Exception
 	{
-		contigCount = 0;
+/*		contigCount = 0;
 
-		Reader in = new InputStreamReader(aFile.getReferenceInputStream());
-        char[] buf = new char[4096];
+		Reader in = new InputStreamReader(aFile.getDataStream());
+		char[] buf = new char[4096];
 
-        for (int num = in.read(buf); num >= 0 && okToRun; num = in.read(buf))
-        	for (char c: buf)
-                if (c == '>')
-                    contigCount++;
+		for (int num = in.read(buf); num >= 0 && okToRun; num = in.read(buf))
+			for (char c: buf)
+				if (c == '>')
+					contigCount++;
 
-        in.close();
+		in.close();
+*/
 	}
 
 
@@ -126,40 +135,5 @@ class FileScanner extends SimpleJob
 
 			default: return null;
 		}
-	}
-
-	/**
-	 * Returns true if a newline character is found within the first 10,000
-	 * bytes of the given input stream.
-	 */
-	static boolean isTextFile(InputStream is)
-		throws Exception
-	{
-		boolean isTextFile = false;
-
-		Reader in = new InputStreamReader(is);
-        char[] buf = new char[4096];
-
-		int read = 0;
-        for (int num = in.read(buf); num >= 0; num = in.read(buf))
-        {
-        	for (char c: buf)
-        	{
-                if (c == '\n')
-                {
-                    isTextFile = true;
-                    break;
-                }
-        	}
-
-        	read += num;
-
-        	if (read > 10000)
-        		break;
-        }
-
-        in.close();
-
-        return isTextFile;
 	}
 }

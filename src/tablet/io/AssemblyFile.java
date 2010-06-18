@@ -27,6 +27,7 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 	private String filename;
 	private URL url;
 	private File file;
+	private boolean isCompressed;
 
 	private int type = UNKNOWN;
 
@@ -106,7 +107,7 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 		catch (Exception e) { return false; }
 	}
 
-	// Returns the input stream for this file
+	// Returns the main input stream for this file
 	InputStream getInputStream()
 		throws Exception
 	{
@@ -116,24 +117,29 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 		return url.openStream();
 	}
 
-	// Returns an input stream suitable for use by a Reference-File reader,
-	// which might be a normal input stream, or a gzipped input stream
-	InputStream getReferenceInputStream()
+	// Returns an input stream suitable for use reading from, which might be a
+	// a normal input stream, or a gzipped input stream
+	InputStream getDataStream()
 		throws Exception
 	{
 		InputStream is = getInputStream();
 
 		try
 		{
+			isCompressed = true;
 			return new GZIPInputStream(is);
 		}
 		catch (Exception e)
 		{
+			isCompressed = false;
 			is.close();
 		}
 
 		return getInputStream();
 	}
+
+	boolean isCompressed()
+		{ return isCompressed; }
 
 	URL getURL()
 	{
@@ -303,7 +309,7 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 	{
 		try
 		{
-			Reader rd = new InputStreamReader(getReferenceInputStream(), "ASCII");
+			Reader rd = new InputStreamReader(getDataStream(), "ASCII");
 	        char[] buf = new char[2048];
 
 			int num = rd.read(buf);
