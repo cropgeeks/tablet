@@ -30,6 +30,8 @@ public class BamFileReader extends TrackableReader
 	// Status tracks what's happening (0=get ref, 1=get bai, 2=open bam)
 	private static int status = 0;
 
+	private boolean refLengthsOK = true;
+
 	BamFileReader()
 	{
 	}
@@ -91,12 +93,15 @@ public class BamFileReader extends TrackableReader
 
 		if (okToRun)
 		{
-			BamFileHandler bamHandler = new BamFileHandler(readCache, bamFile, baiFile, assembly);
 			status = 2;
-			bamHandler.openBamFile(contigHash);
-			assembly.setBamHandler(bamHandler);
 
+			BamFileHandler bamHandler = new BamFileHandler(readCache, bamFile, baiFile, assembly);
+			bamHandler.openBamFile(contigHash);
+
+			assembly.setBamHandler(bamHandler);
 			assembly.setName(bamFile.getName());
+
+			refLengthsOK = bamHandler.refLengthsOK();
 		}
 	}
 
@@ -167,4 +172,7 @@ public class BamFileReader extends TrackableReader
 
 		return "";
 	}
+
+	protected boolean refLengthsOK()
+		{ return refLengthsOK; }
 }

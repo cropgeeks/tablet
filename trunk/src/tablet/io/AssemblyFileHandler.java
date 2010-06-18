@@ -28,6 +28,7 @@ public class AssemblyFileHandler extends SimpleJob
 	private String cacheid = SystemUtils.createGUID(24);
 
 	private Assembly assembly;
+	private boolean refLengthsOK = true;
 
 	public AssemblyFileHandler(String[] filenames, File cacheDir)
 	{
@@ -209,4 +210,7 @@ public class AssemblyFileHandler extends SimpleJob
 
 		return aFile.getType();
 	}
+
+	public boolean refLengthsOK()
+		{ return reader.refLengthsOK(); }
 }
