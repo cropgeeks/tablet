@@ -308,8 +308,13 @@ public class Contig
 		// (eg, if we know the actual BAM read count when it differs from
 		// reads.size()
 
-		public int readCount()
-			{ return reads.size(); }
+		public Integer readCount()
+		{
+			if (readsDefined || readManager != null)
+				return reads.size();
+
+			return null;
+		}
 
 		public int featureCount()
 			{ return getFeatures().size(); }

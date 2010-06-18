@@ -201,17 +201,15 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 			lengthStr = UNKNOWN;
 
 		// Decide how to format the read count, based on the available data
-		int reads = contig.getTableData().readCount();
-		String readsStr = TabletUtils.nf.format(reads);
-		if (contig.getTableData().readsDefined == false && reads == 0)
-			readsStr = UNKNOWN;
+		Integer rc = contig.getTableData().readCount();
+		String rdsStr = rc != null ? TabletUtils.nf.format(rc) : UNKNOWN;
 
 		// Decide how to format the mismatch value
 		Float mf = contig.getTableData().mismatchPercentage();
 		String mm = mf != null ? TabletUtils.nf.format(mf) + "%" : UNKNOWN;
 
 		return RB.format("gui.ContigsPanel.tooltip",
-			contig.getName(), lengthStr, readsStr,
+			contig.getName(), lengthStr, rdsStr,
 			TabletUtils.nf.format(contig.getTableData().featureCount()), mm);
 	}
 
