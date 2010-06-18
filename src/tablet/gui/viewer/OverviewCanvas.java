@@ -136,7 +136,7 @@ public class OverviewCanvas extends JPanel
 				TabletUtils.nf.format(DisplayData.getMaxCoverage())));
 		}
 
-		overviewCoordinates = (oS+1) + " to " + (oE+1) + getBasePairString((oE-oS)+1);
+		overviewCoordinates =  TabletUtils.nf.format(oS+1) + " to " +  TabletUtils.nf.format(oE+1) + getBasePairString((oE-oS)+1);
 		repaint();
 	}
 
