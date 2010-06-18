@@ -141,19 +141,14 @@ class ContigsTableModel extends AbstractTableModel
 			Contig contig = assembly.getContig(row);
 
 			if (contig.getTableData().readsDefined)
-			{
 				setForeground(isSelected ? Color.white : Color.black);
-				setText(TabletUtils.nf.format((Integer)value));
-			}
 			else
-			{
 				setForeground(isSelected ? TabletUtils.red2 : TabletUtils.red1);
 
-				if (((Integer)value) > 0)
-					setText(TabletUtils.nf.format((Integer)value));
-				else
-					setText("?");
-			}
+			if (value != null)
+				setText(TabletUtils.nf.format((Integer)value));
+			else
+				setText("?");
 
 			setHorizontalAlignment(JLabel.RIGHT);
 
