@@ -20,8 +20,7 @@ import apple.dts.samplecode.osxadapter.*;
 
 public class Tablet implements Thread.UncaughtExceptionHandler
 {
-	private static File prefsFile = new File(
-		System.getProperty("user.home"), ".tablet.xml");
+	private static File prefsFile = getPrefsFile();
 	private static Prefs prefs = new Prefs();
 
 	public static WinMain winMain;
@@ -169,6 +168,27 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		};
 
 		SwingUtilities.invokeLater(r);
+	}
+
+	private static File getPrefsFile()
+	{
+		// Ensure the .scri-bioinf folder exists
+		File fldr = new File(System.getProperty("user.home"), ".scri-bioinf");
+		fldr.mkdirs();
+
+		// This is the file we really want
+		File file = new File(fldr, "tablet.xml");
+		// So if it exists, just use it
+		if (file.exists())
+			return file;
+
+		// If not, see if the "old" (pre 21/06/2010) file is available
+		File old = new File(System.getProperty("user.home"), ".tablet.xml");
+		if (old.exists())
+			try { FileUtils.copyFile(old, file, true); }
+			catch (IOException e) {}
+
+		return file;
 	}
 
 	// --------------------------------------------------
