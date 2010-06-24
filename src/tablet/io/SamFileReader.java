@@ -16,6 +16,7 @@ import tablet.data.auxiliary.CigarFeature;
 class SamFileReader extends TrackableReader
 {
 	private IReadCache readCache;
+	private ReadSQLCache nameCache;
 
 	private ReferenceFileReader refReader;
 	private CigarParser cigarParser;
@@ -28,9 +29,10 @@ class SamFileReader extends TrackableReader
 	{
 	}
 
-	SamFileReader(IReadCache readCache)
+	SamFileReader(IReadCache readCache, ReadSQLCache nameCache)
 	{
 		this.readCache = readCache;
+		this.nameCache = nameCache;
 	}
 
 	private void readReferenceFile()
@@ -121,10 +123,18 @@ class SamFileReader extends TrackableReader
 				StringBuilder fullRead = new StringBuilder(cigarParser.parse(
 					data.toString(), pos, cigar));
 
-				ReadMetaData rmd = new ReadMetaData(name, complemented);
+				ReadNameData rnd = new ReadNameData(name);
+				
+
+				ReadMetaData rmd = new ReadMetaData(complemented);
 				rmd.setData(fullRead);
-				rmd.calculateUnpaddedLength();
-				rmd.setCigar(cigar);
+
+				int uLength = rmd.calculateUnpaddedLength();
+				rnd.setUnpaddedLength(uLength);
+				rnd.setCigar(cigar);
+				nameCache.setReadNameData(rnd);
+
+				
 				read.setLength(rmd.length());
 
 				// Do base-position comparison...

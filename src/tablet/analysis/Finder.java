@@ -99,11 +99,12 @@ public class Finder extends SimpleJob
 		{
 			Read read = contig.getReads().get(readNo);
 			ReadMetaData rmd = Assembly.getReadMetaData(read, false);
+			ReadNameData rnd = Assembly.getReadNameData(read);
 
 			if (searchReads)
-				checkForReadMatches(rmd.getName(), read.getStartPosition(), rmd.length(), searchString, contig);
+				checkForReadMatches(rnd.getName(), read.getStartPosition(), rmd.length(), searchString, contig);
 			else
-				checkForSubsequenceMatches(rmd.getName(), read.getStartPosition(), rmd.length(), searchString, contig, rmd.toString());
+				checkForSubsequenceMatches(rnd.getName(), read.getStartPosition(), rmd.length(), searchString, contig, rmd.toString());
 
 			progress++;
 			//if we've had 500 matches stop searching

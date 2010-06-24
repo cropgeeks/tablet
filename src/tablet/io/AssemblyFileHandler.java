@@ -51,17 +51,20 @@ public class AssemblyFileHandler extends SimpleJob
 
 		// Set up the read cache
 		IReadCache readCache = null;
+		ReadSQLCache sqlCache = null;
 
 		if (Prefs.cacheReads)
 		{
 			File cache = new File(cacheDir, "Tablet-" + cacheid + ".reads");
 			File index = new File(cacheDir, "Tablet-" + cacheid + ".readsndx");
 			readCache = new ReadFileCache(cache, index);
+			sqlCache = new ReadSQLCache(new File(cacheDir, "Tablet-" + cacheid + ".db"));
 		}
 		else
 			readCache = new ReadMemCache();
 
 		readCache.openForWriting();
+		sqlCache.openForWriting();
 
 		// Determine assembly type and sort into order (assembly before ref)
 		for (AssemblyFile aFile: files)
@@ -74,27 +77,27 @@ public class AssemblyFileHandler extends SimpleJob
 		switch (files[0].getType())
 		{
 			case ACE:
-				reader = new AceFileReader(readCache);
+				reader = new AceFileReader(readCache, sqlCache);
 				break;
 
 			case AFG:
-				reader = new AfgFileReader(readCache, cacheDir);
+				reader = new AfgFileReader(readCache, sqlCache, cacheDir);
 				break;
 
 			case SAM:
-				reader = new SamFileReader(readCache);
+				reader = new SamFileReader(readCache, sqlCache);
 				break;
 
 			case BAM:
-				reader = new BamFileReader(readCache, cacheDir, cacheid);
+				reader = new BamFileReader(readCache, sqlCache, cacheDir, cacheid);
 				break;
 
 			case MAQ:
-				reader = new MaqFileReader(readCache);
+				reader = new MaqFileReader(readCache, sqlCache);
 				break;
 
 			case SOAP:
-				reader = new SoapFileReader(readCache);
+				reader = new SoapFileReader(readCache, sqlCache);
 				break;
 		}
 
@@ -109,6 +112,9 @@ public class AssemblyFileHandler extends SimpleJob
 
 			readCache.openForReading();
 			assembly.setReadCache(readCache);
+
+			sqlCache.openForReading();
+			assembly.setNameCache(sqlCache);
 
 			// Sort the reads into order
 			System.out.print("Sorting...");

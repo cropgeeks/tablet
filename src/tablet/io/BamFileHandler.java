@@ -18,6 +18,7 @@ public class BamFileHandler
 	public static boolean VALIDATION_LENIENT = false;
 
 	private IReadCache readCache;
+	private ReadSQLCache nameCache;
 	private AssemblyFile bamFile, baiFile;
 	private SAMFileReader bamReader;
 	private Assembly assembly;
@@ -26,12 +27,13 @@ public class BamFileHandler
 	private boolean okToRun = true;
 	private boolean refLengthsOK = true;
 
-	BamFileHandler(IReadCache readCache, AssemblyFile bamFile, AssemblyFile baiFile, Assembly assembly)
+	BamFileHandler(IReadCache readCache, ReadSQLCache nameCache, AssemblyFile bamFile, AssemblyFile baiFile, Assembly assembly)
 	{
 		this.bamFile = bamFile;
 		this.baiFile = baiFile;
 		this.readCache = readCache;
 		this.assembly = assembly;
+		this.nameCache = nameCache;
 	}
 
 	public void cancel()
@@ -65,6 +67,7 @@ public class BamFileHandler
 			readCache = new ReadMemCache();
 
 		readCache.openForWriting();
+		nameCache.openForWriting();
 
 		CigarParser parser = new CigarParser(contig.getName());
 
@@ -90,6 +93,8 @@ public class BamFileHandler
 		{
 			readCache.openForReading();
 			assembly.setReadCache(readCache);
+			nameCache.openForReading();
+			assembly.setNameCache(nameCache);
 		}
 
 		if (okToRun)
@@ -103,21 +108,27 @@ public class BamFileHandler
 	private void createRead(Contig contig, final SAMRecord record, CigarParser parser) throws Exception
 	{
 		int readStartPos = record.getAlignmentStart()-1;
-		ReadMetaData rmd = new ReadMetaData(record.getReadName(), record.getReadNegativeStrandFlag());
+
+		ReadNameData rnd = new ReadNameData(record.getReadName());
+		
+
+		ReadMetaData rmd = new ReadMetaData(record.getReadNegativeStrandFlag());
 
 		StringBuilder fullRead = new StringBuilder(
 			parser.parse(new String(record.getReadBases()), readStartPos, record.getCigarString()));
 		rmd.setData(fullRead);
 		Read read = new Read(readID, readStartPos);
 
-		rmd.calculateUnpaddedLength();
+		int uLength = rmd.calculateUnpaddedLength();
+		rnd.setUnpaddedLength(uLength);
+		rnd.setCigar(record.getCigar().toString());
+		nameCache.setReadNameData(rnd);
+
 		read.setLength(rmd.length());
 		contig.getReads().add(read);
 
 		// Do base-position comparison...
 		BasePositionComparator.compare(contig, rmd, readStartPos);
-
-		rmd.setCigar(record.getCigar().toString());
 
 		readCache.setReadMetaData(rmd);
 		readID++;

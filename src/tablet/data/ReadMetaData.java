@@ -12,40 +12,19 @@ package tablet.data;
  */
 public class ReadMetaData extends Sequence
 {
-	private String name;
-
 	// Is the read complemented or uncomplemented
 	private boolean isComplemented;
 
-	private int unpaddedLength;
 	private int length;
-
-	private String cigar = "";
 
 	public ReadMetaData()
 	{
 	}
 
-	public ReadMetaData(String name, boolean isComplemented)
+	public ReadMetaData(boolean isComplemented)
 	{
-		this.name = name;
 		this.isComplemented = isComplemented;
 	}
-
-	public ReadMetaData(String name, boolean isComplemented, int unpaddedLength)
-	{
-		this.name = name;
-		this.isComplemented = isComplemented;
-		this.unpaddedLength = unpaddedLength;
-	}
-
-	public void setName(String name)
-	{
-		this.name = name;
-	}
-
-	public String getName()
-		{ return name; }
 
 	public void setComplmented(boolean isComplemented)
 	{
@@ -55,22 +34,21 @@ public class ReadMetaData extends Sequence
 	public boolean isComplemented()
 		{ return isComplemented; }
 
-	public int getUnpaddedLength()
-		{ return unpaddedLength; }
-
 	/**
 	 * Calculates and returns the unpadded length of this sequence. Note: this
 	 * information is part of the ReadMetaData class and this method is purely
 	 * for calculation to fill that class - it shouldn't be used for any other
 	 * purpose.
 	 */
-	public void calculateUnpaddedLength()
+	public int calculateUnpaddedLength()
 	{
-		unpaddedLength = 0;
+		int unpaddedLength = 0;
 
 		for (int i = 0; i < length; i++)
 			if (getStateAt(i) != P)
 				unpaddedLength++;
+
+		return unpaddedLength;
 	}
 
 	public int length()
@@ -107,10 +85,4 @@ public class ReadMetaData extends Sequence
 		super.setData(sequence);
 		length = sequence.length();
 	}
-
-	public String getCigar()
-		{ return cigar; }
-
-	public void setCigar(String cigar)
-		{ this.cigar = cigar; }
 }

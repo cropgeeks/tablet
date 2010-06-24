@@ -16,6 +16,7 @@ import scri.commons.gui.*;
 class AfgFileReader extends TrackableReader
 {
 	private IReadCache readCache;
+	private ReadSQLCache nameCache;
 	private HashMap<Integer, Integer> iids = new HashMap<Integer, Integer>();
 	private int tmpCacheID = 0;
 
@@ -39,10 +40,12 @@ class AfgFileReader extends TrackableReader
 	//private AfgNameCache cache = null;
 
 	private IReadCache tempCache;
+	private ReadSQLCache sqlCache;
 	private File cacheDir;
 
 	private File cacheFile;
 	private File indexFile;
+	private File sqlCacheFile;
 
 	private boolean firstTileFound = false;
 
@@ -54,9 +57,10 @@ class AfgFileReader extends TrackableReader
 	{
 	}
 
-	AfgFileReader(IReadCache readCache, File cacheDir)
+	AfgFileReader(IReadCache readCache, ReadSQLCache nameCache, File cacheDir)
 	{
 		this.readCache = readCache;
+		this.nameCache = nameCache;
 		this.cacheDir = cacheDir;
 	}
 
@@ -69,9 +73,13 @@ class AfgFileReader extends TrackableReader
 		long time = System.currentTimeMillis();
 		cacheFile = new File(cacheDir, time + "-" + files[0].getName() + ".tempCache");
 		indexFile = new File(cacheDir, time + "-" + files[0].getName() + ".tempCacheIndex");
+		sqlCacheFile = new File(cacheDir, time + "-" + files[0].getName() + ".db");
 
 		tempCache = new ReadFileCache(cacheFile, indexFile);
 		tempCache.openForWriting();
+
+		sqlCache = new ReadSQLCache(sqlCacheFile);
+		sqlCache.openForWriting();
 
 		// Scan for contigs
 		while ((str = readLine()) != null && okToRun)
@@ -158,6 +166,7 @@ class AfgFileReader extends TrackableReader
 		{
 			firstTileFound = true;
 			tempCache.openForReading();
+			sqlCache.openForReading();
 		}
 
 		//this contains the positions of the gap characters in this read
@@ -208,8 +217,7 @@ class AfgFileReader extends TrackableReader
 		//retrieve the corresponding read from the array list using the internal id
 		int id = iids.get(tileIID);
 		ReadMetaData readMetaData = tempCache.getReadMetaData(id, false);
-
-		readMetaData.calculateUnpaddedLength();
+		ReadNameData readNameData = sqlCache.getReadNameData(id);
 
 		Read read = new Read();
 
@@ -229,8 +237,8 @@ class AfgFileReader extends TrackableReader
 		// Reverse read...
 		else
 		{
-			offset = offset - (readMetaData.getUnpaddedLength() - clearRangeStart);
-			gapOffset = readMetaData.getUnpaddedLength() - clearRangeStart;
+			offset = offset - (readNameData.getUnpaddedLength() - clearRangeStart);
+			gapOffset = readNameData.getUnpaddedLength() - clearRangeStart;
 		}
 
 		//set start pos
@@ -267,8 +275,12 @@ class AfgFileReader extends TrackableReader
 
 		BasePositionComparator.compare(contig, readMetaData, read.getStartPosition());
 
+		ReadNameData rnd = sqlCache.getReadNameData(id);
+
 		readCache.setReadMetaData(readMetaData);
 		readsAdded++;
+
+		nameCache.setReadNameData(rnd);
 
 		//remember to increment the read id
 		currReadID++;
@@ -279,6 +291,7 @@ class AfgFileReader extends TrackableReader
 	//parses a RED tag -- contains read information (internal ID, external ID i.e. name, unpadded sequence, quality scores)
 	private void processRead() throws Exception
 	{
+		ReadNameData rnd = new ReadNameData();
 		//Read read = new Read();
 		ReadMetaData readMetaData = new ReadMetaData();
 
@@ -290,7 +303,7 @@ class AfgFileReader extends TrackableReader
 			// external ID AKA contig name
 			if(str.startsWith("eid"))
 			{
-				readMetaData.setName(str.substring(str.indexOf(":") + 1));
+				rnd.setName(str.substring(str.indexOf(":") + 1));
 			}
 
 			else if (str.startsWith("iid"))
@@ -311,13 +324,16 @@ class AfgFileReader extends TrackableReader
 			}
 		}
 
-		readMetaData.calculateUnpaddedLength();
+		int uLength = readMetaData.calculateUnpaddedLength();
+		rnd.setUnpaddedLength(uLength);
 		readMetaData.setComplmented(false);
 
 		//store this read in the local list so we can look it up later when we are dealing with the alignment of reads against the
 		//consensus sequence
 		//at this point the read is not complemented so we can set the boolean (3rd param) to false accordingly
 		tempCache.setReadMetaData(readMetaData);
+
+		sqlCache.setReadNameData(rnd);
 
 		tmpCacheID++;
 	}
