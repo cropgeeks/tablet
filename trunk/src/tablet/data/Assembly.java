@@ -20,6 +20,7 @@ public class Assembly implements Iterable<Contig>
 
 	private String cacheID;
 	private static IReadCache cache;
+	private static ReadSQLCache nameCache;
 
 	private ArrayList<Contig> contigs = new ArrayList<Contig>();
 
@@ -137,4 +138,18 @@ public class Assembly implements Iterable<Contig>
 	 */
 	public BamBam getBamBam()
 		{ return bambam; }
+
+	public void setNameCache(ReadSQLCache nameCache)
+	{
+		this.nameCache = nameCache;
+	}
+
+	/**
+	 * Finds and returns the read meta data for the given read.
+	 * @return the read meta data for the given read
+	 */
+	public static ReadNameData getReadNameData(Read read)
+	{
+		return nameCache.getReadNameData(read.getID());
+	}
 }

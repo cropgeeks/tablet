@@ -72,6 +72,8 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		this.read = read;
 		this.metaData = metaData;
 
+		ReadNameData rnd = Assembly.getReadNameData(read);
+
 		// Width and height of final overlay
 		w = 300;
 		h = 90;
@@ -93,13 +95,13 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		else
 			lengthData = RB.format("gui.viewer.ReadsCanvasInfoPane.lengthUnpadded",
 				TabletUtils.nf.format(read.length()),
-				TabletUtils.nf.format(metaData.getUnpaddedLength()));
+				TabletUtils.nf.format(rnd.getUnpaddedLength()));
 
 		// Name
-		readName = metaData.getName();
+		readName = Assembly.getReadNameData(read).getName();
 
 		if (Assembly.hasCigar())
-			cigar = RB.format("gui.viewer.ReadsCanvasInfoPane.cigar", metaData.getCigar());
+			cigar = RB.format("gui.viewer.ReadsCanvasInfoPane.cigar", rnd.getCigar());
 
 		// Determine longest string
 		if (fmTitle.stringWidth(readName) > (w-20))
@@ -210,7 +212,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 	void copyReadNameToClipboard()
 	{
-		StringSelection selection = new StringSelection(metaData.getName());
+		StringSelection selection = new StringSelection(Assembly.getReadNameData(read).getName());
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
 			selection, null);
 	}
@@ -231,7 +233,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			text.append("Read direction is FORWARD" + lb + lb);
 
 		// Produce a FASTA formatted string
-		text.append(TabletUtils.formatFASTA(metaData.getName(), seq));
+		text.append(TabletUtils.formatFASTA(Assembly.getReadNameData(read).getName(), seq));
 
 		StringSelection selection = new StringSelection(text.toString());
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(

@@ -20,6 +20,7 @@ public class AceFileReader extends TrackableReader
 	public static boolean PROCESS_QA = true;
 
 	private IReadCache readCache;
+	private ReadSQLCache nameCache;
 
 	private Contig contig;
 	private Consensus consensus;
@@ -56,9 +57,10 @@ public class AceFileReader extends TrackableReader
 	{
 	}
 
-	AceFileReader(IReadCache readCache)
+	AceFileReader(IReadCache readCache, ReadSQLCache nameCache)
 	{
 		this.readCache = readCache;
+		this.nameCache = nameCache;
 	}
 
 	public void runJob(int jobIndex)
@@ -297,10 +299,16 @@ public class AceFileReader extends TrackableReader
 				contig.getReads().set(rdIndex, null);
 		}
 
+		ReadNameData rnd = new ReadNameData(RD[1]);
+
 		// Store the metadata about the read in the cache
-		ReadMetaData rmd = new ReadMetaData(RD[1], ucCache[rdIndex]);
+		ReadMetaData rmd = new ReadMetaData(ucCache[rdIndex]);
 		rmd.setData(seq);
-		rmd.calculateUnpaddedLength();
+
+		int uLength = rmd.calculateUnpaddedLength();
+		rnd.setUnpaddedLength(uLength);
+		nameCache.setReadNameData(rnd);
+		
 		read.setLength(rmd.length());
 
 		// Do base-position comparison...

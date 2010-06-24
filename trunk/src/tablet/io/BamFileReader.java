@@ -16,6 +16,7 @@ import net.sf.samtools.*;
 public class BamFileReader extends TrackableReader
 {
 	private IReadCache readCache;
+	private ReadSQLCache nameCache;
 	private File cacheDir;
 	private String cacheid;
 
@@ -36,9 +37,10 @@ public class BamFileReader extends TrackableReader
 	{
 	}
 
-	BamFileReader(IReadCache readCache, File cacheDir, String cacheid)
+	BamFileReader(IReadCache readCache, ReadSQLCache nameCache, File cacheDir, String cacheid)
 	{
 		this.readCache = readCache;
+		this.nameCache = nameCache;
 		this.cacheDir = cacheDir;
 		this.cacheid = cacheid;
 	}
@@ -93,9 +95,9 @@ public class BamFileReader extends TrackableReader
 
 		if (okToRun)
 		{
+			BamFileHandler bamHandler = new BamFileHandler(readCache, nameCache, bamFile, baiFile, assembly);
 			status = 2;
-
-			BamFileHandler bamHandler = new BamFileHandler(readCache, bamFile, baiFile, assembly);
+			
 			bamHandler.openBamFile(contigHash);
 
 			assembly.setBamHandler(bamHandler);

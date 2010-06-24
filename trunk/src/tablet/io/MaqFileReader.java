@@ -15,6 +15,7 @@ import scri.commons.gui.*;
 class MaqFileReader extends TrackableReader
 {
 	private IReadCache readCache;
+	private ReadSQLCache nameCache;
 
 	private ReferenceFileReader refReader;
 
@@ -26,9 +27,10 @@ class MaqFileReader extends TrackableReader
 	{
 	}
 
-	MaqFileReader(IReadCache readCache)
+	MaqFileReader(IReadCache readCache, ReadSQLCache nameCache)
 	{
 		this.readCache = readCache;
+		this.nameCache = nameCache;
 	}
 
 	private void readReferenceFile()
@@ -84,9 +86,16 @@ class MaqFileReader extends TrackableReader
 			{
 				contigToAddTo.getReads().add(read);
 
-				ReadMetaData rmd = new ReadMetaData(name, complemented);
+				ReadNameData rnd = new ReadNameData(name);
+				
+
+				ReadMetaData rmd = new ReadMetaData(complemented);
 				rmd.setData(data);
-				rmd.calculateUnpaddedLength();
+
+				int uLength = rmd.calculateUnpaddedLength();
+				rnd.setUnpaddedLength(uLength);
+				nameCache.setReadNameData(rnd);
+
 				read.setLength(rmd.length());
 
 				// Do base-position comparison...
