@@ -65,6 +65,11 @@
 						osxadapter.jar
 						scri-commons.jar
 						sam.jar
+						sqlite-jdbc-3.6.19-linux32.jar
+						sqlite-jdbc-3.6.19-linux64.jar
+						sqlite-jdbc-3.6.19-macos.jar
+						sqlite-jdbc-3.6.19-win32.jar
+						sqlite-jdbc-3.6.19-win64.jar
 						tablet-resources.jar"/>
 				<attribute name="Implementation-Version" value="${i4j.version}"/>
 			</manifest>

@@ -60,7 +60,6 @@ public class ReadSQLCache
 
 		Statement s = c.createStatement();
 		s.setFetchSize(100);
-		System.out.println("Size: " + s.getFetchSize());
 		s.close();
 	}
 
