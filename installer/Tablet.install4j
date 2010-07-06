@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="5.0" transformSequenceNumber="3">
+<install4j version="5.0.1" transformSequenceNumber="3">
   <directoryPresets config=".." />
   <application name="Tablet" distributionSourceDir="" applicationId="9483-2571-4596-9336" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="tablet" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="x.xx.xx.xx" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
@@ -27,9 +27,10 @@
       <mountPoint id="746" root="" location="utils" mode="755" />
     </mountPoints>
     <entries>
-      <dirEntry mountPoint="19" file="../lib" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="lib" excludeSuffixes=".svn" dirMode="755" overrideDirMode="false">
+      <dirEntry mountPoint="19" file="../lib" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="lib" excludeSuffixes="*.txt,.svn" dirMode="755" overrideDirMode="false">
         <exclude>
           <entry location="i4jruntime.jar" fileType="regular" />
+          <entry location="sqlite-jdbc-3.6.19.jar" fileType="regular" />
         </exclude>
       </dirEntry>
       <dirEntry mountPoint="342" file="./licence" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="" excludeSuffixes=".svn" dirMode="755" overrideDirMode="false">

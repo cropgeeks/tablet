@@ -15,6 +15,7 @@
 		<jar href="osxadapter.jar"/>
 		<jar href="sam.jar"/>
 		<jar href="scri-commons.jar"/>
+		<jar href="sqlite-jdbc-3.6.19.jar"/>
 		<jar href="tablet.jar"/>
 		<jar href="tablet-resources.jar"/>
 	</resources>
