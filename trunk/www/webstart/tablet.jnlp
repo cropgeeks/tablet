@@ -28,7 +28,7 @@ if(defined($cgi_query->param("java_vm_args")))
 	$java_vm_args = $cgi_query->param("java_vm_args");
 }
 
-open(FILE, "/var/www/cgi-bin/tablet/jnlp.template");
+open(FILE, "tablet.jnlp.template");
 my @file = <FILE>;
 close FILE;
 

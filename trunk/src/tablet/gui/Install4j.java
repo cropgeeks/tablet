@@ -126,7 +126,7 @@ public class Install4j
 						+ " (" + System.getProperty("os.arch") + ")", "UTF-8");
 					String user = URLEncoder.encode(System.getProperty("user.name"), "UTF-8");
 
-					String addr = "http://bioinf.scri.ac.uk/cgi-bin/tablet/tablet.cgi"
+					String addr = "http://bioinf.scri.ac.uk/tablet/logs/tablet.pl"
 						+ "?id=" + id
 						+ "&version=" + version
 						+ "&locale=" + locale
