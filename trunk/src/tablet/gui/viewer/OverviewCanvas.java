@@ -163,7 +163,8 @@ public class OverviewCanvas extends JPanel
 
 		// Work out the x1 position for the outline box
 		bX1 = Math.round(xScale * xIndex);
-		//if (bX1 >= w) bX1 = w - 1;
+		if (bX1 >= w && !isSubsetted())
+			bX1 = w - 1;
 
 		// Work out the y1 position for the outline box
 		bY1 = Math.round(yScale * yIndex);
@@ -171,7 +172,8 @@ public class OverviewCanvas extends JPanel
 
 		// Work out the x2 position for the outline box
 		bX2 = bX1 + Math.round(xNum * xScale);
-		//if (bX2 >= w) bX2 = w - 1;
+		if (bX2 >= w && !isSubsetted())
+			bX2 = w - 1;
 
 		// Work out the y2 position for the outline box
 		bY2 = bY1 + Math.round(yNum * yScale);
