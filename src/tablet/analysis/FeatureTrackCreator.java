@@ -25,12 +25,12 @@ public class FeatureTrackCreator extends SimpleJob
 		vContig.removeTracks();
 
 		// For each type of feature to be given a track...
-		for (String type: Feature.getTypes(true))
+		for (Feature.VisibleFeature f: Feature.order)
 		{
-			FeatureTrack track = new FeatureTrack(type);
+			FeatureTrack track = new FeatureTrack(f.type);
 			vContig.addTrack(track);
 
-			type = type.toLowerCase();
+			String type = f.type.toLowerCase();
 
 			for (Feature feature: contig.getFeatures())
 				if (feature.getGFFType().toLowerCase().equals(type))

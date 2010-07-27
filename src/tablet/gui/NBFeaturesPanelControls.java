@@ -33,6 +33,7 @@ class NBFeaturesPanelControls extends JPanel
 
 		filterText.getDocument().addDocumentListener(this);
 		checkPadded.addActionListener(this);
+		linkEdit.addActionListener(this);
 
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -66,21 +67,27 @@ class NBFeaturesPanelControls extends JPanel
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (Prefs.guiWarnOnPaddedFeatureToggle)
+		if (e.getSource() == checkPadded)
 		{
-			String msg = RB.getString("gui.NBFeaturesPanelControls.checkMessage");
-			JCheckBox checkbox = new JCheckBox();
-			RB.setText(checkbox, "gui.NBFeaturesPanelControls.checkWarning");
+			if (Prefs.guiWarnOnPaddedFeatureToggle)
+			{
+				String msg = RB.getString("gui.NBFeaturesPanelControls.checkMessage");
+				JCheckBox checkbox = new JCheckBox();
+				RB.setText(checkbox, "gui.NBFeaturesPanelControls.checkWarning");
 
-			TaskDialog.info(msg, RB.getString("gui.text.close"), checkbox);
+				TaskDialog.info(msg, RB.getString("gui.text.close"), checkbox);
 
-			Prefs.guiWarnOnPaddedFeatureToggle = !checkbox.isSelected();
+				Prefs.guiWarnOnPaddedFeatureToggle = !checkbox.isSelected();
+			}
+
+			Prefs.guiFeaturesArePadded = checkPadded.isSelected();
+			Feature.ISPADDED = Prefs.guiFeaturesArePadded;
+
+			Tablet.winMain.repaint();
 		}
 
-		Prefs.guiFeaturesArePadded = checkPadded.isSelected();
-		Feature.ISPADDED = Prefs.guiFeaturesArePadded;
-
-		Tablet.winMain.repaint();
+		else if (e.getSource() == linkEdit)
+			panel.editFeatures();
 	}
 
 	public void toggleComponentEnabled(boolean enabled)
@@ -130,6 +137,7 @@ class NBFeaturesPanelControls extends JPanel
             }
         };
         featuresLabel = new javax.swing.JLabel();
+        linkEdit = new scri.commons.gui.matisse.HyperLinkLabel();
 
         filterLabel.setLabelFor(filterText);
         filterLabel.setText("Filter by type:");
@@ -148,38 +156,47 @@ class NBFeaturesPanelControls extends JPanel
 
         featuresLabel.setText("Features (0):");
 
+        linkEdit.setForeground(new java.awt.Color(68, 106, 156));
+        linkEdit.setText("Edit tracks...");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(featuresLabel)
-                .addContainerGap(326, Short.MAX_VALUE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(checkPadded)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(filterLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(filterText, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(featuresLabel)
+                        .addContainerGap(326, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(checkPadded)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(filterLabel)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(filterText, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(linkEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(328, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(featuresLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 64, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(filterLabel)
                     .addComponent(filterText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(checkPadded)
+                .addGap(18, 18, 18)
+                .addComponent(linkEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -191,6 +208,7 @@ class NBFeaturesPanelControls extends JPanel
     private javax.swing.JLabel filterLabel;
     private javax.swing.JTextField filterText;
     private javax.swing.JScrollPane jScrollPane1;
+    private scri.commons.gui.matisse.HyperLinkLabel linkEdit;
     public javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 

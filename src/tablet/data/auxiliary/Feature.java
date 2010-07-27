@@ -28,9 +28,10 @@ public class Feature implements Comparable<Feature>
 
 
 	// Tracks all known GFF types for the current data set. The hash is cleared
-	// by Assembly's constructor whenever new data is imported/loaded. The
-	// boolean value stores whether this feature type is being visualized or not
-	private static HashMap<String, Boolean> types = new HashMap<String, Boolean>();
+	// by Assembly's constructor whenever new data is imported/loaded.
+	public static HashMap<String, String> types = new HashMap<String, String>();
+	// Tracks the order for the GFF types
+	public static ArrayList<VisibleFeature> order = new ArrayList<VisibleFeature>();
 
 	protected byte tabletType;
 
@@ -66,7 +67,10 @@ public class Feature implements Comparable<Feature>
 
 		// Add this feature's type to the tracking table
 		if (types.get(gffType) == null)
-			types.put(gffType, true);
+		{
+			types.put(gffType, gffType);
+			order.add(new VisibleFeature(gffType, false));
+		}
 	}
 
 	public int compareTo(Feature other)
@@ -107,32 +111,12 @@ public class Feature implements Comparable<Feature>
 	public String getName()
 		{ return name; }
 
-	public static void clearTypes()
+	public static void clearTracking()
 	{
 		types.clear();
+		order.clear();
 	}
 
-	/**
-	 * Returns a list of active feature types for this data set, optionally only
-	 * including those that have been marked for visualization.
-	 */
-	public static ArrayList<String> getTypes(boolean selectedOnly)
-	{
-		 Set<String> keysSet = types.keySet();
-		 ArrayList<String> keys = new ArrayList<String>();
-
-		 Iterator<String> itor = keysSet.iterator();
-		 while (itor.hasNext())
-		 {
-		 	String key = itor.next();
-		 	boolean selected = types.get(key);
-
-		 	if (selectedOnly == false || (selectedOnly && selected))
-		 		keys.add(key);
-		 }
-
-		 return keys;
-	}
 
 	/** See class notes above for a description of the following four methods */
 
@@ -180,5 +164,17 @@ public class Feature implements Comparable<Feature>
 		// If it can't be converted (yet) we'll hopefully get it next time
 		else
 			return pE;
+	}
+
+	public static class VisibleFeature
+	{
+		public String type;
+		public boolean isVisible;
+
+		public VisibleFeature(String type, boolean isVisible)
+		{
+			this.type = type;
+			this.isVisible = isVisible;
+		}
 	}
 }

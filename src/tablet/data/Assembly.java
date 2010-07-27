@@ -34,7 +34,7 @@ public class Assembly implements Iterable<Contig>
 
 		hasCigar = false;
 
-		Feature.clearTypes();
+		Feature.clearTracking();
 	}
 
 	/**
