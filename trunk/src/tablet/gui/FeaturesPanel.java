@@ -12,6 +12,7 @@ import javax.swing.table.*;
 import tablet.data.*;
 import tablet.data.auxiliary.*;
 import tablet.gui.*;
+import tablet.gui.dialog.*;
 import tablet.gui.viewer.*;
 
 import scri.commons.gui.*;
@@ -226,6 +227,11 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 			return "" + Sequence.PAD;
 		else
 			return TabletUtils.nf.format(padded+1);
+	}
+
+	void editFeatures()
+	{
+		new FeaturesDialog();
 	}
 
 	private class FeaturesTableRenderer extends NumberFormatCellRenderer
