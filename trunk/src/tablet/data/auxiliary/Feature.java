@@ -64,7 +64,10 @@ public class Feature implements Comparable<Feature>
 		this.name = name;
 		this.pS = pS;
 		this.pE = pE;
+	}
 
+	public void verifyType()
+	{
 		// Add this feature's type to the tracking table
 		if (types.get(gffType) == null)
 		{

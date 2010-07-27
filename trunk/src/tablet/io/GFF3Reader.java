@@ -135,7 +135,10 @@ public class GFF3Reader extends TrackableReader
 
 			for (Feature feature : newFeatures)
 				if (contig.addFeature(feature))
+				{
+					feature.verifyType();
 					cAdded++;
+				}
 
 			Collections.sort(contig.getFeatures());
 		}
