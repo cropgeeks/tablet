@@ -110,6 +110,7 @@ class MaqFileReader extends TrackableReader
 
 		in.close();
 
+		Assembly.setIsPaired(false);
 		assembly.setName(files[0].getName());
 	}
 

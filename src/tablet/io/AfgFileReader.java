@@ -90,7 +90,8 @@ class AfgFileReader extends TrackableReader
 			else if (str.startsWith("{CTG"))
 				processContig();
 		}
-
+		
+		Assembly.setIsPaired(false);
 		assembly.setName(files[ASBINDEX].getName());
 	}
 
