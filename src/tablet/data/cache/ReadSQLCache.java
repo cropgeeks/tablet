@@ -18,27 +18,35 @@ public class ReadSQLCache
 	private PreparedStatement ips;
 	private Stack<PreparedStatement> gpsAll = new Stack<PreparedStatement>();
 
+	private File file;
+
+	boolean first = true;
+
 	public ReadSQLCache(File file)
 		throws Exception
 	{
+		this.file = file;
 		Class.forName("org.sqlite.JDBC");
 
 		c =	DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
 
 		Statement s = c.createStatement();
 
+		// Set up the sqlite modes
 		s.execute("PRAGMA locking_mode = EXCLUSIVE;");
 		s.execute("PRAGMA journal_mode = OFF;");
 		s.execute("PRAGMA synchronous = OFF;");
 		s.execute("PRAGMA count_changes = false;");
 
-//		s.executeUpdate("drop table if exists reads;");
-		s.executeUpdate("CREATE TABLE reads (id INTEGER PRIMARY KEY, name TEXT, unpaddedlength INTEGER, cigar TEXT, matecontig TEXT);");
+		// Create the database table
+		s.executeUpdate("CREATE TABLE reads (id INTEGER PRIMARY KEY, name TEXT, unpaddedlength INTEGER, cigar TEXT, matecontig TEXT, insertsize INTEGER, isproperpair INTEGER, numberinpair INTEGER);");
 
 		s.close();
 
-		ips = c.prepareStatement("INSERT INTO reads (id, name, unpaddedlength, cigar, matecontig) VALUES (?, ?, ?, ?, ?);");
+		// Create the prepared statement for inserting into the database
+		ips = c.prepareStatement("INSERT INTO reads (id, name, unpaddedlength, cigar, matecontig, insertsize, isproperpair, numberinpair) VALUES (?, ?, ?, ?, ?, ?, ?, ?);");
 
+		// Create prepared statements for reading from the database
 		for (int i = 0; i < 10; i++)
 		{
 			PreparedStatement ps = c.prepareStatement("SELECT * FROM reads WHERE id=?;");
@@ -81,7 +89,7 @@ public class ReadSQLCache
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
-				rnd = new ReadNameData(rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5));
+				rnd = new ReadNameData(rs.getString(2), rs.getInt(3), rs.getString(4), rs.getString(5), rs.getInt(6), rs.getBoolean(7), rs.getInt(8));
 
 			rs.close();
 
@@ -104,6 +112,9 @@ public class ReadSQLCache
 		ips.setInt(3, readNameData.getUnpaddedLength());
 		ips.setString(4, readNameData.getCigar());
 		ips.setString(5, readNameData.getMateContig());
+		ips.setInt(6, readNameData.getInsertSize());
+		ips.setBoolean(7, readNameData.isProperPair());
+		ips.setInt(8, readNameData.getNumberInPair());
 
 		ips.addBatch();
 
@@ -115,5 +126,15 @@ public class ReadSQLCache
 		throws SQLException
 	{
 		ips.executeBatch();
+	}
+
+	public ReadSQLCache resetCache()
+		throws IOException, Exception
+	{
+		Statement s = c.createStatement();
+		s.execute("drop table if exists reads;");
+		s.close();
+		c.close();
+		return new ReadSQLCache(file);
 	}
 }
