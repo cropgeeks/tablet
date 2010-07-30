@@ -28,10 +28,10 @@ public class StandardColorScheme extends ColorScheme
 
 			// Duplicate the second half (to deal/ignore with orientation
 			//  add 6 to get us up to "20"
-			for (int i = 0; i < 6; i++)
+			for (int i = 0; i < 4; i++)
 				statesRD.add(null);
 			//  then add the same pre-created states all over again
-			for (int i = 0; i < 14; i++)
+			for (int i = 0; i < 16; i++)
 				statesRD.add(statesRD.get(i));
 		}
 	}
@@ -68,6 +68,10 @@ public class StandardColorScheme extends ColorScheme
 		// Sequence.T
 		statesCS.add(new StandardColorState("T", new Color(120, 120, 255), w, h, false, false));
 		statesCS.add(null);
+
+		// Pair Link
+		statesCS.add(new PairLinkColorState(new Color(180, 180, 180), w, h));
+		statesCS.add(null);
 	}
 
 	protected void createStatesRD(int w, int h)
@@ -102,6 +106,10 @@ public class StandardColorScheme extends ColorScheme
 		// Sequence.T
 		statesRD.add(new StandardColorState("T", new Color(120, 120, 255), w, h, true, false));
 		statesRD.add(new StandardColorState("T", new Color(120, 120, 255), w, h, true, true));
+
+		// Pair Link
+		statesRD.add(new PairLinkColorState(new Color(180, 180, 180), w, h));
+		statesRD.add(null);
 	}
 
 	public Image getImage(int data)
