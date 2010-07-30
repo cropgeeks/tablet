@@ -5,7 +5,6 @@ package tablet.analysis;
 
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.*;
 
 import tablet.analysis.tasks.*;
 import tablet.data.*;
@@ -27,7 +26,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 
 	// The objects that will run calculations as part of this job
 	private CoverageCalculator cc;
-	private PackSetCreator ps;
+	private SimpleJob packCreator;
 
 	// And the objects that will hold the results
 	private IArrayIntCache paddedToUnpadded;
@@ -110,11 +109,51 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 
 		if (okToRun)
 		{
-			ps = new PackSetCreator(contig);
-			ps.runJob(0);
+			packCreator = setupPackCreator();
+
+			if(packCreator != null)
+				packCreator.runJob(0);
 
 			status = 3;
 		}
+	}
+
+	private SimpleJob setupPackCreator()
+	{
+		// If pack is selected
+		if(Prefs.visPacked && !Prefs.visPaired)
+			packCreator = new PackSetCreator(contig);
+
+		// If pair pack is selected
+		else if(Prefs.visPacked && Prefs.visPaired)
+		{
+			packCreator = new PairedPackSetCreator(contig, assembly);
+			// Fall back on normal packing code if required.
+			if(!Assembly.isPaired())
+			{
+				packCreator = new PackSetCreator(contig);
+				Prefs.visPaired = false;
+				Actions.overlayReadNames.setEnabled(false);
+			}
+		}
+
+		// if pair stack is selected
+		else if(!Prefs.visPacked && Prefs.visPaired)
+		{
+			packCreator = new PairedStackCreator(contig);
+			// Fall back on normal packing code if required.
+			if(!Assembly.isPaired())
+			{
+				packCreator = new PackSetCreator(contig);
+				Prefs.visPaired = false;
+				Actions.overlayReadNames.setEnabled(true);
+			}
+		}
+
+		else if(!Prefs.visPacked && !Prefs.visPaired)
+			packCreator = new PackSetCreator(contig);
+
+		return packCreator;
 	}
 
 	public void cancelJob()
@@ -123,8 +162,8 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 
 		if (cc != null)
 			cc.cancelJob();
-		if (ps != null)
-			ps.cancelJob();
+		if (packCreator != null)
+			packCreator.cancelJob();
 
 		if (assembly.getBamBam() != null)
 			assembly.getBamBam().getBamFileHandler().cancel();
@@ -132,16 +171,16 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 
 	public int getMaximum()
 	{
-		if (ps != null)
-			maximum = ps.getMaximum();
+		if (packCreator != null)
+			maximum = packCreator.getMaximum();
 
 		return maximum;
 	}
 
 	public int getValue()
 	{
-		if (ps != null)
-			progress = ps.getValue();
+		if (packCreator != null)
+			progress = packCreator.getValue();
 
 		return progress;
 	}
@@ -156,7 +195,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 			case 2: return
 				RB.getString("analysis.DisplayDataCalculator.coverage");
 			case 4: return
-				ps.getMessage();
+				packCreator.getMessage();
 
 			default:
 				return "";
