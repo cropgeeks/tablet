@@ -31,9 +31,9 @@ public class Actions
 	public static ActionToggleButtonModel stylesStandard;
 	public static ActionToggleButtonModel stylesDirection;
 	public static ActionToggleButtonModel stylesText;
-	public static ActionToggleButtonModel stylesPacked;
-	public static ActionToggleButtonModel stylesStacked;
+	public static ActionRepeatableButtonModel stylesPackStyles;
 	public static ActionToggleButtonModel stylesTagVariants;
+	//public static ActionToggleButtonModel stylesPacked;
 
 	public static ActionRepeatableButtonModel navigatePageLeft;
 	public static ActionRepeatableButtonModel navigatePageRight;
@@ -84,9 +84,9 @@ public class Actions
 		stylesStandard.setEnabled(false);
 		stylesDirection.setEnabled(false);
 		stylesText.setEnabled(false);
-		stylesPacked.setEnabled(false);
-		stylesStacked.setEnabled(false);
+		stylesPackStyles.setEnabled(false);
 		stylesTagVariants.setEnabled(false);
+		//stylesPacked.setEnabled(false);
 
 		navigatePageLeft.setEnabled(false);
 		navigatePageRight.setEnabled(false);
@@ -137,9 +137,9 @@ public class Actions
 		stylesStandard.setEnabled(false);
 		stylesDirection.setEnabled(false);
 		stylesText.setEnabled(false);
-		stylesPacked.setEnabled(false);
-		stylesStacked.setEnabled(false);
+		stylesPackStyles.setEnabled(false);
 		stylesTagVariants.setEnabled(false);
+		//stylesPacked.setEnabled(false);
 
 		navigatePageLeft.setEnabled(false);
 		navigatePageRight.setEnabled(false);
@@ -190,9 +190,9 @@ public class Actions
 		stylesStandard.setEnabled(true);
 		stylesDirection.setEnabled(true);
 		stylesText.setEnabled(true);
-		stylesPacked.setEnabled(true);
-		stylesStacked.setEnabled(true);
+		stylesPackStyles.setEnabled(true);
 		stylesTagVariants.setEnabled(true);
+		//stylesPacked.setEnabled(true);
 
 		navigatePageLeft.setEnabled(true);
 		navigatePageRight.setEnabled(true);

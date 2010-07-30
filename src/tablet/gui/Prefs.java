@@ -156,6 +156,9 @@ public class Prefs extends XMLPreferences
 	public static boolean ioBamValidationLenient = false;
 	public static boolean ioAmbiguousToN = false;
 
+	// Display reads in paired form?
+	public static boolean visPaired = false;
+
 
 	// Updates the array of recently accessed documents so that 'document' is
 	// the first element, even if it has been accessed previously
