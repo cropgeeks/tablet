@@ -48,13 +48,9 @@ public class PackSet implements Iterable<Pack>, IReadManager
 		{
 			Read found = pack.getReadAt(read.getStartPosition());
 			if(found != null && found.getID() == read.getID())
-			{
 				return packs.indexOf(pack);
-			}
 			else
-			{
 				continue;
-			}
 		}
 		return -1;
 	}
@@ -67,5 +63,17 @@ public class PackSet implements Iterable<Pack>, IReadManager
 	public ArrayList<Read> getReadNames(int startIndex, int endIndex)
 	{
 		return null;
+	}
+
+	/**
+	 * Return the pair of reads that can be found at the given line (and near
+	 * the given column) in the display.
+	 */
+	public Read[] getPairAtLine(int lineIndex, int colIndex)
+	{
+		if (lineIndex < 0 || lineIndex >= packs.size())
+			return null;
+
+		return packs.get(lineIndex).getPair(colIndex);
 	}
 }

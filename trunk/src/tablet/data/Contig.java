@@ -39,6 +39,7 @@ public class Contig
 	private IReadManager readManager;
 	private PackSet packSet;
 	private StackSet stackSet;
+	private PairedStack pairedStackSet;
 
 	// Main set of features associated with this contig (basically every feature
 	// held in a single FeatureTrack object)
@@ -174,6 +175,12 @@ public class Contig
 		stackSet = new StackSet(reads);
 	}
 
+	public void setPairedStackSet(PairedStack pairedStackSet)
+	{
+		this.pairedStackSet = pairedStackSet;
+		stackSet = new StackSet(reads);
+	}
+
 	/**
 	 * Clears any references to this contig's pack and stack sets. To be called
 	 * when a contig is no longer on screen (as these object's are only needed
@@ -185,6 +192,7 @@ public class Contig
 		readManager = null;
 
 		packSet = null;
+		pairedStackSet = null;
 		stackSet = null;
 
 		if (doFullReset)
@@ -245,6 +253,9 @@ public class Contig
 
 	public IReadManager getPackSetManager()
 		{ return (readManager = packSet); }
+
+	public IReadManager getPairedStackSetManager()
+		{ return (readManager = pairedStackSet); }
 
 	public IReadManager getStackSetManager()
 		{ return (readManager = stackSet); }
@@ -331,4 +342,5 @@ public class Contig
 				return null;
 		}
 	}
+	
 }
