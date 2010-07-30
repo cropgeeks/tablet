@@ -10,8 +10,6 @@ import javax.swing.event.*;
 
 import tablet.data.*;
 
-import scri.commons.gui.*;
-
 class ReadsCanvasML extends MouseInputAdapter
 {
 	private AssemblyPanel aPanel;
@@ -27,6 +25,7 @@ class ReadsCanvasML extends MouseInputAdapter
 
 	private ReadsCanvasInfoPane infoPane = new ReadsCanvasInfoPane();
 	private OutlinerOverlay outliner;
+	private PairOutliner pairOutliner;
 
 	ReadsCanvasML(AssemblyPanel aPanel)
 	{
@@ -38,6 +37,7 @@ class ReadsCanvasML extends MouseInputAdapter
 		rCanvasMenu = new ReadsCanvasMenu(aPanel, infoPane);
 		nOverlay = new NavigationOverlay(aPanel, infoPane);
 		outliner = new OutlinerOverlay(aPanel, infoPane);
+		pairOutliner = new PairOutliner(rCanvas, infoPane);
 		infoPane.setAssemblyPanel(aPanel);
 
 		// Then add listeners and overlays to the canvas
@@ -45,12 +45,14 @@ class ReadsCanvasML extends MouseInputAdapter
 		rCanvas.addMouseMotionListener(this);
 		rCanvas.overlays.add(new ReadShadower(aPanel));
 		rCanvas.overlays.add(outliner);
+		rCanvas.overlays.add(pairOutliner);
 		rCanvas.overlays.add(nOverlay);
 		rCanvas.overlays.add(infoPane);
 	}
 
 	public void mouseExited(MouseEvent e)
 	{
+		pairOutliner.setPair(null, null, 0, 0);
 		outliner.setRead(null, 0, 0);
 		infoPane.setMousePosition(null);
 		nOverlay.setMousePosition(null);
@@ -69,6 +71,7 @@ class ReadsCanvasML extends MouseInputAdapter
 			// Page left or right if the navigation arrows were clicked on
 			if (nOverlay.isLeftActive())
 				aPanel.pageLeft();
+			
 			else if (nOverlay.isRightActive())
 				aPanel.pageRight();
 
@@ -119,13 +122,94 @@ class ReadsCanvasML extends MouseInputAdapter
 		infoPane.setMousePosition(e.getPoint());
 		nOverlay.setMousePosition(e.getPoint());
 
+		pairOutliner.setColumnIndex(xIndex);
 		ReadShadower.setMouseBase(xIndex);
 
 		// Track the read under the mouse (if any)
 		Read read = rCanvas.reads.getReadAt(yIndex, xIndex);
 		outliner.setRead(read, xIndex, yIndex);
+		outlinePair(yIndex, xIndex);
 
 		aPanel.repaint();
+	}
+
+	/**
+	 * If we can outline a pair of reads, do so. Delegates to outlinePair(Read [])
+	 * to setup the outlining.
+	 */
+	private void outlinePair(int yIndex, int xIndex)
+	{
+		if(rCanvas.reads instanceof PairedStack)
+		{
+			PairedStack set = (PairedStack)rCanvas.reads;
+			Read[] pair = set.getPairAtLine(yIndex, xIndex);
+
+			if(pair == null || pair[0] == null || pair[1] == null)
+				pairOutliner.setPair(null, null, 0, 0);
+			else
+			{
+				int s, e;
+				if(pair[0].getStartPosition() < pair[1].getStartPosition())
+				{
+					s = pair[0].getEndPosition();
+					e = pair[1].getStartPosition();
+				}
+				else
+				{
+					s = pair[1].getEndPosition();
+					e = pair[0].getStartPosition();
+				}
+				if(set.getReadAt(yIndex, xIndex) != null || s < xIndex && xIndex < e)
+					outlinePair(pair);
+				else
+					pairOutliner.setPair(null, null, 0, 0);
+			}
+		}
+		else if(rCanvas.reads instanceof PackSet)
+		{
+			PackSet set = (PackSet)rCanvas.reads;
+			Read[] pair = set.getPairAtLine(yIndex, xIndex);
+		
+			if(pair == null || pair[0] == null || pair[1] == null)
+				pairOutliner.setPair(null, null, 0, 0);
+			else
+			{
+				int s, e;
+				if(pair[0].getStartPosition() < pair[1].getStartPosition())
+				{
+					s = pair[0].getEndPosition();
+					e = pair[1].getStartPosition();
+				}
+				else
+				{
+					s = pair[1].getEndPosition();
+					e = pair[0].getStartPosition();
+				}
+				if(set.getReadAt(yIndex, xIndex) != null || s < xIndex && xIndex < e)
+					outlinePair(pair);
+				else
+					pairOutliner.setPair(null, null, 0, 0);
+			}
+		}
+		else
+			pairOutliner.setPair(null, null, 0, 0);
+	}
+
+	/**
+	 * Passes the pairOutliner object the pair of reads which needs to be outlined.
+	 */
+	private void outlinePair(Read[] pair)
+	{
+		if(pair == null || (pair[0] == null || pair[1] == null))
+			return;
+		
+		int lineIndex = 0;
+		int mateLineIndex = 0;
+
+		lineIndex = aPanel.readsCanvas.reads.getLineForRead(pair[0]);
+		mateLineIndex = aPanel.readsCanvas.reads.getLineForRead(pair[1]);
+
+		pairOutliner.setPair(pair[0], pair[1], lineIndex, mateLineIndex);
 	}
 
 	/** Inner class to handle navigation mouse events (dragging the canvas etc). */

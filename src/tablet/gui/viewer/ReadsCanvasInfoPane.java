@@ -27,14 +27,17 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	private ReadsCanvas rCanvas;
 
 	// Variables that change as we move the mouse
-	int lineIndex;
+	int lineIndex, mLineIndex;
 	Read read;
-	ReadMetaData metaData;
+	private ReadMetaData metaData, mMetaData;
 	private Point mouse;
 	private int x, y, w, h;
+	private int vSpacing = 15;
 
 	// Variables holding the data that gets drawn within the tooltip
-	private String readName, posData, lengthData, cigar;
+	private String readName, posData, lengthData, cigar, mateContig, pairInfo;
+	private String[] readInfo = new String[6];
+	private String[] mateInfo = new String[6];
 
 	ReadsCanvasInfoPane()
 	{
@@ -66,11 +69,21 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		this.mouse = mouse;
 	}
 
-	void setData(int lineIndex, Read read, ReadMetaData metaData)
+	/**
+	 * Set the data for rendering the tooltip based on the Read and ReadMetaData
+	 * provided. This sets up the string values for display.
+	 */
+	void setData(int lineIndex, Read read, ReadMetaData metaData, boolean isMate)
 	{
 		this.lineIndex = lineIndex;
 		this.read = read;
-		this.metaData = metaData;
+
+		if(!isMate)
+			this.metaData = metaData;
+		else
+			this.mMetaData = metaData;
+
+		String insertSize, isProperPair, pairNumber;
 
 		ReadNameData rnd = Assembly.getReadNameData(read);
 
@@ -98,24 +111,64 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 				TabletUtils.nf.format(rnd.getUnpaddedLength()));
 
 		// Name
-		readName = Assembly.getReadNameData(read).getName();
+		readName = rnd.getName();
 
 		if (Assembly.hasCigar())
 			cigar = RB.format("gui.viewer.ReadsCanvasInfoPane.cigar", rnd.getCigar());
 
-		// Determine longest string
-		if (fmTitle.stringWidth(readName) > (w-20))
-			w = fmTitle.stringWidth(readName) + 20;
-		if (fmTitle.stringWidth(posData) > (w-20))
-			w = fmTitle.stringWidth(posData) + 20;
-		if (fmTitle.stringWidth(lengthData) > (w-20))
-			w = fmTitle.stringWidth(lengthData) + 20;
-		if (Assembly.hasCigar() && fmTitle.stringWidth(cigar) > (w-20))
-			w = fmTitle.stringWidth(cigar) + 20;
+		if(read instanceof MatedRead)
+		{
+			insertSize = "insert : " + rnd.getInsertSize();
+			isProperPair = rnd.isProperPair() ? "Paired: Proper " : "Paired: Bad ";
+			if(rnd.getNumberInPair() == 1)
+				pairNumber = "(1/2) ";
+			else if(rnd.getNumberInPair() == 2)
+				pairNumber = "(2/2) ";
+			else
+				pairNumber = "";
+
+			pairInfo = isProperPair + pairNumber + insertSize;
+
+			mateContig = "Mate contig: " + rnd.getMateContig();
+			if(rnd.getMateContig().equals(rCanvas.contig.getName()))
+				mateContig = "";
+		}
+		else
+			insertSize = isProperPair = pairNumber = mateContig = pairInfo = "";
+		
+		adjustBoxSize(insertSize, isProperPair, pairNumber);
 
 		// Tell the overview canvas to paint this read too
 		int offset = -rCanvas.offset;
 		oCanvas.updateRead(lineIndex, readS+offset, readE+offset);
+
+		if(!isMate)
+			readInfo = new String[] {posData, lengthData, readName, cigar, pairInfo, mateContig};
+		else
+			mateInfo = new String[] {posData, lengthData, readName, cigar, pairInfo, mateContig};
+	}
+
+	/**
+	 * Alters the size of the tooltip boxes based on the sizes of the strings contained
+	 * in the tooltip.
+	 */
+	private void adjustBoxSize(String insertSize, String isProperPair, String pairNumber)
+	{
+		if (!insertSize.equals("") || !isProperPair.equals("") || !pairNumber.equals(""))
+			h += vSpacing;
+		if (!mateContig.equals(""))
+			h += vSpacing;
+		
+		if (fmTitle.stringWidth(readName) > (w - 20))
+			w = fmTitle.stringWidth(readName) + 20;
+		if (fmTitle.stringWidth(posData) > (w - 20))
+			w = fmTitle.stringWidth(posData) + 20;
+		if (fmTitle.stringWidth(lengthData) > (w - 20))
+			w = fmTitle.stringWidth(lengthData) + 20;
+		if (Assembly.hasCigar() && fmTitle.stringWidth(cigar) > (w - 20))
+			w = fmTitle.stringWidth(cigar) + 20;
+		if (fmTitle.stringWidth(pairInfo) > (w - 20))
+			w = fmTitle.stringWidth(pairInfo) + 20;
 	}
 
 	boolean isOverRead()
@@ -126,56 +179,149 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		if (mouse == null || Prefs.visInfoPaneActive == false)
 			return;
 
-		int arrowHeight = 55;
-
-		if (Assembly.hasCigar())
-			arrowHeight = 70;
-
-		calculatePosition();
-		g.translate(x, y);
-
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-
-		// The background rectangle
-		g.setColor(bgColor);
-		g.fillRoundRect(0, 0, w-1, h-1, 10, 10);
-		g.setColor(Color.black);
-		g.drawRoundRect(0, 0, w-1, h-1, 10, 10);
-
-		// And the text
-		g.setFont(titleFont);
-		g.drawString(readName, 10, 15);
-		g.setFont(labelFont);
-		g.drawString(posData, 10, 30);
-		g.drawString(lengthData, 10, 45);
-		if (Assembly.hasCigar())
+		MatedRead pr = null;
+		if(read instanceof MatedRead)
 		{
-			g.setColor(Color.blue);
-			g.drawString(cigar, 10, 60);
+			pr = (MatedRead)read;
+			if(pr.getPair() != null)
+				calculatePosition(h*2);
+			else
+				calculatePosition(h+55);
 		}
-
-		// Complemented/uncomplemented arrow
-		if (metaData.isComplemented())
-			g.drawImage(lhArrow, w-10-lhArrow.getWidth(null), arrowHeight, null);
 		else
-			g.drawImage(rhArrow, 10, arrowHeight, null);
+			calculatePosition(h);
+		
+		drawBox(g, false, readInfo, metaData);
 
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-		renderSequence(g);
+		if(read instanceof MatedRead)
+		{
+			g.drawLine(w/2, h, w/2, h+10);
+			g.translate(-x, -y+h+10);
+
+			if(pr.getPair() != null)
+			{
+				ReadMetaData rmd = Assembly.getReadMetaData(pr.getPair(), false);
+
+				setData(lineIndex, pr.getPair(), rmd, true);
+				drawBox(g, true, mateInfo, mMetaData);
+			}
+			else
+			{
+				ReadNameData rnd = Assembly.getReadNameData(read);
+				drawMateUnavailableBox(g, pr.getMatePos(), pr.isMateContig(), rnd.getMateContig());
+			}
+		}
 
 		// Put the graphics origin back to where it was in case other overlay
 		// renderers run after this one
 		g.translate(-x, -y);
 	}
 
-	private void renderSequence(Graphics2D g)
+	/**
+	 * Draws the outline, background and title of the box for the tooltip.
+	 */
+	private void drawBasicBox(Graphics2D g, int mateH, String tempName)
 	{
-		int lineStart = 70;
+		g.translate(x, y);
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		// The background rectangle
+		g.setColor(bgColor);
+		g.fillRoundRect(0, 0, w - 1, mateH - 1, 10, 10);
+		g.setColor(Color.black);
+		g.drawRoundRect(0, 0, w - 1, mateH - 1, 10, 10);
+		// And the text
+		g.setFont(titleFont);
+		g.drawString(tempName, 10, vSpacing);
+		g.setFont(labelFont);
+	}
+
+	/**
+	 * Draws the rest of the box in the usual state where we have a pair of reads
+	 * which are both contained in the current data window.
+	 */
+	private void drawBox(Graphics2D g, boolean isMate, String[] rInfo, ReadMetaData mData)
+	{
+		String pData = rInfo[0];
+		String lData = rInfo[1];
+		String rName = rInfo[2];
+		String cig = rInfo[3];
+		String pInfo = rInfo[4];
+		String mContig = rInfo[5];
+		String tempName;
+
+		if(isMate)
+			tempName = rName + " (Mate)";
+		else
+			tempName = rName;
+
+		int arrowHeight = calculateElementHeight(pInfo, mContig);
+
+		drawBasicBox(g, h, tempName);
+		
+		g.drawString(pData, 10, vSpacing*2);
+		g.drawString(lData, 10, vSpacing*3);
+		if (Assembly.hasCigar())
+		{
+			g.setColor(Color.blue);
+			g.drawString(cig, 10, vSpacing*4);
+		}
+
+		g.drawString(pInfo, 10, vSpacing*5);
+
+		if(!mContig.equals("") && !isMate)
+			g.drawString(mContig, 10, vSpacing*6);
+
+		if (mData.isComplemented())
+			g.drawImage(lhArrow, w - 10 - lhArrow.getWidth(null), arrowHeight, null);
+		else
+			g.drawImage(rhArrow, 10, arrowHeight, null);
+		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
+		renderSequence(g, pInfo, mContig, mData);
+	}
+
+	/**
+	 * Draws the rest of the tooltip when the mate is in another contig, or outwith
+	 * the current BAM data window.
+	 */
+	private void drawMateUnavailableBox(Graphics2D g, int matePos, boolean isMateContig, String mateContig)
+	{
+		String tempName = readName + " (Mate)";
+		int mateH = 70;
+
+		drawBasicBox(g, mateH, tempName);
+
+		g.setColor(Color.red);
+		if(!isMateContig)
+		{
+			g.drawString("Mate is not in this contig", 10, vSpacing*3);
+			g.setColor(Color.black);
+			g.drawString("Located in " + mateContig + ", position " + matePos, 10, vSpacing *4);
+		}
+		else
+		{
+			g.drawString("Mate is outwith BAM window", 10, vSpacing*3);
+			g.setColor(Color.black);
+			g.drawString("Position " + matePos, 10, vSpacing*4);
+		}
+	}
+
+	private int calculateElementHeight(String pInfo, String mContig)
+	{
+		int elementHeight = 55;
 
 		if (Assembly.hasCigar())
-			lineStart = 85;
+			elementHeight += 15;
+		if (!pInfo.equals(""))
+			elementHeight += 15;
+		if (!mContig.equals(""))
+			elementHeight += 15;
+		
+		return elementHeight;
+	}
 
-		ReadMetaData rmd = Assembly.getReadMetaData(read, false);
+	private void renderSequence(Graphics2D g, String pInfo, String mContig, ReadMetaData rmd)
+	{
+		int lineStart = calculateElementHeight(pInfo, mContig) + vSpacing;
 
 		float xScale = read.length() / (float) (w - 10);
 
@@ -197,7 +343,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		g.drawRect(10, lineStart, w-21, 10);
 	}
 
-	private void calculatePosition()
+	private void calculatePosition(int height)
 	{
 		// Decide where to draw (roughly)
 		x = mouse.x + 15;
@@ -206,8 +352,8 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		// Then adjust if the box would be offscreen to the right or bottom
 		if (x + w >= rCanvas.pX2Max)
 			x = rCanvas.pX2Max - w - 1;
-		if (y + h >= rCanvas.pY2)
-			y = rCanvas.pY2 - h - 1;
+		if (y + height >= rCanvas.pY2)
+			y = rCanvas.pY2 - height - 1;
 	}
 
 	void copyReadNameToClipboard()
@@ -223,14 +369,14 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		String seq = metaData.toString();
 
 		StringBuilder text = new StringBuilder(seq.length() + 500);
-		text.append(readName + lb + posData + lb + lengthData + lb);
+		text.append(readName).append(lb).append(posData).append(lb).append(lengthData).append(lb);
 		if(Assembly.hasCigar())
-			text.append(cigar + lb);
+			text.append(cigar).append(lb);
 
 		if (metaData.isComplemented())
-			text.append("Read direction is REVERSE" + lb + lb);
+			text.append("Read direction is REVERSE").append(lb).append(lb);
 		else
-			text.append("Read direction is FORWARD" + lb + lb);
+			text.append("Read direction is FORWARD").append(lb).append(lb);
 
 		// Produce a FASTA formatted string
 		text.append(TabletUtils.formatFASTA(Assembly.getReadNameData(read).getName(), seq));

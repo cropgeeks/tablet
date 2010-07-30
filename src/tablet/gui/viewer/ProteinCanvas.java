@@ -136,7 +136,6 @@ class ProteinCanvas extends TrackingCanvas implements ITaskListener
 	void createTranslations()
 	{
 		translations = new ArrayList<short[]>(6);
-		System.out.println();
 
 		// Forward and reverse...
 		for (int i = 0, tIndex = 0; i < 2; i++)
