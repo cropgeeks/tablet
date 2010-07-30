@@ -53,7 +53,11 @@ public class DirectionColorScheme extends StandardColorScheme
 			statesRD.add(new StandardColorState("T", c, w, h, true, false));
 			statesRD.add(new StandardColorState("T", c, w, h, true, true));
 
-			for (int j = 0; j < 6 && i == 0; j++)
+			// Pair Link
+			statesRD.add(new PairLinkColorState(new Color(180, 180, 180), w, h));
+			statesRD.add(null);
+
+			for (int j = 0; j < 4 && i == 0; j++)
 				statesRD.add(null);
 		}
 	}
