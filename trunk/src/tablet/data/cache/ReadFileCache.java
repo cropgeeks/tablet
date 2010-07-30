@@ -129,9 +129,7 @@ public class ReadFileCache extends TabletCache implements IReadCache
 		//   1   - BYTE, 0 or 1 (for C or U)
 		//   4   - INT, data length
 		//   [d] - BYTES, the data
-		//	 4	 - INT, length of the cigar string
-		//	 [c] - BYTES, the cigar itself
-		// = 9
+		// = 5
 		byteCount += (5 + data.length);
 	}
 }
