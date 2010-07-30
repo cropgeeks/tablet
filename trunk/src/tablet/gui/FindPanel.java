@@ -3,7 +3,7 @@
 
 package tablet.gui;
 
-import java.awt.BorderLayout;
+import java.awt.*;
 import java.awt.event.*;
 import java.util.LinkedList;
 import javax.swing.*;
@@ -166,6 +166,8 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 			if(cPanel.getTable().getValueAt(i, 0).equals(contig))
 			{
 				cPanel.getTable().setRowSelectionInterval(i, i);
+				Rectangle r = cPanel.getTable().getCellRect(i, 0, true);
+				cPanel.getTable().scrollRectToVisible(r);
 				foundInTable = true;
 				break;
 			}

@@ -131,7 +131,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		}
 	}
 
-	void setDisplayedContig(Contig contig)
+	public void setDisplayedContig(Contig contig)
 	{
 		// Attempt to set the contig on the graphical components...
 		if (aPanel.setContig(contig))
