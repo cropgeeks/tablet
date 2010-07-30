@@ -15,7 +15,6 @@ import tablet.gui.*;
 public class Pack
 {
 	private ArrayList<Read> reads = new ArrayList<Read>();
-
 	private int positionE;
 
 	public void trimToSize()
@@ -27,7 +26,7 @@ public class Pack
 	 */
 	public boolean addRead(Read read)
 	{
-		if (reads.size() == 0 || read.getStartPosition() > positionE)
+		if (reads.isEmpty() || read.getStartPosition() > positionE)
 		{
 			reads.add(read);
 			positionE = read.getEndPosition() + Prefs.visPadReads;
@@ -70,14 +69,17 @@ public class Pack
 		}
 
 		// If no suitable read was found, just return an array of -1s
-		if (read == -1)
-		{
-			byte[] data = new byte[end-start+1];
-			for (int i = 0; i < data.length; i++)
-				data[i] = -1;
+//		if (read == -1)
+//		{
+//			byte[] data = new byte[end-start+1];
+//			for (int i = 0; i < data.length; i++)
+//				data[i] = -1;
+//
+//			return data;
+//		}
 
-			return data;
-		}
+		if (read == -1)
+			read = 0;
 
 		// Search left from this read to find the left-most read that appears in
 		// the window (as the binary search will only find the first read that
@@ -104,9 +106,15 @@ public class Pack
 
 		ListIterator<Read> itor = reads.listIterator(fromRead);
 
+		Read read = null;
 		while (itor.hasNext())
 		{
-			Read read = itor.next();
+			read = itor.next();
+
+			MatedRead matedRead = null;
+
+			if(read instanceof MatedRead)
+				matedRead = (MatedRead)read;
 
 			if (read.getStartPosition() > end)
 				break;
@@ -118,8 +126,13 @@ public class Pack
 
 			// Fill in any blanks between the current index the next read
 			for (; index < readS; index++, dataI++)
-				data[dataI] = -1;
-
+			{
+				if(isMate(matedRead, index))
+					data[dataI] = 14;
+				else
+					data[dataI] = -1;
+			}
+			
 			// Determine orientation (and offset by 20 if reversed)
 			byte value = (byte) (rmd.isComplemented() ? 20 : 0);
 
@@ -128,14 +141,25 @@ public class Pack
 				data[dataI] = (byte) (value + rmd.getStateAt(index-readS));
 		}
 
+		MatedRead matedRead = null;
+		if(read instanceof MatedRead)
+			matedRead = (MatedRead)read;
 		// If no more reads are within the window, fill in any blanks between
 		// the final read and the end of the array
 		for (; index <= end; index++, dataI++)
-			data[dataI] = -1;
+		{
+			if(isMateEndWindow(matedRead, index, end))
+				data[dataI] = 14;
+			else
+				data[dataI] = -1;
+		}
 
 		return data;
 	}
 
+	/**
+	 * Returns the read at the given nucleotide position in the pack.
+	 */
 	Read getReadAt(int position)
 	{
 		// Binary search to find the read that contains the nucleotide position
@@ -148,16 +172,78 @@ public class Pack
 			// Position is to the left of this read
 			if (position < reads.get(M).getStartPosition())
 				R = M - 1;
-
 			// Position is to the right of this read
 			else if (position > reads.get(M).getEndPosition())
 				L = M + 1;
-
 			// Position must be within this read
 			else
 				return reads.get(M);
 		}
 
 		return null;
+	}
+
+	/**
+	 * Returns the pair at the given nucleotide position in the pack.
+	 */
+	public Read[] getPair(int colIndex)
+	{
+		for(int i=reads.size()-1; i >= 0; i--)
+		{
+			Read read = reads.get(i);
+			if(read.getStartPosition() <= colIndex)
+				return getPair(read);
+		}
+		return null;
+	}
+
+	/**
+	 * Provides the body for the for loop in getPair(int coIndex).
+	 */
+	private Read[] getPair(Read read)
+	{
+		Read[] pair = new Read[2];
+		pair[0] = read;
+
+		if (read instanceof MatedRead)
+		{
+			MatedRead pr = (MatedRead) read;
+			if (pr.getPair() != null)
+				pair[1] = pr.getPair();
+			else
+				pair[1] = null;
+			
+			return pair;
+		}
+		else
+			return null;
+	}
+
+	/**
+	 * Checks if the nucleotide position is in the middle of a pair.
+	 */
+	private boolean isMate(MatedRead pr, int index)
+	{
+		if(pr == null || pr.getPair() == null)
+			return false;
+		else
+		{
+			return (reads.contains(pr) && reads.contains(pr.getPair()) && pr.getStartPosition() > index && pr.getMatePos() < pr.getStartPosition());
+		}
+	}
+
+	/**
+	 * Checks if the nucleotide position is at the end of a screen window and
+	 * in the middle of a pair.
+	 */
+	private boolean isMateEndWindow(MatedRead pr, int index, int end)
+	{
+		if(pr == null || pr.getPair() == null)
+			return false;
+		else
+		{
+			return ((reads.contains(pr) && reads.contains(pr.getPair())) && index > pr.getEndPosition() && pr.getMatePos() > end) ||
+					((reads.contains(pr) && reads.contains(pr.getPair())) && index < pr.getStartPosition() && pr.getMatePos() < pr.getStartPosition() && pr.getStartPosition() > end && pr.getMatePos() < end);
+		}
 	}
 }
