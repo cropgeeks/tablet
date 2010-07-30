@@ -341,7 +341,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		coverageCanvas.setVisible(!Prefs.guiHideCoverage);
 	}
 
-	private boolean updateDisplayData(boolean doAll)
+	public boolean updateDisplayData(boolean doAll)
 	{
 		String title = RB.getString("gui.viewer.assemblyPanel.progressDialog.title");
 		String label = RB.getString("gui.viewer.assemblyPanel.progressDialog.label");

@@ -3,14 +3,18 @@
 
 package tablet.gui.viewer;
 
+import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
+import tablet.analysis.*;
+import tablet.data.*;
 import tablet.data.auxiliary.*;
 import tablet.gui.*;
 import static tablet.gui.ribbon.RibbonController.*;
 
 import scri.commons.gui.*;
+
 
 class ReadsCanvasMenu implements ActionListener
 {
@@ -33,6 +37,10 @@ class ReadsCanvasMenu implements ActionListener
 	private JCheckBoxMenuItem mShadowingCustom;
 	private JCheckBoxMenuItem mShadowingLock;
 	private JMenuItem mShadowingJump;
+
+	private JMenuItem mJumpToPair;
+	private JMenuItem mJumpToLeftRead;
+	private JMenuItem mJumpToRightRead;
 
 	// Row and column under the mouse at the time the menu appears
 	private int rowIndex, colIndex;
@@ -97,6 +105,18 @@ class ReadsCanvasMenu implements ActionListener
 		RB.setText(mShadowingJump, "gui.viewer.ReadsCanvasMenu.mShadowingJump");
 		mShadowingJump.addActionListener(this);
 
+		mJumpToPair = new JMenuItem("");
+		mJumpToPair.setText("Jump to pair");
+		mJumpToPair.addActionListener(this);
+
+		mJumpToLeftRead = new JMenuItem("");
+		mJumpToLeftRead.setText("Jump to left read");
+		mJumpToLeftRead.addActionListener(this);
+
+		mJumpToRightRead = new JMenuItem("");
+		mJumpToRightRead.setText("Jump to right read");
+		mJumpToRightRead.addActionListener(this);
+
 
 		// Create the menu
 		menu = new JPopupMenu();
@@ -122,6 +142,10 @@ class ReadsCanvasMenu implements ActionListener
 		menu.addSeparator();
 		menu.add(mFindStart);
 		menu.add(mFindEnd);
+		menu.addSeparator();
+		menu.add(mJumpToPair);
+		menu.add(mJumpToLeftRead);
+		menu.add(mJumpToRightRead);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -181,6 +205,90 @@ class ReadsCanvasMenu implements ActionListener
 		else if (e.getSource() == mShadowingJump)
 			aPanel.moveToPosition(-1,
 				aPanel.getVisualContig().getLockedBase(), true);
+
+		else if (e.getSource() == mJumpToPair)
+		{
+			Read read = rCanvas.reads.getReadAt(rowIndex, colIndex);
+			ReadNameData readData = Assembly.getReadNameData(read);
+
+			MatedRead pr = (MatedRead)read;
+			
+			if(!readData.getMateContig().equals(aPanel.getContig().getName()))
+			{
+				for(Contig contig : aPanel.getAssembly())
+				{
+					if(contig.getName().equals(readData.getMateContig()))
+					{
+						//aPanel.setContig(contig);
+						updateContigsTable(contig);
+						break;
+					}
+				}
+			}
+
+			if(pr.getMatePos() != -1)
+			{
+				
+				aPanel.moveToPosition(0, pr.getMatePos(), true);
+
+				PairSearcher pairSearcher = new PairSearcher(rCanvas.contig);
+
+				final Read r = pairSearcher.searchForPair(readData.getName(), pr.getMatePos());
+				final int lineIndex = rCanvas.reads.getLineForRead(r);
+				
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run()
+					{
+						aPanel.moveToPosition(lineIndex, r.getStartPosition(), true);
+						new ReadHighlighter(aPanel, r, lineIndex);
+					}
+				 });
+			}
+		}
+
+		else if (e.getSource() == mJumpToLeftRead)
+		{
+			Read[] pair = null;
+
+			if(rCanvas.reads instanceof PairedStack)
+			{
+				PairedStack set = (PairedStack)rCanvas.reads;
+				pair = set.getPairAtLine(rowIndex, colIndex);
+			}
+			else if(rCanvas.reads instanceof PackSet)
+			{
+				PackSet set = (PackSet)rCanvas.reads;
+				pair = set.getPairAtLine(rowIndex, colIndex);
+			}
+
+			if(pair != null && pair[0] != null)
+			{
+				aPanel.moveToPosition(-1, pair[0].getStartPosition(), true);
+				new ReadHighlighter(aPanel, pair[0], rowIndex);
+			}
+		}
+
+		else if (e.getSource() == mJumpToRightRead)
+		{
+			Read[] pair = null;
+
+			if(rCanvas.reads instanceof PairedStack)
+			{
+				PairedStack set = (PairedStack)rCanvas.reads;
+				pair = set.getPairAtLine(rowIndex, colIndex);
+			}
+			else if(rCanvas.reads instanceof PackSet)
+			{
+				PackSet set = (PackSet)rCanvas.reads;
+				pair = set.getPairAtLine(rowIndex, colIndex);
+			}
+
+			if(pair != null && pair[1] != null)
+			{
+				aPanel.moveToPosition(-1, pair[1].getStartPosition(), true);
+				new ReadHighlighter(aPanel, pair[1], rowIndex);
+			}
+		}
 	}
 
 	boolean isShowingMenu()
@@ -208,6 +316,67 @@ class ReadsCanvasMenu implements ActionListener
 		mShadowingLock.setEnabled(Prefs.visReadShadowing == 2);
 		mShadowingJump.setEnabled(Prefs.visReadShadowing == 2 && base != null);
 
+		// Paired end states
+		Read[] pair = null;
+		Read read = null;
+
+		if(rCanvas.reads instanceof PairedStack)
+		{
+			PairedStack set = (PairedStack)rCanvas.reads;
+			pair = set.getPairAtLine(rowIndex, colIndex);
+			read = set.getReadAt(rowIndex, colIndex);
+		}
+		else if(rCanvas.reads instanceof PackSet)
+		{
+			PackSet set = (PackSet)rCanvas.reads;
+			pair = set.getPairAtLine(rowIndex, colIndex);
+			read = set.getReadAt(rowIndex, colIndex);
+		}
+
+		ReadNameData rnd = Assembly.getReadNameData(read);
+
+		if(read instanceof MatedRead)
+		{
+			mJumpToPair.setEnabled(isOverRead);
+			mJumpToPair.setText("Jump to pair: " + rnd.getName() + " in " + rnd.getMateContig());
+		}
+		else
+		{
+			mJumpToPair.setEnabled(false);
+			mJumpToPair.setText("Jump to pair");
+		}
+
+		mJumpToLeftRead.setEnabled(!isOverRead && pair != null);
+		mJumpToRightRead.setEnabled(!isOverRead && pair != null);
+
 		menu.show(e.getComponent(), e.getX(), e.getY());
 	}
+
+	/**
+	 * Update the contigs table such that the correct contig is selected.
+	 *
+	 * @param contig
+	 */
+	public void updateContigsTable(Contig contig)
+	{
+		ContigsPanel cPanel = Tablet.winMain.getContigsPanel();
+		boolean foundInTable = false;
+		for(int i=0; i < cPanel.getTable().getRowCount(); i++)
+		{
+			if(cPanel.getTable().getValueAt(i, 0).equals(contig))
+			{
+				cPanel.getTable().setRowSelectionInterval(i, i);
+				Rectangle r = cPanel.getTable().getCellRect(i, 0, true);
+				cPanel.getTable().scrollRectToVisible(r);
+				foundInTable = true;
+				break;
+			}
+		}
+
+		if (!foundInTable)
+		{
+			cPanel.setDisplayedContig(contig);
+		}
+	}
+
 }
