@@ -72,11 +72,14 @@ class SamFileReader extends TrackableReader
 
 			String[] tokens = str.split("\t");
 
-			String name = new String(tokens[0]);
-			String data = new String(tokens[9]);
-			String cigar = new String(tokens[5]);
-			String chr  = new String(tokens[2]);
-			Integer pos = Integer.parseInt(tokens[3]) - 1;
+			String name = tokens[0];
+			String data = tokens[9];
+			String cigar = tokens[5];
+			String chr  = tokens[2];
+			int pos = Integer.parseInt(tokens[3]) - 1;
+			String mrnm = tokens[6];
+			int mPos = Integer.parseInt(tokens[7]);
+			int iSize = Integer.parseInt(tokens[8]);
 
 			// Decode the U/C information from the flag field
 			boolean complemented = false;
@@ -85,12 +88,8 @@ class SamFileReader extends TrackableReader
 				complemented = true;
 
 			// TODO: Unmapped reads?
-//			if ((flags & 0x0004) != 0)
-//			{
-
-//			}
-
-//			Read read = new Read(readID, pos);
+			if ((flags & 0x0004) != 0)
+				continue;
 
 			Contig contigToAddTo = contigHash.get(chr);
 
@@ -116,17 +115,36 @@ class SamFileReader extends TrackableReader
 					cigarParser.setCurrentContigName(contigToAddTo.getName());
 				}
 
-				Read read = new Read(readID, pos);
+				Read read;
+
+
+				ReadNameData rnd = new ReadNameData(name);
+				ReadMetaData rmd = new ReadMetaData(complemented);
+
+				if((flags & 0x0001) != 0)
+				{
+					MatedRead pr = new MatedRead(readID, pos);
+					pr.setMatePos(mPos);
+					read = pr;
+					rnd.setInsertSize(iSize);
+					rnd.setIsProperPair((flags & 0x0002) != 0);
+					rnd.setNumberInPair((flags & 0x0040) != 0 ? 1 : 2);
+					rnd.setMateContig(mrnm);
+					// Might want to get rid of this
+					if(!Assembly.isPaired())
+						Assembly.setIsPaired(true);
+
+					boolean isMateContig = mrnm.equals(chr);
+					pr.setIsMateContig(isMateContig);
+				}
+				else
+					read = new Read(readID, pos);
 
 				contigToAddTo.getReads().add(read);
 
 				StringBuilder fullRead = new StringBuilder(cigarParser.parse(
 					data.toString(), pos, cigar));
 
-				ReadNameData rnd = new ReadNameData(name);
-				
-
-				ReadMetaData rmd = new ReadMetaData(complemented);
 				rmd.setData(fullRead);
 
 				int uLength = rmd.calculateUnpaddedLength();
@@ -134,7 +152,6 @@ class SamFileReader extends TrackableReader
 				rnd.setCigar(cigar);
 				nameCache.setReadNameData(rnd);
 
-				
 				read.setLength(rmd.length());
 
 				// Do base-position comparison...

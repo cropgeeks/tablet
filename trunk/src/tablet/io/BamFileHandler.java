@@ -26,7 +26,7 @@ public class BamFileHandler
 
 	private boolean okToRun = true;
 	private boolean refLengthsOK = true;
-
+	
 	BamFileHandler(IReadCache readCache, ReadSQLCache nameCache, AssemblyFile bamFile, AssemblyFile baiFile, Assembly assembly)
 	{
 		this.bamFile = bamFile;
@@ -66,6 +66,8 @@ public class BamFileHandler
 		else
 			readCache = new ReadMemCache();
 
+		nameCache = nameCache.resetCache();
+
 		readCache.openForWriting();
 		nameCache.openForWriting();
 
@@ -79,9 +81,7 @@ public class BamFileHandler
 		{
 			SAMRecord record = itor.next();
 			if (!record.getReadUnmappedFlag())
-			{
 				createRead(contig, record, parser);
-			}
 		}
 
 		itor.close();
@@ -111,20 +111,40 @@ public class BamFileHandler
 
 		ReadNameData rnd = new ReadNameData(record.getReadName());
 		
-
 		ReadMetaData rmd = new ReadMetaData(record.getReadNegativeStrandFlag());
 
 		StringBuilder fullRead = new StringBuilder(
 			parser.parse(new String(record.getReadBases()), readStartPos, record.getCigarString()));
 		rmd.setData(fullRead);
-		Read read = new Read(readID, readStartPos);
 
+		Read read;
+		// If the read is paired
+		if(record.getReadPairedFlag() && !record.getMateUnmappedFlag())
+		{
+			MatedRead pr = new MatedRead(readID, readStartPos);
+			pr.setMatePos(record.getMateAlignmentStart()-1);
+			read = pr;
+			rnd.setInsertSize(record.getInferredInsertSize());
+			rnd.setIsProperPair(record.getProperPairFlag());
+			rnd.setNumberInPair(record.getFirstOfPairFlag() ? 1 : 2);
+			rnd.setMateContig(record.getMateReferenceName());
+
+			// Might want to get rid of this
+			if(!Assembly.isPaired())
+				Assembly.setIsPaired(true);
+
+			boolean isMateContig = record.getMateReferenceName().equals(record.getReferenceName());
+			pr.setIsMateContig(isMateContig);
+		}
+		else
+			read = new Read(readID, readStartPos);
+		
 		int uLength = rmd.calculateUnpaddedLength();
 		rnd.setUnpaddedLength(uLength);
 		rnd.setCigar(record.getCigar().toString());
 		nameCache.setReadNameData(rnd);
-
 		read.setLength(rmd.length());
+
 		contig.getReads().add(read);
 
 		// Do base-position comparison...
@@ -209,4 +229,5 @@ public class BamFileHandler
 
 	boolean refLengthsOK()
 		{ return refLengthsOK; }
+
 }

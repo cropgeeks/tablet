@@ -110,6 +110,7 @@ class SoapFileReader extends TrackableReader
 
 		in.close();
 
+		Assembly.setIsPaired(false);
 		assembly.setName(files[ASBINDEX].getName());
 	}
 

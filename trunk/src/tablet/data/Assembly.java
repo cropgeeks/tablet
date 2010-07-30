@@ -27,6 +27,8 @@ public class Assembly implements Iterable<Contig>
 	private BamBam bambam;
 	private static boolean hasCigar;
 
+	private static boolean isPaired = false;
+
 	/** Constructs a new, empty assembly. */
 	public Assembly(String cacheID)
 	{
@@ -152,4 +154,10 @@ public class Assembly implements Iterable<Contig>
 	{
 		return nameCache.getReadNameData(read.getID());
 	}
+
+	public static boolean isPaired()
+		{ return isPaired; }
+
+	public static void setIsPaired(boolean isPaired)
+		{ Assembly.isPaired = isPaired; }
 }

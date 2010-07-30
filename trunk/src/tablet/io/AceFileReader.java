@@ -73,6 +73,7 @@ public class AceFileReader extends TrackableReader
 
 		String[] AS = p.split(str);
 
+		Assembly.setIsPaired(false);
 		// Initialize the vector of contigs to be at least this size
 		assembly.setContigsSize(Integer.parseInt(AS[1]));
 
