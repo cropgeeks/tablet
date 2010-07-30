@@ -4,7 +4,7 @@ import java.awt.*;
 import tablet.data.*;
 import tablet.gui.*;
 
-public class PairOutliner implements IOverlayRenderer
+public class PairOutlinerOverlay implements IOverlayRenderer
 {
 	private ReadsCanvasInfoPane infoPane;
 	private ReadsCanvas rCanvas;
@@ -12,7 +12,7 @@ public class PairOutliner implements IOverlayRenderer
 	private Read readA, readB;
 	private int lineIndex, mateLineIndex, columnIndex;
 
-	PairOutliner(ReadsCanvas rCanvas, ReadsCanvasInfoPane infoPane)
+	PairOutlinerOverlay(ReadsCanvas rCanvas, ReadsCanvasInfoPane infoPane)
 	{
 		this.infoPane = infoPane;
 		this.rCanvas = rCanvas;

@@ -25,7 +25,7 @@ class ReadsCanvasML extends MouseInputAdapter
 
 	private ReadsCanvasInfoPane infoPane = new ReadsCanvasInfoPane();
 	private OutlinerOverlay outliner;
-	private PairOutliner pairOutliner;
+	private PairOutlinerOverlay pairOutliner;
 
 	ReadsCanvasML(AssemblyPanel aPanel)
 	{
@@ -37,7 +37,7 @@ class ReadsCanvasML extends MouseInputAdapter
 		rCanvasMenu = new ReadsCanvasMenu(aPanel, infoPane);
 		nOverlay = new NavigationOverlay(aPanel, infoPane);
 		outliner = new OutlinerOverlay(aPanel, infoPane);
-		pairOutliner = new PairOutliner(rCanvas, infoPane);
+		pairOutliner = new PairOutlinerOverlay(rCanvas, infoPane);
 		infoPane.setAssemblyPanel(aPanel);
 
 		// Then add listeners and overlays to the canvas
