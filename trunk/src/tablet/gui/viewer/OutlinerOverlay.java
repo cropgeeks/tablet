@@ -42,7 +42,7 @@ class OutlinerOverlay implements IOverlayRenderer
 			readS = read.getStartPosition();
 			readE = read.getEndPosition();
 
-			infoPane.setData(lineIndex, read, data);
+			infoPane.setData(lineIndex, read, data, false);
 		}
 		else
 			infoPane.setMousePosition(null);
