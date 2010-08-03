@@ -20,7 +20,6 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 
 	void setPair(Read readA, Read readB, int lineIndex, int mateLineIndex)
 	{
-		System.out.println("LineIndex: " + lineIndex + " MateLineIndex: " + mateLineIndex);
 		this.readA = readA;
 		this.readB = readB;
 		this.lineIndex = lineIndex;
