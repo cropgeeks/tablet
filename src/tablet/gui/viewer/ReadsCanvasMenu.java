@@ -333,9 +333,11 @@ class ReadsCanvasMenu implements ActionListener
 			read = set.getReadAt(rowIndex, colIndex);
 		}
 
-		ReadNameData rnd = Assembly.getReadNameData(read);
+		ReadNameData rnd = null;
+		if(read != null )
+			rnd = Assembly.getReadNameData(read);
 
-		if(read instanceof MatedRead)
+		if(read instanceof MatedRead && rnd != null)
 		{
 			mJumpToPair.setEnabled(isOverRead);
 			mJumpToPair.setText("Jump to pair: " + rnd.getName() + " in " + rnd.getMateContig());

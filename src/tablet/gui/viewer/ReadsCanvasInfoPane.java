@@ -28,7 +28,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 	// Variables that change as we move the mouse
 	int lineIndex, mLineIndex;
-	Read read;
+	Read read, mRead;
 	private ReadMetaData metaData, mMetaData;
 	private Point mouse;
 	private int x, y, w, h;
@@ -76,14 +76,20 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	void setData(int lineIndex, Read read, ReadMetaData metaData, boolean isMate)
 	{
 		this.lineIndex = lineIndex;
-		this.read = read;
-
 		if(!isMate)
+		{
+			this.read = read;
 			this.metaData = metaData;
+		}
 		else
+		{
+			mRead = read;
 			this.mMetaData = metaData;
+		}
 
 		String insertSize, isProperPair, pairNumber;
+
+		MatedRead mr = null;
 
 		ReadNameData rnd = Assembly.getReadNameData(read);
 
@@ -118,6 +124,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 		if(read instanceof MatedRead)
 		{
+			mr = (MatedRead)read;
 			insertSize = "insert : " + rnd.getInsertSize();
 			isProperPair = rnd.isProperPair() ? "Paired: Proper " : "Paired: Bad ";
 			if(rnd.getNumberInPair() == 1)
@@ -146,6 +153,20 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			readInfo = new String[] {posData, lengthData, readName, cigar, pairInfo, mateContig};
 		else
 			mateInfo = new String[] {posData, lengthData, readName, cigar, pairInfo, mateContig};
+
+		// Deal with setting up the multiple info panes.
+		if(!isMate && mr != null && mr.getPair() != null)
+		{
+			ReadMetaData rmd = Assembly.getReadMetaData(mr.getPair(), false);
+			if(rmd != null)
+				setData(lineIndex, mr.getPair(), rmd, true);
+			else
+				mMetaData = null;
+		}
+		else if(!isMate)
+			mMetaData = null;
+		else if(!isMate && mr != null)
+			mMetaData = null;
 	}
 
 	/**
@@ -191,19 +212,19 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		else
 			calculatePosition(h);
 		
-		drawBox(g, false, readInfo, metaData);
+		drawBox(g, false, readInfo, metaData, read);
 
 		if(read instanceof MatedRead)
 		{
 			g.drawLine(w/2, h, w/2, h+10);
 			g.translate(-x, -y+h+10);
 
-			if(pr.getPair() != null)
+			if(mMetaData != null && mRead != null)
 			{
-				ReadMetaData rmd = Assembly.getReadMetaData(pr.getPair(), false);
+				//ReadMetaData rmd = Assembly.getReadMetaData(pr.getPair(), false);
 
-				setData(lineIndex, pr.getPair(), rmd, true);
-				drawBox(g, true, mateInfo, mMetaData);
+//				setData(lineIndex, pr.getPair(), mMetaData, true);
+				drawBox(g, true, mateInfo, mMetaData, mRead);
 			}
 			else
 			{
@@ -239,7 +260,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	 * Draws the rest of the box in the usual state where we have a pair of reads
 	 * which are both contained in the current data window.
 	 */
-	private void drawBox(Graphics2D g, boolean isMate, String[] rInfo, ReadMetaData mData)
+	private void drawBox(Graphics2D g, boolean isMate, String[] rInfo, ReadMetaData mData, Read renderRead)
 	{
 		String pData = rInfo[0];
 		String lData = rInfo[1];
@@ -276,7 +297,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		else
 			g.drawImage(rhArrow, 10, arrowHeight, null);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-		renderSequence(g, pInfo, mContig, mData);
+		renderSequence(g, pInfo, mContig, mData, renderRead);
 	}
 
 	/**
@@ -319,11 +340,11 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		return elementHeight;
 	}
 
-	private void renderSequence(Graphics2D g, String pInfo, String mContig, ReadMetaData rmd)
+	private void renderSequence(Graphics2D g, String pInfo, String mContig, ReadMetaData rmd, Read renderRead)
 	{
 		int lineStart = calculateElementHeight(pInfo, mContig) + vSpacing;
 
-		float xScale = read.length() / (float) (w - 10);
+		float xScale = renderRead.length() / (float) (w - 10);
 
 		byte isComplemented = (byte) (rmd.isComplemented() ? 20 : 0);
 
