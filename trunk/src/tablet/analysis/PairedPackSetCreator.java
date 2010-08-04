@@ -47,6 +47,9 @@ public class PairedPackSetCreator extends SimpleJob
 
 				// Add the pair to an existing pack
 				addToExistingPack(matedRead);
+
+				if(Assembly.getReadNameData(read).getName().equals("IL12_3251:3:73:808:1694"))
+					System.out.println("Added: " + added + " PairAdded: " + pairAdded);
 				// If that wasn't possible, add to a new pack.
 				if(added == false)
 					addToNewPack(matedRead);
@@ -161,7 +164,7 @@ public class PairedPackSetCreator extends SimpleJob
 
 	private boolean canAddToNewPack(MatedRead matedRead)
 	{
-		return (matedRead.getStartPosition() < matedRead.getMatePos() || matedRead.getMatePos() < s) || !matedRead.isMateContig();
+		return (matedRead.getStartPosition() < matedRead.getMatePos() || (matedRead.getPair() == null &&matedRead.getMatePos() < s)) || !matedRead.isMateContig();
 	}
 
 	private boolean canAddToExistingPack(MatedRead matedRead, int i)
