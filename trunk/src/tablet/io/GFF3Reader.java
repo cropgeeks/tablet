@@ -59,6 +59,13 @@ public class GFF3Reader extends TrackableReader
 
 		while ((str = readLine()) != null && okToRun)
 		{
+			// http://modencode.oicr.on.ca/validate_gff3_online/validate_gff3.html
+
+			// If we find these directives, just quit, as the rest of the file
+			// isn't going to be GFF stuff any more
+			if (str.startsWith(">") || str.startsWith("##FASTA"))
+				break;
+
 			// Ignore blank lines or comment lines
 			if (str.length() == 0 || str.startsWith("#"))
 				continue;
