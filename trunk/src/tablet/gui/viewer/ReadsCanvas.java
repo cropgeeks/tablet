@@ -115,7 +115,7 @@ class ReadsCanvas extends JPanel
 
 			else if(!Prefs.visPacked && Prefs.visPaired)
 				reads = contig.getPairedStackSetManager();
-			
+
 			else
 				reads = contig.getStackSetManager();
 
@@ -306,10 +306,13 @@ class ReadsCanvas extends JPanel
 
 		public void run()
 		{
+			int scheme = Prefs.visColorScheme;
+
 			// For every [nth] row, where n = number of available CPU cores...
 			for (int row = yS, y = (ntH*yS); row <= yE; row += cores, y += ntH*cores)
 			{
-				byte[] data = reads.getValues(row, xS+offset, xE+offset);
+				byte[] data = reads.getValues(row, xS+offset, xE+offset, scheme);
+
 				for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
 					if (data[i] != -1)
 						g.drawImage(colors.getImage(data[i]), x, y, null);

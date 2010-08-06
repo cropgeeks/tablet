@@ -23,17 +23,7 @@ public class StandardColorScheme extends ColorScheme
 		createStatesCS(w, h);
 
 		if (csOnly == false)
-		{
 			createStatesRD(w, h);
-
-			// Duplicate the second half (to deal/ignore with orientation
-			//  add 6 to get us up to "20"
-			for (int i = 0; i < 4; i++)
-				statesRD.add(null);
-			//  then add the same pre-created states all over again
-			for (int i = 0; i < 16; i++)
-				statesRD.add(statesRD.get(i));
-		}
 	}
 
 	private void createStatesCS(int w, int h)

@@ -26,7 +26,7 @@ public class BamFileHandler
 
 	private boolean okToRun = true;
 	private boolean refLengthsOK = true;
-	
+
 	BamFileHandler(IReadCache readCache, ReadSQLCache nameCache, AssemblyFile bamFile, AssemblyFile baiFile, Assembly assembly)
 	{
 		this.bamFile = bamFile;
@@ -110,7 +110,7 @@ public class BamFileHandler
 		int readStartPos = record.getAlignmentStart()-1;
 
 		ReadNameData rnd = new ReadNameData(record.getReadName());
-		
+
 		ReadMetaData rmd = new ReadMetaData(record.getReadNegativeStrandFlag());
 
 		StringBuilder fullRead = new StringBuilder(
@@ -129,6 +129,8 @@ public class BamFileHandler
 			rnd.setNumberInPair(record.getFirstOfPairFlag() ? 1 : 2);
 			rnd.setMateContig(record.getMateReferenceName());
 
+			rmd.setNumberInPair(record.getFirstOfPairFlag() ? 1 : 2);
+
 			// Might want to get rid of this
 			if(!Assembly.isPaired())
 				Assembly.setIsPaired(true);
@@ -138,7 +140,7 @@ public class BamFileHandler
 		}
 		else
 			read = new Read(readID, readStartPos);
-		
+
 		int uLength = rmd.calculateUnpaddedLength();
 		rnd.setUnpaddedLength(uLength);
 		rnd.setCigar(record.getCigar().toString());

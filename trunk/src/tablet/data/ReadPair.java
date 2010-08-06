@@ -21,7 +21,7 @@ public class ReadPair
 	 * Creates and fills an array with all reads that fit within the given
 	 * window start and end positions.
 	 */
-	public byte[] getValues(int start, int end)
+	public byte[] getValues(int start, int end, int scheme)
 	{
 		byte[] data = new byte[end-start+1];
 
@@ -70,12 +70,12 @@ public class ReadPair
 				}
 			}
 
-			// Determine orientation (and offset by 20 if reversed)
-			byte value = (byte) (rmd.isComplemented() ? 20 : 0);
+			// Determine color offset
+			int color = rmd.getColorSchemeAdjustment(scheme);
 
 			// Fill in the read data
 			for (; index <= end && index <= readE; index++, dataI++)
-				data[dataI] = (byte) (value + rmd.getStateAt(index-readS));
+				data[dataI] = (byte) (color + rmd.getStateAt(index-readS));
 		}
 
 		Read read = pair[0];

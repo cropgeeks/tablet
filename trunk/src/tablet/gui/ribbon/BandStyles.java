@@ -28,7 +28,9 @@ public class BandStyles extends JRibbonBand implements ActionListener
 
 	private JCommandToggleButton bStandard;
 	private JCommandToggleButton bDirection;
+	private JCommandToggleButton bReadType;
 	private JCommandToggleButton bText;
+
 
 	//private JCommandToggleButton bPacked, bStacked, bPairPacked, bPairStacked;
 	JCommandToggleButton bPacked, bStacked, bPairPacked, bPairStacked;
@@ -199,6 +201,24 @@ public class BandStyles extends JRibbonBand implements ActionListener
 		styleButtons.add(bDirection);
 
 
+		// Orientation/direction colour scheme button
+		boolean readtypeOn = Prefs.visColorScheme == ColorScheme.READTYPE;
+
+		bReadType = new JCommandToggleButton(
+			RB.getString("gui.ribbon.BandStyles.bReadType"),
+			RibbonController.getIcon("READTYPE32", 32));
+		Actions.stylesReadType = new ActionToggleButtonModel(false);
+		Actions.stylesReadType.setSelected(readtypeOn);
+		Actions.stylesReadType.addActionListener(this);
+		bReadType.setActionModel(Actions.stylesReadType);
+		bReadType.setActionKeyTip("R");
+		bReadType.addMouseListener(styleListener);
+		bReadType.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.BandStyles.bReadType.tooltip"),
+			RB.getString("gui.ribbon.BandStyles.bReadType.richtip")));
+		styleButtons.add(bReadType);
+
+
 		// Text ("classic") colour scheme button
 		boolean textOn = Prefs.visColorScheme == ColorScheme.CLASSIC;
 
@@ -220,9 +240,9 @@ public class BandStyles extends JRibbonBand implements ActionListener
 		// Set up the ribbon gallery (gawd knows what this code is doing)
 		Map<RibbonElementPriority, Integer> counts =
 			new HashMap<RibbonElementPriority, Integer>();
-		counts.put(RibbonElementPriority.LOW, 3);
-		counts.put(RibbonElementPriority.MEDIUM, 3);
-		counts.put(RibbonElementPriority.TOP, 3);
+		counts.put(RibbonElementPriority.LOW, 4);
+		counts.put(RibbonElementPriority.MEDIUM, 4);
+		counts.put(RibbonElementPriority.TOP, 4);
 
 		List<StringValuePair<List<JCommandToggleButton>>> galleryButtons =
 			new ArrayList<StringValuePair<List<JCommandToggleButton>>>();
@@ -230,7 +250,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 		galleryButtons.add(
 			new StringValuePair<List<JCommandToggleButton>>(null, styleButtons));
 		addRibbonGallery(
-			"Style", galleryButtons, counts, 4, 4, RibbonElementPriority.TOP);
+			"Style", galleryButtons, counts, 5, 2, RibbonElementPriority.TOP);
 	}
 
 //	private void createPopupMenu()
@@ -336,6 +356,15 @@ public class BandStyles extends JRibbonBand implements ActionListener
 			Actions.stylesDirection.setSelected(true);
 		}
 
+		else if (e.getSource() == Actions.stylesReadType)
+		{
+			setColorScheme(ColorScheme.READTYPE);
+			styleListener.previousScheme = ColorScheme.READTYPE;
+
+			// BUG: Workaround for API allowing toggle groups to be unselected
+			Actions.stylesReadType.setSelected(true);
+		}
+
 		else if (e.getSource() == Actions.stylesText)
 		{
 			setColorScheme(ColorScheme.CLASSIC);
@@ -355,7 +384,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 			Prefs.visPacked = true;
 			Prefs.visPaired = false;
 			Actions.overlayReadNames.setEnabled(false);
-			
+
 			winMain.getAssemblyPanel().updateDisplayData(false);
 			winMain.getAssemblyPanel().forceRedraw();
 		}
@@ -385,7 +414,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 			Prefs.visPacked = false;
 			Prefs.visPaired = true;
 			Actions.overlayReadNames.setEnabled(false);
-			
+
 			winMain.getAssemblyPanel().updateDisplayData(false);
 			winMain.getAssemblyPanel().forceRedraw();
 		}
@@ -420,6 +449,10 @@ public class BandStyles extends JRibbonBand implements ActionListener
 			else if (e.getSource() == bDirection && Actions.stylesDirection.isEnabled() &&
 				previousScheme != ColorScheme.DIRECTION)
 				setColorScheme(ColorScheme.DIRECTION);
+
+			else if (e.getSource() == bReadType && Actions.stylesReadType.isEnabled() &&
+				previousScheme != ColorScheme.READTYPE)
+				setColorScheme(ColorScheme.READTYPE);
 
 			else if (e.getSource() == bText && Actions.stylesText.isEnabled() &&
 				previousScheme != ColorScheme.CLASSIC)

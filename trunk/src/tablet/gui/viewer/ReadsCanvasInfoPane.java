@@ -142,7 +142,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		}
 		else
 			insertSize = isProperPair = pairNumber = mateContig = pairInfo = "";
-		
+
 		adjustBoxSize(insertSize, isProperPair, pairNumber);
 
 		// Tell the overview canvas to paint this read too
@@ -179,7 +179,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			h += vSpacing;
 		if (!mateContig.equals(""))
 			h += vSpacing;
-		
+
 		if (fmTitle.stringWidth(readName) > (w - 20))
 			w = fmTitle.stringWidth(readName) + 20;
 		if (fmTitle.stringWidth(posData) > (w - 20))
@@ -211,7 +211,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		}
 		else
 			calculatePosition(h);
-		
+
 		drawBox(g, false, readInfo, metaData, read);
 
 		if(read instanceof MatedRead)
@@ -278,7 +278,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		int arrowHeight = calculateElementHeight(pInfo, mContig);
 
 		drawBasicBox(g, h, tempName);
-		
+
 		g.drawString(pData, 10, vSpacing*2);
 		g.drawString(lData, 10, vSpacing*3);
 		if (Assembly.hasCigar())
@@ -336,7 +336,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			elementHeight += 15;
 		if (!mContig.equals(""))
 			elementHeight += 15;
-		
+
 		return elementHeight;
 	}
 
@@ -346,7 +346,8 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 		float xScale = renderRead.length() / (float) (w - 10);
 
-		byte isComplemented = (byte) (rmd.isComplemented() ? 20 : 0);
+		// Determine color offset
+		int color = rmd.getColorSchemeAdjustment(Prefs.visColorScheme);
 
 		for (int x = 10; x < w-10; x++)
 		{
@@ -354,7 +355,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			int dataX = (int) (x * xScale);
 
 			// Then drawing that data
-			byte b = (byte) (isComplemented + rmd.getStateAt(dataX));
+			byte b = (byte) (color + rmd.getStateAt(dataX));
 
 			g.setColor(rCanvas.colors.getColor(b));
 			g.drawLine(x, lineStart, x, lineStart+10);

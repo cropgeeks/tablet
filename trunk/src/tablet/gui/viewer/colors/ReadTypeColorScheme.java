@@ -9,20 +9,26 @@ import java.util.*;
 
 import tablet.data.*;
 
-public class DirectionColorScheme extends StandardColorScheme
+public class ReadTypeColorScheme extends StandardColorScheme
 {
-	public DirectionColorScheme(int w, int h)
+	public ReadTypeColorScheme(int w, int h)
 	{
 		super(w, h, true);
 
 		// VERY IMPORTANT: These MUST be in the same order as the sequential
 		// values within the data.Sequence class, eg, unknown, P, N, A, C, G, T
 
-		// Do twice, once for forward, then again for reverse
-		for (int i = 0; i < 2; i++)
+		// Three sets of states: Normal Read, 1st in Pair, 2nd in Pair
+		for (int i = 0; i < 3; i++)
 		{
-			Color c = (i == 0) ?
-				new Color(165, 200, 175) : new Color(70, 116, 162);
+			Color c = null;
+
+			switch (i)
+			{
+				case 0: c = new Color(255, 120, 120); break;
+				case 1: c = new Color(120, 255, 120); break;
+				case 2: c = new Color(120, 120, 255); break;
+			}
 
 
 			// Sequence.UNKNOWN
@@ -58,9 +64,8 @@ public class DirectionColorScheme extends StandardColorScheme
 
 
 			// Pad out to start the next set at 16
-			for (int j = 0; j < 1 && i == 0; j++)
+			for (int j = 0; j < 1 && i < 2; j++)
 				statesRD.add(null);
-
 		}
 	}
 }

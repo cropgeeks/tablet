@@ -6,6 +6,7 @@ package tablet.gui.viewer;
 import java.awt.*;
 
 import tablet.data.*;
+import tablet.gui.*;
 
 class ScaledOverviewFactory extends OverviewBufferFactory
 {
@@ -67,8 +68,11 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 				if (read != null)
 				{
 					ReadMetaData rmd = Assembly.getReadMetaData(read, true);
-					byte b = (byte) (rmd.getStateAt(dataX-read.getStartPosition())
-						+ (rmd.isComplemented() ? 20 : 0));
+
+					// Determine color offset
+					int color = rmd.getColorSchemeAdjustment(Prefs.visColorScheme);
+
+					byte b = (byte) (color + rmd.getStateAt(dataX-read.getStartPosition()));
 
 					g.setColor(rCanvas.colors.getColor(b));
 					g.drawLine(x, y, x, y);

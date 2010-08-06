@@ -87,17 +87,12 @@ public class ReadFileCache extends TabletCache implements IReadCache
 					// Then C or U
 					boolean isComplemented = rnd.readBooleanFromBuffer();
 
-					if (dataOnly)
-					{
-						rmd = new ReadMetaData(isComplemented);
-						rmd.setRawData(data);
-					}
-					else
-					{
-						rmd = new ReadMetaData(isComplemented);
-						rmd.setRawData(data);
-						rmd.setLength(dataLength);
-					}
+					int numberInPair = rnd.read();
+
+					rmd = new ReadMetaData(isComplemented);
+					rmd.setRawData(data);
+					rmd.setLength(dataLength);
+					rmd.setNumberInPair(numberInPair);
 				}
 				catch (Exception e)	{
 					e.printStackTrace();
@@ -125,11 +120,15 @@ public class ReadFileCache extends TabletCache implements IReadCache
 		// Write a single byte for C or U
 		out.writeBoolean(readMetaData.isComplemented());
 
+		// Byte (0, 1, or 2) for pair information
+		out.writeByte(readMetaData.getNumberInPair());
+
 		// Bytes written:
-		//   1   - BYTE, 0 or 1 (for C or U)
 		//   4   - INT, data length
 		//   [d] - BYTES, the data
-		// = 5
-		byteCount += (5 + data.length);
+		//   1   - BYTE, 0 or 1 (for C or U)
+		//   1   - BYTE, pair info
+		// = 6
+		byteCount += (6 + data.length);
 	}
 }
