@@ -15,6 +15,7 @@ public abstract class ColorScheme
 	public static final int STANDARD = 10;
 	public static final int CLASSIC = 20;
 	public static final int DIRECTION = 30;
+	public static final int READTYPE = 40;
 
 	ColorScheme()
 	{
@@ -46,6 +47,9 @@ public abstract class ColorScheme
 
 		else if (type == DIRECTION)
 			scheme = new DirectionColorScheme(w, h);
+
+		else if (type == READTYPE)
+			scheme = new ReadTypeColorScheme(w, h);
 
 		return scheme;
 	}

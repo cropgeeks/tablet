@@ -27,7 +27,7 @@ class StackSet implements IReadManager
 	 * Returns a byte array containing sequence information (or -1 for no data)
 	 * for the given line between the points start and end.
 	 */
-	public byte[] getValues(int line, int start, int end)
+	public byte[] getValues(int line, int start, int end, int scheme)
 	{
 		Read read = stack.get(line);
 
@@ -48,12 +48,13 @@ class StackSet implements IReadManager
 		for (; index <= end && index < readS; index++, dataI++)
 			data[dataI] = -1;
 
-		// Determine orientation (and offset by 20 if reversed)
-		byte value = (byte) (rmd.isComplemented() ? 20 : 0);
+
+		// Determine color offset
+		int color = rmd.getColorSchemeAdjustment(scheme);
 
 		// Fill in any read data
 		for (; index <= end && index <= readE; index++, dataI++)
-			data[dataI] = (byte) (value + rmd.getStateAt(index-readS));
+			data[dataI] = (byte) (color + rmd.getStateAt(index-readS));
 
 		// If no more reads are within the window, fill in any blanks between
 		// the final read and the end of the array

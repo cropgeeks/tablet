@@ -74,16 +74,6 @@ public class TextColorScheme extends ColorScheme
 
 		// Pair Link
 		statesRD.add(new PairLinkColorState(new Color(180, 180, 180), w, h));
-		statesRD.add(null);
-
-
-		// Duplicate the second half (to deal/ignore with orientation
-		//  add 6 to get us up to "20"
-		for (int i = 0; i < 4; i++)
-			statesRD.add(null);
-		//  then add the same pre-created states all over again
-		for (int i = 0; i < 16; i++)
-			statesRD.add(statesRD.get(i));
 	}
 
 	public Image getImage(int data)

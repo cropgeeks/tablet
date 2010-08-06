@@ -130,6 +130,9 @@ class SamFileReader extends TrackableReader
 					rnd.setIsProperPair((flags & 0x0002) != 0);
 					rnd.setNumberInPair((flags & 0x0040) != 0 ? 1 : 2);
 					rnd.setMateContig(mrnm);
+
+					rmd.setNumberInPair((flags & 0x0040) != 0 ? 1 : 2);
+
 					// Might want to get rid of this
 					if(!Assembly.isPaired())
 						Assembly.setIsPaired(true);

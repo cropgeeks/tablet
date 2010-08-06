@@ -3,6 +3,8 @@
 
 package tablet.data;
 
+import static tablet.gui.viewer.colors.ColorScheme.*;
+
 /**
  * Represents and holds additional meta data about a read. Chances are this is
  * data that was cached elsewhere (eg on disk) because it uses too much memory
@@ -16,6 +18,8 @@ public class ReadMetaData extends Sequence
 	private boolean isComplemented;
 
 	private int length;
+
+	private int numberInPair;
 
 	public ReadMetaData()
 	{
@@ -84,5 +88,37 @@ public class ReadMetaData extends Sequence
 	{
 		super.setData(sequence);
 		length = sequence.length();
+	}
+
+	public int getNumberInPair()
+		{ return numberInPair; }
+
+	public void setNumberInPair(int numberInPair)
+	{
+		this.numberInPair = numberInPair;
+	}
+
+	/**
+	 * Returns the offset amount to be added to any base's state value within
+	 * this read to ensure it matches a value held by the color scheme in use.
+	 * EG, 'A' (forward) may have a value of 5 but 5 (+16) for 'A' (reverse)
+	 */
+	public int getColorSchemeAdjustment(int scheme)
+	{
+		switch (scheme)
+		{
+			case DIRECTION: return isComplemented ? 16:0;
+
+			case READTYPE:
+			{
+				switch (numberInPair)
+				{
+					case 1: return 16;
+					case 2: return 32;
+				}
+			}
+		}
+
+		return 0;
 	}
 }

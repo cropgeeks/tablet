@@ -40,7 +40,7 @@ public class Pack
 	 * Returns a byte array containing sequence information (or -1 for no data)
 	 * between the points start and end.
 	 */
-	byte[] getValues(int start, int end)
+	byte[] getValues(int start, int end, int scheme)
 	{
 		int read = -1;
 
@@ -88,14 +88,14 @@ public class Pack
 			if (reads.get(read).compareToWindow(start, end) == -1)
 				break;
 
-		return getValues(read+1, start, end);
+		return getValues(read+1, start, end, scheme);
 	}
 
 	/**
 	 * Creates and fills an array with all reads that fit within the given
 	 * window start and end positions (starting from the index fromRead).
 	 */
-	private byte[] getValues(int fromRead, int start, int end)
+	private byte[] getValues(int fromRead, int start, int end, int scheme)
 	{
 		byte[] data = new byte[end-start+1];
 
@@ -132,13 +132,13 @@ public class Pack
 				else
 					data[dataI] = -1;
 			}
-			
-			// Determine orientation (and offset by 20 if reversed)
-			byte value = (byte) (rmd.isComplemented() ? 20 : 0);
+
+			// Determine color offset
+			int color = rmd.getColorSchemeAdjustment(scheme);
 
 			// Fill in the read data
 			for (; index <= end && index <= readE; index++, dataI++)
-				data[dataI] = (byte) (value + rmd.getStateAt(index-readS));
+				data[dataI] = (byte) (color + rmd.getStateAt(index-readS));
 		}
 
 		MatedRead matedRead = null;
@@ -212,7 +212,7 @@ public class Pack
 				pair[1] = pr.getPair();
 			else
 				pair[1] = null;
-			
+
 			return pair;
 		}
 		else
