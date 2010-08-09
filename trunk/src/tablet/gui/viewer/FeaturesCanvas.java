@@ -15,7 +15,7 @@ import tablet.data.auxiliary.*;
 import tablet.gui.*;
 import tablet.gui.viewer.colors.*;
 
-class FeaturesCanvas extends TrackingCanvas
+public class FeaturesCanvas extends TrackingCanvas
 {
 	private AssemblyPanel aPanel;
 
@@ -46,9 +46,11 @@ class FeaturesCanvas extends TrackingCanvas
 	{
 		this.aPanel = aPanel;
 		rCanvas = aPanel.readsCanvas;
+
+		new FeaturesCanvasML(aPanel);
 	}
 
-	void setContig(Contig contig)
+	public void setContig(Contig contig)
 	{
 		if (contig != null)
 		{
@@ -67,8 +69,13 @@ class FeaturesCanvas extends TrackingCanvas
 
 		this.contig = contig;
 
-		setPreferredSize(dimension);
-		revalidate();
+		if (vContig != null && vContig.getTrackCount() > 0)
+		{
+			setVisible(true);
+			setPreferredSize(dimension);
+		}
+		else
+			setVisible(false);
 	}
 
 	private void prepareTracks(Contig contig)
@@ -120,7 +127,7 @@ class FeaturesCanvas extends TrackingCanvas
 			for (Feature f: features)
 			{
 				int p1 = f.getVisualPS() - offset;
-				int p2 = f.getVisualPS() - offset;
+				int p2 = f.getVisualPE() - offset;
 
 				if (f.getGFFType().equals("SNP"))
 				{
@@ -145,7 +152,7 @@ class FeaturesCanvas extends TrackingCanvas
 				{
 					g.setPaint(new Color(255, 0, 0, 50));
 					g.fillRect(p1*ntW, H/4, (p2-p1+1)*ntW-1, H/2);
-					g.setPaint(new Color(0, 0, 0, 50));
+					g.setPaint(new Color(255, 0, 0));
 					g.drawRect(p1*ntW, H/4, (p2-p1+1)*ntW-1, H/2);
 				}
 			}

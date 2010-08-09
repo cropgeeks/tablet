@@ -16,8 +16,6 @@ class ReadsCanvasML extends MouseInputAdapter
 	private ReadsCanvas rCanvas;
 	private ScaleCanvas sCanvas;
 
-	// Deals with navigation issues
-	private NavigationHandler nHandler = new NavigationHandler();
 	private NavigationOverlay nOverlay;
 
 	// Deals with pop-up menus
@@ -48,6 +46,8 @@ class ReadsCanvasML extends MouseInputAdapter
 		rCanvas.overlays.add(pairOutliner);
 		rCanvas.overlays.add(nOverlay);
 		rCanvas.overlays.add(infoPane);
+
+		new ReadsCanvasDragHandler(aPanel, rCanvas);
 	}
 
 	public void mouseExited(MouseEvent e)
@@ -71,7 +71,7 @@ class ReadsCanvasML extends MouseInputAdapter
 			// Page left or right if the navigation arrows were clicked on
 			if (nOverlay.isLeftActive())
 				aPanel.pageLeft();
-			
+
 			else if (nOverlay.isRightActive())
 				aPanel.pageRight();
 
@@ -86,9 +86,6 @@ class ReadsCanvasML extends MouseInputAdapter
 
 		if (e.isPopupTrigger())
 			rCanvasMenu.handlePopup(e);
-
-		if (SwingUtilities.isLeftMouseButton(e))
-			nHandler.mousePressed(e);
 	}
 
 	public void mouseReleased(MouseEvent e)
@@ -97,13 +94,6 @@ class ReadsCanvasML extends MouseInputAdapter
 
 		if (e.isPopupTrigger())
 			rCanvasMenu.handlePopup(e);
-
-		nHandler.mouseReleased(e);
-	}
-
-	public void mouseDragged(MouseEvent e)
-	{
-		nHandler.mouseDragged(e);
 	}
 
 	public void mouseMoved(MouseEvent e)
@@ -169,7 +159,7 @@ class ReadsCanvasML extends MouseInputAdapter
 		{
 			PackSet set = (PackSet)rCanvas.reads;
 			Read[] pair = set.getPairAtLine(yIndex, xIndex);
-		
+
 			if(pair == null || pair[0] == null || pair[1] == null)
 				pairOutliner.setPair(null, null, 0, 0);
 			else
@@ -202,7 +192,7 @@ class ReadsCanvasML extends MouseInputAdapter
 	{
 		if(pair == null || (pair[0] == null || pair[1] == null))
 			return;
-		
+
 		int lineIndex = 0;
 		int mateLineIndex = 0;
 
@@ -210,37 +200,5 @@ class ReadsCanvasML extends MouseInputAdapter
 		mateLineIndex = aPanel.readsCanvas.reads.getLineForRead(pair[1]);
 
 		pairOutliner.setPair(pair[0], pair[1], lineIndex, mateLineIndex);
-	}
-
-	/** Inner class to handle navigation mouse events (dragging the canvas etc). */
-	private class NavigationHandler
-	{
-		private Point dragPoint;
-
-		void mousePressed(MouseEvent e)
-		{
-			dragPoint = e.getPoint();
-		}
-
-		void mouseReleased(MouseEvent e)
-		{
-			// Reset any dragging variables
-			dragPoint = null;
-			rCanvas.setCursor(new Cursor(Cursor.DEFAULT_CURSOR));
-		}
-
-		void mouseDragged(MouseEvent e)
-		{
-			// Dragging the canvas...
-			if (dragPoint != null)
-			{
-				rCanvas.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-				int diffX = dragPoint.x - e.getPoint().x;
-				int diffY = dragPoint.y - e.getPoint().y;
-
-				aPanel.moveBy(diffX, diffY);
-			}
-		}
 	}
 }

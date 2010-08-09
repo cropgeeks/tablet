@@ -231,7 +231,13 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 
 	void editFeatures()
 	{
-		new FeaturesDialog();
+		FeaturesDialog dialog = new FeaturesDialog();
+
+		if (dialog.isOK())
+		{
+			aPanel.getFeaturesCanvas().setContig(aPanel.getContig());
+			aPanel.getFeaturesCanvas().revalidate();
+		}
 	}
 
 	private class FeaturesTableRenderer extends NumberFormatCellRenderer

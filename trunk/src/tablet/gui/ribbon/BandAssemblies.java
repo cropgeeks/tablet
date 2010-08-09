@@ -83,8 +83,8 @@ class BandAssemblies extends JRibbonBand implements ActionListener
 
 
 		addCommandButton(bOpen32, RibbonElementPriority.TOP);
-		addCommandButton(bImportFeatures, RibbonElementPriority.MEDIUM);
-		addCommandButton(bScanner, RibbonElementPriority.MEDIUM);
+		addCommandButton(bImportFeatures, RibbonElementPriority.TOP);
+//		addCommandButton(bScanner, RibbonElementPriority.MEDIUM);
 
 		winMain.getRibbon().addTaskbarComponent(bOpen16);
 	}

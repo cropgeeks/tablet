@@ -13,24 +13,22 @@ import tablet.gui.*;
 
 import scri.commons.gui.*;
 
-class ConsensusCanvasML extends MouseInputAdapter implements ActionListener
+class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 {
-	private ConsensusCanvas cCanvas;
+	private FeaturesCanvas fCanvas;
 	private ReadsCanvas rCanvas;
 	private ScaleCanvas sCanvas;
 
-	private JMenuItem mClipboard;
-
-	ConsensusCanvasML(AssemblyPanel aPanel)
+	FeaturesCanvasML(AssemblyPanel aPanel)
 	{
-		cCanvas = aPanel.consensusCanvas;
+		fCanvas = aPanel.featuresCanvas;
 		rCanvas = aPanel.readsCanvas;
 		sCanvas = aPanel.scaleCanvas;
 
-		cCanvas.addMouseListener(this);
-		cCanvas.addMouseMotionListener(this);
+		fCanvas.addMouseListener(this);
+		fCanvas.addMouseMotionListener(this);
 
-		new ReadsCanvasDragHandler(aPanel, cCanvas);
+		new ReadsCanvasDragHandler(aPanel, fCanvas);
 	}
 
 	public void mouseExited(MouseEvent e)
@@ -61,7 +59,7 @@ class ConsensusCanvasML extends MouseInputAdapter implements ActionListener
 
 	private void displayMenu(MouseEvent e)
 	{
-		JPopupMenu menu = new JPopupMenu();
+/*		JPopupMenu menu = new JPopupMenu();
 
 		mClipboard = new JMenuItem("", Icons.getIcon("CLIPBOARD"));
 		RB.setText(mClipboard, "gui.viewer.ConsensusCanvasML.mClipboard");
@@ -69,21 +67,11 @@ class ConsensusCanvasML extends MouseInputAdapter implements ActionListener
 		menu.add(mClipboard);
 
 		menu.show(e.getComponent(), e.getX(), e.getY());
+*/
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == mClipboard)
-		{
-			String name = rCanvas.contig.getName();
-			String seq = rCanvas.contig.getConsensus().toString();
 
-			// Produce a FASTA formatted string
-			String text = TabletUtils.formatFASTA(name, seq);
-
-			StringSelection selection = new StringSelection(text);
-			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
-				selection, null);
-		}
 	}
 }
