@@ -18,12 +18,14 @@ public class FeaturesDialog extends JDialog implements ActionListener
 	private JButton bOK, bCancel, bHelp;
 	private NBFeaturesPanel nbPanel;
 
+	private boolean isOK = false;
+
 	public FeaturesDialog()
 	{
 		super(
 			Tablet.winMain,
 			RB.getString("gui.dialog.FeaturesDialog.title"),
-			false
+			true
 		);
 
 		nbPanel = new NBFeaturesPanel();
@@ -60,10 +62,15 @@ public class FeaturesDialog extends JDialog implements ActionListener
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == bOK && nbPanel.isOK())
-			setVisible(false);
+		if (e.getSource() == bOK)
+		{
+			nbPanel.updateList();
+			isOK = true;
+		}
 
-		else if (e.getSource() == bCancel)
-			setVisible(false);
+		setVisible(false);
 	}
+
+	public boolean isOK()
+		{ return isOK; }
 }

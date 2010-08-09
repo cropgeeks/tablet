@@ -46,6 +46,8 @@ class CoverageCanvas extends TrackingCanvas
 				sCanvas.setMouseBase(xIndex);
 			}
 		});
+
+		new ReadsCanvasDragHandler(aPanel, this);
 	}
 
 	void setContig(Contig contig)

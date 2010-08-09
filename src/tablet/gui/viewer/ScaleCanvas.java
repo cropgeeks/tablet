@@ -57,6 +57,8 @@ class ScaleCanvas extends TrackingCanvas
 	void setAssemblyPanel(AssemblyPanel aPanel)
 	{
 		rCanvas = aPanel.readsCanvas;
+
+		new ReadsCanvasDragHandler(aPanel, this);
 	}
 
 	void setContig(Contig contig)

@@ -480,7 +480,8 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 	}
 
 	public OverviewCanvas getOverviewCanvas()
-	{
-		return overviewCanvas;
-	}
+		{ return overviewCanvas; }
+
+	public FeaturesCanvas getFeaturesCanvas()
+		{ return featuresCanvas; }
 }

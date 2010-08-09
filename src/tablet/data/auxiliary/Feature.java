@@ -71,8 +71,11 @@ public class Feature implements Comparable<Feature>
 		// Add this feature's type to the tracking table
 		if (types.get(gffType) == null)
 		{
+			// Auto-add the first three types so that they will be visible
+			boolean visible = types.size() < 3;
+
 			types.put(gffType, gffType);
-			order.add(new VisibleFeature(gffType, false));
+			order.add(new VisibleFeature(gffType, visible));
 		}
 	}
 

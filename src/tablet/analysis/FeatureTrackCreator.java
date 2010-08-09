@@ -20,13 +20,14 @@ public class FeatureTrackCreator extends SimpleJob
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		long s = System.currentTimeMillis();
-
 		vContig.removeTracks();
 
 		// For each type of feature to be given a track...
 		for (Feature.VisibleFeature f: Feature.order)
 		{
+			if (f.isVisible == false)
+				continue;
+
 			FeatureTrack track = new FeatureTrack(f.type);
 			vContig.addTrack(track);
 
@@ -35,11 +36,6 @@ public class FeatureTrackCreator extends SimpleJob
 			for (Feature feature: contig.getFeatures())
 				if (feature.getGFFType().toLowerCase().equals(type))
 					track.addFeatureNoSort(feature);
-
-			System.out.println("Added " + type + " track with " + track.getFeatures().size() + " features");
 		}
-
-		long e = System.currentTimeMillis();
-		System.out.println("Created features track(s) in " + (e-s) + "ms");
 	}
 }

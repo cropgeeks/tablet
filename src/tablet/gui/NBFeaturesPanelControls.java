@@ -27,6 +27,7 @@ class NBFeaturesPanelControls extends JPanel
 		// i18n text
 		RB.setText(filterLabel, "gui.NBFeaturesPanelControls.filterLabel");
 		RB.setText(checkPadded, "gui.NBFeaturesPanelControls.checkPadded");
+		RB.setText(linkEdit, "gui.NBFeaturesPanelControls.linkEdit");
 		checkPadded.setToolTipText(RB.getString("gui.NBFeaturesPanelControls.checkPaddedTooltip"));
 
 		checkPadded.setSelected(Prefs.guiFeaturesArePadded);
@@ -93,6 +94,7 @@ class NBFeaturesPanelControls extends JPanel
 	public void toggleComponentEnabled(boolean enabled)
 	{
 		checkPadded.setEnabled(enabled);
+		linkEdit.setEnabled(enabled);
 		filterLabel.setEnabled(enabled);
 		filterText.setEnabled(enabled);
 		featuresLabel.setEnabled(enabled);
@@ -157,7 +159,7 @@ class NBFeaturesPanelControls extends JPanel
         featuresLabel.setText("Features (0):");
 
         linkEdit.setForeground(new java.awt.Color(68, 106, 156));
-        linkEdit.setText("Edit tracks...");
+        linkEdit.setText("Select tracks");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -166,27 +168,28 @@ class NBFeaturesPanelControls extends JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(featuresLabel)
-                        .addContainerGap(326, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 195, Short.MAX_VALUE)
+                        .addComponent(linkEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(checkPadded)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(filterLabel)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(filterText, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(linkEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(328, Short.MAX_VALUE))))
+                                .addComponent(filterText, javax.swing.GroupLayout.DEFAULT_SIZE, 248, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(featuresLabel)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(featuresLabel)
+                    .addComponent(linkEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 65, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -195,8 +198,6 @@ class NBFeaturesPanelControls extends JPanel
                     .addComponent(filterText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(checkPadded)
-                .addGap(18, 18, 18)
-                .addComponent(linkEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents

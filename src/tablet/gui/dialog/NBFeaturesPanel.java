@@ -43,7 +43,7 @@ class NBFeaturesPanel extends JPanel implements ActionListener, ListSelectionLis
 		selectNone.addActionListener(this);
 	}
 
-	boolean isOK()
+	void updateList()
 	{
 		order.clear();
 
@@ -54,8 +54,6 @@ class NBFeaturesPanel extends JPanel implements ActionListener, ListSelectionLis
 				(String) model.getValueAt(i, 1),
 				(Boolean) model.getValueAt(i, 0)));
 		}
-
-		return true;
 	}
 
 	public void actionPerformed(ActionEvent e)

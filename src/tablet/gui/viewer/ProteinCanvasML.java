@@ -35,6 +35,8 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 
 		pCanvas.addMouseListener(this);
 		pCanvas.addMouseMotionListener(this);
+
+		new ReadsCanvasDragHandler(aPanel, pCanvas);
 	}
 
 	public void mouseReleased(MouseEvent e)
