@@ -92,7 +92,7 @@ public class PairSearcher
 
 	private Read linearSearch(Read pr, String name, int pos, int mid, int loopModifier, ReadNameData pairRnd)
 	{
-		while (pr != null && pos == pr.getStartPosition())
+		while (pr != null && pos == pr.getStartPosition() && mid > 0)
 		{
 			if (pairRnd.getName().equals(name))
 				return pr;

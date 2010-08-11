@@ -79,7 +79,7 @@ public class Pack
 //		}
 
 		if (read == -1)
-			read = 0;
+			read = M;
 
 		// Search left from this read to find the left-most read that appears in
 		// the window (as the binary search will only find the first read that
@@ -111,11 +111,6 @@ public class Pack
 		{
 			read = itor.next();
 
-			MatedRead matedRead = null;
-
-			if(read instanceof MatedRead)
-				matedRead = (MatedRead)read;
-
 			if (read.getStartPosition() > end)
 				break;
 
@@ -124,13 +119,30 @@ public class Pack
 
 			ReadMetaData rmd = Assembly.getReadMetaData(read, true);
 
-			// Fill in any blanks between the current index the next read
-			for (; index < readS; index++, dataI++)
+			MatedRead matedRead = null;
+
+			if(read instanceof MatedRead && Prefs.visPaired)
 			{
-				if(isMate(matedRead, index))
-					data[dataI] = 14;
-				else
-					data[dataI] = -1;
+				matedRead = (MatedRead)read;
+
+				boolean isMateContig = matedRead.isMateContig();
+				int startPos = matedRead.getStartPosition();
+				int matePos = matedRead.getMatePos();
+				MatedRead mate = matedRead.getPair();
+
+				// Fill in any blanks between the current index the next read
+				for (; index < readS; index++, dataI++)
+				{
+					if(isMate(matedRead, mate, index, isMateContig, startPos, matePos))
+						data[dataI] = 14;
+					else
+						data[dataI] = -1;
+				}
+			}
+			else
+			{
+				for (; index < readS; index++, dataI++)
+						data[dataI] = -1;
 			}
 
 			// Determine color offset
@@ -142,16 +154,29 @@ public class Pack
 		}
 
 		MatedRead matedRead = null;
-		if(read instanceof MatedRead)
-			matedRead = (MatedRead)read;
-		// If no more reads are within the window, fill in any blanks between
-		// the final read and the end of the array
-		for (; index <= end; index++, dataI++)
+		if(read instanceof MatedRead && Prefs.visPaired)
 		{
-			if(isMateEndWindow(matedRead, index, end))
-				data[dataI] = 14;
-			else
-				data[dataI] = -1;
+			matedRead = (MatedRead)read;
+			boolean isMateContig = matedRead.isMateContig();
+			int startPos = matedRead.getStartPosition();
+			int matePos = matedRead.getMatePos();
+			int endPos = matedRead.getEndPosition();
+			MatedRead mate = matedRead.getPair();
+
+			// If no more reads are within the window, fill in any blanks between
+			// the final read and the end of the array
+			for (; index <= end; index++, dataI++)
+			{
+				if(isMateEndWindow(matedRead, mate, index, end, isMateContig, startPos, matePos, endPos))
+					data[dataI] = 14;
+				else
+					data[dataI] = -1;
+			}
+		}
+		else
+		{
+			for (; index <= end; index++, dataI++)
+					data[dataI] = -1;
 		}
 
 		return data;
@@ -222,13 +247,17 @@ public class Pack
 	/**
 	 * Checks if the nucleotide position is in the middle of a pair.
 	 */
-	private boolean isMate(MatedRead pr, int index)
+	private boolean isMate(MatedRead mr, MatedRead mate, int index, boolean isMateContig, int startPos, int matePos)
 	{
-		if(pr == null || pr.getPair() == null)
+		if(!Assembly.isPaired() || mr == null || !isMateContig)
 			return false;
+		else if(isMateContig && mate == null)
+		{
+			return (startPos > index && matePos < startPos && reads.get(0).equals(mr));
+		}
 		else
 		{
-			return (reads.contains(pr) && reads.contains(pr.getPair()) && pr.getStartPosition() > index && pr.getMatePos() < pr.getStartPosition());
+			return (startPos > index && matePos < startPos && reads.contains(mr) && reads.contains(mate));
 		}
 	}
 
@@ -236,14 +265,19 @@ public class Pack
 	 * Checks if the nucleotide position is at the end of a screen window and
 	 * in the middle of a pair.
 	 */
-	private boolean isMateEndWindow(MatedRead pr, int index, int end)
+	private boolean isMateEndWindow(MatedRead mr, MatedRead mate, int index, int end, boolean isMateContig, int startPos, int matePos, int endPos)
 	{
-		if(pr == null || pr.getPair() == null)
+		if(!Assembly.isPaired() || mr == null || !isMateContig)
 			return false;
+		else if(isMateContig && mate == null)
+		{
+			return (index > endPos && matePos > end) ||
+					(index < startPos && matePos < startPos && startPos > end && matePos < end);
+		}
 		else
 		{
-			return ((reads.contains(pr) && reads.contains(pr.getPair())) && index > pr.getEndPosition() && pr.getMatePos() > end) ||
-					((reads.contains(pr) && reads.contains(pr.getPair())) && index < pr.getStartPosition() && pr.getMatePos() < pr.getStartPosition() && pr.getStartPosition() > end && pr.getMatePos() < end);
+			return ((reads.contains(mr) && reads.contains(mate)) && index > endPos && matePos > end) ||
+					((reads.contains(mr) && reads.contains(mate)) && index < startPos && matePos < startPos && startPos > end && matePos < end);
 		}
 	}
 }

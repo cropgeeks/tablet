@@ -48,14 +48,24 @@ public class ReadPair
 			if(read instanceof MatedRead)
 			{
 				MatedRead matedRead = (MatedRead)read;
+
+				// Work out these variables in advance rather than on each iteration
+				int startPos = matedRead.getStartPosition();
+				int matePos = matedRead.getMatePos();
+				boolean isMateContig = matedRead.isMateContig();
+				MatedRead mate = matedRead.getPair();
+				int mateEndPos = 0;
+				if(mate != null)
+					mateEndPos = mate.getEndPosition();
+
 				for (; index < readS; index++, dataI++)
 				{
 					// Is this an area between the start of each read in a pair of reads
-					if(matedRead.getMatePos() < start && matedRead.getMatePos() < readS && matedRead.isMateContig())
+					if(matePos < readS && isMateContig)
 					{
 						data[dataI] = 14;
 						// Is this an outlier which has the reads in the pair on different rows.
-						if(matedRead.getPair() != null && matedRead.getPair().getEndPosition() > matedRead.getStartPosition())
+						if(mate != null && mateEndPos > startPos)
 							data[dataI] = -1;
 					}
 					else
@@ -83,17 +93,21 @@ public class ReadPair
 		if(read instanceof MatedRead)
 		{
 			MatedRead matedRead = (MatedRead)read;
+
+			// Work out these variables in advance rather than on each iteration
+			int endPos = matedRead.getEndPosition();
+			int startPos = matedRead.getStartPosition();
+			int matePos = matedRead.getMatePos();
+			boolean isMateContig = matedRead.isMateContig();
+
 			// If no more reads are within the window, fill in any blanks between
 			// the final read and the end of the array
 			for (; index <= end; index++, dataI++)
 			{
-				if(index > matedRead.getEndPosition() && matedRead.getMatePos() > end || (matedRead.getMatePos() < start && matedRead.getMatePos() < matedRead.getStartPosition() && index < matedRead.getStartPosition() && matedRead.isMateContig()))
+				if(index > endPos && matePos > end || (matePos < start && matePos < startPos && index < startPos && isMateContig))
 					data[dataI] = 14;
 				else
 					data[dataI] = -1;
-
-//				if(matedRead.getPair() != null && matedRead.getPair().getEndPosition() > matedRead.getStartPosition())
-//					data[dataI] = -1;
 			}
 		}
 		else
