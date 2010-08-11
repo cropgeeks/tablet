@@ -131,6 +131,10 @@ public class ReadSQLCache
 	public ReadSQLCache resetCache()
 		throws IOException, Exception
 	{
+		// Deal with situations where errors have interrupted the connection
+		c.close();
+		c =	DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
+		
 		Statement s = c.createStatement();
 		s.execute("drop table if exists reads;");
 		s.close();

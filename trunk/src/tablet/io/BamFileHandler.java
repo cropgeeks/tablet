@@ -42,6 +42,7 @@ public class BamFileHandler
 	public void loadDataBlock(Contig contig, int s, int e)
 			throws Exception
 	{
+		Assembly.setIsPaired(false);
 		try
 		{
 			loadData(contig, s, e);
@@ -49,6 +50,7 @@ public class BamFileHandler
 		catch(Exception ex)
 		{
 			openBamFile(null);
+			nameCache = nameCache.resetCache();
 
 			throw new Exception(ex);
 		}
