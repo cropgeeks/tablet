@@ -53,9 +53,10 @@ class SamFileReader extends TrackableReader
 	public void runJob(int jobIndex)
 		throws Exception
 	{
+		Assembly.setIsPaired(false);
+		
 		// Try and read the reference file (if there is one)
 		readReferenceFile();
-
 
 		in = new BufferedReader(new InputStreamReader(getInputStream(ASBINDEX), "ASCII"));
 
