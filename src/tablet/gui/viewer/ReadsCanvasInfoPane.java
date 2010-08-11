@@ -122,11 +122,11 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		if (Assembly.hasCigar())
 			cigar = RB.format("gui.viewer.ReadsCanvasInfoPane.cigar", rnd.getCigar());
 
-		if(read instanceof MatedRead)
+		if(read instanceof MatedRead && Prefs.visPaired)
 		{
 			mr = (MatedRead)read;
-			insertSize = "insert : " + rnd.getInsertSize();
-			isProperPair = rnd.isProperPair() ? "Paired: Proper " : "Paired: Bad ";
+			insertSize =  RB.format("gui.viewer.ReadsCanvasInfoPane.insert", rnd.getInsertSize());
+			isProperPair = rnd.isProperPair() ? RB.getString("gui.viewer.ReadsCanvasInfoPane.pairedProper") : RB.getString("gui.viewer.ReadsCanvasInfoPane.pairedProper");
 			if(rnd.getNumberInPair() == 1)
 				pairNumber = "(1/2) ";
 			else if(rnd.getNumberInPair() == 2)
@@ -136,7 +136,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 			pairInfo = isProperPair + pairNumber + insertSize;
 
-			mateContig = "Mate contig: " + rnd.getMateContig();
+			mateContig = RB.format("gui.viewer.ReadsCanvasInfoPane.mateContig", rnd.getMateContig());
 			if(rnd.getMateContig().equals(rCanvas.contig.getName()))
 				mateContig = "";
 		}
@@ -201,7 +201,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			return;
 
 		MatedRead pr = null;
-		if(read instanceof MatedRead)
+		if(read instanceof MatedRead && Prefs.visPaired)
 		{
 			pr = (MatedRead)read;
 			if(pr.getPair() != null)
@@ -214,16 +214,13 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 		drawBox(g, false, readInfo, metaData, read);
 
-		if(read instanceof MatedRead)
+		if(read instanceof MatedRead && Prefs.visPaired)
 		{
 			g.drawLine(w/2, h, w/2, h+10);
 			g.translate(-x, -y+h+10);
 
 			if(mMetaData != null && mRead != null)
 			{
-				//ReadMetaData rmd = Assembly.getReadMetaData(pr.getPair(), false);
-
-//				setData(lineIndex, pr.getPair(), mMetaData, true);
 				drawBox(g, true, mateInfo, mMetaData, mRead);
 			}
 			else
@@ -271,7 +268,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		String tempName;
 
 		if(isMate)
-			tempName = rName + " (Mate)";
+			tempName = rName + RB.getString("gui.viewer.ReadsCanvasInfoPane.mateRead");
 		else
 			tempName = rName;
 
@@ -306,7 +303,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	 */
 	private void drawMateUnavailableBox(Graphics2D g, int matePos, boolean isMateContig, String mateContig)
 	{
-		String tempName = readName + " (Mate)";
+		String tempName = readName + RB.getString("gui.viewer.ReadsCanvasInfoPane.mateRead");
 		int mateH = 70;
 
 		drawBasicBox(g, mateH, tempName);
@@ -314,15 +311,15 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		g.setColor(Color.red);
 		if(!isMateContig)
 		{
-			g.drawString("Mate is not in this contig", 10, vSpacing*3);
+			g.drawString(RB.getString("gui.viewer.ReadsCanvasInfoPane.outwithContig"), 10, vSpacing*3);
 			g.setColor(Color.black);
-			g.drawString("Located in " + mateContig + ", position " + matePos, 10, vSpacing *4);
+			g.drawString(RB.format("gui.viewer.ReadsCanvasInforPane.locatedInContig", mateContig, matePos), 10, vSpacing *4);
 		}
 		else
 		{
-			g.drawString("Mate is outwith BAM window", 10, vSpacing*3);
+			g.drawString(RB.getString("gui.viewer.ReadsCanvasInfoPane.outwithBamWindow"), 10, vSpacing*3);
 			g.setColor(Color.black);
-			g.drawString("Position " + matePos, 10, vSpacing*4);
+			g.drawString(RB.format("gui.viewer.ReadsCanvasInfoPane.positionInContig", TabletUtils.nf.format(matePos)), 10, vSpacing*4);
 		}
 	}
 
@@ -396,9 +393,9 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			text.append(cigar).append(lb);
 
 		if (metaData.isComplemented())
-			text.append("Read direction is REVERSE").append(lb).append(lb);
+			text.append(RB.getString("gui.viewer.ReadsCanvasInfoPane.directionReverse")).append(lb).append(lb);
 		else
-			text.append("Read direction is FORWARD").append(lb).append(lb);
+			text.append(RB.getString("gui.viewer.ReadsCanvasInfoPane.directionForward")).append(lb).append(lb);
 
 		// Produce a FASTA formatted string
 		text.append(TabletUtils.formatFASTA(Assembly.getReadNameData(read).getName(), seq));

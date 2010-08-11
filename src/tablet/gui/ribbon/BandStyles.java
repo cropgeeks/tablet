@@ -3,7 +3,6 @@
 
 package tablet.gui.ribbon;
 
-import java.awt.Dimension;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
@@ -14,7 +13,6 @@ import tablet.gui.viewer.colors.*;
 import org.jvnet.flamingo.common.model.*;
 import org.jvnet.flamingo.common.*;
 import org.jvnet.flamingo.common.icon.*;
-import org.jvnet.flamingo.common.popup.*;
 import org.jvnet.flamingo.ribbon.*;
 import org.jvnet.flamingo.ribbon.resize.*;
 
@@ -31,20 +29,15 @@ public class BandStyles extends JRibbonBand implements ActionListener
 	private JCommandToggleButton bReadType;
 	private JCommandToggleButton bText;
 
-
-	//private JCommandToggleButton bPacked, bStacked, bPairPacked, bPairStacked;
-	JCommandToggleButton bPacked, bStacked, bPairPacked, bPairStacked;
+	private JCommandToggleButton bPacked, bStacked, bPairPacked, bPairStacked;
 
 	private JCommandToggleButton bTagVariants;
 	private JCommandButton bSort;
 	private JCommandButton bPackStyle;
 
-	//private JPopupMenu packMenu = new JPopupMenu();
 	private JCheckBoxMenuItem mPacked, mStacked, mPairPacked, mPairStacked;
 
-	//private JCommandButtonPanel popupMenu;
 	private JPopupMenu packMenu = new JPopupMenu();
-
 
 	private StyleListener styleListener = new StyleListener();
 
@@ -56,7 +49,6 @@ public class BandStyles extends JRibbonBand implements ActionListener
 		this.winMain = winMain;
 
 		createRibbonGallery();
-		//createPopupButton();
 		createOptionButtons();
 		createPackingPopupMenu();
 
@@ -65,58 +57,6 @@ public class BandStyles extends JRibbonBand implements ActionListener
 
 	private void createOptionButtons()
 	{
-//		// Set the display to use a packed layout
-//		bPacked = new JCommandToggleButton(
-//			RB.getString("gui.ribbon.BandStyles.bPacked"),
-//			RibbonController.getIcon("PACKED16", 16));
-//		Actions.stylesPacked = new ActionToggleButtonModel(false);
-//		Actions.stylesPacked.setSelected(Prefs.visPacked && !Prefs.visPaired);
-//		Actions.stylesPacked.addActionListener(this);
-//		bPacked.setActionModel(Actions.stylesPacked);
-//		bPacked.setActionKeyTip("P");
-//		bPacked.setActionRichTooltip(new RichTooltip(
-//			RB.getString("gui.ribbon.BandStyles.bPacked.tooltip"),
-//			RB.getString("gui.ribbon.BandStyles.bPacked.richtip")));
-//
-//		// Set the display to use a stacked layout
-//		bStacked = new JCommandToggleButton(
-//			RB.getString("gui.ribbon.BandStyles.bStacked"),
-//			RibbonController.getIcon("STACKED16", 16));
-//		Actions.stylesStacked = new ActionToggleButtonModel(false);
-//		Actions.stylesStacked.setSelected(!Prefs.visPacked && !Prefs.visPaired);
-//		Actions.stylesStacked.addActionListener(this);
-//		bStacked.setActionModel(Actions.stylesStacked);
-//		bStacked.setActionKeyTip("S");
-//		bStacked.setActionRichTooltip(new RichTooltip(
-//			RB.getString("gui.ribbon.BandStyles.bStacked.tooltip"),
-//			RB.getString("gui.ribbon.BandStyles.bStacked.richtip")));
-//
-//		// Set the display to use a paired packed layout
-//		bPairPacked = new JCommandToggleButton(
-//				RB.getString("gui.ribbon.BandStyles.bPairPacked"),
-//				RibbonController.getIcon("PACKED16", 16));
-//		Actions.stylesPairPacked = new ActionToggleButtonModel(false);
-//		Actions.stylesPairPacked.setSelected(Prefs.visPaired && Prefs.visPacked);
-//		Actions.stylesPairPacked.addActionListener(this);
-//		bPairPacked.setActionModel(Actions.stylesPairPacked);
-//		bPairPacked.setActionKeyTip("");
-//		bPairPacked.setActionRichTooltip(new RichTooltip(
-//				RB.getString("gui.ribbon.BandStyles.bPairPacked.tooltip"),
-//				RB.getString("gui.ribbon.BandStyles.bPairPacked.richtip")));
-//
-//		// Set the display to use a paired packed layout
-//		bPairStacked = new JCommandToggleButton(
-//				RB.getString("gui.ribbon.BandStyles.bPairStacked"),
-//				RibbonController.getIcon("STACKED16", 16));
-//		Actions.stylesPairStacked = new ActionToggleButtonModel(false);
-//		Actions.stylesPairStacked.setSelected(Prefs.visPaired && !Prefs.visPacked);
-//		Actions.stylesPairStacked.addActionListener(this);
-//		bPairStacked.setActionModel(Actions.stylesPairStacked);
-//		bPairStacked.setActionKeyTip("");
-//		bPairStacked.setActionRichTooltip(new RichTooltip(
-//				RB.getString("gui.ribbon.BandStyles.bPairStacked.tooltip"),
-//				RB.getString("gui.ribbon.BandStyles.bPairStacked.richtip")));
-//
 		bPackStyle = new JCommandButton("Pack Style", RibbonController.getIcon("PACKED16", 16));
 		Actions.stylesPackStyles = new ActionRepeatableButtonModel(bPackStyle);
 		Actions.stylesPackStyles.addActionListener(this);
@@ -145,17 +85,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.BandStyles.bSort.richtip")));
 		bSort.setEnabled(false);
 */
-//		group = new CommandToggleButtonGroup();
-//		group.add(bPacked);
-//		group.add(bStacked);
-//		group.add(bPairPacked);
-//		group.add(bPairStacked);
 
-//		startGroup();
-		//addCommandButton(bPacked, RibbonElementPriority.MEDIUM);
-		//addCommandButton(bStacked, RibbonElementPriority.MEDIUM);
-		//addCommandButton(bPairPacked, RibbonElementPriority.MEDIUM);
-		//addCommandButton(bPairStacked, RibbonElementPriority.MEDIUM);
 		addCommandButton(bPackStyle, RibbonElementPriority.MEDIUM);
 		addCommandButton(bTagVariants, RibbonElementPriority.MEDIUM);
 //		addCommandButton(bSort, RibbonElementPriority.MEDIUM);
@@ -253,86 +183,6 @@ public class BandStyles extends JRibbonBand implements ActionListener
 			"Style", galleryButtons, counts, 5, 2, RibbonElementPriority.TOP);
 	}
 
-//	private void createPopupMenu()
-//	{
-//		popupMenu = new JCommandButtonPanel(32);
-//
-//		System.out.println("Group count: " + popupMenu.getGroupCount());
-//
-//		bPacked = new JCommandToggleButton("Packed", RibbonController.getIcon("PACKED16", 16));
-//		Actions.stylesPacked = new ActionToggleButtonModel(false);
-//		Actions.stylesPacked.setSelected(Prefs.visPacked && !Prefs.visPaired);
-//		Actions.stylesPacked.addActionListener(this);
-//		bPacked.setActionModel(Actions.stylesPacked);
-//		//bPacked.addActionListener(this);
-//		bPacked.setActionRichTooltip(new RichTooltip(
-//			RB.getString("gui.ribbon.BandStyles.bPacked.tooltip"),
-//			RB.getString("gui.ribbon.BandStyles.bPacked.richtip")));
-//
-//		bStacked = new JCommandToggleButton("Stacked", RibbonController.getIcon("STACKED16", 16));
-//		Actions.stylesPacked = new ActionToggleButtonModel(false);
-//		Actions.stylesPacked.setSelected(Prefs.visPacked && !Prefs.visPaired);
-//		Actions.stylesPacked.addActionListener(this);
-//		bPacked.setActionModel(Actions.stylesPacked);
-//		//bPacked.addActionListener(this);
-//		bPacked.setActionRichTooltip(new RichTooltip(
-//			RB.getString("gui.ribbon.BandStyles.bPacked.tooltip"),
-//			RB.getString("gui.ribbon.BandStyles.bPacked.richtip")));
-//
-//		bPairPacked = new JCommandToggleButton("Pair Packed", RibbonController.getIcon("PACKED16", 16));
-//		Actions.stylesPacked = new ActionToggleButtonModel(false);
-//		Actions.stylesPacked.setSelected(Prefs.visPacked && !Prefs.visPaired);
-//		Actions.stylesPacked.addActionListener(this);
-//		bPacked.setActionModel(Actions.stylesPacked);
-//		//bPacked.addActionListener(this);
-//		bPacked.setActionRichTooltip(new RichTooltip(
-//			RB.getString("gui.ribbon.BandStyles.bPacked.tooltip"),
-//			RB.getString("gui.ribbon.BandStyles.bPacked.richtip")));
-//
-//		bPairStacked = new JCommandToggleButton("Packed", RibbonController.getIcon("PACKED16", 16));
-//		Actions.stylesPacked = new ActionToggleButtonModel(false);
-//		Actions.stylesPacked.setSelected(Prefs.visPacked && !Prefs.visPaired);
-//		Actions.stylesPacked.addActionListener(this);
-//		bPacked.setActionModel(Actions.stylesPacked);
-//		//bPacked.addActionListener(this);
-//		bPacked.setActionRichTooltip(new RichTooltip(
-//			RB.getString("gui.ribbon.BandStyles.bPacked.tooltip"),
-//			RB.getString("gui.ribbon.BandStyles.bPacked.richtip")));
-//
-//		popupMenu.addButtonGroup("Group", 0);
-////		popupMenu.addButtonGroup("Group");
-////		popupMenu.addButtonToLastGroup(bPacked);
-////		popupMenu.addButtonToLastGroup(bStacked);
-////		popupMenu.addButtonToLastGroup(bPairPacked);
-////		popupMenu.addButtonToLastGroup(bPairStacked);
-//
-//		popupMenu.setSingleSelectionMode(true);
-//	}
-
-	private void createPopupButton()
-	{
-//		bPackStyle = new JCommandButton("", RibbonController.getIcon("PACKED16", 16));
-//		bPackStyle.setPopupCallback(new PopupPanelCallback() {
-//
-//			public JPopupPanel getPopupPanel(JCommandButton commandButton)
-//			{
-//				return new JCommandPopupMenu(new PackStylePanel(), 5, 2);
-//			}
-//
-//		});
-//		Actions.stylesPackStyles = new ActionRepeatableButtonModel(bPackStyle);
-//		bPackStyle.setActionModel(Actions.stylesPackStyles);
-//		bPackStyle.addActionListener(this);
-//		bPackStyle.setActionRichTooltip(new RichTooltip(
-//			RB.getString("gui.ribbon.BandStyles.bText.tooltip"),
-//			RB.getString("gui.ribbon.BandStyles.bText.richtip")));
-//
-//		bPackStyle.setCommandButtonKind(JCommandButton.CommandButtonKind.POPUP_ONLY);
-//
-//		addCommandButton(bPackStyle, RibbonElementPriority.MEDIUM);
-	}
-
-
 	// The listeners for the "live preview" styles track the previous style so
 	// that if a new style wasn't selected, the original can be reinstated
 
@@ -379,7 +229,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 			handlePopup();
 		}
 
-		else if (e.getSource() == mPacked)
+		else if (e.getSource() == mPacked || e.getSource() == bPacked)
 		{
 			Prefs.visPacked = true;
 			Prefs.visPaired = false;
@@ -389,7 +239,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 			winMain.getAssemblyPanel().forceRedraw();
 		}
 
-		else if (e.getSource() == mStacked)
+		else if (e.getSource() == mStacked || e.getSource() == bStacked)
 		{
 			Prefs.visPacked = false;
 			Prefs.visPaired = false;
@@ -399,7 +249,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 			winMain.getAssemblyPanel().forceRedraw();
 		}
 
-		else if (e.getSource() == mPairPacked)
+		else if (e.getSource() == mPairPacked || e.getSource() == bPairPacked)
 		{
 			Prefs.visPacked = true;
 			Prefs.visPaired = true;
@@ -409,7 +259,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 			winMain.getAssemblyPanel().forceRedraw();
 		}
 
-		else if (e.getSource() == mPairStacked)
+		else if (e.getSource() == mPairStacked || e.getSource() == bPairStacked)
 		{
 			Prefs.visPacked = false;
 			Prefs.visPaired = true;
@@ -430,6 +280,39 @@ public class BandStyles extends JRibbonBand implements ActionListener
 	{
 		Prefs.visColorScheme = scheme;
 		winMain.getAssemblyPanel().forceRedraw();
+	}
+
+	private void createPackingPopupMenu()
+	{
+		mPacked = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandStyles.bPacked"));
+		mPacked.addActionListener(this);
+
+		mStacked = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandStyles.bStacked"));
+		mStacked.addActionListener(this);
+
+		mPairPacked = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandStyles.bPairPacked"));
+		mPairPacked.addActionListener(this);
+
+		mPairStacked = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandStyles.bPairStacked"));
+		mPairStacked.addActionListener(this);
+
+		packMenu.add(mPacked);
+		packMenu.add(mStacked);
+		packMenu.addSeparator();
+		packMenu.add(mPairPacked);
+		packMenu.add(mPairStacked);
+	}
+
+	private void handlePopup()
+	{
+		mPacked.setSelected(Prefs.visPacked && !Prefs.visPaired);
+		mStacked.setSelected(!Prefs.visPacked && !Prefs.visPaired);
+		mPairPacked.setEnabled(Assembly.isPaired());
+		mPairStacked.setEnabled(Assembly.isPaired());
+		mPairPacked.setSelected(Prefs.visPacked && Prefs.visPaired);
+		mPairStacked.setSelected(!Prefs.visPacked && Prefs.visPaired);
+
+		packMenu.show(bPackStyle, 0, bPackStyle.getHeight());
 	}
 
 	// Tracks the mouse entering or exiting the colour scheme style buttons
@@ -468,89 +351,4 @@ public class BandStyles extends JRibbonBand implements ActionListener
 		}
 	}
 
-	private void createPackingPopupMenu()
-	{
-		mPacked = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandStyles.bPacked"),
-			RibbonController.getIcon("PACKED16", 16));
-		mPacked.addActionListener(this);
-
-		mStacked = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandStyles.bStacked"),
-				RibbonController.getIcon("STACKED16", 16));
-		mStacked.addActionListener(this);
-
-		mPairPacked = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandStyles.bPairPacked"),
-				RibbonController.getIcon("PACKED16", 16));
-		mPairPacked.addActionListener(this);
-
-		mPairStacked = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandStyles.bPairStacked"),
-				RibbonController.getIcon("STACKED16", 16));
-		mPairStacked.addActionListener(this);
-
-		packMenu.add(mPacked);
-		packMenu.add(mStacked);
-		packMenu.addSeparator();
-		packMenu.add(mPairPacked);
-		packMenu.add(mPairStacked);
-	}
-
-	private void handlePopup()
-	{
-		mPacked.setSelected(Prefs.visPacked && !Prefs.visPaired);
-		mStacked.setSelected(!Prefs.visPacked && !Prefs.visPaired);
-		mPairPacked.setEnabled(Assembly.isPaired());
-		mPairStacked.setEnabled(Assembly.isPaired());
-		mPairPacked.setSelected(Prefs.visPacked && Prefs.visPaired);
-		mPairStacked.setSelected(!Prefs.visPacked && Prefs.visPaired);
-
-		packMenu.show(bPackStyle, 0, 0);
-	}
-
-//	private class PackStylePanel extends JCommandButtonPanel
-//	{
-//		BandStyles parent;
-//
-//		public PackStylePanel()
-//		{
-//			super(600);
-//
-//			setLayoutKind(LayoutKind.ROW_FILL);
-//			setMaxButtonRows(1);
-//			setAutoscrolls(false);
-//
-//			addButtonGroup("Pack Styles");
-//
-//			bPacked = new JCommandToggleButton("Packed", RibbonController.getIcon("PACKED16", 16));
-//			bPacked.setActionRichTooltip(new RichTooltip(
-//				RB.getString("gui.ribbon.BandStyles.bPacked.tooltip"),
-//				RB.getString("gui.ribbon.BandStyles.bPacked.richtip")));
-//
-//			bStacked = new JCommandToggleButton("Stacked", RibbonController.getIcon("STACKED16", 16));
-//			bStacked.setActionRichTooltip(new RichTooltip(
-//				RB.getString("gui.ribbon.BandStyles.bPacked.tooltip"),
-//				RB.getString("gui.ribbon.BandStyles.bPacked.richtip")));
-//
-//			//addButtonGroup("Paired Pack Styles");
-//
-//			bPairPacked = new JCommandToggleButton("Pair Packed", RibbonController.getIcon("PACKED16", 16));
-//			bPairPacked.setActionRichTooltip(new RichTooltip(
-//				RB.getString("gui.ribbon.BandStyles.bPacked.tooltip"),
-//				RB.getString("gui.ribbon.BandStyles.bPacked.richtip")));
-//
-//			bPairStacked = new JCommandToggleButton("Pair Stacked", RibbonController.getIcon("STACKED16", 16));
-//			bPairStacked.setActionRichTooltip(new RichTooltip(
-//				RB.getString("gui.ribbon.BandStyles.bPacked.tooltip"),
-//				RB.getString("gui.ribbon.BandStyles.bPacked.richtip")));
-//
-//			addButtonToLastGroup(bPacked);
-//			addButtonToLastGroup(bStacked);
-//			addButtonToLastGroup(bPairPacked);
-//			addButtonToLastGroup(bPairStacked);
-//			setSingleSelectionMode(true);
-//			//setToShowGroupLabels(false);
-//
-////			addButtonGroup(null);
-////			addButtonGroup(null);
-////			addButtonGroup(null);
-//		}
-//	}
 }
