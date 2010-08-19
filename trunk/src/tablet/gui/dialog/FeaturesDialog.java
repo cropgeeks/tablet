@@ -50,7 +50,7 @@ public class FeaturesDialog extends JDialog implements ActionListener
 		bCancel.addActionListener(this);
 		bHelp = SwingUtils.getButton(RB.getString("gui.text.help"));
 		RB.setText(bHelp, "gui.text.help");
-//		TabletUtils.setHelp(bHelp, "gui.dialog.JumpToDialog");
+		TabletUtils.setHelp(bHelp, "importing-features");
 
 		JPanel p1 = TabletUtils.getButtonPanel();
 		p1.add(bOK);

@@ -101,9 +101,6 @@ public class FeaturesCanvas extends TrackingCanvas
 
 		long s = System.currentTimeMillis();
 
-		if (consensus.length() == 0)
-			return;
-
 		offset = contig.getVisualStart();
 
 		int ntW = rCanvas.ntW;
@@ -121,7 +118,7 @@ public class FeaturesCanvas extends TrackingCanvas
 
 			g.setColor(Color.lightGray);
 			g.setStroke(dashed);
-			g.drawLine(x1, H/2, x2, H/2);
+			g.drawLine(x1, H/2+2, x2, H/2+2);
 			g.setStroke(solid);
 
 			for (Feature f: features)
@@ -150,10 +147,15 @@ public class FeaturesCanvas extends TrackingCanvas
 
 				else
 				{
-					g.setPaint(new Color(255, 0, 0, 50));
-					g.fillRect(p1*ntW, H/4, (p2-p1+1)*ntW-1, H/2);
-					g.setPaint(new Color(255, 0, 0));
-					g.drawRect(p1*ntW, H/4, (p2-p1+1)*ntW-1, H/2);
+					// Full color
+					Color cF = Feature.colors.get(f.getGFFType());
+					// Alpha version
+					Color cA = new Color(cF.getRed(), cF.getGreen(), cF.getBlue(), 50);
+
+					g.setPaint(cA);
+					g.fillRect(p1*ntW, H/4+2, (p2-p1+1)*ntW-1, H/2);
+					g.setPaint(cF);
+					g.drawRect(p1*ntW, H/4+2, (p2-p1+1)*ntW-1, H/2);
 				}
 			}
 

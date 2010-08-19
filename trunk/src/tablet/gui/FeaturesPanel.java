@@ -229,7 +229,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 			return TabletUtils.nf.format(padded+1);
 	}
 
-	void editFeatures()
+	public void editFeatures()
 	{
 		FeaturesDialog dialog = new FeaturesDialog();
 
@@ -237,6 +237,8 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		{
 			aPanel.getFeaturesCanvas().setContig(aPanel.getContig());
 			aPanel.getFeaturesCanvas().revalidate();
+
+			aPanel.repaint();
 		}
 	}
 
