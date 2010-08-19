@@ -37,6 +37,24 @@ with padded values counting pad (*) characters and unpadded  values ignoring the
 </p>
 
 
+<h3>Visualizing features</h3>
+
+<p>Once features have been imported, Tablet will automatically select and display
+tracks for the first three feature types found.</p>
+
+<p><a href="images/features-track.png">
+<img class="capture" src="images/features-track2.png" alt="Tablet Screenshot"></a></p>
+
+<p>The active tracks can be enabled, disabled, or reordered using the <b>Select
+Tracks</b> option located within the Features tab.</p>
+
+<p>Each unique type of feature (eg, SNP, INDEL, etc) as defined in the GFF file
+will be rendered using a distinct colour.</p>
+
+<p>Please note that this functionality is still experimental, and is subject to
+change. Tablet currently makes no attempt to link features, or to separate
+features with overlapping positions onto new tracks.</p>
+
 <!--#include virtual="footer.html" -->
 
 </body>

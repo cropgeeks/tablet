@@ -19,6 +19,8 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 	private ReadsCanvas rCanvas;
 	private ScaleCanvas sCanvas;
 
+	private JMenuItem mSelectTracks;
+
 	FeaturesCanvasML(AssemblyPanel aPanel)
 	{
 		fCanvas = aPanel.featuresCanvas;
@@ -29,6 +31,10 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		fCanvas.addMouseMotionListener(this);
 
 		new ReadsCanvasDragHandler(aPanel, fCanvas);
+
+		mSelectTracks = new JMenuItem("");
+		RB.setText(mSelectTracks, "gui.viewer.FeaturesCanvasML.mSelectTracks");
+		mSelectTracks.addActionListener(this);
 	}
 
 	public void mouseExited(MouseEvent e)
@@ -59,19 +65,15 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 
 	private void displayMenu(MouseEvent e)
 	{
-/*		JPopupMenu menu = new JPopupMenu();
+		JPopupMenu menu = new JPopupMenu();
 
-		mClipboard = new JMenuItem("", Icons.getIcon("CLIPBOARD"));
-		RB.setText(mClipboard, "gui.viewer.ConsensusCanvasML.mClipboard");
-		mClipboard.addActionListener(this);
-		menu.add(mClipboard);
-
+		menu.add(mSelectTracks);
 		menu.show(e.getComponent(), e.getX(), e.getY());
-*/
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
-
+		if (e.getSource() == mSelectTracks)
+			Tablet.winMain.getFeaturesPanel().editFeatures();
 	}
 }

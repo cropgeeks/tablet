@@ -3,6 +3,7 @@
 
 package tablet.data.auxiliary;
 
+import java.awt.*;
 import java.util.*;
 
 /**
@@ -32,6 +33,8 @@ public class Feature implements Comparable<Feature>
 	public static HashMap<String, String> types = new HashMap<String, String>();
 	// Tracks the order for the GFF types
 	public static ArrayList<VisibleFeature> order = new ArrayList<VisibleFeature>();
+	// And their colours
+	public static HashMap<String, Color> colors = new HashMap<String, Color>();
 
 	protected byte tabletType;
 
@@ -76,6 +79,10 @@ public class Feature implements Comparable<Feature>
 
 			types.put(gffType, gffType);
 			order.add(new VisibleFeature(gffType, visible));
+
+			int seed = 100;
+			int hash = gffType.hashCode() + seed;
+			colors.put(gffType, WebsafePalette.getColor(hash));
 		}
 	}
 
@@ -181,6 +188,37 @@ public class Feature implements Comparable<Feature>
 		{
 			this.type = type;
 			this.isVisible = isVisible;
+		}
+	}
+
+	// A collection of 216 "web safe" colors
+	private static class WebsafePalette
+	{
+		private static Color[] colors;
+
+		static
+		{
+			int c = 0;
+			colors = new Color[216];
+
+			for (int r = 0; r < 256; r += 51)
+				for (int g = 0; g < 256; g += 51)
+					for (int b = 0; b < 256; b += 51)
+					{
+						colors[c] = new Color(r, g, b);
+						c++;
+					}
+		}
+
+		public static int getColorCount()
+			{ return colors.length; }
+
+		public static Color getColor(int index)
+		{
+			if (index < 0)
+				index *= -1;
+
+			return colors[index % colors.length];
 		}
 	}
 }

@@ -225,6 +225,9 @@ public class WinMain extends JRibbonFrame
 	public ContigsPanel getContigsPanel()
 		{ return contigsPanel; }
 
+	public FeaturesPanel getFeaturesPanel()
+		{ return featuresPanel; }
+
 	public JumpToDialog getJumpToDialog()
 	{
 		if (jumpToDialog == null)
@@ -313,11 +316,6 @@ public class WinMain extends JRibbonFrame
 			splitter.setDividerLocation(splitterMin);
 		else
 			splitter.setDividerLocation(Prefs.guiSplitterLocationPrev);
-	}
-
-	public FeaturesPanel getFeaturesPanel()
-	{
-		return featuresPanel;
 	}
 
 	public void validateCacheFolder()
