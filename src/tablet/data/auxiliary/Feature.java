@@ -75,7 +75,7 @@ public class Feature implements Comparable<Feature>
 		if (types.get(gffType) == null)
 		{
 			// Auto-add the first three types so that they will be visible
-			boolean visible = types.size() < 3;
+			boolean visible = types.size() < 3 || gffType.equals("CIGAR-I");
 
 			types.put(gffType, gffType);
 			order.add(new VisibleFeature(gffType, visible));
