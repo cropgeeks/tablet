@@ -54,7 +54,7 @@ class SamFileReader extends TrackableReader
 		throws Exception
 	{
 		Assembly.setIsPaired(false);
-		
+
 		// Try and read the reference file (if there is one)
 		readReferenceFile();
 
@@ -188,7 +188,8 @@ class SamFileReader extends TrackableReader
 			Contig contig = contigHash.get(featureElements[0]);
 			if (contig != null)
 			{
-				contig.addFeature(cigarFeature);
+				if (contig.addFeature(cigarFeature))
+					cigarFeature.verifyType();
 			}
 		}
 

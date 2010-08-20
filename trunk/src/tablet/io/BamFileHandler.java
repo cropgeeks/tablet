@@ -168,7 +168,8 @@ public class BamFileHandler
 			CigarFeature cigarFeature = new CigarFeature("CIGAR-I", "",
 				Integer.parseInt(featureElements[1]) - 1, Integer.parseInt(featureElements[1]), count);
 
-			contig.addFeature(cigarFeature);
+			if (contig.addFeature(cigarFeature))
+				cigarFeature.verifyType();
 		}
 
 		Collections.sort(contig.getFeatures());

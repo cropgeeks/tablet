@@ -33,6 +33,7 @@ public class FeaturesCanvas extends TrackingCanvas
 	private BasicStroke solid = new BasicStroke(1);
 
 	private Paint snpPaint;
+	private Paint cigarPaint;
 
 	FeaturesCanvas()
 	{
@@ -40,6 +41,7 @@ public class FeaturesCanvas extends TrackingCanvas
 //			0, H, new Color(200, 0, 0, 50));
 
 		snpPaint = new Color(0, 200, 0, 150);
+		cigarPaint = TabletUtils.red1;
 	}
 
 	void setAssemblyPanel(AssemblyPanel aPanel)
@@ -126,6 +128,7 @@ public class FeaturesCanvas extends TrackingCanvas
 				int p1 = f.getVisualPS() - offset;
 				int p2 = f.getVisualPE() - offset;
 
+				// Paint a SNP as a triangle, pointing down at the position
 				if (f.getGFFType().equals("SNP"))
 				{
 					g.translate(p1*ntW, 0);
@@ -145,6 +148,20 @@ public class FeaturesCanvas extends TrackingCanvas
 					g.translate(-(p1*ntW), 0);
 				}
 
+				// Paint a cigar_insertion feature as an "I" bar
+				else if (f.getGFFType().equals("CIGAR-I"))
+				{
+					g.setPaint(cigarPaint);
+
+					// Top horizontal bar
+					g.drawLine(p1*ntW, H/4+2, p2*ntW+ntW-1, H/4+2);
+					// Vertical bar
+					g.fillRect(p2*ntW-1, H/4+2, 2, H-3-(H/4+2));
+					// Bottom horizontal bar
+					g.drawLine(p1*ntW, H-3, p2*ntW+ntW-1, H-3);
+				}
+
+				// All other features are rendered as rectangles from p1 to p2
 				else
 				{
 					// Full color
