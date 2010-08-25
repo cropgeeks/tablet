@@ -307,8 +307,6 @@ public class BandStyles extends JRibbonBand implements ActionListener
 	{
 		mPacked.setSelected(Prefs.visPacked && !Prefs.visPaired);
 		mStacked.setSelected(!Prefs.visPacked && !Prefs.visPaired);
-		mPairPacked.setEnabled(Assembly.isPaired());
-		mPairStacked.setEnabled(Assembly.isPaired());
 		mPairPacked.setSelected(Prefs.visPacked && Prefs.visPaired);
 		mPairStacked.setSelected(!Prefs.visPacked && Prefs.visPaired);
 

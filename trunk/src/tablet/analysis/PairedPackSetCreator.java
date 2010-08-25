@@ -7,13 +7,13 @@ public class PairedPackSetCreator extends SimpleJob
 	private PackSet packSet;
 	private Contig contig;
 	private boolean added, pairAdded;
-	private int s;
+	private int dataS;
 
 	public PairedPackSetCreator(Contig contig, Assembly assembly)
 	{
 		this.contig = contig;
 		packSet = new PackSet();
-		s = assembly.getBamBam().getS();
+		dataS = contig.getVisualStart();
 	}
 
 	public void runJob(int jobIndex)
@@ -24,8 +24,6 @@ public class PairedPackSetCreator extends SimpleJob
 		// Use the number of reads as a count of how much work will be done
 		maximum += contig.readCount();
 
-		PairSearcher pairSearcher = new PairSearcher(contig);
-
 		for (Read read: contig.getReads())
 		{
 			// Check for quit/cancel on the job...
@@ -34,22 +32,14 @@ public class PairedPackSetCreator extends SimpleJob
 			
 			added = pairAdded = false;
 
-			if(read instanceof MatedRead)
+			ReadMetaData rmd = Assembly.getReadMetaData(read, false);
+			if(read instanceof MatedRead && rmd.getIsPaired() && rmd.getMateMapped())
 			{
-				// Search for its pair and set up the link between them
 				MatedRead matedRead = (MatedRead) read;
-				MatedRead foundPair = (MatedRead) pairSearcher.search(matedRead);
-				if(foundPair != null)
-				{
-					matedRead.setPair(foundPair);
-					foundPair.setPair(matedRead);
-				}
 
 				// Add the pair to an existing pack
 				addToExistingPack(matedRead);
 
-				if(Assembly.getReadNameData(read).getName().equals("IL12_3251:3:73:808:1694"))
-					System.out.println("Added: " + added + " PairAdded: " + pairAdded);
 				// If that wasn't possible, add to a new pack.
 				if(added == false)
 					addToNewPack(matedRead);
@@ -164,7 +154,7 @@ public class PairedPackSetCreator extends SimpleJob
 
 	private boolean canAddToNewPack(MatedRead matedRead)
 	{
-		return (matedRead.getStartPosition() < matedRead.getMatePos() || (matedRead.getPair() == null &&matedRead.getMatePos() < s)) || !matedRead.isMateContig();
+		return (matedRead.getStartPosition() < matedRead.getMatePos() || (matedRead.getPair() == null && matedRead.getMatePos() < dataS)) || !matedRead.isMateContig();
 	}
 
 	private boolean canAddToExistingPack(MatedRead matedRead, int i)

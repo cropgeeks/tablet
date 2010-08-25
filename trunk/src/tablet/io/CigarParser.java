@@ -4,6 +4,8 @@
 package tablet.io;
 
 import java.util.HashMap;
+import tablet.data.Read;
+import tablet.data.auxiliary.CigarFeature;
 
 /**
  * Class which contains the logic for parsing the CIGAR strings found in BAM to
@@ -15,7 +17,9 @@ public class CigarParser
 	private int position;
 	private int readPos;
 	private String currentContigName;
-	private HashMap<String, Integer> featureMap = new HashMap<String, Integer>();
+	private HashMap<String, CigarFeature> featureMap = new HashMap<String, CigarFeature>();
+
+	boolean first = true;
 
 	/**
 	 * Constructor for CIGAR parser. Takes the reference sequence that was passed
@@ -35,23 +39,23 @@ public class CigarParser
 	/**
 	 * The method to call when attempting to parse a CIGAR string.
 	 *
-	 * @param read The read string as presented in BAM.
+	 * @param readString The read string as presented in BAM.
 	 * @param position the position given by BAM.
 	 * @param cigarString the CIGAR string to decode.
 	 * @return
 	 * @throws Exception
 	 */
-	public String parse(String read, int position, String cigarString)
+	public String parse(String readString, int position, String cigarString, Read read)
 		throws Exception
 	{
 		this.position = position;
 		readPos = position;
 
-		StringBuilder readString = new StringBuilder();
+		StringBuilder builder = new StringBuilder();
 
 		// If we have been presented with an empty cigar string
 		if(cigarString.equals("*"))
-			return read;
+			return readString;
 		else
 		{
 			String numberString = "";
@@ -72,36 +76,36 @@ public class CigarParser
 					{
 						// For M, = and X treat as Match/Mismatch.
 						case 'M':
-							readString.append(processMatchOrMismatch(operationLength, read));
-							read = new String(read.substring(operationLength));
+							builder.append(processMatchOrMismatch(operationLength, readString));
+							readString = new String(readString.substring(operationLength));
 							readPos += operationLength;
 							break;
 						case '=':
-							readString.append(processMatchOrMismatch(operationLength, read));
-							read = new String(read.substring(operationLength));
+							builder.append(processMatchOrMismatch(operationLength, readString));
+							readString = new String(readString.substring(operationLength));
 							readPos += operationLength;
 							break;
 						case 'X':
-							readString.append(processMatchOrMismatch(operationLength, read));
-							read = new String(read.substring(operationLength));
+							builder.append(processMatchOrMismatch(operationLength, readString));
+							readString = new String(readString.substring(operationLength));
 							readPos += operationLength;
 							break;
 						case 'P':
 							//readString.append(processPad(operationLength));
 							break;
 						case 'I':
-							read = processInsertion(operationLength, read);
+							readString = processInsertion(operationLength, readString, read);
 							break;
 						case 'D':
-							readString.append(processDeletion(operationLength));
+							builder.append(processDeletion(operationLength));
 							readPos += operationLength;
 							break;
 						case 'N':
-							readString.append(processSkipped(operationLength));
+							builder.append(processSkipped(operationLength));
 							readPos += operationLength;
 							break;
 						case 'S':
-							read = processSoftClip(operationLength, read);
+							readString = processSoftClip(operationLength, readString);
 							break;
 						case 'H':
 //							System.out.println("Process HardClip");
@@ -111,7 +115,7 @@ public class CigarParser
 				}
 			}
 
-			return readString.toString();
+			return builder.toString();
 		}
 	}
 
@@ -121,20 +125,24 @@ public class CigarParser
 		return read.substring(0, operationLength);
 	}
 
-	private String processInsertion(int operationLength, String read)
+	private String processInsertion(int operationLength, String readString, Read read)
 		throws Exception
 	{
+		String insertion = new String(readString.substring(0, operationLength));
 		String hashMap = currentContigName + "Tablet-Separator" + readPos;
 		if(featureMap.get(hashMap) == null)
 		{
-			featureMap.put(hashMap, 1);
+			CigarFeature cigarFeature = new CigarFeature("CIGAR-I", "", readPos-1, readPos);
+			cigarFeature.addInsert(read, insertion);
+			featureMap.put(hashMap, cigarFeature);
 		}
 		else
 		{
-			int value = featureMap.get(hashMap);
-			featureMap.put(hashMap, ++value);
+			CigarFeature cigarFeature = featureMap.get(hashMap);
+			cigarFeature.addInsert(read, insertion);
+			featureMap.put(hashMap, cigarFeature);
 		}
-		return new String(read.substring(operationLength));
+		return new String(readString.substring(operationLength));
 	}
 
 	private String processDeletion(int operationLength)
@@ -193,8 +201,9 @@ public class CigarParser
 		this.currentContigName = currentContigName;
 	}
 
-	public HashMap<String, Integer> getFeatureMap()
+	public HashMap<String, CigarFeature> getFeatureMap()
 	{
 		return featureMap;
 	}
+
 }

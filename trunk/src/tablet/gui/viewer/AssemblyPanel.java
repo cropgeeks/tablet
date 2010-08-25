@@ -44,6 +44,8 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 
 	private NameOverlayer nameOverlayer;
 
+	private CigarIHighlighter cigarIHighlighter;
+
 	private VisualAssembly visualAssembly;
 
 	public AssemblyPanel(WinMain winMain)
@@ -79,6 +81,9 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		visPanel.add(sp, BorderLayout.CENTER);
 
 		add(visPanel);
+
+		//cigarIHighlighter = new CigarIHighlighter(readsCanvas);
+		//readsCanvas.overlays.addFirst(cigarIHighlighter);
 	}
 
 	private void createControls()
@@ -285,7 +290,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 
 		updateContigInformation();
 
-		repaint();
+		sp.revalidate();
 	}
 
 	public void doZoom()
@@ -377,7 +382,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		//start fade in animation for overlay
 		if(Prefs.visOverlayNames)
 		{
-			nameOverlayer = new NameOverlayer(this.readsCanvas, false);
+			nameOverlayer = new NameOverlayer(readsCanvas, false);
 			nameOverlayer.start();
 		}
 		//start fade out animation for overlay
@@ -385,7 +390,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		{
 			if(nameOverlayer != null)
 			{
-				nameOverlayer = new NameOverlayer(this.readsCanvas, true);
+				nameOverlayer = new NameOverlayer(readsCanvas, true);
 				nameOverlayer.start();
 			}
 		}
@@ -410,7 +415,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 
 		// And this'll force a repaint of any table's that might need to update
 		winMain.repaint();
-
+		
 		return true;
 	}
 

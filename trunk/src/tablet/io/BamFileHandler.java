@@ -12,6 +12,7 @@ import tablet.data.auxiliary.*;
 
 import net.sf.samtools.*;
 import net.sf.samtools.util.*;
+import tablet.data.auxiliary.CigarFeature.Insert;
 
 public class BamFileHandler
 {
@@ -115,23 +116,22 @@ public class BamFileHandler
 
 		ReadMetaData rmd = new ReadMetaData(record.getReadNegativeStrandFlag());
 
-		StringBuilder fullRead = new StringBuilder(
-			parser.parse(new String(record.getReadBases()), readStartPos, record.getCigarString()));
-		rmd.setData(fullRead);
+		rmd.setIsPaired(record.getReadPairedFlag());
 
 		Read read;
 		// If the read is paired
-		if(record.getReadPairedFlag() && !record.getMateUnmappedFlag())
+		if(record.getReadPairedFlag())
 		{
 			MatedRead pr = new MatedRead(readID, readStartPos);
 			pr.setMatePos(record.getMateAlignmentStart()-1);
 			read = pr;
-			rnd.setInsertSize(record.getInferredInsertSize());
+			rnd.setInsertSize(Math.abs(record.getInferredInsertSize()));
 			rnd.setIsProperPair(record.getProperPairFlag());
 			rnd.setNumberInPair(record.getFirstOfPairFlag() ? 1 : 2);
 			rnd.setMateContig(record.getMateReferenceName());
 
 			rmd.setNumberInPair(record.getFirstOfPairFlag() ? 1 : 2);
+			rmd.setMateMapped(!record.getMateUnmappedFlag());
 
 			// Might want to get rid of this
 			if(!Assembly.isPaired())
@@ -142,6 +142,10 @@ public class BamFileHandler
 		}
 		else
 			read = new Read(readID, readStartPos);
+
+		StringBuilder fullRead = new StringBuilder(
+			parser.parse(new String(record.getReadBases()), readStartPos, record.getCigarString(), read));
+		rmd.setData(fullRead);
 
 		int uLength = rmd.calculateUnpaddedLength();
 		rnd.setUnpaddedLength(uLength);
@@ -164,9 +168,7 @@ public class BamFileHandler
 		for (String feature : parser.getFeatureMap().keySet())
 		{
 			String[] featureElements = feature.split("Tablet-Separator");
-			int count = parser.getFeatureMap().get(feature);
-			CigarFeature cigarFeature = new CigarFeature("CIGAR-I", "",
-				Integer.parseInt(featureElements[1]) - 1, Integer.parseInt(featureElements[1]), count);
+			CigarFeature cigarFeature = parser.getFeatureMap().get(feature);
 
 			if (contig.addFeature(cigarFeature))
 				cigarFeature.verifyType();

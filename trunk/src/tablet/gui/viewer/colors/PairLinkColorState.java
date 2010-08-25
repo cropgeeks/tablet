@@ -9,11 +9,15 @@ public class PairLinkColorState extends ColorState
 	{
 		super(c, w, h);
 
-		image = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+		GraphicsEnvironment environment = GraphicsEnvironment.getLocalGraphicsEnvironment();
+		GraphicsDevice device = environment.getDefaultScreenDevice();
+		GraphicsConfiguration config = device.getDefaultConfiguration();
+
+		image = config.createCompatibleImage(w, h, Transparency.BITMASK);
 		Graphics2D g = image.createGraphics();
 
-		g.setPaint(Color.white);
-		g.fillRect(0, 0, w, h);
+		g.setBackground(new Color(0, 0, 0, 0));
+		g.clearRect(0, 0, w, h);
 
 		g.setPaint(c);
 

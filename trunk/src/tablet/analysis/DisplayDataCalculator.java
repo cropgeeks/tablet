@@ -107,6 +107,9 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 			DisplayData.setAveragePercentage(cc.getAveragePercentage());
 		}
 
+		if(okToRun)
+			pairReads();
+
 		if (okToRun)
 		{
 			packCreator = setupPackCreator();
@@ -126,34 +129,37 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 
 		// If pair pack is selected
 		else if(Prefs.visPacked && Prefs.visPaired)
-		{
 			packCreator = new PairedPackSetCreator(contig, assembly);
-			// Fall back on normal packing code if required.
-			if(!Assembly.isPaired())
-			{
-				packCreator = new PackSetCreator(contig);
-				Prefs.visPaired = false;
-				Actions.overlayReadNames.setEnabled(false);
-			}
-		}
 
 		// if pair stack is selected
 		else if(!Prefs.visPacked && Prefs.visPaired)
-		{
 			packCreator = new PairedStackCreator(contig);
-			// Fall back on normal packing code if required.
-			if(!Assembly.isPaired())
-			{
-				packCreator = new PackSetCreator(contig);
-				Prefs.visPaired = false;
-				Actions.overlayReadNames.setEnabled(true);
-			}
-		}
 
 		else if(!Prefs.visPacked && !Prefs.visPaired)
 			packCreator = new PackSetCreator(contig);
 
 		return packCreator;
+	}
+
+	private void pairReads()
+	{
+		PairSearcher pairSearcher = new PairSearcher(contig);
+
+		for (Read read: contig.getReads())
+		{
+			ReadMetaData rmd = Assembly.getReadMetaData(read, false);
+			if(read instanceof MatedRead && rmd.getIsPaired() && rmd.getMateMapped())
+			{
+				// Search for its pair and set up the link between them
+				MatedRead matedRead = (MatedRead) read;
+				MatedRead foundPair = (MatedRead) pairSearcher.search(matedRead);
+				if(foundPair != null)
+				{
+					matedRead.setPair(foundPair);
+					foundPair.setPair(matedRead);
+				}
+			}
+		}
 	}
 
 	public void cancelJob()
