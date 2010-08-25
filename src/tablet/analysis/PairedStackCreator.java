@@ -25,20 +25,12 @@ public class PairedStackCreator extends SimpleJob
 		// Use the number of reads as a count of how much work will be done
 		maximum += contig.readCount();
 
-		PairSearcher pairSearcher = new PairSearcher(contig);
-
 		for(Read read: contig.getReads())
 		{
 			if(read instanceof MatedRead)
 			{
 				// Search for its pair and set up the link between them
 				MatedRead matedRead = (MatedRead) read;
-				MatedRead foundPair = (MatedRead) pairSearcher.search(matedRead);
-				if(foundPair != null)
-				{
-					matedRead.setPair(foundPair);
-					foundPair.setPair(matedRead);
-				}
 
 				if(matedRead.getPair() == null)
 				{

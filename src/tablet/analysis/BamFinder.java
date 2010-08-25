@@ -121,7 +121,7 @@ public class BamFinder extends Finder
 		{
 			try
 			{
-				String fullRead = parser.parse(record.getReadString(), record.getUnclippedStart() - 1, record.getCigarString());
+				String fullRead = parser.parse(record.getReadString(), record.getUnclippedStart() - 1, record.getCigarString(), null);
 				checkForSubsequenceMatches(record.getReadName(), record.getUnclippedStart() - 1, record.getReadLength(), searchTerm, contig, fullRead);
 			}
 			catch (Exception ex)

@@ -14,12 +14,13 @@ import static tablet.gui.viewer.colors.ColorScheme.*;
  */
 public class ReadMetaData extends Sequence
 {
+	private int length;
+	private int numberInPair;
+
 	// Is the read complemented or uncomplemented
 	private boolean isComplemented;
-
-	private int length;
-
-	private int numberInPair;
+	private boolean isPaired;
+	private boolean mateMapped;
 
 	public ReadMetaData()
 	{
@@ -63,6 +64,26 @@ public class ReadMetaData extends Sequence
 	public void setLength(int length)
 	{
 		this.length = length;
+	}
+
+	public boolean getIsPaired()
+	{
+		return isPaired;
+	}
+
+	public void setIsPaired(boolean isPaired)
+	{
+		this.isPaired = isPaired;
+	}
+
+	public boolean getMateMapped()
+	{
+		return mateMapped;
+	}
+
+	public void setMateMapped(boolean mateMapped)
+	{
+		this.mateMapped = mateMapped;
 	}
 
 	/**
@@ -111,11 +132,12 @@ public class ReadMetaData extends Sequence
 
 			case READTYPE:
 			{
-				switch (numberInPair)
-				{
-					case 1: return 16;
-					case 2: return 32;
-				}
+				if(isPaired && !mateMapped)
+					return 48;
+				else if(numberInPair == 1)
+					return 16;
+				else if(numberInPair == 2)
+					return 32;
 			}
 		}
 

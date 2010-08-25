@@ -334,10 +334,14 @@ class ReadsCanvasMenu implements ActionListener
 		}
 
 		ReadNameData rnd = null;
+		ReadMetaData rmd = null;
 		if(read != null )
+		{
 			rnd = Assembly.getReadNameData(read);
+			rmd = Assembly.getReadMetaData(read, false);
+		}
 
-		if(read instanceof MatedRead && rnd != null)
+		if(read instanceof MatedRead && rnd != null && rmd.getMateMapped())
 		{
 			mJumpToPair.setEnabled(isOverRead);
 			mJumpToPair.setText("Jump to pair: " + rnd.getName() + " in " + rnd.getMateContig());

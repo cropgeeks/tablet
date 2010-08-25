@@ -122,7 +122,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		if (Assembly.hasCigar())
 			cigar = RB.format("gui.viewer.ReadsCanvasInfoPane.cigar", rnd.getCigar());
 
-		if(read instanceof MatedRead && Prefs.visPaired)
+		if(read instanceof MatedRead && metaData.getIsPaired() && metaData.getMateMapped())
 		{
 			mr = (MatedRead)read;
 			insertSize =  RB.format("gui.viewer.ReadsCanvasInfoPane.insert", rnd.getInsertSize());
@@ -140,17 +140,24 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			if(rnd.getMateContig().equals(rCanvas.contig.getName()))
 				mateContig = "";
 		}
+		else if(read instanceof MatedRead && metaData.getIsPaired() && !metaData.getMateMapped())
+		{
+			insertSize = isProperPair = pairNumber = mateContig = "";
+			pairInfo = RB.getString("gui.viewer.ReadsCanvasInfoPane.mateUnmapped");
+		}
 		else
 			insertSize = isProperPair = pairNumber = mateContig = pairInfo = "";
 
-		adjustBoxSize(insertSize, isProperPair, pairNumber);
+		adjustBoxSize();
 
 		// Tell the overview canvas to paint this read too
 		int offset = -rCanvas.offset;
-		oCanvas.updateRead(lineIndex, readS+offset, readE+offset);
 
 		if(!isMate)
+		{
 			readInfo = new String[] {posData, lengthData, readName, cigar, pairInfo, mateContig};
+			oCanvas.updateRead(lineIndex, readS+offset, readE+offset);
+		}
 		else
 			mateInfo = new String[] {posData, lengthData, readName, cigar, pairInfo, mateContig};
 
@@ -173,9 +180,9 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	 * Alters the size of the tooltip boxes based on the sizes of the strings contained
 	 * in the tooltip.
 	 */
-	private void adjustBoxSize(String insertSize, String isProperPair, String pairNumber)
+	private void adjustBoxSize()
 	{
-		if (!insertSize.equals("") || !isProperPair.equals("") || !pairNumber.equals(""))
+		if (!pairInfo.equals(""))
 			h += vSpacing;
 		if (!mateContig.equals(""))
 			h += vSpacing;
@@ -201,7 +208,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			return;
 
 		MatedRead pr = null;
-		if(read instanceof MatedRead && Prefs.visPaired)
+		if(read instanceof MatedRead)
 		{
 			pr = (MatedRead)read;
 			if(pr.getPair() != null)
@@ -214,7 +221,8 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 		drawBox(g, false, readInfo, metaData, read);
 
-		if(read instanceof MatedRead && Prefs.visPaired)
+		ReadMetaData rmd = Assembly.getReadMetaData(read, false);
+		if(read instanceof MatedRead && rmd.getIsPaired() && rmd.getMateMapped())
 		{
 			g.drawLine(w/2, h, w/2, h+10);
 			g.translate(-x, -y+h+10);
@@ -268,7 +276,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		String tempName;
 
 		if(isMate)
-			tempName = rName + RB.getString("gui.viewer.ReadsCanvasInfoPane.mateRead");
+			tempName = rName + " " + RB.getString("gui.viewer.ReadsCanvasInfoPane.mateRead");
 		else
 			tempName = rName;
 
@@ -303,7 +311,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	 */
 	private void drawMateUnavailableBox(Graphics2D g, int matePos, boolean isMateContig, String mateContig)
 	{
-		String tempName = readName + RB.getString("gui.viewer.ReadsCanvasInfoPane.mateRead");
+		String tempName = readName + " " + RB.getString("gui.viewer.ReadsCanvasInfoPane.mateRead");
 		int mateH = 70;
 
 		drawBasicBox(g, mateH, tempName);
@@ -313,7 +321,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		{
 			g.drawString(RB.getString("gui.viewer.ReadsCanvasInfoPane.outwithContig"), 10, vSpacing*3);
 			g.setColor(Color.black);
-			g.drawString(RB.format("gui.viewer.ReadsCanvasInforPane.locatedInContig", mateContig, matePos), 10, vSpacing *4);
+			g.drawString(RB.format("gui.viewer.ReadsCanvasInfoPane.locatedInContig", mateContig, matePos), 10, vSpacing *4);
 		}
 		else
 		{

@@ -3,23 +3,64 @@
 
 package tablet.data.auxiliary;
 
+import java.util.ArrayList;
+import tablet.data.Read;
+
 public class CigarFeature extends Feature
 {
-	private int count;
+	private ArrayList<Insert> inserts;
 
-	public CigarFeature(String gffType, String name, int p1, int p2, int count)
+	public CigarFeature(String gffType, String name, int p1, int p2)
 	{
 		super(Feature.GFF3, gffType, name, p1, p2);
-		this.count = count;
-	}
 
-	public void setCount(int count)
-	{
-		this.count = count;
+		inserts = new ArrayList<Insert>();
 	}
-
+	
 	public int getCount()
 	{
-		return count;
+		return inserts.size();
+	}
+
+	public ArrayList<Insert> getInserts()
+	{
+		return inserts;
+	}
+
+	public void addInsert(Read read, String insertion)
+	{
+		inserts.add(new Insert(read, insertion));
+	}
+
+	public class Insert
+	{
+		Read read;
+		String insertedBases;
+
+		public Insert(Read read, String insertedBases)
+		{
+			this.read = read;
+			this.insertedBases = insertedBases;
+		}
+
+		public Read getRead()
+		{
+			return read;
+		}
+
+		public void setRead(Read read)
+		{
+			this.read = read;
+		}
+
+		public String getInsertedBases()
+		{
+			return insertedBases;
+		}
+
+		public void setInsertedBases(String insertedBases)
+		{
+			this.insertedBases = insertedBases;
+		}
 	}
 }

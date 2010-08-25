@@ -4,8 +4,6 @@
 package tablet.gui.viewer.colors;
 
 import java.awt.*;
-import java.awt.image.*;
-import java.util.*;
 
 import tablet.data.*;
 
@@ -19,15 +17,16 @@ public class ReadTypeColorScheme extends StandardColorScheme
 		// values within the data.Sequence class, eg, unknown, P, N, A, C, G, T
 
 		// Three sets of states: Normal Read, 1st in Pair, 2nd in Pair
-		for (int i = 0; i < 3; i++)
+		for (int i = 0; i < 4; i++)
 		{
 			Color c = null;
 
 			switch (i)
 			{
-				case 0: c = new Color(255, 120, 120); break;
+				case 0: c = new Color(255, 160, 120); break;
 				case 1: c = new Color(120, 255, 120); break;
 				case 2: c = new Color(120, 120, 255); break;
+				case 3: c = new Color(255, 120, 120); break;
 			}
 
 
@@ -64,7 +63,7 @@ public class ReadTypeColorScheme extends StandardColorScheme
 
 
 			// Pad out to start the next set at 16
-			for (int j = 0; j < 1 && i < 2; j++)
+			for (int j = 0; j < 1 && i < 3; j++)
 				statesRD.add(null);
 		}
 	}

@@ -51,14 +51,16 @@ class ReadShadower implements IOverlayRenderer
 		int mid = (rCanvas.pX1 + ((rCanvas.pX2Max-rCanvas.pX1)/2));
 		int top = rCanvas.pY1 / rCanvas.ntH;
 		int bottom = rCanvas.pY2 / rCanvas.ntH;
+		int ntH = rCanvas.ntH;
+		int ntW = rCanvas.ntW;
+		int offset = rCanvas.offset;
 
 		for (int row = top; row <= bottom; row++)
 		{
-			Read read = rCanvas.reads.getReadAt(row, mid/rCanvas.ntW+rCanvas.offset);
+			Read read = rCanvas.reads.getReadAt(row, mid/ntW+offset);
+			
 			if (read != null)
-			{
-				g.fillRect((read.getStartPosition()-rCanvas.offset)*rCanvas.ntW, row*rCanvas.ntH, (read.getEndPosition()-read.getStartPosition()+1)*rCanvas.ntW, rCanvas.ntH);
-			}
+				g.fillRect((read.getStartPosition()-offset) * ntW, row * ntH, (read.getEndPosition()-read.getStartPosition()+1) * ntW, ntH);
 		}
 		// Draws a vertical line down the middle of the display
 		g.setColor(lineColor);
@@ -81,19 +83,24 @@ class ReadShadower implements IOverlayRenderer
 		if (iPosition == null)
 			return;
 
-		int yS = rCanvas.pY1 / rCanvas.ntH;
-		int yE = rCanvas.pY2 / rCanvas.ntH;
+		int ntH = rCanvas.ntH;
+		int ntW = rCanvas.ntW;
+		int offset = rCanvas.offset;
+		int yS = rCanvas.pY1 / ntH;
+		int yE = rCanvas.pY2 / ntH;
+		
 		for (int row = yS; row <= yE; row++)
 		{
 			Read read = rCanvas.reads.getReadAt(row, iPosition);
+			
 			if (read != null)
-			{
-				g.fillRect((read.getStartPosition() - rCanvas.offset) * rCanvas.ntW, row * rCanvas.ntH, ((read.getEndPosition() - rCanvas.offset) - (read.getStartPosition() - rCanvas.offset) + 1) * rCanvas.ntW, rCanvas.ntH);
-			}
+				g.fillRect((read.getStartPosition() - offset) * ntW, row * ntH, ((read.getEndPosition() - offset) - (read.getStartPosition() - offset) + 1) * ntW, ntH);
 		}
 		// Draws a vertical line down the display
 		g.setColor(lineColor);
-		g.drawLine((iPosition - rCanvas.offset) * rCanvas.ntW + rCanvas.ntW / 2, rCanvas.pY1, (iPosition - rCanvas.offset) * rCanvas.ntW + rCanvas.ntW / 2, rCanvas.pY2);
+
+		int linePos = (iPosition - offset) * ntW + ntW / 2;
+		g.drawLine(linePos, rCanvas.pY1, linePos, rCanvas.pY2);
 	}
 
 	public static void setMouseBase(Integer newBase)

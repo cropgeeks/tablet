@@ -147,7 +147,7 @@ class SamFileReader extends TrackableReader
 				contigToAddTo.getReads().add(read);
 
 				StringBuilder fullRead = new StringBuilder(cigarParser.parse(
-					data.toString(), pos, cigar));
+					data.toString(), pos, cigar, read));
 
 				rmd.setData(fullRead);
 
@@ -182,9 +182,8 @@ class SamFileReader extends TrackableReader
 		for (String feature : parser.getFeatureMap().keySet())
 		{
 			String[] featureElements = feature.split("Tablet-Separator");
-			int count = parser.getFeatureMap().get(feature);
-			CigarFeature cigarFeature = new CigarFeature("CIGAR-I", "",
-				Integer.parseInt(featureElements[1]) - 1, Integer.parseInt(featureElements[1]), count);
+			CigarFeature cigarFeature = parser.getFeatureMap().get(feature);
+
 			Contig contig = contigHash.get(featureElements[0]);
 			if (contig != null)
 			{
