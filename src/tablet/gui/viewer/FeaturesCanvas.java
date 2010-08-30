@@ -20,13 +20,13 @@ public class FeaturesCanvas extends TrackingCanvas
 	private AssemblyPanel aPanel;
 
 	private Contig contig;
-	private VisualContig vContig;
+	VisualContig vContig;
 	private Consensus consensus;
 
 	private Dimension dimension = new Dimension();
 
 	// The height of a SINGLE track
-	private static final int H = 20;
+	static final int H = 20;
 
 	private BasicStroke dashed = new BasicStroke(1, BasicStroke.CAP_BUTT,
 		BasicStroke.JOIN_MITER, 10, new float[] { 5,2 }, 0);

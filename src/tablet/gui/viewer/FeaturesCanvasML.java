@@ -6,9 +6,11 @@ package tablet.gui.viewer;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
+import tablet.data.auxiliary.*;
 import tablet.gui.*;
 
 import scri.commons.gui.*;
@@ -44,11 +46,10 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 
 	public void mouseMoved(MouseEvent e)
 	{
-		if (rCanvas.contig == null)
-			return;
-
 		int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) + rCanvas.offset;
 		sCanvas.setMouseBase(xIndex);
+
+		detectFeature(xIndex);
 	}
 
 	public void mouseReleased(MouseEvent e)
@@ -75,5 +76,21 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 	{
 		if (e.getSource() == mSelectTracks)
 			Tablet.winMain.getFeaturesPanel().editFeatures();
+	}
+
+	private void detectFeature(int x)
+	{
+		System.out.println(x);
+
+		// TODO
+		int track = 0;
+
+		ArrayList<Feature> data = fCanvas.vContig.getTrack(0).getFeatures(x, x);
+
+		for (Feature f: data)
+		{
+			System.out.println(f.getGFFType() + " " + f.getDataPS());
+			System.out.println();
+		}
 	}
 }
