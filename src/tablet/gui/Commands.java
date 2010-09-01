@@ -247,4 +247,43 @@ public class Commands
 				+ "the future.", RB.getString("gui.text.close"));
 		}
 	}
+
+	public void exportColumnData(IReadManager manager, int colIndex)
+	{
+		AssemblyPanel aPanel = winMain.getAssemblyPanel();
+		
+		String aName = aPanel.getAssembly().getName();
+		File saveAs = new File(Prefs.guiCurrentDir, aName+".txt");
+
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(
+			RB.getString("gui.text.formats.txt"), "txt");
+
+		// Ask the user for a filename to save the current view as
+		String filename = TabletUtils.getSaveFilename(
+			RB.getString("gui.Commands.exportCoverage.saveDialog"), saveAs, filter);
+
+		// Quit if the user cancelled the file selection
+		if (filename == null)
+			return;
+
+		ReadPrinter printer = new ReadPrinter(saveAs, manager, ReadPrinter.COLUMN_TYPE, colIndex);
+
+		ProgressDialog dialog = new ProgressDialog(printer,
+				RB.getString("gui.Commands.exportReadColumn.title"),
+				RB.getString("gui.Commands.exportReadColumn.label"));
+
+		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
+				dialog.getResult() == ProgressDialog.JOB_FAILED)
+			{
+				dialog.getException().printStackTrace();
+				TaskDialog.error(
+					RB.format("gui.Commands.exportReadColumn.exception",
+					dialog.getException()),
+					RB.getString("gui.text.close"));
+			}
+			else
+				TaskDialog.info(
+					RB.format("gui.Commands.exportReadColumn.success", filename),
+					RB.getString("gui.text.close"));
+	}
 }

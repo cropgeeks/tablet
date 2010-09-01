@@ -31,6 +31,8 @@ class ReadsCanvasMenu implements ActionListener
 	private JMenuItem mOutlineRow;
 	private JMenuItem mOutlineClear;
 
+//	private JMenuItem mExportColumn;
+
 	private JMenu mShadowing;
 	private JCheckBoxMenuItem mShadowingOff;
 	private JCheckBoxMenuItem mShadowingCenter;
@@ -106,16 +108,20 @@ class ReadsCanvasMenu implements ActionListener
 		mShadowingJump.addActionListener(this);
 
 		mJumpToPair = new JMenuItem("");
-		mJumpToPair.setText("Jump to pair");
+		RB.setText(mJumpToPair, "gui.viewer.ReadsCanvasMenu.mJumpToPair");
 		mJumpToPair.addActionListener(this);
 
 		mJumpToLeftRead = new JMenuItem("");
-		mJumpToLeftRead.setText("Jump to left read");
+		RB.setText(mJumpToLeftRead, "gui.viewer.ReadsCanvasMenu.mJumpToLeftRead");
 		mJumpToLeftRead.addActionListener(this);
 
 		mJumpToRightRead = new JMenuItem("");
-		mJumpToRightRead.setText("Jump to right read");
+		RB.setText(mJumpToRightRead, "gui.viewer.ReadsCanvasMenu.mJumpToRightRead");
 		mJumpToRightRead.addActionListener(this);
+
+//		mExportColumn = new JMenuItem("");
+//		RB.setText(mExportColumn, "gui.viewer.ReadsCanvasMenu.mExportColumn");
+//		mExportColumn.addActionListener(this);
 
 
 		// Create the menu
@@ -146,6 +152,9 @@ class ReadsCanvasMenu implements ActionListener
 		menu.add(mJumpToPair);
 		menu.add(mJumpToLeftRead);
 		menu.add(mJumpToRightRead);
+
+//		menu.addSeparator();
+//		menu.add(mExportColumn);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -289,6 +298,11 @@ class ReadsCanvasMenu implements ActionListener
 				new ReadHighlighter(aPanel, pair[1], rowIndex);
 			}
 		}
+
+//		else if (e.getSource() == mExportColumn)
+//		{
+//			Tablet.winMain.getCommands().exportColumnData(rCanvas.reads, colIndex);
+//		}
 	}
 
 	boolean isShowingMenu()
@@ -344,12 +358,12 @@ class ReadsCanvasMenu implements ActionListener
 		if(read instanceof MatedRead && rnd != null && rmd.getMateMapped())
 		{
 			mJumpToPair.setEnabled(isOverRead);
-			mJumpToPair.setText("Jump to pair: " + rnd.getName() + " in " + rnd.getMateContig());
+			mJumpToPair.setText(RB.format("gui.viewer.ReadsCanvasMenu.mJumpToPairInContig", rnd.getName(), rnd.getMateContig()));
 		}
 		else
 		{
 			mJumpToPair.setEnabled(false);
-			mJumpToPair.setText("Jump to pair");
+			RB.setText(mJumpToPair, "gui.viewer.ReadsCanvasMenu.mJumpToPair");
 		}
 
 		mJumpToLeftRead.setEnabled(!isOverRead && pair != null);

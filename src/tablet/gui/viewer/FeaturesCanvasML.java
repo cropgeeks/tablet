@@ -3,8 +3,6 @@
 
 package tablet.gui.viewer;
 
-import java.awt.*;
-import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
@@ -21,6 +19,8 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 	private ReadsCanvas rCanvas;
 	private ScaleCanvas sCanvas;
 
+	private AssemblyPanel aPanel;
+
 	private JMenuItem mSelectTracks;
 
 	FeaturesCanvasML(AssemblyPanel aPanel)
@@ -28,6 +28,8 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		fCanvas = aPanel.featuresCanvas;
 		rCanvas = aPanel.readsCanvas;
 		sCanvas = aPanel.scaleCanvas;
+
+		this.aPanel = aPanel;
 
 		fCanvas.addMouseListener(this);
 		fCanvas.addMouseMotionListener(this);
@@ -80,8 +82,6 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 
 	private void detectFeature(int x)
 	{
-		System.out.println(x);
-
 		// TODO
 		int track = 0;
 
@@ -91,6 +91,13 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		{
 			System.out.println(f.getGFFType() + " " + f.getDataPS());
 			System.out.println();
+
+			if(f.getGFFType().equals("CIGAR-I"))
+			{
+				CigarFeature cigarFeature = (CigarFeature)f;
+				new CigarIHighlighter(aPanel, cigarFeature.getVisualPS()+1, cigarFeature);
+				rCanvas.repaint();
+			}
 		}
 	}
 }
