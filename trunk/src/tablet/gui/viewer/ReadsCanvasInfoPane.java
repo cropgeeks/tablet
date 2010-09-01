@@ -6,12 +6,16 @@ package tablet.gui.viewer;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.image.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 import tablet.data.*;
 import tablet.gui.*;
 
 import scri.commons.gui.*;
+import tablet.data.auxiliary.CigarFeature;
+import tablet.data.auxiliary.CigarFeature.Insert;
+import tablet.data.auxiliary.Feature;
 
 /** Manages and paints the advanced tool tips for the reads canvas. */
 class ReadsCanvasInfoPane implements IOverlayRenderer
@@ -25,6 +29,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	private OverviewCanvas oCanvas;
 	private ScaleCanvas sCanvas;
 	private ReadsCanvas rCanvas;
+	private AssemblyPanel aPanel;
 
 	// Variables that change as we move the mouse
 	int lineIndex, mLineIndex;
@@ -53,6 +58,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		oCanvas = aPanel.overviewCanvas;
 		sCanvas = aPanel.scaleCanvas;
 		rCanvas = aPanel.readsCanvas;
+		this.aPanel = aPanel;
 
 		// Pre-build some font metrics for calculating string widths
 		Image image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
@@ -148,6 +154,28 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		else
 			insertSize = isProperPair = pairNumber = mateContig = pairInfo = "";
 
+		String insertedBases = " ";
+		// TODO
+		if(mouse != null)
+		{
+			int xIndex = (int) ((mouse.getX() / rCanvas.ntW) + rCanvas.offset);
+			ArrayList<Feature> features = aPanel.getVisualContig().getTrack(0).getFeatures(read.getStartPosition(), read.getEndPosition());
+			for(Feature feature : features)
+			{
+				CigarFeature cigarFeature = (CigarFeature)feature;
+				for(Insert insert : cigarFeature.getInserts())
+				{
+					if(insert.getRead() == read)
+					{
+						if(insertedBases.equals(" "))
+							insertedBases += RB.format("gui.viewer.ReadsCanvasInfoPane.inserted", insert.getInsertedBases());
+						else
+							insertedBases += " - " + insert.getInsertedBases();
+					}
+				}
+			}
+		}
+
 		adjustBoxSize();
 
 		// Tell the overview canvas to paint this read too
@@ -155,11 +183,11 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 		if(!isMate)
 		{
-			readInfo = new String[] {posData, lengthData, readName, cigar, pairInfo, mateContig};
+			readInfo = new String[] {posData, lengthData, readName, cigar, pairInfo, mateContig, insertedBases};
 			oCanvas.updateRead(lineIndex, readS+offset, readE+offset);
 		}
 		else
-			mateInfo = new String[] {posData, lengthData, readName, cigar, pairInfo, mateContig};
+			mateInfo = new String[] {posData, lengthData, readName, cigar, pairInfo, mateContig, insertedBases};
 
 		// Deal with setting up the multiple info panes.
 		if(!isMate && mr != null && mr.getPair() != null)
@@ -289,7 +317,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		if (Assembly.hasCigar())
 		{
 			g.setColor(Color.blue);
-			g.drawString(cig, 10, vSpacing*4);
+			g.drawString(cig + rInfo[6], 10, vSpacing*4);
 		}
 
 		g.drawString(pInfo, 10, vSpacing*5);

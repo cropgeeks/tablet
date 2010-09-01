@@ -6,17 +6,18 @@ import tablet.data.Read;
 import tablet.data.auxiliary.CigarFeature;
 import tablet.data.auxiliary.CigarFeature.Insert;
 
-public class CigarIHighlighter implements IOverlayRenderer
+public class CigarIHighlighter extends AlphaOverlay
 {
-	private int overlayOpacity = 200;
-	private ReadsCanvas rCanvas;
+	private Integer insertBase = null;
+	private CigarFeature cigarFeature;
 
-	private static Integer insertBase = null;
-	private static CigarFeature cigarFeature;
-
-	public CigarIHighlighter(ReadsCanvas rCanvas)
+	public CigarIHighlighter(AssemblyPanel aPanel, Integer insertBase, CigarFeature cigarFeature)
 	{
-		this.rCanvas = rCanvas;
+		super(aPanel);
+		this.insertBase = insertBase;
+		this.cigarFeature = cigarFeature;
+
+		start();
 	}
 
 	public void render(Graphics2D g)
@@ -24,7 +25,7 @@ public class CigarIHighlighter implements IOverlayRenderer
 		if(insertBase == null)
 			return;
 
-		g.setPaint(new Color(0, 0, 0, overlayOpacity));
+		g.setPaint(new Color(0, 0, 0, alphaEffect));
 
 		int yS = rCanvas.pY1 / rCanvas.ntH;
 		int yE = rCanvas.pY2 / rCanvas.ntH;
@@ -33,6 +34,11 @@ public class CigarIHighlighter implements IOverlayRenderer
 		int pX2Max = rCanvas.pX2Max;
 		int offset = rCanvas.offset;
 		int ntW = rCanvas.ntW;
+
+		int xS = (pX1 - offset) / ntW;
+		int xE = (rCanvas.pX2 - offset) / ntW;
+
+		int count = 0;
 
 		for (int row = yS; row <= yE; row++)
 		{
@@ -43,6 +49,7 @@ public class CigarIHighlighter implements IOverlayRenderer
 			}
 			if (read != null && cigarFeature != null)
 			{
+				boolean requiresPaint = true;
 				for(Insert insert : cigarFeature.getInserts())
 				{
 					if(insert.getRead().equals(read))
@@ -65,22 +72,26 @@ public class CigarIHighlighter implements IOverlayRenderer
 						g.fillRect(x3-1, row*ntH, 2, ntH);
 						// Bottom horizontal line
 						//g.drawLine(x3-ntW, row*ntH+ntH-1, x3+ntW-1, row*ntH+ntH-1);
-							g.fillRect(x3-(ntW/2), row*ntH+ntH-2, ntW, 2);
-						g.setPaint(new Color(0, 0, 0, overlayOpacity));
+						g.fillRect(x3-(ntW/2), row*ntH+ntH-2, ntW, 2);
+						g.setPaint(new Color(0, 0, 0, alphaEffect));
+
+						requiresPaint = false;
 					}
-					else
-						g.fillRect(pX1, row*ntH, pX2Max-pX1+1, ntH);
 				}
+				if(requiresPaint == true)
+					g.fillRect(pX1, row*ntH, pX2Max-pX1+1, ntH);
 			}
 		}
 	}
 
-	public static void setMouseBase(Integer newBase)
-		{ insertBase = newBase; }
-
-	public static void setCigarFeature(CigarFeature cigarFeature)
+	public void setMouseBase(Integer newBase)
 	{
-		CigarIHighlighter.cigarFeature = cigarFeature;
+		this.insertBase = newBase;
+	}
+
+	public void setCigarFeature(CigarFeature cigarFeature)
+	{
+		this.cigarFeature = cigarFeature;
 	}
 
 }

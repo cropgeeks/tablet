@@ -44,8 +44,6 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 
 	private NameOverlayer nameOverlayer;
 
-	private CigarIHighlighter cigarIHighlighter;
-
 	private VisualAssembly visualAssembly;
 
 	public AssemblyPanel(WinMain winMain)
@@ -81,9 +79,6 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		visPanel.add(sp, BorderLayout.CENTER);
 
 		add(visPanel);
-
-		//cigarIHighlighter = new CigarIHighlighter(readsCanvas);
-		//readsCanvas.overlays.addFirst(cigarIHighlighter);
 	}
 
 	private void createControls()

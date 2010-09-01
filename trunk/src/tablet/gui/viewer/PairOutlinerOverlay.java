@@ -62,7 +62,7 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 		}
 
 		// If the reads are on the row, draw a line connecting them
-		if(lineIndex == mateLineIndex)
+		if(lineIndex == mateLineIndex && Prefs.visPaired)
 		{
 			int y = lineIndex * rCanvas.ntH + rCanvas.ntH / 2;
 			int xS, xE;
