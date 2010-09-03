@@ -46,6 +46,8 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 
 	private VisualAssembly visualAssembly;
 
+	private CigarIHighlighter cigarIHighlighter;
+
 	public AssemblyPanel(WinMain winMain)
 	{
 		this.winMain = winMain;
@@ -79,6 +81,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		visPanel.add(sp, BorderLayout.CENTER);
 
 		add(visPanel);
+		cigarIHighlighter = new CigarIHighlighter(this);
 	}
 
 	private void createControls()
@@ -484,4 +487,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 
 	public FeaturesCanvas getFeaturesCanvas()
 		{ return featuresCanvas; }
+
+	public CigarIHighlighter getCigarIHighlighter()
+		{ return cigarIHighlighter; }
 }

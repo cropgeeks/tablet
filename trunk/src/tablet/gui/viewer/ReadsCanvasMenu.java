@@ -31,7 +31,7 @@ class ReadsCanvasMenu implements ActionListener
 	private JMenuItem mOutlineRow;
 	private JMenuItem mOutlineClear;
 
-//	private JMenuItem mExportColumn;
+	private JMenuItem mExportColumn;
 
 	private JMenu mShadowing;
 	private JCheckBoxMenuItem mShadowingOff;
@@ -119,9 +119,9 @@ class ReadsCanvasMenu implements ActionListener
 		RB.setText(mJumpToRightRead, "gui.viewer.ReadsCanvasMenu.mJumpToRightRead");
 		mJumpToRightRead.addActionListener(this);
 
-//		mExportColumn = new JMenuItem("");
-//		RB.setText(mExportColumn, "gui.viewer.ReadsCanvasMenu.mExportColumn");
-//		mExportColumn.addActionListener(this);
+		mExportColumn = new JMenuItem("");
+		RB.setText(mExportColumn, "gui.viewer.ReadsCanvasMenu.mExportColumn");
+		mExportColumn.addActionListener(this);
 
 
 		// Create the menu
@@ -153,8 +153,8 @@ class ReadsCanvasMenu implements ActionListener
 		menu.add(mJumpToLeftRead);
 		menu.add(mJumpToRightRead);
 
-//		menu.addSeparator();
-//		menu.add(mExportColumn);
+		menu.addSeparator();
+		menu.add(mExportColumn);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -299,10 +299,17 @@ class ReadsCanvasMenu implements ActionListener
 			}
 		}
 
-//		else if (e.getSource() == mExportColumn)
-//		{
-//			Tablet.winMain.getCommands().exportColumnData(rCanvas.reads, colIndex);
-//		}
+		else if (e.getSource() == mExportColumn)
+		{
+			try
+			{
+				Tablet.winMain.getCommands().exportColumnData(rCanvas.reads, colIndex);
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+		}
 	}
 
 	boolean isShowingMenu()
