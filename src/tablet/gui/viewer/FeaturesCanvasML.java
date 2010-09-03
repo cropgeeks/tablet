@@ -89,13 +89,42 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 
 		for (Feature f: data)
 		{
-			System.out.println(f.getGFFType() + " " + f.getDataPS());
-			System.out.println();
+			//System.out.println(f.getGFFType() + " " + f.getDataPS());
+			//System.out.println();
 
-			if(f.getGFFType().equals("CIGAR-I"))
+			if(f.getGFFType().equals("CIGAR-I") && !aPanel.getCigarIHighlighter().isVisible())
 			{
 				CigarFeature cigarFeature = (CigarFeature)f;
 				new CigarIHighlighter(aPanel, cigarFeature.getVisualPS()+1, cigarFeature);
+				rCanvas.repaint();
+			}
+		}
+	}
+
+	public void mouseClicked(MouseEvent e)
+	{
+		int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) + rCanvas.offset;
+		int track = 0;
+
+		ArrayList<Feature> data = fCanvas.vContig.getTrack(0).getFeatures(xIndex, xIndex);
+
+		for (Feature f: data)
+		{
+			if(f.getGFFType().equals("CIGAR-I"))
+			{
+				CigarFeature cigarFeature = (CigarFeature)f;
+				if(!aPanel.getCigarIHighlighter().isVisible())
+				{
+					aPanel.getCigarIHighlighter().setMouseBase(cigarFeature.getVisualPS()+1);
+					aPanel.getCigarIHighlighter().setCigarFeature(cigarFeature);
+					aPanel.getCigarIHighlighter().add();
+				}
+				else
+				{
+					aPanel.getCigarIHighlighter().setMouseBase(null);
+					aPanel.getCigarIHighlighter().setCigarFeature(null);
+					aPanel.getCigarIHighlighter().remove();
+				}
 				rCanvas.repaint();
 			}
 		}

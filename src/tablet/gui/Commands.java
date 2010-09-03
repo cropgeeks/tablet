@@ -3,6 +3,7 @@
 
 package tablet.gui;
 
+import java.awt.Desktop;
 import java.awt.image.*;
 import java.io.*;
 import javax.imageio.*;
@@ -248,7 +249,7 @@ public class Commands
 		}
 	}
 
-	public void exportColumnData(IReadManager manager, int colIndex)
+	public void exportColumnData(IReadManager manager, int colIndex) throws IOException
 	{
 		AssemblyPanel aPanel = winMain.getAssemblyPanel();
 		
@@ -266,7 +267,7 @@ public class Commands
 		if (filename == null)
 			return;
 
-		ReadPrinter printer = new ReadPrinter(saveAs, manager, ReadPrinter.COLUMN_TYPE, colIndex);
+		ReadPrinter printer = new ReadPrinter(new File(filename), manager, ReadPrinter.COLUMN_TYPE, colIndex);
 
 		ProgressDialog dialog = new ProgressDialog(printer,
 				RB.getString("gui.Commands.exportReadColumn.title"),
@@ -274,16 +275,28 @@ public class Commands
 
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
 				dialog.getResult() == ProgressDialog.JOB_FAILED)
+		{
+			dialog.getException().printStackTrace();
+			TaskDialog.error(
+				RB.format("gui.Commands.exportReadColumn.exception",
+				dialog.getException()),
+				RB.getString("gui.text.close"));
+		}
+		else
+		{
+			int result = TaskDialog.show(RB.format("gui.Commands.exportReadColumn.success", filename),
+					TaskDialog.INF, 0, new String[] {"Open file", RB.getString("gui.text.close")});
+			if(result == 0)
 			{
-				dialog.getException().printStackTrace();
-				TaskDialog.error(
-					RB.format("gui.Commands.exportReadColumn.exception",
-					dialog.getException()),
-					RB.getString("gui.text.close"));
+				// Before more Desktop API is used, first check
+				// whether the API is supported by this particular
+				// virtual machine (VM) on this particular host.
+				if (Desktop.isDesktopSupported())
+				{
+					Desktop desktop = Desktop.getDesktop();
+					desktop.open(new File(filename));
+				}
 			}
-			else
-				TaskDialog.info(
-					RB.format("gui.Commands.exportReadColumn.success", filename),
-					RB.getString("gui.text.close"));
+		}
 	}
 }

@@ -10,6 +10,7 @@ public class CigarIHighlighter extends AlphaOverlay
 {
 	private Integer insertBase = null;
 	private CigarFeature cigarFeature;
+	private boolean visible = false;
 
 	public CigarIHighlighter(AssemblyPanel aPanel, Integer insertBase, CigarFeature cigarFeature)
 	{
@@ -18,6 +19,11 @@ public class CigarIHighlighter extends AlphaOverlay
 		this.cigarFeature = cigarFeature;
 
 		start();
+	}
+
+	public CigarIHighlighter(AssemblyPanel aPanel)
+	{
+		super(aPanel);
 	}
 
 	public void render(Graphics2D g)
@@ -94,4 +100,34 @@ public class CigarIHighlighter extends AlphaOverlay
 		this.cigarFeature = cigarFeature;
 	}
 
+	public void add()
+	{
+		if (previous != null)
+			previous.interrupt();
+		previous = this;
+
+		if(!visible)
+		{
+			visible = true;
+			alphaEffect = 200;
+
+			rCanvas.overlays.addFirst(this);
+		}
+	}
+
+	public void remove()
+	{
+		previous = null;
+		if(visible)
+		{
+			visible = false;
+
+			alphaEffect = 0;
+
+			rCanvas.overlays.remove(this);
+		}
+	}
+
+	public boolean isVisible()
+		{ return visible; }
 }
