@@ -364,7 +364,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		{
 			// Get the read at this row and position.
 			Read read = manager.getReadAt(i, position);
-			if(read != null)
+			if(read != null && read.getStartPosition() == position)
 			{
 				ReadNameData rnd = Assembly.getReadNameData(read);
 				// Check if this is the read we are looking for

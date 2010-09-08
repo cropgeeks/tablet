@@ -280,4 +280,9 @@ public class Pack
 					((reads.contains(mr) && reads.contains(mate)) && index < startPos && matePos < startPos && startPos > end && matePos < end);
 		}
 	}
+
+	public ArrayList<Read> getReads()
+	{
+		return reads;
+	}
 }

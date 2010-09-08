@@ -137,4 +137,12 @@ class StackSet implements IReadManager
 
 		return tempList;
 	}
+
+	public ArrayList<Read> getLine(int line)
+	{
+		Read read = stack.get(line);
+		ArrayList<Read> stackLine = new ArrayList<Read>();
+		stackLine.add(read);
+		return stackLine;
+	}
 }

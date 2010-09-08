@@ -147,4 +147,9 @@ public class ReadPair
 
 		return new Read [] {readA, readB};
 	}
+
+	public Read[] getPair()
+	{
+		return new Read[] {readA, readB};
+	}
 }

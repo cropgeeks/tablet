@@ -23,4 +23,6 @@ public interface IReadManager
 	public int getLineForRead(Read read);
 
 	public ArrayList<Read> getReadNames(int startIndex, int endIndex);
+
+	public ArrayList<Read> getLine(int line);
 }

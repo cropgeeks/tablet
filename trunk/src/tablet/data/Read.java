@@ -102,7 +102,7 @@ public class Read implements Comparable<Read>
 	 * methods returns -1 if this read is to the left of it, 0 if any part of
 	 * the read is within the window, and 1 if the read is to the right of it.
 	 */
-	int compareToWindow(int start, int end)
+	public int compareToWindow(int start, int end)
 	{
 		// RHS of the window...
 		if (position > end)

@@ -76,4 +76,9 @@ public class PackSet implements IReadManager, Iterable<Pack>
 
 		return packs.get(lineIndex).getPair(colIndex);
 	}
+
+	public ArrayList<Read> getLine(int line)
+	{
+		return packs.get(line).getReads();
+	}
 }
