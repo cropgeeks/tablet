@@ -72,4 +72,15 @@ public class PairedStack implements IReadManager
 
 		return stack.get(lineIndex).getPair(colIndex);
 	}
+
+	public ArrayList<Read> getLine(int line)
+	{
+		ArrayList<Read> reads = new ArrayList<Read>();
+		for(Read read : stack.get(line).getPair())
+		{
+			if(read != null)
+				reads.add(read);
+		}
+		return reads;
+	}
 }

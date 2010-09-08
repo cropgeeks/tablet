@@ -32,6 +32,7 @@ class ReadsCanvasMenu implements ActionListener
 	private JMenuItem mOutlineClear;
 
 	private JMenuItem mExportColumn;
+	private JMenuItem mExportScreen;
 
 	private JMenu mShadowing;
 	private JCheckBoxMenuItem mShadowingOff;
@@ -123,6 +124,10 @@ class ReadsCanvasMenu implements ActionListener
 		RB.setText(mExportColumn, "gui.viewer.ReadsCanvasMenu.mExportColumn");
 		mExportColumn.addActionListener(this);
 
+		mExportScreen = new JMenuItem("");
+		RB.setText(mExportScreen, "gui.viewer.ReadsCanvasMenu.mExportScreen");
+		mExportScreen.addActionListener(this);
+
 
 		// Create the menu
 		menu = new JPopupMenu();
@@ -155,6 +160,7 @@ class ReadsCanvasMenu implements ActionListener
 
 		menu.addSeparator();
 		menu.add(mExportColumn);
+		menu.add(mExportScreen);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -304,6 +310,20 @@ class ReadsCanvasMenu implements ActionListener
 			try
 			{
 				Tablet.winMain.getCommands().exportColumnData(rCanvas.reads, colIndex);
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+		}
+
+		else if (e.getSource() == mExportScreen)
+		{
+			try
+			{
+				int xS = (rCanvas.pX1 - rCanvas.offset) / rCanvas.ntW;
+				int xE = (rCanvas.pX2 - rCanvas.offset) / rCanvas.ntW;
+				Tablet.winMain.getCommands().exportScreenData(rCanvas.reads, xS, xE);
 			}
 			catch(Exception ex)
 			{

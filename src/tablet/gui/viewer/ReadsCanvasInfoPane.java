@@ -156,7 +156,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 		String insertedBases = " ";
 		// TODO
-		if(mouse != null)
+		if(mouse != null && aPanel.getVisualContig().getTrackCount() > 0)
 		{
 			int xIndex = (int) ((mouse.getX() / rCanvas.ntW) + rCanvas.offset);
 			ArrayList<Feature> features = aPanel.getVisualContig().getTrack(0).getFeatures(read.getStartPosition(), read.getEndPosition());
@@ -319,6 +319,9 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			g.setColor(Color.blue);
 			g.drawString(cig + rInfo[6], 10, vSpacing*4);
 		}
+
+		if(pInfo.equals(RB.getString("gui.viewer.ReadsCanvasInfoPane.mateUnmapped")))
+			g.setColor(Color.red);
 
 		g.drawString(pInfo, 10, vSpacing*5);
 
