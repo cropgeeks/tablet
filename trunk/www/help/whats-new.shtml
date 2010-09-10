@@ -23,6 +23,44 @@ changes between versions, please see the <a href="http://bioinf.scri.ac.uk/table
 subversion change log</a>.</p>
 
 
+<h3>New in 1.10.09.10</h3>
+<ul>
+<li>NEW: Added support for paired-end data from SAM or BAM input files.</li>
+<li>NEW: Added graphical support for paired-end data via special paired-end packed and stacked views.</li>
+<li>NEW: The information tooltip over reads now displays differently based on normal or paired-end reads.</li>
+<li>NEW: Mouse-over on any paired-end read will also show information on its mate.</li>
+<li>NEW: Added a new colour scheme - Read Type - that paints reads based on type: unpaired, 1st in pair, 2nd in pair, or orphaned.</li>
+<li>NEW: Added right-click mouse options to jump to a read's mate (within same BAM window, different window, or different contig).</li>
+<li>NEW: Right-clicking on two paired reads' link lines gives options to jump to the reads at either end.</li>
+<li>NEW: BAM files can now be loaded without the need to specify a reference file.</li>
+<li>NEW: The Contigs Table now contains custom rendering based on what data is available (important for BAM).</li>
+<li>NEW: GFF features can now be rendered alongside the alignment.</li>
+<li>NEW: GFF features are rendered in a distinct colour per type.</li>
+<li>NEW: Added custom rendering of features if type "SNP" is detected.</li>
+<li>NEW: Added a "Select Tracks" option and dialog to control selection of the visible feature (types) and their order.</li>
+<li>NEW: Added a summary message at the end of importing features that gives information on the numbers imported.</li>
+<li>NEW: Added installer file type association for ace, afg, sam, and bam (for OS X only).</li>
+<li>NEW: Made the (current) 500 results limit on searches into a user-configurable amount (tablet.xml: guiSearchLimit).</li>
+<li>NEW: Added a few more entries to the FAQ.</li>
+<li>NEW: Details on all reads on screen, or all reads crossing the column position under the mouse can now be exported to a file (by right-clicking).</li>
+<li>NEW: CIGAR insertion events are now plotted on screen using the features tracks.</li>
+<li>NEW: Individual CIGAR insertions can be drawn over a read by selecting the insertion on the features track.</li>
+<li>NEW: Enabled proper number format cell rendering on the various display tables.</li>
+<li>NEW: Selecting a read from the Find Reads table will now also highlight it on the overview.</li>
+<li>NEW: Added mouse drag navigation to all reference tracking visual elements (consensus, coverage, scale, etc).</li>
+<li>NEW: Tablet now warns if the reference length expected by a BAM file differs from that of the actual reference imported by the user.</li>
+<li>NEW: Moved the default location for saving prefs information from ~/.tablet.xml to ~/.scri-bioinf/tablet.xml (with old files being automatically moved over if found).</li>
+<li>NEW: Updated the GFF reader to cope with files containing ##FASTA directives.</li>
+<li>CHG: Pack style selection is now performed via a drop down menu rather than separate ribbon buttons.</li>
+<li>CHG: Major changes to the way files are handled, detected and loaded.</li>
+<li>CHG: Only one open/close operation is needed per file now to detect its type (rather than one open/close per possible type).</li>
+<li>CHG: Changed the highlight colours used by the overview window to try and make them work a bit better with all the colour schemes.</li>
+<li>BUG: Fixed unformatted large numbers in OverviewCanvas.</li>
+<li>BUG: Feature types (SNP, INDEL, etc) were still being added even if the feature they belonged to was rejected during the import.</li>
+<li>BUG: The find results wouldn't scroll to the selected contig in the contigs list when highlighting it.</li>
+</ul>
+
+
 <h3>New in 1.10.05.21</h3>
 
 <ul>
