@@ -107,7 +107,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 			DisplayData.setAveragePercentage(cc.getAveragePercentage());
 		}
 
-		if(okToRun)
+		if(okToRun && Assembly.isPaired())
 			pairReads();
 
 		if (okToRun)

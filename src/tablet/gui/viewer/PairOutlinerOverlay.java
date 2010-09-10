@@ -34,32 +34,19 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 
 	public void render(Graphics2D g)
 	{
+		// Remember the current stroke so it can be reset afterwards
+		Stroke oldStroke = g.getStroke();
+
+		// Set the outline width based on the zoom level
+		if (Prefs.visReadsCanvasZoom > 18)
+			g.setStroke(new BasicStroke(3));
+		else if (Prefs.visReadsCanvasZoom > 8)
+			g.setStroke(new BasicStroke(2));
+
 		if(readA == null || readB == null || !isValidOutline())
 			return;
 
 		int offset = -rCanvas.offset * rCanvas.ntW;
-
-		// Draw an outline around whichever read is under the mouse
-		if (readA != null)
-		{
-			int y  = lineIndex * rCanvas.ntH;
-			int xS = readA.getStartPosition() * rCanvas.ntW + offset;
-			int xE = readA.getEndPosition() * rCanvas.ntW + rCanvas.ntW + offset;
-
-			g.setColor(TabletUtils.red1);
-			g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);
-		}
-
-		// Draw an outline around the second read
-		if (readB != null)
-		{
-			int y = mateLineIndex * rCanvas.ntH;
-			int xS = readB.getStartPosition() * rCanvas.ntW + offset;
-			int xE = readB.getEndPosition() * rCanvas.ntW + rCanvas.ntW + offset;
-
-			g.setColor(TabletUtils.red1);
-			g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);
-		}
 
 		// If the reads are on the row, draw a line connecting them
 		if(lineIndex == mateLineIndex && Prefs.visPaired)
@@ -80,6 +67,23 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 			g.setColor(Color.BLACK);
 			g.drawLine(xS, y, xE, y);
 		}
+
+		// Draw outlines around the reads in the pair
+		int y  = lineIndex * rCanvas.ntH;
+		int xS = readA.getStartPosition() * rCanvas.ntW + offset;
+		int xE = readA.getEndPosition() * rCanvas.ntW + rCanvas.ntW + offset;
+
+		g.setColor(TabletUtils.red1);
+		g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);
+
+		y = mateLineIndex * rCanvas.ntH;
+		xS = readB.getStartPosition() * rCanvas.ntW + offset;
+		xE = readB.getEndPosition() * rCanvas.ntW + rCanvas.ntW + offset;
+
+		g.setColor(TabletUtils.red1);
+		g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);
+
+		g.setStroke(oldStroke);
 	}
 
 

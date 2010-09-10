@@ -9,11 +9,14 @@ public class PairedPackSetCreator extends SimpleJob
 	private boolean added, pairAdded;
 	private int dataS;
 
+	private int startPos, rowIndex, startRow;
+
 	public PairedPackSetCreator(Contig contig, Assembly assembly)
 	{
 		this.contig = contig;
 		packSet = new PackSet();
 		dataS = contig.getVisualStart();
+		startPos = rowIndex = 0;
 	}
 
 	public void runJob(int jobIndex)
@@ -29,6 +32,11 @@ public class PairedPackSetCreator extends SimpleJob
 			// Check for quit/cancel on the job...
 			if (okToRun == false)
 				return;
+
+			startRow = 0;
+
+			if(read.getStartPosition() == startPos)
+				startRow = rowIndex+1;
 			
 			added = pairAdded = false;
 
@@ -54,6 +62,8 @@ public class PairedPackSetCreator extends SimpleJob
 					createPackForRead(read);
 			}
 
+			startPos = read.getStartPosition();
+
 			progress++;
 		}
 
@@ -75,11 +85,13 @@ public class PairedPackSetCreator extends SimpleJob
 	 */
 	private void addToExistingPack(MatedRead pairedRead)
 	{
-		for (int i = 0; i < packSet.size(); i++)
+		for (int i = startRow; i < packSet.size(); i++)
 		{
 			// Try to add the first read in the pair, must be either the first read from a pair in the contig, or the only read from the pair in the contig
 			if (canAddToExistingPack(pairedRead, i))
 			{
+				rowIndex = i;
+				
 				if(pairedRead.getPair() == null)
 					break;
 
@@ -102,11 +114,14 @@ public class PairedPackSetCreator extends SimpleJob
 
 	private void addToPackInPackSet(Read read)
 	{
-		for(int i = 0; i < packSet.size(); i++)
+		for(int i = startRow; i < packSet.size(); i++)
 		{
 			added = packSet.get(i).addRead(read);
 			if(added)
+			{
+				rowIndex = i;
 				break;
+			}
 		}
 	}
 
@@ -133,7 +148,7 @@ public class PairedPackSetCreator extends SimpleJob
 
 			if (!pairAdded)
 			{
-				for(int i=0; i < packSet.size(); i++)
+				for(int i=startRow; i < packSet.size(); i++)
 				{
 					pairAdded = packSet.get(i).addRead(pairedRead.getPair());
 					if(pairAdded)
@@ -142,6 +157,8 @@ public class PairedPackSetCreator extends SimpleJob
 				if(!pairAdded)
 					createPackForRead(pairedRead.getPair());
 			}
+
+			rowIndex = packSet.size()-1;
 		}
 	}
 
@@ -150,6 +167,7 @@ public class PairedPackSetCreator extends SimpleJob
 		Pack newPack = new Pack();
 		newPack.addRead(read);
 		packSet.addPack(newPack);
+		rowIndex = packSet.size()-1;
 	}
 
 	private boolean canAddToNewPack(MatedRead matedRead)

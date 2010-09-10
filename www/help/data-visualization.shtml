@@ -27,10 +27,14 @@ the display of read data.</p>
 <img class="capture" src="images/reads-visualization2.png" alt="Tablet Screenshot"></a></p>
 
 <p>Each read is shown aligned against the consensus sequence, with its bases
-coloured according to the colour scheme selected. In <b>Enhanced</b> mode, each
+coloured according to the colour scheme selected. In <b>Nucleotide</b> mode, each
 DNA base is assigned its own colour. In contrast the <b>Classic</b> display removes
-colour information, and acts like more traditional text-based viewers. In either
-mode, <i>variant bases</i> - where the nucleotide in the
+colour information, and acts like more traditional text-based viewers. In <b>Direction</b>
+mode, each read is coloured according to whether it was read on the forward or reverse
+strand. In <b>Read Type</b> mode single end reads, the first read in a pair and the
+second read in a pair are each assigned their own colour (orange for single end, green
+for first in pair, blue for second in pair and red for orphaned reads). In all
+modes, <i>variant bases</i> - where the nucleotide in the
 read differs from the same base in the consensus - are displayed slightly brighter
 and with red rather than black text. The brightness value can be adjusted using
 the <b>Variants</b> slider on the <a href="ribbon.shtml">Ribbon Bar</a>'s <b>Adjust</b> tab.</p>
@@ -44,11 +48,10 @@ the <b>Variants</b> slider on the <a href="ribbon.shtml">Ribbon Bar</a>'s <b>Adj
  overview).</p>
 
 <p>Right clicking on the display brings up a menu with the options to outline a row
- or column. To
- remove highlighting, choose clear all from the menu. There are also options to copy the
- name of the current read to the clipboard, or copy all of the read's data to the clipboard
- (its name, length, bases, etc). Finally, there are options which allow you to quickly jump
- the view to the start or end of a read.
+ or column. To remove highlighting, choose clear all from the menu. There are also
+ options to copy the name of the current read to the clipboard, or copy all of the
+ read's data to the clipboard (its name, length, bases, etc). Finally, there are
+ options which allow you to quickly jump the view to the start or end of a read.
 </p>
 
 <h3>Layout styles</h3>
@@ -63,7 +66,8 @@ possible without overlap) or stacked (showing one read per line) formats.</p>
 <img class="capture" src="images/stacked2.png" alt="Tablet Screenshot"></a></p>
 
 <p>Toggle between
-the modes using the options on the <b>Layout Style</b> tab on the <a href="ribbon.shtml">Ribbon Bar</a>.
+the modes using the <b>Pack Style</b> on the <b>Layout Style</b> tab on the
+<a href="ribbon.shtml">Ribbon Bar</a>.
 
 <h3>The scale bar</h3>
 
@@ -102,9 +106,6 @@ the entire contig.</p>
 
 <p><a href="images/coverage.png">
 <img class="capture" src="images/coverage2.png" alt="Tablet Screenshot"></a></p>
-
-
-
 
 
  <!--#include virtual="footer.html" -->

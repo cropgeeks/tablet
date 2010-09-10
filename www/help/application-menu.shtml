@@ -41,6 +41,14 @@ assemblies.</p>
 <p>Allows you to export the current view (reads visualization) as a PNG image
 saved to disk.</p>
 
+<h3>Export Coverage Summary</h3>
+
+<p>Allows you to export a summary of the coverage across all contigs of the
+currently loaded assembly. This exports a list of contigs with the coverage value
+for each base of the consensus. There is an additional config file (called printPads)
+which allows you to choose if padded bases have their coverage output. This
+defaults to true.</p>
+
 <h3>Close</h3>
 
 <p>Closes any currently open assembly and returns to the Tablet front page.</p>

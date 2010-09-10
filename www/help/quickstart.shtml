@@ -27,18 +27,22 @@ in the shortest possible time.</p>
 
 <h3>Opening assemblies</h3>
 
-<p>Tablet currently supports importing assembly data from either ACE, AFG, MAQ or
- SOAP file formats. There are two ways to get this data into Tablet:</p>
+<p>Tablet currently supports importing assembly data from either ACE, AFG, BAM, MAQ,
+SAM	or SOAPAligner/soap2 file formats. There are two ways to get this data into Tablet:</p>
 <ul>
 	<li>By clicking the <b>Open Assembly</b> button in the Data section of the ribbon menu.
 	This will display the <a href="./gui.dialog.ImportAssemblyDialog.shtml">Open Assembly</a> dialog.</li>
 	<li>By dragging and dropping the file (or files) directly into Tablet.</li>
 </ul>
 
+<p>If you are trying Tablet for the first time and don't have any assembly data readily available
+you can load in example datasets from the <a href="./gui.dialog.ImportAssemblyDialog.shtml">
+Open Assembly</a> dialog.
+
 <p>Once the data is loaded, a list of all the contigs found within the assembly will
 be shown in the <b>Contigs Browser</b> down the left-hand side. This can be used to select
 a contig for display, or to filter the list down to a smaller size via a range of
-criteria..</p>
+criteria.</p>
 
 <h3>Tablet overview</h3>
 
@@ -46,7 +50,7 @@ criteria..</p>
 a visualization of a single contig at a time, with reads aligned against their
 consensus sequence. Tablet will lay out the data in either packed (showing as
 many reads per line as possible without overlap) or stacked (showing one read
-per line) formats.</p>
+per line) formats. Paired-end variants are available for both </p>
 
 <p>The read data is supplemented with the consensus sequence and its quality
 scores, coverage information (per base) and up to six consensus to protein
@@ -91,7 +95,8 @@ representation of all the read's bases.</p>
 
 <p>Right clicking with the mouse on many of the display components will open up
 additional menus showing options to change the display types, highlight regions
-of interest, copy data to the clipboard, etc.</p>
+of interest, copy data to the clipboard, jump to a read's pair if it is a paired
+read, etc.</p>
 
 
 <!--#include virtual="footer.html" -->
