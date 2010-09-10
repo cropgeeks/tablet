@@ -23,15 +23,16 @@ generation sequence assemblies and alignments.</p>
 <p><img class="capture" src="images/tablet-main.png" alt="Tablet Screenshot"></p>
 
 <p>Visit the <a href="download.shtml">download page</a> to get the latest version
-of Tablet (1.10.05.21; 21th May 2010) now.</p>
+of Tablet (1.10.09.10; 10th September 2010) now.</p>
 
 <p>Tablet features:</p>
 
 <ul>
 <li>High-performance visualization and data navigation.</li>
 <li>Display of reads in both packed and stacked formats.</li>
-<li>File format support for ACE, AFG, MAQ, SOAP, SAM and BAM.</li>
-<li>Import GFF3 features and quickly find/highlight them.</li>
+<li>Paired end visualization support.</li>
+<li>File format support for ACE, AFG, MAQ, SOAP2, SAM and BAM.</li>
+<li>Import GFF3 features and quickly find/highlight/display them.</li>
 <li>Search and locate reads by name across entire data sets.</li>
 <li>Entire-contig overviews, showing data layout or coverage information.</li>
 <li>Simple install routine via auto-updating graphical installers.</li>

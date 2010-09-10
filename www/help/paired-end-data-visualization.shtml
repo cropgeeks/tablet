@@ -36,7 +36,7 @@ black line.</p>
 <p><a href="images/mate-lines.png">
 <img class="capture" src="images/mate-lines2.png" alt="Tablet Screenshot"></a></p>
 
-<p>As with <a href="data-visualization">single-end data</a>, when the mouse is
+<p>As with <a href="data-visualization.shtml">single-end data</a>, when the mouse is
 over a read a tooltip appears which displays information about that
 read. Where this differs from single-end data is the information provided in the
 tooltip and in additional tooltips which can also be displayed. In addition to displaying a
