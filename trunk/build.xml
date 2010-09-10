@@ -111,6 +111,18 @@
 		</java>
 	</target>
 
+	<target name="profile" depends="jar">
+		<nbprofiledirect>
+			<classpath>
+				<pathelement path="${tablet.jar}"/>
+			</classpath>
+		</nbprofiledirect>
+			<java jar="${tablet.jar}">
+				<jvmarg value="-Xmx1024m"/>
+				<jvmarg value="${profiler.info.jvmargs.agent}"/>
+			</java>
+	</target>
+
 	<target name="jnlp" depends="getversion, jar">
 		<input message="Enter the storepass:" addproperty="storepass"/>
 		<mkdir dir="${webstart}"/>

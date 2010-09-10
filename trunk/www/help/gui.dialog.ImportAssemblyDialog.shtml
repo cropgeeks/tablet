@@ -107,6 +107,17 @@ list of features (that will be shown in the Features Table) for each CIGAR
 "insertion" that is found. Each feature gives the position of the insertion and
 the number of reads that have an insertion at that position.</p>
 
+<h3>Importing example data</h3>
+
+The "Unsure how to get started? Click here to open an assembly." link
+brings up the dialog to load example datasets. This contains a drop down menu which
+allows for selection between the various example datasets available. Below the drop
+down menu is a description of the currently selected example dataset. To open a dataset
+select it from the drop down menu and click the "Open" button.
+
+<p><a href="images/gui.dialog.ImportAssemblyDialog.exampledataset.png">
+<img class="capture" src="images/gui.dialog.ImportAssemblyDialog.exampledataset2.png" alt="Tablet Screenshot"></a></p>
+
 <!--#include virtual="footer.html" -->
 
 </body>
