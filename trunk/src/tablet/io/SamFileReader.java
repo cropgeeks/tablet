@@ -79,7 +79,7 @@ class SamFileReader extends TrackableReader
 			String chr  = tokens[2];
 			int pos = Integer.parseInt(tokens[3]) - 1;
 			String mrnm = tokens[6];
-			int mPos = Integer.parseInt(tokens[7]);
+			int mPos = Integer.parseInt(tokens[7]) - 1;
 			int iSize = Integer.parseInt(tokens[8]);
 
 			// Decode the U/C information from the flag field
@@ -118,9 +118,10 @@ class SamFileReader extends TrackableReader
 
 				Read read;
 
-
 				ReadNameData rnd = new ReadNameData(name);
 				ReadMetaData rmd = new ReadMetaData(complemented);
+
+				rmd.setIsPaired((flags & 0x0001) == 1 ? true : false);
 
 				if((flags & 0x0001) != 0)
 				{
@@ -130,11 +131,15 @@ class SamFileReader extends TrackableReader
 					rnd.setInsertSize(iSize);
 					rnd.setIsProperPair((flags & 0x0002) != 0);
 					rnd.setNumberInPair((flags & 0x0040) != 0 ? 1 : 2);
+
+					if(mrnm.equals("="))
+						mrnm = chr;
+
 					rnd.setMateContig(mrnm);
 
 					rmd.setNumberInPair((flags & 0x0040) != 0 ? 1 : 2);
+					rmd.setMateMapped((flags & 0x0008) != 0 ? false : true);
 
-					// Might want to get rid of this
 					if(!Assembly.isPaired())
 						Assembly.setIsPaired(true);
 

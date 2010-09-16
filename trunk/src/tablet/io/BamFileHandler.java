@@ -12,7 +12,6 @@ import tablet.data.auxiliary.*;
 
 import net.sf.samtools.*;
 import net.sf.samtools.util.*;
-import tablet.data.auxiliary.CigarFeature.Insert;
 
 public class BamFileHandler
 {
@@ -133,7 +132,6 @@ public class BamFileHandler
 			rmd.setNumberInPair(record.getFirstOfPairFlag() ? 1 : 2);
 			rmd.setMateMapped(!record.getMateUnmappedFlag());
 
-			// Might want to get rid of this
 			if(!Assembly.isPaired())
 				Assembly.setIsPaired(true);
 
