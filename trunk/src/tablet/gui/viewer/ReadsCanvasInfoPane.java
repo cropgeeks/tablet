@@ -162,15 +162,18 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			ArrayList<Feature> features = aPanel.getVisualContig().getTrack(0).getFeatures(read.getStartPosition(), read.getEndPosition());
 			for(Feature feature : features)
 			{
-				CigarFeature cigarFeature = (CigarFeature)feature;
-				for(Insert insert : cigarFeature.getInserts())
+				if (feature instanceof CigarFeature)
 				{
-					if(insert.getRead() == read)
+					CigarFeature cigarFeature = (CigarFeature)feature;
+					for(Insert insert : cigarFeature.getInserts())
 					{
-						if(insertedBases.equals(" "))
-							insertedBases += RB.format("gui.viewer.ReadsCanvasInfoPane.inserted", insert.getInsertedBases());
-						else
-							insertedBases += " - " + insert.getInsertedBases();
+						if(insert.getRead() == read)
+						{
+							if(insertedBases.equals(" "))
+								insertedBases += RB.format("gui.viewer.ReadsCanvasInfoPane.inserted", insert.getInsertedBases());
+							else
+								insertedBases += " - " + insert.getInsertedBases();
+						}
 					}
 				}
 			}
