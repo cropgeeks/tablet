@@ -97,6 +97,14 @@ public class PairSearcher
 			if (pairRnd.getName().equals(name))
 				return pr;
 
+			// Deal with paired end reads which have had pair information encoded in the names of reads
+			if (name.endsWith(":1") || name.endsWith(":2"))
+			{
+				String tempName = name.substring(0, name.length()-2);
+				if(pairRnd.getName().substring(0, pairRnd.getName().length()-2).equals(tempName))
+					return pr;
+			}
+
 			mid += loopModifier;
 			pr = contig.getReads().get(mid);
 			pairRnd = Assembly.getReadNameData(pr);
