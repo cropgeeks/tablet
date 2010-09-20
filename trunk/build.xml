@@ -138,7 +138,7 @@
 				<include name="**/*.jar"/>
 			</fileset>
 		</signjar>
-		<copy todir="\\bioinf\root\var\www\html\tablet\webstart2">
+		<copy todir="\\bioinf\root\var\www\html\tablet\webstart">
 			<fileset dir="${webstart}">
 				<include name="**/*.jar"/>
 			</fileset>
