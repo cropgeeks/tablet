@@ -62,7 +62,7 @@ for your operating system. Tablet is currently available for:</p>
 
 </table>
 
-<p>A Java Web Start version of Tablet also exists, and can be made available on
+<p>A <b>Java Web Start</b> version of Tablet also exists, and can be made available on
 request in certain circumstances, however this is not something we can
 officially support.</p>
 
@@ -73,6 +73,14 @@ but if you have any problems, don't hesitate to contact us at
 
 <p>Tablet is developed on Windows 7, and gets additional regular testing on
 Windows XP SP3, OS X 10.6, Ubuntu Linux, and Centos 5.</p>
+
+
+<h3>Additional downloads</h3>
+
+<ul>
+<li><a href="additional/coveragestats.py">coveragestats.py</a> - python script that summarizes the coverage export file from Tablet.
+Provided by Zach Foster and Aaron Liston, Department of Botany & Plant Pathology, Oregon State University.</li>
+</ul>
 
 
 <!--#include virtual="footer.html" -->
