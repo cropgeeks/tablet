@@ -85,7 +85,7 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		// TODO
 		int track = 0;
 
-		ArrayList<Feature> data = fCanvas.vContig.getTrack(0).getFeatures(x, x);
+		ArrayList<Feature> data = fCanvas.vContig.getTrack(track).getFeatures(x, x);
 
 		for (Feature f: data)
 		{

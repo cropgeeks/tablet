@@ -21,6 +21,7 @@ public class NBFindPanelControls extends javax.swing.JPanel
 		// Setup the various visual components and fill with the correct data / options
 		searchTypeCombo.addItem(RB.getString("gui.NBFindPanelControls.findLabel1"));
 		searchTypeCombo.addItem(RB.getString("gui.NBFindPanelControls.findLabel2"));
+		searchTypeCombo.addItem(RB.getString("gui.NBFindPanelControls.findInConsensus"));
 		searchTypeCombo.setSelectedIndex(Prefs.guiFindPanelSearchType);
 		resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", 0));
 		RB.setText(helpLabel, "gui.NBFindPanelControls.helpLabel");
@@ -82,7 +83,7 @@ public class NBFindPanelControls extends javax.swing.JPanel
 		searchTypeCombo.setEnabled(enabled);
 		resultsLabel.setEnabled(enabled);
 		table.setEnabled(enabled);
-		if(searchTypeCombo.getSelectedItem().equals(RB.getString("gui.NBFindPanelControls.findLabel2")))
+		if(searchTypeCombo.getSelectedItem().equals(RB.getString("gui.NBFindPanelControls.findLabel2")) || searchTypeCombo.getSelectedItem().equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))
 			checkUseRegex.setEnabled(false);
 		else
 			checkUseRegex.setEnabled(enabled);

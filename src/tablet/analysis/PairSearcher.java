@@ -94,14 +94,16 @@ public class PairSearcher
 	{
 		while (pr != null && pos == pr.getStartPosition() && mid > 0)
 		{
-			if (pairRnd.getName().equals(name))
+			String pairName = pairRnd.getName();
+
+			if (pairName.equals(name))
 				return pr;
 
 			// Deal with paired end reads which have had pair information encoded in the names of reads
 			if (name.endsWith(":1") || name.endsWith(":2"))
 			{
 				String tempName = name.substring(0, name.length()-2);
-				if(pairRnd.getName().substring(0, pairRnd.getName().length()-2).equals(tempName))
+				if(pairName.substring(0, pairName.length()-2).equals(tempName))
 					return pr;
 			}
 

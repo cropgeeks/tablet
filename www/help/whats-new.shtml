@@ -22,6 +22,13 @@ that have been made to Tablet in recent versions. For full details on all the
 changes between versions, please see the <a href="http://bioinf.scri.ac.uk/tablet/svn.txt">
 subversion change log</a>.</p>
 
+<h3>New in 1.10.09.20</h3>
+
+<ul>
+<li>NEW: Added the ability to search for sequence strings within the consensus / reference.</li>
+<li>BUG: Added fixes for issues where reads in SAM files weren't being paired properly.</li>
+<li>BUG: Fixed a problem with read names that ended :1 or :2 not getting paired.</li>
+</ul>
 
 <h3>New in 1.10.09.10</h3>
 <ul>
