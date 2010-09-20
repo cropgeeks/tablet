@@ -56,6 +56,13 @@ public class FeatureTrack implements Comparator<Feature>
 			features.add((-result)-1, feature);
 			return true;
 		}
+		
+		// Replace any existing cigar features because their references become
+		// invalid after a data reload.
+		else if (feature.gffType.equals("CIGAR-I"))
+		{
+			features.set(result, feature);
+		}
 
 		return false;
 	}

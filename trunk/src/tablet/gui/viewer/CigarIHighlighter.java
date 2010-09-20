@@ -46,14 +46,19 @@ public class CigarIHighlighter extends AlphaOverlay
 
 		int count = 0;
 
+		if (cigarFeature == null)
+			return;
+
 		for (int row = yS; row <= yE; row++)
 		{
 			Read read = rCanvas.reads.getReadAt(row, insertBase);
-			if (read == null || cigarFeature == null)
+
+			if (read == null)
 			{
 				g.fillRect(pX1, row*ntH, pX2Max-pX1+1, ntH);
 			}
-			if (read != null && cigarFeature != null)
+
+			if (read != null)
 			{
 				boolean requiresPaint = true;
 				for(Insert insert : cigarFeature.getInserts())
@@ -84,6 +89,7 @@ public class CigarIHighlighter extends AlphaOverlay
 						requiresPaint = false;
 					}
 				}
+				
 				if(requiresPaint == true)
 					g.fillRect(pX1, row*ntH, pX2Max-pX1+1, ntH);
 			}

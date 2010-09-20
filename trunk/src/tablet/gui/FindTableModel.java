@@ -38,6 +38,11 @@ public class FindTableModel extends AbstractTableModel
 			String col6 = "End Index";
 			columnNames = new String[] { col1, col2, col3, col4, col5, col6 };
 		}
+		else if(results != null && results.size() != 0 && !(results.get(0) instanceof SubsequenceSearchResult) && !(results.get(0) instanceof ReadSearchResult))
+		{
+			col1 = col4;
+			columnNames = new String[] { col1, col2, col3 };
+		}
 	}
 
 	public String getColumnName(int col)
@@ -72,8 +77,11 @@ public class FindTableModel extends AbstractTableModel
 
 	public Object getValueAt(int row, int col)
 	{
-		if(!(results.get(row) instanceof SubsequenceSearchResult))
+		if(!(results.get(row) instanceof SubsequenceSearchResult) && !(results.get(row) instanceof ReadSearchResult))
 			return getSearchResultValue(row, col);
+		
+		else if(!(results.get(row) instanceof SubsequenceSearchResult))
+			return getReadSearchResultValue(row, col);
 
 		else
 			return getSubsequenceSearchResultValue(row, col);
@@ -82,6 +90,20 @@ public class FindTableModel extends AbstractTableModel
 	private Object getSearchResultValue(int row, int col)
 	{
 		SearchResult result = results.get(row);
+		switch (col)
+		{
+			case 0:		return result.getContig().getName();
+			case 1:		return result.getPosition() + 1;
+			case 2:		return result.getLength();
+			case 9:		return result.getContig();
+			case 10:	return parent.getFinder();
+		}
+		return null;
+	}
+
+	private Object getReadSearchResultValue(int row, int col)
+	{
+		ReadSearchResult result = (ReadSearchResult) results.get(row);
 		switch (col)
 		{
 			case 0:		return result.getName();

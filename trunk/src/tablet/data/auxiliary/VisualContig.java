@@ -32,7 +32,10 @@ public class VisualContig
 
 	public void addTrack(FeatureTrack track)
 	{
-		tracks.add(track);
+		if(track.getName().equals("CIGAR-I"))
+			tracks.add(0, track);
+		else
+			tracks.add(track);
 	}
 
 	public FeatureTrack getTrack(int index)

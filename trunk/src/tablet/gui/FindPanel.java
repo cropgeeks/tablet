@@ -109,8 +109,18 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 
 		updateContigsTable(contig);
 
+		if(tableModel.getValueAt(row, 3) == null)
+		{
+			int length = (Integer) tableModel.getValueAt(row, 2);
+			// If we are searching a BAM assembly, we need to load up the correct
+			// section of the BAM file before we can search for the read.
+			if (aPanel.getAssembly().getBamBam() != null)
+				aPanel.moveToPosition(0, pos, true);
+
+			highlightReference(pos, length);
+		}
 		// If we are searching for reads
-		if((Integer) tableModel.getValueAt(row, 4) == null)
+		else if((Integer) tableModel.getValueAt(row, 4) == null)
 		{
 			// If we are searching a BAM assembly, we need to load up the correct
 			// section of the BAM file before we can search for the read.
@@ -231,6 +241,17 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		});
 	}
 
+	private void highlightReference(final int pos, final int length)
+	{
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run()
+			{
+				aPanel.moveToPosition(0, pos, true);
+				new ConsensusHighlighter(aPanel, pos, length);
+			}
+		});
+	}
+
 	public Finder getFinder()
 	{
 		return finder;
@@ -280,6 +301,8 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 			// Set if we are searching for reads, or subsequences
 			finder.setSearchReads((String)controls.searchTypeCombo.getSelectedItem());
 
+			finder.setSearchType((String) controls.searchTypeCombo.getSelectedItem());
+
 			if (controls.findCombo.getText() != null)
 			{
 				controls.findCombo.updateComboBox((String) controls.findCombo.getEditor().getItem());
@@ -292,10 +315,15 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 				title = RB.getString("gui.NBFindPanelControls.progressReadsTitle");
 				label = RB.getString("gui.NBFindPanelControls.progressReadsLabel");
 			}
-			else
+			else if(controls.searchTypeCombo.getSelectedItem().equals(RB.getString("gui.NBFindPanelControls.findLabel2")))
 			{
 				title = RB.getString("gui.NBFindPanelControls.progressSubsequenceTitle");
 				label = RB.getString("gui.NBFindPanelControls.progressSubsequenceLabel");
+			}
+			else
+			{
+				title = RB.getString("gui.NBFindPanelControls.progressReferenceTitle");
+				label = RB.getString("gui.NBFindPanelControls.progressReferenceLabel");
 			}
 
 			ProgressDialog dialog = new ProgressDialog(finder, title, label);

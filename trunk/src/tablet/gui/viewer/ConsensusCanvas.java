@@ -4,6 +4,8 @@
 package tablet.gui.viewer;
 
 import java.awt.*;
+import java.util.ConcurrentModificationException;
+import java.util.LinkedList;
 
 import tablet.data.*;
 import tablet.gui.viewer.colors.*;
@@ -21,6 +23,10 @@ class ConsensusCanvas extends TrackingCanvas
 	private int[] c2;
 
 	private Dimension dimension = new Dimension();
+
+	// A list of renderers that will perform further drawing once the main
+	// canvas has been drawn
+	LinkedList<IOverlayRenderer> overlays = new LinkedList<IOverlayRenderer>();
 
 	ConsensusCanvas()
 	{
@@ -119,5 +125,15 @@ class ConsensusCanvas extends TrackingCanvas
 		for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
 			if (data[i] != -1)
 				g.drawImage(colors.getConsensusImage(data[i]), x, y, null);
+
+		// Then allow any overlays to be painted on top of it
+		try
+		{
+			for (IOverlayRenderer renderer: overlays)
+				renderer.render(g);
+		}
+		catch (ConcurrentModificationException e) {
+			repaint();
+		}
 	}
 }

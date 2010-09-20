@@ -26,6 +26,7 @@ public class Finder extends SimpleJob
 	protected AssemblyPanel aPanel;
 	protected String searchTerm;
 	protected boolean searchReads;
+	protected String searchType;
 	int totalSize = 0;
 
 	public Finder(AssemblyPanel aPanel)
@@ -49,20 +50,27 @@ public class Finder extends SimpleJob
 		// Calculate the maximum value for the progress bar.
 		calculateMaximum(Prefs.guiFindPanelSelectedIndex);
 
-		if(str.equals(""))
-			return;
+		boolean searchInConsensus = searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus"));
+		boolean searchAllContigs = Prefs.guiFindPanelSelectedIndex == ALL_CONTIGS;
 
 		//Loop over contigs checking for matches
 		for(Contig contig : aPanel.getAssembly())
 		{
-			if(okToRun)
-			{
-				if((Prefs.guiFindPanelSelectedIndex == ALL_CONTIGS || (Prefs.guiFindPanelSelectedIndex == CURRENT_CONTIG && contig == aPanel.getContig())) && okToRun)
-					searchReadsInContig(contig, str);
+			// If we are to search in all contigs, or the current contig is the one to be searched in
+			boolean searchContig = (searchAllContigs || (Prefs.guiFindPanelSelectedIndex == CURRENT_CONTIG && contig == aPanel.getContig()));
 
-				if (results.size() >= Prefs.guiSearchLimit)
-					break;
-			}
+			// If do search is false we don't need to check anything else; just move on to the next contig.
+			if (!searchContig)
+				continue;
+			
+			if (!searchInConsensus && okToRun)
+				searchReadsInContig(contig, str);
+
+			else if (searchInConsensus && okToRun)
+				searchReferenceSequence(contig, str);
+
+			if (results.size() >= Prefs.guiSearchLimit)
+				break;
 		}
 	}
 
@@ -70,18 +78,29 @@ public class Finder extends SimpleJob
 	 * Calculate the maximum value for the progress bar, based on the type of
 	 * search being carried out.
 	 *
-	 * @param searchType
+	 * @param searchScope
 	 */
-	private void calculateMaximum(int searchType)
+	protected void calculateMaximum(int searchScope)
 	{
-		if(searchType == CURRENT_CONTIG)
+		totalSize = 0;
+		
+		if(searchScope == CURRENT_CONTIG && !searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))
 			totalSize = aPanel.getContig().getReads().size();
 
-		else if(searchType == ALL_CONTIGS)
+		else if(searchScope == CURRENT_CONTIG && searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))
+			totalSize = aPanel.getContig().getConsensus().length();
+
+		else if(searchScope == ALL_CONTIGS && !searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))
 		{
 			//Work out the total number of reads across all contigs
 			for(Contig contig : aPanel.getAssembly())
 				totalSize += contig.getReads().size();
+		}
+
+		else if(searchScope == ALL_CONTIGS && searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))
+		{
+			for(Contig contig : aPanel.getAssembly())
+				totalSize += aPanel.getContig().getConsensus().length();
 		}
 	}
 
@@ -133,7 +152,7 @@ public class Finder extends SimpleJob
 		if ((Prefs.guiRegexSearching && m.matches()) ||
 			(!Prefs.guiRegexSearching && readName.equals(searchString)))
 		{
-			results.add(new SearchResult(readName, startPos, length, contig));
+			results.add(new ReadSearchResult(readName, startPos, length, contig));
 			found++;
 		}
 	}
@@ -159,7 +178,31 @@ public class Finder extends SimpleJob
 			results.add(new SubsequenceSearchResult(readName, startPos, length, contig, startPos+index, (startPos+index+searchString.length())));
 			found++;
 
+			if (results.size() >= Prefs.guiSearchLimit)
+				break;
+
 			index = readString.toLowerCase().indexOf(searchString.toLowerCase(), ++index);
+		}
+	}
+
+	protected void searchReferenceSequence(Contig contig, String str)
+	{
+		String reference = contig.getConsensus().toString();
+
+		str = str.toUpperCase();
+
+		int index = reference.indexOf(str);
+
+		while(index != -1)
+		{
+			progress = index;
+			results.add(new SearchResult(index, str.length(), contig));
+			found++;
+
+			if (results.size() >= Prefs.guiSearchLimit)
+				break;
+
+			index = reference.indexOf(str, ++index);
 		}
 	}
 
@@ -227,6 +270,11 @@ public class Finder extends SimpleJob
 			searchReads = false;
 	}
 
+	public void setSearchType(String searchType)
+	{
+		this.searchType = searchType;
+	}
+
 	@Override
 	public int getMaximum()
 	{ return 5555; }
@@ -245,21 +293,16 @@ public class Finder extends SimpleJob
 
 	public class SearchResult
 	{
-		private String name;
 		private int position;
 		private int length;
 		private Contig contig;
 
-		SearchResult(String name, int position, int length, Contig contig)
+		SearchResult(int position, int length, Contig contig)
 		{
-			this.name = name;
 			this.position = position;
 			this.length = length;
 			this.contig = contig;
 		}
-
-		public String getName()
-		{	return name;	}
 
 		public int getPosition()
 		{	return position;	}
@@ -273,7 +316,25 @@ public class Finder extends SimpleJob
 
 
 
-	public class SubsequenceSearchResult extends SearchResult
+	public class ReadSearchResult extends SearchResult
+	{
+		private String name;
+
+		ReadSearchResult(String name, int position, int length, Contig contig)
+		{
+			super(position, length, contig);
+			this.name = name;
+		}
+
+		public String getName()
+		{
+			return name;
+		}
+	}
+
+
+
+	public class SubsequenceSearchResult extends ReadSearchResult
 	{
 		private int sIndex;
 		private int eIndex;

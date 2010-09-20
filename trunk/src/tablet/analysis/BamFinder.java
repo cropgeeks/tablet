@@ -7,6 +7,7 @@ import java.util.*;
 
 import net.sf.samtools.*;
 import net.sf.samtools.util.CloseableIterator;
+import scri.commons.gui.RB;
 
 import tablet.data.*;
 import tablet.gui.Prefs;
@@ -18,7 +19,6 @@ import tablet.io.CigarParser;
  */
 public class BamFinder extends Finder
 {
-	int totalSize = 0;
 	String prevContig = "";
 	long totalProgress;
 
@@ -40,7 +40,10 @@ public class BamFinder extends Finder
 		progress = 0;
 		results = new LinkedList<SearchResult>();
 
-		//Temporary SAMFileReader for iterating over whole contig / whole data set
+		// Calculate the maximum value for the progress bar.
+		calculateMaximum(Prefs.guiFindPanelSelectedIndex);
+
+		//SAMFileReader for iterating over whole contig / whole data set
 		SAMFileReader reader = aPanel.getAssembly().getBamBam().getBamFileHandler().getBamReader();
 
 		if(Prefs.guiFindPanelSelectedIndex == CURRENT_CONTIG)
@@ -60,12 +63,25 @@ public class BamFinder extends Finder
 	{
 		// HashMap to allow us to get Contig objects from Contig names
 		HashMap<String, Contig> contigs = new HashMap<String, Contig>();
+
 		// Iterate over contigs to get totalSize of all contigs for progress
 		// bar. Also to get references to contig objects for the hash.
 		for (Contig contig : aPanel.getAssembly())
 		{
 			totalSize += contig.getDataWidth();
 			contigs.put(contig.getName(), contig);
+		}
+
+		if(searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))
+		{
+			for(Contig contig : aPanel.getAssembly())
+			{
+				searchReferenceSequence(contig, searchTerm);
+
+				if (results.size() >= Prefs.guiSearchLimit)
+					break;
+			}
+			return;
 		}
 
 		CloseableIterator<SAMRecord> itor = reader.iterator();
@@ -91,15 +107,25 @@ public class BamFinder extends Finder
 		totalSize = aPanel.getContig().getDataWidth();
 		// Grab iterator for whole contig
 		CloseableIterator<SAMRecord> itor = reader.queryOverlapping(aPanel.getContig().getName(), 0, 0);
-		// For each read check for matches
-		CigarParser parser = new CigarParser();
-		while (itor.hasNext() && okToRun && results.size() < Prefs.guiSearchLimit)
+
+		// Search the consensus for this one contig
+		if(searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))
 		{
-			SAMRecord record = itor.next();
-			checkRecordForMatches(record, searchTerm, parser, aPanel.getContig());
+			searchReferenceSequence(aPanel.getContig(), searchTerm);
+			itor.close();
 		}
-		// Need to close the iterator as only one is allowed
-		itor.close();
+		// For each read check for matches
+		else
+		{
+			CigarParser parser = new CigarParser();
+			while (itor.hasNext() && okToRun && results.size() < Prefs.guiSearchLimit)
+			{
+				SAMRecord record = itor.next();
+				checkRecordForMatches(record, searchTerm, parser, aPanel.getContig());
+			}
+			// Need to close the iterator as only one is allowed
+			itor.close();
+		}
 	}
 
 	/**
