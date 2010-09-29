@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="5.0.1" transformSequenceNumber="3">
+<install4j version="5.0.4" transformSequenceNumber="3">
   <directoryPresets config=".." />
   <application name="Tablet" distributionSourceDir="" applicationId="9483-2571-4596-9336" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="tablet" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="x.xx.xx.xx" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
@@ -41,7 +41,7 @@
   </files>
   <launchers>
     <launcher name="tablet" id="20" customizedId="" external="false" excludeFromMenu="false" unixMode="755" menuName="Tablet" icnsFile="../res/icons/appicon128.icns" swtApp="false" fileset="">
-      <executable name="tablet" type="1" iconSet="true" iconFile="" executableDir="." redirectStderr="true" stderrFile="output.log" stderrMode="overwrite" redirectStdout="true" stdoutFile="output.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="false" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false" globalSingleInstance="false">
+      <executable name="tablet" type="1" iconSet="true" iconFile="" executableDir="." redirectStderr="true" stderrFile="${installer:sys.userHome}/.scri-bioinf/tablet.log" stderrMode="overwrite" redirectStdout="true" stdoutFile="${installer:sys.userHome}/.scri-bioinf/tablet.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="false" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false" globalSingleInstance="false">
         <versionInfo include="true" fileVersion="" fileDescription="SCRI Tablet" legalCopyright="Plant Bioinformatics Group, SCRI" internalName="Tablet" productName="Tablet" />
       </executable>
       <splashScreen show="false" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="" java6SplashScreen="false">
@@ -1466,7 +1466,6 @@ if (wizardContext != null) {
       <excludedLaunchers>
         <launcher id="435" />
       </excludedLaunchers>
-      <excludedComponents />
       <excludedBeans>
         <bean refId="524" />
       </excludedBeans>
@@ -1482,10 +1481,11 @@ if (wizardContext != null) {
         <commentFiles />
         <customAttributes />
       </autoUpdate>
+      <excludedComponents />
+      <includedDownloadableComponents />
     </windows>
     <windows name="Windows x64" id="262" customizedId="" mediaFileName="${compiler:sys.shortName}_windows_x64_${compiler:sys.version}" installDir="Tablet" overridePrincipalLanguage="false" jreBitType="64" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="windows-amd64-1.6.0_20" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
       <excludedLaunchers />
-      <excludedComponents />
       <excludedBeans>
         <bean refId="267" />
       </excludedBeans>
@@ -1501,9 +1501,10 @@ if (wizardContext != null) {
         <commentFiles />
         <customAttributes />
       </autoUpdate>
+      <excludedComponents />
+      <includedDownloadableComponents />
     </windows>
     <macos name="Mac OS X Single Bundle" id="186" customizedId="" mediaFileName="" installDir="Tablet" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" customInstallBaseDir="" contentFilesType="1" downloadURL="" launcherId="20">
-      <excludedComponents />
       <excludedBeans>
         <bean refId="267" />
       </excludedBeans>
@@ -1519,10 +1520,11 @@ if (wizardContext != null) {
         <commentFiles />
         <customAttributes />
       </autoUpdate>
+      <excludedComponents />
+      <includedDownloadableComponents />
     </macos>
     <unixInstaller name="Linux x86" id="187" customizedId="" mediaFileName="${compiler:sys.shortName}_linux_x86_${compiler:sys.version}" installDir="Tablet" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="linux-x86-1.6.0_20" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
-      <excludedComponents />
       <excludedBeans>
         <bean refId="524" />
       </excludedBeans>
@@ -1538,13 +1540,14 @@ if (wizardContext != null) {
         <commentFiles />
         <customAttributes />
       </autoUpdate>
+      <excludedComponents />
+      <includedDownloadableComponents />
       <installerScript mode="1" file="">
         <content />
       </installerScript>
     </unixInstaller>
     <unixInstaller name="Linux x64" id="433" customizedId="" mediaFileName="${compiler:sys.shortName}_linux_x64_${compiler:sys.version}" installDir="Tablet" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="linux-amd64-1.6.0_20" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
-      <excludedComponents />
       <excludedBeans>
         <bean refId="267" />
       </excludedBeans>
@@ -1560,13 +1563,14 @@ if (wizardContext != null) {
         <commentFiles />
         <customAttributes />
       </autoUpdate>
+      <excludedComponents />
+      <includedDownloadableComponents />
       <installerScript mode="1" file="">
         <content />
       </installerScript>
     </unixInstaller>
     <unixInstaller name="Solaris" id="841" customizedId="" mediaFileName="${compiler:sys.shortName}_solaris_${compiler:sys.version}" installDir="Tablet" overridePrincipalLanguage="false" jreBitType="all" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="solaris-sparc-1.6.0_18" manualJREEntry="false" bundleType="1" jreURL="" jreFtpURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="">
       <excludedLaunchers />
-      <excludedComponents />
       <excludedBeans>
         <bean refId="267" />
       </excludedBeans>
@@ -1582,6 +1586,8 @@ if (wizardContext != null) {
         <commentFiles />
         <customAttributes />
       </autoUpdate>
+      <excludedComponents />
+      <includedDownloadableComponents />
       <installerScript mode="1" file="">
         <content />
       </installerScript>
