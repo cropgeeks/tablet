@@ -6,13 +6,11 @@ package tablet.io;
 import java.io.*;
 import java.util.regex.*;
 
-import tablet.analysis.*;
 import static tablet.io.AssemblyFile.*;
 
-import scri.commons.file.*;
+import scri.commons.gui.*;
 
 import net.sf.samtools.*;
-import net.sf.samtools.util.*;
 
 class FileScanner extends SimpleJob
 {

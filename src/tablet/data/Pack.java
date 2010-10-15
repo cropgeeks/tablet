@@ -121,7 +121,7 @@ public class Pack
 
 			MatedRead matedRead = null;
 
-			if(read instanceof MatedRead && Prefs.visPaired)
+			if(read instanceof MatedRead && Prefs.visPaired && Prefs.visPairLines)
 			{
 				matedRead = (MatedRead)read;
 
@@ -154,7 +154,7 @@ public class Pack
 		}
 
 		MatedRead matedRead = null;
-		if(read instanceof MatedRead && Prefs.visPaired)
+		if(read instanceof MatedRead && Prefs.visPaired && Prefs.visPairLines)
 		{
 			matedRead = (MatedRead)read;
 			boolean isMateContig = matedRead.isMateContig();

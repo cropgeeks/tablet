@@ -15,7 +15,6 @@ import javax.swing.table.*;
 import tablet.analysis.*;
 import tablet.analysis.tasks.*;
 import tablet.data.*;
-import tablet.gui.dialog.*;
 import tablet.gui.viewer.*;
 
 import scri.commons.gui.*;
@@ -259,16 +258,16 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 
 		ProgressDialog dialog = new ProgressDialog(summary,
 			RB.getString("gui.ContigsPanel.saveReads.title"),
-			RB.getString("gui.ContigsPanel.saveReads.label"));
+			RB.getString("gui.ContigsPanel.saveReads.label"),
+			Tablet.winMain);
 
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
 			dialog.getResult() == ProgressDialog.JOB_FAILED)
 		{
 			dialog.getException().printStackTrace();
-			TaskDialog.error(
-				RB.format("gui.ContigsPanel.saveReads.exception",
-				dialog.getException()),
-				RB.getString("gui.text.close"));
+			TaskDialog.showFileOpen(RB.format("gui.ContigsPanel.saveReads.exception",
+						dialog.getException()), TaskDialog.ERR, 1, new String[] {"Open log", RB.getString("gui.text.close") },
+						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
 		}
 		else
 			TaskDialog.info(

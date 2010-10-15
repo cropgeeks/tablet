@@ -17,6 +17,7 @@ public class ReadSQLCache
 	// Statements for getting (g) and inserting (i) data
 	private PreparedStatement ips;
 	private Stack<PreparedStatement> gpsAll = new Stack<PreparedStatement>();
+	private Stack<PreparedStatement> gpsName = new Stack<PreparedStatement>();
 
 	private File file;
 
@@ -51,6 +52,12 @@ public class ReadSQLCache
 		{
 			PreparedStatement ps = c.prepareStatement("SELECT * FROM reads WHERE id=?;");
 			gpsAll.push(ps);
+		}
+
+		for (int i = 0; i < 10; i++)
+		{
+			PreparedStatement ps = c.prepareStatement("SELECT name FROM reads WHERE id=?");
+			gpsName.push(ps);
 		}
 	}
 
@@ -96,6 +103,32 @@ public class ReadSQLCache
 			gpsAll.push(ps);
 
 			return rnd;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public String getReadName(int id)
+	{
+		String name = null;
+
+		try
+		{
+			PreparedStatement ps = gpsName.pop();
+			ps.setInt(1, id);
+
+			ResultSet rs = ps.executeQuery();
+			while(rs.next())
+				name = rs.getString(1);
+
+			rs.close();
+
+			gpsName.push(ps);
+
+			return name;
 		}
 		catch (Exception e)
 		{

@@ -5,9 +5,10 @@ package tablet.io;
 
 import java.io.*;
 
-import tablet.analysis.*;
 import tablet.gui.scanner.*;
 import static tablet.io.AssemblyFile.*;
+
+import scri.commons.gui.*;
 
 public class ScanAnalysis extends SimpleJob
 {

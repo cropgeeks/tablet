@@ -13,7 +13,6 @@ import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.auxiliary.*;
 import tablet.gui.*;
-import tablet.gui.dialog.*;
 import tablet.gui.ribbon.*;
 
 import scri.commons.gui.*;
@@ -351,7 +350,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 
 		// Run the job...
 		DisplayDataCalculator ddc = new DisplayDataCalculator(assembly, contig, doAll);
-		ProgressDialog dialog = new ProgressDialog(ddc, title, label);
+		ProgressDialog dialog = new ProgressDialog(ddc, title, label, Tablet.winMain);
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)

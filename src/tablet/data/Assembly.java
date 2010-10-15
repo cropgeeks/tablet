@@ -155,6 +155,11 @@ public class Assembly implements Iterable<Contig>
 		return nameCache.getReadNameData(read.getID());
 	}
 
+	public static String getReadName(Read read)
+	{
+		return nameCache.getReadName(read.getID());
+	}
+
 	public static boolean isPaired()
 		{ return isPaired; }
 

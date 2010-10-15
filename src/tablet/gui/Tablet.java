@@ -6,11 +6,9 @@ package tablet.gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.util.*;
 import javax.swing.*;
 
 import tablet.gui.dialog.*;
-import tablet.gui.dialog.prefs.*;
 import tablet.gui.ribbon.*;
 
 import scri.commons.gui.*;
@@ -251,5 +249,18 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 			initialFiles = new String[1];
 			initialFiles[0] = path;
 		}
+	}
+
+	public static File getLogFile()
+	{
+		try
+		{
+			File root = new File(System.getProperty("user.home"));
+			File folder = new File(root, ".scri-bioinf");
+			File logFile = new File(folder, "tablet.log");
+
+			return logFile;
+		}
+		catch (Throwable e) { return new File(""); }
 	}
 }

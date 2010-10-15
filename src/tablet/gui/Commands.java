@@ -57,7 +57,7 @@ public class Commands
 		String label = RB.getString("gui.Commands.fileOpen.label");
 
 		// Run the job...
-		ProgressDialog dialog = new ProgressDialog(assemblyFileHandler, title, label);
+		ProgressDialog dialog = new ProgressDialog(assemblyFileHandler, title, label, Tablet.winMain);
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
@@ -66,9 +66,10 @@ public class Commands
 				for (int i = 0; i < filenames.length; i++)
 					files += "\n     " + filenames[i];
 
-				TaskDialog.error(RB.format("gui.Commands.fileOpen.error",
-					dialog.getException(), files),
-					RB.getString("gui.text.close"));
+				TaskDialog.showFileOpen(RB.format("gui.Commands.fileOpen.error",
+						dialog.getException(), files), TaskDialog.ERR, 1, new String[] {"Open log", RB.getString("gui.text.close") },
+						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
+
 			}
 
 			return;
@@ -122,15 +123,14 @@ public class Commands
 		String label = RB.getString("gui.Commands.importFeatures.label");
 
 		// Run the job...
-		ProgressDialog dialog = new ProgressDialog(reader, title, label);
+		ProgressDialog dialog = new ProgressDialog(reader, title, label, Tablet.winMain);
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
 			{
-				TaskDialog.error(
-					RB.format("gui.Commands.importFeatures.exception",
-					dialog.getException()),
-					RB.getString("gui.text.close"));
+				TaskDialog.showFileOpen(RB.format("gui.Commands.importFeatures.exceptionn",
+						dialog.getException()), TaskDialog.ERR, 1, new String[] {"Open log", RB.getString("gui.text.close") },
+						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
 			}
 
 			return;
@@ -195,9 +195,9 @@ public class Commands
 		{
 			e.printStackTrace();
 
-			TaskDialog.error(
-				RB.format("gui.Commands.exportImage.exception", e),
-				RB.getString("gui.text.close"));
+			TaskDialog.showFileOpen(RB.format("gui.Commands.exportImage.exception",
+						e), TaskDialog.ERR, 1, new String[] {"Open log", RB.getString("gui.text.close") },
+						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
 		}
 	}
 
@@ -225,16 +225,16 @@ public class Commands
 
 			ProgressDialog dialog = new ProgressDialog(printer,
 				RB.getString("gui.Commands.exportCoverage.title"),
-				RB.getString("gui.Commands.exportCoverage.label"));
+				RB.getString("gui.Commands.exportCoverage.label"),
+				Tablet.winMain);
 
 			if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
 				dialog.getResult() == ProgressDialog.JOB_FAILED)
 			{
 				dialog.getException().printStackTrace();
-				TaskDialog.error(
-					RB.format("gui.Commands.exportCoverage.exception",
-					dialog.getException()),
-					RB.getString("gui.text.close"));
+				TaskDialog.showFileOpen(RB.format("gui.Commands.exportCoverage.exception",
+						dialog.getException()), TaskDialog.ERR, 1, new String[] {"Open log", RB.getString("gui.text.close") },
+						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
 			}
 			else
 				TaskDialog.info(
@@ -271,16 +271,16 @@ public class Commands
 
 		ProgressDialog dialog = new ProgressDialog(printer,
 				RB.getString("gui.Commands.exportReadColumn.title"),
-				RB.getString("gui.Commands.exportReadColumn.label"));
+				RB.getString("gui.Commands.exportReadColumn.label"),
+				Tablet.winMain);
 
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
 				dialog.getResult() == ProgressDialog.JOB_FAILED)
 		{
 			dialog.getException().printStackTrace();
-			TaskDialog.error(
-				RB.format("gui.Commands.exportReadColumn.exception",
-				dialog.getException()),
-				RB.getString("gui.text.close"));
+			TaskDialog.showFileOpen(RB.format("gui.Commands.exportReadColumn.exception",
+						dialog.getException()), TaskDialog.ERR, 1, new String[] {"Open log", RB.getString("gui.text.close") },
+						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
 		}
 		else
 		{
@@ -322,16 +322,16 @@ public class Commands
 
 		ProgressDialog dialog = new ProgressDialog(printer,
 				RB.getString("gui.Commands.exportReadColumn.title"),
-				RB.getString("gui.Commands.exportReadColumn.label"));
+				RB.getString("gui.Commands.exportReadColumn.label"),
+				Tablet.winMain);
 
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
 				dialog.getResult() == ProgressDialog.JOB_FAILED)
 		{
 			dialog.getException().printStackTrace();
-			TaskDialog.error(
-				RB.format("gui.Commands.exportReadColumn.exception",
-				dialog.getException()),
-				RB.getString("gui.text.close"));
+			TaskDialog.showFileOpen(RB.format("gui.Commands.exportReadColumn.exception",
+						dialog.getException()), TaskDialog.ERR, 1, new String[] {"Open log", RB.getString("gui.text.close") },
+						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
 		}
 		else
 		{

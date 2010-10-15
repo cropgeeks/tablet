@@ -7,10 +7,10 @@ import java.io.*;
 import java.text.*;
 import java.util.zip.*;
 
-import tablet.analysis.*;
 import tablet.data.*;
 
 import scri.commons.file.*;
+import scri.commons.gui.*;
 
 /**
  * Tracks reading from one or more files. Tracking is based on all the files
