@@ -79,8 +79,26 @@ class SamFileReader extends TrackableReader
 			String chr  = tokens[2];
 			int pos = Integer.parseInt(tokens[3]) - 1;
 			String mrnm = tokens[6];
-			int mPos = Integer.parseInt(tokens[7]) - 1;
-			int iSize = Integer.parseInt(tokens[8]);
+			// Working fix for problem Micha noted
+			int mPos, iSize;
+
+			try
+			{
+				mPos = Integer.parseInt(tokens[7]) - 1;
+			}
+			catch(NumberFormatException e)
+			{
+				mPos = 0;
+			}
+
+			try
+			{
+				iSize = Integer.parseInt(tokens[8]);
+			}
+			catch(NumberFormatException e)
+			{
+				iSize = 0;
+			}
 
 			// Decode the U/C information from the flag field
 			boolean complemented = false;

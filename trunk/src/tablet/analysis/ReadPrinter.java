@@ -3,6 +3,8 @@ package tablet.analysis;
 import java.io.*;
 import java.util.ArrayList;
 
+import scri.commons.gui.*;
+
 import tablet.data.*;
 
 public class ReadPrinter extends SimpleJob

@@ -1,5 +1,7 @@
 package tablet.data;
 
+import tablet.gui.Prefs;
+
 /**
  * Stores information about one row in the PairedStack display. Includes a
  * simple array of reads, with space for two reads.
@@ -45,7 +47,7 @@ public class ReadPair
 
 			ReadMetaData rmd = Assembly.getReadMetaData(read, true);
 
-			if(read instanceof MatedRead)
+			if(read instanceof MatedRead && Prefs.visPairLines)
 			{
 				MatedRead matedRead = (MatedRead)read;
 
@@ -66,6 +68,9 @@ public class ReadPair
 						data[dataI] = 14;
 						// Is this an outlier which has the reads in the pair on different rows.
 						if(mate != null && mateEndPos > startPos)
+							data[dataI] = -1;
+
+						if (mate == null)
 							data[dataI] = -1;
 					}
 					else
@@ -88,34 +93,41 @@ public class ReadPair
 				data[dataI] = (byte) (color + rmd.getStateAt(index-readS));
 		}
 
-		Read read = pair[0];
-
-		if(read instanceof MatedRead)
+		if (index <= end)
 		{
-			MatedRead matedRead = (MatedRead)read;
 
-			// Work out these variables in advance rather than on each iteration
-			int endPos = matedRead.getEndPosition();
-			int startPos = matedRead.getStartPosition();
-			int matePos = matedRead.getMatePos();
-			boolean isMateContig = matedRead.isMateContig();
+			Read read = pair[0];
 
-			// If no more reads are within the window, fill in any blanks between
-			// the final read and the end of the array
-			for (; index <= end; index++, dataI++)
+			if(read instanceof MatedRead && Prefs.visPairLines)
 			{
-				if(index > endPos && matePos > end || (matePos < start && matePos < startPos && index < startPos && isMateContig))
-					data[dataI] = 14;
-				else
+				MatedRead matedRead = (MatedRead)read;
+
+				// Work out these variables in advance rather than on each iteration
+				int endPos = matedRead.getEndPosition();
+				int startPos = matedRead.getStartPosition();
+				int matePos = matedRead.getMatePos();
+				boolean isMateContig = matedRead.isMateContig();
+
+				// If no more reads are within the window, fill in any blanks between
+				// the final read and the end of the array
+				for (; index <= end; index++, dataI++)
+				{
+					if(index > endPos && matePos > end || (matePos < start && matePos < startPos && index < startPos && isMateContig))
+						data[dataI] = 14;
+					else
+						data[dataI] = -1;
+
+					if (matedRead.getPair() == null)
+						data[dataI] = -1;
+				}
+			}
+			else
+			{
+				for (; index <= end; index++, dataI++)
 					data[dataI] = -1;
 			}
 		}
-		else
-		{
-			for (; index <= end; index++, dataI++)
-				data[dataI] = -1;
-		}
-
+		
 		return data;
 	}
 

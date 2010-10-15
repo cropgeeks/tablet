@@ -108,16 +108,21 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 		}
 
 		if(okToRun && Assembly.isPaired())
+		{
+			maximum = contig.getReads().size();
+			status = 3;
+			long s = System.currentTimeMillis();
 			pairReads();
+			System.out.println("Paired reads in: " + (System.currentTimeMillis()-s));
+		}
 
 		if (okToRun)
 		{
+			status = 4;
 			packCreator = setupPackCreator();
 
 			if(packCreator != null)
 				packCreator.runJob(0);
-
-			status = 3;
 		}
 	}
 
@@ -147,18 +152,28 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 
 		for (Read read: contig.getReads())
 		{
+			if (!okToRun)
+				break;
+			
 			ReadMetaData rmd = Assembly.getReadMetaData(read, false);
 			if(read instanceof MatedRead && rmd.getIsPaired() && rmd.getMateMapped())
 			{
 				// Search for its pair and set up the link between them
 				MatedRead matedRead = (MatedRead) read;
+
+				if (matedRead.getPair() != null)
+					continue;
+
 				MatedRead foundPair = (MatedRead) pairSearcher.search(matedRead);
 				if(foundPair != null)
 				{
 					matedRead.setPair(foundPair);
 					foundPair.setPair(matedRead);
+					progress +=2;
 				}
 			}
+			else if(!rmd.getIsPaired())
+				progress++;
 		}
 	}
 
@@ -177,7 +192,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 
 	public int getMaximum()
 	{
-		if (packCreator != null)
+		if (status == 4 && packCreator != null)
 			maximum = packCreator.getMaximum();
 
 		return maximum;
@@ -185,7 +200,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 
 	public int getValue()
 	{
-		if (packCreator != null)
+		if (status == 4 && packCreator != null)
 			progress = packCreator.getValue();
 
 		return progress;
@@ -200,6 +215,8 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 				contig.readCount());
 			case 2: return
 				RB.getString("analysis.DisplayDataCalculator.coverage");
+			case 3: return
+					RB.format("analysis.DisplayDataCalculator.pairing", progress);
 			case 4: return
 				packCreator.getMessage();
 

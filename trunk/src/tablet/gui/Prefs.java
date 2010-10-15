@@ -159,6 +159,8 @@ public class Prefs extends XMLPreferences
 	// Display reads in paired form?
 	public static boolean visPaired = false;
 
+	public static boolean visPairLines = true;
+
 
 	// Updates the array of recently accessed documents so that 'document' is
 	// the first element, even if it has been accessed previously

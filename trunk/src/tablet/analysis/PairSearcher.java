@@ -19,6 +19,7 @@ public class PairSearcher
 	{
 		int low = 0;
 		int high = contig.getReads().size() - 1;
+		int matePos = read.getMatePos();
 
 		while (high >= low)
 		{
@@ -26,14 +27,14 @@ public class PairSearcher
 			int mid = low + ((high - low) / 2);
 			int startPos = contig.getReads().get(mid).getStartPosition();
 
-			if (startPos < read.getMatePos())
+			if (startPos < matePos)
 				low = mid + 1;
 
-			else if (startPos > read.getMatePos())
+			else if (startPos > matePos)
 				high = mid - 1;
 
 			else
-				return refinePairSearch(mid, Assembly.getReadNameData(read).getName(), read.getMatePos());
+				return refinePairSearch(mid, Assembly.getReadName(read), matePos);
 		}
 		return null;
 	}
@@ -72,44 +73,42 @@ public class PairSearcher
 	private Read refinePairSearch(int mid, String name, int pos)
 	{
 		Read mate = contig.getReads().get(mid);
-		ReadNameData pairRnd = Assembly.getReadNameData(mate);
+		String mateName = Assembly.getReadName(mate);
 
-		if (pairRnd.getName().equals(name))
+		if (mateName.equals(name))
 			return mate;
 		else
 		{
 			Read read = null;
-			read = linearSearch(mate, name, pos, mid, -1, pairRnd);
+			read = linearSearch(mate, name, pos, mid, -1, mateName);
 			if(read != null)
 				return read;
 
-			read = linearSearch(mate, name, pos, mid, 1, pairRnd);
+			read = linearSearch(mate, name, pos, mid, 1, mateName);
 			if(read != null)
 				return read;
 		}
 		return null;
 	}
 
-	private Read linearSearch(Read pr, String name, int pos, int mid, int loopModifier, ReadNameData pairRnd)
+	private Read linearSearch(Read mate, String name, int pos, int mid, int loopModifier, String mateName)
 	{
-		while (pr != null && pos == pr.getStartPosition() && mid > 0)
+		while (mate != null && pos == mate.getStartPosition() && mid > 0)
 		{
-			String pairName = pairRnd.getName();
-
-			if (pairName.equals(name))
-				return pr;
+			if (mateName.equals(name))
+				return mate;
 
 			// Deal with paired end reads which have had pair information encoded in the names of reads
 			if (name.endsWith(":1") || name.endsWith(":2"))
 			{
 				String tempName = name.substring(0, name.length()-2);
-				if(pairName.substring(0, pairName.length()-2).equals(tempName))
-					return pr;
+				if(mateName.substring(0, mateName.length()-2).equals(tempName))
+					return mate;
 			}
 
 			mid += loopModifier;
-			pr = contig.getReads().get(mid);
-			pairRnd = Assembly.getReadNameData(pr);
+			mate = contig.getReads().get(mid);
+			mateName = Assembly.getReadName(mate);
 		}
 		return null;
 	}

@@ -4,11 +4,9 @@
 package tablet.analysis;
 
 import java.io.*;
-import javax.swing.*;
 
 import tablet.data.*;
 import tablet.gui.*;
-import tablet.gui.dialog.*;
 
 import scri.commons.gui.*;
 

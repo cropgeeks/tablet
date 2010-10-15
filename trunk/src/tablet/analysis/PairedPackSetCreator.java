@@ -1,5 +1,7 @@
 package tablet.analysis;
 
+import scri.commons.gui.*;
+
 import tablet.data.*;
 
 public class PairedPackSetCreator extends SimpleJob
@@ -180,4 +182,8 @@ public class PairedPackSetCreator extends SimpleJob
 		return (canAddToNewPack(matedRead)) && (added = packSet.get(i).addRead(matedRead));
 	}
 
+	public String getMessage()
+	{
+		return RB.format("analysis.PackSetCreator.status", packSet.size());
+	}
 }

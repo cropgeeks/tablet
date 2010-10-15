@@ -6,13 +6,12 @@ package tablet.io;
 import java.io.*;
 import java.util.*;
 
-import tablet.analysis.*;
+import scri.commons.gui.*;
+
 import tablet.data.*;
 import tablet.data.cache.*;
 import tablet.gui.*;
 import static tablet.io.AssemblyFile.*;
-
-import scri.commons.gui.*;
 
 /**
  * The AssemblyFileHandler class is given file pointers and will attempt to

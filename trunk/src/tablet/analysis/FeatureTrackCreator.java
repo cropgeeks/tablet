@@ -3,6 +3,8 @@
 
 package tablet.analysis;
 
+import scri.commons.gui.*;
+
 import tablet.data.*;
 import tablet.data.auxiliary.*;
 

@@ -14,7 +14,6 @@ import tablet.data.*;
 import tablet.gui.viewer.*;
 import tablet.analysis.*;
 import tablet.analysis.Finder.*;
-import tablet.gui.dialog.*;
 
 import scri.commons.gui.*;
 
@@ -326,7 +325,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 				label = RB.getString("gui.NBFindPanelControls.progressReferenceLabel");
 			}
 
-			ProgressDialog dialog = new ProgressDialog(finder, title, label);
+			ProgressDialog dialog = new ProgressDialog(finder, title, label, Tablet.winMain);
 			if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 			{
 				if (dialog.getResult() == ProgressDialog.JOB_FAILED)
