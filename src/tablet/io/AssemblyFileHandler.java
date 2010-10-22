@@ -116,15 +116,15 @@ public class AssemblyFileHandler extends SimpleJob
 			assembly.setNameCache(sqlCache);
 
 			// Sort the reads into order
-			System.out.print("Sorting...");
-			long s = System.currentTimeMillis();
+//			System.out.print("Sorting...");
+//			long s = System.currentTimeMillis();
 			for (Contig contig: assembly)
 			{
-				contig.getReads().trimToSize();
-				Collections.sort(contig.getReads());
+//				contig.getReads().trimToSize();
+//				//Collections.sort(contig.getReads());
 				contig.calculateOffsets(assembly);
 			}
-			System.out.println((System.currentTimeMillis()-s) + "ms");
+//			System.out.println((System.currentTimeMillis()-s) + "ms");
 		}
 
 		// If the file couldn't be understood then throw an exception

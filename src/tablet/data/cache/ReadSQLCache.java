@@ -18,6 +18,7 @@ public class ReadSQLCache
 	private PreparedStatement ips;
 	private Stack<PreparedStatement> gpsAll = new Stack<PreparedStatement>();
 	private Stack<PreparedStatement> gpsName = new Stack<PreparedStatement>();
+	private PreparedStatement psGetReadsByName;
 
 	private File file;
 
@@ -59,6 +60,8 @@ public class ReadSQLCache
 			PreparedStatement ps = c.prepareStatement("SELECT name FROM reads WHERE id=?");
 			gpsName.push(ps);
 		}
+
+		psGetReadsByName = c.prepareStatement("SELECT id FROM reads WHERE name=?;");
 	}
 
 	public void openForWriting()
@@ -75,6 +78,14 @@ public class ReadSQLCache
 
 		Statement s = c.createStatement();
 		s.setFetchSize(100);
+		s.close();
+	}
+
+	public void indexNames()
+		throws Exception
+	{
+		Statement s = c.createStatement();
+		s.executeUpdate("CREATE INDEX names ON reads(name);");
 		s.close();
 	}
 
@@ -173,5 +184,22 @@ public class ReadSQLCache
 		s.close();
 		c.close();
 		return new ReadSQLCache(file);
+	}
+
+	public ArrayList<Integer> getReadsByName(String name)
+		throws SQLException
+	{
+		ArrayList<Integer> reads = new ArrayList<Integer>();
+
+		psGetReadsByName.setString(1, name);
+
+		ResultSet rs = psGetReadsByName.executeQuery();
+
+		while (rs.next())
+			reads.add(rs.getInt(1));
+
+		rs.close();
+
+		return reads;
 	}
 }

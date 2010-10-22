@@ -118,6 +118,19 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 
 		if (okToRun)
 		{
+			// Sort the reads into order
+			System.out.print("Sorting...");
+			long s = System.currentTimeMillis();
+			
+			contig.getReads().trimToSize();
+			Collections.sort(contig.getReads());
+			contig.calculateOffsets(assembly);
+
+			System.out.println((System.currentTimeMillis()-s) + "ms");
+		}
+
+		if (okToRun)
+		{
 			status = 4;
 			packCreator = setupPackCreator();
 
@@ -147,6 +160,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 	}
 
 	private void pairReads()
+		throws Exception
 	{
 		PairSearcher pairSearcher = new PairSearcher(contig);
 
@@ -155,26 +169,32 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 			if (!okToRun)
 				break;
 			
-			ReadMetaData rmd = Assembly.getReadMetaData(read, false);
-			if(read instanceof MatedRead && rmd.getIsPaired() && rmd.getMateMapped())
+			try
 			{
 				// Search for its pair and set up the link between them
 				MatedRead matedRead = (MatedRead) read;
-
-				if (matedRead.getPair() != null)
-					continue;
-
-				MatedRead foundPair = (MatedRead) pairSearcher.search(matedRead);
-				if(foundPair != null)
+				if(matedRead.getPair() == null)
 				{
-					matedRead.setPair(foundPair);
-					foundPair.setPair(matedRead);
-					progress +=2;
+					ReadMetaData rmd = Assembly.getReadMetaData(read, false);
+					if(rmd.getIsPaired() && rmd.getMateMapped())
+					{
+						MatedRead foundPair = (MatedRead) pairSearcher.search(matedRead);
+						if(foundPair != null)
+						{
+							matedRead.setPair(foundPair);
+							foundPair.setPair(matedRead);
+						}
+					}
 				}
 			}
-			else if(!rmd.getIsPaired())
-				progress++;
+			catch(ClassCastException e)
+			{
+				e.printStackTrace();
+			}
+			progress++;
+			
 		}
+		
 	}
 
 	public void cancelJob()
