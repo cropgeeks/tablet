@@ -33,6 +33,7 @@ class ReadsCanvasMenu implements ActionListener
 
 	private JMenuItem mExportColumn;
 	private JMenuItem mExportScreen;
+	//private JMenuItem mExportContig;
 
 	private JMenu mShadowing;
 	private JCheckBoxMenuItem mShadowingOff;
@@ -128,6 +129,10 @@ class ReadsCanvasMenu implements ActionListener
 		RB.setText(mExportScreen, "gui.viewer.ReadsCanvasMenu.mExportScreen");
 		mExportScreen.addActionListener(this);
 
+//		mExportContig = new JMenuItem("");
+//		RB.setText(mExportContig, "gui.viewer.ReadsCanvasMenu.mExportScreen");
+//		mExportContig.addActionListener(this);
+
 
 		// Create the menu
 		menu = new JPopupMenu();
@@ -161,6 +166,7 @@ class ReadsCanvasMenu implements ActionListener
 		menu.addSeparator();
 		menu.add(mExportColumn);
 		menu.add(mExportScreen);
+		//menu.add(mExportContig);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -243,21 +249,27 @@ class ReadsCanvasMenu implements ActionListener
 
 			if(pr.getMatePos() != -1)
 			{
-				
-				aPanel.moveToPosition(0, pr.getMatePos(), true);
+				try
+				{
+					aPanel.moveToPosition(0, pr.getMatePos(), true);
 
-				PairSearcher pairSearcher = new PairSearcher(rCanvas.contig);
+					PairSearcher pairSearcher = new PairSearcher(rCanvas.contig);
 
-				final Read r = pairSearcher.searchForPair(readData.getName(), pr.getMatePos());
-				final int lineIndex = rCanvas.reads.getLineForRead(r);
-				
-				SwingUtilities.invokeLater(new Runnable() {
-					public void run()
-					{
-						aPanel.moveToPosition(lineIndex, r.getStartPosition(), true);
-						new ReadHighlighter(aPanel, r, lineIndex);
-					}
-				 });
+					final Read r = pairSearcher.searchForPair(readData.getName(), pr.getMatePos());
+					final int lineIndex = rCanvas.reads.getLineForRead(r);
+
+					SwingUtilities.invokeLater(new Runnable() {
+						public void run()
+						{
+							aPanel.moveToPosition(lineIndex, r.getStartPosition(), true);
+							new ReadHighlighter(aPanel, r, lineIndex);
+						}
+					 });
+				}
+				catch(Exception ex)
+				{
+
+				}
 			}
 		}
 
@@ -330,6 +342,18 @@ class ReadsCanvasMenu implements ActionListener
 				ex.printStackTrace();
 			}
 		}
+//
+//		else if (e.getSource() == mExportContig)
+//		{
+//			try
+//			{
+//				Tablet.winMain.getCommands().exportContigData(rCanvas.reads);
+//			}
+//			catch(Exception ex)
+//			{
+//				ex.printStackTrace();
+//			}
+//		}
 	}
 
 	boolean isShowingMenu()
