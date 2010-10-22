@@ -158,8 +158,7 @@ class SamFileReader extends TrackableReader
 					rmd.setNumberInPair((flags & 0x0040) != 0 ? 1 : 2);
 					rmd.setMateMapped((flags & 0x0008) != 0 ? false : true);
 
-					if(!Assembly.isPaired())
-						Assembly.setIsPaired(true);
+					Assembly.setIsPaired(true);
 
 					boolean isMateContig = mrnm.equals(chr);
 					pr.setIsMateContig(isMateContig);
@@ -197,6 +196,9 @@ class SamFileReader extends TrackableReader
 
 		assembly.setName(files[ASBINDEX].getName());
 		assembly.setHasCigar();
+
+		if (Assembly.isPaired())
+			nameCache.indexNames();
 	}
 
 	private void processCigarFeatures(CigarParser parser)

@@ -3,6 +3,7 @@
 
 package tablet.data;
 
+import java.sql.SQLException;
 import java.util.*;
 
 import tablet.data.auxiliary.*;
@@ -158,6 +159,11 @@ public class Assembly implements Iterable<Contig>
 	public static String getReadName(Read read)
 	{
 		return nameCache.getReadName(read.getID());
+	}
+
+	public static ArrayList<Integer> getReadsByName(String name) throws SQLException
+	{
+		return nameCache.getReadsByName(name);
 	}
 
 	public static boolean isPaired()

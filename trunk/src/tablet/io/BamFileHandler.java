@@ -42,6 +42,7 @@ public class BamFileHandler
 	public void loadDataBlock(Contig contig, int s, int e)
 			throws Exception
 	{
+		long start = System.currentTimeMillis();
 		Assembly.setIsPaired(false);
 		try
 		{
@@ -54,6 +55,7 @@ public class BamFileHandler
 
 			throw new Exception(ex);
 		}
+		System.out.println("Loaded in: " + (System.currentTimeMillis()-start));
 	}
 
 	public void loadData(Contig contig, int s, int e)
@@ -102,9 +104,13 @@ public class BamFileHandler
 		if (okToRun)
 		{
 			contig.getReads().trimToSize();
-			Collections.sort(contig.getReads());
+			// Sort now happens in DisplayDataCalculator (22/10/2010)
+//			Collections.sort(contig.getReads());
 			contig.calculateOffsets(assembly);
 		}
+
+		if (Assembly.isPaired())
+			nameCache.indexNames();
 	}
 
 	private void createRead(Contig contig, final SAMRecord record, CigarParser parser) throws Exception
@@ -132,8 +138,7 @@ public class BamFileHandler
 			rmd.setNumberInPair(record.getFirstOfPairFlag() ? 1 : 2);
 			rmd.setMateMapped(!record.getMateUnmappedFlag());
 
-			if(!Assembly.isPaired())
-				Assembly.setIsPaired(true);
+			Assembly.setIsPaired(true);
 
 			boolean isMateContig = record.getMateReferenceName().equals(record.getReferenceName());
 			pr.setIsMateContig(isMateContig);

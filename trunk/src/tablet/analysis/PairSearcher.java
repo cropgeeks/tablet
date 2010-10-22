@@ -1,5 +1,6 @@
 package tablet.analysis;
 
+import java.util.ArrayList;
 import tablet.data.*;
 
 public class PairSearcher
@@ -16,26 +17,22 @@ public class PairSearcher
 	 * bam window of the contig in the case of paired-end bam).
 	 */
 	public Read search(MatedRead read)
+		throws Exception
 	{
-		int low = 0;
-		int high = contig.getReads().size() - 1;
-		int matePos = read.getMatePos();
+		String name = Assembly.getReadName(read);
 
-		while (high >= low)
+		ArrayList<Integer> mate = Assembly.getReadsByName(name);
+		
+		Read potentialMate = null;
+
+		for (Integer potentialMateID : mate)
 		{
-			// Get mid while avoiding potential integer overflow
-			int mid = low + ((high - low) / 2);
-			int startPos = contig.getReads().get(mid).getStartPosition();
-
-			if (startPos < matePos)
-				low = mid + 1;
-
-			else if (startPos > matePos)
-				high = mid - 1;
-
-			else
-				return refinePairSearch(mid, Assembly.getReadName(read), matePos);
+			potentialMate = contig.getReads().get(potentialMateID);
+			
+			if (read.getMatePos() == potentialMate.getStartPosition())
+				return potentialMate;
 		}
+
 		return null;
 	}
 
@@ -44,6 +41,7 @@ public class PairSearcher
 	 * bam window of the contig in the case of paired-end bam).
 	 */
 	public Read searchForPair(String name, int pos)
+		throws Exception
 	{
 		int low = 0;
 		int high = contig.getReads().size() - 1;
@@ -70,46 +68,47 @@ public class PairSearcher
 	 * There is a potential for more than one read mapping to a position, as
 	 * such we need to refine the search by searching linearly in both directions.
 	 */
-	private Read refinePairSearch(int mid, String name, int pos)
+	private Read refinePairSearch(int index, String name, int pos)
+		throws Exception
 	{
-		Read mate = contig.getReads().get(mid);
-		String mateName = Assembly.getReadName(mate);
+		Read read = null;
+		read = linearSearch( name, pos, index, -1);
+		if(read != null)
+			return read;
 
-		if (mateName.equals(name))
-			return mate;
-		else
-		{
-			Read read = null;
-			read = linearSearch(mate, name, pos, mid, -1, mateName);
-			if(read != null)
-				return read;
+		read = linearSearch(name, pos, index, 1);
+		if(read != null)
+			return read;
 
-			read = linearSearch(mate, name, pos, mid, 1, mateName);
-			if(read != null)
-				return read;
-		}
 		return null;
 	}
 
-	private Read linearSearch(Read mate, String name, int pos, int mid, int loopModifier, String mateName)
+	private Read linearSearch(String name, int pos, int index, int loopModifier)
+		throws Exception
 	{
-		while (mate != null && pos == mate.getStartPosition() && mid > 0)
+		boolean prefixNameCase = name.endsWith(":1") || name.endsWith(":2");
+		String prefixName = name.substring(0, name.length()-2);
+
+		Read mate = contig.getReads().get(index);
+		String mateName = Assembly.getReadName(mate);
+
+		while (mate != null && pos == mate.getStartPosition() && index > 0)
 		{
 			if (mateName.equals(name))
 				return mate;
 
 			// Deal with paired end reads which have had pair information encoded in the names of reads
-			if (name.endsWith(":1") || name.endsWith(":2"))
+			if (prefixNameCase)
 			{
-				String tempName = name.substring(0, name.length()-2);
-				if(mateName.substring(0, mateName.length()-2).equals(tempName))
+				if(mateName.substring(0, mateName.length()-2).equals(prefixName))
 					return mate;
 			}
-
-			mid += loopModifier;
-			mate = contig.getReads().get(mid);
+			
+			index += loopModifier;
+			mate = contig.getReads().get(index);
 			mateName = Assembly.getReadName(mate);
 		}
+		
 		return null;
 	}
 }
