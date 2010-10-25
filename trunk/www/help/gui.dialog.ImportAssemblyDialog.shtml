@@ -75,12 +75,12 @@ original reference sequences in a FASTA formatted file, simply use this file ins
 In either case, this file is optional.</p>
 
 
-<h3>Importing SOAP files</h3>
+<h3>Importing SOAPAligner output</h3>
 
-<p>The output from a SOAP assembly will include a text-based SOAP alignment file
-that includes the read data, and a separate FASTA formatted file containing the
-reference information. You must provide at least the SOAP file to Tablet (the
-reference file is optional).</p>
+<p>The output from the SOAPAligner mapping tool is a text-based alignment file that
+includes the read data only. A separate FASTA formatted file containing the reference
+sequence(s) can be provided separately but this is optional. SOAPDenovo output is
+currently not supported.</p>
 
 
 <h3>Importing SAM files</h3>
