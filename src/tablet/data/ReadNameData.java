@@ -2,7 +2,7 @@ package tablet.data;
 
 public class ReadNameData
 {
-	private String name, cigar, mateContig;
+	private String name, namePostfix, cigar, mateContig;
 	private int unpaddedLength, insertSize, numberInPair;
 	private boolean isProperPair;
 
@@ -10,14 +10,25 @@ public class ReadNameData
 	{
 	}
 
-	public ReadNameData(String name)
+	public ReadNameData(String fullName)
 	{
-		this.name = name;
+		if (fullName.endsWith(":1") || fullName.endsWith(":2") ||
+			fullName.endsWith("/1") || fullName.endsWith("/2"))
+		{
+			namePostfix = fullName.substring(fullName.length()-2);
+			name = fullName.substring(0, fullName.length()-3);
+		}
+		else
+		{
+			name = fullName;
+			namePostfix = "";
+		}
 	}
 
-	public ReadNameData(String name, int unpaddedLength, String cigar, String mateContig, int insertSize, boolean isProperPair, int numberInPair)
+	public ReadNameData(String name, String namePostfix, int unpaddedLength, String cigar, String mateContig, int insertSize, boolean isProperPair, int numberInPair)
 	{
 		this.name = name;
+		this.namePostfix = namePostfix;
 		this.unpaddedLength = unpaddedLength;
 		this.cigar = cigar;
 		this.mateContig = mateContig;
@@ -26,13 +37,14 @@ public class ReadNameData
 		this.numberInPair = numberInPair;
 	}
 
-	public void setName(String name)
-	{
-		this.name = name;
-	}
+	public String getNamePrefix()
+		{ return name; }
 
 	public String getName()
-		{ return name; }
+		{ return name + namePostfix; }
+
+	public String getNamePostfix()
+		{ return namePostfix; }
 
 	public void setUnpaddedLength(int unpaddedLength)
 	{
