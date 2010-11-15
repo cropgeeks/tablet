@@ -90,7 +90,7 @@ class AfgFileReader extends TrackableReader
 			else if (str.startsWith("{CTG"))
 				processContig();
 		}
-		
+
 		Assembly.setIsPaired(false);
 		assembly.setName(files[ASBINDEX].getName());
 	}
@@ -304,7 +304,7 @@ class AfgFileReader extends TrackableReader
 			// external ID AKA contig name
 			if(str.startsWith("eid"))
 			{
-				rnd.setName(str.substring(str.indexOf(":") + 1));
+				rnd = new ReadNameData(str.substring(str.indexOf(":") + 1));
 			}
 
 			else if (str.startsWith("iid"))
