@@ -38,7 +38,7 @@ public class Read implements Comparable<Read>
 		this.position = position;
 	}
 
-	int getID()
+	public int getID()
 		{ return id; }
 
 	/**

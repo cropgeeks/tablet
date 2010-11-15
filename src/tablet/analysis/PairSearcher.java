@@ -13,7 +13,7 @@ public class PairSearcher
 	}
 
 	/**
-	 * Binary search for a read's pair within the current contig (or current
+	 * Search for a read's pair within the current contig (or current
 	 * bam window of the contig in the case of paired-end bam).
 	 */
 	public Read search(MatedRead read)
@@ -22,13 +22,13 @@ public class PairSearcher
 		String name = Assembly.getReadName(read);
 
 		ArrayList<Integer> mate = Assembly.getReadsByName(name);
-		
+
 		Read potentialMate = null;
 
 		for (Integer potentialMateID : mate)
 		{
 			potentialMate = contig.getReads().get(potentialMateID);
-			
+
 			if (read.getMatePos() == potentialMate.getStartPosition())
 				return potentialMate;
 		}
@@ -36,11 +36,18 @@ public class PairSearcher
 		return null;
 	}
 
+
+
+	// 15/11/2010: Commented out the code below because the search for a read's
+	// pair can be done using the new DB-lookup code above instead. The only
+	// issue is whether a check needs to be done on the position of the mate (ie
+	// is it what was expected when the matches come back?).
+
 	/**
 	 * Binary search for a read's pair within the current contig (or current
 	 * bam window of the contig in the case of paired-end bam).
 	 */
-	public Read searchForPair(String name, int pos)
+/*	public Read searchForPair(String name, int pos)
 		throws Exception
 	{
 		int low = 0;
@@ -68,7 +75,7 @@ public class PairSearcher
 	 * There is a potential for more than one read mapping to a position, as
 	 * such we need to refine the search by searching linearly in both directions.
 	 */
-	private Read refinePairSearch(int index, String name, int pos)
+/*	private Read refinePairSearch(int index, String name, int pos)
 		throws Exception
 	{
 		Read read = null;
@@ -103,12 +110,13 @@ public class PairSearcher
 				if(mateName.substring(0, mateName.length()-2).equals(prefixName))
 					return mate;
 			}
-			
+
 			index += loopModifier;
 			mate = contig.getReads().get(index);
 			mateName = Assembly.getReadName(mate);
 		}
-		
+
 		return null;
 	}
+*/
 }
