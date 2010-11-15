@@ -233,7 +233,7 @@ class ReadsCanvasMenu implements ActionListener
 			ReadNameData readData = Assembly.getReadNameData(read);
 
 			MatedRead pr = (MatedRead)read;
-			
+
 			if(!readData.getMateContig().equals(aPanel.getContig().getName()))
 			{
 				for(Contig contig : aPanel.getAssembly())
@@ -255,7 +255,9 @@ class ReadsCanvasMenu implements ActionListener
 
 					PairSearcher pairSearcher = new PairSearcher(rCanvas.contig);
 
-					final Read r = pairSearcher.searchForPair(readData.getName(), pr.getMatePos());
+					final Read r = pairSearcher.search(pr);
+
+//					final Read r = pairSearcher.searchForPair(read, readData.getName(), pr.getMatePos());
 					final int lineIndex = rCanvas.reads.getLineForRead(r);
 
 					SwingUtilities.invokeLater(new Runnable() {
