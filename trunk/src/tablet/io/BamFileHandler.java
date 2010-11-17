@@ -13,6 +13,8 @@ import tablet.data.auxiliary.*;
 import net.sf.samtools.*;
 import net.sf.samtools.util.*;
 
+import scri.commons.gui.*;
+
 public class BamFileHandler
 {
 	public static boolean VALIDATION_LENIENT = false;
@@ -53,7 +55,8 @@ public class BamFileHandler
 			openBamFile(null);
 			nameCache = nameCache.resetCache();
 
-			throw new Exception(ex);
+			throw new Exception(ex.toString() + "\n\n"
+				+ RB.getString("io.BamFileHandler.bamError"), ex);
 		}
 		System.out.println("Loaded in: " + (System.currentTimeMillis()-start));
 	}
@@ -79,7 +82,7 @@ public class BamFileHandler
 
 		contig.clearContigData(true);
 
-		CloseableIterator<SAMRecord> itor = bamReader.query(contig.getName(), s+1, e+1, false);
+		SAMRecordIterator itor = bamReader.query(contig.getName(), s+1, e+1, false);
 
 		while(itor.hasNext() && okToRun)
 		{
@@ -196,6 +199,21 @@ public class BamFileHandler
 		// contigs that weren't in the reference file but are in the BAM file
 		if (contigHash != null)
 		{
+			TabletStats stats = new TabletStats();
+			boolean statsOK = false;
+
+			try
+			{
+				// This is exception wrapped because picard can crap-out on
+				// older index files that don't contain the stats data. It can
+				// also work on some older files, but return a count of zero.
+				stats.doWork(bamFile.getInputStream(), baiFile.getFile());
+				statsOK = true;
+			}
+			catch (Exception e) { e.printStackTrace(); }
+
+			int i = 0;
+
 			for(SAMSequenceRecord record : bamReader.getFileHeader().getSequenceDictionary().getSequences())
 			{
 				String contigName = record.getSequenceName();
@@ -205,11 +223,11 @@ public class BamFileHandler
 
 				if (contigToAdd == null)
 				{
-					Contig contig = new Contig(contigName);
-					contig.getTableData().setConsensusLength(length);
+					contigToAdd = new Contig(contigName);
+					contigToAdd.getTableData().setConsensusLength(length);
 
-					contigHash.put(contigName, contig);
-					assembly.addContig(contig);
+					contigHash.put(contigName, contigToAdd);
+					assembly.addContig(contigToAdd);
 				}
 
 				// If it *is* in the imported reference, check the lengths
@@ -226,11 +244,32 @@ public class BamFileHandler
 						refLengthsOK = false;
 					}
 				}
+
+				// Store the read count (from the index file)
+				if (statsOK)
+				{
+					int readCount = stats.getAlignedRecordCount(i);
+					contigToAdd.getTableData().readCount = readCount;
+				}
+
+				i++;
 			}
+
+			long totalReadCount = 0;
 
 			// Finally, set every contig to have undefined reads
 			for (Contig contig: assembly)
+			{
 				contig.getTableData().readsDefined = false;
+				totalReadCount += contig.getTableData().readCount;
+			}
+
+			if (totalReadCount == 0)
+			{
+				TaskDialog.warning(
+					RB.getString("io.BamFileHandler.noReadsError"),
+					RB.getString("gui.text.close"));
+			}
 		}
 	}
 
@@ -239,5 +278,4 @@ public class BamFileHandler
 
 	boolean refLengthsOK()
 		{ return refLengthsOK; }
-
 }
