@@ -6,7 +6,6 @@ package tablet.analysis;
 import java.util.*;
 
 import net.sf.samtools.*;
-import net.sf.samtools.util.CloseableIterator;
 import scri.commons.gui.RB;
 
 import tablet.data.*;
@@ -84,7 +83,7 @@ public class BamFinder extends Finder
 			return;
 		}
 
-		CloseableIterator<SAMRecord> itor = reader.iterator();
+		SAMRecordIterator itor = reader.iterator();
 		// For each read check for matches
 		CigarParser parser = new CigarParser();
 		while (itor.hasNext() && okToRun && results.size() < Prefs.guiSearchLimit)
@@ -106,7 +105,7 @@ public class BamFinder extends Finder
 	{
 		totalSize = aPanel.getContig().getDataWidth();
 		// Grab iterator for whole contig
-		CloseableIterator<SAMRecord> itor = reader.queryOverlapping(aPanel.getContig().getName(), 0, 0);
+		SAMRecordIterator itor = reader.queryOverlapping(aPanel.getContig().getName(), 0, 0);
 
 		// Search the consensus for this one contig
 		if(searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))

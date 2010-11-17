@@ -129,6 +129,7 @@ public class Contig
 	public int readCount()
 		{ return reads.size(); }
 
+
 	/**
 	 * Returns the features held by this contig as a vector.
 	 * @return the features held by this contig as a vector
@@ -291,6 +292,7 @@ public class Contig
 		 * a contig to have an undefined read list.
 		*/
 		public boolean readsDefined = true;
+		public int readCount = 0;
 
 		// A count of how many bases (so far) have had mismatch data counted
 		private long mmTotalBases = 0;
@@ -321,10 +323,10 @@ public class Contig
 
 		public Integer readCount()
 		{
-			if (readsDefined || readManager != null)
+			if (readsDefined)// || readManager != null)
 				return reads.size();
 
-			return null;
+			return readCount;
 		}
 
 		public int featureCount()
@@ -342,5 +344,5 @@ public class Contig
 				return null;
 		}
 	}
-	
+
 }
