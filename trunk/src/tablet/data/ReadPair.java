@@ -59,20 +59,16 @@ public class ReadPair
 				int mateEndPos = 0;
 				if(mate != null)
 					mateEndPos = mate.getEndPosition();
+				
+				boolean needsLine = matePos < readS && isMateContig;
+				boolean onDifferentRows = mate != null && mateEndPos >= startPos;
+				boolean drawLine = needsLine & !onDifferentRows;
 
 				for (; index < readS; index++, dataI++)
 				{
 					// Is this an area between the start of each read in a pair of reads
-					if(matePos < readS && isMateContig)
-					{
+					if(drawLine)
 						data[dataI] = 14;
-						// Is this an outlier which has the reads in the pair on different rows.
-						if(mate != null && mateEndPos > startPos)
-							data[dataI] = -1;
-
-						if (mate == null)
-							data[dataI] = -1;
-					}
 					else
 						data[dataI] = -1;
 				}
@@ -104,20 +100,17 @@ public class ReadPair
 
 				// Work out these variables in advance rather than on each iteration
 				int endPos = matedRead.getEndPosition();
-				int startPos = matedRead.getStartPosition();
 				int matePos = matedRead.getMatePos();
 				boolean isMateContig = matedRead.isMateContig();
-
+				boolean needsLine = matePos > end && isMateContig && matedRead.getPair() != null;
+				
 				// If no more reads are within the window, fill in any blanks between
 				// the final read and the end of the array
 				for (; index <= end; index++, dataI++)
 				{
-					if(index > endPos && matePos > end || (matePos < start && matePos < startPos && index < startPos && isMateContig))
+					if(index > endPos && needsLine)
 						data[dataI] = 14;
 					else
-						data[dataI] = -1;
-
-					if (matedRead.getPair() == null)
 						data[dataI] = -1;
 				}
 			}

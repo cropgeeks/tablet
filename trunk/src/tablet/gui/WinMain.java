@@ -34,6 +34,7 @@ public class WinMain extends JRibbonFrame
 	private ContigsPanel contigsPanel;
 	private FeaturesPanel featuresPanel;
 	private FindPanel findPanel;
+	private ReadsPanel readsPanel;
 
 	private Assembly assembly;
 
@@ -85,6 +86,7 @@ public class WinMain extends JRibbonFrame
 		contigsPanel = new ContigsPanel(this, assemblyPanel, ctrlTabs);
 		featuresPanel = new FeaturesPanel(assemblyPanel, ctrlTabs);
 		findPanel = new FindPanel(assemblyPanel, this, ctrlTabs);
+		readsPanel = new ReadsPanel(assemblyPanel, ctrlTabs);
 
 		contigsPanel.setFeaturesPanel(featuresPanel);
 		contigsPanel.setFindPanel(findPanel);
@@ -93,14 +95,17 @@ public class WinMain extends JRibbonFrame
 		setDropTarget(new DropTarget(this, dropAdapter));
 
 		ctrlTabs.addTab("", contigsPanel);
-		ctrlTabs.setIconAt(0, Icons.getIcon("ENHANCED16"));
+		ctrlTabs.setIconAt(0, Icons.getIcon("CONTIGSTAB"));
 		ctrlTabs.setToolTipTextAt(0, RB.getString("gui.WinMain.tabsContigs"));
 		ctrlTabs.addTab("", featuresPanel);
-		ctrlTabs.setIconAt(1, Icons.getIcon("COLUMN16"));
+		ctrlTabs.setIconAt(1, Icons.getIcon("FEATURESTAB"));
 		ctrlTabs.setToolTipTextAt(1, RB.getString("gui.WinMain.tabsFeatures"));
+		ctrlTabs.addTab("", readsPanel);
+		ctrlTabs.setIconAt(2, Icons.getIcon("VISIBLEREADSTAB"));
+		ctrlTabs.setToolTipTextAt(2, RB.getString("gui.WinMain.tabsVisibleReads"));
 		ctrlTabs.addTab("", findPanel);
-		ctrlTabs.setIconAt(2, Icons.getIcon("FIND"));
-		ctrlTabs.setToolTipTextAt(2, RB.getString("gui.WinMain.tabsSearch"));
+		ctrlTabs.setIconAt(3, Icons.getIcon("FIND"));
+		ctrlTabs.setToolTipTextAt(3, RB.getString("gui.WinMain.tabsSearch"));
 
 		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		splitter.setBorder(BorderFactory.createEmptyBorder());
@@ -340,7 +345,12 @@ public class WinMain extends JRibbonFrame
 		String msg = RB.format("gui.WinMain.cacheError", Prefs.cacheDir, e);
 
 		TaskDialog.showFileOpen(RB.format("gui.ContigsPanel.saveReads.exception",
-						msg), TaskDialog.ERR, 1, new String[] {"Open log", RB.getString("gui.text.close") },
+						msg), TaskDialog.ERR, 1, new String[] { RB.getString("gui.text.openLog"), RB.getString("gui.text.close") },
 						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
+	}
+
+	public ReadsPanel getReadsPanel()
+	{
+		return readsPanel;
 	}
 }

@@ -49,7 +49,7 @@ class ReadsCanvas extends JPanel
 
 	// Starting and ending indices of the bases that will be drawn during the
 	// next repaint operation
-	int xS, xE, yE;
+	int xS, xE, yS, yE;
 
 	// Tracks the base closest to the centre of the view
 	float ntCenterX, ntCenterY;
@@ -217,6 +217,9 @@ class ReadsCanvas extends JPanel
 			catch (Exception e) {}
 
 			isRendering = false;
+
+			yS = pY1 / ntH;
+			new VisibleReadsGrabberThread(reads, xS+offset, xE+offset, yS, yE);
 		}
 
 		// Then paint it to the screen

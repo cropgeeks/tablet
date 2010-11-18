@@ -20,20 +20,21 @@ class ReadsCanvasMenu implements ActionListener
 {
 	private AssemblyPanel aPanel;
 	private ReadsCanvas rCanvas;
-	private ReadsCanvasInfoPane infoPane;
+	private ReadsCanvasInfoPaneRenderer infoPaneRenderer;
 
 	private JPopupMenu menu = new JPopupMenu();
 	private JMenuItem mClipboardName;
 	private JMenuItem mClipboardData;
-	private JMenuItem mFindStart, mFindEnd;
+	
 	private JMenu mOutline;
 	private JMenuItem mOutlineCol;
 	private JMenuItem mOutlineRow;
 	private JMenuItem mOutlineClear;
 
+	private JMenuItem mExport;
 	private JMenuItem mExportColumn;
 	private JMenuItem mExportScreen;
-	//private JMenuItem mExportContig;
+	private JMenuItem mExportContig;
 
 	private JMenu mShadowing;
 	private JCheckBoxMenuItem mShadowingOff;
@@ -42,6 +43,8 @@ class ReadsCanvasMenu implements ActionListener
 	private JCheckBoxMenuItem mShadowingLock;
 	private JMenuItem mShadowingJump;
 
+	private JMenu mJumpTo;
+	private JMenuItem mFindStart, mFindEnd;
 	private JMenuItem mJumpToPair;
 	private JMenuItem mJumpToLeftRead;
 	private JMenuItem mJumpToRightRead;
@@ -49,10 +52,10 @@ class ReadsCanvasMenu implements ActionListener
 	// Row and column under the mouse at the time the menu appears
 	private int rowIndex, colIndex;
 
-	ReadsCanvasMenu(AssemblyPanel aPanel, ReadsCanvasInfoPane infoPane)
+	ReadsCanvasMenu(AssemblyPanel aPanel, ReadsCanvasInfoPaneRenderer infoPaneRenderer)
 	{
 		this.aPanel = aPanel;
-		this.infoPane = infoPane;
+		this.infoPaneRenderer = infoPaneRenderer;
 		rCanvas = aPanel.readsCanvas;
 
 		mClipboardName = new JMenuItem("", Icons.getIcon("CLIPBOARDNAME"));
@@ -64,11 +67,11 @@ class ReadsCanvasMenu implements ActionListener
 		mClipboardData.addActionListener(this);
 
 		mFindStart = new JMenuItem("", Icons.getIcon("START16"));
-		RB.setText(mFindStart, "gui.viewer.ReadsCanvasMenu.mFindStart");
+		RB.setText(mFindStart, "gui.viewer.ReadsCanvasMenu.mJumpToReadStart");
 		mFindStart.addActionListener(this);
 
 		mFindEnd = new JMenuItem("", Icons.getIcon("END16"));
-		RB.setText(mFindEnd, "gui.viewer.ReadsCanvasMenu.mFindEnd");
+		RB.setText(mFindEnd, "gui.viewer.ReadsCanvasMenu.mJumpToReadEnd");
 		mFindEnd.addActionListener(this);
 
 		mOutline = new JMenu("");
@@ -109,6 +112,9 @@ class ReadsCanvasMenu implements ActionListener
 		RB.setText(mShadowingJump, "gui.viewer.ReadsCanvasMenu.mShadowingJump");
 		mShadowingJump.addActionListener(this);
 
+		mJumpTo = new JMenu("");
+		RB.setText(mJumpTo, "gui.viewer.ReadsCanvasMenu.mJumpTo");
+
 		mJumpToPair = new JMenuItem("");
 		RB.setText(mJumpToPair, "gui.viewer.ReadsCanvasMenu.mJumpToPair");
 		mJumpToPair.addActionListener(this);
@@ -121,6 +127,9 @@ class ReadsCanvasMenu implements ActionListener
 		RB.setText(mJumpToRightRead, "gui.viewer.ReadsCanvasMenu.mJumpToRightRead");
 		mJumpToRightRead.addActionListener(this);
 
+		mExport = new JMenu("");
+		RB.setText(mExport, "gui.viewer.ReadsCanvasMenu.mExport");
+
 		mExportColumn = new JMenuItem("");
 		RB.setText(mExportColumn, "gui.viewer.ReadsCanvasMenu.mExportColumn");
 		mExportColumn.addActionListener(this);
@@ -129,10 +138,9 @@ class ReadsCanvasMenu implements ActionListener
 		RB.setText(mExportScreen, "gui.viewer.ReadsCanvasMenu.mExportScreen");
 		mExportScreen.addActionListener(this);
 
-//		mExportContig = new JMenuItem("");
-//		RB.setText(mExportContig, "gui.viewer.ReadsCanvasMenu.mExportScreen");
-//		mExportContig.addActionListener(this);
-
+		mExportContig = new JMenuItem("");
+		RB.setText(mExportContig, "gui.viewer.ReadsCanvasMenu.mExportContig");
+		mExportContig.addActionListener(this);
 
 		// Create the menu
 		menu = new JPopupMenu();
@@ -150,45 +158,48 @@ class ReadsCanvasMenu implements ActionListener
 		mShadowing.add(mShadowingLock);
 		mShadowing.add(mShadowingJump);
 
+		mJumpTo.add(mFindStart);
+		mJumpTo.add(mFindEnd);
+		mJumpTo.add(mJumpToPair);
+		mJumpTo.addSeparator();
+		mJumpTo.add(mJumpToLeftRead);
+		mJumpTo.add(mJumpToRightRead);
+
+		mExport.add(mExportColumn);
+		mExport.add(mExportScreen);
+		mExport.add(mExportContig);
+
 		menu.add(mOutline);
 		menu.add(mShadowing);
 		menu.addSeparator();
 		menu.add(mClipboardName);
 		menu.add(mClipboardData);
 		menu.addSeparator();
-		menu.add(mFindStart);
-		menu.add(mFindEnd);
+		menu.add(mJumpTo);
 		menu.addSeparator();
-		menu.add(mJumpToPair);
-		menu.add(mJumpToLeftRead);
-		menu.add(mJumpToRightRead);
-
-		menu.addSeparator();
-		menu.add(mExportColumn);
-		menu.add(mExportScreen);
-		//menu.add(mExportContig);
+		menu.add(mExport);
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == mClipboardName)
-			infoPane.copyReadNameToClipboard();
+			infoPaneRenderer.readInfo.copyReadNameToClipboard();
 		else if (e.getSource() == mClipboardData)
-			infoPane.copyDataToClipboard();
+			infoPaneRenderer.readInfo.copyDataToClipboard();
 
 		else if (e.getSource() == mFindStart)
 		{
-			int position = infoPane.read.getStartPosition();
+			int position = infoPaneRenderer.readInfo.read.getStartPosition();
 
 			aPanel.moveToPosition(-1, position, true);
-			new ReadHighlighter(aPanel, infoPane.read, infoPane.lineIndex);
+			new ReadHighlighter(aPanel, infoPaneRenderer.readInfo.read, infoPaneRenderer.readInfo.lineIndex);
 		}
 		else if (e.getSource() == mFindEnd)
 		{
-			int position = infoPane.read.getEndPosition();
+			int position = infoPaneRenderer.readInfo.read.getEndPosition();
 
 			aPanel.moveToPosition(-1, position, true);
-			new ReadHighlighter(aPanel, infoPane.read, infoPane.lineIndex);
+			new ReadHighlighter(aPanel, infoPaneRenderer.readInfo.read, infoPaneRenderer.readInfo.lineIndex);
 		}
 
 		else if (e.getSource() == mOutlineCol)
@@ -257,7 +268,6 @@ class ReadsCanvasMenu implements ActionListener
 
 					final Read r = pairSearcher.search(pr);
 
-//					final Read r = pairSearcher.searchForPair(read, readData.getName(), pr.getMatePos());
 					final int lineIndex = rCanvas.reads.getLineForRead(r);
 
 					SwingUtilities.invokeLater(new Runnable() {
@@ -335,27 +345,25 @@ class ReadsCanvasMenu implements ActionListener
 		{
 			try
 			{
-				int xS = (rCanvas.pX1 - rCanvas.offset) / rCanvas.ntW;
-				int xE = (rCanvas.pX2 - rCanvas.offset) / rCanvas.ntW;
-				Tablet.winMain.getCommands().exportScreenData(rCanvas.reads, xS, xE);
+				Tablet.winMain.getCommands().exportScreenData(rCanvas.reads, rCanvas.xS, rCanvas.xE, rCanvas.yS, rCanvas.yE);
 			}
 			catch(Exception ex)
 			{
 				ex.printStackTrace();
 			}
 		}
-//
-//		else if (e.getSource() == mExportContig)
-//		{
-//			try
-//			{
-//				Tablet.winMain.getCommands().exportContigData(rCanvas.reads);
-//			}
-//			catch(Exception ex)
-//			{
-//				ex.printStackTrace();
-//			}
-//		}
+
+		else if (e.getSource() == mExportContig)
+		{
+			try
+			{
+				Tablet.winMain.getCommands().exportContigData(rCanvas.reads);
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+		}
 	}
 
 	boolean isShowingMenu()
@@ -366,8 +374,13 @@ class ReadsCanvasMenu implements ActionListener
 		rowIndex = (e.getY() / rCanvas.ntH);
 		colIndex = (e.getX() / rCanvas.ntW) + rCanvas.offset;
 
+		if (aPanel.getAssembly().getBamBam() == null)
+			RB.setText(mExportContig, "gui.viewer.ReadsCanvasMenu.mExportContig");
+		else
+			RB.setText(mExportContig, "gui.viewer.ReadsCanvasMenu.mExportBamWindow");
+
 		// Check enabled states
-		boolean isOverRead = infoPane.isOverRead();
+		boolean isOverRead = infoPaneRenderer.readInfo.isOverRead();
 		mClipboardName.setEnabled(isOverRead);
 		mClipboardData.setEnabled(isOverRead);
 		mFindStart.setEnabled(isOverRead);
@@ -447,9 +460,7 @@ class ReadsCanvasMenu implements ActionListener
 		}
 
 		if (!foundInTable)
-		{
 			cPanel.setDisplayedContig(contig);
-		}
 	}
 
 }

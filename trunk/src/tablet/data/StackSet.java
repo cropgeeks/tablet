@@ -5,7 +5,7 @@ package tablet.data;
 
 import java.util.*;
 
-class StackSet implements IReadManager
+public class StackSet implements IReadManager
 {
 	private ArrayList<Read> stack = new ArrayList<Read>();
 
@@ -40,6 +40,7 @@ class StackSet implements IReadManager
 
 		int readS = read.getStartPosition();
 		int readE = read.getEndPosition();
+
 
 		ReadMetaData rmd = Assembly.getReadMetaData(read, true);
 
