@@ -15,16 +15,16 @@ import tablet.gui.*;
  */
 class OutlinerOverlay implements IOverlayRenderer
 {
-	private ReadsCanvasInfoPane infoPane;
+	private ReadsCanvasInfoPaneRenderer infoPaneRenderer;
 	private ReadsCanvas rCanvas;
 
 	private Read read;
 	private int readS, readE;
 	private int lineIndex;
 
-	OutlinerOverlay(AssemblyPanel aPanel, ReadsCanvasInfoPane infoPane)
+	OutlinerOverlay(AssemblyPanel aPanel, ReadsCanvasInfoPaneRenderer infoPaneRenderer)
 	{
-		this.infoPane = infoPane;
+		this.infoPaneRenderer = infoPaneRenderer;
 
 		rCanvas = aPanel.readsCanvas;
 	}
@@ -42,10 +42,14 @@ class OutlinerOverlay implements IOverlayRenderer
 			readS = read.getStartPosition();
 			readE = read.getEndPosition();
 
-			infoPane.setData(lineIndex, read, data, false);
+			infoPaneRenderer.readInfo.setData(lineIndex, read, data);
+			infoPaneRenderer.readInfo.updateOverviewCanvas();
+
+			infoPaneRenderer.pairInfo.setmRead(read);
+			infoPaneRenderer.pairInfo.setMateAvailable(false);
 		}
 		else
-			infoPane.setMousePosition(null);
+			infoPaneRenderer.setMousePosition(null);
 	}
 
 	public void render(Graphics2D g)

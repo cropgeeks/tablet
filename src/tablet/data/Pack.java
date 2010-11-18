@@ -129,11 +129,18 @@ public class Pack
 				int startPos = matedRead.getStartPosition();
 				int matePos = matedRead.getMatePos();
 				MatedRead mate = matedRead.getPair();
+				int mateEndPos = 0;
+				if (mate != null)
+					mateEndPos = mate.getEndPosition();
+
+				boolean needsLine = matePos < readS && isMateContig;
+				boolean onDifferentRows = mate != null && mateEndPos >= startPos;
+				boolean drawLine = needsLine & !onDifferentRows;
 
 				// Fill in any blanks between the current index the next read
 				for (; index < readS; index++, dataI++)
 				{
-					if(isMate(matedRead, mate, index, isMateContig, startPos, matePos))
+					if(drawLine)
 						data[dataI] = 14;
 					else
 						data[dataI] = -1;
@@ -160,14 +167,17 @@ public class Pack
 			boolean isMateContig = matedRead.isMateContig();
 			int startPos = matedRead.getStartPosition();
 			int matePos = matedRead.getMatePos();
-			int endPos = matedRead.getEndPosition();
 			MatedRead mate = matedRead.getPair();
+
+			boolean needsLine = matePos < startPos && startPos > end && isMateContig;
+			boolean samePack = reads.contains(matedRead) && reads.contains(mate);
+			boolean drawLine = needsLine && samePack && mate != null;
 
 			// If no more reads are within the window, fill in any blanks between
 			// the final read and the end of the array
 			for (; index <= end; index++, dataI++)
 			{
-				if(isMateEndWindow(matedRead, mate, index, end, isMateContig, startPos, matePos, endPos))
+				if(drawLine)
 					data[dataI] = 14;
 				else
 					data[dataI] = -1;
@@ -176,7 +186,7 @@ public class Pack
 		else
 		{
 			for (; index <= end; index++, dataI++)
-					data[dataI] = -1;
+				data[dataI] = -1;
 		}
 
 		return data;
@@ -242,43 +252,6 @@ public class Pack
 		}
 		else
 			return null;
-	}
-
-	/**
-	 * Checks if the nucleotide position is in the middle of a pair.
-	 */
-	private boolean isMate(MatedRead mr, MatedRead mate, int index, boolean isMateContig, int startPos, int matePos)
-	{
-		if(!Assembly.isPaired() || mr == null || !isMateContig)
-			return false;
-		else if(isMateContig && mate == null)
-		{
-			return (startPos > index && matePos < startPos && reads.get(0).equals(mr));
-		}
-		else
-		{
-			return (startPos > index && matePos < startPos && reads.contains(mr) && reads.contains(mate));
-		}
-	}
-
-	/**
-	 * Checks if the nucleotide position is at the end of a screen window and
-	 * in the middle of a pair.
-	 */
-	private boolean isMateEndWindow(MatedRead mr, MatedRead mate, int index, int end, boolean isMateContig, int startPos, int matePos, int endPos)
-	{
-		if(!Assembly.isPaired() || mr == null || !isMateContig)
-			return false;
-		else if(isMateContig && mate == null)
-		{
-			return (index > endPos && matePos > end) ||
-					(index < startPos && matePos < startPos && startPos > end && matePos < end);
-		}
-		else
-		{
-			return ((reads.contains(mr) && reads.contains(mate)) && index > endPos && matePos > end) ||
-					((reads.contains(mr) && reads.contains(mate)) && index < startPos && matePos < startPos && startPos > end && matePos < end);
-		}
 	}
 
 	public ArrayList<Read> getReads()

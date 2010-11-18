@@ -6,15 +6,15 @@ import tablet.gui.*;
 
 public class PairOutlinerOverlay implements IOverlayRenderer
 {
-	private ReadsCanvasInfoPane infoPane;
+	private ReadsCanvasInfoPaneRenderer infoPaneRenderer;
 	private ReadsCanvas rCanvas;
 
 	private Read readA, readB;
 	private int lineIndex, mateLineIndex, columnIndex;
 
-	PairOutlinerOverlay(ReadsCanvas rCanvas, ReadsCanvasInfoPane infoPane)
+	PairOutlinerOverlay(ReadsCanvas rCanvas, ReadsCanvasInfoPaneRenderer infoPaneRenderer)
 	{
-		this.infoPane = infoPane;
+		this.infoPaneRenderer = infoPaneRenderer;
 		this.rCanvas = rCanvas;
 	}
 
@@ -28,12 +28,31 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 		if (readA != null)
 		{
 			ReadMetaData data = Assembly.getReadMetaData(readA, false);
-			infoPane.setData(lineIndex, readA, data, false);
+			infoPaneRenderer.readInfo.setData(lineIndex, readA, data);
+			infoPaneRenderer.readInfo.updateOverviewCanvas();
+
+			infoPaneRenderer.pairInfo.setmRead(readA);
+		}
+
+		if (readB != null)
+		{
+			ReadMetaData pairData = Assembly.getReadMetaData(readB, false);
+			infoPaneRenderer.pairInfo.setData(mateLineIndex, readB, pairData);
+
+			infoPaneRenderer.readInfo.setmRead(readB);
+			infoPaneRenderer.pairInfo.setMateAvailable(true);
 		}
 	}
 
 	public void render(Graphics2D g)
 	{
+		if(!isValidOutline())
+			return;
+
+		int ntW = rCanvas.ntW;
+		int ntH = rCanvas.ntH;
+		int offset = -rCanvas.offset * ntW;
+
 		// Remember the current stroke so it can be reset afterwards
 		Stroke oldStroke = g.getStroke();
 
@@ -43,25 +62,20 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 		else if (Prefs.visReadsCanvasZoom > 8)
 			g.setStroke(new BasicStroke(2));
 
-		if(readA == null || readB == null || !isValidOutline())
-			return;
-
-		int offset = -rCanvas.offset * rCanvas.ntW;
-
 		// If the reads are on the row, draw a line connecting them
 		if(lineIndex == mateLineIndex && Prefs.visPaired)
 		{
-			int y = lineIndex * rCanvas.ntH + rCanvas.ntH / 2;
+			int y = (lineIndex * ntH) + (ntH / 2);
 			int xS, xE;
 			if(readA.getStartPosition() < readB.getStartPosition())
 			{
-				xS = readA.getEndPosition() * rCanvas.ntW + offset + rCanvas.ntW;
-				xE = readB.getStartPosition() * rCanvas.ntW + offset;
+				xS = (readA.getEndPosition() * ntW) + offset + ntW;
+				xE = (readB.getStartPosition() * ntW) + offset;
 			}
 			else
 			{
-				xS = readB.getEndPosition() * rCanvas.ntW + offset + rCanvas.ntW;
-				xE = readA.getStartPosition() * rCanvas.ntW + offset;
+				xS = (readB.getEndPosition() * ntW) + offset + ntW;
+				xE = (readA.getStartPosition() * ntW) + offset;
 			}
 
 			g.setColor(Color.BLACK);
@@ -69,19 +83,19 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 		}
 
 		// Draw outlines around the reads in the pair
-		int y  = lineIndex * rCanvas.ntH;
-		int xS = readA.getStartPosition() * rCanvas.ntW + offset;
-		int xE = readA.getEndPosition() * rCanvas.ntW + rCanvas.ntW + offset;
+		int y  = lineIndex * ntH;
+		int xS = (readA.getStartPosition() * ntW) + offset;
+		int xE = (readA.getEndPosition() * ntW) + ntW + offset;
 
 		g.setColor(TabletUtils.red1);
-		g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);
+		g.drawRect(xS, y, xE-xS-1, ntH-1);
 
-		y = mateLineIndex * rCanvas.ntH;
-		xS = readB.getStartPosition() * rCanvas.ntW + offset;
-		xE = readB.getEndPosition() * rCanvas.ntW + rCanvas.ntW + offset;
+		y = mateLineIndex * ntH;
+		xS = (readB.getStartPosition() * ntW) + offset;
+		xE = (readB.getEndPosition() * ntW) + ntW + offset;
 
 		g.setColor(TabletUtils.red1);
-		g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);
+		g.drawRect(xS, y, xE-xS-1, ntH-1);
 
 		g.setStroke(oldStroke);
 	}
@@ -93,6 +107,9 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 	 */
 	public boolean isValidOutline()
 	{
+		if (readA == null || readB == null)
+			return false;
+		
 		int s, e;
 		s = e = columnIndex;
 		

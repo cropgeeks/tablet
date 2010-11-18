@@ -13,36 +13,34 @@ import tablet.data.*;
 import tablet.gui.*;
 
 import scri.commons.gui.*;
-import tablet.data.auxiliary.CigarFeature;
+import tablet.data.auxiliary.*;
 import tablet.data.auxiliary.CigarFeature.Insert;
-import tablet.data.auxiliary.Feature;
 
 /** Manages and paints the advanced tool tips for the reads canvas. */
-class ReadsCanvasInfoPane implements IOverlayRenderer
+class ReadsCanvasInfoPane
 {
 	private Color bgColor;
-	private Image lhArrow = Icons.getIcon("LHARROW").getImage();
-	private Image rhArrow = Icons.getIcon("RHARROW").getImage();
+	protected Image lhArrow = Icons.getIcon("LHARROW").getImage();
+	protected Image rhArrow = Icons.getIcon("RHARROW").getImage();
 	private Font titleFont, labelFont;
 	private FontMetrics fmTitle;
 
 	private OverviewCanvas oCanvas;
 	private ScaleCanvas sCanvas;
-	private ReadsCanvas rCanvas;
 	private AssemblyPanel aPanel;
+	ReadsCanvas rCanvas;
 
 	// Variables that change as we move the mouse
-	int lineIndex, mLineIndex;
-	Read read, mRead;
-	private ReadMetaData metaData, mMetaData;
-	private Point mouse;
-	private int x, y, w, h;
-	private int vSpacing = 15;
+	protected int lineIndex, x, y, w, h;
+	protected Read read, mRead;
+	protected ReadMetaData metaData;
+	protected Point mouse;
+	protected int lineSpacing = 15;
+	protected int basicHeight = 55;
+	protected int elementHeight;
 
 	// Variables holding the data that gets drawn within the tooltip
-	private String readName, posData, lengthData, cigar, mateContig, pairInfo;
-	private String[] readInfo = new String[6];
-	private String[] mateInfo = new String[6];
+	protected String readName, posData, lengthData, cigar, mateContig, pairInfo, insertedBases;
 
 	ReadsCanvasInfoPane()
 	{
@@ -79,32 +77,20 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	 * Set the data for rendering the tooltip based on the Read and ReadMetaData
 	 * provided. This sets up the string values for display.
 	 */
-	void setData(int lineIndex, Read read, ReadMetaData metaData, boolean isMate)
+	void setData(int lineIndex, Read read, ReadMetaData metaData)
 	{
+		if (read == null)
+			return;
+		
 		this.lineIndex = lineIndex;
-		if(!isMate)
-		{
-			this.read = read;
-			this.metaData = metaData;
-		}
-		else
-		{
-			mRead = read;
-			this.mMetaData = metaData;
-		}
-
-		String insertSize, isProperPair, pairNumber;
-
-		MatedRead mr = null;
+		this.read = read;
+		this.metaData = metaData;
 
 		ReadNameData rnd = Assembly.getReadNameData(read);
 
 		// Width and height of final overlay
 		w = 300;
 		h = 90;
-
-		if (Assembly.hasCigar())
-			h = 105;
 
 		// Start and ending positions (against consensus)
 		int readS = read.getStartPosition();
@@ -128,9 +114,53 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		if (Assembly.hasCigar())
 			cigar = RB.format("gui.viewer.ReadsCanvasInfoPane.cigar", rnd.getCigar());
 
+		setupPairInfo(rnd);
+		setupInsertedBaseInfo(read);
+
+		adjustBoxSize();
+	}
+
+	void updateOverviewCanvas()
+	{
+		// Tell the overview canvas to paint this read too
+		int offset = -rCanvas.offset;
+
+		oCanvas.updateRead(lineIndex, read.getStartPosition()+offset, read.getEndPosition()+offset);
+	}
+
+	private void setupInsertedBaseInfo(Read read)
+	{
+		insertedBases = "";
+		// TODO
+		if(mouse == null || aPanel.getVisualContig().getTrackCount() <= 0)
+			return;
+
+		ArrayList<Feature> features = aPanel.getVisualContig().getTrack(0).getFeatures(read.getStartPosition(), read.getEndPosition());
+		for (Feature feature : features)
+		{
+			if (!(feature.getGFFType().equals("CIGAR-I")))
+				continue;
+			
+			CigarFeature cigarFeature = (CigarFeature) feature;
+			for (Insert insert : cigarFeature.getInserts())
+			{
+				if (insert.getRead().equals(read))
+				{
+					if (insertedBases.equals(""))
+						insertedBases += RB.format("gui.viewer.ReadsCanvasInfoPane.inserted", insert.getInsertedBases());
+					else
+						insertedBases += " - " + insert.getInsertedBases();
+				}
+			}
+		}
+	}
+
+	private void setupPairInfo(ReadNameData rnd)
+	{
+		String insertSize, isProperPair, pairNumber;
+
 		if(read instanceof MatedRead && metaData.getIsPaired() && metaData.getMateMapped())
 		{
-			mr = (MatedRead)read;
 			insertSize =  RB.format("gui.viewer.ReadsCanvasInfoPane.insert", rnd.getInsertSize());
 			isProperPair = rnd.isProperPair() ? RB.getString("gui.viewer.ReadsCanvasInfoPane.pairedProper") : RB.getString("gui.viewer.ReadsCanvasInfoPane.pairedProper");
 			if(rnd.getNumberInPair() == 1)
@@ -153,58 +183,6 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		}
 		else
 			insertSize = isProperPair = pairNumber = mateContig = pairInfo = "";
-
-		String insertedBases = " ";
-		// TODO
-		if(mouse != null && aPanel.getVisualContig().getTrackCount() > 0)
-		{
-			int xIndex = (int) ((mouse.getX() / rCanvas.ntW) + rCanvas.offset);
-			ArrayList<Feature> features = aPanel.getVisualContig().getTrack(0).getFeatures(read.getStartPosition(), read.getEndPosition());
-			for(Feature feature : features)
-			{
-				if (!(feature.getGFFType().equals("CIGAR-I")))
-					continue;
-				
-				CigarFeature cigarFeature = (CigarFeature)feature;
-				for(Insert insert : cigarFeature.getInserts())
-				{
-					if(insert.getRead().equals(read))
-					{
-						if(insertedBases.equals(" "))
-							insertedBases += RB.format("gui.viewer.ReadsCanvasInfoPane.inserted", insert.getInsertedBases());
-						else
-							insertedBases += " - " + insert.getInsertedBases();
-					}
-				}
-			}
-		}
-
-		adjustBoxSize();
-
-		// Tell the overview canvas to paint this read too
-		int offset = -rCanvas.offset;
-
-		if(!isMate)
-		{
-			readInfo = new String[] {posData, lengthData, readName, cigar, pairInfo, mateContig, insertedBases};
-			oCanvas.updateRead(lineIndex, readS+offset, readE+offset);
-		}
-		else
-			mateInfo = new String[] {posData, lengthData, readName, cigar, pairInfo, mateContig, insertedBases};
-
-		// Deal with setting up the multiple info panes.
-		if(!isMate && mr != null && mr.getPair() != null)
-		{
-			ReadMetaData rmd = Assembly.getReadMetaData(mr.getPair(), false);
-			if(rmd != null)
-				setData(lineIndex, mr.getPair(), rmd, true);
-			else
-				mMetaData = null;
-		}
-		else if(!isMate)
-			mMetaData = null;
-		else if(!isMate && mr != null)
-			mMetaData = null;
 	}
 
 	/**
@@ -213,10 +191,27 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 	 */
 	private void adjustBoxSize()
 	{
+		elementHeight = basicHeight;
+		if (Assembly.hasCigar())
+		{
+			h += lineSpacing;
+			elementHeight += lineSpacing;
+		}
 		if (!pairInfo.equals(""))
-			h += vSpacing;
+		{
+			h += lineSpacing;
+			elementHeight += lineSpacing;
+		}
 		if (!mateContig.equals(""))
-			h += vSpacing;
+		{
+			h += lineSpacing;
+			elementHeight += lineSpacing;
+		}
+		if (!insertedBases.equals(""))
+		{
+			h += lineSpacing;
+			elementHeight += lineSpacing;
+		}
 
 		if (fmTitle.stringWidth(readName) > (w - 20))
 			w = fmTitle.stringWidth(readName) + 20;
@@ -228,58 +223,20 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			w = fmTitle.stringWidth(cigar) + 20;
 		if (fmTitle.stringWidth(pairInfo) > (w - 20))
 			w = fmTitle.stringWidth(pairInfo) + 20;
+		if (fmTitle.stringWidth(insertedBases) > (w - 20))
+			w = fmTitle.stringWidth(insertedBases) + 20;
 	}
 
 	boolean isOverRead()
 		{ return mouse != null; }
 
-	public void render(Graphics2D g)
-	{
-		if (mouse == null || Prefs.visInfoPaneActive == false)
-			return;
-
-		MatedRead pr = null;
-		if(read instanceof MatedRead)
-		{
-			pr = (MatedRead)read;
-			if(pr.getPair() != null)
-				calculatePosition(h*2);
-			else
-				calculatePosition(h+55);
-		}
-		else
-			calculatePosition(h);
-
-		drawBox(g, false, readInfo, metaData, read);
-
-		ReadMetaData rmd = Assembly.getReadMetaData(read, false);
-		if(read instanceof MatedRead && rmd.getIsPaired() && rmd.getMateMapped())
-		{
-			g.drawLine(w/2, h, w/2, h+10);
-			g.translate(-x, -y+h+10);
-
-			if(mMetaData != null && mRead != null)
-			{
-				drawBox(g, true, mateInfo, mMetaData, mRead);
-			}
-			else
-			{
-				ReadNameData rnd = Assembly.getReadNameData(read);
-				drawMateUnavailableBox(g, pr.getMatePos(), pr.isMateContig(), rnd.getMateContig());
-			}
-		}
-
-		// Put the graphics origin back to where it was in case other overlay
-		// renderers run after this one
-		g.translate(-x, -y);
-	}
 
 	/**
 	 * Draws the outline, background and title of the box for the tooltip.
 	 */
-	private void drawBasicBox(Graphics2D g, int mateH, String tempName)
+	protected void drawBasicBox(Graphics2D g, int mateH, String tempName)
 	{
-		g.translate(x, y);
+		//g.translate(x, y);
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		// The background rectangle
 		g.setColor(bgColor);
@@ -288,105 +245,66 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		g.drawRoundRect(0, 0, w - 1, mateH - 1, 10, 10);
 		// And the text
 		g.setFont(titleFont);
-		g.drawString(tempName, 10, vSpacing);
+		g.drawString(tempName, 10, lineSpacing);
 		g.setFont(labelFont);
+	}
+
+	protected int drawSharedStrings(Graphics2D g, int lineNo)
+	{
+		g.drawString(posData, 10, lineSpacing * ++lineNo);
+		g.drawString(lengthData, 10, lineSpacing * ++lineNo);
+
+		if (Assembly.hasCigar())
+		{
+			g.setColor(Color.blue);
+			g.drawString(cigar, 10, lineSpacing * ++lineNo);
+			if (!insertedBases.equals(""))
+				g.drawString(insertedBases, 10, lineSpacing * ++lineNo);
+		}
+
+		if (pairInfo.equals(RB.getString("gui.viewer.ReadsCanvasInfoPane.mateUnmapped")))
+			g.setColor(Color.red);
+
+		g.drawString(pairInfo, 10, lineSpacing * ++lineNo);
+		
+		return lineNo;
 	}
 
 	/**
 	 * Draws the rest of the box in the usual state where we have a pair of reads
 	 * which are both contained in the current data window.
 	 */
-	private void drawBox(Graphics2D g, boolean isMate, String[] rInfo, ReadMetaData mData, Read renderRead)
+	protected void drawBox(Graphics2D g)
 	{
-		String pData = rInfo[0];
-		String lData = rInfo[1];
-		String rName = rInfo[2];
-		String cig = rInfo[3];
-		String pInfo = rInfo[4];
-		String mContig = rInfo[5];
-		String tempName;
+		if(read == null)
+			return;
 
-		if(isMate)
-			tempName = rName + " " + RB.getString("gui.viewer.ReadsCanvasInfoPane.mateRead");
+		int lineNo = 1;
+
+		drawBasicBox(g, h, readName);
+
+		lineNo = drawSharedStrings(g, lineNo);
+
+		if(!mateContig.equals(""))
+			g.drawString(mateContig, 10, lineSpacing * ++lineNo);
+
+		if (metaData.isComplemented())
+			g.drawImage(lhArrow, w - 10 - lhArrow.getWidth(null), elementHeight, null);
 		else
-			tempName = rName;
-
-		int arrowHeight = calculateElementHeight(pInfo, mContig);
-
-		drawBasicBox(g, h, tempName);
-
-		g.drawString(pData, 10, vSpacing*2);
-		g.drawString(lData, 10, vSpacing*3);
-		if (Assembly.hasCigar())
-		{
-			g.setColor(Color.blue);
-			g.drawString(cig + rInfo[6], 10, vSpacing*4);
-		}
-
-		if(pInfo.equals(RB.getString("gui.viewer.ReadsCanvasInfoPane.mateUnmapped")))
-			g.setColor(Color.red);
-
-		g.drawString(pInfo, 10, vSpacing*5);
-
-		if(!mContig.equals("") && !isMate)
-			g.drawString(mContig, 10, vSpacing*6);
-
-		if (mData.isComplemented())
-			g.drawImage(lhArrow, w - 10 - lhArrow.getWidth(null), arrowHeight, null);
-		else
-			g.drawImage(rhArrow, 10, arrowHeight, null);
+			g.drawImage(rhArrow, 10, elementHeight, null);
+		
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-		renderSequence(g, pInfo, mContig, mData, renderRead);
+		renderSequence(g);
 	}
 
-	/**
-	 * Draws the rest of the tooltip when the mate is in another contig, or outwith
-	 * the current BAM data window.
-	 */
-	private void drawMateUnavailableBox(Graphics2D g, int matePos, boolean isMateContig, String mateContig)
+	protected void renderSequence(Graphics2D g)
 	{
-		String tempName = readName + " " + RB.getString("gui.viewer.ReadsCanvasInfoPane.mateRead");
-		int mateH = 70;
+		int lineStart = elementHeight + lineSpacing;
 
-		drawBasicBox(g, mateH, tempName);
-
-		g.setColor(Color.red);
-		if(!isMateContig)
-		{
-			g.drawString(RB.getString("gui.viewer.ReadsCanvasInfoPane.outwithContig"), 10, vSpacing*3);
-			g.setColor(Color.black);
-			g.drawString(RB.format("gui.viewer.ReadsCanvasInfoPane.locatedInContig", mateContig, matePos), 10, vSpacing *4);
-		}
-		else
-		{
-			g.drawString(RB.getString("gui.viewer.ReadsCanvasInfoPane.outwithBamWindow"), 10, vSpacing*3);
-			g.setColor(Color.black);
-			g.drawString(RB.format("gui.viewer.ReadsCanvasInfoPane.positionInContig", TabletUtils.nf.format(matePos)), 10, vSpacing*4);
-		}
-	}
-
-	private int calculateElementHeight(String pInfo, String mContig)
-	{
-		int elementHeight = 55;
-
-		if (Assembly.hasCigar())
-			elementHeight += 15;
-		if (!pInfo.equals(""))
-			elementHeight += 15;
-		if (!mContig.equals(""))
-			elementHeight += 15;
-
-		return elementHeight;
-	}
-
-	private void renderSequence(Graphics2D g, String pInfo, String mContig, ReadMetaData rmd, Read renderRead)
-	{
-		int lineStart = calculateElementHeight(pInfo, mContig) + vSpacing;
-
-		float xScale = renderRead.length() / (float) (w - 10);
+		float xScale = read.length() / (float) (w - 10);
 
 		// Determine color offset
-		int color = rmd.getColorSchemeAdjustment(Prefs.visColorScheme);
+		int color = metaData.getColorSchemeAdjustment(Prefs.visColorScheme);
 
 		for (int x = 10; x < w-10; x++)
 		{
@@ -394,7 +312,7 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 			int dataX = (int) (x * xScale);
 
 			// Then drawing that data
-			byte b = (byte) (color + rmd.getStateAt(dataX));
+			byte b = (byte) (color + metaData.getStateAt(dataX));
 
 			g.setColor(rCanvas.colors.getColor(b));
 			g.drawLine(x, lineStart, x, lineStart+10);
@@ -402,19 +320,6 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 
 		g.setColor(Color.darkGray);
 		g.drawRect(10, lineStart, w-21, 10);
-	}
-
-	private void calculatePosition(int height)
-	{
-		// Decide where to draw (roughly)
-		x = mouse.x + 15;
-		y = mouse.y + 20;
-
-		// Then adjust if the box would be offscreen to the right or bottom
-		if (x + w >= rCanvas.pX2Max)
-			x = rCanvas.pX2Max - w - 1;
-		if (y + height >= rCanvas.pY2)
-			y = rCanvas.pY2 - height - 1;
 	}
 
 	void copyReadNameToClipboard()
@@ -445,5 +350,10 @@ class ReadsCanvasInfoPane implements IOverlayRenderer
 		StringSelection selection = new StringSelection(text.toString());
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
 			selection, null);
+	}
+
+	public void setmRead(Read mRead)
+	{
+		this.mRead = mRead;
 	}
 }

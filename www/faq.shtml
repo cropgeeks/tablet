@@ -44,7 +44,7 @@ that covers coverting between several common assembly formats.</p>
 
 <p>&nbsp;</p>
 
-<p><b>Why does every contig in my BAM assembly show the number of reads as "0"?</b></p>
+<p><b>Why does every contig in my BAM assembly show the number of reads as "?"?</b></p>
 <p>BAM assemblies are treated differently to other file formats in Tablet (to allow
 instant access to portions of very large assemblies) and because of this it means
 that Tablet is not able to provide summary information simply because Tablet hasn't

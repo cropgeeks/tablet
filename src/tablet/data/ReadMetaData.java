@@ -20,6 +20,7 @@ public class ReadMetaData extends Sequence
 	// Is the read complemented or uncomplemented
 	private boolean isComplemented;
 	private boolean isPaired;
+	// True if this read's mate has been mapped to a contig in the assembly
 	private boolean mateMapped;
 
 	public ReadMetaData()

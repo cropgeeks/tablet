@@ -195,13 +195,8 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 	 */
 	private void highlightRead(final Read read, final Contig contig)
 	{
-		final int lineIndex;
-
-		if(Prefs.visPacked == false)
-			lineIndex = contig.getStackSetManager().getLineForRead(read);
-		else
-			lineIndex = contig.getPackSetManager().getLineForRead(read);
-
+		final int lineIndex = contig.getReadManager().getLineForRead(read);
+		
 		final int startPos = read.getStartPosition()/* - contig.getVisualStart()*/;
 
 		SwingUtilities.invokeLater(new Runnable() {
@@ -224,12 +219,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 	 */
 	private void highlightSubsequence(final Read read, final Contig contig, final int sPos, final int ePos)
 	{
-		final int lineIndex;
-
-		if(Prefs.visPacked == false)
-			lineIndex = contig.getStackSetManager().getLineForRead(read);
-		else
-			lineIndex = contig.getPackSetManager().getLineForRead(read);
+		final int lineIndex = contig.getReadManager().getLineForRead(read);
 
 		SwingUtilities.invokeLater(new Runnable() {
 			public void run()

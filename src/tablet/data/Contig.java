@@ -261,6 +261,9 @@ public class Contig
 	public IReadManager getStackSetManager()
 		{ return (readManager = stackSet); }
 
+	public IReadManager getReadManager()
+		{ return readManager; }
+
 	public void addOutline(Feature outline)
 	{
 		outlines.add(outline);

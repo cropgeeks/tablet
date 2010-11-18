@@ -176,14 +176,14 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 				if(matedRead.getPair() == null)
 				{
 					ReadMetaData rmd = Assembly.getReadMetaData(read, false);
-					if(rmd.getIsPaired() && rmd.getMateMapped())
+					if(!rmd.getMateMapped())
+						continue;
+					
+					MatedRead foundPair = (MatedRead) pairSearcher.search(matedRead);
+					if(foundPair != null)
 					{
-						MatedRead foundPair = (MatedRead) pairSearcher.search(matedRead);
-						if(foundPair != null)
-						{
-							matedRead.setPair(foundPair);
-							foundPair.setPair(matedRead);
-						}
+						matedRead.setPair(foundPair);
+						foundPair.setPair(matedRead);
 					}
 				}
 			}

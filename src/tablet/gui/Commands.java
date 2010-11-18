@@ -3,7 +3,6 @@
 
 package tablet.gui;
 
-import java.awt.Desktop;
 import java.awt.image.*;
 import java.io.*;
 import javax.imageio.*;
@@ -67,7 +66,7 @@ public class Commands
 					files += "\n     " + filenames[i];
 
 				TaskDialog.showFileOpen(RB.format("gui.Commands.fileOpen.error",
-						dialog.getException(), files), TaskDialog.ERR, 1, new String[] {"Open log", RB.getString("gui.text.close") },
+						dialog.getException(), files), TaskDialog.ERR, 1, new String[] { RB.getString("gui.text.openLog"), RB.getString("gui.text.close") },
 						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
 
 			}
@@ -128,8 +127,8 @@ public class Commands
 		{
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
 			{
-				TaskDialog.showFileOpen(RB.format("gui.Commands.importFeatures.exceptionn",
-						dialog.getException()), TaskDialog.ERR, 1, new String[] {"Open log", RB.getString("gui.text.close") },
+				TaskDialog.showFileOpen(RB.format("gui.Commands.importFeatures.exception",
+						dialog.getException()), TaskDialog.ERR, 1, new String[] { RB.getString("gui.text.openLog"), RB.getString("gui.text.close") },
 						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
 			}
 
@@ -196,7 +195,7 @@ public class Commands
 			e.printStackTrace();
 
 			TaskDialog.showFileOpen(RB.format("gui.Commands.exportImage.exception",
-						e), TaskDialog.ERR, 1, new String[] {"Open log", RB.getString("gui.text.close") },
+						e), TaskDialog.ERR, 1, new String[] { RB.getString("gui.text.openLog"), RB.getString("gui.text.close") },
 						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
 		}
 	}
@@ -233,7 +232,7 @@ public class Commands
 			{
 				dialog.getException().printStackTrace();
 				TaskDialog.showFileOpen(RB.format("gui.Commands.exportCoverage.exception",
-						dialog.getException()), TaskDialog.ERR, 1, new String[] {"Open log", RB.getString("gui.text.close") },
+						dialog.getException()), TaskDialog.ERR, 1, new String[] { RB.getString("gui.text.openLog"), RB.getString("gui.text.close") },
 						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
 			}
 			else
@@ -251,23 +250,13 @@ public class Commands
 
 	public void exportColumnData(IReadManager manager, int colIndex) throws IOException
 	{
-		AssemblyPanel aPanel = winMain.getAssemblyPanel();
-		
-		String aName = aPanel.getAssembly().getName();
-		File saveAs = new File(Prefs.guiCurrentDir, aName+".txt");
-
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-			RB.getString("gui.text.formats.txt"), "txt");
-
-		// Ask the user for a filename to save the current view as
-		String filename = TabletUtils.getSaveFilename(
-			RB.getString("gui.Commands.exportCoverage.saveDialog"), saveAs, filter);
+		String filename = getFilename();
 
 		// Quit if the user cancelled the file selection
 		if (filename == null)
 			return;
 
-		ReadPrinter printer = new ReadPrinter(new File(filename), manager, ReadPrinter.COLUMN_TYPE, colIndex);
+		ReadPrinter printer = new ReadPrinter(new File(filename), manager, colIndex);
 
 		ProgressDialog dialog = new ProgressDialog(printer,
 				RB.getString("gui.Commands.exportReadColumn.title"),
@@ -278,76 +267,112 @@ public class Commands
 				dialog.getResult() == ProgressDialog.JOB_FAILED)
 		{
 			dialog.getException().printStackTrace();
-			TaskDialog.showFileOpen(RB.format("gui.Commands.exportReadColumn.exception",
-						dialog.getException()), TaskDialog.ERR, 1, new String[] {"Open log", RB.getString("gui.text.close") },
-						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
+			TaskDialog.showFileOpen(
+					RB.format("gui.Commands.exportReadColumn.exception",
+					dialog.getException()), TaskDialog.ERR, 1,
+					new String[] { RB.getString("gui.text.openLog"),
+					RB.getString("gui.text.close") }, new boolean[] { true, true },
+					Tablet.getLogFile().getAbsolutePath());
 		}
 		else
 		{
-			int result = TaskDialog.show(RB.format("gui.Commands.exportReadColumn.success", filename),
-					TaskDialog.INF, 0, new String[] {"Open file", RB.getString("gui.text.close")});
-			if(result == 0)
-			{
-				// Before more Desktop API is used, first check
-				// whether the API is supported by this particular
-				// virtual machine (VM) on this particular host.
-				if (Desktop.isDesktopSupported())
-				{
-					Desktop desktop = Desktop.getDesktop();
-					desktop.open(new File(filename));
-				}
-			}
+			TaskDialog.showFileOpen(
+					RB.format("gui.Commands.exportReadColumn.success", filename),
+					TaskDialog.INF, 0,
+					new String[] { RB.getString("gui.text.open"),
+					RB.getString("gui.text.close")},
+					new boolean [] { true, true }, filename);
 		}
 	}
 
-	public void exportScreenData(IReadManager manager, int xS, int xE) throws IOException
+	public void exportScreenData(IReadManager manager, int xS, int xE, int yS, int yE) throws IOException
+	{
+		// Ask the user for a filename to save the current view as
+		String filename = getFilename();
+
+		// Quit if the user cancelled the file selection
+		if (filename == null)
+			return;
+
+		ReadPrinter printer = new ReadPrinter(new File(filename), manager, xS, xE, yS, yE);
+
+		ProgressDialog dialog = new ProgressDialog(printer,
+				RB.getString("gui.Commands.exportVisibleReads.title"),
+				RB.getString("gui.Commands.exportVisibleReads.label"),
+				Tablet.winMain);
+
+		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
+				dialog.getResult() == ProgressDialog.JOB_FAILED)
+		{
+			dialog.getException().printStackTrace();
+			TaskDialog.showFileOpen(
+					RB.format("gui.Commands.exportVisibleReads.exception",
+					dialog.getException()), TaskDialog.ERR, 1,
+					new String[] { RB.getString("gui.text.openLog"),
+					RB.getString("gui.text.close") }, new boolean[] { true, true },
+					Tablet.getLogFile().getAbsolutePath());
+		}
+		else
+		{
+			TaskDialog.showFileOpen(
+					RB.format("gui.Commands.exportVisibleReads.success", filename),
+					TaskDialog.INF, 0,
+					new String[] { RB.getString("gui.text.open"),
+					RB.getString("gui.text.close") }, new boolean[] { true, true },
+					filename);
+		}
+	}
+
+	public void exportContigData(IReadManager manager) throws IOException
+	{
+		// Ask the user for a filename to save the current view as
+		String filename = getFilename();
+
+		// Quit if the user cancelled the file selection
+		if (filename == null)
+			return;
+
+		ReadPrinter printer = new ReadPrinter(new File(filename), manager);
+
+		ProgressDialog dialog = new ProgressDialog(printer,
+				RB.getString("gui.Commands.exportContigReads.title"),
+				RB.getString("gui.Commands.exportContigReads.label"),
+				Tablet.winMain);
+
+		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
+				dialog.getResult() == ProgressDialog.JOB_FAILED)
+		{
+			dialog.getException().printStackTrace();
+			TaskDialog.showFileOpen(
+					RB.format("gui.Commands.exportContigReads.exception",
+					dialog.getException()), TaskDialog.ERR, 1,
+					new String[] { RB.getString("gui.text.openLog"),
+					RB.getString("gui.text.close") }, new boolean[] { true, true },
+					Tablet.getLogFile().getAbsolutePath());
+		}
+		else
+		{
+			TaskDialog.showFileOpen(
+					RB.format("gui.Commands.exportContigReads.success", filename),
+					TaskDialog.INF, 0,
+					new String[] { RB.getString("gui.text.open"),
+					RB.getString("gui.text.close") }, new boolean[] { true, true },
+					filename);
+		}
+	}
+
+	/**
+	 * Display a save dialog to get the filename a file should be saved under.
+	 */
+	private String getFilename()
 	{
 		AssemblyPanel aPanel = winMain.getAssemblyPanel();
-
 		String aName = aPanel.getAssembly().getName();
-		File saveAs = new File(Prefs.guiCurrentDir, aName+".txt");
-
-		FileNameExtensionFilter filter = new FileNameExtensionFilter(
-			RB.getString("gui.text.formats.txt"), "txt");
-
+		File saveAs = new File(Prefs.guiCurrentDir, aName + ".txt");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter(RB.getString("gui.text.formats.txt"), "txt");
 		// Ask the user for a filename to save the current view as
-		String filename = TabletUtils.getSaveFilename(
-			RB.getString("gui.Commands.exportCoverage.saveDialog"), saveAs, filter);
-
-		// Quit if the user cancelled the file selection
-		if (filename == null)
-			return;
-
-		ReadPrinter printer = new ReadPrinter(new File(filename), manager, ReadPrinter.SCREEN_TYPE, xS, xE);
-
-		ProgressDialog dialog = new ProgressDialog(printer,
-				RB.getString("gui.Commands.exportReadColumn.title"),
-				RB.getString("gui.Commands.exportReadColumn.label"),
-				Tablet.winMain);
-
-		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
-				dialog.getResult() == ProgressDialog.JOB_FAILED)
-		{
-			dialog.getException().printStackTrace();
-			TaskDialog.showFileOpen(RB.format("gui.Commands.exportReadColumn.exception",
-						dialog.getException()), TaskDialog.ERR, 1, new String[] {"Open log", RB.getString("gui.text.close") },
-						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
-		}
-		else
-		{
-			int result = TaskDialog.show(RB.format("gui.Commands.exportReadColumn.success", filename),
-					TaskDialog.INF, 0, new String[] {"Open file", RB.getString("gui.text.close")});
-			if(result == 0)
-			{
-				// Before more Desktop API is used, first check
-				// whether the API is supported by this particular
-				// virtual machine (VM) on this particular host.
-				if (Desktop.isDesktopSupported())
-				{
-					Desktop desktop = Desktop.getDesktop();
-					desktop.open(new File(filename));
-				}
-			}
-		}
+		String filename = TabletUtils.getSaveFilename(RB.getString("gui.Commands.exportCoverage.saveDialog"), saveAs, filter);
+		return filename;
 	}
+
 }
