@@ -196,7 +196,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 	private void highlightRead(final Read read, final Contig contig)
 	{
 		final int lineIndex = contig.getReadManager().getLineForRead(read);
-		
+
 		final int startPos = read.getStartPosition()/* - contig.getVisualStart()*/;
 
 		SwingUtilities.invokeLater(new Runnable() {
@@ -277,7 +277,8 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 
 		if(Prefs.guiFindPanelSelectedIndex == Finder.CURRENT_CONTIG && aPanel.getContig() == null)
 		{
-			TaskDialog.error("A Contig must be selected before searching over a single contig can occur.", "OK");
+			TaskDialog.error(RB.getString("gui.findPanel.noContigError"),
+				RB.getString("gui.text.close"));
 			return;
 		}
 		try
