@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="5.0.4" transformSequenceNumber="3">
+<install4j version="5.0.6" transformSequenceNumber="3">
   <directoryPresets config=".." />
   <application name="Tablet" distributionSourceDir="" applicationId="9483-2571-4596-9336" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="tablet" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="x.xx.xx.xx" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
@@ -18,7 +18,7 @@
     </variables>
     <mergedProjects />
   </application>
-  <files keepModificationTimes="false" missingFilesStrategy="warn" defaultOverwriteMode="4" defaultUninstallMode="0" launcherOverwriteMode="3" defaultFileMode="644" defaultDirMode="755">
+  <files keepModificationTimes="false" missingFilesStrategy="warn" globalExcludeSuffixes="" defaultOverwriteMode="4" defaultUninstallMode="0" launcherOverwriteMode="3" defaultFileMode="644" defaultDirMode="755">
     <filesets />
     <roots />
     <mountPoints>
@@ -1594,5 +1594,6 @@ if (wizardContext != null) {
     </unixInstaller>
   </mediaSets>
   <buildIds buildAll="true" />
+  <buildOptions verbose="false" faster="false" debug="false" />
 </install4j>
 

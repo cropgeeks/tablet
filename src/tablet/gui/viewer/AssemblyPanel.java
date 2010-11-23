@@ -357,7 +357,11 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 			{
 				String msg = RB.format("gui.viewer.assemblyPanel.ddcError",
 					dialog.getException());
-				TaskDialog.error(msg, RB.getString("gui.text.close"));
+
+				TaskDialog.showFileOpen(msg, TaskDialog.ERR, 1,
+					new String[] { RB.getString("gui.text.openLog"),
+					RB.getString("gui.text.close") }, new boolean[] { true, true },
+					Tablet.getLogFile().getAbsolutePath());
 			}
 
 			System.out.println("contig load failed for " + contig.getName());
@@ -412,7 +416,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 
 		// And this'll force a repaint of any table's that might need to update
 		winMain.repaint();
-		
+
 		return true;
 	}
 

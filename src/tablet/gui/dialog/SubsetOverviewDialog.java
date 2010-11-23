@@ -94,7 +94,8 @@ public class SubsetOverviewDialog extends JDialog implements ActionListener
 	{
 		if((Integer)fromModel.getValue() > (Integer)toModel.getValue())
 		{
-			TaskDialog.error("You must ensure that the \"display bases from\" value is less than the \"to\" value.", RB.getString("gui.text.close"));
+			TaskDialog.error("You must ensure that the \"display bases from\" value is less than the \"to\" value.",
+				RB.getString("gui.text.close"));
 			return false;
 		}
 		return true;
