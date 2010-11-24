@@ -136,6 +136,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		if (aPanel.setContig(contig))
 		{
 			featuresPanel.setContig(contig);
+			winMain.getReadsPanel().setContig(contig);
 
 			Actions.openedContigSelected();
 
@@ -159,6 +160,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 	{
 		aPanel.setContig(null);
 		featuresPanel.setContig(null);
+		winMain.getReadsPanel().setContig(null);
 		findPanel.toggleComponentEnabled(true);
 
 		winMain.setAssemblyPanelVisible(false);

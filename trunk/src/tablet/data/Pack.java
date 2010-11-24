@@ -133,7 +133,7 @@ public class Pack
 				if (mate != null)
 					mateEndPos = mate.getEndPosition();
 
-				boolean needsLine = matePos < readS && isMateContig;
+				boolean needsLine = matePos < readS && isMateContig && rmd.getMateMapped();
 				boolean onDifferentRows = mate != null && mateEndPos >= startPos;
 				boolean drawLine = needsLine & !onDifferentRows;
 
@@ -160,6 +160,7 @@ public class Pack
 				data[dataI] = (byte) (color + rmd.getStateAt(index-readS));
 		}
 
+		ReadMetaData rmd = Assembly.getReadMetaData(read, true);
 		MatedRead matedRead = null;
 		if(read instanceof MatedRead && Prefs.visPaired && Prefs.visPairLines)
 		{
@@ -169,7 +170,7 @@ public class Pack
 			int matePos = matedRead.getMatePos();
 			MatedRead mate = matedRead.getPair();
 
-			boolean needsLine = matePos < startPos && startPos > end && isMateContig;
+			boolean needsLine = matePos < startPos && startPos > end && isMateContig && rmd.getMateMapped();
 			boolean samePack = reads.contains(matedRead) && reads.contains(mate);
 			boolean drawLine = needsLine && samePack && mate != null;
 

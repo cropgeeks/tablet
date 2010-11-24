@@ -2,7 +2,9 @@ package tablet.gui;
 
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.table.TableCellRenderer;
+import javax.swing.table.*;
+
+import scri.commons.gui.*;
 
 public class NBReadsPanelControls extends javax.swing.JPanel
 {
@@ -18,6 +20,8 @@ public class NBReadsPanelControls extends javax.swing.JPanel
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getSelectionModel().addListSelectionListener(panel);
+		exportLinkLabel.addActionListener(panel);
+		exportLinkLabel.setEnabled(false);
     }
 
 	private JTable createTable()
@@ -40,6 +44,37 @@ public class NBReadsPanelControls extends javax.swing.JPanel
 			}
 		};
 	}
+	
+	public void setLabelStates(boolean visible)
+	{
+		labelPanel.setVisible(visible);
+		cigarLabel.setVisible(visible);
+		cLabel.setVisible(visible);
+	}
+
+	public void setPairLabelStates(boolean visible)
+	{
+		properlyPairedLabel.setVisible(visible);
+		pairLabel.setVisible(visible);
+		numberInPairLabel.setVisible(visible);
+		noInPairLabel.setVisible(visible);
+		insertSizeLabel.setVisible(visible);
+		iSizeLabel.setVisible(visible);
+		matePosLabel.setVisible(visible);
+		mPosLabel.setVisible(visible);
+		mateContigLabel.setVisible(visible);
+		mContigLabel.setVisible(visible);
+	}
+	
+	void setReadInfoToDefaults()
+	{
+		cigarLabel.setText("");
+		properlyPairedLabel.setText("");
+		numberInPairLabel.setText("");
+		insertSizeLabel.setText("");
+		matePosLabel.setText("");
+		mateContigLabel.setText("");
+	}
 
     /** This method is called from within the constructor to
      * initialize the form.
@@ -53,18 +88,20 @@ public class NBReadsPanelControls extends javax.swing.JPanel
         readsLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         table = createTable();
-        cLabel = new javax.swing.JLabel();
-        pairLabel = new javax.swing.JLabel();
-        noInPairLabel = new javax.swing.JLabel();
-        iSizeLabel = new javax.swing.JLabel();
-        mPosLabel = new javax.swing.JLabel();
+        labelPanel = new javax.swing.JPanel();
         mContigLabel = new javax.swing.JLabel();
-        numberInPairLabel = new javax.swing.JLabel();
         properlyPairedLabel = new javax.swing.JLabel();
-        cigarLabel = new javax.swing.JLabel();
+        mPosLabel = new javax.swing.JLabel();
+        pairLabel = new javax.swing.JLabel();
         insertSizeLabel = new javax.swing.JLabel();
         matePosLabel = new javax.swing.JLabel();
+        numberInPairLabel = new javax.swing.JLabel();
+        noInPairLabel = new javax.swing.JLabel();
         mateContigLabel = new javax.swing.JLabel();
+        iSizeLabel = new javax.swing.JLabel();
+        cigarLabel = new javax.swing.JLabel();
+        cLabel = new javax.swing.JLabel();
+        exportLinkLabel = new scri.commons.gui.matisse.HyperLinkLabel();
 
         readsLabel.setText("Visible reads (0):");
 
@@ -78,32 +115,19 @@ public class NBReadsPanelControls extends javax.swing.JPanel
         ));
         jScrollPane1.setViewportView(table);
 
-        cLabel.setLabelFor(cigarLabel);
-        cLabel.setText("Cigar:");
-
-        pairLabel.setLabelFor(properlyPairedLabel);
-        pairLabel.setText("Properly paired:");
-
-        noInPairLabel.setLabelFor(numberInPairLabel);
-        noInPairLabel.setText("Number in pair:");
-
-        iSizeLabel.setLabelFor(insertSizeLabel);
-        iSizeLabel.setText("Insert size:");
-
-        mPosLabel.setLabelFor(matePosLabel);
-        mPosLabel.setText("Mate pos:");
+        labelPanel.setAutoscrolls(true);
 
         mContigLabel.setLabelFor(mateContigLabel);
         mContigLabel.setText("Mate contig:");
 
-        numberInPairLabel.setForeground(new java.awt.Color(255, 0, 0));
-        numberInPairLabel.setText(" ");
-
         properlyPairedLabel.setForeground(new java.awt.Color(255, 0, 0));
         properlyPairedLabel.setText(" ");
 
-        cigarLabel.setForeground(new java.awt.Color(255, 0, 0));
-        cigarLabel.setText(" ");
+        mPosLabel.setLabelFor(matePosLabel);
+        mPosLabel.setText("Mate pos:");
+
+        pairLabel.setLabelFor(properlyPairedLabel);
+        pairLabel.setText("Properly paired:");
 
         insertSizeLabel.setForeground(new java.awt.Color(255, 0, 0));
         insertSizeLabel.setText(" ");
@@ -111,8 +135,80 @@ public class NBReadsPanelControls extends javax.swing.JPanel
         matePosLabel.setForeground(new java.awt.Color(255, 0, 0));
         matePosLabel.setText(" ");
 
+        numberInPairLabel.setForeground(new java.awt.Color(255, 0, 0));
+        numberInPairLabel.setText(" ");
+
+        noInPairLabel.setLabelFor(numberInPairLabel);
+        noInPairLabel.setText("Number in pair:");
+
         mateContigLabel.setForeground(new java.awt.Color(255, 0, 0));
         mateContigLabel.setText(" ");
+
+        iSizeLabel.setLabelFor(insertSizeLabel);
+        iSizeLabel.setText("Insert size:");
+
+        cigarLabel.setForeground(new java.awt.Color(255, 0, 0));
+        cigarLabel.setText(" ");
+
+        cLabel.setLabelFor(cigarLabel);
+        cLabel.setText("Cigar:");
+
+        javax.swing.GroupLayout labelPanelLayout = new javax.swing.GroupLayout(labelPanel);
+        labelPanel.setLayout(labelPanelLayout);
+        labelPanelLayout.setHorizontalGroup(
+            labelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(labelPanelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(labelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(noInPairLabel)
+                    .addComponent(pairLabel)
+                    .addComponent(cLabel)
+                    .addComponent(iSizeLabel)
+                    .addComponent(mPosLabel)
+                    .addComponent(mContigLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(labelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(properlyPairedLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(numberInPairLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(insertSizeLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(matePosLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cigarLabel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(mateContigLabel, javax.swing.GroupLayout.Alignment.LEADING))
+                .addContainerGap(335, Short.MAX_VALUE))
+        );
+        labelPanelLayout.setVerticalGroup(
+            labelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(labelPanelLayout.createSequentialGroup()
+                .addGroup(labelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                    .addComponent(cLabel)
+                    .addComponent(cigarLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(labelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                    .addComponent(pairLabel)
+                    .addComponent(properlyPairedLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(labelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                    .addComponent(noInPairLabel)
+                    .addComponent(numberInPairLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(labelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, labelPanelLayout.createSequentialGroup()
+                        .addComponent(iSizeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(mPosLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, labelPanelLayout.createSequentialGroup()
+                        .addComponent(insertSizeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(matePosLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(labelPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE, false)
+                    .addComponent(mContigLabel)
+                    .addComponent(mateContigLabel))
+                .addContainerGap())
+        );
+
+        exportLinkLabel.setForeground(new java.awt.Color(68, 106, 156));
+        exportLinkLabel.setText("Export data");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -121,61 +217,23 @@ public class NBReadsPanelControls extends javax.swing.JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(readsLabel)
-                .addContainerGap(310, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(noInPairLabel)
-                    .addComponent(pairLabel)
-                    .addComponent(cLabel)
-                    .addComponent(iSizeLabel)
-                    .addComponent(mPosLabel)
-                    .addComponent(mContigLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(properlyPairedLabel)
-                    .addComponent(numberInPairLabel)
-                    .addComponent(insertSizeLabel)
-                    .addComponent(matePosLabel)
-                    .addComponent(mateContigLabel)
-                    .addComponent(cigarLabel))
-                .addContainerGap(300, Short.MAX_VALUE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 400, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 278, Short.MAX_VALUE)
+                .addComponent(exportLinkLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 435, Short.MAX_VALUE)
+            .addComponent(labelPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(readsLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 170, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(cLabel)
-                    .addComponent(cigarLabel))
+                    .addComponent(readsLabel)
+                    .addComponent(exportLinkLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(pairLabel)
-                    .addComponent(properlyPairedLabel))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 76, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(noInPairLabel)
-                    .addComponent(numberInPairLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(iSizeLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(mPosLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(mContigLabel)
-                            .addComponent(mateContigLabel)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(insertSizeLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(matePosLabel)
-                        .addGap(20, 20, 20)))
+                .addComponent(labelPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -184,9 +242,11 @@ public class NBReadsPanelControls extends javax.swing.JPanel
     // Variables declaration - do not modify//GEN-BEGIN:variables
     javax.swing.JLabel cLabel;
     javax.swing.JLabel cigarLabel;
+    scri.commons.gui.matisse.HyperLinkLabel exportLinkLabel;
     javax.swing.JLabel iSizeLabel;
     javax.swing.JLabel insertSizeLabel;
     private javax.swing.JScrollPane jScrollPane1;
+    javax.swing.JPanel labelPanel;
     javax.swing.JLabel mContigLabel;
     javax.swing.JLabel mPosLabel;
     javax.swing.JLabel mateContigLabel;

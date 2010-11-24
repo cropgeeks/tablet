@@ -232,6 +232,9 @@ public class WinMain extends JRibbonFrame
 
 	public FeaturesPanel getFeaturesPanel()
 		{ return featuresPanel; }
+	
+	public ReadsPanel getReadsPanel()
+		{ return readsPanel; }
 
 	public JumpToDialog getJumpToDialog()
 	{
@@ -347,10 +350,5 @@ public class WinMain extends JRibbonFrame
 		TaskDialog.showFileOpen(RB.format("gui.ContigsPanel.saveReads.exception",
 						msg), TaskDialog.ERR, 1, new String[] { RB.getString("gui.text.openLog"), RB.getString("gui.text.close") },
 						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
-	}
-
-	public ReadsPanel getReadsPanel()
-	{
-		return readsPanel;
 	}
 }
