@@ -266,7 +266,9 @@ class ReadsCanvasMenu implements ActionListener
 
 					PairSearcher pairSearcher = new PairSearcher(rCanvas.contig);
 
-					final Read r = pairSearcher.search(pr);
+					// Must use searchForPair instead of search as DB query 
+					// cannot be relied upon once the reads have been sorted
+					final Read r = pairSearcher.searchForPair(Assembly.getReadName(read), pr.getMatePos());
 
 					final int lineIndex = rCanvas.reads.getLineForRead(r);
 
@@ -411,6 +413,16 @@ class ReadsCanvasMenu implements ActionListener
 			PackSet set = (PackSet)rCanvas.reads;
 			pair = set.getPairAtLine(rowIndex, colIndex);
 			read = set.getReadAt(rowIndex, colIndex);
+		}
+		else if(rCanvas.reads instanceof StackSet)
+		{
+			StackSet set = (StackSet)rCanvas.reads;
+			read = set.getReadAt(rowIndex, colIndex);
+			if (read instanceof MatedRead)
+			{
+				MatedRead mr = (MatedRead)read;
+				pair = new Read[] { read, mr.getPair() };
+			}
 		}
 
 		ReadNameData rnd = null;

@@ -219,7 +219,6 @@ public class ReadPrinter extends SimpleJob
 		if (newLine != true)
 			out.newLine();
 		
-		out.newLine();
 		progress++;
 	}
 

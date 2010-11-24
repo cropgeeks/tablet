@@ -493,4 +493,9 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 
 	public CigarIHighlighter getCigarIHighlighter()
 		{ return cigarIHighlighter; }
+
+	public ReadsCanvas getReadsCanvas()
+	{
+		return readsCanvas;
+	}
 }

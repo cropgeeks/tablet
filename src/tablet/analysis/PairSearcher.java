@@ -14,7 +14,8 @@ public class PairSearcher
 
 	/**
 	 * Search for a read's pair within the current contig (or current
-	 * bam window of the contig in the case of paired-end bam).
+	 * bam window of the contig in the case of paired-end bam) Can only be used
+	 * in situations where the reads haven't been sorted yet.
 	 */
 	public Read search(MatedRead read)
 		throws Exception
@@ -38,16 +39,17 @@ public class PairSearcher
 
 
 
-	// 15/11/2010: Commented out the code below because the search for a read's
-	// pair can be done using the new DB-lookup code above instead. The only
-	// issue is whether a check needs to be done on the position of the mate (ie
-	// is it what was expected when the matches come back?).
+	/* 22/11/10 The code below is for use in situations where the DB lookup
+		can't be used to find pairs. This is mainly any usage situation where
+		the reads have already been sorted, such as any post-packing / stacking
+		situation
+	*/
 
 	/**
 	 * Binary search for a read's pair within the current contig (or current
 	 * bam window of the contig in the case of paired-end bam).
 	 */
-/*	public Read searchForPair(String name, int pos)
+	public Read searchForPair(String name, int pos)
 		throws Exception
 	{
 		int low = 0;
@@ -75,7 +77,7 @@ public class PairSearcher
 	 * There is a potential for more than one read mapping to a position, as
 	 * such we need to refine the search by searching linearly in both directions.
 	 */
-/*	private Read refinePairSearch(int index, String name, int pos)
+	private Read refinePairSearch(int index, String name, int pos)
 		throws Exception
 	{
 		Read read = null;
@@ -118,5 +120,4 @@ public class PairSearcher
 
 		return null;
 	}
-*/
 }

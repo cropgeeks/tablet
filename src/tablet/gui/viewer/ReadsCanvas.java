@@ -14,7 +14,7 @@ import tablet.data.*;
 import tablet.gui.*;
 import tablet.gui.viewer.colors.*;
 
-class ReadsCanvas extends JPanel
+public class ReadsCanvas extends JPanel
 {
 	private AssemblyPanel aPanel;
 
@@ -321,5 +321,25 @@ class ReadsCanvas extends JPanel
 						g.drawImage(colors.getImage(data[i]), x, y, null);
 			}
 		}
+	}
+
+	public int getXS()
+	{
+		return xS;
+	}
+
+	public int getXE()
+	{
+		return xE;
+	}
+
+	public int getYS()
+	{
+		return yS;
+	}
+
+	public int getYE()
+	{
+		return yE;
 	}
 }

@@ -60,7 +60,7 @@ public class ReadPair
 				if(mate != null)
 					mateEndPos = mate.getEndPosition();
 				
-				boolean needsLine = matePos < readS && isMateContig;
+				boolean needsLine = matePos < readS && isMateContig && rmd.getMateMapped();
 				boolean onDifferentRows = mate != null && mateEndPos >= startPos;
 				boolean drawLine = needsLine & !onDifferentRows;
 
