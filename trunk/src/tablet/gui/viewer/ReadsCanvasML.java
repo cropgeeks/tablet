@@ -3,11 +3,13 @@
 
 package tablet.gui.viewer;
 
+import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
 import tablet.data.*;
+import tablet.gui.ribbon.*;
 
 class ReadsCanvasML extends MouseInputAdapter
 {
@@ -41,6 +43,8 @@ class ReadsCanvasML extends MouseInputAdapter
 		// Then add listeners and overlays to the canvas
 		rCanvas.addMouseListener(this);
 		rCanvas.addMouseMotionListener(this);
+		rCanvas.addMouseWheelListener(this);
+
 		rCanvas.overlays.add(new ReadShadower(aPanel));
 		rCanvas.overlays.add(outliner);
 		rCanvas.overlays.add(pairOutliner);
@@ -100,6 +104,41 @@ class ReadsCanvasML extends MouseInputAdapter
 	{
 		if (rCanvasMenu.isShowingMenu() == false)
 			trackMouse(e);
+	}
+
+	public void mouseWheelMoved(MouseWheelEvent e)
+	{
+		int shortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+
+		// CTRL/CMD down: do canvas zooming
+		if (e.getModifiers() == shortcut)
+		{
+			int units = e.getWheelRotation();
+
+			if (units > 0)
+				BandAdjust.zoomIn(-units);
+			else
+				BandAdjust.zoomOut(units);
+		}
+
+		// Otherwise, do canvas scrolling
+		else
+		{
+			JScrollBar sBar = null;
+			if (aPanel.vBar.isVisible())
+				sBar = aPanel.vBar;
+			else if (aPanel.hBar.isVisible())
+				sBar = aPanel.hBar;
+
+			if (sBar != null)
+			{
+				int notches = e.getWheelRotation();
+				int value = sBar.getValue();
+				int units = 5 * sBar.getUnitIncrement();
+
+				sBar.setValue(value + (notches * units));
+			}
+		}
 	}
 
 	private void trackMouse(MouseEvent e)

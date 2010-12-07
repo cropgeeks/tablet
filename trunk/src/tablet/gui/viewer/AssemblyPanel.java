@@ -33,7 +33,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 	ReadsCanvas readsCanvas;
 
 	private JScrollPane sp;
-	private JScrollBar hBar, vBar;
+	JScrollBar hBar, vBar;
 	private JViewport viewport;
 
 	// Normal or click zooming (affects which base to zoom in on)
@@ -112,6 +112,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		hBar = sp.getHorizontalScrollBar();
 		vBar = sp.getVerticalScrollBar();
 
+		sp.setWheelScrollingEnabled(false);
 		sp.setViewportView(readsCanvas);
 		sp.getViewport().setBackground(Color.white);
 	}
@@ -219,9 +220,9 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 	void setScrollbarAdjustmentValues(int xIncrement, int yIncrement)
 	{
 		hBar.setUnitIncrement(xIncrement);
-		hBar.setBlockIncrement(xIncrement);
+		hBar.setBlockIncrement(xIncrement*25);
 		vBar.setUnitIncrement(yIncrement);
-		vBar.setBlockIncrement(yIncrement);
+		vBar.setBlockIncrement(yIncrement*25);
 	}
 
 	void updateOverview(int xIndex, int xNum, int yIndex, int yNum)
