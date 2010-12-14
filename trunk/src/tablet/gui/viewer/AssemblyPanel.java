@@ -205,6 +205,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 			overviewCanvas.setSubset(contig.getVisualStart(), contig.getVisualEnd());
 
 		forceRedraw();
+		stateChanged(null);
 
 		return setContigOK;
 	}
