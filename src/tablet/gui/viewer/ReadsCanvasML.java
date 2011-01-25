@@ -11,6 +11,8 @@ import javax.swing.event.*;
 import tablet.data.*;
 import tablet.gui.ribbon.*;
 
+import scri.commons.gui.*;
+
 class ReadsCanvasML extends MouseInputAdapter
 {
 	private AssemblyPanel aPanel;
@@ -25,6 +27,10 @@ class ReadsCanvasML extends MouseInputAdapter
 	private ReadsCanvasInfoPaneRenderer infoPaneRenderer = new ReadsCanvasInfoPaneRenderer();
 	private OutlinerOverlay outliner;
 	private PairOutlinerOverlay pairOutliner;
+
+	ReadsCanvasDragHandler dragHandler;
+
+	private boolean isOSX = SystemUtils.isMacOS();
 
 	ReadsCanvasML(AssemblyPanel aPanel)
 	{
@@ -51,7 +57,12 @@ class ReadsCanvasML extends MouseInputAdapter
 		rCanvas.overlays.add(nOverlay);
 		rCanvas.overlays.add(infoPaneRenderer);
 
-		new ReadsCanvasDragHandler(aPanel, rCanvas);
+		dragHandler = new ReadsCanvasDragHandler(aPanel, rCanvas);
+	}
+
+	private boolean isMetaClick(MouseEvent e)
+	{
+		return isOSX && e.isMetaDown() || !isOSX && e.isControlDown();
 	}
 
 	public void mouseExited(MouseEvent e)
@@ -70,7 +81,10 @@ class ReadsCanvasML extends MouseInputAdapter
 
 	public void mouseClicked(MouseEvent e)
 	{
-		if (SwingUtilities.isLeftMouseButton(e))
+		if (isMetaClick(e) && e.isAltDown() && e.getClickCount() == 2)
+			new Breakout(rCanvas, aPanel);
+
+		else if (SwingUtilities.isLeftMouseButton(e))
 		{
 			// Page left or right if the navigation arrows were clicked on
 			if (nOverlay.isLeftActive())
