@@ -199,21 +199,6 @@ public class BamFileHandler
 		// contigs that weren't in the reference file but are in the BAM file
 		if (contigHash != null)
 		{
-			TabletStats stats = new TabletStats();
-			boolean statsOK = false;
-
-			try
-			{
-				// This is exception wrapped because picard can crap-out on
-				// older index files that don't contain the stats data. It can
-				// also work on some older files, but return a count of zero.
-				stats.doWork(bamFile.getInputStream(), baiFile.getFile());
-				statsOK = true;
-			}
-			catch (Exception e) { e.printStackTrace(); }
-
-			int i = 0;
-
 			for(SAMSequenceRecord record : bamReader.getFileHeader().getSequenceDictionary().getSequences())
 			{
 				String contigName = record.getSequenceName();
@@ -223,11 +208,11 @@ public class BamFileHandler
 
 				if (contigToAdd == null)
 				{
-					contigToAdd = new Contig(contigName);
-					contigToAdd.getTableData().setConsensusLength(length);
+					Contig contig = new Contig(contigName);
+					contig.getTableData().setConsensusLength(length);
 
-					contigHash.put(contigName, contigToAdd);
-					assembly.addContig(contigToAdd);
+					contigHash.put(contigName, contig);
+					assembly.addContig(contig);
 				}
 
 				// If it *is* in the imported reference, check the lengths
@@ -244,32 +229,11 @@ public class BamFileHandler
 						refLengthsOK = false;
 					}
 				}
-
-				// Store the read count (from the index file)
-				if (statsOK)
-				{
-					int readCount = stats.getAlignedRecordCount(i);
-					contigToAdd.getTableData().readCount = readCount;
-				}
-
-				i++;
 			}
-
-			long totalReadCount = 0;
 
 			// Finally, set every contig to have undefined reads
 			for (Contig contig: assembly)
-			{
 				contig.getTableData().readsDefined = false;
-				totalReadCount += contig.getTableData().readCount;
-			}
-
-			if (totalReadCount == 0)
-			{
-				TaskDialog.warning(
-					RB.getString("io.BamFileHandler.noReadsError"),
-					RB.getString("gui.text.close"));
-			}
 		}
 	}
 
@@ -278,4 +242,5 @@ public class BamFileHandler
 
 	boolean refLengthsOK()
 		{ return refLengthsOK; }
+
 }
