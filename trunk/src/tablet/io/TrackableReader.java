@@ -38,7 +38,7 @@ abstract class TrackableReader extends SimpleJob
 	// Tracks the current file being read from
 	private int fileIndex;
 
-	private boolean isIndeterminate = false;
+	protected boolean isIndeterminate = false;
 
 	// The total size (in bytes) of all the files
 	private long totalSize;

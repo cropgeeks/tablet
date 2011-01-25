@@ -97,7 +97,7 @@ public class BamFileReader extends TrackableReader
 		{
 			BamFileHandler bamHandler = new BamFileHandler(readCache, nameCache, bamFile, baiFile, assembly);
 			status = 2;
-			
+
 			bamHandler.openBamFile(contigHash);
 
 			assembly.setBamHandler(bamHandler);
@@ -169,7 +169,9 @@ public class BamFileReader extends TrackableReader
 
 			case 1:	return RB.format("io.BamFileReader.bai", getTransferRate());
 
-			case 2: return RB.getString("io.BamFileReader.bam");
+			case 2:
+				isIndeterminate = true;
+				return RB.getString("io.BamFileReader.bam");
 		}
 
 		return "";
