@@ -22,6 +22,20 @@ that have been made to Tablet in recent versions. For full details on all the
 changes between versions, please see the <a href="http://bioinf.scri.ac.uk/tablet/svn.txt">
 subversion change log</a>.</p>
 
+<h3>New in 1.11.01.25</h3>
+<ul>
+<li>NEW: Various improvements to the pair-matching code should result in much faster loading of paired-end data.</li>
+<li>NEW: Drawing paired-reads that include "link lines" is now faster.</li>
+<li>NEW: Added new right-click options to the main canvas that provides several export-to-disk options for reads.</li>
+<li>NEW: Added a "Visible Reads" tab, that displays a dynamically changing table of all on-screen reads as you navigate around a contig.</li>
+<li>NEW: Added CTRL/CMD mousewheel zooming to the main canvas.</li>
+<li>CHG: Altered the SAM parsing code to better handle files which have been produced by tools which haven't adhered to the SAM specification.</li>
+<li>CHG: Rearranged some of existing options on the main canvas's right-click menu.</li>
+<li>CHG: Changed to a different SQLite binary for use on OS X that allows it to work on all systems (10.4, 10.5, 10.6) again.</li>
+<li>BUG: Fixed some installer problems that were causing issues on Ubuntu Linux.</li>
+</ul>
+
+
 <h3>New in 1.10.10.06</h3>
 
 <ul>
