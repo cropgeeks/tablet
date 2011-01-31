@@ -22,7 +22,8 @@ class ReadsCanvasPairInfoPane extends ReadsCanvasInfoPane
 		{
 			MatedRead pr = (MatedRead)mRead;
 			ReadNameData rnd = Assembly.getReadNameData(mRead);
-			drawMateUnavailableBox(g, pr.getMatePos(), pr.isMateContig(), rnd.getMateContig());
+			readName = rnd.getName();
+			drawMateUnavailableBox(g, (pr.getMatePos() + 1), pr.isMateContig(), rnd.getMateContig());
 		}
 	}
 
