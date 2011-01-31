@@ -5,6 +5,7 @@ package tablet.analysis;
 
 import java.util.ArrayList;
 import tablet.data.*;
+import tablet.data.cache.*;
 
 public class PairSearcher
 {
@@ -25,14 +26,21 @@ public class PairSearcher
 	{
 		String name = Assembly.getReadName(read);
 
-		ArrayList<Integer> mate = Assembly.getReadsByName(name);
+		ArrayList<Integer> potentialMates = Assembly.getReadsByName(name);
 
 		Read potentialMate = null;
+		int cacheOffset = contig.getCacheOffset();
+		int readCount = contig.getReads().size();
 
-		for (Integer potentialMateID : mate)
+		for (Integer potentialMateID : potentialMates)
 		{
-			potentialMate = contig.getReads().get(potentialMateID);
+			// We can only pair up if we've found a match in the same contig...
+			if (potentialMateID < cacheOffset || potentialMateID > cacheOffset+readCount)
+				continue;
 
+			potentialMate = contig.getReads().get(potentialMateID-cacheOffset);
+
+			// ... with the same EXPECTED start position for the mate
 			if (read.getMatePos() == potentialMate.getStartPosition())
 				return potentialMate;
 		}

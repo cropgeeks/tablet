@@ -121,7 +121,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 			// Sort the reads into order
 			System.out.print("Sorting...");
 			long s = System.currentTimeMillis();
-			
+
 			contig.getReads().trimToSize();
 			Collections.sort(contig.getReads());
 			contig.calculateOffsets(assembly);
@@ -168,17 +168,19 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 		{
 			if (!okToRun)
 				break;
-			
+
 			try
 			{
 				// Search for its pair and set up the link between them
 				MatedRead matedRead = (MatedRead) read;
+
+				// If this read has already had its mate set, skip it
 				if(matedRead.getPair() == null)
 				{
 					ReadMetaData rmd = Assembly.getReadMetaData(read, false);
 					if(!rmd.getMateMapped())
 						continue;
-					
+
 					MatedRead foundPair = (MatedRead) pairSearcher.search(matedRead);
 					if(foundPair != null)
 					{
@@ -189,12 +191,12 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 			}
 			catch(ClassCastException e)
 			{
-				e.printStackTrace();
+//				e.printStackTrace();
 			}
 			progress++;
-			
+
 		}
-		
+
 	}
 
 	public void cancelJob()

@@ -123,6 +123,7 @@ public class AssemblyFileHandler extends SimpleJob
 //				contig.getReads().trimToSize();
 //				//Collections.sort(contig.getReads());
 				contig.calculateOffsets(assembly);
+				contig.setCacheOffset();
 			}
 //			System.out.println((System.currentTimeMillis()-s) + "ms");
 		}
