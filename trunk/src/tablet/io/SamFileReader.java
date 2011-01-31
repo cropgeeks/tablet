@@ -23,7 +23,12 @@ class SamFileReader extends TrackableReader
 
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
+	// ontig currently being processed. Used to detect unsorted data.
+	private String currentContig = "";
+	private boolean isUnsorted = false;
+
 	private int readID = 0;
+
 
 	SamFileReader()
 	{
@@ -111,6 +116,7 @@ class SamFileReader extends TrackableReader
 				continue;
 
 			Contig contigToAddTo = contigHash.get(chr);
+			boolean createdContig = false;
 
 			// If it wasn't found (and we don't have ref data), make it
 			if (contigToAddTo == null && refReader == null)
@@ -119,10 +125,19 @@ class SamFileReader extends TrackableReader
 				contigHash.put(chr, contigToAddTo);
 
 				assembly.addContig(contigToAddTo);
+				createdContig = true;
 			}
 
 			if (contigToAddTo != null)
 			{
+				// Unsorted check...
+				if (contigToAddTo.getName().equals(currentContig) == false)
+				{
+					currentContig = contigToAddTo.getName();
+					if (createdContig == false)
+						isUnsorted = true;
+				}
+
 				if(prev == null)
 				{
 					prev = contigToAddTo;
@@ -198,7 +213,20 @@ class SamFileReader extends TrackableReader
 		assembly.setHasCigar();
 
 		if (Assembly.isPaired())
+		{
 			nameCache.indexNames();
+
+			if (isUnsorted)
+			{
+				javax.swing.SwingUtilities.invokeLater(new Runnable() {
+					public void run() {
+						TaskDialog.warning(
+							RB.getString("io.SamFileReader.unsortedError"),
+							RB.getString("gui.text.close"));
+					}
+				});
+			}
+		}
 	}
 
 	private void processCigarFeatures(CigarParser parser)

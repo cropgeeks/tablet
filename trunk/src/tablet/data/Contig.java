@@ -21,6 +21,10 @@ public class Contig
 
 	private TableData tableData = new TableData();
 
+	// Offset (in number of reads) that is needed to find the first read in this
+	// contig if looking in the cache
+	private int cacheOffset;
+
 	// Starting and ending indices of the region of data that is currently
 	// viewable. Eg, from -10 to 109 (assuming consensus length 100 and reads
 	// overhanging by 10 bases at each end). In the case of BAM subset views,
@@ -277,6 +281,18 @@ public class Contig
 		return features.addFeatureDoSort(newFeature);
 	}
 
+	// Stores a count of the number of reads that exist in the cache BEFORE you
+	// get to the first read for this contig. This number is basically the ID of
+	// the first read in this contig (before any sorting has been done).
+	public void setCacheOffset()
+	{
+		if (reads.size() > 0)
+			cacheOffset = reads.get(0).getID();
+	}
+
+	public int getCacheOffset()
+		{ return cacheOffset; }
+
 	public TableData getTableData()
 		{ return tableData; }
 
@@ -345,5 +361,5 @@ public class Contig
 				return null;
 		}
 	}
-	
+
 }
