@@ -140,14 +140,14 @@ public class BamFinder extends Finder
 	{
 		if (searchReads)
 		{
-			checkForReadMatches(record.getReadName(), record.getUnclippedStart() - 1, record.getReadLength(), searchTerm, contig);
+			checkForReadMatches(record.getReadName(), record.getAlignmentStart() - 1, record.getReadLength(), searchTerm, contig);
 		}
 		else
 		{
 			try
 			{
-				String fullRead = parser.parse(record.getReadString(), record.getUnclippedStart() - 1, record.getCigarString(), null);
-				checkForSubsequenceMatches(record.getReadName(), record.getUnclippedStart() - 1, record.getReadLength(), searchTerm, contig, fullRead);
+				String fullRead = parser.parse(record.getReadString(), record.getAlignmentStart() - 1, record.getCigarString(), null);
+				checkForSubsequenceMatches(record.getReadName(), record.getAlignmentStart() - 1, record.getReadLength(), searchTerm, contig, fullRead);
 			}
 			catch (Exception ex)
 			{
