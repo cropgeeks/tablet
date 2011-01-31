@@ -23,7 +23,7 @@ class SamFileReader extends TrackableReader
 
 	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
-	// ontig currently being processed. Used to detect unsorted data.
+	// Contig currently being processed. Used to detect unsorted data.
 	private String currentContig = "";
 	private boolean isUnsorted = false;
 
@@ -116,7 +116,6 @@ class SamFileReader extends TrackableReader
 				continue;
 
 			Contig contigToAddTo = contigHash.get(chr);
-			boolean createdContig = false;
 
 			// If it wasn't found (and we don't have ref data), make it
 			if (contigToAddTo == null && refReader == null)
@@ -125,7 +124,6 @@ class SamFileReader extends TrackableReader
 				contigHash.put(chr, contigToAddTo);
 
 				assembly.addContig(contigToAddTo);
-				createdContig = true;
 			}
 
 			if (contigToAddTo != null)
@@ -134,7 +132,8 @@ class SamFileReader extends TrackableReader
 				if (contigToAddTo.getName().equals(currentContig) == false)
 				{
 					currentContig = contigToAddTo.getName();
-					if (createdContig == false)
+
+					if (contigToAddTo.getReads().size() > 0)
 						isUnsorted = true;
 				}
 
