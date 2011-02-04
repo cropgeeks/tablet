@@ -13,7 +13,7 @@
 		<jar href="flamingo.jar"/>
 		<jar href="i4jruntime.jar"/>
 		<jar href="osxadapter.jar"/>
-		<jar href="sam.jar"/>
+		<jar href="picard.jar"/>
 		<jar href="samtools-all.jar"/>
 		<jar href="scri-commons.jar"/>
 		<jar href="sqlite-jdbc-3.6.19.jar"/>
