@@ -151,7 +151,7 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 		return url != null;
 	}
 
-	File getFile()
+	public File getFile()
 	{
 		return file;
 	}

@@ -89,10 +89,10 @@
 
 <p>The contigs panel displays the name, length, number of reads, number of
 	features and the percentage mismatch for each contig. When viewing BAM
-	alignments the contig name and length are always displayed; whereas the
-	number of reads, number of features and percentage mismatch are all zero
-	when a contig is not selected, and represent the appropriate figure for
-	the current BAM data window when a contig is selected.</p>
+	alignments the percentage mismatch cannot be displayed until the data
+	for a contig is loaded, and even then, it will only be the mismatch
+	value for that particular BAM window (which may be smaller than the 
+	actual size of the contig).</p>
 
 <h3>Coverage printer</h3>
 

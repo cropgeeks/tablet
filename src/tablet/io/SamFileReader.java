@@ -217,13 +217,9 @@ class SamFileReader extends TrackableReader
 
 			if (isUnsorted)
 			{
-				javax.swing.SwingUtilities.invokeLater(new Runnable() {
-					public void run() {
-						TaskDialog.warning(
-							RB.getString("io.SamFileReader.unsortedError"),
-							RB.getString("gui.text.close"));
-					}
-				});
+				TaskDialog.warning(
+					RB.getString("io.SamFileReader.unsortedError"),
+					RB.getString("gui.text.close"));
 			}
 		}
 	}

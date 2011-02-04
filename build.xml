@@ -67,6 +67,10 @@
 						osxadapter.jar
 						scri-commons.jar
 						sam.jar
+						samtools-all.jar
+						samtools-linux.jar
+						samtools-macos.jar
+						samtools-windows.jar
 						sqlite-jdbc-3.6.19.jar
 						sqlite-jdbc-3.6.19-linux32.jar
 						sqlite-jdbc-3.6.19-linux64.jar

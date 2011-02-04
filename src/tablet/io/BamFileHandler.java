@@ -9,6 +9,8 @@ import tablet.analysis.*;
 import tablet.data.cache.*;
 import tablet.data.*;
 import tablet.data.auxiliary.*;
+import tablet.gui.*;
+import tablet.io.samtools.*;
 
 import net.sf.samtools.*;
 import net.sf.samtools.util.*;
@@ -231,9 +233,41 @@ public class BamFileHandler
 				}
 			}
 
+			// Run idxstats and try to fill the contigs with read counts
+			IdxStats idxStats = new IdxStats(contigHash, assembly.getCacheID());
+			boolean statsOK = idxStats.run(bamFile, baiFile);
+
+			long totalReadCount = 0;
+
 			// Finally, set every contig to have undefined reads
 			for (Contig contig: assembly)
+			{
 				contig.getTableData().readsDefined = false;
+				totalReadCount += contig.getTableData().readCount;
+
+				if (!statsOK)
+					contig.getTableData().readCount = -1;
+			}
+
+
+			// If all read counts were zero, chances are it's not a "new" index
+			if (totalReadCount == 0 && statsOK)
+				TaskDialog.warning(
+					RB.getString("io.BamFileHandler.noReadsError"),
+					RB.getString("gui.text.close"));
+
+			// If idxstats failed (show an error, but we don't quit)
+			if (statsOK == false)
+			{
+				String msg = RB.getString("io.BamFileHandler.statsError1");
+				if (Prefs.ioSamtoolsPath.length() > 0)
+					msg = RB.getString("io.BamFileHandler.statsError2");
+
+				TaskDialog.showFileOpen(msg, TaskDialog.ERR, 0,
+					new String[] { RB.getString("gui.text.openLog"), RB.getString("gui.text.close") },
+					new boolean [] { true, true },
+					Tablet.getLogFile().getAbsolutePath());
+			}
 		}
 	}
 
@@ -242,5 +276,4 @@ public class BamFileHandler
 
 	boolean refLengthsOK()
 		{ return refLengthsOK; }
-
 }

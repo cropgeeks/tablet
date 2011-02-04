@@ -30,6 +30,7 @@
       <dirEntry mountPoint="19" file="../lib" overwriteMode="4" shared="false" fileMode="644" uninstallMode="0" overrideFileMode="false" overrideOverwriteMode="false" overrideUninstallMode="false" entryMode="direct" subDirectory="lib" excludeSuffixes="*.txt,.svn" dirMode="755" overrideDirMode="false">
         <exclude>
           <entry location="i4jruntime.jar" fileType="regular" />
+          <entry location="samtools-all.jar" fileType="regular" />
           <entry location="sqlite-jdbc-3.6.19.jar" fileType="regular" />
         </exclude>
       </dirEntry>
@@ -1471,6 +1472,9 @@ if (wizardContext != null) {
       </excludedBeans>
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
+        <entry location="lib/osxadapter.jar" fileType="regular" />
+        <entry location="lib/samtools-linux.jar" fileType="regular" />
+        <entry location="lib/samtools-macos.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-linux32.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-linux64.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-macos.jar" fileType="regular" />
@@ -1491,6 +1495,9 @@ if (wizardContext != null) {
       </excludedBeans>
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
+        <entry location="lib/osxadapter.jar" fileType="regular" />
+        <entry location="lib/samtools-linux.jar" fileType="regular" />
+        <entry location="lib/samtools-macos.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-linux32.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-linux64.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-macos.jar" fileType="regular" />
@@ -1510,6 +1517,8 @@ if (wizardContext != null) {
       </excludedBeans>
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
+        <entry location="lib/samtools-linux.jar" fileType="regular" />
+        <entry location="lib/samtools-windows.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-linux32.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-linux64.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-win32.jar" fileType="regular" />
@@ -1530,6 +1539,9 @@ if (wizardContext != null) {
       </excludedBeans>
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
+        <entry location="lib/osxadapter.jar" fileType="regular" />
+        <entry location="lib/samtools-macos.jar" fileType="regular" />
+        <entry location="lib/samtools-windows.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-linux64.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-macos.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-win32.jar" fileType="regular" />
@@ -1553,6 +1565,9 @@ if (wizardContext != null) {
       </excludedBeans>
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
+        <entry location="lib/osxadapter.jar" fileType="regular" />
+        <entry location="lib/samtools-macos.jar" fileType="regular" />
+        <entry location="lib/samtools-windows.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-linux32.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-macos.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-win32.jar" fileType="regular" />
@@ -1576,6 +1591,9 @@ if (wizardContext != null) {
       </excludedBeans>
       <overriddenPrincipalLanguage id="en" customLocalizationFile="" />
       <exclude>
+        <entry location="lib/osxadapter.jar" fileType="regular" />
+        <entry location="lib/samtools-macos.jar" fileType="regular" />
+        <entry location="lib/samtools-windows.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-linux32.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-macos.jar" fileType="regular" />
         <entry location="lib/sqlite-jdbc-3.6.19-win32.jar" fileType="regular" />

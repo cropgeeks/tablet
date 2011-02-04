@@ -156,6 +156,8 @@ public class Prefs extends XMLPreferences
 	public static boolean ioBamValidationLenient = false;
 	public static boolean ioAmbiguousToN = false;
 
+	public static String ioSamtoolsPath = "";
+
 	// Display reads in paired form?
 	public static boolean visPaired = false;
 
