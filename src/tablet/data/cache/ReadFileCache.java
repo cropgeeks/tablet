@@ -27,6 +27,9 @@ public class ReadFileCache extends TabletCache implements IReadCache
 		this.cacheFile = cacheFile;
 		this.indexFile = indexFile;
 
+		cacheFile.deleteOnExit();
+		indexFile.deleteOnExit();
+
 		index = new ArrayLongFileCache(indexFile);
 	}
 

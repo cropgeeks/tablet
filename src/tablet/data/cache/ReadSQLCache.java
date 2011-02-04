@@ -28,6 +28,8 @@ public class ReadSQLCache
 		throws Exception
 	{
 		this.file = file;
+		file.deleteOnExit();
+
 		Class.forName("org.sqlite.JDBC");
 
 		c =	DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());

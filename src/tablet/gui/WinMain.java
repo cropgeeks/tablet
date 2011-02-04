@@ -232,7 +232,7 @@ public class WinMain extends JRibbonFrame
 
 	public FeaturesPanel getFeaturesPanel()
 		{ return featuresPanel; }
-	
+
 	public ReadsPanel getReadsPanel()
 		{ return readsPanel; }
 
@@ -329,8 +329,8 @@ public class WinMain extends JRibbonFrame
 	public void validateCacheFolder()
 	{
 		new File(Prefs.cacheDir).mkdirs();
-		File test = new File(Prefs.cacheDir, "Tablet-"
-			+ SystemUtils.createGUID(24) + ".cache");
+		File test = new File(Prefs.cacheDir, "Tablet-"+ SystemUtils.createGUID(24) + ".cache");
+		test.deleteOnExit();
 
 		try
 		{
