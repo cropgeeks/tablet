@@ -122,13 +122,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		// Attempt to remove any temp files that were in use
 		winMain.closeAssembly();
 
-		for (File file: new File(Prefs.cacheDir).listFiles())
-		{
-			if (file.isFile() && file.getName().startsWith("Tablet-"))
-				file.delete();
-		}
-
-//		FileUtils.emptyDirectory(new File(Prefs.cacheDir), true);
+		FileUtils.emptyDirectory(new File(Prefs.cacheDir), true);
 
 		Prefs.isFirstRun = false;
 		prefs.savePreferences(prefsFile, Prefs.class);
