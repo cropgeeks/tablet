@@ -96,6 +96,12 @@ way Tablet is used and is displayed.</p>
     assemblies and will attempt to display the file as if it was OK. Any errors that
     are found will be written to the output.log file in Tablet's install directory.
     See samtools/picard documentation for more details on strict/lenient parsing options.</li>
+	
+	<li><b>Alternative path to samtools</b></br>
+	When opening BAM files, Tablet attempts to use its own bundled copy of samtools to gather
+	read count statistics from the index file (using the "samtools idxstats" command). Tablet's
+	distributable versions may not work on every operating system, so you can use this option to
+	provide the path to a known working version of samtools (0.1.8 or higher).</li>
 </ul>
 
 

@@ -143,7 +143,10 @@ public class BamFileReader extends TrackableReader
 		// Are we after the first or second entry in the array?
 		int baiIndex = files.length == 1 ? 0 : 1;
 
-		File file = new File(cacheDir, "Tablet-"+cacheid+baiFile.getName());
+		File dir = new File(cacheDir, "Tablet-"+cacheid+"-"+baiFile.getName());
+		dir.mkdir();
+
+		File file = new File(dir, baiFile.getName());
 
 		BufferedInputStream inputStream = new BufferedInputStream(
 			getInputStream(baiIndex));
