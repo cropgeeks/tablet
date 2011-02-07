@@ -130,6 +130,28 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		}
 	}
 
+	public void setDisplayedContig(String contigName, Integer position)
+	{
+		Contig contig = null;
+		int row;
+		// Attempt to get a contig object matching the given name
+		for (row = 0; row < controls.table.getRowCount(); row++)
+		{
+			contig = (Contig) controls.table.getValueAt(row, 0);
+			
+			if (contig.getName().equals(contigName))
+			{
+				controls.table.setRowSelectionInterval(row, row);
+				// If we can, move to the position within the contig and highlight it
+				if (position != null)
+				{
+					winMain.getAssemblyPanel().moveToPosition(-1, position, true);
+					new ColumnHighlighter(winMain.getAssemblyPanel(), position, position);
+				}
+			}
+		}
+	}
+
 	public void setDisplayedContig(Contig contig)
 	{
 		// Attempt to set the contig on the graphical components...
