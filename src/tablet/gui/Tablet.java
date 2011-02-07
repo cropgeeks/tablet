@@ -6,6 +6,7 @@ package tablet.gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.util.*;
 import javax.swing.*;
 
 import tablet.gui.dialog.*;
@@ -30,6 +31,9 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 	public static int menuShortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 	public static String winKey;
 
+	private static String contig = "";
+	private static Integer position = null;
+
 	public static void main(String[] args)
 		throws Exception
 	{
@@ -45,17 +49,54 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 		Icons.initialize("/res/icons", ".png");
 		RB.initialize(Prefs.localeText, "res.text.tablet");
-
-		if (args.length > 0)
-		{
-			initialFiles = new String[args.length];
-			for (int i = 0; i < args.length; i++)
-				initialFiles[i] = args[i];
-		}
+		
+		parseCommandLineArguments(args);
 
 		Install4j.doStartUpCheck();
 
 		new Tablet();
+	}
+
+	private static void parseCommandLineArguments(String[] args) throws NumberFormatException
+	{
+		if (args.length > 0)
+		{
+			// Temporary arrayList for potential files
+			ArrayList<String> initFiles = new ArrayList<String>();
+			
+			for (int i = 0; i < args.length; i++)
+			{
+				String arg = args[i];
+
+				// Parse out arguments of form view:contigName:position
+				if (arg.toLowerCase().startsWith("view:"))
+				{
+					contig = arg.substring(arg.indexOf(":") + 1);
+
+					int index = contig.lastIndexOf(":");
+					// Check if there were any colons
+					if (index != -1)
+					{
+						// Check that the colon is not the last character in the string
+						if ((index + 1) < contig.length())
+							position = Integer.parseInt(contig.substring(index + 1));
+
+						// The rest of the string up to the colon must be the contig name
+						contig = contig.substring(0, index);
+					}
+				}
+
+				else
+					initFiles.add(arg);
+
+				// Create new array which is the size of the temporary ArrayList.
+				// No need to change loading code this way.
+				if(initFiles.size() > 0)
+					initialFiles = initFiles.toArray(new String[initFiles.size()]);
+				else
+					initialFiles = null;
+			}
+		}
 	}
 
 	Tablet()
@@ -101,7 +142,14 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 				// Do we want to open an initial project?
 				if (initialFiles != null)
+				{
 					winMain.getCommands().fileOpen(initialFiles);
+
+					// If the contig argument was provided attempt to set this
+					// as the displayed contig
+					if (contig.length() > 0)
+						winMain.getContigsPanel().setDisplayedContig(contig, position);
+				}
 			}
 
 			public void windowClosing(WindowEvent e)
