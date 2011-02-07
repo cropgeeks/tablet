@@ -219,6 +219,12 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		StringBuilder text = new StringBuilder();
 		String newline = System.getProperty("line.separator");
 
+		text.append(RB.getString("gui.ContigsTableModel.col1") + "\t");
+		text.append(RB.getString("gui.ContigsTableModel.col2") + "\t");
+		text.append(RB.getString("gui.ContigsTableModel.col3") + "\t");
+		text.append(RB.getString("gui.ContigsTableModel.col4") + "\t");
+		text.append(RB.getString("gui.ContigsTableModel.col5") + newline);
+
 		for (int i = 0; i < controls.table.getRowCount(); i++)
 		{
 			int row = controls.table.convertRowIndexToModel(i);
