@@ -22,7 +22,7 @@ public class Finder extends SimpleJob
 	public static final int CURRENT_CONTIG = 0;
 	public static final int ALL_CONTIGS = 1;
 	protected int found;
-	protected LinkedList<SearchResult> results;
+	protected ArrayList<SearchResult> results;
 	protected AssemblyPanel aPanel;
 	protected String searchTerm;
 	protected boolean searchReads;
@@ -45,7 +45,7 @@ public class Finder extends SimpleJob
 	{
 		found = 0;
 		progress = 0;
-		results = new LinkedList<SearchResult>();
+		results = new ArrayList<SearchResult>();
 
 		// Calculate the maximum value for the progress bar.
 		calculateMaximum(Prefs.guiFindPanelSelectedIndex);
@@ -67,7 +67,7 @@ public class Finder extends SimpleJob
 				searchReadsInContig(contig, str);
 
 			else if (searchInConsensus && okToRun)
-				searchReferenceSequence(contig, str);
+				searchReferenceSequence(contig, str.toUpperCase());
 
 			if (results.size() >= Prefs.guiSearchLimit)
 				break;
@@ -100,7 +100,7 @@ public class Finder extends SimpleJob
 		else if(searchScope == ALL_CONTIGS && searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))
 		{
 			for(Contig contig : aPanel.getAssembly())
-				totalSize += aPanel.getContig().getConsensus().length();
+				totalSize += contig.getConsensus().length();
 		}
 	}
 
@@ -123,7 +123,7 @@ public class Finder extends SimpleJob
 			if (searchReads)
 				checkForReadMatches(rnd.getName(), read.getStartPosition(), rmd.length(), searchString, contig);
 			else
-				checkForSubsequenceMatches(rnd.getName(), read.getStartPosition(), rmd.length(), searchString, contig, rmd.toString());
+				checkForSubsequenceMatches(rnd.getName(), read.getStartPosition(), rmd.length(), searchString.toUpperCase(), contig, rmd.toString());
 
 			progress++;
 			//if we've had 500 matches stop searching
@@ -170,42 +170,60 @@ public class Finder extends SimpleJob
 	 */
 	protected void checkForSubsequenceMatches(String readName, int startPos, int length, String searchString, Contig contig, String readString)
 	{
-		int index = readString.toLowerCase().indexOf(searchString.toLowerCase());
+		ArrayList<Match> matches = searchSequence(readString, searchString);
 
-		// Having found one occurrence in the read string, search for more.
-		while(index != -1)
-		{
-			results.add(new SubsequenceSearchResult(readName, startPos, length, contig, startPos+index, (startPos+index+searchString.length())));
-			found++;
-
-			if (results.size() >= Prefs.guiSearchLimit)
-				break;
-
-			index = readString.toLowerCase().indexOf(searchString.toLowerCase(), ++index);
-		}
+		for (Match match : matches)
+			results.add(new SubsequenceSearchResult(readName, startPos, length, contig, startPos+match.getStart(), startPos+match.getEnd()));
 	}
 
-	protected void searchReferenceSequence(Contig contig, String str)
+	protected void searchReferenceSequence(Contig contig, String searchString)
 	{
-		String reference = contig.getConsensus().toString();
+		ArrayList<Match> matches = searchSequence(contig.getConsensus().toString(), searchString);
 
-		str = str.toUpperCase();
-
-		int index = reference.indexOf(str);
-
-		while(index != -1)
-		{
-			progress = index;
-			results.add(new SearchResult(index, str.length(), contig));
-			found++;
-
-			if (results.size() >= Prefs.guiSearchLimit)
-				break;
-
-			index = reference.indexOf(str, ++index);
-		}
+		for (Match match : matches)
+			results.add(new SearchResult(match.getStart(), match.getEnd() - match.getStart() + 1, contig));
 	}
 
+	/**
+	 * Does the string matching for subsequence and consensus / reference
+	 * subsequence searches.
+	 */
+	private ArrayList<Match> searchSequence(String sequence, String searchString)
+	{
+		ArrayList<Match> matches = new ArrayList<Match>();
+
+		int matchIndex, matchStart, matchEnd;
+		matchIndex = matchStart = matchEnd = 0;
+
+		for (int i = 0; i < sequence.length(); i++)
+		{
+			if (sequence.charAt(i) == searchString.charAt(matchIndex))
+			{
+				// Denotes the start of a potential match
+				if (matchIndex == 0)
+					matchStart = i;
+
+				matchIndex++;
+			}
+			// Skip pad characters
+			else if (Prefs.guiSearchIgnorePads && (sequence.charAt(i) == '*' || sequence.charAt(i) == 'N'))
+				continue;
+			else
+				matchIndex = 0;
+
+			if (matchIndex == searchString.length())
+			{
+				// Adjust by one as matchEnd is not inclusive.
+				matchEnd = i;
+				matches.add(new Match(matchStart, matchEnd));
+				matchIndex = 0;
+
+				if (matches.size() >= Prefs.guiSearchLimit)
+					break;
+			}
+		}
+		return matches;
+	}
 
 	/**
 	 * Run job method so this can be run in a progress dialog.
@@ -253,14 +271,14 @@ public class Finder extends SimpleJob
 		}
 	}
 
-	public void setResults(LinkedList<SearchResult> results)
-	{	this.results = results;	}
+	public void setResults(ArrayList<SearchResult> results)
+		{ this.results = results;	}
 
-	public LinkedList<SearchResult> getResults()
-	{	return results;	}
+	public ArrayList<SearchResult> getResults()
+		{ return results; }
 
 	public void setSearchTerm(String searchTerm)
-	{	this.searchTerm = searchTerm;	}
+		{ this.searchTerm = searchTerm; }
 
 	public void setSearchReads(String searchType)
 	{
@@ -277,11 +295,11 @@ public class Finder extends SimpleJob
 
 	@Override
 	public int getMaximum()
-	{ return 5555; }
+		{ return 5555; }
 
 	@Override
 	public boolean isIndeterminate()
-	{ return totalSize == 0; }
+		{ return totalSize == 0; }
 
 	@Override
 	public int getValue()
@@ -289,6 +307,27 @@ public class Finder extends SimpleJob
 		return Math.round(((progress)/ (float) totalSize) * 5555);
 	}
 
+	/**
+	 * Class which stores information about the start and end points of a
+	 * subsequence search result (be it from a read or the consesnus / reference).
+	 */
+	private class Match
+	{
+		private int start;
+		private int end;
+
+		public Match(int start, int end)
+		{
+			this.start = start;
+			this.end = end;
+		}
+
+		public int getStart()
+			{ return start; }
+
+		public int getEnd()
+			{ return end; }
+	}
 
 
 	public class SearchResult
@@ -305,15 +344,14 @@ public class Finder extends SimpleJob
 		}
 
 		public int getPosition()
-		{	return position;	}
+			{ return position; }
 
 		public int getLength()
-		{	return length;	}
+			{ return length; }
 
 		public Contig getContig()
-		{	return contig;	}
+			{ return contig; }
 	}
-
 
 
 	public class ReadSearchResult extends SearchResult
@@ -327,11 +365,8 @@ public class Finder extends SimpleJob
 		}
 
 		public String getName()
-		{
-			return name;
-		}
+			{ return name; }
 	}
-
 
 
 	public class SubsequenceSearchResult extends ReadSearchResult
@@ -347,9 +382,9 @@ public class Finder extends SimpleJob
 		}
 
 		public int getStartIndex()
-		{	return sIndex;	}
+			{ return sIndex; }
 
 		public int getEndIndex()
-		{	return eIndex;	}
+			{ return eIndex; }
 	}
 }

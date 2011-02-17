@@ -37,7 +37,7 @@ public class BamFinder extends Finder
 	{
 		found = 0;
 		progress = 0;
-		results = new LinkedList<SearchResult>();
+		results = new ArrayList<SearchResult>();
 
 		// Calculate the maximum value for the progress bar.
 		calculateMaximum(Prefs.guiFindPanelSelectedIndex);

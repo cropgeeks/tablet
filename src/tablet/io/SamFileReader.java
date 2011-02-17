@@ -29,6 +29,8 @@ class SamFileReader extends TrackableReader
 
 	private int readID = 0;
 
+	private boolean indexingCache = false;
+
 
 	SamFileReader()
 	{
@@ -213,6 +215,7 @@ class SamFileReader extends TrackableReader
 
 		if (Assembly.isPaired())
 		{
+			setIndexingCache();
 			nameCache.indexNames();
 
 			if (isUnsorted)
@@ -246,7 +249,17 @@ class SamFileReader extends TrackableReader
 
 	public String getMessage()
 	{
-		return RB.format("io.AssemblyFileHandler.status",
-			getTransferRate(), contigHash.size(), readID);
+		if (!indexingCache)
+			return RB.format("io.AssemblyFileHandler.status",
+				getTransferRate(), contigHash.size(), readID);
+		else
+			return RB.getString("io.AssemblyFileHandler.status.indexingCache");
+
+	}
+
+	private void setIndexingCache()
+	{
+		isIndeterminate = true;
+		indexingCache = true;
 	}
 }

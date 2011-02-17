@@ -91,10 +91,10 @@ public class Prefs extends XMLPreferences
 	public static int guiJumpToBase = 1;
 	public static boolean guiFeaturesArePadded = true;
 
-	// Search using regex
+	// Finder preferences.
 	public static boolean guiRegexSearching = true;
-
 	public static int guiSearchLimit = 500;
+	public static boolean guiSearchIgnorePads = true;
 
 	// Colour scheme in use
 	public static int visColorScheme = ColorScheme.STANDARD;

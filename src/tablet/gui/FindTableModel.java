@@ -3,7 +3,7 @@
 
 package tablet.gui;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
 import javax.swing.table.AbstractTableModel;
 import scri.commons.gui.RB;
 import tablet.analysis.Finder.*;
@@ -14,13 +14,13 @@ import tablet.data.*;
  */
 public class FindTableModel extends AbstractTableModel
 {
-	private LinkedList<SearchResult> results;
+	private ArrayList<SearchResult> results;
 
 	private String[] columnNames;
 
 	private FindPanel parent;
 
-	FindTableModel(LinkedList<SearchResult> results, FindPanel parent)
+	FindTableModel(ArrayList<SearchResult> results, FindPanel parent)
 	{
 		this.results = results;
 		this.parent = parent;
@@ -125,8 +125,8 @@ public class FindTableModel extends AbstractTableModel
 			case 1:		return result.getPosition() + 1;
 			case 2:		return result.getLength();
 			case 3:		return result.getContig().getName();
-			case 4:		return result.getStartIndex();
-			case 5:		return result.getEndIndex();
+			case 4:		return result.getStartIndex()+1;
+			case 5:		return result.getEndIndex()+1;
 			case 9:		return result.getContig();
 			case 10:	return parent.getFinder();
 		}
