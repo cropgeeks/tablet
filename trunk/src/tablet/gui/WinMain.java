@@ -40,6 +40,8 @@ public class WinMain extends JRibbonFrame
 
 	private JumpToDialog jumpToDialog;
 
+	private ConsensusSubsequenceDialog consensusSubsequenceDialog;
+
 	WinMain()
 	{
 		createControls();
@@ -242,6 +244,14 @@ public class WinMain extends JRibbonFrame
 			jumpToDialog = new JumpToDialog(this);
 
 		return jumpToDialog;
+	}
+
+	public ConsensusSubsequenceDialog getConsensusSubsequenceDialog()
+	{
+		if (consensusSubsequenceDialog == null)
+			consensusSubsequenceDialog = new ConsensusSubsequenceDialog(this);
+
+		return consensusSubsequenceDialog;
 	}
 
 	public SubsetOverviewDialog getSubsetOverviewDialog()

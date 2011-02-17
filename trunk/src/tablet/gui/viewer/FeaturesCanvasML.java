@@ -49,9 +49,11 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 	public void mouseMoved(MouseEvent e)
 	{
 		int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) + rCanvas.offset;
+		int yIndex = e.getY() / fCanvas.H;
+		
 		sCanvas.setMouseBase(xIndex);
 
-		detectFeature(xIndex);
+		detectFeature(xIndex, yIndex);
 	}
 
 	public void mouseReleased(MouseEvent e)
@@ -80,24 +82,34 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 			Tablet.winMain.getFeaturesPanel().editFeatures();
 	}
 
-	private void detectFeature(int x)
+	private void detectFeature(int x, int y)
 	{
-		// TODO
-		int track = 0;
+		int track;
+
+		// Check if mouse is over a track on the features canvas
+		if (y < fCanvas.vContig.getTrackCount())
+			track = y;
+		else
+			return;
 
 		ArrayList<Feature> data = fCanvas.vContig.getTrack(track).getFeatures(x, x);
 
+		if (data.isEmpty())
+			fCanvas.setToolTipText(null);
+
 		for (Feature f: data)
 		{
-			//System.out.println(f.getGFFType() + " " + f.getDataPS());
-			//System.out.println();
-
 			if(f.getGFFType().equals("CIGAR-I") && !aPanel.getCigarIHighlighter().isVisible())
 			{
 				CigarFeature cigarFeature = (CigarFeature)f;
 				new CigarIHighlighter(aPanel, cigarFeature.getVisualPS()+1, cigarFeature);
 				rCanvas.repaint();
 			}
+
+			// Set tooltip for the feature under the mouse
+			fCanvas.setToolTipText(RB.format("gui.viewer.FeaturesCanvasML.tooltip",
+					f.getGFFType(), f.getName(),
+					TabletUtils.nf.format(f.getVisualPS()+1), TabletUtils.nf.format(f.getVisualPE()+1)));
 		}
 	}
 

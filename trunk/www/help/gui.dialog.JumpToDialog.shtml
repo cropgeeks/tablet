@@ -63,6 +63,13 @@ unpadded values.</p>
  </tr>
 </table>
 
+<h3>Jumping to a position in another contig</h3>
+
+<p>It is also possible to jump to a base position in a contig other than the
+contig you are currently viewing. To jump to a base in another contig instead of
+simply entering the base position, enter the contig name and the base position
+separated by a colon e.g. <b>Contig1:200</b>.
+
 <!--#include virtual="footer.html" -->
 
 </body>

@@ -90,14 +90,36 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 			featuresPanel.toggleComponentEnabled(true);
 		}
 
+		
+
 		String title = RB.format("gui.ContigsPanel.title", controls.table.getRowCount());
 		controls.contigsLabel.setText(title);
+
+		int count = calculateTotalReadCount();
+		String readCount = RB.format("gui.ContigsPanel.readCount", count);
+		controls.readCountLabel.setText(readCount);
+		if(controls.table.getRowCount() != 0)
+		{
+			String averageReadCount = RB.format("gui.ContigsPanel.readCount.tooltip", (count/controls.table.getRowCount()));
+			controls.readCountLabel.setToolTipText(averageReadCount);
+		}
+
 		ctrlTabs.setSelectedIndex(0);
 
 		controls.clearFilter();
 		controls.setEnabledState(assembly != null);
 
 		findPanel.setAssembly(assembly);
+	}
+
+	private int calculateTotalReadCount()
+	{
+		int readCount = 0;
+		for (int row = 0; row < controls.table.getRowCount(); row++)
+		{
+			readCount += (Integer)controls.table.getValueAt(row, 2);
+		}
+		return readCount;
 	}
 
 	public void valueChanged(ListSelectionEvent e)
@@ -130,7 +152,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		}
 	}
 
-	public void setDisplayedContig(String contigName, Integer position)
+	public void setContigInTable(String contigName)
 	{
 		Contig contig = null;
 		int row;
@@ -140,16 +162,17 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 			contig = (Contig) controls.table.getValueAt(row, 0);
 			
 			if (contig.getName().equals(contigName))
-			{
 				controls.table.setRowSelectionInterval(row, row);
-				// If we can, move to the position within the contig and highlight it
-				if (position != null)
-				{
-					winMain.getAssemblyPanel().moveToPosition(-1, position, true);
-					new ColumnHighlighter(winMain.getAssemblyPanel(), position, position);
-				}
-			}
 		}
+	}
+
+	public void moveToContigPosition(String contigName, Integer position)
+	{
+		setContigInTable(contigName);
+		
+		// If we can, move to the position within the contig and highlight it
+		if (position != null)
+			winMain.getAssemblyPanel().highlightColumn(position);
 	}
 
 	public void setDisplayedContig(Contig contig)

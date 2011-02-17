@@ -5,7 +5,7 @@ package tablet.gui;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.LinkedList;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -68,7 +68,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		return controls;
 	}
 
-	void setTableModel(LinkedList<SearchResult> results)
+	void setTableModel(ArrayList<SearchResult> results)
 	{
 		// Note: the model is created to be non-editable
 		tableModel = new FindTableModel(results, this) {
@@ -133,7 +133,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		// If we are searching for read subsequences
 		else
 		{
-			int sPos = (Integer)tableModel.getValueAt(row, 4);
+			int sPos = (Integer)tableModel.getValueAt(row, 4)-1;
 			int ePos = (Integer)tableModel.getValueAt(row, 5)-1;
 			// If we are searching a BAM assembly, we need to load up the correct
 			// section of the BAM file before we can search for the read.
@@ -154,12 +154,24 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 
 		int end = ((Integer)tableModel.getValueAt(row, 1)+(Integer)tableModel.getValueAt(row, 2));
 
-		return RB.format("gui.NBFindPanelControls.tooltip",
-			tableModel.getValueAt(row, 0),
-			tableModel.getValueAt(row, 3),
-			TabletUtils.nf.format(tableModel.getValueAt(row, 1)),
-			TabletUtils.nf.format(end),
-			tableModel.getValueAt(row, 2));
+		if (controls.table.getColumnCount() != 3)
+		{
+			return RB.format("gui.NBFindPanelControls.tooltip",
+				tableModel.getValueAt(row, 0),
+				tableModel.getValueAt(row, 3),
+				TabletUtils.nf.format(tableModel.getValueAt(row, 1)),
+				TabletUtils.nf.format(end),
+				tableModel.getValueAt(row, 2));
+		}
+		else
+		{
+			return RB.format("gui.NBFindPanelControls.consensusTooltip",
+				tableModel.getValueAt(row, 0),
+				TabletUtils.nf.format(tableModel.getValueAt(row, 1)),
+				TabletUtils.nf.format(end),
+				tableModel.getValueAt(row, 2));
+		}
+
 	}
 
 	/**
@@ -330,7 +342,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 			ex.printStackTrace();
 		}
 
-		LinkedList<SearchResult> results = finder.getResults();
+		ArrayList<SearchResult> results = finder.getResults();
 		if(results != null && results.size() > 0)
 		{
 			controls.resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", results.size()));
@@ -354,13 +366,22 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		else if (e.getSource() == controls.checkUseRegex)
 			Prefs.guiRegexSearching = controls.checkUseRegex.isSelected();
 
+		else if (e.getSource() == controls.checkIgnorePads)
+			Prefs.guiSearchIgnorePads = controls.checkIgnorePads.isSelected();
+
 		else if (e.getSource() == controls.searchTypeCombo)
 		{
 			Prefs.guiFindPanelSearchType = controls.searchTypeCombo.getSelectedIndex();
 			if(controls.searchTypeCombo.getSelectedItem().equals(RB.getString("gui.NBFindPanelControls.findLabel1")))
+			{
 				controls.checkUseRegex.setEnabled(true);
+				controls.checkIgnorePads.setEnabled(false);
+			}
 			else
+			{
+				controls.checkIgnorePads.setEnabled(true);
 				controls.checkUseRegex.setEnabled(false);
+			}
 		}
 	}
 

@@ -32,6 +32,16 @@ following is a list of all the tips that may appear:</p>
 	<li>Right click on a visible read, consensus or protein translation to see options for copying its data to the clipboard<p></p>
 	<li>Position data is often supplemented with U (unpadded position) and CV (read coverage at that position) values providing the unpadded value and CV providing a value for coverage<p></p>
 	<li>Navigate around an alignment by clicking and dragging on either the overview display area or the main display area<p></p>
+	<li>GFF3 data can be displayed on the features track after importing<p></p>
+	<li>Right click on the features track to access the option to select which tracks are visible<p></p>
+	<li>Use the Search tab to search for subsequences within the reads, or within the consensus / reference<p></p>
+	<li>Mousing over CIGAR "I" features on the features track highlights the reads - and locations - the insertion relates to<p></p>
+	<li>The visible reads tab contains a table of information on the reads currently on screen<p></p>
+	<li>CTRL / CMD drag the mouse on the overview display to subset the overview<p></p>
+	<li>Right click on a read to access the jump to navigation options for jumping to a read's start, end or pair<p></p>
+	<li>Right click on the line connecting paired reads to access jump to options for jumping to the left and right read of the pair<p></p>
+	<li>When the read shadower is in custom mode, right click on any base position to lock the highlighting<p></p>
+	<li>Mouse over a feature on the feature track to see information including its name and start and end positions<p></p>
 </ul>
 
 <!--#include virtual="footer.html" -->

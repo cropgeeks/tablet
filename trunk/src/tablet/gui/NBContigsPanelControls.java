@@ -144,6 +144,7 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
 		combo.setEnabled(state);
 		textField.setEnabled(state);
 		contigsLabel.setEnabled(state);
+		readCountLabel.setEnabled(state);
 	}
 
 	private JTable createTable()
@@ -182,6 +183,7 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
         jScrollPane1 = new javax.swing.JScrollPane();
         table = createTable();
         contigsLabel = new javax.swing.JLabel();
+        readCountLabel = new javax.swing.JLabel();
 
         filterLabel.setLabelFor(combo);
         filterLabel.setText("Filter by:");
@@ -196,7 +198,9 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
         ));
         jScrollPane1.setViewportView(table);
 
-        contigsLabel.setText("Contigs (0):");
+        contigsLabel.setText("Contigs: 0");
+
+        readCountLabel.setText("0 total reads");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -205,7 +209,9 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(contigsLabel)
-                .addContainerGap(317, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
+                .addComponent(readCountLabel)
+                .addContainerGap())
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -221,7 +227,9 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(contigsLabel)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(contigsLabel)
+                    .addComponent(readCountLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -240,6 +248,7 @@ class NBContigsPanelControls extends JPanel implements ActionListener, DocumentL
     public javax.swing.JLabel contigsLabel;
     private javax.swing.JLabel filterLabel;
     private javax.swing.JScrollPane jScrollPane1;
+    javax.swing.JLabel readCountLabel;
     public javax.swing.JTable table;
     private javax.swing.JTextField textField;
     // End of variables declaration//GEN-END:variables

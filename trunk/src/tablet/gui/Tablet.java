@@ -148,7 +148,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 					// If the contig argument was provided attempt to set this
 					// as the displayed contig
 					if (contig.length() > 0)
-						winMain.getContigsPanel().setDisplayedContig(contig, position);
+						winMain.getContigsPanel().moveToContigPosition(contig, position);
 				}
 			}
 

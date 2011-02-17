@@ -202,7 +202,10 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		bambamBar.setContig(contig);
 
 		if (contig != null)
+		{
 			overviewCanvas.setSubset(contig.getVisualStart(), contig.getVisualEnd());
+			winMain.getConsensusSubsequenceDialog().updateModel(contig);
+		}
 
 		forceRedraw();
 		stateChanged(null);
@@ -456,6 +459,12 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 				moveTo(row, col, centre);
 			}
 		});
+	}
+
+	public void highlightColumn(int index)
+	{
+		moveToPosition(-1, index, true);
+		new ColumnHighlighter(this, index, index);
 	}
 
 	public void updateColorScheme()

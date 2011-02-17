@@ -19,7 +19,7 @@ class ConsensusCanvasML extends MouseInputAdapter implements ActionListener
 	private ReadsCanvas rCanvas;
 	private ScaleCanvas sCanvas;
 
-	private JMenuItem mClipboard;
+	private JMenuItem mClipboard, mSubsequenceClipboard;
 
 	ConsensusCanvasML(AssemblyPanel aPanel)
 	{
@@ -68,6 +68,11 @@ class ConsensusCanvasML extends MouseInputAdapter implements ActionListener
 		mClipboard.addActionListener(this);
 		menu.add(mClipboard);
 
+		mSubsequenceClipboard = new JMenuItem("", Icons.getIcon("CLIPBOARD"));
+		RB.setText(mSubsequenceClipboard, "gui.viewer.ConsensusCanvasML.mSubsequenceClipboard");
+		mSubsequenceClipboard.addActionListener(this);
+		menu.add(mSubsequenceClipboard);
+
 		menu.show(e.getComponent(), e.getX(), e.getY());
 	}
 
@@ -85,5 +90,8 @@ class ConsensusCanvasML extends MouseInputAdapter implements ActionListener
 			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
 				selection, null);
 		}
+
+		else if (e.getSource() == mSubsequenceClipboard)
+			Tablet.winMain.getConsensusSubsequenceDialog().setVisible(true);
 	}
 }

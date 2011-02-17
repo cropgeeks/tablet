@@ -27,10 +27,12 @@ public class JumpToDialog extends JDialog
 	private int padded = 0;
 	private int unpadded = 0;
 
+	private Contig contigToJumpTo;
+
 	public JumpToDialog(WinMain winMain)
 	{
 		super(
-			Tablet.winMain,
+			winMain,
 			RB.getString("gui.dialog.JumpToDialog.title"),
 			false
 		);
@@ -105,7 +107,7 @@ public class JumpToDialog extends JDialog
 			getRootPane().setDefaultButton(nbPanel.bJumpPadded);
 			Prefs.guiUsePaddedJumpToBases = true;
 
-			jumpToBase(padded);
+			jumpToPosition(padded);
 		}
 
 		else if (e.getSource() == nbPanel.bJumpUnpadded)
@@ -113,23 +115,30 @@ public class JumpToDialog extends JDialog
 			getRootPane().setDefaultButton(nbPanel.bJumpUnpadded);
 			Prefs.guiUsePaddedJumpToBases = false;
 
-			jumpToBase(unpadded);
+			jumpToPosition(unpadded);
 		}
 	}
 
-	private void jumpToBase(int index)
+	private void jumpToPosition(int index)
 	{
-		aPanel.moveToPosition(-1, index, true);
-		new ColumnHighlighter(aPanel, index, index);
+		if (contigToJumpTo != aPanel.getContig())
+			Tablet.winMain.getContigsPanel().setContigInTable(contigToJumpTo.getName());
+		
+		aPanel.highlightColumn(index);
 	}
 
 	private void checkControls()
 	{
 		int base;
+		String inputText = nbPanel.getInputText();
+		contigToJumpTo = parseContig(inputText);
+
+		if (contigToJumpTo != null)
+			inputText = inputText.substring(inputText.lastIndexOf(":") + 1, inputText.length());
 
 		try
 		{
-			base = Integer.parseInt(nbPanel.getInputText());
+			base = Integer.parseInt(inputText);
 			Prefs.guiJumpToBase = base;
 
 			base = base - 1;
@@ -142,22 +151,37 @@ public class JumpToDialog extends JDialog
 			return;
 		}
 
-		Contig contig = aPanel.getContig();
-
-		if (contig == null)
-			return;
+		if (contigToJumpTo == null)
+			contigToJumpTo = aPanel.getContig();
 
 		padded = base;
 
 		// Is it a valid padded index?
-		if (padded < contig.getDataStart() || padded > contig.getDataEnd())
+		if (padded < contigToJumpTo.getDataStart() || padded > contigToJumpTo.getDataEnd())
 			nbPanel.bJumpPadded.setEnabled(false);
 		else
 			nbPanel.bJumpPadded.setEnabled(true);
 
 		// Is it a valid unpadded index?
 		unpadded = DisplayData.unpaddedToPadded(base);
-		nbPanel.bJumpUnpadded.setEnabled(unpadded != -1);
+		nbPanel.bJumpUnpadded.setEnabled(unpadded != -1 && unpadded < contigToJumpTo.getConsensus().getUnpaddedLength());
+	}
+
+	private Contig parseContig(String contigPosition)
+	{
+		String contigName = "";
+
+		int index = contigPosition.lastIndexOf(":");
+		// Check if there were any colons
+		if (index != -1)
+			// The rest of the string up to the colon must be the contig name
+			contigName = contigPosition.substring(0, index);
+
+		for (Contig contig : aPanel.getAssembly())
+			if (contig.getName().equals(contigName))
+				return contig;
+
+		return null;
 	}
 
 	public void changedUpdate(DocumentEvent e)
