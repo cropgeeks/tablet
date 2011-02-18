@@ -25,6 +25,7 @@ class NBJumpToPanel extends javax.swing.JPanel
 		RB.setText(bJumpUnpadded, "gui.dialog.NBJumpToPanel.bJumpUnpadded");
 		RB.setText(descriptionLabel1, "gui.dialog.NBJumpToPanel.descriptionLabel1");
 		RB.setText(descriptionLabel2, "gui.dialog.NBJumpToPanel.descriptionLabel2");
+		RB.setText(descriptionLabel3, "gui.dialog.NBJumpToPanel.descriptionLabel3");
 
 		jumpField.setText("" + defaultValue);
 		jumpField.getDocument().addDocumentListener(parent);
@@ -52,11 +53,12 @@ class NBJumpToPanel extends javax.swing.JPanel
         bJumpUnpadded = new javax.swing.JButton();
         descriptionLabel1 = new javax.swing.JLabel();
         descriptionLabel2 = new javax.swing.JLabel();
+        descriptionLabel3 = new javax.swing.JLabel();
 
         jumpLabel.setLabelFor(jumpField);
         jumpLabel.setText("Jump to base:");
 
-        jumpField.setColumns(8);
+        jumpField.setColumns(16);
 
         bJumpPadded.setText("Padded Jump");
 
@@ -65,6 +67,8 @@ class NBJumpToPanel extends javax.swing.JPanel
         descriptionLabel1.setText("descriptionLabel1");
 
         descriptionLabel2.setText("descriptionLabel2");
+
+        descriptionLabel3.setText("descriptionLabel3");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -82,7 +86,8 @@ class NBJumpToPanel extends javax.swing.JPanel
                         .addGap(6, 6, 6)
                         .addComponent(bJumpUnpadded))
                     .addComponent(descriptionLabel1)
-                    .addComponent(descriptionLabel2))
+                    .addComponent(descriptionLabel2)
+                    .addComponent(descriptionLabel3))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -98,6 +103,8 @@ class NBJumpToPanel extends javax.swing.JPanel
                 .addComponent(descriptionLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(descriptionLabel2)
+                .addGap(18, 18, 18)
+                .addComponent(descriptionLabel3)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -108,6 +115,7 @@ class NBJumpToPanel extends javax.swing.JPanel
     javax.swing.JButton bJumpUnpadded;
     private javax.swing.JLabel descriptionLabel1;
     private javax.swing.JLabel descriptionLabel2;
+    private javax.swing.JLabel descriptionLabel3;
     private javax.swing.JTextField jumpField;
     private javax.swing.JLabel jumpLabel;
     // End of variables declaration//GEN-END:variables
