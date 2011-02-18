@@ -17,7 +17,7 @@
 
 <h2>Download Tablet</h2>
 
-<p>The most recent release of Tablet is <b>1.11.01.25</b> (25th January 2011).</p>
+<p>The most recent release of Tablet is <b>1.11.02.18</b> (18th February 2011).</p>
 
 <p>Please use the links below to download the Tablet installer most suitable
 for your operating system. Tablet is currently available for:</p>
@@ -27,9 +27,9 @@ for your operating system. Tablet is currently available for:</p>
 	<td>&nbsp;&nbsp;&nbsp;</td>
 	<td><img src="images/icon_windows.gif" alt="Windows"></td>
 	<td>
-		<a href="installers/tablet_windows_x86_1_11_01_25.exe"
+		<a href="installers/tablet_windows_x86_1_11_02_18.exe"
 		  onClick="javascript: pageTracker._trackPageview('/installers/windows_x86');">Windows (32 bit)</a> or
-		<a href="installers/tablet_windows_x64_1_11_01_25.exe"
+		<a href="installers/tablet_windows_x64_1_11_02_18.exe"
 		  onClick="javascript: pageTracker._trackPageview('/installers/windows_x64');">Windows (64 bit)</a>
 	</td>
 </tr>
@@ -37,9 +37,9 @@ for your operating system. Tablet is currently available for:</p>
 	<td>&nbsp;&nbsp;&nbsp;</td>
 	<td><img src="images/icon_linux.gif" alt="Linux"></td>
 	<td>
-		<a href="installers/tablet_linux_x86_1_11_01_25.sh"
+		<a href="installers/tablet_linux_x86_1_11_02_18.sh"
 		  onClick="javascript: pageTracker._trackPageview('/installers/linux_x86');">Linux (32 bit)</a> or
-		<a href="installers/tablet_linux_x64_1_11_01_25.sh"
+		<a href="installers/tablet_linux_x64_1_11_02_18.sh"
 		  onClick="javascript: pageTracker._trackPageview('/installers/linux_x64');">Linux (64 bit)</a>
 	</td>
 </tr>
@@ -47,7 +47,7 @@ for your operating system. Tablet is currently available for:</p>
 	<td>&nbsp;&nbsp;&nbsp;</td>
 	<td><img src="images/icon_osx.gif" alt="OS X"></td>
 	<td>
-		<a href="installers/tablet_macos_1_11_01_25.dmg"
+		<a href="installers/tablet_macos_1_11_02_18.dmg"
 		  onClick="javascript: pageTracker._trackPageview('/installers/macosx_x86');">Apple Mac OS X</a> (Java 6 required)
 	</td>
 </tr>
@@ -55,7 +55,7 @@ for your operating system. Tablet is currently available for:</p>
 	<td>&nbsp;&nbsp;&nbsp;</td>
 	<td><img src="images/icon_solaris.gif" alt="Solaris"></td>
 	<td>
-		<a href="installers/tablet_solaris_1_11_01_25.sh"
+		<a href="installers/tablet_solaris_1_11_02_18.sh"
 		  onClick="javascript: pageTracker._trackPageview('/installers/solaris');">Solaris (Sparc)</a>
 	</td>
 </tr>

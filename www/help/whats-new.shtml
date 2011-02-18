@@ -22,7 +22,25 @@ that have been made to Tablet in recent versions. For full details on all the
 changes between versions, please see the <a href="http://bioinf.scri.ac.uk/tablet/svn.txt">
 subversion change log</a>.</p>
 
+<h3>New in 1.11.02.18</h3>
+
+<ul>
+<li>NEW: BAM files are now displayed with read count summaries, even before a contig has been viewed, so long as the index file was generated with samtools 0.1.8 or higher.</li>
+<li>NEW: Tablet now uses the samtools executable for some tasks. The Options Dialog allows for an alternative path to be set if the version distributed with Tablet doesn't run.</li>
+<li>NEW: The table column headers are now included in the output from the contig table's copy-to-clipboard option.</li>
+<li>NEW: Tablet now accepts a "view" command-line argument that allows you to specify a contig and position to jump to after loading (view:contigName:position).</li>
+<li>NEW: The Jump To Base Dialog now supports navigating to positions in contigs outwith the current contig.</li>
+<li>NEW: The search code can now ignore pads and 'N's when looking for matches.</li>
+<li>NEW: Added a new option to allow copying just part of a consensus/reference sequence to the clipboard.</li>
+<li>CHG: SAM files containing paired-read data must now be sorted before Tablet will accept them.</li>
+<li>BUG: Fixed array-out-of-bounds exceptions with SAM files containing paired-data.</li>
+<li>BUG: The wrong start position for a read was sometimes shown in search results with BAM files.</li>
+<li>BUG: The wrong name and position was being displayed for out-of-contig mates.</li>
+</ul>
+
+
 <h3>New in 1.11.01.25</h3>
+
 <ul>
 <li>NEW: Various improvements to the pair-matching code should result in much faster loading of paired-end data.</li>
 <li>NEW: Drawing paired-reads that include "link lines" is now faster.</li>
@@ -31,7 +49,7 @@ subversion change log</a>.</p>
 <li>NEW: Added CTRL/CMD mousewheel zooming to the main canvas.</li>
 <li>CHG: Altered the SAM parsing code to better handle files which have been produced by tools which haven't adhered to the SAM specification.</li>
 <li>CHG: Rearranged some of existing options on the main canvas's right-click menu.</li>
-<li>CHG: Changed to a different SQLite binary for use on OS X that allows it to work on all systems (10.4, 10.5, 10.6) again.</li>
+<li>CHG: Changed to a different SQLite binary for use on OS X that allows it to work on all systems again.</li>
 <li>BUG: Fixed some installer problems that were causing issues on Ubuntu Linux.</li>
 </ul>
 
