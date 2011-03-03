@@ -37,6 +37,10 @@ public class NBStartHelpPanel extends javax.swing.JPanel implements ActionListen
 			RB.setText(labels[i], "gui.NBStartHelpPanel.link" + (i+1));
 			labels[i].addActionListener(this);
 		}
+
+		ratingsPanel.doSetup(Prefs.rating,
+			Icons.getIcon("STARON"), Icons.getIcon("STAROFF"));
+		ratingsPanel.addActionListener(this);
     }
 
 	public void actionPerformed(ActionEvent e)
@@ -53,6 +57,9 @@ public class NBStartHelpPanel extends javax.swing.JPanel implements ActionListen
 					TabletUtils.visitURL(RB.getString("gui.NBStartHelpPanel.url" + (i+1)));
 				}
 		}
+
+		if (e.getSource() == ratingsPanel)
+			Prefs.rating = ratingsPanel.getRating();
 	}
 
     /** This method is called from within the constructor to
@@ -73,6 +80,9 @@ public class NBStartHelpPanel extends javax.swing.JPanel implements ActionListen
         link6 = new scri.commons.gui.matisse.HyperLinkLabel();
         link7 = new scri.commons.gui.matisse.HyperLinkLabel();
         link8 = new scri.commons.gui.matisse.HyperLinkLabel();
+        ratingsPanel = new scri.commons.gui.matisse.RatingsPanel();
+        rateLabel = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
 
         homeLabel.setForeground(new java.awt.Color(68, 106, 156));
         homeLabel.setText("Visit the online Tablet user manual");
@@ -109,11 +119,14 @@ public class NBStartHelpPanel extends javax.swing.JPanel implements ActionListen
         link8.setIcon(Icons.getIcon("BUTTON"));
         link8.setText("link8");
 
+        rateLabel.setText("Click to rate Tablet:");
+
+        jLabel1.setText("  ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 192, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -125,12 +138,16 @@ public class NBStartHelpPanel extends javax.swing.JPanel implements ActionListen
                     .addComponent(link5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(link6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(link7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(link8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(link8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(rateLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(ratingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 208, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(homeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -150,6 +167,12 @@ public class NBStartHelpPanel extends javax.swing.JPanel implements ActionListen
                 .addComponent(link7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(link8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(rateLabel)
+                    .addComponent(ratingsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
@@ -157,6 +180,7 @@ public class NBStartHelpPanel extends javax.swing.JPanel implements ActionListen
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private scri.commons.gui.matisse.HyperLinkLabel homeLabel;
+    private javax.swing.JLabel jLabel1;
     private scri.commons.gui.matisse.HyperLinkLabel link1;
     private scri.commons.gui.matisse.HyperLinkLabel link2;
     private scri.commons.gui.matisse.HyperLinkLabel link3;
@@ -165,6 +189,8 @@ public class NBStartHelpPanel extends javax.swing.JPanel implements ActionListen
     private scri.commons.gui.matisse.HyperLinkLabel link6;
     private scri.commons.gui.matisse.HyperLinkLabel link7;
     private scri.commons.gui.matisse.HyperLinkLabel link8;
+    private javax.swing.JLabel rateLabel;
+    private scri.commons.gui.matisse.RatingsPanel ratingsPanel;
     // End of variables declaration//GEN-END:variables
 
 
