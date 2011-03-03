@@ -25,11 +25,6 @@
                   <Component id="project1" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="project2" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="project3" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="rateLabel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="ratingsPanel" min="-2" max="-2" attributes="0"/>
-                  </Group>
                   <Component id="project4" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="project5" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="project6" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -37,7 +32,7 @@
                   <Component id="project8" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="project9" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="75" max="32767" attributes="0"/>
+              <EmptySpace pref="82" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -68,12 +63,7 @@
               <Component id="project8" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="project9" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-              <Group type="103" groupAlignment="2" attributes="0">
-                  <Component id="rateLabel" alignment="2" min="-2" max="-2" attributes="0"/>
-                  <Component id="ratingsPanel" alignment="2" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
+              <EmptySpace pref="31" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -171,13 +161,6 @@
         </Property>
         <Property name="text" type="java.lang.String" value="&lt;project3&gt;"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="rateLabel">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="Click to rate Tablet:"/>
-      </Properties>
-    </Component>
-    <Component class="scri.commons.gui.matisse.RatingsPanel" name="ratingsPanel">
     </Component>
   </SubComponents>
 </Form>
