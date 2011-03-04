@@ -7,6 +7,7 @@ import java.awt.*;
 
 import tablet.data.*;
 import tablet.gui.*;
+import tablet.gui.viewer.colors.*;
 
 class ScaledOverviewFactory extends OverviewBufferFactory
 {
@@ -49,6 +50,9 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 		float xScale = overviewWidth / (float) w;
 		float yScale = ntOnCanvasY / (float) h;
 
+		// Color scheme in use
+		ReadColorScheme colors = rCanvas.colors;
+
 		// Loop over every pixel that makes up the overview...
 		for (int y = 0; y < h && !killMe; y++)
 		{
@@ -69,12 +73,7 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 				{
 					ReadMetaData rmd = Assembly.getReadMetaData(read, true);
 
-					// Determine color offset
-					int color = rmd.getColorSchemeAdjustment(Prefs.visColorScheme);
-
-					byte b = (byte) (color + rmd.getStateAt(dataX-read.getStartPosition()));
-
-					g.setColor(rCanvas.colors.getColor(b));
+					g.setColor(colors.getColor(rmd, dataX-read.getStartPosition()));
 					g.drawLine(x, y, x, y);
 				}
 			}
@@ -87,45 +86,3 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 			canvas.bufferAvailable(buffer);
 	}
 }
-
-/* Code that might be useful for "data coverage" overview. Possibly superceded
- * by the proper coverage overview histogram.
-
-// Loop over every pixel that makes up the overview...
-for (int y = 0; y < h && !killMe; y++)
-{
-	int dataY = (int) (y * yScale);
-
-	for (int x = 0; x < w && !killMe; x++)
-	{
-		// Working out where each pixel maps to in the data...
-		// Each overview pixel maps to a window of data (x1 to x2)
-		int dataX1 = (int) (x * xScale) + rCanvas.offset;
-		int dataX2 = dataX1 + (int) xScale;
-
-		// Determine the percentage of actual data in this window
-		byte[] data = reads.getValues(dataY, dataX1, dataX2);
-
-		float dataCount = 0;
-		for (int i = 0; i < data.length; i++)
-			if (data[i] != -1)
-				dataCount++;
-
-		float percent = dataCount / (float)data.length;
-
-		// Draw the lower 10% in red
-		if (percent > 0 && percent < 0.1f)
-		{
-			g.setColor(new Color(255, 0, 0, 100));
-			g.drawLine(x, y, x, y);
-		}
-		// And the rest in shades of blue
-		else if (percent > 0)
-		{
-			g.setColor(new Color(0, 0, 255, (int)(255*(percent))));
-			g.drawLine(x, y, x, y);
-		}
-	}
-}
-
-*/

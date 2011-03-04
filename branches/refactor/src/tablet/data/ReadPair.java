@@ -22,13 +22,10 @@ public class ReadPair
 			readB = read;
 	}
 
-	/**
-	 * Creates and fills an array with all reads that fit within the given
-	 * window start and end positions.
-	 */
-	public byte[] getValues(int start, int end, int scheme)
+	public LineData getLineData(int start, int end)
 	{
-		byte[] data = new byte[end-start+1];
+		ReadMetaData[] reads = new ReadMetaData[end-start+1];
+		int[] indexes = new int[end-start+1];
 
 		// Tracking index within the data array
 		int dataI = 0;
@@ -52,44 +49,27 @@ public class ReadPair
 
 			if(read instanceof MatedRead && Prefs.visPairLines)
 			{
-				MatedRead matedRead = (MatedRead)read;
-
-				// Work out these variables in advance rather than on each iteration
-				int startPos = matedRead.getStartPosition();
-				int matePos = matedRead.getMatePos();
-				boolean isMateContig = matedRead.isMateContig();
-				MatedRead mate = matedRead.getPair();
-				int mateEndPos = 0;
-				if(mate != null)
-					mateEndPos = mate.getEndPosition();
-				
-				boolean needsLine = matePos < readS && isMateContig && rmd.getMateMapped();
-				boolean onDifferentRows = mate != null && mateEndPos >= startPos;
-				boolean drawLine = needsLine & !onDifferentRows;
+				boolean drawLine = drawMateLineBeforeRead(read, readS, rmd);
 
 				for (; index < readS; index++, dataI++)
 				{
 					// Is this an area between the start of each read in a pair of reads
 					if(drawLine)
-						data[dataI] = 14;
+						indexes[dataI] = -2;
 					else
-						data[dataI] = -1;
+						indexes[dataI] = -1;
 				}
 			}
 			else
-			{
 				for (; index < readS; index++, dataI++)
-				{
-					data[dataI] = -1;
-				}
-			}
-
-			// Determine color offset
-			int color = rmd.getColorSchemeAdjustment(scheme);
+					indexes[dataI] = -1;
 
 			// Fill in the read data
 			for (; index <= end && index <= readE; index++, dataI++)
-				data[dataI] = (byte) (color + rmd.getStateAt(index-readS));
+			{
+				indexes[dataI] = index-readS;
+				reads[dataI] = rmd;
+			}
 		}
 
 		if (index <= end)
@@ -106,25 +86,40 @@ public class ReadPair
 				int matePos = matedRead.getMatePos();
 				boolean isMateContig = matedRead.isMateContig();
 				boolean needsLine = matePos > end && isMateContig && matedRead.getPair() != null;
-				
+
 				// If no more reads are within the window, fill in any blanks between
 				// the final read and the end of the array
 				for (; index <= end; index++, dataI++)
 				{
 					if(index > endPos && needsLine)
-						data[dataI] = 14;
+						indexes[dataI] = -2;
 					else
-						data[dataI] = -1;
+						indexes[dataI] = -1;
 				}
 			}
 			else
-			{
 				for (; index <= end; index++, dataI++)
-					data[dataI] = -1;
-			}
+					indexes[dataI] = -1;
 		}
-		
-		return data;
+
+		return new LineData(indexes, reads);
+	}
+
+	private boolean drawMateLineBeforeRead(Read read, int readS, ReadMetaData rmd)
+	{
+		MatedRead matedRead = (MatedRead) read;
+		// Work out these variables in advance rather than on each iteration
+		int startPos = matedRead.getStartPosition();
+		int matePos = matedRead.getMatePos();
+		boolean isMateContig = matedRead.isMateContig();
+		MatedRead mate = matedRead.getPair();
+		int mateEndPos = 0;
+		if (mate != null)
+			mateEndPos = mate.getEndPosition();
+		boolean needsLine = matePos < readS && isMateContig && rmd.getMateMapped();
+		boolean onDifferentRows = mate != null && mateEndPos >= startPos;
+		boolean drawLine = needsLine & !onDifferentRows;
+		return drawLine;
 	}
 
 	/**

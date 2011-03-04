@@ -8,15 +8,14 @@ import java.awt.image.*;
 import java.util.*;
 
 import tablet.analysis.*;
+import tablet.data.*;
 
-public class ProteinTextColorScheme extends ColorScheme
+public class ProteinTextColorScheme extends ProteinColorScheme
 {
 	private ArrayList<ColorState> states = new ArrayList<ColorState>();
 
 	public ProteinTextColorScheme(int w, int h)
 	{
-		super();
-
 		String[] codes = new ProteinTranslator().codes;
 
 		states.add(new StandardColorState("", Color.white, w, h, false, false));
@@ -55,15 +54,5 @@ public class ProteinTextColorScheme extends ColorScheme
 	public Image getImage(int data)
 	{
 		return states.get(data).getImage();
-	}
-
-	public Image getConsensusImage(int data)
-	{
-		return states.get(data).getImage();
-	}
-
-	public Color getColor(int data)
-	{
-		return states.get(data).getColor();
 	}
 }
