@@ -13,15 +13,11 @@ public class PairedStack implements IReadManager
 {
 	private ArrayList<ReadPair> stack = new ArrayList<ReadPair>();
 
-	/**
-	 * Get the values for the current screen of data so rendering can be carried
-	 * out.
-	 */
-	public byte[] getValues(int line, int start, int end, int scheme)
+	public LineData getLineData(int line, int start, int end)
 	{
 		ReadPair readPair = stack.get(line);
 
-		return readPair.getValues(start, end, scheme);
+		return readPair.getLineData(start, end);
 	}
 
 	public int size()

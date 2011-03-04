@@ -81,7 +81,7 @@ class ReadsCanvasInfoPane
 	{
 		if (read == null)
 			return;
-		
+
 		this.lineIndex = lineIndex;
 		this.read = read;
 		this.metaData = metaData;
@@ -140,7 +140,7 @@ class ReadsCanvasInfoPane
 		{
 			if (!(feature.getGFFType().equals("CIGAR-I")))
 				continue;
-			
+
 			CigarFeature cigarFeature = (CigarFeature) feature;
 			for (Insert insert : cigarFeature.getInserts())
 			{
@@ -266,7 +266,7 @@ class ReadsCanvasInfoPane
 			g.setColor(Color.red);
 
 		g.drawString(pairInfo, 10, lineSpacing * ++lineNo);
-		
+
 		return lineNo;
 	}
 
@@ -292,7 +292,7 @@ class ReadsCanvasInfoPane
 			g.drawImage(lhArrow, w - 10 - lhArrow.getWidth(null), elementHeight, null);
 		else
 			g.drawImage(rhArrow, 10, elementHeight, null);
-		
+
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
 		renderSequence(g);
 	}
@@ -303,18 +303,12 @@ class ReadsCanvasInfoPane
 
 		float xScale = read.length() / (float) (w - 10);
 
-		// Determine color offset
-		int color = metaData.getColorSchemeAdjustment(Prefs.visColorScheme);
-
 		for (int x = 10; x < w-10; x++)
 		{
 			// Working out where each pixel maps to in the data...
 			int dataX = (int) (x * xScale);
 
-			// Then drawing that data
-			byte b = (byte) (color + metaData.getStateAt(dataX));
-
-			g.setColor(rCanvas.colors.getColor(b));
+			g.setColor(rCanvas.colors.getColor(metaData, dataX));
 			g.drawLine(x, lineStart, x, lineStart+10);
 		}
 

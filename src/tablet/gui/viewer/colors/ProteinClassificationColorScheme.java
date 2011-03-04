@@ -8,8 +8,9 @@ import java.awt.image.*;
 import java.util.*;
 
 import tablet.analysis.*;
+import tablet.data.*;
 
-public class ProteinClassificationColorScheme extends ColorScheme
+public class ProteinClassificationColorScheme extends ProteinColorScheme
 {
 	private ArrayList<ColorState> states = new ArrayList<ColorState>();
 
@@ -22,8 +23,6 @@ public class ProteinClassificationColorScheme extends ColorScheme
 
 	public ProteinClassificationColorScheme(int w, int h)
 	{
-		super();
-
 		// VERY IMPORTANT: These MUST be in the same order as the codes within
 		// the string array from the ProteinTranslator
 
@@ -62,15 +61,5 @@ public class ProteinClassificationColorScheme extends ColorScheme
 	public Image getImage(int data)
 	{
 		return states.get(data).getImage();
-	}
-
-	public Image getConsensusImage(int data)
-	{
-		return states.get(data).getImage();
-	}
-
-	public Color getColor(int data)
-	{
-		return states.get(data).getColor();
 	}
 }

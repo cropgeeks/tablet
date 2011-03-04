@@ -97,7 +97,7 @@ public class Prefs extends XMLPreferences
 	public static boolean guiSearchIgnorePads = true;
 
 	// Colour scheme in use
-	public static int visColorScheme = ColorScheme.STANDARD;
+	public static int visColorScheme = ReadColorScheme.STANDARD;
 
 	// Display reads in packed or stacked form?
 	public static boolean visPacked = true;

@@ -21,15 +21,11 @@ public class PackSet implements IReadManager, Iterable<Pack>
 	public void trimToSize()
 		{ packs.trimToSize(); }
 
-	/**
-	 * Returns a byte array containing sequence information (or -1 for no data)
-	 * for the given line between the points start and end.
-	 */
-	public byte[] getValues(int line, int start, int end, int scheme)
+	public LineData getLineData(int line, int start, int end)
 	{
 		Pack pack = packs.get(line);
 
-		return pack.getValues(start, end, scheme);
+		return pack.getLineData(start, end);
 	}
 
 	public Read getReadAt(int line, int nucleotidePosition)

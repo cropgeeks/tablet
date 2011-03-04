@@ -57,6 +57,11 @@ public abstract class Sequence
 	/** Base is an T, but different to the consensus. */
 	public static final byte dT = 13;
 
+	public static String[] getStates()
+	{
+		return new String[] { "?", PAD, "N", "A", "C", "G", "T" };
+	}
+
 
 	// Stores the actual DNA states, using one byte for every two states
 	private byte[] data;

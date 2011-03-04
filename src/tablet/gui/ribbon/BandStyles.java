@@ -96,7 +96,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 		List<JCommandToggleButton> styleButtons = new ArrayList<JCommandToggleButton>();
 
 		// Standard ("enhanced") colour scheme button
-		boolean standardOn = Prefs.visColorScheme == ColorScheme.STANDARD;
+		boolean standardOn = Prefs.visColorScheme == ReadColorScheme.STANDARD;
 
 		bStandard = new JCommandToggleButton(
 			RB.getString("gui.ribbon.BandStyles.bStandard"),
@@ -114,7 +114,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 
 
 		// Orientation/direction colour scheme button
-		boolean directionOn = Prefs.visColorScheme == ColorScheme.DIRECTION;
+		boolean directionOn = Prefs.visColorScheme == ReadColorScheme.DIRECTION;
 
 		bDirection = new JCommandToggleButton(
 			RB.getString("gui.ribbon.BandStyles.bDirection"),
@@ -132,7 +132,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 
 
 		// Orientation/direction colour scheme button
-		boolean readtypeOn = Prefs.visColorScheme == ColorScheme.READTYPE;
+		boolean readtypeOn = Prefs.visColorScheme == ReadColorScheme.READTYPE;
 
 		bReadType = new JCommandToggleButton(
 			RB.getString("gui.ribbon.BandStyles.bReadType"),
@@ -150,7 +150,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 
 
 		// Text ("classic") colour scheme button
-		boolean textOn = Prefs.visColorScheme == ColorScheme.CLASSIC;
+		boolean textOn = Prefs.visColorScheme == ReadColorScheme.CLASSIC;
 
 		bText = new JCommandToggleButton(
 			RB.getString("gui.ribbon.BandStyles.bText"),
@@ -190,8 +190,8 @@ public class BandStyles extends JRibbonBand implements ActionListener
 	{
 		if (e.getSource() == Actions.stylesStandard)
 		{
-			setColorScheme(ColorScheme.STANDARD);
-			styleListener.previousScheme = ColorScheme.STANDARD;
+			setColorScheme(ReadColorScheme.STANDARD);
+			styleListener.previousScheme = ReadColorScheme.STANDARD;
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
 			Actions.stylesStandard.setSelected(true);
@@ -199,8 +199,8 @@ public class BandStyles extends JRibbonBand implements ActionListener
 
 		else if (e.getSource() == Actions.stylesDirection)
 		{
-			setColorScheme(ColorScheme.DIRECTION);
-			styleListener.previousScheme = ColorScheme.DIRECTION;
+			setColorScheme(ReadColorScheme.DIRECTION);
+			styleListener.previousScheme = ReadColorScheme.DIRECTION;
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
 			Actions.stylesDirection.setSelected(true);
@@ -208,8 +208,8 @@ public class BandStyles extends JRibbonBand implements ActionListener
 
 		else if (e.getSource() == Actions.stylesReadType)
 		{
-			setColorScheme(ColorScheme.READTYPE);
-			styleListener.previousScheme = ColorScheme.READTYPE;
+			setColorScheme(ReadColorScheme.READTYPE);
+			styleListener.previousScheme = ReadColorScheme.READTYPE;
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
 			Actions.stylesReadType.setSelected(true);
@@ -217,8 +217,8 @@ public class BandStyles extends JRibbonBand implements ActionListener
 
 		else if (e.getSource() == Actions.stylesText)
 		{
-			setColorScheme(ColorScheme.CLASSIC);
-			styleListener.previousScheme = ColorScheme.CLASSIC;
+			setColorScheme(ReadColorScheme.CLASSIC);
+			styleListener.previousScheme = ReadColorScheme.CLASSIC;
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
 			Actions.stylesText.setSelected(true);
@@ -324,20 +324,20 @@ public class BandStyles extends JRibbonBand implements ActionListener
 		public void mouseEntered(MouseEvent e)
 		{
 			if (e.getSource() == bStandard && Actions.stylesStandard.isEnabled() &&
-				previousScheme != ColorScheme.STANDARD)
-				setColorScheme(ColorScheme.STANDARD);
+				previousScheme != ReadColorScheme.STANDARD)
+				setColorScheme(ReadColorScheme.STANDARD);
 
 			else if (e.getSource() == bDirection && Actions.stylesDirection.isEnabled() &&
-				previousScheme != ColorScheme.DIRECTION)
-				setColorScheme(ColorScheme.DIRECTION);
+				previousScheme != ReadColorScheme.DIRECTION)
+				setColorScheme(ReadColorScheme.DIRECTION);
 
 			else if (e.getSource() == bReadType && Actions.stylesReadType.isEnabled() &&
-				previousScheme != ColorScheme.READTYPE)
-				setColorScheme(ColorScheme.READTYPE);
+				previousScheme != ReadColorScheme.READTYPE)
+				setColorScheme(ReadColorScheme.READTYPE);
 
 			else if (e.getSource() == bText && Actions.stylesText.isEnabled() &&
-				previousScheme != ColorScheme.CLASSIC)
-				setColorScheme(ColorScheme.CLASSIC);
+				previousScheme != ReadColorScheme.CLASSIC)
+				setColorScheme(ReadColorScheme.CLASSIC);
 		}
 
 		// On mouse exit we can just reinstate the previous scheme (if it's not

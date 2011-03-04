@@ -9,102 +9,59 @@ import java.util.*;
 
 import tablet.data.*;
 
-public class StandardColorScheme extends ColorScheme
+public class StandardColorScheme extends ReadColorScheme
 {
+	private HashMap<String, Color> colors = new HashMap<String, Color>();
+
 	// Holds the states needed by the reads canvas
 	protected ArrayList<ColorState> statesRD = new ArrayList<ColorState>();
 	// Holds the states needed by the consensus canvas
 	protected ArrayList<ColorState> statesCS = new ArrayList<ColorState>();
 
-	public StandardColorScheme(int w, int h, boolean csOnly)
+	// Holds the image used to draw a "link" between two reads
+	protected PairLinkColorState pairLink;
+
+	public StandardColorScheme(int w, int h, boolean createCS, boolean createRD)
 	{
-		super();
+		createColors();
 
-		createStatesCS(w, h);
+		// Create the images used by the consensus canvas (if needed)
+		if (createCS)
+		{
+			for (String base: Sequence.getStates())
+			{
+				Color c = colors.get(base);
 
-		if (csOnly == false)
-			createStatesRD(w, h);
+				statesCS.add(new StandardColorState(base, c, w, h, false, false));
+				statesCS.add(null);
+			}
+		}
+
+		// Create the images used by the main (reads) canvas (if needed)
+		if (createRD)
+		{
+			for (String base: Sequence.getStates())
+			{
+				Color c = colors.get(base);
+
+				statesRD.add(new StandardColorState(base, c, w, h, true, false));
+				statesRD.add(new StandardColorState(base, c, w, h, true, true));
+			}
+		}
+
+		// Create the image used for linking pairs
+		pairLink = new PairLinkColorState(new Color(180, 180, 180), w, h);
 	}
 
-	private void createStatesCS(int w, int h)
+	private void createColors()
 	{
-		// VERY IMPORTANT: These MUST be in the same order as the sequential
-		// values within the data.Sequence class, eg, unknown, P, N, A, C, G, T
-
-		// Sequence.UNKNOWN
-		statesCS.add(new StandardColorState("?", Color.lightGray, w, h, false, false));
-		statesCS.add(null);
-
-		// Sequence.P
-		statesCS.add(new StandardColorState(Sequence.PAD, Color.lightGray, w, h, false, false));
-		statesCS.add(null);
-
-		// Sequence.N
-		statesCS.add(new StandardColorState("N", Color.lightGray, w, h, false, false));
-		statesCS.add(null);
-
-		// Sequence.A
-		statesCS.add(new StandardColorState("A", new Color(120, 255, 120), w, h, false, false));
-		statesCS.add(null);
-
-		// Sequence.C
-		statesCS.add(new StandardColorState("C", new Color(255, 160, 120), w, h, false, false));
-		statesCS.add(null);
-
-		// Sequence.G
-		statesCS.add(new StandardColorState("G", new Color(255, 120, 120), w, h, false, false));
-		statesCS.add(null);
-
-		// Sequence.T
-		statesCS.add(new StandardColorState("T", new Color(120, 120, 255), w, h, false, false));
-		statesCS.add(null);
-
-		// Pair Link
-		statesCS.add(new PairLinkColorState(new Color(180, 180, 180), w, h));
-		statesCS.add(null);
-	}
-
-	protected void createStatesRD(int w, int h)
-	{
-		// VERY IMPORTANT: These MUST be in the same order as the sequential
-		// values within the data.Sequence class, eg, unknown, P, N, A, C, G, T
-
-		// Sequence.UNKNOWN
-		statesRD.add(new StandardColorState("?", Color.lightGray, w, h, true, false));
-		statesRD.add(new StandardColorState("?", Color.lightGray, w, h, true, true));
-
-		// Sequence.P
-		statesRD.add(new StandardColorState(Sequence.PAD, Color.lightGray, w, h, true, false));
-		statesRD.add(new StandardColorState(Sequence.PAD, Color.lightGray, w, h, true, true));
-
-		// Sequence.N
-		statesRD.add(new StandardColorState("N", Color.lightGray, w, h, true, false));
-		statesRD.add(new StandardColorState("N", Color.lightGray, w, h, true, true));
-
-		// Sequence.A
-		statesRD.add(new StandardColorState("A", new Color(120, 255, 120), w, h, true, false));
-		statesRD.add(new StandardColorState("A", new Color(120, 255, 120), w, h, true, true));
-
-		// Sequence.C
-		statesRD.add(new StandardColorState("C", new Color(255, 160, 120), w, h, true, false));
-		statesRD.add(new StandardColorState("C", new Color(255, 160, 120), w, h, true, true));
-
-		// Sequence.G
-		statesRD.add(new StandardColorState("G", new Color(255, 120, 120), w, h, true, false));
-		statesRD.add(new StandardColorState("G", new Color(255, 120, 120), w, h, true, true));
-
-		// Sequence.T
-		statesRD.add(new StandardColorState("T", new Color(120, 120, 255), w, h, true, false));
-		statesRD.add(new StandardColorState("T", new Color(120, 120, 255), w, h, true, true));
-
-		// Pair Link
-		statesRD.add(new PairLinkColorState(new Color(180, 180, 180), w, h));
-		statesRD.add(null);
-	}
-
-	public Image getImage(int data)
-	{
-		return statesRD.get(data).getImage();
+		colors.put("?", Color.lightGray);
+		colors.put(Sequence.PAD, Color.lightGray);
+		colors.put("N", Color.lightGray);
+		colors.put("A", new Color(120, 255, 120));
+		colors.put("C", new Color(255, 160, 120));
+		colors.put("G", new Color(255, 120, 120));
+		colors.put("T", new Color(120, 120, 255));
 	}
 
 	public Image getConsensusImage(int data)
@@ -112,8 +69,16 @@ public class StandardColorScheme extends ColorScheme
 		return statesCS.get(data).getImage();
 	}
 
-	public Color getColor(int data)
+	public Image getImage(ReadMetaData rmd, int index)
 	{
-		return statesRD.get(data).getColor();
+		return statesRD.get(rmd.getStateAt(index)).getImage();
 	}
+
+	public Color getColor(ReadMetaData rmd, int index)
+	{
+		return statesRD.get(rmd.getStateAt(index)).getColor();
+	}
+
+	public Image getPairLink()
+		{ return pairLink.getImage(); }
 }

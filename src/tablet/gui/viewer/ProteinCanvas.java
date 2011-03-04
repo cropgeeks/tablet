@@ -91,7 +91,7 @@ class ProteinCanvas extends TrackingCanvas implements ITaskListener
 		int xS = rCanvas.xS;
 		int xE = rCanvas.xE;
 
-		ColorScheme colors = rCanvas.proteins;
+		ProteinColorScheme colors = rCanvas.proteins;
 
 		for (int t = 0, count = 0; t < translations.size(); t++)
 		{
