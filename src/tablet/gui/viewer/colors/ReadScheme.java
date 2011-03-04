@@ -8,7 +8,7 @@ import java.awt.*;
 import tablet.data.*;
 import tablet.gui.*;
 
-public abstract class ReadColorScheme
+public abstract class ReadScheme
 {
 	public static final int STANDARD = 10;
 	public static final int CLASSIC = 20;
@@ -17,7 +17,7 @@ public abstract class ReadColorScheme
 
 
 	/** Returns a DNA colouring scheme from the cache of schemes. */
-	public static ReadColorScheme getScheme(int type, int w, int h)
+	public static ReadScheme getScheme(int type, int w, int h)
 	{
 		// Ensure the correct type of pad character rendering is used
 		if (Prefs.visPadCharType == 0)
@@ -25,19 +25,19 @@ public abstract class ReadColorScheme
 		else if (Prefs.visPadCharType == 1)
 			Sequence.PAD = "-";
 
-		ReadColorScheme scheme = null;
+		ReadScheme scheme = null;
 
 		if (type == STANDARD)
-			scheme = new StandardColorScheme(w, h, true, true);
+			scheme = new EnhancedScheme(w, h, true, true);
 
 		else if (type == CLASSIC)
-			scheme = new TextColorScheme(w, h);
+			scheme = new ClassicScheme(w, h);
 
 		else if (type == DIRECTION)
-			scheme = new DirectionColorScheme(w, h);
+			scheme = new DirectionScheme(w, h);
 
 		else if (type == READTYPE)
-			scheme = new ReadTypeColorScheme(w, h);
+			scheme = new ReadTypeScheme(w, h);
 
 		return scheme;
 	}

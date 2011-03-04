@@ -4,17 +4,16 @@
 package tablet.gui.viewer.colors;
 
 import java.awt.*;
-import java.awt.image.*;
 import java.util.*;
 
 import tablet.data.*;
 
-public class DirectionColorScheme extends StandardColorScheme
+public class DirectionScheme extends EnhancedScheme
 {
-	private ArrayList<ColorState> statesF = new ArrayList<ColorState>();
-	private ArrayList<ColorState> statesR = new ArrayList<ColorState>();
+	private ArrayList<ColorStamp> statesF = new ArrayList<ColorStamp>();
+	private ArrayList<ColorStamp> statesR = new ArrayList<ColorStamp>();
 
-	public DirectionColorScheme(int w, int h)
+	public DirectionScheme(int w, int h)
 	{
 		super(w, h, true, false);
 
@@ -23,14 +22,14 @@ public class DirectionColorScheme extends StandardColorScheme
 		initStates(statesR, new Color(70, 116, 162), w, h);
 	}
 
-	private void initStates(ArrayList<ColorState> states, Color c, int w, int h)
+	private void initStates(ArrayList<ColorStamp> states, Color c, int w, int h)
 	{
 		for (String base: Sequence.getStates())
 		{
 			// Add the normal image
-			states.add(new StandardColorState(base, c, w, h, true, false));
+			states.add(new ColorStamp(base, c, w, h, true, false));
 			// Add the delta image
-			states.add(new StandardColorState(base, c, w, h, true, true));
+			states.add(new ColorStamp(base, c, w, h, true, true));
 		}
 	}
 

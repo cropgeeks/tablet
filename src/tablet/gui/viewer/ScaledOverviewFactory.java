@@ -51,7 +51,7 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 		float yScale = ntOnCanvasY / (float) h;
 
 		// Color scheme in use
-		ReadColorScheme colors = rCanvas.colors;
+		ReadScheme colors = rCanvas.colors;
 
 		// Loop over every pixel that makes up the overview...
 		for (int y = 0; y < h && !killMe; y++)

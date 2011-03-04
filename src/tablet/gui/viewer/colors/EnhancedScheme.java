@@ -4,24 +4,23 @@
 package tablet.gui.viewer.colors;
 
 import java.awt.*;
-import java.awt.image.*;
 import java.util.*;
 
 import tablet.data.*;
 
-public class StandardColorScheme extends ReadColorScheme
+public class EnhancedScheme extends ReadScheme
 {
 	private HashMap<String, Color> colors = new HashMap<String, Color>();
 
 	// Holds the states needed by the reads canvas
-	protected ArrayList<ColorState> statesRD = new ArrayList<ColorState>();
+	protected ArrayList<Stamp> statesRD = new ArrayList<Stamp>();
 	// Holds the states needed by the consensus canvas
-	protected ArrayList<ColorState> statesCS = new ArrayList<ColorState>();
+	protected ArrayList<Stamp> statesCS = new ArrayList<Stamp>();
 
 	// Holds the image used to draw a "link" between two reads
-	protected PairLinkColorState pairLink;
+	protected LinkStamp pairLink;
 
-	public StandardColorScheme(int w, int h, boolean createCS, boolean createRD)
+	public EnhancedScheme(int w, int h, boolean createCS, boolean createRD)
 	{
 		createColors();
 
@@ -32,7 +31,7 @@ public class StandardColorScheme extends ReadColorScheme
 			{
 				Color c = colors.get(base);
 
-				statesCS.add(new StandardColorState(base, c, w, h, false, false));
+				statesCS.add(new ColorStamp(base, c, w, h, false, false));
 				statesCS.add(null);
 			}
 		}
@@ -44,13 +43,13 @@ public class StandardColorScheme extends ReadColorScheme
 			{
 				Color c = colors.get(base);
 
-				statesRD.add(new StandardColorState(base, c, w, h, true, false));
-				statesRD.add(new StandardColorState(base, c, w, h, true, true));
+				statesRD.add(new ColorStamp(base, c, w, h, true, false));
+				statesRD.add(new ColorStamp(base, c, w, h, true, true));
 			}
 		}
 
 		// Create the image used for linking pairs
-		pairLink = new PairLinkColorState(new Color(180, 180, 180), w, h);
+		pairLink = new LinkStamp(new Color(180, 180, 180), w, h);
 	}
 
 	private void createColors()

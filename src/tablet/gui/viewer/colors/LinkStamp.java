@@ -4,11 +4,10 @@
 package tablet.gui.viewer.colors;
 
 import java.awt.*;
-import java.awt.image.*;
 
-public class PairLinkColorState extends ColorState
+public class LinkStamp extends Stamp
 {
-	PairLinkColorState(Color c, int w, int h)
+	LinkStamp(Color c, int w, int h)
 	{
 		super(c, w, h);
 

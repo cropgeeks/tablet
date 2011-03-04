@@ -6,13 +6,12 @@ package tablet.gui.viewer.colors;
 import java.awt.*;
 
 import tablet.analysis.*;
-import tablet.data.*;
 import tablet.gui.*;
 
-public abstract class ProteinColorScheme
+public abstract class ProteinScheme
 {
 	/** Returns a PROTEIN colouring scheme from the cache of schemes. */
-	public static ProteinColorScheme getScheme(int type, int w, int h)
+	public static ProteinScheme getScheme(int type, int w, int h)
 	{
 		// Ensure the correct type of pad character rendering is used
 		if (Prefs.visStopCharType == 0)
@@ -20,13 +19,13 @@ public abstract class ProteinColorScheme
 		else if (Prefs.visStopCharType == 1)
 			ProteinTranslator.setStopCharacter("*");
 
-		ProteinColorScheme scheme = null;
+		ProteinScheme scheme = null;
 
-		if (type == ReadColorScheme.CLASSIC)
-			scheme = new ProteinTextColorScheme(w, h);
+		if (type == ReadScheme.CLASSIC)
+			scheme = new ProteinClassicScheme(w, h);
 
 		else
-			scheme = new ProteinClassificationColorScheme(w, h);
+			scheme = new ProteinEnhancedScheme(w, h);
 
 		return scheme;
 	}
