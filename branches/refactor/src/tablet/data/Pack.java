@@ -87,13 +87,15 @@ public class Pack
 		// Tracking index on the start->end scale
 		int index = start;
 
-		ListIterator<Read> itor = reads.listIterator(fromRead);
-
 		Read read = null;
 		ReadMetaData rmd = null;
+
+		ListIterator<Read> itor = reads.listIterator(fromRead);
+
 		while (itor.hasNext())
 		{
 			read = itor.next();
+			rmd = Assembly.getReadMetaData(read, true);
 
 			if (read.getStartPosition() > end)
 				break;
@@ -101,26 +103,17 @@ public class Pack
 			int readS = read.getStartPosition();
 			int readE = read.getEndPosition();
 
-			rmd = Assembly.getReadMetaData(read, true);
 
-			if(read instanceof MatedRead && Prefs.visPaired && Prefs.visPairLines)
-			{
-				boolean drawLine = drawMateLineBeforeRead(read, readS, rmd);
-
-				// Fill in any blanks between the current index the next read
+			// Decide what to put in the bases before each read
+			if (read instanceof MatedRead && linesBeforeRead(read, readS, rmd))
 				for (; index < readS; index++, dataI++)
-				{
-					if(drawLine)
-						indexes[dataI] = -2;
-					else
-						indexes[dataI] = -1;
-				}
-			}
+					indexes[dataI] = -2;
 			else
 				for (; index < readS; index++, dataI++)
 					indexes[dataI] = -1;
 
-			// Fill in the read data
+
+			// Fill in the data for this read
 			for (; index <= end && index <= readE; index++, dataI++)
 			{
 				rmds[dataI] = rmd;
@@ -128,31 +121,24 @@ public class Pack
 			}
 		}
 
-		rmd = Assembly.getReadMetaData(read, true);
-
-		if(read instanceof MatedRead && Prefs.visPaired && Prefs.visPairLines)
-		{
-			boolean drawLine = drawMateLineAfterRead(read, end, rmd);
-
-			// If no more reads are within the window, fill in any blanks between
-			// the final read and the end of the array
+		// If no more reads are within the window, fill in any blanks between
+		// the final read and the end of the array
+		if (read instanceof MatedRead && linesAfterRead(read, end, rmd))
 			for (; index <= end; index++, dataI++)
-			{
-				if(drawLine)
-					indexes[dataI] = -2;
-				else
-					indexes[dataI] = -1;
-			}
-		}
+				indexes[dataI] = -2;
 		else
 			for (; index <= end; index++, dataI++)
 				indexes[dataI] = -1;
 
+
 		return new LineData(indexes, rmds);
 	}
 
-	private boolean drawMateLineBeforeRead(Read read, int readS, ReadMetaData rmd)
+	private boolean linesBeforeRead(Read read, int readS, ReadMetaData rmd)
 	{
+		if (!Prefs.visPaired || !Prefs.visPairLines)
+			return false;
+
 		MatedRead matedRead = (MatedRead)read;
 		MatedRead mate = matedRead.getPair();
 
@@ -166,8 +152,11 @@ public class Pack
 		return needsLine && !onDifferentRows;
 	}
 
-	private boolean drawMateLineAfterRead(Read read, int end, ReadMetaData rmd)
+	private boolean linesAfterRead(Read read, int end, ReadMetaData rmd)
 	{
+		if (!Prefs.visPaired || !Prefs.visPairLines)
+			return false;
+
 		MatedRead matedRead = (MatedRead)read;
 		MatedRead mate = matedRead.getPair();
 		int startPos = matedRead.getStartPosition();
