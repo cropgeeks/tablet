@@ -6,7 +6,7 @@ package tablet.gui.viewer.colors;
 import java.awt.*;
 import java.awt.image.*;
 
-abstract class ColorState
+abstract class Stamp
 {
 	// AWT representation of this color
 	protected Color color;
@@ -17,7 +17,7 @@ abstract class ColorState
 	// Width and height of the image
 	protected int w, h;
 
-	ColorState(Color c, int w, int h)
+	Stamp(Color c, int w, int h)
 	{
 		this.color = c;
 		this.w = w;

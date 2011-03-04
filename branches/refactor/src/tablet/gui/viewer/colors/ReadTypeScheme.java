@@ -9,14 +9,14 @@ import java.util.*;
 import tablet.data.*;
 import static tablet.data.ReadMetaData.*;
 
-public class ReadTypeColorScheme extends StandardColorScheme
+public class ReadTypeScheme extends EnhancedScheme
 {
-	private ArrayList<ColorState> unpaired = new ArrayList<ColorState>();
-	private ArrayList<ColorState> firstInP = new ArrayList<ColorState>();
-	private ArrayList<ColorState> secndInP = new ArrayList<ColorState>();
-	private ArrayList<ColorState> orphaned = new ArrayList<ColorState>();
+	private ArrayList<ColorStamp> unpaired = new ArrayList<ColorStamp>();
+	private ArrayList<ColorStamp> firstInP = new ArrayList<ColorStamp>();
+	private ArrayList<ColorStamp> secndInP = new ArrayList<ColorStamp>();
+	private ArrayList<ColorStamp> orphaned = new ArrayList<ColorStamp>();
 
-	public ReadTypeColorScheme(int w, int h)
+	public ReadTypeScheme(int w, int h)
 	{
 		super(w, h, true, false);
 
@@ -27,14 +27,14 @@ public class ReadTypeColorScheme extends StandardColorScheme
 		initStates(orphaned, new Color(255, 120, 120), w, h);
 	}
 
-	private void initStates(ArrayList<ColorState> states, Color c, int w, int h)
+	private void initStates(ArrayList<ColorStamp> states, Color c, int w, int h)
 	{
 		for (String base: Sequence.getStates())
 		{
 			// Add the normal image
-			states.add(new StandardColorState(base, c, w, h, true, false));
+			states.add(new ColorStamp(base, c, w, h, true, false));
 			// Add the delta image
-			states.add(new StandardColorState(base, c, w, h, true, true));
+			states.add(new ColorStamp(base, c, w, h, true, true));
 		}
 	}
 

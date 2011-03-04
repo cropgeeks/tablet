@@ -9,9 +9,9 @@ import java.awt.image.*;
 
 import tablet.gui.*;
 
-class TextState extends ColorState
+class GrayscaleStamp extends Stamp
 {
-	TextState(String text, int w, int h, boolean useAlpha, boolean isDeltaBase)
+	GrayscaleStamp(String text, int w, int h, boolean useAlpha, boolean isDeltaBase)
 	{
 		super(Color.lightGray, w, h);
 

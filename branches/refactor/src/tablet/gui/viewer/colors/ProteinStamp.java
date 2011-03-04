@@ -9,9 +9,9 @@ import java.awt.image.*;
 
 import tablet.gui.*;
 
-class ProteinClassificationColorState extends ColorState
+class ProteinStamp extends Stamp
 {
-	ProteinClassificationColorState(String txt, Color c, int w, int h, int chop)
+	ProteinStamp(String txt, Color c, int w, int h, int chop)
 	{
 		super(c, w, h);
 

@@ -25,8 +25,8 @@ public class ReadsCanvas extends JPanel
 	IReadManager reads;
 
 	// Color scheme in use
-	ReadColorScheme colors;
-	ProteinColorScheme proteins;
+	ReadScheme colors;
+	ProteinScheme proteins;
 
 	// Width and height of the canvas
 	int canvasW, canvasH;
@@ -197,8 +197,8 @@ public class ReadsCanvas extends JPanel
 
 	void updateColorScheme()
 	{
-		colors = ReadColorScheme.getScheme(Prefs.visColorScheme, ntW, ntH);
-		proteins = ProteinColorScheme.getScheme(Prefs.visColorScheme, ntW, ntH);
+		colors = ReadScheme.getScheme(Prefs.visColorScheme, ntW, ntH);
+		proteins = ProteinScheme.getScheme(Prefs.visColorScheme, ntW, ntH);
 	}
 
 	public void paintComponent(Graphics graphics)

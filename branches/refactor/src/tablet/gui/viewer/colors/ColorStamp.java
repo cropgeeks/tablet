@@ -9,9 +9,9 @@ import java.awt.image.*;
 
 import tablet.gui.*;
 
-class StandardColorState extends ColorState
+class ColorStamp extends Stamp
 {
-	StandardColorState(String text, Color c, int w, int h, boolean useAlpha, boolean isDeltaBase)
+	ColorStamp(String text, Color c, int w, int h, boolean useAlpha, boolean isDeltaBase)
 	{
 		super(c, w, h);
 
