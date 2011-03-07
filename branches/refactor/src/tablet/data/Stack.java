@@ -5,15 +5,15 @@ package tablet.data;
 
 import java.util.*;
 
-public class StackSet implements IReadManager
+public class Stack implements IReadManager
 {
 	private ArrayList<Read> stack = new ArrayList<Read>();
 
-	StackSet()
+	Stack()
 	{
 	}
 
-	StackSet(ArrayList<Read> reads)
+	Stack(ArrayList<Read> reads)
 	{
 		stack = reads;
 	}

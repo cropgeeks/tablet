@@ -12,13 +12,13 @@ import scri.commons.gui.*;
 public class PackSetCreator extends SimpleJob
 {
 	private Contig contig;
-	private PackSet packSet;
+	private Pack pack;
 	private int startPos, rowIndex;
 
 	public PackSetCreator(Contig contig)
 	{
 		this.contig = contig;
-		packSet = new PackSet();
+		pack = new Pack();
 		startPos=rowIndex=0;
 	}
 
@@ -47,9 +47,9 @@ public class PackSetCreator extends SimpleJob
 				startRow = rowIndex+1;
 
 			// Can this read be added to any of the existing pack lines?
-			for(int i=startRow; i < packSet.size(); i++)
+			for(int i=startRow; i < pack.size(); i++)
 			{
-				if(added = packSet.get(i).addRead(read))
+				if(added = pack.get(i).addRead(read))
 				{
 					rowIndex = i;
 					break;
@@ -59,11 +59,11 @@ public class PackSetCreator extends SimpleJob
 			// If not, create a new pack and add it there
 			if (added == false)
 			{
-				Pack newPack = new Pack();
-				newPack.addRead(read);
+				PackRow newPackRow = new PackRow();
+				newPackRow.addRead(read);
 
-				packSet.addPack(newPack);
-				rowIndex = packSet.size()-1;
+				pack.addPack(newPackRow);
+				rowIndex = pack.size()-1;
 			}
 
 			startPos = read.getStartPosition();
@@ -72,11 +72,11 @@ public class PackSetCreator extends SimpleJob
 		}
 
 		// Trim the packs down to size once finished
-		for (Pack pack: packSet)
-			pack.trimToSize();
-		packSet.trimToSize();
+		for (PackRow packRow: pack)
+			packRow.trimToSize();
+		pack.trimToSize();
 
-		contig.setPackSet(packSet);
+		contig.setPack(pack);
 
 
 		long e = System.currentTimeMillis();
@@ -85,6 +85,6 @@ public class PackSetCreator extends SimpleJob
 
 	public String getMessage()
 	{
-		return RB.format("analysis.PackSetCreator.status", packSet.size());
+		return RB.format("analysis.PackSetCreator.status", pack.size());
 	}
 }

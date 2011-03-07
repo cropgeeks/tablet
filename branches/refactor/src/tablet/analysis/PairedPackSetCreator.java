@@ -9,7 +9,7 @@ import tablet.data.*;
 
 public class PairedPackSetCreator extends SimpleJob
 {
-	private PackSet packSet;
+	private Pack pack;
 	private Contig contig;
 	private boolean added, pairAdded;
 	private int dataS;
@@ -19,7 +19,7 @@ public class PairedPackSetCreator extends SimpleJob
 	public PairedPackSetCreator(Contig contig, Assembly assembly)
 	{
 		this.contig = contig;
-		packSet = new PackSet();
+		pack = new Pack();
 		dataS = contig.getVisualStart();
 		startPos = rowIndex = 0;
 	}
@@ -51,20 +51,20 @@ public class PairedPackSetCreator extends SimpleJob
 				MatedRead matedRead = (MatedRead) read;
 
 				// Add the pair to an existing pack
-				addToExistingPack(matedRead);
+				addToExistingPackRow(matedRead);
 
 				// If that wasn't possible, add to a new pack.
 				if(added == false)
-					addToNewPack(matedRead);
+					addToNewPackRow(matedRead);
 			}
 			// Add the single-end read to the packset.
 			else
 			{
 				// Add the read to an existing pack
-				addToPackInPackSet(read);
+				addToPackRowInPack(read);
 				// If that wasn't possible, add to a new pack.
 				if(added == false)
-					createPackForRead(read);
+					createPackRowForRead(read);
 			}
 
 			startPos = read.getStartPosition();
@@ -73,12 +73,12 @@ public class PairedPackSetCreator extends SimpleJob
 		}
 
 		// Trim the packs down to size once finished
-		for (Pack pack: packSet)
-			pack.trimToSize();
+		for (PackRow packRow: pack)
+			packRow.trimToSize();
 		
-		packSet.trimToSize();
+		pack.trimToSize();
 
-		contig.setPackSet(packSet);
+		contig.setPack(pack);
 
 		long e = System.currentTimeMillis();
 		System.out.println("Packed data in " + (e-s) + "ms");
@@ -88,12 +88,12 @@ public class PairedPackSetCreator extends SimpleJob
 	 * Loop over existing packs attempting to add both the read and its pair to
 	 * each pack, halting the loop if we are successful.
 	 */
-	private void addToExistingPack(MatedRead pairedRead)
+	private void addToExistingPackRow(MatedRead pairedRead)
 	{
-		for (int i = startRow; i < packSet.size(); i++)
+		for (int i = startRow; i < pack.size(); i++)
 		{
 			// Try to add the first read in the pair, must be either the first read from a pair in the contig, or the only read from the pair in the contig
-			if (canAddToExistingPack(pairedRead, i))
+			if (canAddToExistingPackRow(pairedRead, i))
 			{
 				rowIndex = i;
 				
@@ -101,27 +101,27 @@ public class PairedPackSetCreator extends SimpleJob
 					break;
 
 				// Try to add the second read in the pair
-				if (!(pairAdded = packSet.get(i).addRead(pairedRead.getPair())))
+				if (!(pairAdded = pack.get(i).addRead(pairedRead.getPair())))
 				{
-					for(int j=0; j < packSet.size(); j++)
+					for(int j=0; j < pack.size(); j++)
 					{
-						pairAdded = packSet.get(j).addRead(pairedRead.getPair());
+						pairAdded = pack.get(j).addRead(pairedRead.getPair());
 						if(pairAdded)
 							break;
 					}
 					if(!pairAdded)
-						createPackForRead(pairedRead.getPair());
+						createPackRowForRead(pairedRead.getPair());
 				}
 				break;
 			}
 		}
 	}
 
-	private void addToPackInPackSet(Read read)
+	private void addToPackRowInPack(Read read)
 	{
-		for(int i = startRow; i < packSet.size(); i++)
+		for(int i = startRow; i < pack.size(); i++)
 		{
-			added = packSet.get(i).addRead(read);
+			added = pack.get(i).addRead(read);
 			if(added)
 			{
 				rowIndex = i;
@@ -134,59 +134,59 @@ public class PairedPackSetCreator extends SimpleJob
 	 * Attempt to add reads from the pair which were not added to an existing pack
 	 * to a new pack.
 	 */
-	private void addToNewPack(MatedRead pairedRead)
+	private void addToNewPackRow(MatedRead pairedRead)
 	{
 	
-		if (canAddToNewPack(pairedRead))
+		if (canAddToNewPackRow(pairedRead))
 		{
-			Pack newPack = new Pack();
-			newPack.addRead(pairedRead);
+			PackRow newPackRow = new PackRow();
+			newPackRow.addRead(pairedRead);
 			added = true;
 
 			if(pairedRead.getPair() != null)
-				pairAdded = newPack.addRead(pairedRead.getPair());
+				pairAdded = newPackRow.addRead(pairedRead.getPair());
 
-			packSet.addPack(newPack);
+			pack.addPack(newPackRow);
 
 			if(pairedRead.getPair() == null)
 				return;
 
 			if (!pairAdded)
 			{
-				for(int i=startRow; i < packSet.size(); i++)
+				for(int i=startRow; i < pack.size(); i++)
 				{
-					pairAdded = packSet.get(i).addRead(pairedRead.getPair());
+					pairAdded = pack.get(i).addRead(pairedRead.getPair());
 					if(pairAdded)
 						break;
 				}
 				if(!pairAdded)
-					createPackForRead(pairedRead.getPair());
+					createPackRowForRead(pairedRead.getPair());
 			}
 
-			rowIndex = packSet.size()-1;
+			rowIndex = pack.size()-1;
 		}
 	}
 
-	private void createPackForRead(Read read)
+	private void createPackRowForRead(Read read)
 	{
-		Pack newPack = new Pack();
-		newPack.addRead(read);
-		packSet.addPack(newPack);
-		rowIndex = packSet.size()-1;
+		PackRow newPackRow = new PackRow();
+		newPackRow.addRead(read);
+		pack.addPack(newPackRow);
+		rowIndex = pack.size()-1;
 	}
 
-	private boolean canAddToNewPack(MatedRead matedRead)
+	private boolean canAddToNewPackRow(MatedRead matedRead)
 	{
 		return (matedRead.getStartPosition() < matedRead.getMatePos() || (matedRead.getPair() == null && matedRead.getMatePos() < dataS)) || !matedRead.isMateContig();
 	}
 
-	private boolean canAddToExistingPack(MatedRead matedRead, int i)
+	private boolean canAddToExistingPackRow(MatedRead matedRead, int i)
 	{
-		return (canAddToNewPack(matedRead)) && (added = packSet.get(i).addRead(matedRead));
+		return (canAddToNewPackRow(matedRead)) && (added = pack.get(i).addRead(matedRead));
 	}
 
 	public String getMessage()
 	{
-		return RB.format("analysis.PackSetCreator.status", packSet.size());
+		return RB.format("analysis.PackSetCreator.status", pack.size());
 	}
 }

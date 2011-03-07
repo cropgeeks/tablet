@@ -41,9 +41,9 @@ public class Contig
 
 	// Objects for handling the ordering of reads (for display)
 	private IReadManager readManager;
-	private PackSet packSet;
-	private StackSet stackSet;
-	private PairedStack pairedStackSet;
+	private Pack pack;
+	private Stack stack;
+	private PairedStack pairedStack;
 
 	// Main set of features associated with this contig (basically every feature
 	// held in a single FeatureTrack object)
@@ -173,16 +173,16 @@ public class Contig
 		}
 	}
 
-	public void setPackSet(PackSet packSet)
+	public void setPack(Pack pack)
 	{
-		this.packSet = packSet;
-		stackSet = new StackSet(reads);
+		this.pack = pack;
+		stack = new Stack(reads);
 	}
 
-	public void setPairedStackSet(PairedStack pairedStackSet)
+	public void setPairedStack(PairedStack pairedStack)
 	{
-		this.pairedStackSet = pairedStackSet;
-		stackSet = new StackSet(reads);
+		this.pairedStack = pairedStack;
+		stack = new Stack(reads);
 	}
 
 	/**
@@ -195,9 +195,9 @@ public class Contig
 	{
 		readManager = null;
 
-		packSet = null;
-		pairedStackSet = null;
-		stackSet = null;
+		pack = null;
+		pairedStack = null;
+		stack = null;
 
 		if (doFullReset)
 		{
@@ -255,14 +255,14 @@ public class Contig
 	public int getVisualHeight()
 		{ return readManager.size(); }
 
-	public IReadManager getPackSetManager()
-		{ return (readManager = packSet); }
+	public IReadManager getPackManager()
+		{ return (readManager = pack); }
 
-	public IReadManager getPairedStackSetManager()
-		{ return (readManager = pairedStackSet); }
+	public IReadManager getPairedStackManager()
+		{ return (readManager = pairedStack); }
 
-	public IReadManager getStackSetManager()
-		{ return (readManager = stackSet); }
+	public IReadManager getStackManager()
+		{ return (readManager = stack); }
 
 	public IReadManager getReadManager()
 		{ return readManager; }
