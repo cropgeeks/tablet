@@ -5,13 +5,11 @@ package tablet.data;
 
 import java.util.*;
 
-import tablet.gui.Prefs;
-
 /**
  * Stores information about one row in the PairedStack display. Includes a
  * simple array of reads, with space for two reads.
  */
-public class ReadPair
+public class PairedStackRow
 {
 	private Read readA = null;
 	private Read readB = null;

@@ -183,22 +183,22 @@ class ReadsCanvasML extends MouseInputAdapter
 	{
 		if(rCanvas.reads instanceof PairedStack)
 		{
-			PairedStack set = (PairedStack)rCanvas.reads;
-			Read[] pair = set.getPairAtLine(yIndex, xIndex);
+			PairedStack pairedStack = (PairedStack)rCanvas.reads;
+			Read[] pair = pairedStack.getPairAtLine(yIndex, xIndex);
 
 			setupPairOutline(pair, yIndex, xIndex);
 		}
-		else if(rCanvas.reads instanceof PackSet)
+		else if(rCanvas.reads instanceof Pack)
 		{
-			PackSet set = (PackSet)rCanvas.reads;
-			Read[] pair = set.getPairAtLine(yIndex, xIndex);
+			Pack pack = (Pack)rCanvas.reads;
+			Read[] pair = pack.getPairAtLine(yIndex, xIndex);
 
 			setupPairOutline(pair, yIndex, xIndex);
 		}
-		else if(rCanvas.reads instanceof StackSet)
+		else if(rCanvas.reads instanceof Stack)
 		{
-			StackSet set = (StackSet)rCanvas.reads;
-			Read read = set.getReadAt(yIndex, xIndex);
+			Stack stack = (Stack)rCanvas.reads;
+			Read read = stack.getReadAt(yIndex, xIndex);
 			Read mate = null;
 
 			if(read instanceof MatedRead)

@@ -11,13 +11,13 @@ import java.util.*;
  */
 public class PairedStack implements IReadManager
 {
-	private ArrayList<ReadPair> stack = new ArrayList<ReadPair>();
+	private ArrayList<PairedStackRow> stack = new ArrayList<PairedStackRow>();
 
 	public LineData getLineData(int line, int start, int end)
 	{
-		ReadPair readPair = stack.get(line);
+		PairedStackRow pairedStackRow = stack.get(line);
 
-		return readPair.getLineData(start, end);
+		return pairedStackRow.getLineData(start, end);
 	}
 
 	public int size()
@@ -30,9 +30,9 @@ public class PairedStack implements IReadManager
 		if (line < 0 || line >= stack.size())
 			return null;
 
-		ReadPair readPair = stack.get(line);
+		PairedStackRow pairedStackRow = stack.get(line);
 
-		return readPair.getReadAt(nucleotidePosition);
+		return pairedStackRow.getReadAt(nucleotidePosition);
 	}
 
 	/**
@@ -40,12 +40,12 @@ public class PairedStack implements IReadManager
 	 */
 	public int getLineForRead(Read read)
 	{
-		for(ReadPair readPair : stack)
+		for(PairedStackRow pairedStackRow : stack)
 		{
-			Read found = readPair.getReadAt(read.getStartPosition());
+			Read found = pairedStackRow.getReadAt(read.getStartPosition());
 
 			if(found != null && found.getID() == read.getID())
-				return stack.indexOf(readPair);
+				return stack.indexOf(pairedStackRow);
 		}
 		return -1;
 	}
@@ -55,9 +55,9 @@ public class PairedStack implements IReadManager
 		return null;
 	}
 
-	public void addPairedStack(ReadPair pairedStack)
+	public void addPairedStackRow(PairedStackRow pairedStackRow)
 	{
-		stack.add(pairedStack);
+		stack.add(pairedStackRow);
 	}
 
 	/**

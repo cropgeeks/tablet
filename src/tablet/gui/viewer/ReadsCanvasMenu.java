@@ -293,13 +293,13 @@ class ReadsCanvasMenu implements ActionListener
 
 			if(rCanvas.reads instanceof PairedStack)
 			{
-				PairedStack set = (PairedStack)rCanvas.reads;
-				pair = set.getPairAtLine(rowIndex, colIndex);
+				PairedStack pairedStack = (PairedStack)rCanvas.reads;
+				pair = pairedStack.getPairAtLine(rowIndex, colIndex);
 			}
-			else if(rCanvas.reads instanceof PackSet)
+			else if(rCanvas.reads instanceof Pack)
 			{
-				PackSet set = (PackSet)rCanvas.reads;
-				pair = set.getPairAtLine(rowIndex, colIndex);
+				Pack pack = (Pack)rCanvas.reads;
+				pair = pack.getPairAtLine(rowIndex, colIndex);
 			}
 
 			if(pair != null && pair[0] != null)
@@ -315,13 +315,13 @@ class ReadsCanvasMenu implements ActionListener
 
 			if(rCanvas.reads instanceof PairedStack)
 			{
-				PairedStack set = (PairedStack)rCanvas.reads;
-				pair = set.getPairAtLine(rowIndex, colIndex);
+				PairedStack pairedStack = (PairedStack)rCanvas.reads;
+				pair = pairedStack.getPairAtLine(rowIndex, colIndex);
 			}
-			else if(rCanvas.reads instanceof PackSet)
+			else if(rCanvas.reads instanceof Pack)
 			{
-				PackSet set = (PackSet)rCanvas.reads;
-				pair = set.getPairAtLine(rowIndex, colIndex);
+				Pack pack = (Pack)rCanvas.reads;
+				pair = pack.getPairAtLine(rowIndex, colIndex);
 			}
 
 			if(pair != null && pair[1] != null)
@@ -408,15 +408,15 @@ class ReadsCanvasMenu implements ActionListener
 			pair = set.getPairAtLine(rowIndex, colIndex);
 			read = set.getReadAt(rowIndex, colIndex);
 		}
-		else if(rCanvas.reads instanceof PackSet)
+		else if(rCanvas.reads instanceof Pack)
 		{
-			PackSet set = (PackSet)rCanvas.reads;
+			Pack set = (Pack)rCanvas.reads;
 			pair = set.getPairAtLine(rowIndex, colIndex);
 			read = set.getReadAt(rowIndex, colIndex);
 		}
-		else if(rCanvas.reads instanceof StackSet)
+		else if(rCanvas.reads instanceof Stack)
 		{
-			StackSet set = (StackSet)rCanvas.reads;
+			Stack set = (Stack)rCanvas.reads;
 			read = set.getReadAt(rowIndex, colIndex);
 			if (read instanceof MatedRead)
 			{
