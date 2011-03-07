@@ -3,6 +3,8 @@
 
 package tablet.data;
 
+import java.util.*;
+
 import tablet.gui.Prefs;
 
 /**
@@ -27,99 +29,59 @@ public class ReadPair
 		ReadMetaData[] reads = new ReadMetaData[end-start+1];
 		int[] indexes = new int[end-start+1];
 
-		// Tracking index within the data array
-		int dataI = 0;
-		// Tracking index on the start->end scale
-		int index = start;
+		// Pre-fill array with "blanks"
+		Arrays.fill(indexes, -1);
 
-		Read [] pair = new Read [] {readA, readB};
+		// Fill in data for first read
+		if (readA != null)
+			getLineDataForRead(readA, reads, indexes, start, end);
 
-		// loop over the reads in the data window
-		for(int i=0; i < pair.length; i++)
-		{
-			Read read = pair[i];
+		// Fill in any links between reads
+		if (readA != null && readB != null)
+			getLineDataForPairLink(indexes, start, end);
 
-			if(read == null || read.getStartPosition() > end)
-				break;
-
-			int readS = read.getStartPosition();
-			int readE = read.getEndPosition();
-
-			ReadMetaData rmd = Assembly.getReadMetaData(read, true);
-
-			if(read instanceof MatedRead && Prefs.visPairLines)
-			{
-				boolean drawLine = drawMateLineBeforeRead(read, readS, rmd);
-
-				for (; index < readS; index++, dataI++)
-				{
-					// Is this an area between the start of each read in a pair of reads
-					if(drawLine)
-						indexes[dataI] = -2;
-					else
-						indexes[dataI] = -1;
-				}
-			}
-			else
-				for (; index < readS; index++, dataI++)
-					indexes[dataI] = -1;
-
-			// Fill in the read data
-			for (; index <= end && index <= readE; index++, dataI++)
-			{
-				indexes[dataI] = index-readS;
-				reads[dataI] = rmd;
-			}
-		}
-
-		if (index <= end)
-		{
-
-			Read read = pair[0];
-
-			if(read instanceof MatedRead && Prefs.visPairLines)
-			{
-				MatedRead matedRead = (MatedRead)read;
-
-				// Work out these variables in advance rather than on each iteration
-				int endPos = matedRead.getEndPosition();
-				int matePos = matedRead.getMatePos();
-				boolean isMateContig = matedRead.isMateContig();
-				boolean needsLine = matePos > end && isMateContig && matedRead.getPair() != null;
-
-				// If no more reads are within the window, fill in any blanks between
-				// the final read and the end of the array
-				for (; index <= end; index++, dataI++)
-				{
-					if(index > endPos && needsLine)
-						indexes[dataI] = -2;
-					else
-						indexes[dataI] = -1;
-				}
-			}
-			else
-				for (; index <= end; index++, dataI++)
-					indexes[dataI] = -1;
-		}
+		// Fill in the data for the second read
+		if (readB != null)
+			getLineDataForRead(readB, reads, indexes, start, end);
 
 		return new LineData(indexes, reads);
 	}
 
-	private boolean drawMateLineBeforeRead(Read read, int readS, ReadMetaData rmd)
+	// If a read is off screen do nothing, otherwise jump to where it begins and
+	// fill the array up to where it ends (or hits the edge of the window)
+	private void getLineDataForRead(Read read, ReadMetaData[] reads, int[] indexes, int start, int end)
 	{
-		MatedRead matedRead = (MatedRead) read;
-		// Work out these variables in advance rather than on each iteration
-		int startPos = matedRead.getStartPosition();
-		int matePos = matedRead.getMatePos();
-		boolean isMateContig = matedRead.isMateContig();
-		MatedRead mate = matedRead.getPair();
-		int mateEndPos = 0;
-		if (mate != null)
-			mateEndPos = mate.getEndPosition();
-		boolean needsLine = matePos < readS && isMateContig && rmd.getMateMapped();
-		boolean onDifferentRows = mate != null && mateEndPos >= startPos;
-		boolean drawLine = needsLine & !onDifferentRows;
-		return drawLine;
+		int readS = read.getStartPosition();
+		int readE = read.getEndPosition();
+		int index = start;
+
+		// No point doing anything for reads which aren't on screen
+		if (readE < start || readS > end)
+			return;
+
+		// Skip empty bases before the read actually starts
+		if (readS >= start && readS <= end)
+			index = readS;
+
+		ReadMetaData rmd = Assembly.getReadMetaData(read, true);
+		
+		for (; index <= end && index <= readE; index++)
+		{
+			reads[index - start] = rmd;
+			indexes[index - start] = index-readS;
+		}
+	}
+
+	private void getLineDataForPairLink(int[] indexes, int start, int end)
+	{
+		int index = readA.getEndPosition();
+		int readB_s = readB.getStartPosition();
+
+		if (index < start)
+			index = start;
+
+		for (; index <= end && index <= readB_s; index++)
+			indexes[index - start] = -2;
 	}
 
 	/**
@@ -136,7 +98,7 @@ public class ReadPair
 		return null;
 	}
 
-	public Read [] getPair(int colIndex)
+	public Read[] getPair(int colIndex)
 	{
 		if(readB == null)
 		{
