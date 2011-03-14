@@ -7,6 +7,8 @@ import java.io.*;
 import java.net.*;
 import java.util.zip.*;
 
+import net.sf.samtools.*;
+
 /**
  * Class that represents an assembly file, that may be a traditional file on
  * disk, or a reference to a file located on the web (in http:// format).
@@ -191,8 +193,8 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 					type = AFG;
 				else if (isSam(str))
 					type = SAM;
-				else if (isBam(str))
-					type = BAM;
+//				else if (isBam(str))
+//					type = BAM;
 				else if (isMaq(str))
 					type = MAQ;
 				else if (isSoap(str))
@@ -203,6 +205,13 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 					type = FASTQ;
 				else if (isGff3(str))
 					type = GFF3;
+			}
+
+			if (type == UNKNOWN)
+			{
+				SAMFileReader reader = new SAMFileReader(getInputStream());
+				if (reader.isBinary())
+					type = BAM;
 			}
 		}
 		catch (Exception e) { System.out.println(e);}
@@ -319,7 +328,7 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 				if (buf[c] == '\n' || buf[c] == '\r')
 					return new String(buf, 0, c);
 		}
-		catch (Exception e) {}
+		catch (Exception e) { e.printStackTrace(); }
 
 		return null;
 	}

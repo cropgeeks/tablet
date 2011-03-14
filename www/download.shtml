@@ -47,7 +47,7 @@ for your operating system. Tablet is currently available for:</p>
 	<td>&nbsp;&nbsp;&nbsp;</td>
 	<td><img src="images/icon_osx.gif" alt="OS X"></td>
 	<td>
-		<a href="installers/tablet_macos_1_11_02_18.dmg"
+		<a href="installers/tablet_macos_1_11_03_14.dmg"
 		  onClick="javascript: pageTracker._trackPageview('/installers/macosx_x86');">Apple Mac OS X</a> (Java 6 required)
 	</td>
 </tr>
