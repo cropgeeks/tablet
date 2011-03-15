@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Pack implements IReadManager, Iterable<PackRow>
 {
-	private ArrayList<PackRow> packRows = new ArrayList<PackRow>();
+	protected ArrayList<PackRow> packRows = new ArrayList<PackRow>();
 
 	public Iterator<PackRow> iterator()
 		{ return packRows.iterator(); }
@@ -15,8 +15,8 @@ public class Pack implements IReadManager, Iterable<PackRow>
 	public int size()
 		{ return packRows.size(); }
 
-	public void addPack(PackRow pack)
-		{ packRows.add(pack); }
+	public void addPackRow(PackRow packRow)
+		{ packRows.add(packRow); }
 
 	public void trimToSize()
 		{ packRows.trimToSize(); }
@@ -43,10 +43,8 @@ public class Pack implements IReadManager, Iterable<PackRow>
 		for(PackRow packRow : packRows)
 		{
 			Read found = packRow.getReadAt(read.getStartPosition());
-			if(found != null && found.getID() == read.getID())
+			if (found != null && found.getID() == read.getID())
 				return packRows.indexOf(packRow);
-			else
-				continue;
 		}
 		return -1;
 	}
@@ -61,20 +59,25 @@ public class Pack implements IReadManager, Iterable<PackRow>
 		return null;
 	}
 
-	/**
-	 * Return the pair of reads that can be found at the given line (and near
-	 * the given column) in the display.
-	 */
+	public ArrayList<Read> getLine(int line)
+	{
+		return packRows.get(line).getReads();
+	}
+
 	public Read[] getPairAtLine(int lineIndex, int colIndex)
 	{
 		if (lineIndex < 0 || lineIndex >= packRows.size())
 			return null;
 
-		return packRows.get(lineIndex).getPair(colIndex);
-	}
-
-	public ArrayList<Read> getLine(int line)
-	{
-		return packRows.get(line).getReads();
+		PackRow packRow = packRows.get(lineIndex);
+		Read readA = packRow.getReadAt(colIndex);
+		Read readB = null;
+		
+		if (readA instanceof MatedRead)
+		{
+			MatedRead mRead = (MatedRead)readA;
+			readB = mRead.getPair();
+		}
+		return new Read[] { readA, readB };
 	}
 }

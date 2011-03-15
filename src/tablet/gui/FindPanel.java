@@ -387,13 +387,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 
 	public Read getRead(int position, String name)
 	{
-		IReadManager manager;
-
-		// Get the pack or stack set for searching in
-		if(Prefs.visPacked)
-			manager = aPanel.getContig().getPackManager();
-		else
-			manager = aPanel.getContig().getStackManager();
+		IReadManager manager = aPanel.getContig().getReadManager();
 
 		int i = 0;
 		// Loop over the rows of the packset until we find out read (with an

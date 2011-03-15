@@ -296,9 +296,9 @@ class ReadsCanvasMenu implements ActionListener
 				PairedStack pairedStack = (PairedStack)rCanvas.reads;
 				pair = pairedStack.getPairAtLine(rowIndex, colIndex);
 			}
-			else if(rCanvas.reads instanceof Pack)
+			else if(rCanvas.reads instanceof PairedPack)
 			{
-				Pack pack = (Pack)rCanvas.reads;
+				PairedPack pack = (PairedPack)rCanvas.reads;
 				pair = pack.getPairAtLine(rowIndex, colIndex);
 			}
 
@@ -318,9 +318,9 @@ class ReadsCanvasMenu implements ActionListener
 				PairedStack pairedStack = (PairedStack)rCanvas.reads;
 				pair = pairedStack.getPairAtLine(rowIndex, colIndex);
 			}
-			else if(rCanvas.reads instanceof Pack)
+			else if(rCanvas.reads instanceof PairedPack)
 			{
-				Pack pack = (Pack)rCanvas.reads;
+				PairedPack pack = (PairedPack)rCanvas.reads;
 				pair = pack.getPairAtLine(rowIndex, colIndex);
 			}
 
@@ -402,28 +402,9 @@ class ReadsCanvasMenu implements ActionListener
 		Read[] pair = null;
 		Read read = null;
 
-		if(rCanvas.reads instanceof PairedStack)
-		{
-			PairedStack set = (PairedStack)rCanvas.reads;
-			pair = set.getPairAtLine(rowIndex, colIndex);
-			read = set.getReadAt(rowIndex, colIndex);
-		}
-		else if(rCanvas.reads instanceof Pack)
-		{
-			Pack set = (Pack)rCanvas.reads;
-			pair = set.getPairAtLine(rowIndex, colIndex);
-			read = set.getReadAt(rowIndex, colIndex);
-		}
-		else if(rCanvas.reads instanceof Stack)
-		{
-			Stack set = (Stack)rCanvas.reads;
-			read = set.getReadAt(rowIndex, colIndex);
-			if (read instanceof MatedRead)
-			{
-				MatedRead mr = (MatedRead)read;
-				pair = new Read[] { read, mr.getPair() };
-			}
-		}
+		IReadManager manager = rCanvas.reads;
+		pair = manager.getPairAtLine(rowIndex, colIndex);
+		read = manager.getReadAt(rowIndex, colIndex);
 
 		ReadNameData rnd = null;
 		ReadMetaData rmd = null;
@@ -436,7 +417,8 @@ class ReadsCanvasMenu implements ActionListener
 		if(read instanceof MatedRead && rnd != null && rmd.getMateMapped())
 		{
 			mJumpToPair.setEnabled(isOverRead);
-			mJumpToPair.setText(RB.format("gui.viewer.ReadsCanvasMenu.mJumpToPairInContig", rnd.getName(), rnd.getMateContig()));
+			mJumpToPair.setText(RB.format("gui.viewer.ReadsCanvasMenu.mJumpToPairInContig",
+					rnd.getName(), rnd.getMateContig()));
 		}
 		else
 		{

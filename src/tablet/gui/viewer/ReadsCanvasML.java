@@ -171,7 +171,7 @@ class ReadsCanvasML extends MouseInputAdapter
 		// Track the read under the mouse (if any)
 		Read read = rCanvas.reads.getReadAt(yIndex, xIndex);
 		outliner.setRead(read, xIndex, yIndex);
-		attemptPairOutline(yIndex, xIndex);
+		outlinePair(yIndex, xIndex);
 
 		aPanel.repaint();
 	}
@@ -179,92 +179,18 @@ class ReadsCanvasML extends MouseInputAdapter
 	/**
 	 * If we can outline a pair of reads, do so.
 	 */
-	private void attemptPairOutline(int yIndex, int xIndex)
+	private void outlinePair(int yIndex, int xIndex)
 	{
-		if(rCanvas.reads instanceof PairedStack)
-		{
-			PairedStack pairedStack = (PairedStack)rCanvas.reads;
-			Read[] pair = pairedStack.getPairAtLine(yIndex, xIndex);
+		Read[] pair = rCanvas.reads.getPairAtLine(yIndex, xIndex);
 
-			setupPairOutline(pair, yIndex, xIndex);
-		}
-		else if(rCanvas.reads instanceof Pack)
-		{
-			Pack pack = (Pack)rCanvas.reads;
-			Read[] pair = pack.getPairAtLine(yIndex, xIndex);
-
-			setupPairOutline(pair, yIndex, xIndex);
-		}
-		else if(rCanvas.reads instanceof Stack)
-		{
-			Stack stack = (Stack)rCanvas.reads;
-			Read read = stack.getReadAt(yIndex, xIndex);
-			Read mate = null;
-
-			if(read instanceof MatedRead)
-			{
-				MatedRead mr = (MatedRead)read;
-				if(mr.getPair() != null)
-					mate = mr.getPair();
-				else
-					pairOutliner.setPair(null, null, 0, 0);
-			}
-
-			if (mate != null)
-			{
-				Read[] pair = new Read[] {read, mate};
-
-				setupPairOutline(pair, yIndex, xIndex);
-			}
-
-		}
-		else
-			pairOutliner.setPair(null, null, 0, 0);
-	}
-
-	private void setupPairOutline(Read[] pair, int yIndex, int xIndex)
-	{
 		if (pair == null || pair[0] == null || pair[1] == null)
 			pairOutliner.setPair(null, null, 0, 0);
 		else
 		{
-			pair = orientPairCorrectly(pair);
-			outlinePair(pair);
+			int lineIndex = aPanel.readsCanvas.reads.getLineForRead(pair[0]);
+			int mateLineIndex = aPanel.readsCanvas.reads.getLineForRead(pair[1]);
+
+			pairOutliner.setPair(pair[0], pair[1], lineIndex, mateLineIndex);
 		}
-	}
-
-	private Read[] orientPairCorrectly(Read[] pair)
-	{
-		int s;
-		int e;
-		if (pair[0].getStartPosition() < pair[1].getStartPosition())
-		{
-			s = pair[0].getEndPosition();
-			e = pair[1].getStartPosition();
-		}
-		else
-		{
-			s = pair[1].getEndPosition();
-			e = pair[0].getStartPosition();
-		}
-
-		return pair;
-	}
-
-	/**
-	 * Passes the pairOutliner object the pair of reads which needs to be outlined.
-	 */
-	private void outlinePair(Read[] pair)
-	{
-		if(pair == null || (pair[0] == null || pair[1] == null))
-			return;
-
-		int lineIndex = 0;
-		int mateLineIndex = 0;
-
-		lineIndex = aPanel.readsCanvas.reads.getLineForRead(pair[0]);
-		mateLineIndex = aPanel.readsCanvas.reads.getLineForRead(pair[1]);
-
-		pairOutliner.setPair(pair[0], pair[1], lineIndex, mateLineIndex);
 	}
 }
