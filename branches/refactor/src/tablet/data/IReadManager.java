@@ -26,4 +26,6 @@ public interface IReadManager
 	 * between the points start and end.
 	 */
 	public LineData getLineData(int line, int start, int end);
+
+	public Read[] getPairAtLine(int lineIndex, int colIndex);
 }

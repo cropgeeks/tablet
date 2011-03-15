@@ -72,7 +72,7 @@ public class PairedStackRow
 
 	private void getLineDataForPairLink(int[] indexes, int start, int end)
 	{
-		int index = readA.getEndPosition();
+		int index = readA.getEndPosition()+1;
 		int readB_s = readB.getStartPosition();
 
 		if (index < start)

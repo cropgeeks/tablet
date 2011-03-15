@@ -9,13 +9,13 @@ import scri.commons.gui.*;
 /**
  * Processes a contig to oganise its reads into packs ready for display.
  */
-public class PackSetCreator extends SimpleJob
+public class PackCreator extends SimpleJob
 {
 	private Contig contig;
 	private Pack pack;
 	private int startPos, rowIndex;
 
-	public PackSetCreator(Contig contig)
+	public PackCreator(Contig contig)
 	{
 		this.contig = contig;
 		pack = new Pack();
@@ -62,7 +62,7 @@ public class PackSetCreator extends SimpleJob
 				PackRow newPackRow = new PackRow();
 				newPackRow.addRead(read);
 
-				pack.addPack(newPackRow);
+				pack.addPackRow(newPackRow);
 				rowIndex = pack.size()-1;
 			}
 

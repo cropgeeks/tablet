@@ -42,6 +42,7 @@ public class Contig
 	// Objects for handling the ordering of reads (for display)
 	private IReadManager readManager;
 	private Pack pack;
+	private PairedPack pairedPack;
 	private Stack stack;
 	private PairedStack pairedStack;
 
@@ -173,16 +174,24 @@ public class Contig
 		}
 	}
 
+	public void setStack()
+	{
+		stack = new Stack(reads);
+	}
+
 	public void setPack(Pack pack)
 	{
 		this.pack = pack;
-		stack = new Stack(reads);
+	}
+
+	public void setPairedPack(PairedPack pairedPack)
+	{
+		this.pairedPack = pairedPack;
 	}
 
 	public void setPairedStack(PairedStack pairedStack)
 	{
 		this.pairedStack = pairedStack;
-		stack = new Stack(reads);
 	}
 
 	/**
@@ -196,6 +205,7 @@ public class Contig
 		readManager = null;
 
 		pack = null;
+		pairedPack = null;
 		pairedStack = null;
 		stack = null;
 
@@ -257,6 +267,9 @@ public class Contig
 
 	public IReadManager getPackManager()
 		{ return (readManager = pack); }
+
+	public IReadManager getPairedPackManager()
+		{ return (readManager = pairedPack); }
 
 	public IReadManager getPairedStackManager()
 		{ return (readManager = pairedStack); }
