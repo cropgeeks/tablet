@@ -16,7 +16,7 @@ public class ReadSQLCache
 
 	// Statements for getting (g) and inserting (i) data
 	private PreparedStatement ips;
-	private Stack<PreparedStatement> gpsAll = new Stack<PreparedStatement>();
+	private java.util.Stack<PreparedStatement> gpsAll = new java.util.Stack<PreparedStatement>();
 	private PreparedStatement psGetName;
 	private PreparedStatement psGetReadsByName;
 
