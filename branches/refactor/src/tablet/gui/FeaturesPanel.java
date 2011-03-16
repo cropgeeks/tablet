@@ -29,7 +29,6 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 	private Contig contig;
 	private Consensus consensus;
 	private TableRowSorter<FeaturesTableModel> sorter;
-	private FeaturesTableRenderer featuresRenderer = new FeaturesTableRenderer();
 
 	FeaturesPanel(AssemblyPanel aPanel, JTabbedPane ctrlTabs)
 	{
@@ -48,7 +47,9 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 			}
 		});
 
-		controls.table.setDefaultRenderer(Integer.class, featuresRenderer);
+		// Set the custom renderer on the table
+		controls.table.setDefaultRenderer(Integer.class,
+			new FeaturesTableModel.FeaturesTableRenderer());
 
 		controls.featuresLabel.setText(getTitle(0));
 
@@ -110,7 +111,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		row = controls.table.convertRowIndexToModel(row);
 
 		// Pull the feature out of the model
-		Feature feature = (Feature) model.getValueAt(row, 9);
+		Feature feature = (Feature) model.getFeature(row);
 
 		int start = feature.getDataPS();
 		int end   = feature.getDataPE();
@@ -239,34 +240,6 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 			aPanel.getFeaturesCanvas().revalidate();
 
 			aPanel.repaint();
-		}
-	}
-
-	private class FeaturesTableRenderer extends NumberFormatCellRenderer
-	{
-		public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSel, boolean hasFocus, int row, int column)
-		{
-			super.getTableCellRendererComponent(table, value, isSel, hasFocus,
-				row, column);
-
-			setForeground(isSel ? Color.white : Color.black);
-			int pos = (Integer) value;
-
-			// Invalid if the value is lt or gt than the canvas
-			if (Prefs.guiFeaturesArePadded)
-			{
-				if (pos < contig.getDataStart() || pos > contig.getDataEnd())
-					setForeground(isSel ? TabletUtils.red2 : TabletUtils.red1);
-			}
-			// Invalid if the value is lt or gt than unpadded consensus length
-			else
-			{
-				if (pos < 0 || pos >= contig.getConsensus().getUnpaddedLength())
-					setForeground(isSel ? TabletUtils.red2 : TabletUtils.red1);
-			}
-
-			return this;
 		}
 	}
 }

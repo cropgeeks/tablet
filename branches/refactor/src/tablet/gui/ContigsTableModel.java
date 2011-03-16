@@ -17,16 +17,10 @@ import scri.commons.gui.*;
  */
 class ContigsTableModel extends AbstractTableModel
 {
-	private static Assembly assembly;
+	private Assembly assembly;
 
 	private JTable table;
 	private String[] columnNames;
-
-	// Custom renderers for the data
-	private static LengthRenderer lengthRenderer = new LengthRenderer();
-	private static ReadsRenderer readsRenderer = new ReadsRenderer();
-	private static NumberFormatCellRenderer nfRenderer = new NumberFormatCellRenderer();
-	private static MismatchRenderer mismatchRenderer = new MismatchRenderer();
 
 	ContigsTableModel(Assembly assembly, JTable table)
 	{
@@ -81,21 +75,24 @@ class ContigsTableModel extends AbstractTableModel
 		return null;
 	}
 
-	static TableCellRenderer getCellRenderer(JTable table, int row, int col)
+	static TableCellRenderer getCellRenderer(int col)
 	{
 		switch (col)
 		{
-			case 1: return lengthRenderer;
-			case 2: return readsRenderer;
-			case 3: return nfRenderer;
-			case 4: return mismatchRenderer;
+			case 1: return new LengthRenderer();
+			case 2: return new NumberFormatCellRenderer();
+			case 3: return new NumberFormatCellRenderer();
+			case 4: return new MismatchRenderer();
 
 			default: return null;
 		}
 	}
 
+	private Assembly getAssembly()
+		{ return assembly; }
+
 	// Custom cell renderer for showing the contig length column
-	private static class LengthRenderer extends DefaultTableCellRenderer
+	private static class LengthRenderer extends NumberFormatCellRenderer
 	{
 		public Component getTableCellRendererComponent(JTable table, Object value,
 			boolean isSelected, boolean hasFocus, int row, int column)
@@ -103,68 +100,35 @@ class ContigsTableModel extends AbstractTableModel
 			super.getTableCellRendererComponent(table, value, isSelected,
 				hasFocus, row, column);
 
+			Assembly assembly = ((ContigsTableModel)table.getModel()).getAssembly();
 			Contig contig = assembly.getContig(row);
 
 			// The consensus exists and has a length
 			if (contig.getTableData().consensusDefined)
-			{
 				setForeground(isSelected ? Color.white : Color.black);
-				setText(TabletUtils.nf.format((Integer)value));
-			}
+
 			else
 			{
 				setForeground(isSelected ? TabletUtils.red2 : TabletUtils.red1);
 
-				// The consensus doesn't exist, but we know its length (BAM)
-				if (((Integer)value) > 0)
-					setText(TabletUtils.nf.format((Integer)value));
-				// The consensus doesn't exist, nor do we know its length
-				else
+				// The consensus doesn't exist, but we know its length (BAM),
+				// then setText is called by the call to super() above
+
+				// Else if consensus doesn't exist, nor do we know its length
+				if (((Integer) value) <= 0)
 					setText("?");
 			}
-
-			setHorizontalAlignment(JLabel.RIGHT);
-
-			return this;
-		}
-	}
-
-	// Custom cell renderer for showing the reads count column
-	private static class ReadsRenderer extends DefaultTableCellRenderer
-	{
-		public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column)
-		{
-			super.getTableCellRendererComponent(table, value, isSelected,
-				hasFocus, row, column);
-
-			Contig contig = assembly.getContig(row);
-
-//			if (contig.getTableData().readsDefined)
-				setForeground(isSelected ? Color.white : Color.black);
-//			else
-//				setForeground(isSelected ? TabletUtils.red2 : TabletUtils.red1);
-
-//			if (value != null)
-				setText(TabletUtils.nf.format((Integer)value));
-//			else
-//				setText("?");
-
-			setHorizontalAlignment(JLabel.RIGHT);
 
 			return this;
 		}
 	}
 
 	// Custom cell renderer for showing the Mismatch (%) column
-	private static class MismatchRenderer extends DefaultTableCellRenderer
+	private static class MismatchRenderer extends NumberFormatCellRenderer
 	{
-		private static final NumberFormat nf = NumberFormat.getInstance();
-
 		MismatchRenderer()
 		{
 			nf.setMaximumFractionDigits(1);
-			setHorizontalAlignment(JLabel.RIGHT);
 		}
 
 		public Component getTableCellRendererComponent(JTable table, Object value,
@@ -173,6 +137,7 @@ class ContigsTableModel extends AbstractTableModel
 			super.getTableCellRendererComponent(table, value, isSelected,
 				hasFocus, row, column);
 
+			Assembly assembly = ((ContigsTableModel)table.getModel()).getAssembly();
 			Contig contig = assembly.getContig(row);
 
 			if (contig.getTableData().readsDefined)
@@ -180,9 +145,7 @@ class ContigsTableModel extends AbstractTableModel
 			else
 				setForeground(isSelected ? TabletUtils.red2 : TabletUtils.red1);
 
-			if (value != null)
-				setText(nf.format((Float)value));
-			else
+			if (value == null)
 				setText("?");
 
 			return this;
