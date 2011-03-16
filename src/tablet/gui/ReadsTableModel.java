@@ -6,8 +6,7 @@ package tablet.gui;
 import java.awt.Component;
 import java.util.*;
 import javax.swing.*;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+import javax.swing.event.*;
 import javax.swing.table.*;
 
 import scri.commons.gui.*;
@@ -19,8 +18,6 @@ public class ReadsTableModel extends AbstractTableModel
 	private List<Read> reads;
 
 	private String[] columnNames;
-
-	private static NumberFormatCellRenderer nfRenderer = new NumberFormatCellRenderer();
 
 	ReadsTableModel(List<Read> reads)
 	{
@@ -74,31 +71,14 @@ public class ReadsTableModel extends AbstractTableModel
 		return null;
 	}
 
-	static TableCellRenderer getCellRenderer(JTable table, int row, int col)
+	static TableCellRenderer getCellRenderer(int col)
 	{
 		switch (col)
 		{
-			case 1: return nfRenderer;
-			case 2: return nfRenderer;
+			case 1: return new NumberFormatCellRenderer();
+			case 2: return new NumberFormatCellRenderer();
 
 			default: return null;
-		}
-	}
-
-	// Custom cell renderer for showing the contig length column
-	private static class NumberFormatCellRenderer extends DefaultTableCellRenderer
-	{
-		public Component getTableCellRendererComponent(JTable table, Object value,
-			boolean isSelected, boolean hasFocus, int row, int column)
-		{
-			super.getTableCellRendererComponent(table, value, isSelected,
-				hasFocus, row, column);
-
-			setText(TabletUtils.nf.format((Integer)value));
-
-			setHorizontalAlignment(JLabel.RIGHT);
-
-			return this;
 		}
 	}
 
@@ -111,8 +91,6 @@ public class ReadsTableModel extends AbstractTableModel
 	{
 		reads.clear();
 
-		for (TableModelListener tml: getTableModelListeners())
-			tml.tableChanged(new TableModelEvent(this));
+		fireTableChanged(new TableModelEvent(this));
 	}
-
 }

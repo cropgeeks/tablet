@@ -153,12 +153,8 @@ class ContigsPanelNB extends JPanel implements ActionListener, DocumentListener
 		{
 			public TableCellRenderer getCellRenderer(int row, int col)
 			{
-				TableCellRenderer tcr = ContigsTableModel.getCellRenderer(this, row, col);
-
-				if (tcr != null)
-					return tcr;
-
-				return super.getCellRenderer(row, col);
+				TableCellRenderer tcr = ContigsTableModel.getCellRenderer(col);
+				return (tcr != null) ? tcr : super.getCellRenderer(row, col);
 			}
 
 			public String getToolTipText(MouseEvent e)

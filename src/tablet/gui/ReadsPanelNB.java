@@ -33,21 +33,17 @@ public class ReadsPanelNB extends javax.swing.JPanel
 		{
 			public TableCellRenderer getCellRenderer(int row, int col)
 			{
-				TableCellRenderer tcr = ReadsTableModel.getCellRenderer(this, row, col);
-
-				if (tcr != null)
-					return tcr;
-
-				return super.getCellRenderer(row, col);
+				TableCellRenderer tcr = ReadsTableModel.getCellRenderer(col);
+				return (tcr != null) ? tcr : super.getCellRenderer(row, col);
 			}
-			
+
 			public String getToolTipText(MouseEvent e)
 			{
 				return panel.getTableToolTip(e);
 			}
 		};
 	}
-	
+
 	public void setLabelStates(boolean visible)
 	{
 		labelPanel.setVisible(visible);
@@ -68,7 +64,7 @@ public class ReadsPanelNB extends javax.swing.JPanel
 		mateContigLabel.setVisible(visible);
 		mContigLabel.setVisible(visible);
 	}
-	
+
 	void setReadInfoToDefaults()
 	{
 		cigarLabel.setText("");
