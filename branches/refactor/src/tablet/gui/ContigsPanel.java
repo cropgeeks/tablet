@@ -24,7 +24,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 	private WinMain winMain;
 	private AssemblyPanel aPanel;
 	private FeaturesPanel featuresPanel;
-	private NBContigsPanelControls controls;
+	private ContigsPanelNB controls;
 	private FindPanel findPanel;
 	private JTabbedPane ctrlTabs;
 
@@ -40,7 +40,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		this.ctrlTabs = ctrlTabs;
 
 		setLayout(new BorderLayout());
-		add(controls = new NBContigsPanelControls(this));
+		add(controls = new ContigsPanelNB(this));
 
 		controls.table.addMouseListener(new TableMouseListener());
 	}

@@ -24,28 +24,28 @@ class NavPanel
 		welcomePanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 8, 2));
 		welcomePanel.add(new TitlePanel3(
 			RB.getString("gui.NBStartWelcomePanel.title")), BorderLayout.NORTH);
-		welcomePanel.add(new NBStartWelcomePanel());
+		welcomePanel.add(new StartPanelWelcomeNB());
 
 		JPanel filePanel = new JPanel(new BorderLayout());
 		filePanel.setOpaque(false);
 		filePanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 		filePanel.add(new TitlePanel3(
 			RB.getString("gui.NBStartFilePanel.title")), BorderLayout.NORTH);
-		filePanel.add(new NBStartFilePanel());
+		filePanel.add(new StartPanelFileNB());
 
 		JPanel helpPanel = new JPanel(new BorderLayout());
 		helpPanel.setOpaque(false);
 		helpPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 		helpPanel.add(new TitlePanel3(
 			RB.getString("gui.NBStartHelpPanel.title")), BorderLayout.NORTH);
-		helpPanel.add(new NBStartHelpPanel());
+		helpPanel.add(new StartPanelHelpNB());
 
 		JPanel pubPanel = new JPanel(new BorderLayout());
 		pubPanel.setOpaque(false);
 		pubPanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 8, 2));
 		pubPanel.add(new TitlePanel3(
 			RB.getString("gui.NBStartPublicationPanel.title")), BorderLayout.NORTH);
-		pubPanel.add(new NBStartPublicationPanel());
+		pubPanel.add(new StartPanelPublicationNB());
 
 		JPanel centrePanel = new JPanel(new GridLayout(1, 2, 0, 0));
 		centrePanel.setOpaque(false);

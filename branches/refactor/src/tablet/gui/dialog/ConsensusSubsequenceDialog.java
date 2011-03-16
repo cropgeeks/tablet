@@ -15,7 +15,7 @@ import tablet.gui.viewer.*;
 public class ConsensusSubsequenceDialog extends JDialog implements ActionListener
 {
 	private JButton bCancel, bCopy, bHelp;
-	private NBConsensusSubsequencePanel controls;
+	private ConsensusSubsequencePanelNB controls;
 	private AssemblyPanel aPanel;
 
 	public ConsensusSubsequenceDialog(WinMain winMain)
@@ -29,7 +29,7 @@ public class ConsensusSubsequenceDialog extends JDialog implements ActionListene
 		this.aPanel = winMain.getAssemblyPanel();
 		Contig contig = aPanel.getContig();
 
-		controls = new NBConsensusSubsequencePanel(this, contig.getVisualStart()+1, contig.getVisualEnd()+1);
+		controls = new ConsensusSubsequencePanelNB(this, contig.getVisualStart()+1, contig.getVisualEnd()+1);
 
 		add(controls);
 		add(createButtons(), BorderLayout.SOUTH);

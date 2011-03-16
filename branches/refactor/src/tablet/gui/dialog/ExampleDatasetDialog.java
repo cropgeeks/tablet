@@ -15,7 +15,7 @@ import tablet.gui.*;
 
 public class ExampleDatasetDialog extends JDialog implements ActionListener
 {
-	private NBExampleDataset panel;
+	private ExampleDatasetPanelNB panel;
 	private Properties properties;
 	private JButton bClose, bLoad;
 	private String[] filenames;
@@ -28,7 +28,7 @@ public class ExampleDatasetDialog extends JDialog implements ActionListener
 			true
 		);
 
-		panel = new NBExampleDataset(this);
+		panel = new ExampleDatasetPanelNB(this);
 		add(panel);
 		add(createButtons(), BorderLayout.SOUTH);
 

@@ -16,7 +16,7 @@ import scri.commons.gui.*;
 
 public class ScannerFrame extends JFrame implements ActionListener
 {
-	private NBScannerPanel nbPanel;
+	private ScannerPanelNB nbPanel;
 
 	private File targetFile;
 	private JTable table;
@@ -27,7 +27,7 @@ public class ScannerFrame extends JFrame implements ActionListener
 
 	public ScannerFrame()
 	{
-		nbPanel = new NBScannerPanel(this);
+		nbPanel = new ScannerPanelNB(this);
 
 		model = new ResultsTableModel();
 		sorter = new TableRowSorter<ResultsTableModel>(model);
