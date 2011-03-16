@@ -18,7 +18,7 @@ import scri.commons.gui.*;
 public class BamWindowDialog extends JDialog implements ActionListener
 {
 	private JButton bOK, bCancel, bHelp;
-	private NBBamWindowPanel nbPanel;
+	private BamWindowPanelNB nbPanel;
 
 	private boolean isOK = false;
 
@@ -30,7 +30,7 @@ public class BamWindowDialog extends JDialog implements ActionListener
 			true
 		);
 
-		nbPanel = new NBBamWindowPanel();
+		nbPanel = new BamWindowPanelNB();
 
 		add(nbPanel);
 		add(createButtons(), BorderLayout.SOUTH);

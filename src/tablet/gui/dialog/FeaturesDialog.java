@@ -16,7 +16,7 @@ import scri.commons.gui.*;
 public class FeaturesDialog extends JDialog implements ActionListener
 {
 	private JButton bOK, bCancel, bHelp;
-	private NBFeaturesPanel nbPanel;
+	private FeaturesPanelNB nbPanel;
 
 	private boolean isOK = false;
 
@@ -28,7 +28,7 @@ public class FeaturesDialog extends JDialog implements ActionListener
 			true
 		);
 
-		nbPanel = new NBFeaturesPanel();
+		nbPanel = new FeaturesPanelNB();
 
 		add(nbPanel);
 		add(createButtons(), BorderLayout.SOUTH);

@@ -19,10 +19,10 @@ public class PreferencesDialog extends JDialog implements ActionListener
 	private boolean isOK;
 
 	private JTabbedPane tabs;
-	private NBGeneralPanel generalPanel;
-	private NBVisualizationPanel visualizationPanel;
-	private NBFormatsPanel formatsPanel;
-	private NBWarningPanel warningPanel;
+	private GeneralTabNB generalPanel;
+	private VisualizationTabNB visualizationPanel;
+	private FormatsTabNB formatsPanel;
+	private WarningTabNB warningPanel;
 
 	public PreferencesDialog(Integer newTab)
 	{
@@ -35,10 +35,10 @@ public class PreferencesDialog extends JDialog implements ActionListener
 		if (newTab != null)
 			lastTab = newTab;
 
-		generalPanel = new NBGeneralPanel();
-		visualizationPanel = new NBVisualizationPanel();
-		formatsPanel = new NBFormatsPanel();
-		warningPanel = new NBWarningPanel();
+		generalPanel = new GeneralTabNB();
+		visualizationPanel = new VisualizationTabNB();
+		formatsPanel = new FormatsTabNB();
+		warningPanel = new WarningTabNB();
 
 		tabs = new JTabbedPane();
 		tabs.setBorder(BorderFactory.createEmptyBorder(2, 2, 10, 2));

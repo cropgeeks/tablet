@@ -23,7 +23,7 @@ public class ImportAssemblyDialog extends JDialog
 
 	private JButton bCancel, bHelp, bOpen;
 
-	private NBImportAssemblyPanel nbPanel;
+	private ImportAssemblyPanelNB nbPanel;
 
 	private String[] filenames;
 	private boolean useExamples;
@@ -36,7 +36,7 @@ public class ImportAssemblyDialog extends JDialog
 			true
 		);
 
-		nbPanel = new NBImportAssemblyPanel(this);
+		nbPanel = new ImportAssemblyPanelNB(this);
 		initDisplay();
 
 		add(nbPanel);

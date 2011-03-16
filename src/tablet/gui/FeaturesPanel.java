@@ -24,7 +24,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 
 	private JTabbedPane ctrlTabs;
 	private FeaturesTableModel model;
-	private NBFeaturesPanelControls controls;
+	private FeaturesPanelNB controls;
 
 	private Contig contig;
 	private Consensus consensus;
@@ -37,7 +37,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		this.ctrlTabs = ctrlTabs;
 
 		setLayout(new BorderLayout());
-		add(controls = new NBFeaturesPanelControls(this));
+		add(controls = new FeaturesPanelNB(this));
 
 		// Additional (duplicate) table-clicked handler to catch the user
 		// re-clicking on the same row. This doesn't generate a table event, but

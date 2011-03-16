@@ -20,7 +20,7 @@ import tablet.gui.viewer.*;
 
 public class ReadsPanel extends JPanel implements ListSelectionListener, ActionListener
 {
-	private NBReadsPanelControls controls;
+	private ReadsPanelNB controls;
 	private ReadsTableModel tableModel;
 	private TableRowSorter<AbstractTableModel> sorter;
 	private AssemblyPanel aPanel;
@@ -31,7 +31,7 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 	ReadsPanel(AssemblyPanel aPanel, JTabbedPane ctrlTabs)
 	{
 		this.aPanel = aPanel;
-		controls = new NBReadsPanelControls(this);
+		controls = new ReadsPanelNB(this);
 
 		// Additional (duplicate) table-clicked handler to catch the user
 		// re-clicking on the same row. This doesn't generate a table event, but

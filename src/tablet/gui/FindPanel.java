@@ -19,7 +19,7 @@ import scri.commons.gui.*;
 
 public class FindPanel extends JPanel implements ListSelectionListener, ActionListener
 {
-	private NBFindPanelControls controls;
+	private FindPanelNB controls;
 	private AssemblyPanel aPanel;
 	private AbstractTableModel tableModel;
 	private ContigsPanel cPanel;
@@ -31,7 +31,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		this.aPanel = aPanel;
 		this.cPanel = winMain.getContigsPanel();
 
-		controls = new NBFindPanelControls(this);
+		controls = new FindPanelNB(this);
 
 		finder = new Finder(aPanel);
 
@@ -45,7 +45,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		});
 
 		setLayout(new BorderLayout());
-		add(controls = new NBFindPanelControls(this));
+		add(controls = new FindPanelNB(this));
 
 		//Keyboard shortcut code
 		Action openFind = new AbstractAction() {
@@ -63,7 +63,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		controls.table.setDefaultRenderer(Number.class, new NumberFormatCellRenderer());
 	}
 
-	public NBFindPanelControls getFindPanel()
+	public FindPanelNB getFindPanel()
 	{
 		return controls;
 	}
