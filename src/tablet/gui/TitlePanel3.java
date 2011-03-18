@@ -9,7 +9,7 @@ import javax.swing.*;
 public class TitlePanel3 extends JPanel
 {
 	private static final Color lineColor = new Color(207, 219, 234);
-	private static final Color textColor = new Color(106, 140, 185);
+	private static final Color textColor = new Color(75, 105, 150);
 
 	private static final int h = 30;
 

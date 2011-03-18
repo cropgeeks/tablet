@@ -43,7 +43,7 @@ class NBAboutPanel extends javax.swing.JPanel implements ActionListener
 
 	private void initWebStuff()
 	{
-		final String scriHTML = "http://www.scri.ac.uk";
+		final String scriHTML = "http://www.hutton.ac.uk";
 
 		scriIcon.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		scriIcon.addMouseListener(new MouseAdapter() {
