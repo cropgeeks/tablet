@@ -4,11 +4,13 @@
 package tablet.gui;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 import tablet.data.*;
 
 import scri.commons.gui.*;
+import scri.commons.gui.matisse.*;
 
 class NavPanel
 {
@@ -47,6 +49,11 @@ class NavPanel
 			RB.getString("gui.NBStartPublicationPanel.title")), BorderLayout.NORTH);
 		pubPanel.add(new NBStartPublicationPanel());
 
+		JPanel huttonPanel = new JPanel(new BorderLayout());
+		huttonPanel.setOpaque(false);
+		huttonPanel.add(pubPanel);
+		huttonPanel.add(getHuttonLabel(), BorderLayout.EAST);
+
 		JPanel centrePanel = new JPanel(new GridLayout(1, 2, 0, 0));
 		centrePanel.setOpaque(false);
 		centrePanel.add(filePanel);
@@ -54,11 +61,26 @@ class NavPanel
 
 		logoPanel.add(welcomePanel, BorderLayout.NORTH);
 		logoPanel.add(centrePanel, BorderLayout.CENTER);
-		logoPanel.add(pubPanel, BorderLayout.SOUTH);
+		logoPanel.add(huttonPanel, BorderLayout.SOUTH);
 
 		panel.add(logoPanel);
 
 		return panel;
+	}
+
+	private static JLabel getHuttonLabel()
+	{
+		HyperLinkLabel huttonLabel = new HyperLinkLabel();
+		huttonLabel.setIcon(Icons.getIcon("HUTTON"));
+		huttonLabel.setBorder(BorderFactory.createEmptyBorder(0, 10, 0, 10));
+
+		huttonLabel.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TabletUtils.visitURL("http://www.hutton.ac.uk");
+			}
+		});
+
+		return huttonLabel;
 	}
 
 	static JPanel getContigsPanel(Assembly assembly)
@@ -73,7 +95,7 @@ class NavPanel
 
 	private static class LogoPanel extends JPanel
 	{
-		private static ImageIcon logo = Icons.getIcon("SCRILARGE");
+		private static ImageIcon logo = Icons.getIcon("HUTTONLARGE");
 
 		LogoPanel(LayoutManager lm)
 		{
@@ -88,8 +110,9 @@ class NavPanel
 			Graphics2D g = (Graphics2D) graphics;
 
 			int w = getWidth();
+			int h = getHeight();
 
-			g.drawImage(logo.getImage(), 0, 0, w, w, null);
+			g.drawImage(logo.getImage(), 0, 0, w, h, null);
 		}
 	}
 }

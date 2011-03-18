@@ -40,6 +40,7 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
 		labels[6] = project6; labels[7] = project7;
 		labels[8] = project8; labels[9] = project9;
 
+
 		int j=0;
 		// Parse the list of recent documents
 		for (final String path: Prefs.guiRecentDocs)
@@ -77,6 +78,9 @@ public class NBStartFilePanel extends javax.swing.JPanel implements ActionListen
 
 			j++;
 		}
+
+		if (j == 0)
+			openLabel.setVisible(false);
 
 		for (int i = 0; i < labels.length; i++)
 		{
