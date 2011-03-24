@@ -7,7 +7,7 @@ import scri.commons.gui.*;
 
 public class ConsensusSubsequencePanelNB extends javax.swing.JPanel
 {
-    public ConsensusSubsequencePanelNB(ConsensusSubsequenceDialog parent, int start, int end)
+    public ConsensusSubsequencePanelNB(ConsensusSubsequenceDialog parent)
 	{
         initComponents();
 
@@ -15,16 +15,7 @@ public class ConsensusSubsequencePanelNB extends javax.swing.JPanel
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		RB.setText(lblInfo, "gui.dialog.ConsensusSubsequenceDialog.lblInfo");
-
-		spinnerStartBase.setModel(new SpinnerNumberModel(start, start, end, 1));
-		spinnerEndBase.setModel(new SpinnerNumberModel(end, start, end, 1));
     }
-
-	void updateModel(int start, int end)
-	{
-		spinnerStartBase.setModel(new SpinnerNumberModel(start, start, end, 1));
-		spinnerEndBase.setModel(new SpinnerNumberModel(end, start, end, 1));
-	}
 
     /** This method is called from within the constructor to
      * initialize the form.

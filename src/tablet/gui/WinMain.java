@@ -251,6 +251,8 @@ public class WinMain extends JRibbonFrame
 		if (consensusSubsequenceDialog == null)
 			consensusSubsequenceDialog = new ConsensusSubsequenceDialog(this);
 
+		consensusSubsequenceDialog.updateModel(assemblyPanel.getContig());
+
 		return consensusSubsequenceDialog;
 	}
 
