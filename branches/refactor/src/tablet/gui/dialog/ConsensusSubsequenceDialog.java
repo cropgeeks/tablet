@@ -27,9 +27,11 @@ public class ConsensusSubsequenceDialog extends JDialog implements ActionListene
 		);
 
 		this.aPanel = winMain.getAssemblyPanel();
-		Contig contig = aPanel.getContig();
 
-		controls = new ConsensusSubsequencePanelNB(this, contig.getVisualStart()+1, contig.getVisualEnd()+1);
+		controls = new ConsensusSubsequencePanelNB(this);
+
+		Contig contig = aPanel.getContig();
+		updateModel(contig);
 
 		add(controls);
 		add(createButtons(), BorderLayout.SOUTH);
@@ -48,7 +50,14 @@ public class ConsensusSubsequenceDialog extends JDialog implements ActionListene
 	 */
 	public void updateModel(Contig contig)
 	{
-		controls.updateModel(aPanel.getContig().getVisualStart()+1, aPanel.getContig().getVisualEnd()+1);
+		int vS = contig.getVisualStart() + 1;
+		int start = 1 < vS ? vS : 1;
+
+		int vE = contig.getVisualEnd() + 1;
+		int end = contig.getConsensus().length() > vE ? vE : contig.getConsensus().length();
+		
+		controls.spinnerStartBase.setModel(new SpinnerNumberModel(start, start, end, 1));
+		controls.spinnerEndBase.setModel(new SpinnerNumberModel(end, start, end, 1));
 	}
 
 	private JPanel createButtons()
