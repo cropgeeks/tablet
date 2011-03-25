@@ -97,20 +97,20 @@ public class PairedPackCreator extends SimpleJob
 			{
 				rowIndex = i;
 				
-				if(read.getPair() == null)
+				if(read.getMate() == null)
 					break;
 
 				// Try to add the second read in the pair
-				if (!(pairAdded = pack.get(i).addRead(read.getPair())))
+				if (!(pairAdded = pack.get(i).addRead(read.getMate())))
 				{
 					for(int j=0; j < pack.size(); j++)
 					{
-						pairAdded = pack.get(j).addRead(read.getPair());
+						pairAdded = pack.get(j).addRead(read.getMate());
 						if(pairAdded)
 							break;
 					}
 					if(!pairAdded)
-						createPackRowForRead(read.getPair());
+						createPackRowForRead(read.getMate());
 				}
 				break;
 			}
@@ -143,24 +143,24 @@ public class PairedPackCreator extends SimpleJob
 			packRow.addRead(read);
 			added = true;
 
-			if(read.getPair() != null)
-				pairAdded = packRow.addRead(read.getPair());
+			if(read.getMate() != null)
+				pairAdded = packRow.addRead(read.getMate());
 
 			pack.addPackRow(packRow);
 
-			if(read.getPair() == null)
+			if(read.getMate() == null)
 				return;
 
 			if (!pairAdded)
 			{
 				for(int i=startRow; i < pack.size(); i++)
 				{
-					pairAdded = pack.get(i).addRead(read.getPair());
+					pairAdded = pack.get(i).addRead(read.getMate());
 					if(pairAdded)
 						break;
 				}
 				if(!pairAdded)
-					createPackRowForRead(read.getPair());
+					createPackRowForRead(read.getMate());
 			}
 
 			rowIndex = pack.size()-1;
@@ -178,7 +178,7 @@ public class PairedPackCreator extends SimpleJob
 	private boolean canAddToNewPackRow(MatedRead matedRead)
 	{
 		return (matedRead.getStartPosition() < matedRead.getMatePos() || 
-				(matedRead.getPair() == null && matedRead.getMatePos() < dataS))
+				(matedRead.getMate() == null && matedRead.getMatePos() < dataS))
 				|| !matedRead.isMateContig();
 	}
 

@@ -60,26 +60,30 @@ public class PairedStack implements IReadManager
 		stack.add(pairedStackRow);
 	}
 
-	/**
-	 * Return the pair of reads that can be found at the given line (and near
-	 * the given column) in the display.
-	 */
-	public Read[] getPairAtLine(int lineIndex, int colIndex)
-	{
-		if (lineIndex < 0 || lineIndex >= stack.size())
-			return null;
-
-		return stack.get(lineIndex).getPair(colIndex);
-	}
-
 	public ArrayList<Read> getLine(int line)
 	{
 		ArrayList<Read> reads = new ArrayList<Read>();
-		for(Read read : stack.get(line).getPair())
+		for(Read read : stack.get(line).getBothReads())
 		{
 			if(read != null)
 				reads.add(read);
 		}
 		return reads;
+	}
+
+	public Read[] getPairForLink(int rowIndex, int colIndex)
+	{
+		if (rowIndex >= 0 && rowIndex < stack.size())
+		{
+			// Get the pair of reads for this line
+			Read[] pair = stack.get(rowIndex).getBothReads();
+
+			// But only return them if it really is a pair (ie TWO reads), and
+			// the point asked for is between them (on the link)
+			if (pair[1] != null && colIndex > pair[0].getEndPosition() && colIndex < pair[1].getStartPosition())
+				return pair;
+		}
+
+		return null;
 	}
 }

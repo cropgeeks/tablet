@@ -15,17 +15,20 @@ public class PairedPack extends Pack
 		PairedPackRow packRow = (PairedPackRow) packRows.get(line);
 		return packRow.getLineData(start, end);
 	}
-	
-	/**
-	 * Return the pair of reads that can be found at the given line (and near
-	 * the given column) in the display.
-	 */
-	public Read[] getPairAtLine(int lineIndex, int colIndex)
+
+	public Read[] getPairForLink(int rowIndex, int colIndex)
 	{
-		if (lineIndex < 0 || lineIndex >= packRows.size())
+		// Are we over a valid row in the pack?
+		if (rowIndex < 0 || rowIndex >= packRows.size())
 			return null;
 
-		PairedPackRow packRow = (PairedPackRow) packRows.get(lineIndex);
-		return packRow.getPair(colIndex);
+		// Are we over a link-line (test by looking at just one base)
+		LineData lineData = getLineData(rowIndex, colIndex, colIndex);
+        if (lineData.getIndexes()[0] != LineData.PAIRLINK)
+            return null;
+
+		PairedPackRow packRow = (PairedPackRow) packRows.get(rowIndex);
+
+		return packRow.getPairForLinkPosition(colIndex);
 	}
 }

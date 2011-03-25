@@ -68,7 +68,7 @@ public class PairedPackRow extends PackRow
 			return false;
 
 		MatedRead matedRead = (MatedRead)read;
-		MatedRead mate = matedRead.getPair();
+		MatedRead mate = matedRead.getMate();
 
 		// if the mate starts before the current read, is mapped and in this contig
 		boolean needsLine = matedRead.getMatePos() < readS &&
@@ -86,7 +86,7 @@ public class PairedPackRow extends PackRow
 			return false;
 
 		MatedRead matedRead = (MatedRead)read;
-		MatedRead mate = matedRead.getPair();
+		MatedRead mate = matedRead.getMate();
 		int startPos = matedRead.getStartPosition();
 
 		// if the mate is before the read and the read is offscreen, in this contig
@@ -99,39 +99,22 @@ public class PairedPackRow extends PackRow
 		return needsLine && samePack && mate != null;
 	}
 
-	/**
-	 * Returns the pair at the given nucleotide position in the pack.
-	 */
-	Read[] getPair(int colIndex)
+	Read[] getPairForLinkPosition(int colIndex)
 	{
-		for(int i=reads.size()-1; i >= 0; i--)
-		{
-			Read read = reads.get(i);
-			if(read.getStartPosition() <= colIndex)
-				return getPair(read);
-		}
-		return null;
-	}
+		int index = windowBinarySearch(colIndex, colIndex);
 
-	/**
-	 * Provides the body for the for loop in getPair(int coIndex).
-	 */
-	private Read[] getPair(Read read)
-	{
-		Read[] pair = new Read[2];
-		pair[0] = read;
+		MatedRead read = (MatedRead) reads.get(index);
 
-		if (read instanceof MatedRead)
+		if (read.getMate() != null)
 		{
-			MatedRead pr = (MatedRead) read;
-			if (pr.getPair() != null)
-				pair[1] = pr.getPair();
-			else
-				pair[1] = null;
+			Read[] pair = new Read[] { read, read.getMate() };
+
+			// This ensures the reads are always in the correct left/right order
+			Arrays.sort(pair);
 
 			return pair;
 		}
-		else
-			return null;
+
+		return null;
 	}
 }

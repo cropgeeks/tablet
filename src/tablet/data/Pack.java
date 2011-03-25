@@ -64,20 +64,6 @@ public class Pack implements IReadManager, Iterable<PackRow>
 		return packRows.get(line).getReads();
 	}
 
-	public Read[] getPairAtLine(int lineIndex, int colIndex)
-	{
-		if (lineIndex < 0 || lineIndex >= packRows.size())
-			return null;
-
-		PackRow packRow = packRows.get(lineIndex);
-		Read readA = packRow.getReadAt(colIndex);
-		Read readB = null;
-		
-		if (readA instanceof MatedRead)
-		{
-			MatedRead mRead = (MatedRead)readA;
-			readB = mRead.getPair();
-		}
-		return new Read[] { readA, readB };
-	}
+	public Read[] getPairForLink(int rowIndex, int colIndex)
+		{ return null; }
 }

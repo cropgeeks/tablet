@@ -19,120 +19,204 @@ import tablet.data.auxiliary.CigarFeature.Insert;
 /** Manages and paints the advanced tool tips for the reads canvas. */
 class ReadsCanvasInfoPane
 {
-	private Color bgColor;
-	protected Image lhArrow = Icons.getIcon("LHARROW").getImage();
-	protected Image rhArrow = Icons.getIcon("RHARROW").getImage();
-	private Font titleFont, labelFont;
-	private FontMetrics fmTitle;
+	private ReadsCanvasInfoPaneRenderer renderer;
 
+	private AssemblyPanel aPanel;
 	private OverviewCanvas oCanvas;
 	private ScaleCanvas sCanvas;
-	private AssemblyPanel aPanel;
-	ReadsCanvas rCanvas;
+	private ReadsCanvas rCanvas;
 
-	// Variables that change as we move the mouse
-	protected int lineIndex, x, y, w, h;
-	protected Read read, mRead;
-	protected ReadMetaData metaData;
-	protected Point mouse;
-	protected int lineSpacing = 15;
-	protected int basicHeight = 55;
-	protected int elementHeight;
+	// readA = read under the mouse (if any); readB = readA's mate (if any)
+	private Read readA, readB;
+	private BoxData box;
 
-	// Variables holding the data that gets drawn within the tooltip
-	protected String readName, posData, lengthData, cigar, mateContig, pairInfo, insertedBases;
-
-	ReadsCanvasInfoPane()
+	ReadsCanvasInfoPane(AssemblyPanel aPanel)
 	{
-		Color c = (Color) UIManager.get("info");
-		bgColor = new Color(c.getRed(), c.getGreen(), c.getBlue(), 190);
+		this.aPanel = aPanel;
 
-		titleFont = new Font("Dialog", Font.BOLD, 12);
-		labelFont = new Font("Dialog", Font.PLAIN, 11);
-	}
-
-	void setAssemblyPanel(AssemblyPanel aPanel)
-	{
 		oCanvas = aPanel.overviewCanvas;
 		sCanvas = aPanel.scaleCanvas;
 		rCanvas = aPanel.readsCanvas;
-		this.aPanel = aPanel;
 
-		// Pre-build some font metrics for calculating string widths
-		Image image = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
-		Graphics g = image.getGraphics();
-		fmTitle = g.getFontMetrics(titleFont);
-		g.dispose();
+		renderer = new ReadsCanvasInfoPaneRenderer(rCanvas);
 	}
 
-	void setMousePosition(Point mouse)
+	IOverlayRenderer getRenderer()
 	{
-		if (mouse == null)
+		return renderer;
+	}
+
+	public void setMousePosition(Point mouse, int lineIndex, int rowIndex)
+	{
+		renderer.setMousePosition(mouse);
+
+		updateReadData(lineIndex, rowIndex);
+
+		updateOverviewCanvas(lineIndex, rowIndex);
+	}
+
+	// Assuming we're over a read, tells the Overview canvas to paint an outline
+	// around the read
+	void updateOverviewCanvas(int lineIndex, int rowIndex)
+	{
+		Read read = rCanvas.reads.getReadAt(lineIndex, rowIndex);
+
+		if (read == null)
 			oCanvas.updateRead(-1, -1, -1);
 
-		this.mouse = mouse;
+		else
+		{
+			// Tell the overview canvas to paint this read too
+			int offset = -rCanvas.offset;
+			int start = read.getStartPosition()+offset;
+			int end = read.getEndPosition()+offset;
+
+			oCanvas.updateRead(lineIndex, start, end);
+		}
 	}
 
-	/**
-	 * Set the data for rendering the tooltip based on the Read and ReadMetaData
-	 * provided. This sets up the string values for display.
-	 */
-	void setData(int lineIndex, Read read, ReadMetaData metaData)
-	{
-		if (read == null)
-			return;
+	boolean isOverRead()
+		{ return readA != null; }
 
-		this.lineIndex = lineIndex;
-		this.read = read;
-		this.metaData = metaData;
+	// Set the data for rendering the tooltip based on the Read and ReadMetaData
+	// provided. This sets up the string values for display.
+	void updateReadData(int lineIndex, int rowIndex)
+	{
+		readA = readB = null;
+		renderer.box1 = null;
+		renderer.box2 = null;
+
+		// Is there a read under the mouse?
+		readA = rCanvas.reads.getReadAt(lineIndex, rowIndex);
+
+		// And if so, does it have a mate?
+		if (readA instanceof MatedRead)
+			readB = ((MatedRead)readA).getMate();
+
+
+		if (readA != null)
+		{
+			renderer.box1 = getReadData(readA, 1);
+			box = renderer.box1;
+		}
+
+		if (readB != null)
+			renderer.box2 = getReadData(readB, 2);
+
+		else if (readA instanceof MatedRead)
+			renderer.box2 = getMissingMateData(readA);
+
+
+		// Special case where we turn off box2 because the mate is unmapped
+		if (renderer.box1 != null && renderer.box1.mateStatus != null)
+			renderer.box2 = null;
+	}
+
+	private BoxData getReadData(Read read, int boxNum)
+	{
+		BoxData box = new BoxData();
 
 		ReadNameData rnd = Assembly.getReadNameData(read);
-
-		// Width and height of final overlay
-		w = 300;
-		h = 90;
+		ReadMetaData rmd = Assembly.getReadMetaData(read, false);
 
 		// Start and ending positions (against consensus)
 		int readS = read.getStartPosition();
 		int readE = read.getEndPosition();
 
-		posData = RB.format("gui.viewer.ReadsCanvasInfoPane.from",
+		// Name
+		box.readName = rnd.getName();
+		if (boxNum == 2)
+			box.readName += " " + RB.getString("gui.viewer.ReadsCanvasInfoPane.mateRead");
+
+		// Position data
+		box.posData = RB.format("gui.viewer.ReadsCanvasInfoPane.from",
 			(TabletUtils.nf.format(readS+1) + sCanvas.getUnpadded(readS)),
 			(TabletUtils.nf.format(readE+1) + sCanvas.getUnpadded(readE)));
 
+		// Length
 		if (Prefs.visHideUnpaddedValues)
-			lengthData = RB.format("gui.viewer.ReadsCanvasInfoPane.length",
+			box.lengthData = RB.format("gui.viewer.ReadsCanvasInfoPane.length",
 				TabletUtils.nf.format(read.length()));
 		else
-			lengthData = RB.format("gui.viewer.ReadsCanvasInfoPane.lengthUnpadded",
+			box.lengthData = RB.format("gui.viewer.ReadsCanvasInfoPane.lengthUnpadded",
 				TabletUtils.nf.format(read.length()),
 				TabletUtils.nf.format(rnd.getUnpaddedLength()));
 
-		// Name
-		readName = rnd.getName();
-
+		// Cigar
 		if (Assembly.hasCigar())
-			cigar = RB.format("gui.viewer.ReadsCanvasInfoPane.cigar", rnd.getCigar());
+			box.cigar = RB.format("gui.viewer.ReadsCanvasInfoPane.cigar", rnd.getCigar());
 
-		setupPairInfo(rnd);
-		setupInsertedBaseInfo(read);
+		// Inserted bases
+		getInsertedBases(read, box);
 
-		adjustBoxSize();
+		// Pair info
+		if (read instanceof MatedRead && rmd.getIsPaired() && rmd.getMateMapped())
+		{
+			String num = "";
+
+			if (rnd.getNumberInPair() == 1)
+				num = "(1/2)";
+			else if(rnd.getNumberInPair() == 2)
+				num = "(2/2)";
+
+			if (rnd.isProperPair())
+				box.pairInfo = RB.format("gui.viewer.ReadsCanvasInfoPane.pairedProper",
+					num, rnd.getInsertSize());
+			else
+				box.pairInfo = RB.format("gui.viewer.ReadsCanvasInfoPane.pairedBad",
+					num, rnd.getInsertSize());
+		}
+
+		// Mate status
+		if (read instanceof MatedRead && rmd.getIsPaired())
+			if (rmd.getMateMapped() == false)
+				box.mateStatus = RB.getString("gui.viewer.ReadsCanvasInfoPane.mateUnmapped");
+
+
+		box.read = read;
+		box.rmd = rmd;
+
+		return box;
 	}
 
-	void updateOverviewCanvas()
+	private BoxData getMissingMateData(Read read)
 	{
-		// Tell the overview canvas to paint this read too
-		int offset = -rCanvas.offset;
+		BoxData box = new BoxData();
 
-		oCanvas.updateRead(lineIndex, read.getStartPosition()+offset, read.getEndPosition()+offset);
+		ReadNameData rnd = Assembly.getReadNameData(read);
+		ReadMetaData rmd = Assembly.getReadMetaData(read, false);
+
+		// Name
+		box.readName = rnd.getName() + " "
+			+ RB.getString("gui.viewer.ReadsCanvasInfoPane.mateRead");
+
+		// Position data left blank to create some space in the box onscreen
+		box.posData = "";
+
+		// Mate status and position
+		// Mate is not in the current contig...
+		if (((MatedRead)read).isMateContig() == false)
+		{
+			box.mateStatus = RB.getString("gui.viewer.ReadsCanvasInfoPane.outwithContig");
+			box.matePosition = RB.format("gui.viewer.ReadsCanvasInfoPane.locatedInContig",
+				rnd.getMateContig(), ((MatedRead)read).getMatePos() +1);
+		}
+
+		// Mate is in this contig, but not loaded int the current BAM window...
+		else
+		{
+			box.mateStatus = RB.getString("gui.viewer.ReadsCanvasInfoPane.outwithBamWindow");
+			box.matePosition = RB.format("gui.viewer.ReadsCanvasInfoPane.positionInContig",
+				((MatedRead)read).getMatePos() +1);
+		}
+
+		return box;
 	}
 
-	private void setupInsertedBaseInfo(Read read)
+	void getInsertedBases(Read read, BoxData box)
 	{
-		insertedBases = "";
 		// TODO
-		if(mouse == null || aPanel.getVisualContig().getTrackCount() <= 0)
+		if(aPanel.getVisualContig().getTrackCount() <= 0)
 			return;
 
 		ArrayList<Feature> features = aPanel.getVisualContig().getTrack(0).getFeatures(read.getStartPosition(), read.getEndPosition());
@@ -146,179 +230,22 @@ class ReadsCanvasInfoPane
 			{
 				if (insert.getRead().equals(read))
 				{
-					if (insertedBases.equals(""))
-						insertedBases += RB.format("gui.viewer.ReadsCanvasInfoPane.inserted", insert.getInsertedBases());
+					if (box.insertedBases == null)
+						box.insertedBases = RB.format("gui.viewer.ReadsCanvasInfoPane.inserted", insert.getInsertedBases());
 					else
-						insertedBases += " - " + insert.getInsertedBases();
+						box.insertedBases += " - " + insert.getInsertedBases();
+
+					break;
 				}
 			}
 		}
 	}
 
-	private void setupPairInfo(ReadNameData rnd)
-	{
-		String insertSize, isProperPair, pairNumber;
-
-		if(read instanceof MatedRead && metaData.getIsPaired() && metaData.getMateMapped())
-		{
-			insertSize =  RB.format("gui.viewer.ReadsCanvasInfoPane.insert", rnd.getInsertSize());
-			isProperPair = rnd.isProperPair() ? RB.getString("gui.viewer.ReadsCanvasInfoPane.pairedProper") : RB.getString("gui.viewer.ReadsCanvasInfoPane.pairedProper");
-			if(rnd.getNumberInPair() == 1)
-				pairNumber = "(1/2) ";
-			else if(rnd.getNumberInPair() == 2)
-				pairNumber = "(2/2) ";
-			else
-				pairNumber = "";
-
-			pairInfo = isProperPair + pairNumber + insertSize;
-
-			mateContig = RB.format("gui.viewer.ReadsCanvasInfoPane.mateContig", rnd.getMateContig());
-			if(rnd.getMateContig().equals(rCanvas.contig.getName()))
-				mateContig = "";
-		}
-		else if(read instanceof MatedRead && metaData.getIsPaired() && !metaData.getMateMapped())
-		{
-			insertSize = isProperPair = pairNumber = mateContig = "";
-			pairInfo = RB.getString("gui.viewer.ReadsCanvasInfoPane.mateUnmapped");
-		}
-		else
-			insertSize = isProperPair = pairNumber = mateContig = pairInfo = "";
-	}
-
-	/**
-	 * Alters the size of the tooltip boxes based on the sizes of the strings contained
-	 * in the tooltip.
-	 */
-	private void adjustBoxSize()
-	{
-		elementHeight = basicHeight;
-		if (Assembly.hasCigar())
-		{
-			h += lineSpacing;
-			elementHeight += lineSpacing;
-		}
-		if (!pairInfo.equals(""))
-		{
-			h += lineSpacing;
-			elementHeight += lineSpacing;
-		}
-		if (!mateContig.equals(""))
-		{
-			h += lineSpacing;
-			elementHeight += lineSpacing;
-		}
-		if (!insertedBases.equals(""))
-		{
-			h += lineSpacing;
-			elementHeight += lineSpacing;
-		}
-
-		if (fmTitle.stringWidth(readName) > (w - 20))
-			w = fmTitle.stringWidth(readName) + 20;
-		if (fmTitle.stringWidth(posData) > (w - 20))
-			w = fmTitle.stringWidth(posData) + 20;
-		if (fmTitle.stringWidth(lengthData) > (w - 20))
-			w = fmTitle.stringWidth(lengthData) + 20;
-		if (Assembly.hasCigar() && fmTitle.stringWidth(cigar) > (w - 20))
-			w = fmTitle.stringWidth(cigar) + 20;
-		if (fmTitle.stringWidth(pairInfo) > (w - 20))
-			w = fmTitle.stringWidth(pairInfo) + 20;
-		if (fmTitle.stringWidth(insertedBases) > (w - 20))
-			w = fmTitle.stringWidth(insertedBases) + 20;
-	}
-
-	boolean isOverRead()
-		{ return mouse != null; }
-
-
-	/**
-	 * Draws the outline, background and title of the box for the tooltip.
-	 */
-	protected void drawBasicBox(Graphics2D g, int mateH, String tempName)
-	{
-		//g.translate(x, y);
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		// The background rectangle
-		g.setColor(bgColor);
-		g.fillRoundRect(0, 0, w - 1, mateH - 1, 10, 10);
-		g.setColor(Color.black);
-		g.drawRoundRect(0, 0, w - 1, mateH - 1, 10, 10);
-		// And the text
-		g.setFont(titleFont);
-		g.drawString(tempName, 10, lineSpacing);
-		g.setFont(labelFont);
-	}
-
-	protected int drawSharedStrings(Graphics2D g, int lineNo)
-	{
-		g.drawString(posData, 10, lineSpacing * ++lineNo);
-		g.drawString(lengthData, 10, lineSpacing * ++lineNo);
-
-		if (Assembly.hasCigar())
-		{
-			g.setColor(Color.blue);
-			g.drawString(cigar, 10, lineSpacing * ++lineNo);
-			if (!insertedBases.equals(""))
-				g.drawString(insertedBases, 10, lineSpacing * ++lineNo);
-		}
-
-		if (pairInfo.equals(RB.getString("gui.viewer.ReadsCanvasInfoPane.mateUnmapped")))
-			g.setColor(Color.red);
-
-		g.drawString(pairInfo, 10, lineSpacing * ++lineNo);
-
-		return lineNo;
-	}
-
-	/**
-	 * Draws the rest of the box in the usual state where we have a pair of reads
-	 * which are both contained in the current data window.
-	 */
-	protected void drawBox(Graphics2D g)
-	{
-		if(read == null)
-			return;
-
-		int lineNo = 1;
-
-		drawBasicBox(g, h, readName);
-
-		lineNo = drawSharedStrings(g, lineNo);
-
-		if(!mateContig.equals(""))
-			g.drawString(mateContig, 10, lineSpacing * ++lineNo);
-
-		if (metaData.isComplemented())
-			g.drawImage(lhArrow, w - 10 - lhArrow.getWidth(null), elementHeight, null);
-		else
-			g.drawImage(rhArrow, 10, elementHeight, null);
-
-		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
-		renderSequence(g);
-	}
-
-	protected void renderSequence(Graphics2D g)
-	{
-		int lineStart = elementHeight + lineSpacing;
-
-		float xScale = read.length() / (float) (w - 10);
-
-		for (int x = 10; x < w-10; x++)
-		{
-			// Working out where each pixel maps to in the data...
-			int dataX = (int) (x * xScale);
-
-			g.setColor(rCanvas.colors.getColor(metaData, dataX));
-			g.drawLine(x, lineStart, x, lineStart+10);
-		}
-
-		g.setColor(Color.darkGray);
-		g.drawRect(10, lineStart, w-21, 10);
-	}
-
 	void copyReadNameToClipboard()
 	{
-		StringSelection selection = new StringSelection(Assembly.getReadNameData(read).getName());
+		String readName = box.readName;
+
+		StringSelection selection = new StringSelection(readName);
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
 			selection, null);
 	}
@@ -326,28 +253,35 @@ class ReadsCanvasInfoPane
 	void copyDataToClipboard()
 	{
 		String lb = System.getProperty("line.separator");
-		String seq = metaData.toString();
+		String seq = box.rmd.toString();
 
 		StringBuilder text = new StringBuilder(seq.length() + 500);
-		text.append(readName).append(lb).append(posData).append(lb).append(lengthData).append(lb);
+		text.append(box.readName).append(lb).append(box.posData).append(lb).append(box.lengthData).append(lb);
 		if(Assembly.hasCigar())
-			text.append(cigar).append(lb);
+			text.append(box.cigar).append(lb);
 
-		if (metaData.isComplemented())
+		if (box.rmd.isComplemented())
 			text.append(RB.getString("gui.viewer.ReadsCanvasInfoPane.directionReverse")).append(lb).append(lb);
 		else
 			text.append(RB.getString("gui.viewer.ReadsCanvasInfoPane.directionForward")).append(lb).append(lb);
 
 		// Produce a FASTA formatted string
-		text.append(TabletUtils.formatFASTA(Assembly.getReadNameData(read).getName(), seq));
+		text.append(TabletUtils.formatFASTA(box.readName, seq));
 
 		StringSelection selection = new StringSelection(text.toString());
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
 			selection, null);
 	}
 
-	public void setmRead(Read mRead)
+	static class BoxData
 	{
-		this.mRead = mRead;
+		String readName, posData, lengthData;
+		String cigar;
+		String pairInfo;
+		String insertedBases;
+		String mateStatus, matePosition;
+
+		Read read;
+		ReadMetaData rmd;
 	}
 }

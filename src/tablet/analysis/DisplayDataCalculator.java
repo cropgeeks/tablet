@@ -176,7 +176,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 				MatedRead matedRead = (MatedRead) read;
 
 				// If this read has already had its mate set, skip it
-				if(matedRead.getPair() == null)
+				if(matedRead.getMate() == null)
 				{
 					ReadMetaData rmd = Assembly.getReadMetaData(read, false);
 					if(!rmd.getMateMapped())
@@ -185,8 +185,8 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 					MatedRead foundPair = (MatedRead) pairSearcher.search(matedRead);
 					if(foundPair != null)
 					{
-						matedRead.setPair(foundPair);
-						foundPair.setPair(matedRead);
+						matedRead.setMate(foundPair);
+						foundPair.setMate(matedRead);
 					}
 				}
 			}

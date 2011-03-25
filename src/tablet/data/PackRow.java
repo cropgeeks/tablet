@@ -36,7 +36,7 @@ public class PackRow
 		return false;
 	}
 
-	public LineData getLineData(int start, int end)
+	protected int windowBinarySearch(int start, int end)
 	{
 		int read = -1;
 
@@ -51,10 +51,7 @@ public class PackRow
 
 			// If this read is within the window
 			if (windowed == 0)
-			{
-				read = M;
 				break;
-			}
 
 			// LHS of the window
 			if (windowed == -1)
@@ -64,8 +61,14 @@ public class PackRow
 				R = M - 1;
 		}
 
-		if (read == -1)
-			read = M;
+		read = M;
+
+		return read;
+	}
+
+	LineData getLineData(int start, int end)
+	{
+		int read = windowBinarySearch(start, end);
 
 		// Search left from this read to find the left-most read that appears in
 		// the window (as the binary search will only find the first read that
@@ -100,7 +103,7 @@ public class PackRow
 				break;
 
 			rmd = Assembly.getReadMetaData(read, true);
-			
+
 			int readS = read.getStartPosition();
 			int readE = read.getEndPosition();
 
