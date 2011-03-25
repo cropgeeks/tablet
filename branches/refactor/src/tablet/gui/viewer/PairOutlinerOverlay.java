@@ -9,15 +9,13 @@ import tablet.gui.*;
 
 public class PairOutlinerOverlay implements IOverlayRenderer
 {
-	private ReadsCanvasInfoPaneRenderer infoPaneRenderer;
 	private ReadsCanvas rCanvas;
 
 	private Read readA, readB;
 	private int lineIndex, mateLineIndex, columnIndex;
 
-	PairOutlinerOverlay(ReadsCanvas rCanvas, ReadsCanvasInfoPaneRenderer infoPaneRenderer)
+	PairOutlinerOverlay(ReadsCanvas rCanvas)
 	{
-		this.infoPaneRenderer = infoPaneRenderer;
 		this.rCanvas = rCanvas;
 	}
 
@@ -27,24 +25,6 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 		this.readB = readB;
 		this.lineIndex = lineIndex;
 		this.mateLineIndex = mateLineIndex;
-
-		if (readA != null)
-		{
-			ReadMetaData data = Assembly.getReadMetaData(readA, false);
-			infoPaneRenderer.readInfo.setData(lineIndex, readA, data);
-			infoPaneRenderer.readInfo.updateOverviewCanvas();
-
-			infoPaneRenderer.pairInfo.setmRead(readA);
-		}
-
-		if (readB != null)
-		{
-			ReadMetaData pairData = Assembly.getReadMetaData(readB, false);
-			infoPaneRenderer.pairInfo.setData(mateLineIndex, readB, pairData);
-
-			infoPaneRenderer.readInfo.setmRead(readB);
-			infoPaneRenderer.pairInfo.setMateAvailable(true);
-		}
 	}
 
 	public void render(Graphics2D g)
@@ -115,10 +95,10 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 	{
 		if (readA == null || readB == null)
 			return false;
-		
+
 		int s, e;
 		s = e = columnIndex;
-		
+
 		if(readA.getStartPosition() < readB.getStartPosition())
 		{
 			s = readA.getStartPosition();

@@ -142,24 +142,6 @@ public class Stack implements IReadManager
 		return stackLine;
 	}
 
-	/**
-	 * Return the pair of reads that can be found at the given line (and near
-	 * the given column) in the display.
-	 */
-	public Read[] getPairAtLine(int lineIndex, int colIndex)
-	{
-		if (lineIndex < 0 || lineIndex >= stack.size())
-			return null;
-		
-		Read readA = stack.get(lineIndex);
-		Read readB = null;
-
-		if (readA instanceof MatedRead)
-		{
-			MatedRead mRead = (MatedRead) readA;
-			readB = mRead.getPair();
-		}
-
-		return new Read[] { readA, readB };
-	}
+	public Read[] getPairForLink(int rowIndex, int colIndex)
+		{ return null; }
 }

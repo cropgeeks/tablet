@@ -20,12 +20,12 @@ class ReadsCanvasMenu implements ActionListener
 {
 	private AssemblyPanel aPanel;
 	private ReadsCanvas rCanvas;
-	private ReadsCanvasInfoPaneRenderer infoPaneRenderer;
+	private ReadsCanvasInfoPane infoPane;
 
 	private JPopupMenu menu = new JPopupMenu();
 	private JMenuItem mClipboardName;
 	private JMenuItem mClipboardData;
-	
+
 	private JMenu mOutline;
 	private JMenuItem mOutlineCol;
 	private JMenuItem mOutlineRow;
@@ -52,10 +52,10 @@ class ReadsCanvasMenu implements ActionListener
 	// Row and column under the mouse at the time the menu appears
 	private int rowIndex, colIndex;
 
-	ReadsCanvasMenu(AssemblyPanel aPanel, ReadsCanvasInfoPaneRenderer infoPaneRenderer)
+	ReadsCanvasMenu(AssemblyPanel aPanel, ReadsCanvasInfoPane infoPane)
 	{
 		this.aPanel = aPanel;
-		this.infoPaneRenderer = infoPaneRenderer;
+		this.infoPane = infoPane;
 		rCanvas = aPanel.readsCanvas;
 
 		mClipboardName = new JMenuItem("", Icons.getIcon("CLIPBOARDNAME"));
@@ -183,23 +183,25 @@ class ReadsCanvasMenu implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == mClipboardName)
-			infoPaneRenderer.readInfo.copyReadNameToClipboard();
+			infoPane.copyReadNameToClipboard();
 		else if (e.getSource() == mClipboardData)
-			infoPaneRenderer.readInfo.copyDataToClipboard();
+			infoPane.copyDataToClipboard();
 
 		else if (e.getSource() == mFindStart)
 		{
-			int position = infoPaneRenderer.readInfo.read.getStartPosition();
+			Read read = rCanvas.reads.getReadAt(rowIndex, colIndex);
+			int position = read.getStartPosition();
 
 			aPanel.moveToPosition(-1, position, true);
-			new ReadHighlighter(aPanel, infoPaneRenderer.readInfo.read, infoPaneRenderer.readInfo.lineIndex);
+			new ReadHighlighter(aPanel, read, rowIndex);
 		}
 		else if (e.getSource() == mFindEnd)
 		{
-			int position = infoPaneRenderer.readInfo.read.getEndPosition();
+			Read read = rCanvas.reads.getReadAt(rowIndex, colIndex);
+			int position = read.getEndPosition();
 
 			aPanel.moveToPosition(-1, position, true);
-			new ReadHighlighter(aPanel, infoPaneRenderer.readInfo.read, infoPaneRenderer.readInfo.lineIndex);
+			new ReadHighlighter(aPanel, read, rowIndex);
 		}
 
 		else if (e.getSource() == mOutlineCol)
@@ -266,7 +268,7 @@ class ReadsCanvasMenu implements ActionListener
 
 					PairSearcher pairSearcher = new PairSearcher(rCanvas.contig);
 
-					// Must use searchForPair instead of search as DB query 
+					// Must use searchForPair instead of search as DB query
 					// cannot be relied upon once the reads have been sorted
 					final Read r = pairSearcher.searchForPair(Assembly.getReadName(read), pr.getMatePos());
 
@@ -287,48 +289,22 @@ class ReadsCanvasMenu implements ActionListener
 			}
 		}
 
+		// From a link line, jump to the read on its LHS
 		else if (e.getSource() == mJumpToLeftRead)
 		{
-			Read[] pair = null;
+			Read[] pair = rCanvas.reads.getPairForLink(rowIndex, colIndex);
 
-			if(rCanvas.reads instanceof PairedStack)
-			{
-				PairedStack pairedStack = (PairedStack)rCanvas.reads;
-				pair = pairedStack.getPairAtLine(rowIndex, colIndex);
-			}
-			else if(rCanvas.reads instanceof PairedPack)
-			{
-				PairedPack pack = (PairedPack)rCanvas.reads;
-				pair = pack.getPairAtLine(rowIndex, colIndex);
-			}
-
-			if(pair != null && pair[0] != null)
-			{
-				aPanel.moveToPosition(-1, pair[0].getStartPosition(), true);
-				new ReadHighlighter(aPanel, pair[0], rowIndex);
-			}
+			aPanel.moveToPosition(-1, pair[0].getStartPosition(), true);
+			new ReadHighlighter(aPanel, pair[0], rowIndex);
 		}
 
+		// From a link line, jump to the read on its RHS
 		else if (e.getSource() == mJumpToRightRead)
 		{
-			Read[] pair = null;
+			Read[] pair = rCanvas.reads.getPairForLink(rowIndex, colIndex);
 
-			if(rCanvas.reads instanceof PairedStack)
-			{
-				PairedStack pairedStack = (PairedStack)rCanvas.reads;
-				pair = pairedStack.getPairAtLine(rowIndex, colIndex);
-			}
-			else if(rCanvas.reads instanceof PairedPack)
-			{
-				PairedPack pack = (PairedPack)rCanvas.reads;
-				pair = pack.getPairAtLine(rowIndex, colIndex);
-			}
-
-			if(pair != null && pair[1] != null)
-			{
-				aPanel.moveToPosition(-1, pair[1].getStartPosition(), true);
-				new ReadHighlighter(aPanel, pair[1], rowIndex);
-			}
+			aPanel.moveToPosition(-1, pair[1].getStartPosition(), true);
+			new ReadHighlighter(aPanel, pair[1], rowIndex);
 		}
 
 		else if (e.getSource() == mExportColumn)
@@ -382,11 +358,12 @@ class ReadsCanvasMenu implements ActionListener
 			RB.setText(mExportContig, "gui.viewer.ReadsCanvasMenu.mExportBamWindow");
 
 		// Check enabled states
-		boolean isOverRead = infoPaneRenderer.readInfo.isOverRead();
+		boolean isOverRead = infoPane.isOverRead();
 		mClipboardName.setEnabled(isOverRead);
 		mClipboardData.setEnabled(isOverRead);
 		mFindStart.setEnabled(isOverRead);
 		mFindEnd.setEnabled(isOverRead);
+		mJumpToPair.setEnabled(false);
 		mOutlineClear.setEnabled(rCanvas.contig.getOutlines().size() > 0);
 
 		// Shadowing options
@@ -398,36 +375,27 @@ class ReadsCanvasMenu implements ActionListener
 		mShadowingLock.setEnabled(Prefs.visReadShadowing == 2);
 		mShadowingJump.setEnabled(Prefs.visReadShadowing == 2 && base != null);
 
-		// Paired end states
-		Read[] pair = null;
 		Read read = null;
 
 		IReadManager manager = rCanvas.reads;
-		pair = manager.getPairAtLine(rowIndex, colIndex);
 		read = manager.getReadAt(rowIndex, colIndex);
 
 		ReadNameData rnd = null;
 		ReadMetaData rmd = null;
-		if(read != null )
+
+		if (read != null )
 		{
 			rnd = Assembly.getReadNameData(read);
 			rmd = Assembly.getReadMetaData(read, false);
+
+			if (read instanceof MatedRead && rmd.getMateMapped())
+				mJumpToPair.setEnabled(true);
 		}
 
-		if(read instanceof MatedRead && rnd != null && rmd.getMateMapped())
-		{
-			mJumpToPair.setEnabled(isOverRead);
-			mJumpToPair.setText(RB.format("gui.viewer.ReadsCanvasMenu.mJumpToPairInContig",
-					rnd.getName(), rnd.getMateContig()));
-		}
-		else
-		{
-			mJumpToPair.setEnabled(false);
-			RB.setText(mJumpToPair, "gui.viewer.ReadsCanvasMenu.mJumpToPair");
-		}
-
-		mJumpToLeftRead.setEnabled(!isOverRead && pair != null);
-		mJumpToRightRead.setEnabled(!isOverRead && pair != null);
+		// Check if we're over a link line for a pair
+		Read[] pair = rCanvas.reads.getPairForLink(rowIndex, colIndex);
+		mJumpToLeftRead.setEnabled(pair != null);
+		mJumpToRightRead.setEnabled(pair != null);
 
 		menu.show(e.getComponent(), e.getX(), e.getY());
 	}
@@ -456,5 +424,4 @@ class ReadsCanvasMenu implements ActionListener
 		if (!foundInTable)
 			cPanel.setDisplayedContig(contig);
 	}
-
 }

@@ -12,6 +12,7 @@ public interface IReadManager
 {
 	public int size();
 
+	/** Returns the read at the given position, or null if no read is there. */
 	public Read getReadAt(int line, int nucleotidePosition);
 
 	public int getLineForRead(Read read);
@@ -27,5 +28,9 @@ public interface IReadManager
 	 */
 	public LineData getLineData(int line, int start, int end);
 
-	public Read[] getPairAtLine(int lineIndex, int colIndex);
+	/**
+	 * Returns the pair of reads that form each end of the (possible) link line
+	 * at the given position. Returns null if no link line is at that position.
+	 */
+	public Read[] getPairForLink(int rowIndex, int colIndex);
 }

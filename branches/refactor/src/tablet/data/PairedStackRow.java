@@ -62,7 +62,7 @@ public class PairedStackRow
 			index = readS;
 
 		ReadMetaData rmd = Assembly.getReadMetaData(read, true);
-		
+
 		for (; index <= end && index <= readE; index++)
 		{
 			reads[index - start] = rmd;
@@ -96,22 +96,7 @@ public class PairedStackRow
 		return null;
 	}
 
-	public Read[] getPair(int colIndex)
-	{
-		if(readB == null)
-		{
-			if(readA instanceof MatedRead)
-			{
-				MatedRead matedRead = (MatedRead) readA;
-				if (matedRead.getPair() != null)
-					return new Read [] {readA, matedRead.getPair()};
-			}
-		}
-
-		return new Read [] {readA, readB};
-	}
-
-	public Read[] getPair()
+	Read[] getBothReads()
 	{
 		return new Read[] {readA, readB};
 	}
