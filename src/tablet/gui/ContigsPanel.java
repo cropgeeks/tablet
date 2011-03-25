@@ -90,12 +90,12 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 			featuresPanel.toggleComponentEnabled(true);
 		}
 
-		
+
 
 		String title = RB.format("gui.ContigsPanel.title", controls.table.getRowCount());
 		controls.contigsLabel.setText(title);
 
-		int count = calculateTotalReadCount();
+		long count = calculateTotalReadCount();
 		String readCount = RB.format("gui.ContigsPanel.readCount", count);
 		controls.readCountLabel.setText(readCount);
 		if(controls.table.getRowCount() != 0)
@@ -112,9 +112,9 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		findPanel.setAssembly(assembly);
 	}
 
-	private int calculateTotalReadCount()
+	private long calculateTotalReadCount()
 	{
-		int readCount = 0;
+		long readCount = 0;
 		for (int row = 0; row < controls.table.getRowCount(); row++)
 		{
 			readCount += (Integer)controls.table.getValueAt(row, 2);
@@ -160,7 +160,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		for (row = 0; row < controls.table.getRowCount(); row++)
 		{
 			contig = (Contig) controls.table.getValueAt(row, 0);
-			
+
 			if (contig.getName().equals(contigName))
 				controls.table.setRowSelectionInterval(row, row);
 		}
@@ -169,7 +169,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 	public void moveToContigPosition(String contigName, Integer position)
 	{
 		setContigInTable(contigName);
-		
+
 		// If we can, move to the position within the contig and highlight it
 		if (position != null)
 			winMain.getAssemblyPanel().highlightColumn(position);
