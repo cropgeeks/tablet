@@ -165,7 +165,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		row = controls.table.convertRowIndexToModel(row);
 
 		// Pull the feature out of the model
-		Feature feature = (Feature) model.getValueAt(row, 9);
+		Feature feature = model.getFeature(row);
 
 		int p1 = feature.getDataPS();
 		int p2 = feature.getDataPE();
