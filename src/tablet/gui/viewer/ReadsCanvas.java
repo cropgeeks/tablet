@@ -155,10 +155,8 @@ public class ReadsCanvas extends JPanel
 		canvasH = (ntOnCanvasY * ntH);
 
 		dimension = new Dimension(canvasW, canvasH);
-		aPanel.setScrollbarAdjustmentValues(ntW, ntH);
 
 		updateColorScheme();
-		updateBuffer = true;
 	}
 
 	// Compute real-time variables, that change as the viewpoint is moved across
@@ -195,13 +193,15 @@ public class ReadsCanvas extends JPanel
 		int xS = (pX1/ntW);
 		int yS = (pY1/ntH);
 
-		aPanel.updateOverview(xS, ntOnScreenX, yS, ntOnScreenY);
+		aPanel.canvasViewChanged(xS, ntOnScreenX, yS, ntOnScreenY);
 	}
 
 	void updateColorScheme()
 	{
 		colors = ReadScheme.getScheme(Prefs.visColorScheme, ntW, ntH);
 		proteins = ProteinScheme.getScheme(Prefs.visColorScheme, ntW, ntH);
+
+		updateBuffer = true;
 	}
 
 	public void paintComponent(Graphics graphics)

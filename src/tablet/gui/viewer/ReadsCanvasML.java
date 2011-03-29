@@ -93,7 +93,7 @@ class ReadsCanvasML extends MouseInputAdapter
 				aPanel.pageRight();
 
 			else if (e.getClickCount() == 2)
-				aPanel.clickZoom(e);
+				aPanel.getController().clickZoom(e);
 		}
 	}
 
@@ -137,11 +137,13 @@ class ReadsCanvasML extends MouseInputAdapter
 		// Otherwise, do canvas scrolling
 		else
 		{
+			CanvasController controller = aPanel.getController();
+
 			JScrollBar sBar = null;
-			if (aPanel.vBar.isVisible())
-				sBar = aPanel.vBar;
-			else if (aPanel.hBar.isVisible())
-				sBar = aPanel.hBar;
+			if (controller.getVBar().isVisible())
+				sBar = controller.getVBar();
+			else if (controller.getHBar().isVisible())
+				sBar = controller.getHBar();
 
 			if (sBar != null)
 			{
