@@ -199,7 +199,8 @@ public class ReadPrinter extends SimpleJob
 		ReadMetaData rmd = Assembly.getReadMetaData(read, false);
 		ReadNameData rnd = Assembly.getReadNameData(read);
 
-		out.write(">" + rnd.getName() + " pos=" + read.getStartPosition() + " len=" + read.length());
+		out.write(">" + rnd.getName() + " pos=" + (read.getStartPosition() + 1)
+				+ " len=" + read.length());
 		out.newLine();
 
 		String readString = rmd.toString();
