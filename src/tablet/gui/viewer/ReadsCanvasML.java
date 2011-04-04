@@ -87,10 +87,10 @@ class ReadsCanvasML extends MouseInputAdapter
 		{
 			// Page left or right if the navigation arrows were clicked on
 			if (nOverlay.isLeftActive())
-				aPanel.pageLeft();
+				aPanel.getController().pageLeft();
 
 			else if (nOverlay.isRightActive())
-				aPanel.pageRight();
+				aPanel.getController().pageRight();
 
 			else if (e.getClickCount() == 2)
 				aPanel.getController().clickZoom(e);

@@ -10,12 +10,13 @@ import javax.swing.event.*;
 import tablet.gui.*;
 import tablet.gui.ribbon.*;
 
-class CanvasController extends JPanel implements ChangeListener
+public class CanvasController extends JPanel implements ChangeListener
 {
 	private AssemblyPanel aPanel;
 	private ConsensusCanvas consensusCanvas;
 	private ProteinCanvas proteinCanvas;
 	private ReadsCanvas readsCanvas;
+	private ScaleCanvas scaleCanvas;
 
 	private JScrollPane sp;
 	private JScrollBar hBar, vBar;
@@ -34,6 +35,7 @@ class CanvasController extends JPanel implements ChangeListener
 		readsCanvas = aPanel.readsCanvas;
 		consensusCanvas = aPanel.consensusCanvas;
 		proteinCanvas = aPanel.proteinCanvas;
+		scaleCanvas = aPanel.scaleCanvas;
 
 		viewport = sp.getViewport();
 		viewport.addChangeListener(this);
@@ -52,7 +54,7 @@ class CanvasController extends JPanel implements ChangeListener
 		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
 	}
 
-	void setScrollbarAdjustmentValues(int xIncrement, int yIncrement)
+	private void setScrollbarAdjustmentValues(int xIncrement, int yIncrement)
 	{
 		hBar.setUnitIncrement(xIncrement);
 		hBar.setBlockIncrement(xIncrement*25);
@@ -88,6 +90,15 @@ class CanvasController extends JPanel implements ChangeListener
 		setScrollbarAdjustmentValues(readsCanvas.ntW, readsCanvas.ntH);
 	}
 
+	void moveToLater(final int rowIndex, final int colIndex, final boolean centre)
+	{
+		SwingUtilities.invokeLater(new Runnable() {
+			public void run() {
+				moveTo(rowIndex, colIndex, centre);
+			}
+		});
+	}
+
 	// Jumps to a position relative to the given row and column
 	void moveTo(int rowIndex, int colIndex, boolean centre)
 	{
@@ -120,7 +131,7 @@ class CanvasController extends JPanel implements ChangeListener
 		vBar.setValue(vBar.getValue() + y);
 	}
 
-	void doZoom()
+	public void doZoom()
 	{
 		// Track the center of the screen (before the zoom)
 		if (isClickZooming == false)
@@ -152,5 +163,19 @@ class CanvasController extends JPanel implements ChangeListener
 		BandAdjust.zoomIn(6);
 
 		isClickZooming = false;
+	}
+
+	// Jumps the screen left by one "page"
+	public void pageLeft()
+	{
+		int jumpTo = scaleCanvas.ntL - (readsCanvas.ntOnScreenX);
+		moveToLater(-1, jumpTo, false);
+	}
+
+	// Jumps the screen right by one "page"
+	public void pageRight()
+	{
+		int jumpTo = scaleCanvas.ntR + 1;
+		moveToLater(-1, jumpTo, false);
 	}
 }

@@ -5,9 +5,7 @@ package tablet.gui.viewer;
 
 import java.awt.*;
 import java.awt.image.*;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
@@ -123,7 +121,7 @@ public class AssemblyPanel extends JPanel
 		return assembly;
 	}
 
-	CanvasController getController()
+	public CanvasController getController()
 		{ return controller; }
 
 	public void updateContigInformation()
@@ -202,7 +200,6 @@ public class AssemblyPanel extends JPanel
 		}
 
 		forceRedraw();
-//		controller.stateChanged(null);
 
 		return setContigOK;
 	}
@@ -231,27 +228,6 @@ public class AssemblyPanel extends JPanel
 
 		overviewCanvas.createImage();
 		updateContigInformation();
-	}
-
-	public void doZoom()
-	{
-		controller.doZoom();
-	}
-
-	// Jumps the screen left by one "page"
-	public void pageLeft()
-	{
-		int jumpTo = scaleCanvas.ntL - (readsCanvas.ntOnScreenX);
-
-		moveToPosition(-1, jumpTo, false);
-	}
-
-	// Jumps the screen right by one "page"
-	public void pageRight()
-	{
-		int jumpTo = scaleCanvas.ntR + 1;
-
-		moveToPosition(-1, jumpTo, false);
 	}
 
 	public void setVisibilities()
@@ -368,11 +344,7 @@ public class AssemblyPanel extends JPanel
 		// Adjust the colIndex so that it is valid for the current (visual) data
 		final int col = colIndex += (-contig.getVisualStart());
 
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				controller.moveTo(row, col, centre);
-			}
-		});
+		controller.moveToLater(row, col, centre);
 	}
 
 	public void highlightColumn(int index)

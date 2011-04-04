@@ -77,10 +77,12 @@ public class ReadsCanvas extends JPanel
 
 		// Set up some keyboard navigation
 		Action pageLeft = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) { aPanel.pageLeft(); }
+			public void actionPerformed(ActionEvent e)
+				{ aPanel.getController().pageLeft(); }
 		};
 		Action pageRight = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) { aPanel.pageRight(); }
+			public void actionPerformed(ActionEvent e)
+				{ aPanel.getController().pageRight(); }
 		};
 
 		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
