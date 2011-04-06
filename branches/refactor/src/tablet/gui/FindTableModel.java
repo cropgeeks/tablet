@@ -3,9 +3,11 @@
 
 package tablet.gui;
 
-import java.util.ArrayList;
-import javax.swing.table.AbstractTableModel;
-import scri.commons.gui.RB;
+import java.util.*;
+import javax.swing.table.*;
+
+import scri.commons.gui.*;
+
 import tablet.analysis.Finder.*;
 import tablet.data.*;
 
@@ -15,40 +17,34 @@ import tablet.data.*;
 public class FindTableModel extends AbstractTableModel
 {
 	private ArrayList<SearchResult> results;
-
 	private String[] columnNames;
 
-	private FindPanel parent;
-
-	FindTableModel(ArrayList<SearchResult> results, FindPanel parent)
+	FindTableModel(ArrayList<SearchResult> results)
 	{
 		this.results = results;
-		this.parent = parent;
 
 		String col1 = RB.getString("gui.FindTableModel.name");
 		String col2 = RB.getString("gui.FindTableModel.position");
 		String col3 = RB.getString("gui.FindTableModel.length");
 		String col4 = RB.getString("gui.FindTableModel.contig");
 
-		columnNames = new String[] { col1, col2, col3, col4 };
-
-		if(results != null && results.size() != 0 && results.get(0) instanceof SubsequenceSearchResult)
+		if(results != null && !results.isEmpty() && results.get(0) instanceof SubsequenceSearchResult)
 		{
-			String col5 = "Start Index";
-			String col6 = "End Index";
+			String col5 = RB.getString("gui.FindTableModel.start");
+			String col6 = RB.getString("gui.FindTableModel.end");
 			columnNames = new String[] { col1, col2, col3, col4, col5, col6 };
 		}
-		else if(results != null && results.size() != 0 && !(results.get(0) instanceof SubsequenceSearchResult) && !(results.get(0) instanceof ReadSearchResult))
+		else if(results != null && !results.isEmpty() && !(results.get(0) instanceof SubsequenceSearchResult) && !(results.get(0) instanceof ReadSearchResult))
 		{
 			col1 = col4;
 			columnNames = new String[] { col1, col2, col3 };
 		}
+		else
+			columnNames = new String[] { col1, col2, col3, col4 };
 	}
 
 	public String getColumnName(int col)
-	{
-	    return columnNames[col];
-	}
+		{ return columnNames[col]; }
 
 	public int getColumnCount()
 		{ return columnNames.length; }
@@ -96,7 +92,6 @@ public class FindTableModel extends AbstractTableModel
 			case 1:		return result.getPosition() + 1;
 			case 2:		return result.getLength();
 			case 9:		return result.getContig();
-			case 10:	return parent.getFinder();
 		}
 		return null;
 	}
@@ -111,7 +106,6 @@ public class FindTableModel extends AbstractTableModel
 			case 2:		return result.getLength();
 			case 3:		return result.getContig().getName();
 			case 9:		return result.getContig();
-			case 10:	return parent.getFinder();
 		}
 		return null;
 	}
@@ -128,8 +122,10 @@ public class FindTableModel extends AbstractTableModel
 			case 4:		return result.getStartIndex()+1;
 			case 5:		return result.getEndIndex()+1;
 			case 9:		return result.getContig();
-			case 10:	return parent.getFinder();
 		}
 		return null;
 	}
+
+	public boolean isCellEditable(int rowIndex, int mColIndex)
+		{ return false; }
 }

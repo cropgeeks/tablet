@@ -158,7 +158,7 @@ public class BamFileHandler
 		int uLength = rmd.calculateUnpaddedLength();
 		rnd.setUnpaddedLength(uLength);
 		rnd.setCigar(record.getCigar().toString());
-		nameCache.setReadNameData(rnd);
+		nameCache.setReadNameData(rnd, contig);
 		read.setLength(rmd.length());
 
 		contig.getReads().add(read);

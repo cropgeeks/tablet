@@ -308,7 +308,7 @@ public class AceFileReader extends TrackableReader
 
 		int uLength = rmd.calculateUnpaddedLength();
 		rnd.setUnpaddedLength(uLength);
-		nameCache.setReadNameData(rnd);
+		nameCache.setReadNameData(rnd, contig);
 		
 		read.setLength(rmd.length());
 

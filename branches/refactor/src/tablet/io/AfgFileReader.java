@@ -281,7 +281,7 @@ class AfgFileReader extends TrackableReader
 		readCache.setReadMetaData(readMetaData);
 		readsAdded++;
 
-		nameCache.setReadNameData(rnd);
+		nameCache.setReadNameData(rnd, contig);
 
 		//remember to increment the read id
 		currReadID++;
@@ -334,7 +334,7 @@ class AfgFileReader extends TrackableReader
 		//at this point the read is not complemented so we can set the boolean (3rd param) to false accordingly
 		tempCache.setReadMetaData(readMetaData);
 
-		sqlCache.setReadNameData(rnd);
+		sqlCache.setReadNameData(rnd, contig);
 
 		tmpCacheID++;
 	}

@@ -13,6 +13,7 @@ import tablet.data.auxiliary.*;
  */
 public class Contig
 {
+	private int id;
 	private String name;
 	private Consensus consensus;
 	private boolean complemented;
@@ -87,6 +88,12 @@ public class Contig
 
 		reads = new ArrayList<Read>(readCount);
 	}
+
+	void setId(int id)
+		{ this.id = id; }
+
+	public int getId()
+		{ return id; }
 
 	/**
 	 * Returns the name of this contig.
@@ -375,5 +382,4 @@ public class Contig
 				return null;
 		}
 	}
-
 }

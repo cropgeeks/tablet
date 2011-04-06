@@ -94,7 +94,7 @@ class MaqFileReader extends TrackableReader
 
 				int uLength = rmd.calculateUnpaddedLength();
 				rnd.setUnpaddedLength(uLength);
-				nameCache.setReadNameData(rnd);
+				nameCache.setReadNameData(rnd, contigToAddTo);
 
 				read.setLength(rmd.length());
 
