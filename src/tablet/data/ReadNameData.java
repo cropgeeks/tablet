@@ -19,7 +19,7 @@ public class ReadNameData
 			fullName.endsWith("/1") || fullName.endsWith("/2"))
 		{
 			namePostfix = fullName.substring(fullName.length()-2);
-			name = fullName.substring(0, fullName.length()-3);
+			name = fullName.substring(0, fullName.length()-2);
 		}
 		else
 		{
