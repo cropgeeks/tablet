@@ -181,7 +181,9 @@ public class ReadSQLCache
 		ips.setInt(7, readNameData.getInsertSize());
 		ips.setBoolean(8, readNameData.isProperPair());
 		ips.setInt(9, readNameData.getNumberInPair());
-		ips.setInt(10, contig.getId());
+		// Error handling for AFG loading (with its initial cache that doesn't
+		// have contig references. The final cache will though.
+		ips.setInt(10, contig != null ? contig.getId() : -1);
 
 		ips.addBatch();
 
