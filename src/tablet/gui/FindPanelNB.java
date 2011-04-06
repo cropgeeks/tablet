@@ -5,7 +5,10 @@ package tablet.gui;
 
 import java.awt.event.*;
 import javax.swing.*;
+
 import scri.commons.gui.*;
+
+import tablet.analysis.*;
 
 public class FindPanelNB extends javax.swing.JPanel
 {
@@ -23,33 +26,17 @@ public class FindPanelNB extends javax.swing.JPanel
 		searchTypeCombo.addItem(RB.getString("gui.NBFindPanelControls.findLabel2"));
 		searchTypeCombo.addItem(RB.getString("gui.NBFindPanelControls.findInConsensus"));
 		searchTypeCombo.setSelectedIndex(Prefs.guiFindPanelSearchType);
+		searchTypeCombo.addActionListener(panel);
+
 		resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", 0));
 		RB.setText(helpLabel, "gui.NBFindPanelControls.helpLabel");
 		RB.setText(label, "gui.NBFindPanelControls.label");
 
 		findCombo.setHistory(Prefs.recentSearches);
-
-		DefaultComboBoxModel model = new DefaultComboBoxModel();
-		model.addElement(RB.getString("gui.NBFindPanelControls.currentContig"));
-		model.addElement(RB.getString("gui.NBFindPanelControls.allContigs"));
-
-		findInCombo.setModel(model);
-		findInCombo.setSelectedIndex(Prefs.guiFindPanelSelectedIndex);
-
 		findCombo.setPrototypeDisplayValue(25);
 
-		bFind.setText("");
-		bFind.setIcon(Icons.getIcon("FIND"));
-
-		bFind.addActionListener(panel);
-
-		if(!SystemUtils.isMacOS())
-			bFind.setBorder(BorderFactory.createEmptyBorder(0, 11, 0, 11));
-
-		// Setup the table with the desired properties
-		table.getTableHeader().setReorderingAllowed(false);
-		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		table.getSelectionModel().addListSelectionListener(panel);
+		findInCheckBox.setSelected(Prefs.guiFindPanelSearchCurrentContig);
+		findInCheckBox.addActionListener(panel);
 
 		RB.setText(checkUseRegex, "gui.NBFindPanelControls.checkUseRegex");
 		checkUseRegex.setSelected(Prefs.guiRegexSearching);
@@ -59,38 +46,52 @@ public class FindPanelNB extends javax.swing.JPanel
 		checkIgnorePads.setSelected(Prefs.guiSearchIgnorePads);
 		checkIgnorePads.addActionListener(panel);
 
-		// Setup a keyboard listener on  the findCombo combo box. This was to allow
-		// the user to hit return from the combo box to run the search.
-		findCombo.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
-		public void keyPressed(KeyEvent e)
-		{
-			if(e.getKeyCode() == KeyEvent.VK_ENTER)
-				panel.runSearch();
-		}});
+		bFind.setText("");
+		bFind.setIcon(Icons.getIcon("FIND"));
+		bFind.addActionListener(panel);
+		if(!SystemUtils.isMacOS())
+			bFind.setBorder(BorderFactory.createEmptyBorder(0, 11, 0, 11));
 
 		helpLabel.setIcon(Icons.getIcon("WEB"));
 		helpLabel.addActionListener(panel);
 
-		searchTypeCombo.addActionListener(panel);
+		// Setup the table with the desired properties
+		table.getTableHeader().setReorderingAllowed(false);
+		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.getSelectionModel().addListSelectionListener(panel);
+
+		// Setup a keyboard listener on  the findCombo combo box. This was to allow
+		// the user to hit return from the combo box to run the search.
+		findCombo.getEditor().getEditorComponent().addKeyListener(new KeyAdapter() {
+			public void keyPressed(KeyEvent e) {
+				if(e.getKeyCode() == KeyEvent.VK_ENTER)
+					panel.runSearch();
+			}
+		});
     }
 
-	/**
-	 * Toggle which components are enabled to ensure that the correct components
-	 * are enabled / disabled at any given time. 
-	 */
-	public void toggleComponentEnabled(boolean enabled)
+	// Toggle which components are enabled to ensure that the correct components
+	// are enabled / disabled at any given time.
+	void toggleComponentEnabled(boolean enabled)
 	{
 		label.setEnabled(enabled);
 		bFind.setEnabled(enabled);
 		findCombo.setEnabled(enabled);
-		findInCombo.setEnabled(enabled);
 		searchTypeCombo.setEnabled(enabled);
 		resultsLabel.setEnabled(enabled);
 		table.setEnabled(enabled);
-		if(searchTypeCombo.getSelectedItem().equals(RB.getString("gui.NBFindPanelControls.findLabel2")) || searchTypeCombo.getSelectedItem().equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))
+		findInCheckBox.setEnabled(enabled);
+		helpLabel.setEnabled(enabled);
+
+		if(searchTypeCombo.getSelectedIndex() != Finder.READ_NAME)
 			checkUseRegex.setEnabled(false);
 		else
 			checkUseRegex.setEnabled(enabled);
+
+		if (searchTypeCombo.getSelectedIndex() == Finder.READ_NAME)
+			checkIgnorePads.setEnabled(false);
+		else
+			checkIgnorePads.setEnabled(enabled);
 	}
 
     /** This method is called from within the constructor to
@@ -103,7 +104,6 @@ public class FindPanelNB extends javax.swing.JPanel
     private void initComponents() {
 
         findCombo = new scri.commons.gui.matisse.HistoryComboBox();
-        findInCombo = new javax.swing.JComboBox();
         resultsLabel = new javax.swing.JLabel();
         bFind = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -117,6 +117,7 @@ public class FindPanelNB extends javax.swing.JPanel
         searchTypeCombo = new javax.swing.JComboBox();
         label = new javax.swing.JLabel();
         checkIgnorePads = new javax.swing.JCheckBox();
+        findInCheckBox = new javax.swing.JCheckBox();
 
         resultsLabel.setText("Results:");
 
@@ -141,52 +142,46 @@ public class FindPanelNB extends javax.swing.JPanel
 
         checkIgnorePads.setText("Ignore pads when searching");
 
+        findInCheckBox.setText("Search in current contig only");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(findInCheckBox)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(label)
-                        .addContainerGap(140, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                        .addComponent(helpLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(checkUseRegex, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(checkUseRegex, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(findCombo, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bFind, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(findInCombo, 0, 167, Short.MAX_VALUE)
-                            .addComponent(searchTypeCombo, 0, 167, Short.MAX_VALUE))
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(checkIgnorePads)
-                        .addContainerGap(16, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(findCombo, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(helpLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(65, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(resultsLabel)
-                        .addContainerGap(138, Short.MAX_VALUE))))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
+                        .addComponent(bFind, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(searchTypeCombo, 0, 167, Short.MAX_VALUE)
+                    .addComponent(checkIgnorePads)
+                    .addComponent(resultsLabel))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(label)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(label)
+                    .addComponent(helpLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(findCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bFind))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(searchTypeCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(findInCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addComponent(findInCheckBox)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(checkUseRegex)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -195,11 +190,10 @@ public class FindPanelNB extends javax.swing.JPanel
                 .addComponent(resultsLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(helpLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(20, 20, 20))
         );
 
-        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {bFind, findCombo, findInCombo});
+        layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {bFind, findCombo});
 
     }// </editor-fold>//GEN-END:initComponents
 
@@ -209,7 +203,7 @@ public class FindPanelNB extends javax.swing.JPanel
     javax.swing.JCheckBox checkIgnorePads;
     javax.swing.JCheckBox checkUseRegex;
     public scri.commons.gui.matisse.HistoryComboBox findCombo;
-    public javax.swing.JComboBox findInCombo;
+    javax.swing.JCheckBox findInCheckBox;
     scri.commons.gui.matisse.HyperLinkLabel helpLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel label;

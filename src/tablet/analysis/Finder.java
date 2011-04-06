@@ -10,6 +10,7 @@ import javax.swing.*;
 import scri.commons.gui.*;
 
 import tablet.data.*;
+import tablet.data.cache.ReadSQLCache;
 import tablet.gui.*;
 import tablet.gui.viewer.*;
 
@@ -19,242 +20,237 @@ import tablet.gui.viewer.*;
  */
 public class Finder extends SimpleJob
 {
-	public static final int CURRENT_CONTIG = 0;
-	public static final int ALL_CONTIGS = 1;
-	protected int found;
-	protected ArrayList<SearchResult> results;
-	protected AssemblyPanel aPanel;
-	protected String searchTerm;
-	protected boolean searchReads;
-	protected String searchType;
-	int totalSize = 0;
+	public static final int READ_NAME = 0;
+	public static final int READ_SEQUENCE = 1;
+	public static final int CON_SEQUENCE = 2;
 
-	public Finder(AssemblyPanel aPanel)
+	protected AssemblyPanel aPanel;
+	
+	protected String searchTerm;
+	protected Pattern pattern;
+	protected ArrayList<SearchResult> results;
+	protected long maximumLong;
+	protected long progressLong;
+	
+	protected boolean searchAllContigs;
+	protected boolean useRegex;
+	protected int searchType;
+
+	public Finder(AssemblyPanel aPanel, String searchTerm, boolean searchAllContigs, int searchType)
 	{
 		this.aPanel = aPanel;
-	}
+		this.searchTerm = searchTerm;
+		this.searchAllContigs = searchAllContigs;
+		this.searchType = searchType;
 
-	/**
-	 * Searches for the desired read, or subsequence. Returns a LinkedList of
-	 * SearchResult objects.
-	 *
-	 * @param str	The string to be searched for.
-	 * @param selectedIndex	The type of search to run.
-	 */
-	protected void search(String str)
-	{
-		found = 0;
-		progress = 0;
+		useRegex = Prefs.guiRegexSearching;
+
 		results = new ArrayList<SearchResult>();
-
-		// Calculate the maximum value for the progress bar.
-		calculateMaximum(Prefs.guiFindPanelSelectedIndex);
-
-		boolean searchInConsensus = searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus"));
-		boolean searchAllContigs = Prefs.guiFindPanelSelectedIndex == ALL_CONTIGS;
-
-		//Loop over contigs checking for matches
-		for(Contig contig : aPanel.getAssembly())
-		{
-			// If we are to search in all contigs, or the current contig is the one to be searched in
-			boolean searchContig = (searchAllContigs || (Prefs.guiFindPanelSelectedIndex == CURRENT_CONTIG && contig == aPanel.getContig()));
-
-			// If do search is false we don't need to check anything else; just move on to the next contig.
-			if (!searchContig)
-				continue;
-			
-			if (!searchInConsensus && okToRun)
-				searchReadsInContig(contig, str);
-
-			else if (searchInConsensus && okToRun)
-				searchReferenceSequence(contig, str.toUpperCase());
-
-			if (results.size() >= Prefs.guiSearchLimit)
-				break;
-		}
 	}
 
-	/**
-	 * Calculate the maximum value for the progress bar, based on the type of
-	 * search being carried out.
-	 *
-	 * @param searchScope
-	 */
-	protected void calculateMaximum(int searchScope)
-	{
-		totalSize = 0;
-		
-		if(searchScope == CURRENT_CONTIG && !searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))
-			totalSize = aPanel.getContig().getReads().size();
-
-		else if(searchScope == CURRENT_CONTIG && searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))
-			totalSize = aPanel.getContig().getConsensus().length();
-
-		else if(searchScope == ALL_CONTIGS && !searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))
-		{
-			//Work out the total number of reads across all contigs
-			for(Contig contig : aPanel.getAssembly())
-				totalSize += contig.getReads().size();
-		}
-
-		else if(searchScope == ALL_CONTIGS && searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))
-		{
-			for(Contig contig : aPanel.getAssembly())
-				totalSize += contig.getConsensus().length();
-		}
-	}
-
-	/**
-	 * Search over all the reads in the given contig using the search string
-	 * provided.
-	 *
-	 * @param contig	The contig to search in.
-	 * @param searchString	The string to find.
-	 */
-	private void searchReadsInContig(Contig contig, String searchString)
-	{
-		int readNo = 0;
-		while((readNo < contig.getReads().size()) && okToRun)
-		{
-			Read read = contig.getReads().get(readNo);
-			ReadMetaData rmd = Assembly.getReadMetaData(read, false);
-			ReadNameData rnd = Assembly.getReadNameData(read);
-
-			if (searchReads)
-				checkForReadMatches(rnd.getName(), read.getStartPosition(), rmd.length(), searchString, contig);
-			else
-				checkForSubsequenceMatches(rnd.getName(), read.getStartPosition(), rmd.length(), searchString.toUpperCase(), contig, rmd.toString());
-
-			progress++;
-			//if we've had 500 matches stop searching
-			if (results.size() >= Prefs.guiSearchLimit)
-				break;
-
-			readNo++;
-		}
-	}
-
-	/**
-	 * Checks to see if the given read name matches the searchString we are
-	 * looking for.
-	 *
-	 * @param readName	The read name to compare against.
-	 * @param startPos	The starting position of the read.
-	 * @param length	The length of the read.
-	 * @param searchString	The string we are comparing the read names against.
-	 * @param contig	The contig this read is a part of.
-	 */
-	protected void checkForReadMatches(String readName, int startPos, int length, String searchString, Contig contig)
-	{
-		Pattern p = Pattern.compile(searchString);
-		Matcher m = p.matcher(readName);
-
-		if ((Prefs.guiRegexSearching && m.matches()) ||
-			(!Prefs.guiRegexSearching && readName.equals(searchString)))
-		{
-			results.add(new ReadSearchResult(readName, startPos, length, contig));
-			found++;
-		}
-	}
-
-	/**
-	 * Checks to see if the subsequence we are looking for can be found anywhere
-	 * within the read string.
-	 *
-	 * @param readName	The read name.
-	 * @param startPos	The starting position of the read.
-	 * @param length	The length of the read.
-	 * @param searchString	The string we are comparing the read strings.
-	 * @param contig	The contig this read is a part of.
-	 * @param readString	The read string to compare against.
-	 */
-	protected void checkForSubsequenceMatches(String readName, int startPos, int length, String searchString, Contig contig, String readString)
-	{
-		ArrayList<Match> matches = searchSequence(readString, searchString);
-
-		for (Match match : matches)
-			results.add(new SubsequenceSearchResult(readName, startPos, length, contig, startPos+match.getStart(), startPos+match.getEnd()));
-	}
-
-	protected void searchReferenceSequence(Contig contig, String searchString)
-	{
-		ArrayList<Match> matches = searchSequence(contig.getConsensus().toString(), searchString);
-
-		for (Match match : matches)
-			results.add(new SearchResult(match.getStart(), match.getEnd() - match.getStart() + 1, contig));
-	}
-
-	/**
-	 * Does the string matching for subsequence and consensus / reference
-	 * subsequence searches.
-	 */
-	private ArrayList<Match> searchSequence(String sequence, String searchString)
-	{
-		ArrayList<Match> matches = new ArrayList<Match>();
-
-		int matchIndex, matchStart, matchEnd;
-		matchIndex = matchStart = matchEnd = 0;
-
-		for (int i = 0; i < sequence.length(); i++)
-		{
-			if (sequence.charAt(i) == searchString.charAt(matchIndex))
-			{
-				// Denotes the start of a potential match
-				if (matchIndex == 0)
-					matchStart = i;
-
-				matchIndex++;
-			}
-			// Skip pad characters
-			else if (Prefs.guiSearchIgnorePads && (sequence.charAt(i) == '*' || sequence.charAt(i) == 'N'))
-				continue;
-			else
-				matchIndex = 0;
-
-			if (matchIndex == searchString.length())
-			{
-				// Adjust by one as matchEnd is not inclusive.
-				matchEnd = i;
-				matches.add(new Match(matchStart, matchEnd));
-				matchIndex = 0;
-
-				if (matches.size() >= Prefs.guiSearchLimit)
-					break;
-			}
-		}
-		return matches;
-	}
-
-	/**
-	 * Run job method so this can be run in a progress dialog.
-	 *
-	 * @param jobIndex
-	 * @throws Exception
-	 */
+	// Run job method so this can be run in a progress dialog.
 	public void runJob(int jobIndex) throws Exception
 	{
-		try { Pattern.compile(searchTerm); }
-			catch (PatternSyntaxException e)
-			{
-				TaskDialog.error(
-					RB.format("gui.FindPanel.regexError", e.getMessage()),
-					RB.getString("gui.text.close"));
-				return;
-			}
-
 		if(searchTerm.equals(""))
 			return;
+		
+		try
+		{
+			pattern = Pattern.compile(searchTerm);
+		}
+		catch (PatternSyntaxException e)
+		{
+			TaskDialog.error(
+				RB.format("gui.FindPanel.regexError", e.getMessage()),
+				RB.getString("gui.text.close"));
+			return;
+		}
 
-		search(searchTerm);
+		// Calculate the maximum value for the progress bar.
+		calculateMaximum();
+
+		search();
 
 		//if we've had 500 matches stop searching
 		if (results.size() >= Prefs.guiSearchLimit)
 			showWarning();
 	}
 
+	protected void search()
+	{
+		if (searchType == READ_NAME)
+			searchReadNames();
+
+		else
+		{
+			//Loop over contigs checking for matches
+			for (Contig contig: aPanel.getAssembly())
+			{
+				if (!okToRun())
+					break;
+				
+				// If not searching in all contigs, skip to the current contig
+				if (!searchAllContigs && contig != aPanel.getContig())
+					continue;
+
+				if (searchType == CON_SEQUENCE)
+					searchConsensus(contig);
+				else
+					searchReadSubsequences(contig);
+			}
+		}
+	}
+
+	protected void searchReadNames()
+	{
+		int readCount = 0;
+		// Count the total number of reads in the dataset
+		for (Contig contig : aPanel.getAssembly())
+			readCount += contig.getReads().size();
+
+		int rIndex = 0;
+		// Loop over every read name in the database
+		while (rIndex < readCount && okToRun())
+		{
+			ArrayList<ReadSQLCache.NameWrapper> names = Assembly.getReadNameFinder(rIndex, Prefs.guiSearchDBLimit);
+
+			int readID = rIndex;
+			for (ReadSQLCache.NameWrapper wrapper : names)
+			{
+				progressLong = readID;
+
+				if (!okToRun())
+					break;
+
+				// If the name matches the search term, find the read with this name
+				if (checkNameMatches(wrapper.name) == false)
+					continue;
+
+				Contig contig = aPanel.getAssembly().getContig(wrapper.contigId);
+				if (!searchAllContigs && contig != aPanel.getContig())
+					continue;
+
+				for (Read read : contig.getReads())
+				{
+					if (read.getID() == readID)
+					{
+						results.add(new ReadSearchResult(wrapper.name, read.getStartPosition(), read.length(), contig));
+						break;
+					}
+				}
+				readID++;
+			}
+
+			rIndex += Prefs.guiSearchDBLimit;
+		}
+	}
+
+	// Checks to see if the given read name matches the searchString
+	protected boolean checkNameMatches(String name)
+	{
+		Matcher m = pattern.matcher(name);
+
+		if ((useRegex && m.matches()) || (!useRegex && name.equals(searchTerm)))
+			return true;
+
+		return false;
+	}
+
+	protected void searchConsensus(Contig contig)
+	{		
+		Consensus con = contig.getConsensus();
+		searchSequence(con.toString(), 0, con.length(), contig, null);
+	}
+
+	protected void searchReadSubsequences(Contig contig)
+	{
+		for (Read read : contig.getReads())
+		{
+			if (!okToRun())
+				break;
+
+			ReadMetaData rmd = Assembly.getReadMetaData(read, true);
+
+			String name = Assembly.getReadName(read);
+			searchSequence(rmd.toString(), read.getStartPosition(), read.length(), contig, name);
+		}
+	}
+
+	// Does the string matching for subsequence and consensus / reference
+	protected void searchSequence(String seq, int sPos, int len, Contig contig, String name)
+	{
+		int matchIndex, matchS;
+		matchIndex = matchS = 0;
+
+		for (int i = 0; i < seq.length() && okToRun(); i++)
+		{
+			char seqChar = seq.charAt(i);
+			
+			if (seqChar == searchTerm.charAt(matchIndex))
+			{
+				// Denotes the start of a potential match
+				if (matchIndex == 0)
+					matchS = i;
+
+				matchIndex++;
+			}
+			
+			// Skip pad characters
+			else if (Prefs.guiSearchIgnorePads && (seqChar == '*' || seqChar == 'N'))
+				continue;
+
+			else
+			{
+				// Jump back to next potential match start character
+				if (matchIndex > 0 && matchS != seq.length()-1)
+					i = matchS;
+				matchIndex = 0;
+			}
+
+			// We have found a result
+			if (matchIndex == searchTerm.length())
+			{
+				if (searchType == CON_SEQUENCE)
+					results.add(new SearchResult(matchS, i - matchS + 1, contig));
+				else
+					results.add(new SubsequenceSearchResult(name, sPos, len, contig, sPos + matchS, sPos + i));
+
+				matchIndex = 0;
+				
+				if (matchS != seq.length()-1)
+					i = matchS;
+			}
+		}
+	}
+
+	// Calculate the maximum for the progress bar based on search type
+	protected void calculateMaximum()
+	{
+		maximumLong = 0;
+
+		// Read search in current contig
+		if(!searchAllContigs && searchType == READ_SEQUENCE)
+			maximumLong = aPanel.getContig().getReads().size();
+
+		// Read search across all contigs
+		else if(searchType == READ_NAME || (searchAllContigs && searchType == READ_SEQUENCE))
+			for(Contig contig : aPanel.getAssembly())
+				maximumLong += contig.getReads().size();
+
+		// Consensus search in current contig
+		else if(!searchAllContigs && searchType == CON_SEQUENCE)
+			maximumLong = aPanel.getContig().getConsensus().length();
+
+		// Consensus search across all contigs
+		else if(searchAllContigs  && searchType == CON_SEQUENCE)
+			for(Contig contig : aPanel.getAssembly())
+				maximumLong += contig.getConsensus().length();
+	}
+
 	public String getMessage()
 	{
-		return RB.getString("gui.NBFindPanelControls.progressMessage")+ " " + found;
+		return RB.getString("gui.NBFindPanelControls.progressMessage") + " " +
+			results.size();
 	}
 
 	private void showWarning()
@@ -272,65 +268,32 @@ public class Finder extends SimpleJob
 	}
 
 	public void setResults(ArrayList<SearchResult> results)
-		{ this.results = results;	}
+		{ this.results = results; }
 
 	public ArrayList<SearchResult> getResults()
 		{ return results; }
 
-	public void setSearchTerm(String searchTerm)
-		{ this.searchTerm = searchTerm; }
-
-	public void setSearchReads(String searchType)
+	public boolean okToRun()
 	{
-		if(searchType.equals(RB.getString("gui.NBFindPanelControls.findLabel1")))
-			searchReads = true;
-		else
-			searchReads = false;
+		return okToRun && results.size() < Prefs.guiSearchLimit;
 	}
 
-	public void setSearchType(String searchType)
-	{
-		this.searchType = searchType;
-	}
-
-	@Override
 	public int getMaximum()
 		{ return 5555; }
 
-	@Override
 	public boolean isIndeterminate()
-		{ return totalSize == 0; }
+		{ return maximumLong == 0; }
 
-	@Override
+	// Doing this with the 5555 trick because the maximum may be set to the total
+	// number of reads which may be beyond the limit of an int
 	public int getValue()
 	{
-		return Math.round(((progress)/ (float) totalSize) * 5555);
+		return Math.round(((progressLong)/ (float) maximumLong) * 5555);
 	}
 
-	/**
-	 * Class which stores information about the start and end points of a
-	 * subsequence search result (be it from a read or the consesnus / reference).
-	 */
-	private class Match
-	{
-		private int start;
-		private int end;
-
-		public Match(int start, int end)
-		{
-			this.start = start;
-			this.end = end;
-		}
-
-		public int getStart()
-			{ return start; }
-
-		public int getEnd()
-			{ return end; }
-	}
-
-
-	public class SearchResult
+	
+	// Used for storing consensus subsequence search results
+	public static class SearchResult
 	{
 		private int position;
 		private int length;
@@ -354,7 +317,8 @@ public class Finder extends SimpleJob
 	}
 
 
-	public class ReadSearchResult extends SearchResult
+	// Used for storing read name search results
+	public static class ReadSearchResult extends SearchResult
 	{
 		private String name;
 
@@ -369,7 +333,8 @@ public class Finder extends SimpleJob
 	}
 
 
-	public class SubsequenceSearchResult extends ReadSearchResult
+	// Used for sotring read subsequence search results
+	public static class SubsequenceSearchResult extends ReadSearchResult
 	{
 		private int sIndex;
 		private int eIndex;

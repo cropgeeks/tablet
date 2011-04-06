@@ -192,7 +192,7 @@ class SamFileReader extends TrackableReader
 				int uLength = rmd.calculateUnpaddedLength();
 				rnd.setUnpaddedLength(uLength);
 				rnd.setCigar(cigar);
-				nameCache.setReadNameData(rnd);
+				nameCache.setReadNameData(rnd, contigToAddTo);
 
 				read.setLength(rmd.length());
 
