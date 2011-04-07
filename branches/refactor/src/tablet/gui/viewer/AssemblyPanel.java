@@ -194,10 +194,7 @@ public class AssemblyPanel extends JPanel
 		bambamBar.setContig(contig);
 
 		if (contig != null)
-		{
 			overviewCanvas.setSubset(contig.getVisualStart(), contig.getVisualEnd());
-			winMain.getConsensusSubsequenceDialog().updateModel(contig);
-		}
 
 		forceRedraw();
 
