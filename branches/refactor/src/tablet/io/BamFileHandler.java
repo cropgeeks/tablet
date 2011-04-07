@@ -137,7 +137,6 @@ public class BamFileHandler
 			read = pr;
 			rnd.setInsertSize(Math.abs(record.getInferredInsertSize()));
 			rnd.setIsProperPair(record.getProperPairFlag());
-			rnd.setNumberInPair(record.getFirstOfPairFlag() ? 1 : 2);
 			rnd.setMateContig(record.getMateReferenceName());
 
 			rmd.setNumberInPair(record.getFirstOfPairFlag() ? 1 : 2);
