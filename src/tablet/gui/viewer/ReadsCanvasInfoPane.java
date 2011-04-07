@@ -154,9 +154,9 @@ class ReadsCanvasInfoPane
 		{
 			String num = "";
 
-			if (rnd.getNumberInPair() == 1)
+			if (rmd.getNumberInPair() == 1)
 				num = "(1/2)";
-			else if(rnd.getNumberInPair() == 2)
+			else if(rmd.getNumberInPair() == 2)
 				num = "(2/2)";
 
 			if (rnd.isProperPair())
@@ -181,10 +181,9 @@ class ReadsCanvasInfoPane
 
 	private BoxData getMissingMateData(Read read)
 	{
-		BoxData box = new BoxData();
+		box = new BoxData();
 
 		ReadNameData rnd = Assembly.getReadNameData(read);
-		ReadMetaData rmd = Assembly.getReadMetaData(read, false);
 
 		// Name
 		box.readName = rnd.getName() + " "

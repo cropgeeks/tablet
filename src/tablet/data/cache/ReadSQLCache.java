@@ -44,12 +44,12 @@ public class ReadSQLCache
 		s.execute("PRAGMA count_changes = false;");
 
 		// Create the database table
-		s.executeUpdate("CREATE TABLE reads (id INTEGER PRIMARY KEY, name TEXT, name_postfix TEXT, unpaddedlength INTEGER, cigar TEXT, matecontig TEXT, insertsize INTEGER, isproperpair INTEGER, numberinpair INTEGER, contig INTEGER);");
+		s.executeUpdate("CREATE TABLE reads (id INTEGER PRIMARY KEY, name TEXT, name_postfix TEXT, unpaddedlength INTEGER, cigar TEXT, matecontig TEXT, insertsize INTEGER, isproperpair INTEGER, contig INTEGER);");
 
 		s.close();
 
 		// Create the prepared statement for inserting into the database
-		ips = c.prepareStatement("INSERT INTO reads (id, name, name_postfix, unpaddedlength, cigar, matecontig, insertsize, isproperpair, numberinpair, contig) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+		ips = c.prepareStatement("INSERT INTO reads (id, name, name_postfix, unpaddedlength, cigar, matecontig, insertsize, isproperpair, contig) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
 		// Create prepared statements for reading from the database
 		for (int i = 0; i < 10; i++)
@@ -111,7 +111,7 @@ public class ReadSQLCache
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
-				rnd = new ReadNameData(rs.getString(2), rs.getString(3), rs.getInt(4), rs.getString(5), rs.getString(6), rs.getInt(7), rs.getBoolean(8), rs.getInt(9));
+				rnd = new ReadNameData(rs.getString(2), rs.getString(3), rs.getInt(4), rs.getString(5), rs.getString(6), rs.getInt(7), rs.getBoolean(8));
 
 			rs.close();
 
@@ -166,7 +166,7 @@ public class ReadSQLCache
 			names.trimToSize();
 			return names;
 		}
-		catch(Exception e) {};
+		catch(Exception e) {}
 
 		return null;
 	}
@@ -182,10 +182,9 @@ public class ReadSQLCache
 		ips.setString(6, readNameData.getMateContig());
 		ips.setInt(7, readNameData.getInsertSize());
 		ips.setBoolean(8, readNameData.isProperPair());
-		ips.setInt(9, readNameData.getNumberInPair());
 		// Error handling for AFG loading (with its initial cache that doesn't
 		// have contig references. The final cache will though.
-		ips.setInt(10, contig != null ? contig.getId() : -1);
+		ips.setInt(9, contig != null ? contig.getId() : -1);
 
 		ips.addBatch();
 

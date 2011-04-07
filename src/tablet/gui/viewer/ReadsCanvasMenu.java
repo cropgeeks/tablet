@@ -380,12 +380,10 @@ class ReadsCanvasMenu implements ActionListener
 		IReadManager manager = rCanvas.reads;
 		read = manager.getReadAt(rowIndex, colIndex);
 
-		ReadNameData rnd = null;
 		ReadMetaData rmd = null;
 
 		if (read != null )
 		{
-			rnd = Assembly.getReadNameData(read);
 			rmd = Assembly.getReadMetaData(read, false);
 
 			if (read instanceof MatedRead && rmd.getMateMapped())
