@@ -161,6 +161,8 @@ public class ReadSQLCache
 			while(rs.next())
 				names.add(new NameWrapper(rs.getString(1)+rs.getString(2), rs.getInt(3)));
 
+			rs.close();
+
 			names.trimToSize();
 			return names;
 		}
