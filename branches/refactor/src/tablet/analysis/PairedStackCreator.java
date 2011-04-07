@@ -23,13 +23,15 @@ public class PairedStackCreator extends SimpleJob
 
 	public void runJob(int jobIndex) throws Exception
 	{
-		long s = System.currentTimeMillis();
-
 		// Use the number of reads as a count of how much work will be done
 		maximum += contig.readCount();
 
 		for(Read read: contig.getReads())
 		{
+			// Check for quit/cancel on the job...
+			if (okToRun == false)
+				return;
+			
 			if(read instanceof MatedRead)
 			{
 				// Search for its pair and set up the link between them
@@ -53,8 +55,6 @@ public class PairedStackCreator extends SimpleJob
 		}
 
 		contig.setPairedStack(pairedStack);
-
-		long e = System.currentTimeMillis();
 	}
 
 	private void addToPairedStackRow(MatedRead matedRead)
@@ -64,10 +64,13 @@ public class PairedStackCreator extends SimpleJob
 		{
 			PairedStackRow pairedStackRow = new PairedStackRow();
 			pairedStackRow.addRead(matedRead);
+
 			// If it has a valid paired read
 			if (matedRead.getMatePos() > matedRead.getEndPosition())
 				pairedStackRow.addRead(matedRead.getMate());
+
 			pairedStack.addPairedStackRow(pairedStackRow);
+
 			// In the case where the paired reads overlap, assign the second
 			// read to a new paired stack in the view.
 			if (matedRead.getMatePos() < matedRead.getEndPosition())
@@ -79,6 +82,7 @@ public class PairedStackCreator extends SimpleJob
 		}
 	}
 
+	@Override
 	public String getMessage()
 	{
 		return RB.format("analysis.PackSetCreator.status", pairedStack.size());

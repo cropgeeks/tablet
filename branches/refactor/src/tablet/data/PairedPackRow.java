@@ -2,101 +2,80 @@ package tablet.data;
 
 import java.util.*;
 
-import tablet.gui.*;
-
 public class PairedPackRow extends PackRow
 {
+	@Override
 	protected LineData getLineData(int fromRead, int start, int end)
 	{
 		ReadMetaData[] rmds = new ReadMetaData[end-start+1];
 		int[] indexes = new int[end-start+1];
 
-		// Tracking index within the data array
-		int dataI = 0;
-		// Tracking index on the start->end scale
-		int index = start;
+		// Pre-fill the array; means we only have to fill in read data or link lines
+		Arrays.fill(indexes, -1);
 
-		Read read = null;
-		ReadMetaData rmd = null;
+		// Without this step you can run into situations where loop knows
+		// nothing about the read to the left of the window, potentially
+		// breaking link line drawing
+		Read prev = fromRead > 0 ? reads.get(fromRead-1) : null;
 
 		ListIterator<Read> itor = reads.listIterator(fromRead);
 
 		while (itor.hasNext())
 		{
-			read = itor.next();
-			rmd = Assembly.getReadMetaData(read, true);
+			Read read = itor.next();
 
-			if (read.getStartPosition() > end)
-				break;
-
-			int readS = read.getStartPosition();
-			int readE = read.getEndPosition();
-
-			// Decide what to put in the bases before each read
-			if (read instanceof MatedRead && linesBeforeRead(read, readS, rmd))
-				for (; index < readS; index++, dataI++)
-					indexes[dataI] = -2;
-			else
-				for (; index < readS; index++, dataI++)
-					indexes[dataI] = -1;
-
-
-			// Fill in the data for this read
-			for (; index <= end && index <= readE; index++, dataI++)
+			if (read instanceof MatedRead)
 			{
-				rmds[dataI] = rmd;
-				indexes[dataI] = index-readS;
+				Read mate = ((MatedRead)read).getMate();
+				// if the previous read equals the current read's mate draw a link line
+				if (prev != null && prev == mate)
+					getLineDataForPairLink(read, prev, indexes, start, end);
 			}
+
+			// Fills in the arrays with the correct data for the read
+			getLineDataForRead(read, rmds, indexes, start, end);
+
+			prev = read;
 		}
-
-		// If no more reads are within the window, fill in any blanks between
-		// the final read and the end of the array
-		if (read instanceof MatedRead && linesAfterRead(read, end, rmd))
-			for (; index <= end; index++, dataI++)
-				indexes[dataI] = -2;
-		else
-			for (; index <= end; index++, dataI++)
-				indexes[dataI] = -1;
-
 
 		return new LineData(indexes, rmds);
 	}
 
-	protected boolean linesBeforeRead(Read read, int readS, ReadMetaData rmd)
+	// If a read is off screen do nothing, otherwise jump to where it begins and
+	// fill the array up to where it ends (or hits the edge of the window)
+	private void getLineDataForRead(Read read, ReadMetaData[] rmds, int[] indexes, int start, int end)
 	{
-		if (!Prefs.visPaired || !Prefs.visPairLines)
-			return false;
+		int readS = read.getStartPosition();
+		int readE = read.getEndPosition();
+		int index = start;
 
-		MatedRead matedRead = (MatedRead)read;
-		MatedRead mate = matedRead.getMate();
+		// No point doing anything for reads which aren't on screen
+		if (readE < start || readS > end)
+			return;
 
-		// if the mate starts before the current read, is mapped and in this contig
-		boolean needsLine = matedRead.getMatePos() < readS &&
-				matedRead.isMateContig() && rmd.getMateMapped();
-		// if the mate is on the same row of the display (the mates don't overlap)
-		boolean onDifferentRows = mate != null
-				&& mate.getEndPosition() >= matedRead.getStartPosition();
+		// Skip empty bases before the read actually starts
+		if (readS >= start && readS <= end)
+			index = readS;
 
-		return needsLine && !onDifferentRows;
+		ReadMetaData rmd = Assembly.getReadMetaData(read, true);
+
+		for (; index <= end && index <= readE; index++)
+		{
+			rmds[index - start] = rmd;
+			indexes[index - start] = index-readS;
+		}
 	}
 
-	protected boolean linesAfterRead(Read read, int end, ReadMetaData rmd)
+	private void getLineDataForPairLink(Read read, Read prev, int[] indexes, int start, int end)
 	{
-		if (!Prefs.visPaired || !Prefs.visPairLines)
-			return false;
+		int prevE = prev.getEndPosition()+1;
+		int readS = read.getStartPosition();
 
-		MatedRead matedRead = (MatedRead)read;
-		MatedRead mate = matedRead.getMate();
-		int startPos = matedRead.getStartPosition();
+		if (prevE < start)
+			prevE = start;
 
-		// if the mate is before the read and the read is offscreen, in this contig
-		// and mapped
-		boolean needsLine = matedRead.getMatePos() < startPos && startPos > end
-				&& matedRead.isMateContig() && rmd.getMateMapped();
-		// determine that the reads are in this pack
-		boolean samePack = reads.contains(matedRead) && reads.contains(mate);
-
-		return needsLine && samePack && mate != null;
+		for (; prevE <= end && prevE <= readS; prevE++)
+			indexes[prevE - start] = -2;
 	}
 
 	Read[] getPairForLinkPosition(int colIndex)
