@@ -52,7 +52,6 @@ public class FindPanelNB extends javax.swing.JPanel
 		if(!SystemUtils.isMacOS())
 			bFind.setBorder(BorderFactory.createEmptyBorder(0, 11, 0, 11));
 
-		helpLabel.setIcon(Icons.getIcon("WEB"));
 		helpLabel.addActionListener(panel);
 
 		// Setup the table with the desired properties
@@ -81,7 +80,6 @@ public class FindPanelNB extends javax.swing.JPanel
 		resultsLabel.setEnabled(enabled);
 		table.setEnabled(enabled);
 		findInCheckBox.setEnabled(enabled);
-		helpLabel.setEnabled(enabled);
 
 		if(searchTypeCombo.getSelectedIndex() != Finder.READ_NAME)
 			checkUseRegex.setEnabled(false);
@@ -148,7 +146,6 @@ public class FindPanelNB extends javax.swing.JPanel
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -166,6 +163,7 @@ public class FindPanelNB extends javax.swing.JPanel
                     .addComponent(checkIgnorePads)
                     .addComponent(resultsLabel))
                 .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 187, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -189,8 +187,7 @@ public class FindPanelNB extends javax.swing.JPanel
                 .addGap(13, 13, 13)
                 .addComponent(resultsLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE)
-                .addGap(20, 20, 20))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {bFind, findCombo});
