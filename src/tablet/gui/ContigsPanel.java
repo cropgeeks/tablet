@@ -26,6 +26,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 	private FeaturesPanel featuresPanel;
 	private ContigsPanelNB controls;
 	private FindPanel findPanel;
+	private ReadsPanel readsPanel;
 	private JTabbedPane ctrlTabs;
 
 	private ContigsTableModel model;
@@ -49,9 +50,10 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		{ this.featuresPanel = featuresPanel; }
 
 	void setFindPanel(FindPanel findPanel)
-	{
-		this.findPanel = findPanel;
-	}
+		{ this.findPanel = findPanel; }
+
+	void setReadsPanel(ReadsPanel readsPanel)
+		{ this.readsPanel = readsPanel; }
 
 	String getTitle(int count)
 	{
@@ -78,7 +80,8 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 			controls.table.setModel(new DefaultTableModel());
 			controls.table.setRowSorter(null);
 			featuresPanel.toggleComponentEnabled(false);
-
+			findPanel.toggleComponentEnabled(false);
+			readsPanel.toggleComponentEnabled(false);
 		}
 		else
 		{
@@ -88,6 +91,8 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 			controls.table.setModel(model);
 			controls.table.setRowSorter(sorter);
 			featuresPanel.toggleComponentEnabled(true);
+			findPanel.toggleComponentEnabled(true);
+			readsPanel.toggleComponentEnabled(true);
 		}
 
 
@@ -185,7 +190,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 
 			Actions.openedContigSelected();
 
-			if(contig.getFeatures().size() == 0)
+			if(contig.getFeatures().isEmpty())
 			{
 				Actions.navigateNextFeature.setEnabled(false);
 				Actions.navigatePrevFeature.setEnabled(false);
@@ -206,7 +211,6 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		aPanel.setContig(null);
 		featuresPanel.setContig(null);
 		winMain.getReadsPanel().setContig(null);
-		findPanel.toggleComponentEnabled(true);
 
 		winMain.setAssemblyPanelVisible(false);
 	}
@@ -359,12 +363,14 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 
 	private class TableMouseListener extends MouseInputAdapter
 	{
+		@Override
 		public void mousePressed(MouseEvent e)
 		{
 			if (e.isPopupTrigger())
 				displayMenu(e);
 		}
 
+		@Override
 		public void mouseReleased(MouseEvent e)
 		{
 			if (e.isPopupTrigger())

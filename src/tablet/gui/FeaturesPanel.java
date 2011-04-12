@@ -11,7 +11,6 @@ import javax.swing.table.*;
 
 import tablet.data.*;
 import tablet.data.auxiliary.*;
-import tablet.gui.*;
 import tablet.gui.dialog.*;
 import tablet.gui.viewer.*;
 
@@ -62,7 +61,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 
 		// If a contig (in the main contig table) was de-selected or there are
 		// no features to actually show, disable the tab
-		if (contig == null || contig.getFeatures().size() == 0)
+		if (contig == null || contig.getFeatures().isEmpty())
 		{
 			controls.featuresLabel.setText(getTitle(0));
 
@@ -154,7 +153,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		ctrlTabs.setSelectedComponent(this);
 	}
 
-	public void toggleComponentEnabled(boolean enabled)
+	void toggleComponentEnabled(boolean enabled)
 	{
 		controls.toggleComponentEnabled(enabled);
 	}

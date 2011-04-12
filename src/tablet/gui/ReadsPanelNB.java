@@ -25,18 +25,22 @@ public class ReadsPanelNB extends javax.swing.JPanel
 		table.getSelectionModel().addListSelectionListener(panel);
 		exportLinkLabel.addActionListener(panel);
 		exportLinkLabel.setEnabled(false);
+
+		readsLabel.setText(RB.format("gui.ReadsPanel.readsLabel", 0));
     }
 
 	private JTable createTable()
 	{
 		return new JTable()
 		{
+			@Override
 			public TableCellRenderer getCellRenderer(int row, int col)
 			{
 				TableCellRenderer tcr = ReadsTableModel.getCellRenderer(col);
 				return (tcr != null) ? tcr : super.getCellRenderer(row, col);
 			}
 
+			@Override
 			public String getToolTipText(MouseEvent e)
 			{
 				return panel.getTableToolTip(e);
@@ -44,25 +48,24 @@ public class ReadsPanelNB extends javax.swing.JPanel
 		};
 	}
 
-	public void setLabelStates(boolean visible)
+	public void setLabelStates(boolean cigar, boolean isPaired)
 	{
-		labelPanel.setVisible(visible);
-		cigarLabel.setVisible(visible);
-		cLabel.setVisible(visible);
-	}
+		// Set visible if we have cigar strings for reads
+		labelPanel.setVisible(cigar);
+		cigarLabel.setVisible(cigar);
+		cLabel.setVisible(cigar);
 
-	public void setPairLabelStates(boolean visible)
-	{
-		properlyPairedLabel.setVisible(visible);
-		pairLabel.setVisible(visible);
-		numberInPairLabel.setVisible(visible);
-		noInPairLabel.setVisible(visible);
-		insertSizeLabel.setVisible(visible);
-		iSizeLabel.setVisible(visible);
-		matePosLabel.setVisible(visible);
-		mPosLabel.setVisible(visible);
-		mateContigLabel.setVisible(visible);
-		mContigLabel.setVisible(visible);
+		// Set visible if we have paired data
+		properlyPairedLabel.setVisible(isPaired);
+		pairLabel.setVisible(isPaired);
+		numberInPairLabel.setVisible(isPaired);
+		noInPairLabel.setVisible(isPaired);
+		insertSizeLabel.setVisible(isPaired);
+		iSizeLabel.setVisible(isPaired);
+		matePosLabel.setVisible(isPaired);
+		mPosLabel.setVisible(isPaired);
+		mateContigLabel.setVisible(isPaired);
+		mContigLabel.setVisible(isPaired);
 	}
 
 	void setReadInfoToDefaults()
@@ -73,6 +76,26 @@ public class ReadsPanelNB extends javax.swing.JPanel
 		insertSizeLabel.setText("");
 		matePosLabel.setText("");
 		mateContigLabel.setText("");
+	}
+
+	void toggleComponentEnabled(boolean enabled)
+	{
+		cLabel.setEnabled(enabled);
+		cigarLabel.setEnabled(enabled);
+		exportLinkLabel.setEnabled(enabled);
+		iSizeLabel.setEnabled(enabled);
+		insertSizeLabel.setEnabled(enabled);
+		labelPanel.setEnabled(enabled);
+		mContigLabel.setEnabled(enabled);
+		mPosLabel.setEnabled(enabled);
+		mateContigLabel.setEnabled(enabled);
+		matePosLabel.setEnabled(enabled);
+		noInPairLabel.setEnabled(enabled);
+		numberInPairLabel.setEnabled(enabled);
+		pairLabel.setEnabled(enabled);
+		properlyPairedLabel.setEnabled(enabled);
+		readsLabel.setEnabled(enabled);
+		table.setEnabled(enabled);
 	}
 
     /** This method is called from within the constructor to

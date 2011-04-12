@@ -3,9 +3,7 @@
 
 package tablet.gui;
 
-import java.awt.Component;
 import java.util.*;
-import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 
@@ -13,10 +11,9 @@ import scri.commons.gui.*;
 
 import tablet.data.*;
 
-public class ReadsTableModel extends AbstractTableModel
+class ReadsTableModel extends AbstractTableModel
 {
 	private List<Read> reads;
-
 	private String[] columnNames;
 
 	ReadsTableModel(List<Read> reads)
@@ -30,32 +27,16 @@ public class ReadsTableModel extends AbstractTableModel
 		columnNames = new String[] { col1, col2, col3 };
 	}
 
+	@Override
 	public String getColumnName(int col)
-	{
-	    return columnNames[col];
-	}
+		{ return columnNames[col]; }
 
 	public int getColumnCount()
 		{ return columnNames.length; }
 
 	public int getRowCount()
 	{
-		if(reads != null)
-			return reads.size();
-		else
-			return 0;
-	}
-
-	public Class getColumnClass(int col)
-	{
-		if (col == 0)
-			return String.class;
-		else if (col == 1 || col == 2)
-			return Integer.class;
-		else if (col == 3)
-			return Read.class;
-		else
-			return null;
+		return reads != null ? reads.size() : 0;
 	}
 
 	public Object getValueAt(int row, int col)
@@ -66,11 +47,30 @@ public class ReadsTableModel extends AbstractTableModel
 			case 0:	return Assembly.getReadName(read);
 			case 1: return read.getStartPosition() + 1;
 			case 2: return read.length();
-			case 3: return read;
 		}
 		return null;
 	}
 
+	Read getRead(int row)
+		{ return reads.get(row); }
+
+	void clear()
+	{
+		reads.clear();
+		fireTableChanged(new TableModelEvent(this));
+	}
+
+	@Override
+	public Class getColumnClass(int col)
+	{
+		if (col == 0)
+			return String.class;
+		else if (col == 1 || col == 2)
+			return Integer.class;
+		else
+			return null;
+	}
+	
 	static TableCellRenderer getCellRenderer(int col)
 	{
 		switch (col)
@@ -82,15 +82,7 @@ public class ReadsTableModel extends AbstractTableModel
 		}
 	}
 
+	@Override
 	public boolean isCellEditable(int rowIndex, int mColIndex)
-	{
-		return false;
-	}
-
-	public void clear()
-	{
-		reads.clear();
-
-		fireTableChanged(new TableModelEvent(this));
-	}
+		{ return false; }
 }
