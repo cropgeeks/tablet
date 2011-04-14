@@ -57,10 +57,12 @@ public class AssemblyFileHandler extends SimpleJob
 			File cache = new File(cacheDir, "Tablet-" + cacheid + ".reads");
 			File index = new File(cacheDir, "Tablet-" + cacheid + ".readsndx");
 			readCache = new ReadFileCache(cache, index);
-			sqlCache = new ReadSQLCache(new File(cacheDir, "Tablet-" + cacheid + ".db"));
 		}
 		else
 			readCache = new ReadMemCache();
+
+		sqlCache = new ReadSQLCache(new File(cacheDir, "Tablet-" + cacheid + ".sqlite"));
+		Consensus.prepareCache(new File(cacheDir, "Tablet-" + cacheid + ".refs"));
 
 		readCache.openForWriting();
 		sqlCache.openForWriting();
