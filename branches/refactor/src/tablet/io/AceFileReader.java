@@ -144,14 +144,12 @@ public class AceFileReader extends TrackableReader
 		contigHash.put(name, contig);
 
 		// Reference sequence (immediately follows CO line)
-		StringBuilder ref = new StringBuilder(baseCount);
-		while ((str = readLine()) != null && str.length() > 0)
-			ref.append(str);
-
 		consensus = new Consensus();
-		consensus.setData(ref);
-		consensus.calculateUnpaddedLength();
-		contig.setConsensusSequence(consensus);
+		while ((str = readLine()) != null && str.length() > 0)
+			consensus.appendSequence(str);
+
+		consensus.closeSequence();
+		contig.setConsensus(consensus);
 
 		ucCache = new boolean[readCount];
 
@@ -173,9 +171,8 @@ public class AceFileReader extends TrackableReader
 		while ((str = readLine()) != null && str.length() > 0);
 //			bqStr.append(" " + str);
 
-		if (true)
-			return;
 
+/*
 		String[] tokens = p.split(bqStr.toString().trim());
 		byte[] bq = new byte[consensus.length()];
 
@@ -205,6 +202,7 @@ public class AceFileReader extends TrackableReader
 		}
 
 		consensus.setBaseQualities(bq);
+*/
 	}
 
 	private void processReadLocation()
@@ -309,7 +307,7 @@ public class AceFileReader extends TrackableReader
 		int uLength = rmd.calculateUnpaddedLength();
 		rnd.setUnpaddedLength(uLength);
 		nameCache.setReadNameData(rnd, contig);
-		
+
 		read.setLength(rmd.length());
 
 		// Do base-position comparison...

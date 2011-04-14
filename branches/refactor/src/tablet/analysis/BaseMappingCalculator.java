@@ -93,6 +93,8 @@ public class BaseMappingCalculator extends BackgroundTask
 		int length = c.length();
 		boolean hasPad = false;
 
+		Sequence cSeq = c.getSequence();
+
 		ArrayList<Integer> padToUnpad = new ArrayList<Integer>();
 		ArrayList<Integer> unpadToPad = new ArrayList<Integer>();
 
@@ -100,7 +102,7 @@ public class BaseMappingCalculator extends BackgroundTask
 		for (int baseCount =0; baseCount < length && okToRun; baseCount++)
 		{
 			// If the base isn't a pad
-			if (c.getStateAt(baseCount) != Sequence.P)
+			if (cSeq.getStateAt(baseCount) != Sequence.P)
 			{
 				// If the previous base(s) was a pad
 				if(hasPad)

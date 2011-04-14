@@ -20,6 +20,7 @@ public class ProteinTranslator extends BackgroundTask
 	public String[] codes;
 
 	private Sequence sequence;
+	private int length;
 	private static String STOP = ".";
 
 	private int index;
@@ -46,19 +47,19 @@ public class ProteinTranslator extends BackgroundTask
 	 * specified Direction and reading frame.
 	 */
 	public ProteinTranslator(
-		int index, Sequence sequence, Direction direction, int readingFrame)
+		int index, Sequence sequence, int length, Direction direction, int readingFrame)
 	{
 		this();
 
 		this.index = index;
 		this.sequence = sequence;
+		this.length = length;
 		this.direction = direction;
 		this.readingFrame = readingFrame - 1;
 	}
 
 	void enableUnitTest()
 	{
-		int length = sequence.length();
 		translation = new StringBuilder(length);
 	}
 
@@ -77,8 +78,6 @@ public class ProteinTranslator extends BackgroundTask
 
 		try
 		{
-			int length = sequence.length();
-
 			protein = new short[length];
 
 			if (direction == Direction.FORWARD)
@@ -107,7 +106,6 @@ public class ProteinTranslator extends BackgroundTask
 		dna = new int[3];
 		int s = 0;
 
-		int length = sequence.length();
 		int startAt = 0;
 
 		// Find the first "real" base (skips translating NNNNN etc at start)
@@ -158,7 +156,6 @@ public class ProteinTranslator extends BackgroundTask
 		dna = new int[3];
 		int s = 0;
 
-		int length = sequence.length();
 		int startAt = length - 1;
 
 		// Find the first "real" base (skips translating NNNNN etc at start)

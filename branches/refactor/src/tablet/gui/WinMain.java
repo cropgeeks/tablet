@@ -354,6 +354,8 @@ public class WinMain extends JRibbonFrame
 		catch (IOException e) {
 			cacheInvalid(e);
 		}
+
+		test.delete();
 	}
 
 	private void cacheInvalid(IOException e)

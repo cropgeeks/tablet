@@ -46,12 +46,13 @@ public class CoveragePrinter extends SimpleJob
 			int[] coverage = cc.getCoverage();
 			int s = -contig.getVisualStart();
 			int e = contig.getConsensus().length() -1 -contig.getVisualStart();
-			Consensus consensus = contig.getConsensus();
+
+			Sequence cSeq = contig.getConsensus().getSequence();
 
 			int c = 0;
 			for (int i = s; i <= e && okToRun; i++, c++)
 			{
-				if (Prefs.printPads || consensus.getStateAt(i-s) != Sequence.P)
+				if (Prefs.printPads || cSeq.getStateAt(i-s) != Sequence.P)
 				{
 					out.write(" " + coverage[i]);
 					if (c == 49)

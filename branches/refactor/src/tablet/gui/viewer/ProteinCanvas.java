@@ -157,7 +157,7 @@ class ProteinCanvas extends TrackingCanvas implements ITaskListener
 				if (enabled[tIndex])
 				{
 					ProteinTranslator pt = new ProteinTranslator(
-						tIndex, consensus, direction, j);
+						tIndex, consensus.getSequence(), consensus.length(), direction, j);
 
 					pt.addTaskListener(this);
 					TaskManager.submit(name, pt);

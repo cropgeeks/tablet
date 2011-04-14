@@ -4,10 +4,10 @@
 package tablet.data;
 
 /**
- * Sequence is an abstract base class for objects that need to store DNA
+ * Sequence is the base class for objects that need to store DNA
  * sequence information in an efficient mannor.
  */
-public abstract class Sequence
+public class Sequence
 {
 	// Defines what the pad character will be (can be changed if need be)
 	public static String PAD = "*";
@@ -62,6 +62,14 @@ public abstract class Sequence
 		return new String[] { "?", PAD, "N", "A", "C", "G", "T" };
 	}
 
+	public Sequence()
+	{
+	}
+
+	public Sequence(String sequence)
+	{
+		setData(new StringBuilder(sequence));
+	}
 
 	// Stores the actual DNA states, using one byte for every two states
 	private byte[] data;
@@ -235,5 +243,8 @@ public abstract class Sequence
 		}
 	}
 
-	public abstract int length();
+	public int length()
+	{
+		throw new UnsupportedOperationException();
+	}
 }

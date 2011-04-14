@@ -117,10 +117,10 @@ public class Contig
 		{ return consensus; }
 
 	/**
-	 * Sets the consensus sequence object for this contig.
+	 * Sets the consensus object for this contig.
 	 * @param consensus the consensus to be set
 	 */
-	public void setConsensusSequence(Consensus consensus)
+	public void setConsensus(Consensus consensus)
 	{
 		this.consensus = consensus;
 
