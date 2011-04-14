@@ -16,7 +16,6 @@ public class Contig
 	private int id;
 	private String name;
 	private Consensus consensus;
-	private boolean complemented;
 
 	private ArrayList<Read> reads = new ArrayList<Read>();
 
@@ -51,7 +50,7 @@ public class Contig
 	// held in a single FeatureTrack object)
 	private FeatureTrack features = new FeatureTrack();
 	// Supplementary set of features used purely for graphical outlining
-	private ArrayList<Feature> outlines = new ArrayList<Feature>();
+	private ArrayList<Feature> outlines;
 
 
 
@@ -84,7 +83,7 @@ public class Contig
 	public Contig(String name, boolean complemented, int readCount)
 	{
 		this.name = name;
-		this.complemented = complemented;
+//		this.complemented = complemented;
 
 		reads = new ArrayList<Read>(readCount);
 	}
@@ -153,7 +152,12 @@ public class Contig
 	 * @return the supplementary (outliner) features held within this contig
 	 */
 	public ArrayList<Feature> getOutlines()
-		{ return outlines; }
+	{
+		if (outlines == null)
+			outlines = new ArrayList<Feature>();
+
+		return outlines;
+	}
 
 	public void calculateOffsets(Assembly assembly)
 	{
