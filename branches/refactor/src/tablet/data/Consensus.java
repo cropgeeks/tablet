@@ -17,7 +17,7 @@ public class Consensus //extends Sequence
 	private int cacheID = -1;
 
 	// Base quality information, one byte per nucleotide base
-	private byte[] bq;
+//	private byte[] bq;
 
 	private int unpaddedLength;
 	private int length;
@@ -52,14 +52,14 @@ public class Consensus //extends Sequence
 	 * with -1 for bases with no score).
 	 */
 	public void setBaseQualities(byte[] bq)
-		{ this.bq = bq; }
+		{ /*this.bq = bq;*/ }
 
 	/**
 	 * Returns true if this consensus sequence contains quality scores for its
 	 * bases.
 	 */
 	public boolean hasBaseQualities()
-		{ return bq != null; }
+		{ return false; /*return bq != null;*/ }
 
 	/**
 	 * Returns an array of base quality data, starting at start and ending at
@@ -73,7 +73,7 @@ public class Consensus //extends Sequence
 	{
 		byte[] data = new byte[end-start+1];
 
-		int i = 0, d = 0;
+/*		int i = 0, d = 0;
 		int length = bq.length;
 
 		// Pre sequence data
@@ -87,7 +87,7 @@ public class Consensus //extends Sequence
 		// Post sequence data
 		for (i = i; i <= end; i++, d++)
 			data[d] = -1;
-
+*/
 		return data;
 	}
 
@@ -128,8 +128,6 @@ public class Consensus //extends Sequence
 	@Override
 	public String toString()
 	{
-		getSequence();
-
 		StringBuilder sb = new StringBuilder(length);
 
 		for (int i = 0; i < length; i++)

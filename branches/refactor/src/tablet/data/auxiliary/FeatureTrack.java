@@ -15,7 +15,7 @@ public class FeatureTrack implements Comparator<Feature>
 	private String name;
 
 	// A "track" might be a container for sub tracks...
-	private ArrayList<FeatureTrack> tracks = new ArrayList<FeatureTrack>();
+//	private ArrayList<FeatureTrack> tracks = new ArrayList<FeatureTrack>();
 
 	// ... or just a standard track with some features on it
 	private ArrayList<Feature> features = new ArrayList<Feature>();
@@ -28,8 +28,8 @@ public class FeatureTrack implements Comparator<Feature>
 	public FeatureTrack(String name)
 		{ this.name = name; }
 
-	public int getSubTrackCount()
-		{ return tracks.size(); }
+//	public int getSubTrackCount()
+//		{ return tracks.size(); }
 
 	/**
 	 * Adds a new feature to this track without performing checks to ensure it
@@ -56,7 +56,7 @@ public class FeatureTrack implements Comparator<Feature>
 			features.add((-result)-1, feature);
 			return true;
 		}
-		
+
 		// Replace any existing cigar features because their references become
 		// invalid after a data reload.
 		else if (feature.gffType.equals("CIGAR-I"))
