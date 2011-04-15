@@ -23,6 +23,8 @@ public class BasePositionComparator
 		int mismatches = 0;
 		int count = 0;
 
+		Sequence cSeq = contig.getConsensus().getSequence();
+
 		for (int r = 0; r < rLength; r++, c++)
 		{
 			byte value = read.getStateAt(r);
@@ -39,7 +41,7 @@ public class BasePositionComparator
 				// The DNATable encodes its states so that A and dA are
 				// only ever 1 byte apart, meaning we can change quickly
 				// by just incrementing the value by one
-				if (contig.getConsensus().getStateAt(c) != value)
+				if (cSeq.getStateAt(c) != value)
 				{
 					read.setStateAt(r, (byte)(value+1));
 					mismatches++;

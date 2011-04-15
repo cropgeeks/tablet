@@ -164,7 +164,6 @@ class SamFileReader extends TrackableReader
 					read = pr;
 					rnd.setInsertSize(iSize);
 					rnd.setIsProperPair((flags & 0x0002) != 0);
-					rnd.setNumberInPair((flags & 0x0040) != 0 ? 1 : 2);
 
 					if(mrnm.equals("="))
 						mrnm = chr;
@@ -192,7 +191,7 @@ class SamFileReader extends TrackableReader
 				int uLength = rmd.calculateUnpaddedLength();
 				rnd.setUnpaddedLength(uLength);
 				rnd.setCigar(cigar);
-				nameCache.setReadNameData(rnd);
+				nameCache.setReadNameData(rnd, contigToAddTo);
 
 				read.setLength(rmd.length());
 

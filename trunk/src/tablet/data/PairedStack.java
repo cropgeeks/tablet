@@ -11,17 +11,13 @@ import java.util.*;
  */
 public class PairedStack implements IReadManager
 {
-	private ArrayList<ReadPair> stack = new ArrayList<ReadPair>();
+	private ArrayList<PairedStackRow> stack = new ArrayList<PairedStackRow>();
 
-	/**
-	 * Get the values for the current screen of data so rendering can be carried
-	 * out.
-	 */
-	public byte[] getValues(int line, int start, int end, int scheme)
+	public LineData getLineData(int line, int start, int end)
 	{
-		ReadPair readPair = stack.get(line);
+		PairedStackRow pairedStackRow = stack.get(line);
 
-		return readPair.getValues(start, end, scheme);
+		return pairedStackRow.getLineData(start, end);
 	}
 
 	public int size()
@@ -34,9 +30,9 @@ public class PairedStack implements IReadManager
 		if (line < 0 || line >= stack.size())
 			return null;
 
-		ReadPair readPair = stack.get(line);
+		PairedStackRow pairedStackRow = stack.get(line);
 
-		return readPair.getReadAt(nucleotidePosition);
+		return pairedStackRow.getReadAt(nucleotidePosition);
 	}
 
 	/**
@@ -44,12 +40,12 @@ public class PairedStack implements IReadManager
 	 */
 	public int getLineForRead(Read read)
 	{
-		for(ReadPair readPair : stack)
+		for(PairedStackRow pairedStackRow : stack)
 		{
-			Read found = readPair.getReadAt(read.getStartPosition());
+			Read found = pairedStackRow.getReadAt(read.getStartPosition());
 
 			if(found != null && found.getID() == read.getID())
-				return stack.indexOf(readPair);
+				return stack.indexOf(pairedStackRow);
 		}
 		return -1;
 	}
@@ -59,31 +55,35 @@ public class PairedStack implements IReadManager
 		return null;
 	}
 
-	public void addPairedStack(ReadPair pairedStack)
+	public void addPairedStackRow(PairedStackRow pairedStackRow)
 	{
-		stack.add(pairedStack);
-	}
-
-	/**
-	 * Return the pair of reads that can be found at the given line (and near
-	 * the given column) in the display.
-	 */
-	public Read[] getPairAtLine(int lineIndex, int colIndex)
-	{
-		if (lineIndex < 0 || lineIndex >= stack.size())
-			return null;
-
-		return stack.get(lineIndex).getPair(colIndex);
+		stack.add(pairedStackRow);
 	}
 
 	public ArrayList<Read> getLine(int line)
 	{
 		ArrayList<Read> reads = new ArrayList<Read>();
-		for(Read read : stack.get(line).getPair())
+		for(Read read : stack.get(line).getBothReads())
 		{
 			if(read != null)
 				reads.add(read);
 		}
 		return reads;
+	}
+
+	public Read[] getPairForLink(int rowIndex, int colIndex)
+	{
+		if (rowIndex >= 0 && rowIndex < stack.size())
+		{
+			// Get the pair of reads for this line
+			Read[] pair = stack.get(rowIndex).getBothReads();
+
+			// But only return them if it really is a pair (ie TWO reads), and
+			// the point asked for is between them (on the link)
+			if (pair[1] != null && colIndex > pair[0].getEndPosition() && colIndex < pair[1].getStartPosition())
+				return pair;
+		}
+
+		return null;
 	}
 }

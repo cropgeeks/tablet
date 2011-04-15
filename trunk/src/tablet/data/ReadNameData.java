@@ -6,7 +6,7 @@ package tablet.data;
 public class ReadNameData
 {
 	private String name, namePostfix, cigar, mateContig;
-	private int unpaddedLength, insertSize, numberInPair;
+	private int unpaddedLength, insertSize;
 	private boolean isProperPair;
 
 	public ReadNameData()
@@ -19,7 +19,7 @@ public class ReadNameData
 			fullName.endsWith("/1") || fullName.endsWith("/2"))
 		{
 			namePostfix = fullName.substring(fullName.length()-2);
-			name = fullName.substring(0, fullName.length()-3);
+			name = fullName.substring(0, fullName.length()-2);
 		}
 		else
 		{
@@ -28,7 +28,7 @@ public class ReadNameData
 		}
 	}
 
-	public ReadNameData(String name, String namePostfix, int unpaddedLength, String cigar, String mateContig, int insertSize, boolean isProperPair, int numberInPair)
+	public ReadNameData(String name, String namePostfix, int unpaddedLength, String cigar, String mateContig, int insertSize, boolean isProperPair)
 	{
 		this.name = name;
 		this.namePostfix = namePostfix;
@@ -37,7 +37,6 @@ public class ReadNameData
 		this.mateContig = mateContig;
 		this.insertSize = insertSize;
 		this.isProperPair = isProperPair;
-		this.numberInPair = numberInPair;
 	}
 
 	public String getNamePrefix()
@@ -88,13 +87,4 @@ public class ReadNameData
 	{
 		this.isProperPair = isProperPair;
 	}
-
-	public int getNumberInPair()
-		{ return numberInPair; }
-
-	public void setNumberInPair(int numberInPair)
-	{
-		this.numberInPair = numberInPair;
-	}
-
 }

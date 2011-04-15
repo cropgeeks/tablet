@@ -17,14 +17,12 @@ public class SequenceTest extends TestCase
 	{
 		for (int i = 1; i <= 10; i++)
 		{
-			Consensus c = new Consensus();
-
 			StringBuilder sb = new StringBuilder(i);
 			for (int s = 0; s < i; s++)
 				sb.append(rndNucleotide());
 
 			System.out.println(sb);
-			c.setData(sb);
+			Consensus c = new Consensus(sb.toString());
 
 			String str2 = c.toString();
 			System.out.println(str2);
@@ -34,22 +32,21 @@ public class SequenceTest extends TestCase
 	}
 
 	public void testSettingChanges()
+		throws Exception
 	{
 		System.out.println();
-
-		Consensus c = new Consensus();
 
 		StringBuilder sb = new StringBuilder(10);
 		for (int s = 0; s < 10; s++)
 			sb.append(rndNucleotide());
 
 		System.out.println(sb);
-		c.setData(sb);
+		Consensus c = new Consensus(sb.toString());
 
 		for (int i = 0; i < c.length(); i++)
 		{
-			byte b = c.getStateAt(i);
-			c.setStateAt(i, b);
+			byte b = c.getSequence().getStateAt(i);
+			c.getSequence().setStateAt(i, b);
 		}
 
 		String str2 = c.toString();

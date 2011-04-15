@@ -137,7 +137,6 @@ public class BamFileHandler
 			read = pr;
 			rnd.setInsertSize(Math.abs(record.getInferredInsertSize()));
 			rnd.setIsProperPair(record.getProperPairFlag());
-			rnd.setNumberInPair(record.getFirstOfPairFlag() ? 1 : 2);
 			rnd.setMateContig(record.getMateReferenceName());
 
 			rmd.setNumberInPair(record.getFirstOfPairFlag() ? 1 : 2);
@@ -158,7 +157,7 @@ public class BamFileHandler
 		int uLength = rmd.calculateUnpaddedLength();
 		rnd.setUnpaddedLength(uLength);
 		rnd.setCigar(record.getCigar().toString());
-		nameCache.setReadNameData(rnd);
+		nameCache.setReadNameData(rnd, contig);
 		read.setLength(rmd.length());
 
 		contig.getReads().add(read);

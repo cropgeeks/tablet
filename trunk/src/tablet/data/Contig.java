@@ -13,9 +13,9 @@ import tablet.data.auxiliary.*;
  */
 public class Contig
 {
+	private int id;
 	private String name;
 	private Consensus consensus;
-	private boolean complemented;
 
 	private ArrayList<Read> reads = new ArrayList<Read>();
 
@@ -41,15 +41,16 @@ public class Contig
 
 	// Objects for handling the ordering of reads (for display)
 	private IReadManager readManager;
-	private PackSet packSet;
-	private StackSet stackSet;
-	private PairedStack pairedStackSet;
+	private Pack pack;
+	private PairedPack pairedPack;
+	private Stack stack;
+	private PairedStack pairedStack;
 
 	// Main set of features associated with this contig (basically every feature
 	// held in a single FeatureTrack object)
 	private FeatureTrack features = new FeatureTrack();
 	// Supplementary set of features used purely for graphical outlining
-	private ArrayList<Feature> outlines = new ArrayList<Feature>();
+	private ArrayList<Feature> outlines;
 
 
 
@@ -82,10 +83,16 @@ public class Contig
 	public Contig(String name, boolean complemented, int readCount)
 	{
 		this.name = name;
-		this.complemented = complemented;
+//		this.complemented = complemented;
 
 		reads = new ArrayList<Read>(readCount);
 	}
+
+	void setId(int id)
+		{ this.id = id; }
+
+	public int getId()
+		{ return id; }
 
 	/**
 	 * Returns the name of this contig.
@@ -109,10 +116,10 @@ public class Contig
 		{ return consensus; }
 
 	/**
-	 * Sets the consensus sequence object for this contig.
+	 * Sets the consensus object for this contig.
 	 * @param consensus the consensus to be set
 	 */
-	public void setConsensusSequence(Consensus consensus)
+	public void setConsensus(Consensus consensus)
 	{
 		this.consensus = consensus;
 
@@ -145,7 +152,12 @@ public class Contig
 	 * @return the supplementary (outliner) features held within this contig
 	 */
 	public ArrayList<Feature> getOutlines()
-		{ return outlines; }
+	{
+		if (outlines == null)
+			outlines = new ArrayList<Feature>();
+
+		return outlines;
+	}
 
 	public void calculateOffsets(Assembly assembly)
 	{
@@ -173,16 +185,24 @@ public class Contig
 		}
 	}
 
-	public void setPackSet(PackSet packSet)
+	public void setStack()
 	{
-		this.packSet = packSet;
-		stackSet = new StackSet(reads);
+		stack = new Stack(reads);
 	}
 
-	public void setPairedStackSet(PairedStack pairedStackSet)
+	public void setPack(Pack pack)
 	{
-		this.pairedStackSet = pairedStackSet;
-		stackSet = new StackSet(reads);
+		this.pack = pack;
+	}
+
+	public void setPairedPack(PairedPack pairedPack)
+	{
+		this.pairedPack = pairedPack;
+	}
+
+	public void setPairedStack(PairedStack pairedStack)
+	{
+		this.pairedStack = pairedStack;
 	}
 
 	/**
@@ -195,9 +215,10 @@ public class Contig
 	{
 		readManager = null;
 
-		packSet = null;
-		pairedStackSet = null;
-		stackSet = null;
+		pack = null;
+		pairedPack = null;
+		pairedStack = null;
+		stack = null;
 
 		if (doFullReset)
 		{
@@ -255,14 +276,17 @@ public class Contig
 	public int getVisualHeight()
 		{ return readManager.size(); }
 
-	public IReadManager getPackSetManager()
-		{ return (readManager = packSet); }
+	public IReadManager getPackManager()
+		{ return (readManager = pack); }
 
-	public IReadManager getPairedStackSetManager()
-		{ return (readManager = pairedStackSet); }
+	public IReadManager getPairedPackManager()
+		{ return (readManager = pairedPack); }
 
-	public IReadManager getStackSetManager()
-		{ return (readManager = stackSet); }
+	public IReadManager getPairedStackManager()
+		{ return (readManager = pairedStack); }
+
+	public IReadManager getStackManager()
+		{ return (readManager = stack); }
 
 	public IReadManager getReadManager()
 		{ return readManager; }
@@ -362,5 +386,4 @@ public class Contig
 				return null;
 		}
 	}
-
 }

@@ -10,14 +10,9 @@ import java.util.ArrayList;
  */
 public interface IReadManager
 {
-	/**
-	 * Returns a byte array containing sequence information (or -1 for no data)
-	 * for the given line between the points start and end.
-	 */
-	public byte[] getValues(int line, int start, int end, int scheme);
-
 	public int size();
 
+	/** Returns the read at the given position, or null if no read is there. */
 	public Read getReadAt(int line, int nucleotidePosition);
 
 	public int getLineForRead(Read read);
@@ -25,4 +20,17 @@ public interface IReadManager
 	public ArrayList<Read> getReadNames(int startIndex, int endIndex);
 
 	public ArrayList<Read> getLine(int line);
+
+	/**
+	 * Returns an array (one element per base) with each element containing a
+	 * reference to the ReadMetaData object at each base, for the given line
+	 * between the points start and end.
+	 */
+	public LineData getLineData(int line, int start, int end);
+
+	/**
+	 * Returns the pair of reads that form each end of the (possible) link line
+	 * at the given position. Returns null if no link line is at that position.
+	 */
+	public Read[] getPairForLink(int rowIndex, int colIndex);
 }

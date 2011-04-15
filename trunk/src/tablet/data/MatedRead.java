@@ -10,7 +10,7 @@ package tablet.data;
  */
 public class MatedRead extends Read
 {
-	private MatedRead pair = null;
+	private MatedRead mate = null;
 	private int matePos;
 	private boolean isMateContig;
 
@@ -19,11 +19,11 @@ public class MatedRead extends Read
 		super(id, position);
 	}
 
-	public MatedRead getPair()
-		{ return pair; }
+	public MatedRead getMate()
+		{ return mate; }
 
-	public void setPair(MatedRead pair)
-		{ this.pair = pair; }
+	public void setMate(MatedRead mate)
+		{ this.mate = mate; }
 
 	public int getMatePos()
 		{ return matePos; }
@@ -36,5 +36,4 @@ public class MatedRead extends Read
 
 	public void setIsMateContig(boolean isMateContig)
 		{ this.isMateContig = isMateContig; }
-
 }

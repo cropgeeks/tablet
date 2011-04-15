@@ -19,9 +19,7 @@ public class BaseMappingCalculatorTest extends TestCase
 	public void testCalculatingUnpaddedPositions()
 		throws Exception
 	{
-		Consensus c = new Consensus();
-		c.setData(new StringBuilder("*AC*T"));
-		c.calculateUnpaddedLength();
+		Consensus c = new Consensus("*AC*T");
 		IArrayIntCache paddedToUnpadded = new ArrayIntMemCache(5);
 		IArrayIntCache unpaddedToPadded = new ArrayIntMemCache(5);
 		BaseMappingCalculator bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -35,9 +33,7 @@ public class BaseMappingCalculatorTest extends TestCase
 			assertEquals(test1[i], mappingData.getPaddedToUnpadded(i));
 
 
-		c = new Consensus();
-		c.setData(new StringBuilder("**A**"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("**A**");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -51,9 +47,7 @@ public class BaseMappingCalculatorTest extends TestCase
 			assertEquals(test2[i], mappingData.getPaddedToUnpadded(i));
 
 
-		c = new Consensus();
-		c.setData(new StringBuilder("AC*TG"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("AC*TG");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -67,9 +61,7 @@ public class BaseMappingCalculatorTest extends TestCase
 			assertEquals(test3[i], mappingData.getPaddedToUnpadded(i));
 
 
-		c = new Consensus();
-		c.setData(new StringBuilder("ACT**"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("ACT**");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -82,9 +74,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		for (int i = 0; i < test4.length; i++)
 			assertEquals(test4[i], mappingData.getPaddedToUnpadded(i));
 
-		c = new Consensus();
-		c.setData(new StringBuilder("***ACGTA****CGTCA***"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("***ACGTA****CGTCA***");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -97,9 +87,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		for (int i = 0; i < test5.length; i++)
 			assertEquals(test5[i], mappingData.getPaddedToUnpadded(i));
 
-		c = new Consensus();
-		c.setData(new StringBuilder("*GTACGTAC*AGCGTCACA*"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("*GTACGTAC*AGCGTCACA*");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -112,9 +100,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		for (int i = 0; i < test6.length; i++)
 			assertEquals(test6[i], mappingData.getPaddedToUnpadded(i));
 
-		c = new Consensus();
-		c.setData(new StringBuilder("*G*A*G*A*C*G*G*C*C*T"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("*G*A*G*A*C*G*G*C*C*T");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -127,9 +113,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		for (int i = 0; i < test7.length; i++)
 			assertEquals(test7[i], mappingData.getPaddedToUnpadded(i));
 
-		c = new Consensus();
-		c.setData(new StringBuilder("TGGACGTAGCAGTGTCACGT"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("TGGACGTAGCAGTGTCACGT");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -142,9 +126,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		for (int i = 0; i < test8.length; i++)
 			assertEquals(test8[i], mappingData.getPaddedToUnpadded(i));
 
-		c = new Consensus();
-		c.setData(new StringBuilder("********************"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("********************");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -157,9 +139,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		for (int i = 0; i < test9.length; i++)
 			assertEquals(test9[i], mappingData.getPaddedToUnpadded(i));
 
-		c = new Consensus();
-		c.setData(new StringBuilder("AGCT**G*TA**CTA**TG"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("AGCT**G*TA**CTA**TG");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -178,9 +158,7 @@ public class BaseMappingCalculatorTest extends TestCase
 	public void testCalculatingPaddedPositions()
 		throws Exception
 	{
-		Consensus c = new Consensus();
-		c.setData(new StringBuilder("*AC*T"));
-		c.calculateUnpaddedLength();
+		Consensus c = new Consensus("*AC*T");
 		IArrayIntCache paddedToUnpadded = new ArrayIntMemCache(5);
 		IArrayIntCache unpaddedToPadded = new ArrayIntMemCache(5);
 		BaseMappingCalculator bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -199,9 +177,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		}
 
 
-		c = new Consensus();
-		c.setData(new StringBuilder("*****"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("*****");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -220,9 +196,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		}
 
 
-		c = new Consensus();
-		c.setData(new StringBuilder("AGTCA"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("AGTCA");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -241,9 +215,7 @@ public class BaseMappingCalculatorTest extends TestCase
 		}
 
 
-		c = new Consensus();
-		c.setData(new StringBuilder("A*TCA"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("A*TCA");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -261,9 +233,7 @@ public class BaseMappingCalculatorTest extends TestCase
 			assertEquals(test4[i], result);
 		}
 
-		c = new Consensus();
-		c.setData(new StringBuilder("***ACGTA****CGTCA***"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("***ACGTA****CGTCA***");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -281,9 +251,7 @@ public class BaseMappingCalculatorTest extends TestCase
 			assertEquals(test5[i], result);
 		}
 
-		c = new Consensus();
-		c.setData(new StringBuilder("*GTACGTAC*AGCGTCACA*"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("*GTACGTAC*AGCGTCACA*");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -301,9 +269,7 @@ public class BaseMappingCalculatorTest extends TestCase
 			assertEquals(test6[i], result);
 		}
 
-		c = new Consensus();
-		c.setData(new StringBuilder("*G*A*G*A*C*G*G*C*C*T"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("*G*A*G*A*C*G*G*C*C*T");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -321,9 +287,7 @@ public class BaseMappingCalculatorTest extends TestCase
 			assertEquals(test7[i], result);
 		}
 
-		c = new Consensus();
-		c.setData(new StringBuilder("TGGACGTAGCAGTGTCACGT"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("TGGACGTAGCAGTGTCACGT");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -341,9 +305,7 @@ public class BaseMappingCalculatorTest extends TestCase
 			assertEquals(test8[i], result);
 		}
 
-		c = new Consensus();
-		c.setData(new StringBuilder("********************"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("********************");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);
@@ -361,9 +323,7 @@ public class BaseMappingCalculatorTest extends TestCase
 			assertEquals(test9[i], result);
 		}
 
-		c = new Consensus();
-		c.setData(new StringBuilder("AGCT**G*TA**CTA**TG"));
-		c.calculateUnpaddedLength();
+		c = new Consensus("AGCT**G*TA**CTA**TG");
 		paddedToUnpadded = new ArrayIntMemCache(5);
 		unpaddedToPadded = new ArrayIntMemCache(5);
 		bm = new BaseMappingCalculator(c, paddedToUnpadded, unpaddedToPadded);

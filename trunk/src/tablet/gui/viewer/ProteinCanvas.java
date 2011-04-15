@@ -91,7 +91,7 @@ class ProteinCanvas extends TrackingCanvas implements ITaskListener
 		int xS = rCanvas.xS;
 		int xE = rCanvas.xE;
 
-		ColorScheme colors = rCanvas.proteins;
+		ProteinScheme colors = rCanvas.proteins;
 
 		for (int t = 0, count = 0; t < translations.size(); t++)
 		{
@@ -157,7 +157,7 @@ class ProteinCanvas extends TrackingCanvas implements ITaskListener
 				if (enabled[tIndex])
 				{
 					ProteinTranslator pt = new ProteinTranslator(
-						tIndex, consensus, direction, j);
+						tIndex, consensus.getSequence(), consensus.length(), direction, j);
 
 					pt.addTaskListener(this);
 					TaskManager.submit(name, pt);

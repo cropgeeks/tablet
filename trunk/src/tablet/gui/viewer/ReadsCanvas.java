@@ -25,8 +25,8 @@ public class ReadsCanvas extends JPanel
 	IReadManager reads;
 
 	// Color scheme in use
-	ColorScheme colors;
-	ColorScheme proteins;
+	ReadScheme colors;
+	ProteinScheme proteins;
 
 	// Width and height of the canvas
 	int canvasW, canvasH;
@@ -77,10 +77,12 @@ public class ReadsCanvas extends JPanel
 
 		// Set up some keyboard navigation
 		Action pageLeft = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) { aPanel.pageLeft(); }
+			public void actionPerformed(ActionEvent e)
+				{ aPanel.getController().pageLeft(); }
 		};
 		Action pageRight = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) { aPanel.pageRight(); }
+			public void actionPerformed(ActionEvent e)
+				{ aPanel.getController().pageRight(); }
 		};
 
 		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
@@ -110,14 +112,17 @@ public class ReadsCanvas extends JPanel
 
 		if (contig != null)
 		{
-			if (Prefs.visPacked)
-				reads = contig.getPackSetManager();
+			if (Prefs.visPacked && !Prefs.visPaired)
+				reads = contig.getPackManager();
+
+			else if(Prefs.visPacked && Prefs.visPaired)
+				reads = contig.getPairedPackManager();
 
 			else if(!Prefs.visPacked && Prefs.visPaired)
-				reads = contig.getPairedStackSetManager();
+				reads = contig.getPairedStackManager();
 
 			else
-				reads = contig.getStackSetManager();
+				reads = contig.getStackManager();
 
 			offset = contig.getVisualStart();
 		}
@@ -152,10 +157,8 @@ public class ReadsCanvas extends JPanel
 		canvasH = (ntOnCanvasY * ntH);
 
 		dimension = new Dimension(canvasW, canvasH);
-		aPanel.setScrollbarAdjustmentValues(ntW, ntH);
 
 		updateColorScheme();
-		updateBuffer = true;
 	}
 
 	// Compute real-time variables, that change as the viewpoint is moved across
@@ -192,13 +195,15 @@ public class ReadsCanvas extends JPanel
 		int xS = (pX1/ntW);
 		int yS = (pY1/ntH);
 
-		aPanel.updateOverview(xS, ntOnScreenX, yS, ntOnScreenY);
+		aPanel.canvasViewChanged(xS, ntOnScreenX, yS, ntOnScreenY);
 	}
 
 	void updateColorScheme()
 	{
-		colors = ColorScheme.getDNA(Prefs.visColorScheme, ntW, ntH);
-		proteins = ColorScheme.getProtein(Prefs.visColorScheme, ntW, ntH);
+		colors = ReadScheme.getScheme(Prefs.visColorScheme, ntW, ntH);
+		proteins = ProteinScheme.getScheme(Prefs.visColorScheme, ntW, ntH);
+
+		updateBuffer = true;
 	}
 
 	public void paintComponent(Graphics graphics)
@@ -236,7 +241,7 @@ public class ReadsCanvas extends JPanel
 		}
 
 		long e = System.nanoTime();
-		//System.out.println("Render time: " + ((e-s)/1000000f) + "ms");
+//		System.out.println("Render time: " + ((e-s)/1000000f) + "ms");
 	}
 
 	private void paintBuffer()
@@ -309,16 +314,28 @@ public class ReadsCanvas extends JPanel
 
 		public void run()
 		{
-			int scheme = Prefs.visColorScheme;
+			// Declared here rather below because it did seem to be ever so
+			// slightly faster (not having to allocate them on every iteration).
+			LineData data;
+			ReadMetaData[] rmds;
+			int[] indexes;
 
 			// For every [nth] row, where n = number of available CPU cores...
 			for (int row = yS, y = (ntH*yS); row <= yE; row += cores, y += ntH*cores)
 			{
-				byte[] data = reads.getValues(row, xS+offset, xE+offset, scheme);
+				// Ask the read manager to calculate the data for this row
+				data = reads.getLineData(row, xS+offset, xE+offset);
+				rmds = data.getReads();
+				indexes = data.getIndexes();
 
-				for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
-					if (data[i] != -1)
-						g.drawImage(colors.getImage(data[i]), x, y, null);
+				for (int i = 0, x = (ntW*xS); i < rmds.length; i++, x += ntW)
+				{
+					if (indexes[i] >= 0)
+						g.drawImage(colors.getImage(rmds[i], indexes[i]), x, y, null);
+
+					else if (indexes[i] == LineData.PAIRLINK)
+						g.drawImage(colors.getPairLink(), x, y, null);
+				}
 			}
 		}
 	}

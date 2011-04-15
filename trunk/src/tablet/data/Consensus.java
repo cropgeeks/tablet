@@ -3,11 +3,21 @@
 
 package tablet.data;
 
+import java.io.*;
+
+import static tablet.data.Sequence.*;
+import tablet.data.cache.*;
+
 /** The consensus sequence for a contig. */
-public class Consensus extends Sequence
+public class Consensus //extends Sequence
 {
+	private static ConsensusFileCache cache;
+
+	private Sequence consensus;
+	private int cacheID = -1;
+
 	// Base quality information, one byte per nucleotide base
-	private byte[] bq;
+//	private byte[] bq;
 
 	private int unpaddedLength;
 	private int length;
@@ -17,17 +27,17 @@ public class Consensus extends Sequence
 	{
 	}
 
-	/**
-	 * Calculates the unpadded length of this sequence.
-	 */
-	public void calculateUnpaddedLength()
+	/** To be used by UNIT TESTS ONLY to avoid disk caching **/
+	public Consensus(String str)
 	{
-		unpaddedLength = 0;
+		consensus = new Sequence(str);
 
-		for (int i = 0; i < length; i++)
-			if (getStateAt(i) != P)
-				unpaddedLength++;
+		length = str.length();
+		calculateUnpaddedLength();
 	}
+
+	public int length()
+		{ return length; }
 
 	/**
 	 * Returns the unpadded length of this consensus sequence.
@@ -42,14 +52,14 @@ public class Consensus extends Sequence
 	 * with -1 for bases with no score).
 	 */
 	public void setBaseQualities(byte[] bq)
-		{ this.bq = bq; }
+		{ /*this.bq = bq;*/ }
 
 	/**
 	 * Returns true if this consensus sequence contains quality scores for its
 	 * bases.
 	 */
 	public boolean hasBaseQualities()
-		{ return bq != null; }
+		{ return false; /*return bq != null;*/ }
 
 	/**
 	 * Returns an array of base quality data, starting at start and ending at
@@ -63,7 +73,7 @@ public class Consensus extends Sequence
 	{
 		byte[] data = new byte[end-start+1];
 
-		int i = 0, d = 0;
+/*		int i = 0, d = 0;
 		int length = bq.length;
 
 		// Pre sequence data
@@ -77,7 +87,7 @@ public class Consensus extends Sequence
 		// Post sequence data
 		for (i = i; i <= end; i++, d++)
 			data[d] = -1;
-
+*/
 		return data;
 	}
 
@@ -102,18 +112,13 @@ public class Consensus extends Sequence
 
 		// Sequence data
 		for (i = i; i <= end && i < length; i++, d++)
-			data[d] = getStateAt(i);
+			data[d] = consensus.getStateAt(i);
 
 		// Post sequence data
 		for (i = i; i <= end; i++, d++)
 			data[d] = -1;
 
 		return data;
-	}
-
-	public int length()
-	{
-		return length;
 	}
 
 	/**
@@ -127,17 +132,76 @@ public class Consensus extends Sequence
 
 		for (int i = 0; i < length; i++)
 		{
-			byte state = getStateAt(i);
-			sb.append(getDNA(state));
+			byte state = consensus.getStateAt(i);
+			sb.append(consensus.getDNA(state));
 		}
 
 		return sb.toString();
 	}
 
-	@Override
-	public void setData(StringBuilder sequence)
+	public void appendSequence(String string)
+		throws Exception
 	{
-		super.setData(sequence);
-		length = sequence.length();
+		if (cacheID == -1)
+			cacheID = cache.createNewEntry();
+
+		cache.appendSequence(string);
+	}
+
+	public void closeSequence()
+		throws Exception
+	{
+		length = cache.closeSequence();
+		calculateUnpaddedLength();
+	}
+
+	private void calculateUnpaddedLength()
+	{
+		getSequence();
+
+		// Store the sequence length (ignoring pads)
+		for (int i = 0; i < length; i++)
+			if (consensus.getStateAt(i) != P)
+				unpaddedLength++;
+	}
+
+	public Sequence getSequence()
+	{
+		if (consensus == null)
+		{
+			try
+			{
+				// cacheID will be -1 if there is NO reference data loaded (the
+				// Contig and Consensus classes still exist; they're just empty)
+				if (cacheID == -1)
+					return new Sequence();
+
+				// Otherwise, grab the consensus data from the cache
+				consensus = cache.getSequence(this, cacheID);
+			}
+			catch (Exception e)
+			{
+				// TODO: Critical error if this happens...
+				System.out.println("getSequence() CRITICAL");
+				e.printStackTrace();
+			}
+		}
+
+		return consensus;
+	}
+
+	/**
+	 * Used to "forget" (and hopefully garbage collect the sequence). Should
+	 * only be called by ConsensusCache.
+	 */
+	public void forgetSequence()
+	{
+		consensus = null;
+	}
+
+	public static void prepareCache(File cacheFile)
+		throws Exception
+	{
+		cache = new ConsensusFileCache(cacheFile);
 	}
 }
