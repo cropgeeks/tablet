@@ -4,6 +4,8 @@
 package tablet.gui;
 
 import java.util.*;
+import java.awt.*;
+import javax.swing.*;
 import javax.swing.table.*;
 
 import tablet.data.*;
@@ -17,13 +19,16 @@ import scri.commons.gui.*;
 class FeaturesTableModel extends AbstractTableModel
 {
 	private FeaturesPanel panel;
-	ArrayList<Feature> features;
+	private Contig contig;
+
+	private ArrayList<Feature> features;
 
 	private String[] columnNames;
 
 	FeaturesTableModel(FeaturesPanel panel, Contig contig)
 	{
 		this.panel = panel;
+		this.contig = contig;
 		features = contig.getFeatures();
 
 		String col1 = RB.getString("gui.FeaturesTableModel.col1");
@@ -65,10 +70,44 @@ class FeaturesTableModel extends AbstractTableModel
 			case 1: return feature.getName();
 			case 2: return feature.getDataPS()+1;  // +1 back into consensus space
 			case 3: return feature.getDataPE()+1;  // +1 back into consensus space
-
-			case 9: return feature;
 		}
 
 		return null;
+	}
+
+	Feature getFeature(int row)
+		{ return features.get(row); }
+
+	private Contig getContig()
+		{ return contig; }
+
+	static class FeaturesTableRenderer extends NumberFormatCellRenderer
+	{
+		public Component getTableCellRendererComponent(JTable table, Object value,
+			boolean isSel, boolean hasFocus, int row, int column)
+		{
+			super.getTableCellRendererComponent(table, value, isSel, hasFocus,
+				row, column);
+
+			Contig contig = ((FeaturesTableModel)table.getModel()).getContig();
+
+			setForeground(isSel ? Color.white : Color.black);
+			int pos = (Integer) value;
+
+			// Invalid if the value is lt or gt than the canvas
+			if (Prefs.guiFeaturesArePadded)
+			{
+				if (pos < contig.getDataStart() || pos > contig.getDataEnd())
+					setForeground(isSel ? TabletUtils.red2 : TabletUtils.red1);
+			}
+			// Invalid if the value is lt or gt than unpadded consensus length
+			else
+			{
+				if (pos < 0 || pos >= contig.getConsensus().getUnpaddedLength())
+					setForeground(isSel ? TabletUtils.red2 : TabletUtils.red1);
+			}
+
+			return this;
+		}
 	}
 }

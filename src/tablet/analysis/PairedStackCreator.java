@@ -12,76 +12,80 @@ import tablet.data.*;
  */
 public class PairedStackCreator extends SimpleJob
 {
-	private PairedStack stackSet;
+	private PairedStack pairedStack;
 	private Contig contig;
 	
 	public PairedStackCreator(Contig contig)
 	{
 		this.contig = contig;
-		stackSet = new PairedStack();
+		pairedStack = new PairedStack();
 	}
 
 	public void runJob(int jobIndex) throws Exception
 	{
-		long s = System.currentTimeMillis();
-
 		// Use the number of reads as a count of how much work will be done
 		maximum += contig.readCount();
 
 		for(Read read: contig.getReads())
 		{
+			// Check for quit/cancel on the job...
+			if (okToRun == false)
+				return;
+			
 			if(read instanceof MatedRead)
 			{
 				// Search for its pair and set up the link between them
 				MatedRead matedRead = (MatedRead) read;
 
-				if(matedRead.getPair() == null)
+				if(matedRead.getMate() == null)
 				{
-					ReadPair readPair = new ReadPair();
-					readPair.addRead(matedRead);
-					stackSet.addPairedStack(readPair);
+					PairedStackRow pairedStackRow = new PairedStackRow();
+					pairedStackRow.addRead(matedRead);
+					pairedStack.addPairedStackRow(pairedStackRow);
 				}
 				else
-					addPairToStack(matedRead);
+					addToPairedStackRow(matedRead);
 			}
 			else
 			{
-				ReadPair readPair = new ReadPair();
-				readPair.addRead(read);
-				stackSet.addPairedStack(readPair);
+				PairedStackRow pairedStackRow = new PairedStackRow();
+				pairedStackRow.addRead(read);
+				pairedStack.addPairedStackRow(pairedStackRow);
 			}
 		}
 
-		contig.setPairedStackSet(stackSet);
-
-		long e = System.currentTimeMillis();
+		contig.setPairedStack(pairedStack);
 	}
 
-	private void addPairToStack(MatedRead matedRead)
+	private void addToPairedStackRow(MatedRead matedRead)
 	{
 		// If this is the first in the pair
 		if (matedRead.getStartPosition() < matedRead.getMatePos())
 		{
-			ReadPair readPair = new ReadPair();
-			readPair.addRead(matedRead);
+			PairedStackRow pairedStackRow = new PairedStackRow();
+			pairedStackRow.addRead(matedRead);
+
 			// If it has a valid paired read
 			if (matedRead.getMatePos() > matedRead.getEndPosition())
-				readPair.addRead(matedRead.getPair());
-			stackSet.addPairedStack(readPair);
+				pairedStackRow.addRead(matedRead.getMate());
+
+			pairedStack.addPairedStackRow(pairedStackRow);
+
 			// In the case where the paired reads overlap, assign the second
 			// read to a new paired stack in the view.
 			if (matedRead.getMatePos() < matedRead.getEndPosition())
 			{
-				ReadPair stack = new ReadPair();
-				stack.addRead(matedRead.getPair());
-				stackSet.addPairedStack(stack);
+				PairedStackRow stack = new PairedStackRow();
+				stack.addRead(matedRead.getMate());
+				pairedStack.addPairedStackRow(stack);
 			}
 		}
 	}
 
+	@Override
 	public String getMessage()
 	{
-		return RB.format("analysis.PackSetCreator.status", stackSet.size());
+		return RB.format("analysis.PackSetCreator.status", pairedStack.size());
 	}
 
 }

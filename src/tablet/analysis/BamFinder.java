@@ -3,181 +3,89 @@
 
 package tablet.analysis;
 
-import java.util.*;
-
 import net.sf.samtools.*;
-import scri.commons.gui.RB;
 
 import tablet.data.*;
-import tablet.gui.Prefs;
 import tablet.gui.viewer.*;
-import tablet.io.CigarParser;
+import tablet.io.*;
 
 /**
  * Class for searching for reads in BAM files.
  */
 public class BamFinder extends Finder
 {
-	String prevContig = "";
-	long totalProgress;
+	private String prevContig = "";
+	private long totalProgress;
+	private SAMFileReader reader;
+	private CigarParser parser;
 
-	public BamFinder(AssemblyPanel aPanel)
+	public BamFinder(AssemblyPanel aPanel, String searchTerm, boolean searchAllContigs, int searchType) throws Exception
 	{
-		super(aPanel);
+		super(aPanel, searchTerm, searchAllContigs, searchType);
+
+		reader = aPanel.getAssembly().getBamBam().getBamFileHandler().getBamReader();
+		parser = new CigarParser();
 	}
 
-	/**
-	 * Search over either a BAM contig, or whole BAM file. Overrides the search
-	 * in Finder.
-	 *
-	 * @param searchTerm	The string being compared against.
-	 */
 	@Override
-	protected void search(String searchTerm)
+	protected void calculateMaximum()
 	{
-		found = 0;
-		progress = 0;
-		results = new ArrayList<SearchResult>();
+		if (!searchAllContigs)
+			maximumLong = aPanel.getContig().getTableData().readCount;
+//			maximumLong += reader.getFileHeader().getSequenceDictionary().getSequence(
+//				aPanel.getContig().getName()).getSequenceLength();
 
-		// Calculate the maximum value for the progress bar.
-		calculateMaximum(Prefs.guiFindPanelSelectedIndex);
-
-		//SAMFileReader for iterating over whole contig / whole data set
-		SAMFileReader reader = aPanel.getAssembly().getBamBam().getBamFileHandler().getBamReader();
-
-		if(Prefs.guiFindPanelSelectedIndex == CURRENT_CONTIG)
-			searchSingleContig(reader, searchTerm);
-
-		else if(Prefs.guiFindPanelSelectedIndex == ALL_CONTIGS)
-			searchAllContigs(reader, searchTerm);
+		else
+			for (Contig contig : aPanel.getAssembly())
+				maximumLong += contig.getTableData().readCount;
+//			for(SAMSequenceRecord record : reader.getFileHeader().getSequenceDictionary().getSequences())
+//				maximumLong += record.getSequenceLength();
 	}
 
-	/**
-	 * Search over all the contigs in the BAM file.
-	 *
-	 * @param reader	The SAMFileReader which gives access to the BAM file.
-	 * @param searchTerm	The term being compared against.
-	 */
-	private void searchAllContigs(SAMFileReader reader, String searchTerm)
+	@Override
+	protected void searchReadNames()
 	{
-		// HashMap to allow us to get Contig objects from Contig names
-		HashMap<String, Contig> contigs = new HashMap<String, Contig>();
-
-		// Iterate over contigs to get totalSize of all contigs for progress
-		// bar. Also to get references to contig objects for the hash.
 		for (Contig contig : aPanel.getAssembly())
 		{
-			totalSize += contig.getDataWidth();
-			contigs.put(contig.getName(), contig);
-		}
+			if (!okToRun())
+				break;
+			
+			// If not searching in all contigs, skip to the current contig
+			if (!searchAllContigs && contig != aPanel.getContig())
+				continue;
 
-		if(searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))
-		{
-			for(Contig contig : aPanel.getAssembly())
-			{
-				searchReferenceSequence(contig, searchTerm);
+			SAMRecordIterator itor = reader.queryOverlapping(contig.getName(), 0, 0);
 
-				if (results.size() >= Prefs.guiSearchLimit)
-					break;
-			}
-			return;
-		}
-
-		SAMRecordIterator itor = reader.iterator();
-		// For each read check for matches
-		CigarParser parser = new CigarParser();
-		while (itor.hasNext() && okToRun && results.size() < Prefs.guiSearchLimit)
-		{
-			SAMRecord record = itor.next();
-			checkRecordForMatches(record, searchTerm, parser, contigs.get(record.getReferenceName()));
-		}
-		// Need to close the iterator as only one is allowed
-		itor.close();
-	}
-
-	/**
-	 * Search for results in the current contig only.
-	 *
-	 * @param reader	The SAMFileReader which gives access to the BAM file.
-	 * @param searchTerm	The term being compared against.
-	 */
-	private void searchSingleContig(SAMFileReader reader, String searchTerm)
-	{
-		totalSize = aPanel.getContig().getDataWidth();
-		// Grab iterator for whole contig
-		SAMRecordIterator itor = reader.queryOverlapping(aPanel.getContig().getName(), 0, 0);
-
-		// Search the consensus for this one contig
-		if(searchType.equals(RB.getString("gui.NBFindPanelControls.findInConsensus")))
-		{
-			searchReferenceSequence(aPanel.getContig(), searchTerm);
-			itor.close();
-		}
-		// For each read check for matches
-		else
-		{
-			CigarParser parser = new CigarParser();
-			while (itor.hasNext() && okToRun && results.size() < Prefs.guiSearchLimit)
+			while (itor.hasNext() && okToRun())
 			{
 				SAMRecord record = itor.next();
-				checkRecordForMatches(record, searchTerm, parser, aPanel.getContig());
+				if (checkNameMatches(record.getReadName()))
+					results.add(new ReadSearchResult(record.getReadName(), record.getAlignmentStart() - 1, record.getReadLength(), contig));
+
+				progressLong++;
 			}
-			// Need to close the iterator as only one is allowed
 			itor.close();
 		}
 	}
 
-	/**
-	 * Carry out the steps to check if the provided record contains any matches
-	 * to our search term.
-	 *
-	 * @param record	The record being checked for matches.
-	 * @param searchTerm	The term we are checking against.
-	 * @param parser	The cigar parser (Required to get full BAM readString).
-	 * @param contig	The contig this read / record is contained in.
-	 */
-	private void checkRecordForMatches(SAMRecord record, String searchTerm, CigarParser parser, Contig contig)
+	@Override
+	protected void searchReadSubsequences(Contig contig)
 	{
-		if (searchReads)
+		SAMRecordIterator itor = reader.queryOverlapping(contig.getName(), 0, 0);
+
+		while (itor.hasNext() && okToRun())
 		{
-			checkForReadMatches(record.getReadName(), record.getAlignmentStart() - 1, record.getReadLength(), searchTerm, contig);
-		}
-		else
-		{
+			SAMRecord record = itor.next();
+
 			try
 			{
-				String fullRead = parser.parse(record.getReadString(), record.getAlignmentStart() - 1, record.getCigarString(), null);
-				checkForSubsequenceMatches(record.getReadName(), record.getAlignmentStart() - 1, record.getReadLength(), searchTerm, contig, fullRead);
+				String read = parser.parse(record.getReadString(), record.getAlignmentStart() - 1, record.getCigarString(), null);
+				searchSequence(read, record.getAlignmentStart() - 1, record.getReadLength(), contig, record.getReadName());
 			}
-			catch (Exception ex)
-			{
-			}
+			catch (Exception e) {}
+
+			progressLong++;
 		}
-		updateProgress(record);
-	}
-
-	/**
-	 * Update the progress bar.
-	 *
-	 * @param record
-	 */
-	private void updateProgress(SAMRecord record)
-	{
-		if (!prevContig.equals(record.getReferenceName()))
-		{
-			totalProgress += progress;
-			prevContig = record.getReferenceName();
-		}
-		progress = record.getUnclippedStart();
-	}
-
-	@Override
-	public boolean isIndeterminate()
-	{ return totalSize == 0; }
-
-	@Override
-	public int getValue()
-	{
-		return Math.round(((totalProgress + progress)/ (float) totalSize) * 5555);
+		itor.close();
 	}
 }

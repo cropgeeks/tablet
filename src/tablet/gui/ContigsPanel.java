@@ -24,8 +24,9 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 	private WinMain winMain;
 	private AssemblyPanel aPanel;
 	private FeaturesPanel featuresPanel;
-	private NBContigsPanelControls controls;
+	private ContigsPanelNB controls;
 	private FindPanel findPanel;
+	private ReadsPanel readsPanel;
 	private JTabbedPane ctrlTabs;
 
 	private ContigsTableModel model;
@@ -40,7 +41,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		this.ctrlTabs = ctrlTabs;
 
 		setLayout(new BorderLayout());
-		add(controls = new NBContigsPanelControls(this));
+		add(controls = new ContigsPanelNB(this));
 
 		controls.table.addMouseListener(new TableMouseListener());
 	}
@@ -49,9 +50,10 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		{ this.featuresPanel = featuresPanel; }
 
 	void setFindPanel(FindPanel findPanel)
-	{
-		this.findPanel = findPanel;
-	}
+		{ this.findPanel = findPanel; }
+
+	void setReadsPanel(ReadsPanel readsPanel)
+		{ this.readsPanel = readsPanel; }
 
 	String getTitle(int count)
 	{
@@ -78,7 +80,8 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 			controls.table.setModel(new DefaultTableModel());
 			controls.table.setRowSorter(null);
 			featuresPanel.toggleComponentEnabled(false);
-
+			findPanel.toggleComponentEnabled(false);
+			readsPanel.toggleComponentEnabled(false);
 		}
 		else
 		{
@@ -88,14 +91,16 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 			controls.table.setModel(model);
 			controls.table.setRowSorter(sorter);
 			featuresPanel.toggleComponentEnabled(true);
+			findPanel.toggleComponentEnabled(true);
+			readsPanel.toggleComponentEnabled(true);
 		}
 
-		
+
 
 		String title = RB.format("gui.ContigsPanel.title", controls.table.getRowCount());
 		controls.contigsLabel.setText(title);
 
-		int count = calculateTotalReadCount();
+		long count = calculateTotalReadCount();
 		String readCount = RB.format("gui.ContigsPanel.readCount", count);
 		controls.readCountLabel.setText(readCount);
 		if(controls.table.getRowCount() != 0)
@@ -112,9 +117,9 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		findPanel.setAssembly(assembly);
 	}
 
-	private int calculateTotalReadCount()
+	private long calculateTotalReadCount()
 	{
-		int readCount = 0;
+		long readCount = 0;
 		for (int row = 0; row < controls.table.getRowCount(); row++)
 		{
 			readCount += (Integer)controls.table.getValueAt(row, 2);
@@ -160,7 +165,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		for (row = 0; row < controls.table.getRowCount(); row++)
 		{
 			contig = (Contig) controls.table.getValueAt(row, 0);
-			
+
 			if (contig.getName().equals(contigName))
 				controls.table.setRowSelectionInterval(row, row);
 		}
@@ -169,7 +174,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 	public void moveToContigPosition(String contigName, Integer position)
 	{
 		setContigInTable(contigName);
-		
+
 		// If we can, move to the position within the contig and highlight it
 		if (position != null)
 			winMain.getAssemblyPanel().highlightColumn(position);
@@ -185,7 +190,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 
 			Actions.openedContigSelected();
 
-			if(contig.getFeatures().size() == 0)
+			if(contig.getFeatures().isEmpty())
 			{
 				Actions.navigateNextFeature.setEnabled(false);
 				Actions.navigatePrevFeature.setEnabled(false);
@@ -206,7 +211,6 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		aPanel.setContig(null);
 		featuresPanel.setContig(null);
 		winMain.getReadsPanel().setContig(null);
-		findPanel.toggleComponentEnabled(true);
 
 		winMain.setAssemblyPanelVisible(false);
 	}
@@ -359,12 +363,14 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 
 	private class TableMouseListener extends MouseInputAdapter
 	{
+		@Override
 		public void mousePressed(MouseEvent e)
 		{
 			if (e.isPopupTrigger())
 				displayMenu(e);
 		}
 
+		@Override
 		public void mouseReleased(MouseEvent e)
 		{
 			if (e.isPopupTrigger())

@@ -33,11 +33,13 @@ class ConsensusCanvasML extends MouseInputAdapter implements ActionListener
 		new ReadsCanvasDragHandler(aPanel, cCanvas);
 	}
 
+	@Override
 	public void mouseExited(MouseEvent e)
 	{
 		sCanvas.setMouseBase(null);
 	}
 
+	@Override
 	public void mouseMoved(MouseEvent e)
 	{
 		if (rCanvas.contig == null)
@@ -47,12 +49,14 @@ class ConsensusCanvasML extends MouseInputAdapter implements ActionListener
 		sCanvas.setMouseBase(xIndex);
 	}
 
+	@Override
 	public void mouseReleased(MouseEvent e)
 	{
 		if (e.isPopupTrigger())
 			displayMenu(e);
 	}
 
+	@Override
 	public void mousePressed(MouseEvent e)
 	{
 		if (e.isPopupTrigger())
@@ -72,7 +76,7 @@ class ConsensusCanvasML extends MouseInputAdapter implements ActionListener
 		RB.setText(mSubsequenceClipboard, "gui.viewer.ConsensusCanvasML.mSubsequenceClipboard");
 		mSubsequenceClipboard.addActionListener(this);
 		menu.add(mSubsequenceClipboard);
-
+		
 		menu.show(e.getComponent(), e.getX(), e.getY());
 	}
 
@@ -92,6 +96,9 @@ class ConsensusCanvasML extends MouseInputAdapter implements ActionListener
 		}
 
 		else if (e.getSource() == mSubsequenceClipboard)
-			Tablet.winMain.getConsensusSubsequenceDialog().setVisible(true);
+		{
+			if (rCanvas.contig.getConsensus().length() > 0)
+				Tablet.winMain.getConsensusSubsequenceDialog().setVisible(true);
+		}
 	}
 }

@@ -9,15 +9,13 @@ import tablet.gui.*;
 
 public class PairOutlinerOverlay implements IOverlayRenderer
 {
-	private ReadsCanvasInfoPaneRenderer infoPaneRenderer;
 	private ReadsCanvas rCanvas;
 
 	private Read readA, readB;
 	private int lineIndex, mateLineIndex, columnIndex;
 
-	PairOutlinerOverlay(ReadsCanvas rCanvas, ReadsCanvasInfoPaneRenderer infoPaneRenderer)
+	PairOutlinerOverlay(ReadsCanvas rCanvas)
 	{
-		this.infoPaneRenderer = infoPaneRenderer;
 		this.rCanvas = rCanvas;
 	}
 
@@ -27,24 +25,6 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 		this.readB = readB;
 		this.lineIndex = lineIndex;
 		this.mateLineIndex = mateLineIndex;
-
-		if (readA != null)
-		{
-			ReadMetaData data = Assembly.getReadMetaData(readA, false);
-			infoPaneRenderer.readInfo.setData(lineIndex, readA, data);
-			infoPaneRenderer.readInfo.updateOverviewCanvas();
-
-			infoPaneRenderer.pairInfo.setmRead(readA);
-		}
-
-		if (readB != null)
-		{
-			ReadMetaData pairData = Assembly.getReadMetaData(readB, false);
-			infoPaneRenderer.pairInfo.setData(mateLineIndex, readB, pairData);
-
-			infoPaneRenderer.readInfo.setmRead(readB);
-			infoPaneRenderer.pairInfo.setMateAvailable(true);
-		}
 	}
 
 	public void render(Graphics2D g)
@@ -67,40 +47,43 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 
 		// If the reads are on the row, draw a line connecting them
 		if(lineIndex == mateLineIndex && Prefs.visPaired)
-		{
-			int y = (lineIndex * ntH) + (ntH / 2);
-			int xS, xE;
-			if(readA.getStartPosition() < readB.getStartPosition())
-			{
-				xS = (readA.getEndPosition() * ntW) + offset + ntW;
-				xE = (readB.getStartPosition() * ntW) + offset;
-			}
-			else
-			{
-				xS = (readB.getEndPosition() * ntW) + offset + ntW;
-				xE = (readA.getStartPosition() * ntW) + offset;
-			}
+			renderLinkLine(ntH, ntW, offset, g);
 
-			g.setColor(Color.BLACK);
-			g.drawLine(xS, y, xE, y);
-		}
+		g.setColor(TabletUtils.red1);
 
 		// Draw outlines around the reads in the pair
-		int y  = lineIndex * ntH;
-		int xS = (readA.getStartPosition() * ntW) + offset;
-		int xE = (readA.getEndPosition() * ntW) + ntW + offset;
-
-		g.setColor(TabletUtils.red1);
-		g.drawRect(xS, y, xE-xS-1, ntH-1);
-
-		y = mateLineIndex * ntH;
-		xS = (readB.getStartPosition() * ntW) + offset;
-		xE = (readB.getEndPosition() * ntW) + ntW + offset;
-
-		g.setColor(TabletUtils.red1);
-		g.drawRect(xS, y, xE-xS-1, ntH-1);
+		renderReadOutline(readA, lineIndex, ntH, ntW, offset, g);
+		renderReadOutline(readB, mateLineIndex, ntH, ntW, offset, g);
 
 		g.setStroke(oldStroke);
+	}
+
+	private void renderLinkLine(int ntH, int ntW, int offset, Graphics2D g)
+	{
+		int y = (lineIndex * ntH) + (ntH / 2);
+		int xS;
+		int xE;
+		if (readA.getStartPosition() < readB.getStartPosition())
+		{
+			xS = (readA.getEndPosition() * ntW) + offset + ntW;
+			xE = (readB.getStartPosition() * ntW) + offset;
+		}
+		else
+		{
+			xS = (readB.getEndPosition() * ntW) + offset + ntW;
+			xE = (readA.getStartPosition() * ntW) + offset;
+		}
+		g.setColor(Color.BLACK);
+		g.drawLine(xS, y, xE, y);
+	}
+
+	private void renderReadOutline(Read read, int line, int ntH, int ntW, int offset, Graphics2D g)
+	{
+		int y  = line * ntH;
+		int xS = (read.getStartPosition() * ntW) + offset;
+		int xE = (read.getEndPosition() * ntW) + ntW + offset;
+
+		g.drawRect(xS, y, xE-xS-1, ntH-1);
 	}
 
 
@@ -112,10 +95,10 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 	{
 		if (readA == null || readB == null)
 			return false;
-		
+
 		int s, e;
 		s = e = columnIndex;
-		
+
 		if(readA.getStartPosition() < readB.getStartPosition())
 		{
 			s = readA.getStartPosition();
@@ -127,7 +110,7 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 			e = readA.getEndPosition();
 		}
 
-		return (columnIndex < s || columnIndex > e ? false : true);
+		return (columnIndex >= s && columnIndex <= e ? true : false);
 	}
 
 	public void setMateLineIndex(int mateLineIndex)

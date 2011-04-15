@@ -84,7 +84,10 @@ public class Assembly implements Iterable<Contig>
 	 * @param contig the contig to add
 	 */
 	public void addContig(Contig contig)
-		{ contigs.add(contig); }
+	{
+		contig.setId(contigs.size());
+		contigs.add(contig);
+	}
 
 	/**
 	 * Returns the size of this assembly, that is, the number of contigs within
@@ -159,6 +162,11 @@ public class Assembly implements Iterable<Contig>
 	public static String getReadName(Read read)
 	{
 		return nameCache.getReadName(read.getID());
+	}
+
+	public static ArrayList<ReadSQLCache.NameWrapper> getReadNameFinder(int startID, int limit)
+	{
+		return nameCache.getAllNames(startID, limit);
 	}
 
 	public static ArrayList<Integer> getReadsByName(String name) throws SQLException

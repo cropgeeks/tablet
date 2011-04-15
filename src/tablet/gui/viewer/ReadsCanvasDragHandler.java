@@ -53,7 +53,7 @@ class ReadsCanvasDragHandler extends MouseInputAdapter
 			if (e.getSource() instanceof ReadsCanvas)
 				diffY = dragPoint.y - e.getPoint().y;
 
-			aPanel.moveBy(diffX, diffY);
+			aPanel.getController().moveBy(diffX, diffY);
 		}
 	}
 

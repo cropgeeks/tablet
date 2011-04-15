@@ -92,6 +92,7 @@ public class WinMain extends JRibbonFrame
 
 		contigsPanel.setFeaturesPanel(featuresPanel);
 		contigsPanel.setFindPanel(findPanel);
+		contigsPanel.setReadsPanel(readsPanel);
 
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(this, dropAdapter));
@@ -251,6 +252,8 @@ public class WinMain extends JRibbonFrame
 		if (consensusSubsequenceDialog == null)
 			consensusSubsequenceDialog = new ConsensusSubsequenceDialog(this);
 
+		consensusSubsequenceDialog.updateModel(assemblyPanel.getContig());
+
 		return consensusSubsequenceDialog;
 	}
 
@@ -351,6 +354,8 @@ public class WinMain extends JRibbonFrame
 		catch (IOException e) {
 			cacheInvalid(e);
 		}
+
+		test.delete();
 	}
 
 	private void cacheInvalid(IOException e)

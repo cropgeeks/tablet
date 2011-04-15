@@ -16,9 +16,10 @@ public class ReadSQLCache
 
 	// Statements for getting (g) and inserting (i) data
 	private PreparedStatement ips;
-	private Stack<PreparedStatement> gpsAll = new Stack<PreparedStatement>();
-	private PreparedStatement psGetName;
-	private PreparedStatement psGetReadsByName;
+	private java.util.Stack<PreparedStatement> gpsAll = new java.util.Stack<PreparedStatement>();
+	private PreparedStatement psGetNameByReadID;
+	private PreparedStatement psGetAllNames;
+	private PreparedStatement psGetReadIDByName;
 
 	private File file;
 
@@ -43,12 +44,12 @@ public class ReadSQLCache
 		s.execute("PRAGMA count_changes = false;");
 
 		// Create the database table
-		s.executeUpdate("CREATE TABLE reads (id INTEGER PRIMARY KEY, name TEXT, name_postfix TEXT, unpaddedlength INTEGER, cigar TEXT, matecontig TEXT, insertsize INTEGER, isproperpair INTEGER, numberinpair INTEGER);");
+		s.executeUpdate("CREATE TABLE reads (id INTEGER PRIMARY KEY, name TEXT, name_postfix TEXT, unpaddedlength INTEGER, cigar TEXT, matecontig TEXT, insertsize INTEGER, isproperpair INTEGER, contig INTEGER);");
 
 		s.close();
 
 		// Create the prepared statement for inserting into the database
-		ips = c.prepareStatement("INSERT INTO reads (id, name, name_postfix, unpaddedlength, cigar, matecontig, insertsize, isproperpair, numberinpair) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
+		ips = c.prepareStatement("INSERT INTO reads (id, name, name_postfix, unpaddedlength, cigar, matecontig, insertsize, isproperpair, contig) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);");
 
 		// Create prepared statements for reading from the database
 		for (int i = 0; i < 10; i++)
@@ -57,9 +58,14 @@ public class ReadSQLCache
 			gpsAll.push(ps);
 		}
 
-		psGetName = c.prepareStatement("SELECT name FROM reads WHERE id=?");
+		// Gets the name for a single read
+		psGetNameByReadID = c.prepareStatement("SELECT name FROM reads WHERE id=?");
 
-		psGetReadsByName = c.prepareStatement("SELECT id FROM reads WHERE name=?;");
+		// Used to retrieve the names of all the reads in the database
+		psGetAllNames = c.prepareStatement("SELECT name, name_postfix, contig FROM reads LIMIT ?, ?");
+
+		// Gets the id for a read with the given name (paired-end load time)
+		psGetReadIDByName = c.prepareStatement("SELECT id FROM reads WHERE name=?;");
 	}
 
 	public void openForWriting()
@@ -105,7 +111,7 @@ public class ReadSQLCache
 
 			ResultSet rs = ps.executeQuery();
 			while (rs.next())
-				rnd = new ReadNameData(rs.getString(2), rs.getString(3), rs.getInt(4), rs.getString(5), rs.getString(6), rs.getInt(7), rs.getBoolean(8), rs.getInt(9));
+				rnd = new ReadNameData(rs.getString(2), rs.getString(3), rs.getInt(4), rs.getString(5), rs.getString(6), rs.getInt(7), rs.getBoolean(8));
 
 			rs.close();
 
@@ -126,9 +132,9 @@ public class ReadSQLCache
 
 		try
 		{
-			psGetName.setInt(1, id);
+			psGetNameByReadID.setInt(1, id);
 
-			ResultSet rs = psGetName.executeQuery();
+			ResultSet rs = psGetNameByReadID.executeQuery();
 			while(rs.next())
 				name = rs.getString(1);
 
@@ -142,7 +148,30 @@ public class ReadSQLCache
 		}
 	}
 
-	public void setReadNameData(ReadNameData readNameData)
+	public ArrayList<NameWrapper> getAllNames(int startID, int limit)
+	{
+		try
+		{
+			psGetAllNames.setInt(1, startID);
+			psGetAllNames.setInt(2, limit);
+
+			ArrayList<NameWrapper> names = new ArrayList<NameWrapper>(limit);
+			ResultSet rs = psGetAllNames.executeQuery();
+
+			while(rs.next())
+				names.add(new NameWrapper(rs.getString(1)+rs.getString(2), rs.getInt(3)));
+
+			rs.close();
+
+			names.trimToSize();
+			return names;
+		}
+		catch(Exception e) {}
+
+		return null;
+	}
+
+	public void setReadNameData(ReadNameData readNameData, Contig contig)
 		throws Exception
 	{
 		ips.setInt(1, id++);
@@ -153,7 +182,9 @@ public class ReadSQLCache
 		ips.setString(6, readNameData.getMateContig());
 		ips.setInt(7, readNameData.getInsertSize());
 		ips.setBoolean(8, readNameData.isProperPair());
-		ips.setInt(9, readNameData.getNumberInPair());
+		// Error handling for AFG loading (with its initial cache that doesn't
+		// have contig references. The final cache will though.
+		ips.setInt(9, contig != null ? contig.getId() : -1);
 
 		ips.addBatch();
 
@@ -186,9 +217,9 @@ public class ReadSQLCache
 	{
 		ArrayList<Integer> reads = new ArrayList<Integer>();
 
-		psGetReadsByName.setString(1, name);
+		psGetReadIDByName.setString(1, name);
 
-		ResultSet rs = psGetReadsByName.executeQuery();
+		ResultSet rs = psGetReadIDByName.executeQuery();
 
 		while (rs.next())
 			reads.add(rs.getInt(1));
@@ -196,5 +227,17 @@ public class ReadSQLCache
 		rs.close();
 
 		return reads;
+	}
+
+	public static class NameWrapper
+	{
+		public String name;
+		public int contigId;
+
+		NameWrapper(String name, int contigId)
+		{
+			this.name = name;
+			this.contigId = contigId;
+		}
 	}
 }

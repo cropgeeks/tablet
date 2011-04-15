@@ -21,7 +21,7 @@ public class JumpToDialog extends JDialog
 	private AssemblyPanel aPanel;
 
 	private JButton bClose, bHelp;
-	private NBJumpToPanel nbPanel;
+	private JumpToPanelNB nbPanel;
 
 	// The indices within the dataset we'll ultimately try to jump to
 	private int padded = 0;
@@ -38,7 +38,7 @@ public class JumpToDialog extends JDialog
 		);
 
 		aPanel = winMain.getAssemblyPanel();
-		nbPanel = new NBJumpToPanel(this, Prefs.guiJumpToBase);
+		nbPanel = new JumpToPanelNB(this, Prefs.guiJumpToBase);
 
 //		add(new TitlePanel2(), BorderLayout.NORTH);
 		add(nbPanel);

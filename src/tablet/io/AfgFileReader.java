@@ -128,16 +128,12 @@ class AfgFileReader extends TrackableReader
 			//the consensus sequence itself
 			else if (str.startsWith("seq"))
 			{
-				StringBuilder seqBuf = new StringBuilder();
 				while ((str = readLine()) != null && str.length() > 0 && str.charAt(0) != '.')
-				{
-					seqBuf.append(str);
-				}
+					consensus.appendSequence(str);
 
 				//deal with the consensus sequence
-				consensus.setData(seqBuf);
-				consensus.calculateUnpaddedLength();
-				contig.setConsensusSequence(consensus);
+				consensus.closeSequence();
+				contig.setConsensus(consensus);
 			}
 
 			//read alignment info
@@ -281,7 +277,7 @@ class AfgFileReader extends TrackableReader
 		readCache.setReadMetaData(readMetaData);
 		readsAdded++;
 
-		nameCache.setReadNameData(rnd);
+		nameCache.setReadNameData(rnd, contig);
 
 		//remember to increment the read id
 		currReadID++;
@@ -334,7 +330,7 @@ class AfgFileReader extends TrackableReader
 		//at this point the read is not complemented so we can set the boolean (3rd param) to false accordingly
 		tempCache.setReadMetaData(readMetaData);
 
-		sqlCache.setReadNameData(rnd);
+		sqlCache.setReadNameData(rnd, contig);
 
 		tmpCacheID++;
 	}
@@ -369,7 +365,7 @@ class AfgFileReader extends TrackableReader
 			bq[i] = Byte.parseByte(tokens[t]);
 		}
 
-		consensus.setBaseQualities(bq);
+//		consensus.setBaseQualities(bq);
 	}
 
 	private void reverseComplementRead(ReadMetaData rmd)

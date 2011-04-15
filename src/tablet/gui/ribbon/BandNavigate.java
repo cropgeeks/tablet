@@ -111,10 +111,10 @@ class BandNavigate extends JRibbonBand implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == Actions.navigatePageLeft)
-			winMain.getAssemblyPanel().pageLeft();
+			winMain.getAssemblyPanel().getController().pageLeft();
 
 		else if (e.getSource() == Actions.navigatePageRight)
-			winMain.getAssemblyPanel().pageRight();
+			winMain.getAssemblyPanel().getController().pageRight();
 
 		else if (e.getSource() == Actions.navigateJumpTo)
 		{

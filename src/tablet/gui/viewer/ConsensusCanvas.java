@@ -89,7 +89,7 @@ class ConsensusCanvas extends TrackingCanvas
 		int xS = rCanvas.xS;
 		int xE = rCanvas.xE;
 
-		ColorScheme colors = rCanvas.colors;
+		ReadScheme colors = rCanvas.colors;
 
 		int y = 0;
 

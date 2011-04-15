@@ -15,7 +15,9 @@
 
 	<path id="project.classpath">
 		<pathelement path="${classes}"/>
-		<fileset dir="${lib}"/>
+		<fileset dir="${lib}">
+			<exclude name="*.txt"/>
+		</fileset>
 		<fileset dir="${lib-devel}"/>
 	</path>
 

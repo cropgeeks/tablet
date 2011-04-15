@@ -45,6 +45,7 @@ class ReferenceFileReader
 		throws Exception
 	{
 		Contig contig = null;
+		Consensus consensus = null;
 		StringBuilder sb = null;
 		String str = null;
 
@@ -52,10 +53,10 @@ class ReferenceFileReader
 		{
 			if (str.startsWith(">"))
 			{
-				if (sb != null && sb.length() > 0)
-					addContig(contig, new Consensus(), sb);
+				if (consensus != null)
+					addContig(contig, consensus);
 
-				sb = new StringBuilder();
+				consensus = new Consensus();
 
 				String name;
 				if (str.indexOf(" ") != -1)
@@ -68,18 +69,18 @@ class ReferenceFileReader
 			}
 
 			else
-				sb.append(str.trim());
+				consensus.appendSequence(str.trim());
 		}
 
-		if (sb != null && sb.length() > 0)
-			addContig(contig, new Consensus(), sb);
+		if (consensus != null)
+			addContig(contig, consensus);
 	}
 
-	private void addContig(Contig contig, Consensus consensus, StringBuilder sb)
+	private void addContig(Contig contig, Consensus consensus)
+		throws Exception
 	{
-		consensus.setData(sb);
-		consensus.calculateUnpaddedLength();
-		contig.setConsensusSequence(consensus);
+		consensus.closeSequence();
+		contig.setConsensus(consensus);
 
 		assembly.addContig(contig);
 	}
@@ -88,15 +89,16 @@ class ReferenceFileReader
 		throws Exception
 	{
 		Contig contig = null;
-		StringBuilder sb = null;
-		StringBuilder qlt = null;
+		Consensus consensus = null;
+//		StringBuilder sb = null;
+//		StringBuilder qlt = null;
 		String str = null;
 
 		while ((str = reader.readLine()) != null && reader.okToRun())
 		{
 			if (str.startsWith("@"))
 			{
-				sb = new StringBuilder();
+				consensus = new Consensus();
 
 				String name;
 				if (str.indexOf(" ") != -1)
@@ -111,28 +113,35 @@ class ReferenceFileReader
 			//Process quality data to avoid incorrectly catching @ markers
 			else if(str.startsWith("+"))
 			{
-				int length = sb.length();
-				qlt = new StringBuilder();
-				while(qlt.length() != length)
+				addContig(contig, consensus);
+
+				int length = consensus.length();
+				int qltLength = 0;
+//				qlt = new StringBuilder();
+//				while(qlt.length() != length)
+				while (qltLength != length)
 				{
 					str = reader.readLine();
-					qlt.append(str.trim());
+					qltLength += str.length();
+//					qlt.append(str.trim());
 				}
-				if (sb != null && sb.length() > 0 && qlt != null && qlt.length() > 0)
-					addContig(contig, new Consensus(), sb, qlt);
+//				if (consensus != null && qltLength > 0)
+//				if (sb != null && sb.length() > 0 && qlt != null && qlt.length() > 0)
+//					addContig(contig, consensus);
+
 			}
 
 			else
-			{
-				sb.append(str.trim());
-			}
+				consensus.appendSequence(str.trim());
 		}
 	}
 
-	private void addContig(Contig contig, Consensus consensus, StringBuilder sb, StringBuilder qlt)
+	// 2011-04-06 - Unused (see commented-out addContig() call above)
+	// This is to remove calls to Consensus.setBaseQualities()
+/*	private void addContig(Contig contig, Consensus consensus, StringBuilder sb, StringBuilder qlt)
+		throws Exception
 	{
 		consensus.setData(sb);
-		consensus.calculateUnpaddedLength();
 		contig.setConsensusSequence(consensus);
 
 		byte[] bq = new byte[consensus.length()];
@@ -146,4 +155,5 @@ class ReferenceFileReader
 
 		assembly.addContig(contig);
 	}
+*/
 }

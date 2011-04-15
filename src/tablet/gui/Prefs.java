@@ -95,9 +95,10 @@ public class Prefs extends XMLPreferences
 	public static boolean guiRegexSearching = true;
 	public static int guiSearchLimit = 500;
 	public static boolean guiSearchIgnorePads = true;
+	public static int guiSearchDBLimit = 500000;
 
 	// Colour scheme in use
-	public static int visColorScheme = ColorScheme.STANDARD;
+	public static int visColorScheme = ReadScheme.STANDARD;
 
 	// Display reads in packed or stacked form?
 	public static boolean visPacked = true;
@@ -130,7 +131,7 @@ public class Prefs extends XMLPreferences
 
 	public static boolean visOverlayNames = false;
 
-	public static int guiFindPanelSelectedIndex = 0;
+	public static boolean guiFindPanelSearchCurrentContig = true;
 	public static int guiFindPanelSearchType = 0;
 	public static String recentSearches = "";
 

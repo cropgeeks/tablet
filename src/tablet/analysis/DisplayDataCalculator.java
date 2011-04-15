@@ -141,20 +141,21 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 
 	private SimpleJob setupPackCreator()
 	{
-		// If pack is selected
+		// If PACK is selected
 		if(Prefs.visPacked && !Prefs.visPaired)
-			packCreator = new PackSetCreator(contig);
+			packCreator = new PackCreator(contig);
 
-		// If pair pack is selected
+		// If PAIRED PACK is selected
 		else if(Prefs.visPacked && Prefs.visPaired)
-			packCreator = new PairedPackSetCreator(contig, assembly);
+			packCreator = new PairedPackCreator(contig, assembly);
 
-		// if pair stack is selected
+		// If PAIRED STACK is selected
 		else if(!Prefs.visPacked && Prefs.visPaired)
 			packCreator = new PairedStackCreator(contig);
-
-		else if(!Prefs.visPacked && !Prefs.visPaired)
-			packCreator = new PackSetCreator(contig);
+		
+		// If STACK is selected
+		else
+			contig.setStack();
 
 		return packCreator;
 	}
@@ -175,7 +176,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 				MatedRead matedRead = (MatedRead) read;
 
 				// If this read has already had its mate set, skip it
-				if(matedRead.getPair() == null)
+				if(matedRead.getMate() == null)
 				{
 					ReadMetaData rmd = Assembly.getReadMetaData(read, false);
 					if(!rmd.getMateMapped())
@@ -184,8 +185,8 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 					MatedRead foundPair = (MatedRead) pairSearcher.search(matedRead);
 					if(foundPair != null)
 					{
-						matedRead.setPair(foundPair);
-						foundPair.setPair(matedRead);
+						matedRead.setMate(foundPair);
+						foundPair.setMate(matedRead);
 					}
 				}
 			}

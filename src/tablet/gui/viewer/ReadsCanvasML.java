@@ -24,7 +24,7 @@ class ReadsCanvasML extends MouseInputAdapter
 	// Deals with pop-up menus
 	private ReadsCanvasMenu rCanvasMenu;
 
-	private ReadsCanvasInfoPaneRenderer infoPaneRenderer = new ReadsCanvasInfoPaneRenderer();
+	private ReadsCanvasInfoPane infoPane;
 	private OutlinerOverlay outliner;
 	private PairOutlinerOverlay pairOutliner;
 
@@ -39,12 +39,11 @@ class ReadsCanvasML extends MouseInputAdapter
 		sCanvas = aPanel.scaleCanvas;
 
 		// Create the various objects that track the mouse
-		rCanvasMenu = new ReadsCanvasMenu(aPanel, infoPaneRenderer);
-		nOverlay = new NavigationOverlay(aPanel, infoPaneRenderer);
-		outliner = new OutlinerOverlay(aPanel, infoPaneRenderer);
-		pairOutliner = new PairOutlinerOverlay(rCanvas, infoPaneRenderer);
-		infoPaneRenderer.readInfo.setAssemblyPanel(aPanel);
-		infoPaneRenderer.pairInfo.setAssemblyPanel(aPanel);
+		infoPane = new ReadsCanvasInfoPane(aPanel);
+		rCanvasMenu = new ReadsCanvasMenu(aPanel, infoPane);
+		nOverlay = new NavigationOverlay(aPanel, infoPane);
+		outliner = new OutlinerOverlay(aPanel);
+		pairOutliner = new PairOutlinerOverlay(rCanvas);
 
 		// Then add listeners and overlays to the canvas
 		rCanvas.addMouseListener(this);
@@ -55,7 +54,7 @@ class ReadsCanvasML extends MouseInputAdapter
 		rCanvas.overlays.add(outliner);
 		rCanvas.overlays.add(pairOutliner);
 		rCanvas.overlays.add(nOverlay);
-		rCanvas.overlays.add(infoPaneRenderer);
+		rCanvas.overlays.add(infoPane.getRenderer());
 
 		dragHandler = new ReadsCanvasDragHandler(aPanel, rCanvas);
 	}
@@ -69,7 +68,7 @@ class ReadsCanvasML extends MouseInputAdapter
 	{
 		pairOutliner.setPair(null, null, 0, 0);
 		outliner.setRead(null, 0, 0);
-		infoPaneRenderer.setMousePosition(null);
+		infoPane.setMousePosition(null, -1, -1);
 		nOverlay.setMousePosition(null);
 
 		if (rCanvasMenu.isShowingMenu() == false)
@@ -88,13 +87,13 @@ class ReadsCanvasML extends MouseInputAdapter
 		{
 			// Page left or right if the navigation arrows were clicked on
 			if (nOverlay.isLeftActive())
-				aPanel.pageLeft();
+				aPanel.getController().pageLeft();
 
 			else if (nOverlay.isRightActive())
-				aPanel.pageRight();
+				aPanel.getController().pageRight();
 
 			else if (e.getClickCount() == 2)
-				aPanel.clickZoom(e);
+				aPanel.getController().clickZoom(e);
 		}
 	}
 
@@ -138,11 +137,13 @@ class ReadsCanvasML extends MouseInputAdapter
 		// Otherwise, do canvas scrolling
 		else
 		{
+			CanvasController controller = aPanel.getController();
+
 			JScrollBar sBar = null;
-			if (aPanel.vBar.isVisible())
-				sBar = aPanel.vBar;
-			else if (aPanel.hBar.isVisible())
-				sBar = aPanel.hBar;
+			if (controller.getVBar().isVisible())
+				sBar = controller.getVBar();
+			else if (controller.getHBar().isVisible())
+				sBar = controller.getHBar();
 
 			if (sBar != null)
 			{
@@ -162,7 +163,7 @@ class ReadsCanvasML extends MouseInputAdapter
 
 		// Track the mouse position
 		sCanvas.setMouseBase(xIndex);
-		infoPaneRenderer.setMousePosition(e.getPoint());
+		infoPane.setMousePosition(e.getPoint(), yIndex, xIndex);
 		nOverlay.setMousePosition(e.getPoint());
 
 		pairOutliner.setColumnIndex(xIndex);
@@ -171,7 +172,8 @@ class ReadsCanvasML extends MouseInputAdapter
 		// Track the read under the mouse (if any)
 		Read read = rCanvas.reads.getReadAt(yIndex, xIndex);
 		outliner.setRead(read, xIndex, yIndex);
-		attemptPairOutline(yIndex, xIndex);
+		outlinePair(read, yIndex, xIndex);
+
 
 		aPanel.repaint();
 	}
@@ -179,92 +181,30 @@ class ReadsCanvasML extends MouseInputAdapter
 	/**
 	 * If we can outline a pair of reads, do so.
 	 */
-	private void attemptPairOutline(int yIndex, int xIndex)
+	private void outlinePair(Read read, int yIndex, int xIndex)
 	{
-		if(rCanvas.reads instanceof PairedStack)
-		{
-			PairedStack set = (PairedStack)rCanvas.reads;
-			Read[] pair = set.getPairAtLine(yIndex, xIndex);
+		pairOutliner.setPair(null, null, 0, 0);
 
-			setupPairOutline(pair, yIndex, xIndex);
+		// If no read is under the mouse, we might be over a link line
+		if (read == null)
+		{
+			Read[] pair = rCanvas.reads.getPairForLink(yIndex, xIndex);
+
+			if (pair != null)
+				pairOutliner.setPair(pair[0], pair[1], yIndex, yIndex);
 		}
-		else if(rCanvas.reads instanceof PackSet)
-		{
-			PackSet set = (PackSet)rCanvas.reads;
-			Read[] pair = set.getPairAtLine(yIndex, xIndex);
 
-			setupPairOutline(pair, yIndex, xIndex);
-		}
-		else if(rCanvas.reads instanceof StackSet)
+		// If a read *is* under the mouse, does it have a mate (who may also
+		// be on another line too)
+		else if (read instanceof MatedRead)
 		{
-			StackSet set = (StackSet)rCanvas.reads;
-			Read read = set.getReadAt(yIndex, xIndex);
-			Read mate = null;
-
-			if(read instanceof MatedRead)
-			{
-				MatedRead mr = (MatedRead)read;
-				if(mr.getPair() != null)
-					mate = mr.getPair();
-				else
-					pairOutliner.setPair(null, null, 0, 0);
-			}
+			Read mate = ((MatedRead)read).getMate();
 
 			if (mate != null)
 			{
-				Read[] pair = new Read[] {read, mate};
-
-				setupPairOutline(pair, yIndex, xIndex);
+				int mateLineIndex = rCanvas.reads.getLineForRead(mate);
+				pairOutliner.setPair(read, mate, yIndex, mateLineIndex);
 			}
-
 		}
-		else
-			pairOutliner.setPair(null, null, 0, 0);
-	}
-
-	private void setupPairOutline(Read[] pair, int yIndex, int xIndex)
-	{
-		if (pair == null || pair[0] == null || pair[1] == null)
-			pairOutliner.setPair(null, null, 0, 0);
-		else
-		{
-			pair = orientPairCorrectly(pair);
-			outlinePair(pair);
-		}
-	}
-
-	private Read[] orientPairCorrectly(Read[] pair)
-	{
-		int s;
-		int e;
-		if (pair[0].getStartPosition() < pair[1].getStartPosition())
-		{
-			s = pair[0].getEndPosition();
-			e = pair[1].getStartPosition();
-		}
-		else
-		{
-			s = pair[1].getEndPosition();
-			e = pair[0].getStartPosition();
-		}
-
-		return pair;
-	}
-
-	/**
-	 * Passes the pairOutliner object the pair of reads which needs to be outlined.
-	 */
-	private void outlinePair(Read[] pair)
-	{
-		if(pair == null || (pair[0] == null || pair[1] == null))
-			return;
-
-		int lineIndex = 0;
-		int mateLineIndex = 0;
-
-		lineIndex = aPanel.readsCanvas.reads.getLineForRead(pair[0]);
-		mateLineIndex = aPanel.readsCanvas.reads.getLineForRead(pair[1]);
-
-		pairOutliner.setPair(pair[0], pair[1], lineIndex, mateLineIndex);
 	}
 }

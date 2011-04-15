@@ -5,9 +5,7 @@ package tablet.gui.viewer;
 
 import java.awt.*;
 import java.awt.image.*;
-import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
@@ -17,12 +15,13 @@ import tablet.gui.ribbon.*;
 
 import scri.commons.gui.*;
 
-public class AssemblyPanel extends JPanel implements ChangeListener
+public class AssemblyPanel extends JPanel
 {
 	private WinMain winMain;
 	private Assembly assembly;
 	private Contig contig;
 
+	private JScrollPane sp;
 	OverviewCanvas overviewCanvas;
 	ScaleCanvas scaleCanvas;
 	ConsensusCanvas consensusCanvas;
@@ -32,14 +31,7 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 	BamBamBar bambamBar;
 	ReadsCanvas readsCanvas;
 
-	private JScrollPane sp;
-	JScrollBar hBar, vBar;
-	private JViewport viewport;
-
-	// Normal or click zooming (affects which base to zoom in on)
-	private boolean isClickZooming = false;
-	// Tracks the base to zoom in on
-	private float ntCenterX, ntCenterY;
+	private CanvasController controller;
 
 	private NameOverlayer nameOverlayer;
 
@@ -107,14 +99,11 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		bambamBar.setAssemblyPanel(this);
 
 		sp = new JScrollPane();
-		viewport = sp.getViewport();
-		viewport.addChangeListener(this);
-		hBar = sp.getHorizontalScrollBar();
-		vBar = sp.getVerticalScrollBar();
-
-		sp.setWheelScrollingEnabled(false);
 		sp.setViewportView(readsCanvas);
 		sp.getViewport().setBackground(Color.white);
+		sp.setWheelScrollingEnabled(false);
+
+		controller = new CanvasController(this, sp);
 	}
 
 	public void setAssembly(Assembly assembly)
@@ -131,6 +120,9 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 	{
 		return assembly;
 	}
+
+	public CanvasController getController()
+		{ return controller; }
 
 	public void updateContigInformation()
 	{
@@ -202,13 +194,9 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		bambamBar.setContig(contig);
 
 		if (contig != null)
-		{
 			overviewCanvas.setSubset(contig.getVisualStart(), contig.getVisualEnd());
-			winMain.getConsensusSubsequenceDialog().updateModel(contig);
-		}
 
 		forceRedraw();
-		stateChanged(null);
 
 		return setContigOK;
 	}
@@ -216,67 +204,15 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 	public Contig getContig()
 		{ return contig; }
 
-	public void stateChanged(ChangeEvent e)
-	{
-		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
-	}
 
-	void setScrollbarAdjustmentValues(int xIncrement, int yIncrement)
+	void canvasViewChanged(int xIndex, int xNum, int yIndex, int yNum)
 	{
-		hBar.setUnitIncrement(xIncrement);
-		hBar.setBlockIncrement(xIncrement*25);
-		vBar.setUnitIncrement(yIncrement);
-		vBar.setBlockIncrement(yIncrement*25);
-	}
-
-	void updateOverview(int xIndex, int xNum, int yIndex, int yNum)
-	{
+		// Tell the overview canvas to track the new position
 		overviewCanvas.updateOverview(xIndex, xNum, yIndex, yNum);
+
+		// A repaint() call will also update the consensus, etc canvases that
+		// need to maintain their synchronization with the reads canvas
 		repaint();
-	}
-
-	void clickZoom(MouseEvent e)
-	{
-		isClickZooming = true;
-
-		ntCenterX = (e.getX() / readsCanvas.ntW);
-		ntCenterY = (e.getY() / readsCanvas.ntH);
-
-		BandAdjust.zoomIn(6);
-
-		isClickZooming = false;
-	}
-
-	// Moves the scroll bars by the given amount in the x and y directions
-	void moveBy(int x, int y)
-	{
-		hBar.setValue(hBar.getValue() + x);
-		vBar.setValue(vBar.getValue() + y);
-	}
-
-	// Jumps to a position relative to the given row and column
-	void moveTo(int rowIndex, int colIndex, boolean centre)
-	{
-		// If 'centre' is true, offset by half the screen
-		int offset = 0;
-
-		if (rowIndex != -1)
-		{
-			if (centre)
-				offset = ((readsCanvas.ntOnScreenY * readsCanvas.ntH) / 2) - readsCanvas.ntH;
-
-			int y = rowIndex * readsCanvas.ntH - offset;
-			vBar.setValue(y);
-		}
-
-		if (colIndex != -1)
-		{
-			if (centre)
-				offset = ((readsCanvas.ntOnScreenX * readsCanvas.ntW) / 2) - readsCanvas.ntW;
-
-			int x = colIndex * readsCanvas.ntW - offset;
-			hBar.setValue(x);
-		}
 	}
 
 	/**
@@ -285,59 +221,10 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 	 */
 	public void forceRedraw()
 	{
-		readsCanvas.setContig(contig);
+		controller.forceRedraw();
 
-		computePanelSizes();
 		overviewCanvas.createImage();
-
 		updateContigInformation();
-
-		sp.revalidate();
-	}
-
-	public void doZoom()
-	{
-		// Track the center of the screen (before the zoom)
-		if (isClickZooming == false)
-		{
-			ntCenterX = readsCanvas.ntCenterX;
-			ntCenterY = readsCanvas.ntCenterY;
-		}
-
-		// This is needed because for some crazy reason the moveToPosition call
-		// further down will not work correctly until after Swing has stopped
-		// generating endless resize events that affect the scrollbars
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				moveTo(Math.round(ntCenterY), Math.round(ntCenterX), true);
-
-			}
-		});
-	}
-
-	public void computePanelSizes()
-	{
-		int zoom = Prefs.visReadsCanvasZoom;
-
-		readsCanvas.setDimensions(zoom, zoom);
-		consensusCanvas.setDimensions();
-		proteinCanvas.setDimensions();
-	}
-
-	// Jumps the screen left by one "page"
-	public void pageLeft()
-	{
-		int jumpTo = scaleCanvas.ntL - (readsCanvas.ntOnScreenX);
-
-		moveToPosition(-1, jumpTo, false);
-	}
-
-	// Jumps the screen right by one "page"
-	public void pageRight()
-	{
-		int jumpTo = scaleCanvas.ntR + 1;
-
-		moveToPosition(-1, jumpTo, false);
 	}
 
 	public void setVisibilities()
@@ -454,23 +341,13 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 		// Adjust the colIndex so that it is valid for the current (visual) data
 		final int col = colIndex += (-contig.getVisualStart());
 
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				moveTo(row, col, centre);
-			}
-		});
+		controller.moveToLater(row, col, centre);
 	}
 
 	public void highlightColumn(int index)
 	{
 		moveToPosition(-1, index, true);
 		new ColumnHighlighter(this, index, index);
-	}
-
-	public void updateColorScheme()
-	{
-		readsCanvas.updateColorScheme();
-		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
 	}
 
 	public VisualContig getVisualContig()
@@ -495,6 +372,9 @@ public class AssemblyPanel extends JPanel implements ChangeListener
 	{
 		bambamBar.bamPrevious();
 	}
+
+	public void updateColorScheme()
+		{ readsCanvas.updateColorScheme(); }
 
 	public OverviewCanvas getOverviewCanvas()
 		{ return overviewCanvas; }

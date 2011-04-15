@@ -15,7 +15,7 @@ import tablet.gui.viewer.*;
 public class SubsetOverviewDialog extends JDialog implements ActionListener
 {
 	private SpinnerNumberModel fromModel, toModel;
-	private NBSubsetOverview panel;
+	private SubsetOverviewPanelNB panel;
 	private AssemblyPanel aPanel;
 	private JButton bOK, bClose, bHelp;
 
@@ -34,7 +34,7 @@ public class SubsetOverviewDialog extends JDialog implements ActionListener
 		toModel = new SpinnerNumberModel(aPanel.getOverviewCanvas().getOE()+1, aPanel.getContig().getVisualStart()+1, aPanel.getContig().getVisualEnd()+1, 1);
 
 		// Setup the matisse panel for the dialog
-		panel = new NBSubsetOverview(this, aPanel);
+		panel = new SubsetOverviewPanelNB(this, aPanel);
 		panel.fromSpinner.setModel(fromModel);
 		panel.toSpinner.setModel(toModel);
 

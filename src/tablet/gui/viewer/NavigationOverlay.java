@@ -13,7 +13,7 @@ import scri.commons.gui.*;
 class NavigationOverlay implements IOverlayRenderer
 {
 	private ReadsCanvas rCanvas;
-	private ReadsCanvasInfoPaneRenderer infoPaneRenderer;
+	private ReadsCanvasInfoPane infoPane;
 
 	private Image navLBlu, navRBlu;
 	private Image navLGrn, navRGrn;
@@ -23,9 +23,9 @@ class NavigationOverlay implements IOverlayRenderer
 	private boolean isLeftActive;
 	private boolean isRightActive;
 
-	public NavigationOverlay(AssemblyPanel aPanel, ReadsCanvasInfoPaneRenderer infoPaneRenderer)
+	public NavigationOverlay(AssemblyPanel aPanel, ReadsCanvasInfoPane infoPane)
 	{
-		this.infoPaneRenderer = infoPaneRenderer;
+		this.infoPane = infoPane;
 		rCanvas = aPanel.readsCanvas;
 
 		navLBlu = Icons.getIcon("NAVLBLU32").getImage();
@@ -62,7 +62,7 @@ class NavigationOverlay implements IOverlayRenderer
 				rCanvas.ntOnScreenX);
 			rCanvas.setToolTipText(tt);
 
-			infoPaneRenderer.readInfo.setMousePosition(null);
+			infoPane.setMousePosition(null, -1, -1);
 			isLeftActive = true;
 		}
 
@@ -95,7 +95,7 @@ class NavigationOverlay implements IOverlayRenderer
 				rCanvas.ntOnScreenX);
 			rCanvas.setToolTipText(tt);
 
-			infoPaneRenderer.readInfo.setMousePosition(null);
+			infoPane.setMousePosition(null, -1, -1);
 			isRightActive = true;
 		}
 
