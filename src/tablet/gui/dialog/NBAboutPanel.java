@@ -12,9 +12,9 @@ import tablet.gui.*;
 
 import scri.commons.gui.*;
 
-class AboutPanelNB extends javax.swing.JPanel implements ActionListener
+class NBAboutPanel extends javax.swing.JPanel implements ActionListener
 {
-	public AboutPanelNB()
+	public NBAboutPanel()
 	{
 		initComponents();
 

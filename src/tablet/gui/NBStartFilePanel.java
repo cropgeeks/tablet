@@ -14,7 +14,7 @@ import scri.commons.gui.matisse.HyperLinkLabel;
  *
  * @author gsteph
  */
-public class StartPanelFileNB extends javax.swing.JPanel implements ActionListener
+public class NBStartFilePanel extends javax.swing.JPanel implements ActionListener
 {
 	private HyperLinkLabel[] labels = new HyperLinkLabel[10];
 
@@ -22,7 +22,7 @@ public class StartPanelFileNB extends javax.swing.JPanel implements ActionListen
 	private String[] filenames = new String[10];
 	private String[] tooltips = new String[10];
 
-	public StartPanelFileNB()
+	public NBStartFilePanel()
 	{
 		initComponents();
 		setOpaque(false);
