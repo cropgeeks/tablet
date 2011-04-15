@@ -15,7 +15,7 @@ public class AboutDialog extends JDialog implements ActionListener
 {
 	private JButton bClose;
 
-	private AboutPanelNB nbPanel;
+	private NBAboutPanel nbPanel;
 
 	public AboutDialog()
 	{
@@ -25,7 +25,7 @@ public class AboutDialog extends JDialog implements ActionListener
 			true
 		);
 
-		nbPanel = new AboutPanelNB();
+		nbPanel = new NBAboutPanel();
 
 		AvatarPanel avatars = new AvatarPanel();
 

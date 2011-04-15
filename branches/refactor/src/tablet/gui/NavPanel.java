@@ -31,7 +31,7 @@ class NavPanel
 		filePanel.setBorder(BorderFactory.createEmptyBorder(2, 2, 2, 2));
 		filePanel.add(new TitlePanel3(
 			RB.getString("gui.NBStartFilePanel.title")), BorderLayout.NORTH);
-		filePanel.add(new StartPanelFileNB());
+		filePanel.add(new NBStartFilePanel());
 
 		JPanel helpPanel = new JPanel(new BorderLayout());
 		helpPanel.setOpaque(false);
