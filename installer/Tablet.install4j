@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<install4j version="5.0.6" transformSequenceNumber="3">
+<install4j version="5.0.8" transformSequenceNumber="3">
   <directoryPresets config=".." />
-  <application name="Tablet" distributionSourceDir="" applicationId="9483-2571-4596-9336" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="tablet" publisher="SCRI" publisherWeb="http://www.scri.ac.uk" version="x.xx.xx.xx" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
+  <application name="Tablet" distributionSourceDir="" applicationId="9483-2571-4596-9336" mediaDir="." mediaFilePattern="${compiler:sys.shortName}_${compiler:sys.platform}_${compiler:sys.version}" compression="6" lzmaCompression="false" pack200Compression="false" excludeSignedFromPacking="true" commonExternalFiles="false" createMd5Sums="true" shrinkRuntime="true" shortName="tablet" publisher="The James Hutton Institute" publisherWeb="http://www.hutton.ac.uk" version="x.xx.xx.xx" allPathsRelative="true" backupOnSave="false" autoSave="false" convertDotsToUnderscores="true" macSignature="????" installerName="" javaMinVersion="1.6" javaMaxVersion="" allowBetaVM="false" jdkMode="runtimeJre" jdkName="">
     <languages skipLanguageSelection="false" languageSelectionInPrincipalLanguage="false">
       <principalLanguage id="en" customLocalizationFile="" />
       <additionalLanguages />
@@ -12,8 +12,8 @@
       <envVar name="JDK_HOME" />
     </searchSequence>
     <variables>
-      <variable name="urlWebsite" value="http://bioinf.scri.ac.uk/tablet" description="" category="" />
-      <variable name="urlWhatsNew" value="http://bioinf.scri.ac.uk/tablet/help/whats-new.shtml" description="" category="" />
+      <variable name="urlWebsite" value="http://bioinf.hutton.ac.uk/tablet" description="" category="" />
+      <variable name="urlWhatsNew" value="http://bioinf.hutton.ac.uk/tablet/help/whats-new.shtml" description="" category="" />
       <variable name="changeLog" value="Show Change Log" description="" category="" />
     </variables>
     <mergedProjects />
@@ -43,7 +43,7 @@
   <launchers>
     <launcher name="tablet" id="20" customizedId="" external="false" excludeFromMenu="false" unixMode="755" menuName="Tablet" icnsFile="../res/icons/appicon128.icns" swtApp="false" fileset="">
       <executable name="tablet" type="1" iconSet="true" iconFile="" executableDir="." redirectStderr="true" stderrFile="${installer:sys.userHome}/.scri-bioinf/tablet.log" stderrMode="overwrite" redirectStdout="true" stdoutFile="${installer:sys.userHome}/.scri-bioinf/tablet.log" stdoutMode="overwrite" failOnStderrOutput="true" executableMode="1" changeWorkingDirectory="false" workingDirectory="." singleInstance="false" serviceStartType="2" serviceDependencies="" serviceDescription="" jreLocation="" executionLevel="asInvoker" checkConsoleParameter="false" globalSingleInstance="false">
-        <versionInfo include="true" fileVersion="" fileDescription="SCRI Tablet" legalCopyright="Plant Bioinformatics Group, SCRI" internalName="Tablet" productName="Tablet" />
+        <versionInfo include="true" fileVersion="" fileDescription="Tablet" legalCopyright="Plant Bioinformatics Group, JHI" internalName="Tablet" productName="Tablet" />
       </executable>
       <splashScreen show="false" autoOff="true" alwaysOnTop="true" width="0" height="0" bitmapFile="" java6SplashScreen="false">
         <text>
@@ -158,7 +158,7 @@
                   </void>
                   <void property="bannerImageFile">
                     <object class="com.install4j.api.beans.ExternalFile">
-                      <string>./scribanner.png</string>
+                      <string>./jhibanner.png</string>
                     </object>
                   </void>
                 </object>
@@ -478,7 +478,7 @@
                   </void>
                   <void property="bannerImageFile">
                     <object class="com.install4j.api.beans.ExternalFile">
-                      <string>./scribanner.png</string>
+                      <string>./jhibanner.png</string>
                     </object>
                   </void>
                 </object>
@@ -581,7 +581,7 @@
                   </void>
                   <void property="bannerImageFile">
                     <object class="com.install4j.api.beans.ExternalFile">
-                      <string>./scribanner.png</string>
+                      <string>./jhibanner.png</string>
                     </object>
                   </void>
                 </object>
@@ -643,7 +643,7 @@
                   </void>
                   <void property="bannerImageFile">
                     <object class="com.install4j.api.beans.ExternalFile">
-                      <string>./scribanner.png</string>
+                      <string>./jhibanner.png</string>
                     </object>
                   </void>
                 </object>
@@ -748,7 +748,7 @@
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.update.CheckForUpdateAction">
                       <void property="updateDescriptorUrl">
-                        <string>http://bioinf.scri.ac.uk/tablet/installers/updates.xml</string>
+                        <string>http://bioinf.hutton.ac.uk/tablet/installers/updates.xml</string>
                       </void>
                       <void property="variable">
                         <string>updateDescriptor</string>
@@ -948,7 +948,7 @@
                       </void>
                       <void property="bannerImageFile">
                         <object class="com.install4j.api.beans.ExternalFile">
-                          <string>./scribanner.png</string>
+                          <string>./jhibanner.png</string>
                         </object>
                       </void>
                       <void property="infoText">
@@ -1270,7 +1270,7 @@ if (wizardContext != null) {
                       </void>
                       <void property="bannerImageFile">
                         <object class="com.install4j.api.beans.ExternalFile">
-                          <string>./scribanner.png</string>
+                          <string>./jhibanner.png</string>
                         </object>
                       </void>
                       <void property="infoText">
