@@ -24,7 +24,7 @@ class StartPanelPublicationNB extends javax.swing.JPanel implements ActionListen
 	{
 		if(e.getSource() == linkLabel)
 		{
-			TabletUtils.visitURL("http://bioinf.scri.ac.uk/tablet/papers.shtml");
+			TabletUtils.visitURL("http://bioinf.hutton.ac.uk/tablet/papers.shtml");
 		}
 	}
 
