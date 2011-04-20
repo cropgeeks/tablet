@@ -27,12 +27,12 @@ body
 .logo
 {
 	position: relative;
-	background: url('scri.gif');
+	background: url('jhiweb.png');
 	display: inline;
 	float: left;
 	margin: 1.3em 0pt 0pt 1.6em;
-	width: 175px;
-	height: 53px;
+	width: 119px;
+	height: 55px;
 }
 
 #headerImage
@@ -127,9 +127,9 @@ A:hover
 h2
 {
 	border-bottom: 1px solid #438500;
-	color:#0066B2;
+	color:#872175;
 	font-size:150%;
-	font-weight:lighter;
+	fffont-weight:lighter;
 	margin-bottom:0.6em;
 	padding:0pt 0pt 10px 0px;
 }
@@ -139,7 +139,6 @@ h3
 	color:#438500;
 	font-size:120%;
 	line-height:20px;
-	margin-top:25px;
 }
 
 h5

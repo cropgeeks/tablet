@@ -57,7 +57,7 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == webLabel)
-			TabletUtils.visitURL("http://bioinf.scri.ac.uk/tablet");
+			TabletUtils.visitURL("http://bioinf.hutton.ac.uk/tablet");
 	}
 
     /** This method is called from within the constructor to
@@ -88,7 +88,7 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
 
         nameLabel.setText("Iain Milne, Micha Bayer, Linda Cardle, Paul Shaw, Gordon Stephen, David Marshall");
 
-        copyrightLabel.setText("Copyright (C) 2009, Plant Bioinformatics Group, SCRI");
+        copyrightLabel.setText("Copyright (C) 2009, Plant Bioinformatics Group, JHI");
 
         versionLabel.setFont(new java.awt.Font("Tahoma", 1, 18));
         versionLabel.setText("Tablet - x.xx.xx.xx");
@@ -99,7 +99,7 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
         memLabel.setForeground(java.awt.Color.gray);
         memLabel.setText("Memory available to JVM:");
 
-        webLabel.setText("http://bioinf.scri.ac.uk/tablet");
+        webLabel.setText("http://bioinf.hutton.ac.uk/tablet");
 
         scriIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         scriIcon.setText("SCRI LOGO");

@@ -38,7 +38,7 @@ public class TabletUtils
 	 */
 	public static void setHelp(final JButton button, String topic)
 	{
-		final String html = "http://bioinf.scri.ac.uk/tablet/help/" + topic + ".shtml";
+		final String html = "http://bioinf.hutton.ac.uk/tablet/help/" + topic + ".shtml";
 
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -64,7 +64,7 @@ public class TabletUtils
 		try
 		{
 			Desktop desktop = Desktop.getDesktop();
-			desktop.mail(new URI("mailto:tablet@scri.ac.uk?subject=Tablet%20Feedback"));
+			desktop.mail(new URI("mailto:tablet@hutton.ac.uk?subject=Tablet%20Feedback"));
 		}
 		catch (Exception e) { System.out.println(e); }
 	}

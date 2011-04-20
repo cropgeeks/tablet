@@ -44,7 +44,7 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="tabletLabel">
       <Properties>
-        <Property name="text" type="java.lang.String" value="&lt;html&gt;Tablet x.xx.xx.xx - &amp;copy; Plant Bioinformatics Group, SCRI."/>
+        <Property name="text" type="java.lang.String" value="&lt;html&gt;Tablet x.xx.xx.xx - &amp;copy; Plant Bioinformatics Group, JHI."/>
       </Properties>
     </Component>
     <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="feedbackLabel">

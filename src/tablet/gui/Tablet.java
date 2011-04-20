@@ -49,7 +49,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 		Icons.initialize("/res/icons", ".png");
 		RB.initialize(Prefs.localeText, "res.text.tablet");
-		
+
 		parseCommandLineArguments(args);
 
 		Install4j.doStartUpCheck();
@@ -63,7 +63,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		{
 			// Temporary arrayList for potential files
 			ArrayList<String> initFiles = new ArrayList<String>();
-			
+
 			for (int i = 0; i < args.length; i++)
 			{
 				String arg = args[i];
@@ -140,6 +140,12 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 			{
 				winMain.validateCacheFolder();
 
+				if (Prefs.isFirstRun == false && Prefs.isHuttonised == false)
+				{
+					new HuttonDialog();
+					Prefs.isHuttonised = true;
+				}
+
 				// Do we want to open an initial project?
 				if (initialFiles != null)
 				{
@@ -201,7 +207,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 				int response = TaskDialog.show(msg, TaskDialog.ERR, 0, options);
 				if (response == 0)
-					TabletUtils.visitURL("http://bioinf.scri.ac.uk/tablet/help/memory.shtml");
+					TabletUtils.visitURL("http://bioinf.hutton.ac.uk/tablet/help/memory.shtml");
 
 				System.exit(1);
 			}

@@ -48,7 +48,7 @@ public class StartPanelWelcomeNB extends javax.swing.JPanel implements ActionLis
         feedbackLabel = new scri.commons.gui.matisse.HyperLinkLabel();
         twitterLabel = new scri.commons.gui.matisse.HyperLinkLabel();
 
-        tabletLabel.setText("<html>Tablet x.xx.xx.xx - &copy; Plant Bioinformatics Group, SCRI.");
+        tabletLabel.setText("<html>Tablet x.xx.xx.xx - &copy; Plant Bioinformatics Group, JHI.");
 
         feedbackLabel.setForeground(new java.awt.Color(68, 106, 156));
         feedbackLabel.setText("Send feedback");

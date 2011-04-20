@@ -19,7 +19,7 @@ import scri.commons.gui.*;
  */
 public class Install4j
 {
-	private static String URL = "http://bioinf.scri.ac.uk/tablet/installers/updates.xml";
+	private static String URL = "http://bioinf.hutton.ac.uk/tablet/installers/updates.xml";
 
 	public static String VERSION;
 
@@ -113,8 +113,8 @@ public class Install4j
 			{
 				try
 				{
-					// Track this user as an SCRI user if they have ever run the
-					// software on the SCRI network
+					// Track this user as an SCRI/Hutton user if they have ever
+					// run the software on the SCRI network
 					if (Prefs.isSCRIUser == false && SystemUtils.isSCRIUser())
 						Prefs.isSCRIUser = true;
 
@@ -126,7 +126,7 @@ public class Install4j
 						+ " (" + System.getProperty("os.arch") + ")", "UTF-8");
 					String user = URLEncoder.encode(System.getProperty("user.name"), "UTF-8");
 
-					String addr = "http://bioinf.scri.ac.uk/tablet/logs/tablet.pl"
+					String addr = "http://bioinf.hutton.ac.uk/tablet/logs/tablet.pl"
 						+ "?id=" + id
 						+ "&version=" + version
 						+ "&locale=" + locale
