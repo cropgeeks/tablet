@@ -25,13 +25,13 @@ public class Finder extends SimpleJob
 	public static final int CON_SEQUENCE = 2;
 
 	protected AssemblyPanel aPanel;
-	
+
 	protected String searchTerm;
 	protected Pattern pattern;
 	protected ArrayList<SearchResult> results;
 	protected long maximumLong;
 	protected long progressLong;
-	
+
 	protected boolean searchAllContigs;
 	protected boolean useRegex;
 	protected int searchType;
@@ -53,7 +53,7 @@ public class Finder extends SimpleJob
 	{
 		if(searchTerm.equals(""))
 			return;
-		
+
 		try
 		{
 			pattern = Pattern.compile(searchTerm);
@@ -88,7 +88,7 @@ public class Finder extends SimpleJob
 			{
 				if (!okToRun())
 					break;
-				
+
 				// If not searching in all contigs, skip to the current contig
 				if (!searchAllContigs && contig != aPanel.getContig())
 					continue;
@@ -108,19 +108,22 @@ public class Finder extends SimpleJob
 		for (Contig contig : aPanel.getAssembly())
 			readCount += contig.getReads().size();
 
+		// The index of the first read returned from the current batch of DB results
 		int rIndex = 0;
 		// Loop over every read name in the database
 		while (rIndex < readCount && okToRun())
 		{
 			ArrayList<ReadSQLCache.NameWrapper> names = Assembly.getReadNameFinder(rIndex, Prefs.guiSearchDBLimit);
 
-			int readID = rIndex;
+			// The index of the read currently being processed (from the DB)
+			int readID = rIndex-1;
 			for (ReadSQLCache.NameWrapper wrapper : names)
 			{
-				progressLong = readID;
-
 				if (!okToRun())
 					break;
+
+				readID++;
+				progressLong = readID;
 
 				// If the name matches the search term, find the read with this name
 				if (checkNameMatches(wrapper.name) == false)
@@ -138,7 +141,6 @@ public class Finder extends SimpleJob
 						break;
 					}
 				}
-				readID++;
 			}
 
 			rIndex += Prefs.guiSearchDBLimit;
@@ -157,7 +159,7 @@ public class Finder extends SimpleJob
 	}
 
 	protected void searchConsensus(Contig contig)
-	{		
+	{
 		Consensus con = contig.getConsensus();
 		searchSequence(con.toString(), 0, con.length(), contig, null);
 	}
@@ -185,7 +187,7 @@ public class Finder extends SimpleJob
 		for (int i = 0; i < seq.length() && okToRun(); i++)
 		{
 			char seqChar = seq.charAt(i);
-			
+
 			if (seqChar == searchTerm.charAt(matchIndex))
 			{
 				// Denotes the start of a potential match
@@ -194,7 +196,7 @@ public class Finder extends SimpleJob
 
 				matchIndex++;
 			}
-			
+
 			// Skip pad characters
 			else if (Prefs.guiSearchIgnorePads && (seqChar == '*' || seqChar == 'N'))
 				continue;
@@ -216,7 +218,7 @@ public class Finder extends SimpleJob
 					results.add(new SubsequenceSearchResult(name, sPos, len, contig, sPos + matchS, sPos + i));
 
 				matchIndex = 0;
-				
+
 				if (matchS != seq.length()-1)
 					i = matchS;
 			}
@@ -291,7 +293,7 @@ public class Finder extends SimpleJob
 		return Math.round(((progressLong)/ (float) maximumLong) * 5555);
 	}
 
-	
+
 	// Used for storing consensus subsequence search results
 	public static class SearchResult
 	{
