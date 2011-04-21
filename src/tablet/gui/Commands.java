@@ -227,13 +227,15 @@ public class Commands
 				RB.getString("gui.Commands.exportCoverage.label"),
 				Tablet.winMain);
 
-			if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
-				dialog.getResult() == ProgressDialog.JOB_FAILED)
+			if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 			{
-				dialog.getException().printStackTrace();
-				TaskDialog.showFileOpen(RB.format("gui.Commands.exportCoverage.exception",
+				if (dialog.getResult() == ProgressDialog.JOB_FAILED)
+				{
+					dialog.getException().printStackTrace();
+					TaskDialog.showFileOpen(RB.format("gui.Commands.exportCoverage.exception",
 						dialog.getException()), TaskDialog.ERR, 1, new String[] { RB.getString("gui.text.openLog"), RB.getString("gui.text.close") },
 						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
+				}
 			}
 			else
 				TaskDialog.info(
@@ -263,26 +265,28 @@ public class Commands
 				RB.getString("gui.Commands.exportReadColumn.label"),
 				Tablet.winMain);
 
-		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
-				dialog.getResult() == ProgressDialog.JOB_FAILED)
+		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
-			dialog.getException().printStackTrace();
-			TaskDialog.showFileOpen(
+			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
+			{
+				dialog.getException().printStackTrace();
+				TaskDialog.showFileOpen(
 					RB.format("gui.Commands.exportReadColumn.exception",
 					dialog.getException()), TaskDialog.ERR, 1,
 					new String[] { RB.getString("gui.text.openLog"),
 					RB.getString("gui.text.close") }, new boolean[] { true, true },
 					Tablet.getLogFile().getAbsolutePath());
+			}
+
+			return;
 		}
-		else
-		{
-			TaskDialog.showFileOpen(
-					RB.format("gui.Commands.exportReadColumn.success", filename),
-					TaskDialog.INF, 0,
-					new String[] { RB.getString("gui.text.open"),
-					RB.getString("gui.text.close")},
-					new boolean [] { true, true }, filename);
-		}
+
+		TaskDialog.showFileOpen(
+			RB.format("gui.Commands.exportReadColumn.success", filename),
+			TaskDialog.INF, 0,
+			new String[] { RB.getString("gui.text.open"),
+			RB.getString("gui.text.close")},
+			new boolean [] { true, true }, filename);
 	}
 
 	public void exportScreenData(IReadManager manager, int xS, int xE, int yS, int yE) throws IOException
@@ -301,26 +305,28 @@ public class Commands
 				RB.getString("gui.Commands.exportVisibleReads.label"),
 				Tablet.winMain);
 
-		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
-				dialog.getResult() == ProgressDialog.JOB_FAILED)
+		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
-			dialog.getException().printStackTrace();
-			TaskDialog.showFileOpen(
+			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
+			{
+				dialog.getException().printStackTrace();
+				TaskDialog.showFileOpen(
 					RB.format("gui.Commands.exportVisibleReads.exception",
 					dialog.getException()), TaskDialog.ERR, 1,
 					new String[] { RB.getString("gui.text.openLog"),
 					RB.getString("gui.text.close") }, new boolean[] { true, true },
 					Tablet.getLogFile().getAbsolutePath());
+			}
+
+			return;
 		}
-		else
-		{
-			TaskDialog.showFileOpen(
-					RB.format("gui.Commands.exportVisibleReads.success", filename),
-					TaskDialog.INF, 0,
-					new String[] { RB.getString("gui.text.open"),
-					RB.getString("gui.text.close") }, new boolean[] { true, true },
-					filename);
-		}
+
+		TaskDialog.showFileOpen(
+			RB.format("gui.Commands.exportVisibleReads.success", filename),
+			TaskDialog.INF, 0,
+			new String[] { RB.getString("gui.text.open"),
+			RB.getString("gui.text.close") }, new boolean[] { true, true },
+			filename);
 	}
 
 	public void exportContigData(IReadManager manager) throws IOException
@@ -339,26 +345,28 @@ public class Commands
 				RB.getString("gui.Commands.exportContigReads.label"),
 				Tablet.winMain);
 
-		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
-				dialog.getResult() == ProgressDialog.JOB_FAILED)
+		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
-			dialog.getException().printStackTrace();
-			TaskDialog.showFileOpen(
+			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
+			{
+				dialog.getException().printStackTrace();
+				TaskDialog.showFileOpen(
 					RB.format("gui.Commands.exportContigReads.exception",
 					dialog.getException()), TaskDialog.ERR, 1,
 					new String[] { RB.getString("gui.text.openLog"),
 					RB.getString("gui.text.close") }, new boolean[] { true, true },
 					Tablet.getLogFile().getAbsolutePath());
+			}
+
+			return;
 		}
-		else
-		{
-			TaskDialog.showFileOpen(
-					RB.format("gui.Commands.exportContigReads.success", filename),
-					TaskDialog.INF, 0,
-					new String[] { RB.getString("gui.text.open"),
-					RB.getString("gui.text.close") }, new boolean[] { true, true },
-					filename);
-		}
+
+		TaskDialog.showFileOpen(
+			RB.format("gui.Commands.exportContigReads.success", filename),
+			TaskDialog.INF, 0,
+			new String[] { RB.getString("gui.text.open"),
+			RB.getString("gui.text.close") }, new boolean[] { true, true },
+			filename);
 	}
 
 	/**

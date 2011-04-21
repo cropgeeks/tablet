@@ -318,18 +318,22 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 			RB.getString("gui.ContigsPanel.saveReads.label"),
 			Tablet.winMain);
 
-		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED &&
-			dialog.getResult() == ProgressDialog.JOB_FAILED)
+		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
-			dialog.getException().printStackTrace();
-			TaskDialog.showFileOpen(RB.format("gui.ContigsPanel.saveReads.exception",
-						dialog.getException()), TaskDialog.ERR, 1, new String[] { RB.getString("gui.text.openLog"), RB.getString("gui.text.close") },
-						new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
+			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
+			{
+				dialog.getException().printStackTrace();
+				TaskDialog.showFileOpen(RB.format("gui.ContigsPanel.saveReads.exception",
+					dialog.getException()), TaskDialog.ERR, 1, new String[] { RB.getString("gui.text.openLog"), RB.getString("gui.text.close") },
+					new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
+			}
+
+			return;
 		}
-		else
-			TaskDialog.info(
-				RB.format("gui.ContigsPanel.saveReads.success", filename),
-				RB.getString("gui.text.close"));
+
+		TaskDialog.info(
+			RB.format("gui.ContigsPanel.saveReads.success", filename),
+			RB.getString("gui.text.close"));
 	}
 
 	private void displayMenu(MouseEvent e)
