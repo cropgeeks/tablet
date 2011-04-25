@@ -31,7 +31,8 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		this.aPanel = aPanel;
 		this.cPanel = winMain.getContigsPanel();
 
-		controls = new FindPanelNB(this);
+		setLayout(new BorderLayout());
+		add(controls = new FindPanelNB(this));
 
 		// Additional (duplicate) table-clicked handler to catch the user
 		// re-clicking on the same row. This doesn't generate a table event, but
@@ -41,9 +42,6 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 				processTableSelection();
 			}
 		});
-
-		setLayout(new BorderLayout());
-		add(controls = new FindPanelNB(this));
 
 		//Keyboard shortcut code
 		Action openFind = new AbstractAction() {
@@ -116,7 +114,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		{
 			int sPos = (Integer)tableModel.getValueAt(row, 4)-1;
 			int ePos = (Integer)tableModel.getValueAt(row, 5)-1;
-			
+
 			Read r = getRead(pos, (String)tableModel.getValueAt(row, 0));
 
 			if(r != null)
@@ -156,7 +154,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 	{
 		boolean foundInTable = false;
 		JTable table = cPanel.getTable();
-		
+
 		for(int i=0; i < table.getRowCount(); i++)
 		{
 			if(table.getValueAt(i, 0).equals(contig))
@@ -225,7 +223,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 
 		if (finder != null)
 			finder.setResults(null);
-		
+
 		controls.table.setModel(new DefaultTableModel());
 		controls.resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", 0));
 	}
@@ -238,7 +236,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 				RB.getString("gui.text.close"));
 			return;
 		}
-		
+
 		resetFinder();
 		setTableModel(null);
 
@@ -251,7 +249,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		setupDialog();
 
 		ArrayList<SearchResult> results = finder.getResults();
-		
+
 		if(results != null && !results.isEmpty())
 		{
 			controls.resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", results.size()));
@@ -265,7 +263,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 	private void setupDialog()
 	{
 		String title, label;
-		
+
 		if (controls.searchTypeCombo.getSelectedIndex() == Finder.READ_NAME)
 		{
 			title = RB.getString("gui.NBFindPanelControls.progressReadsTitle");
@@ -281,7 +279,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 			title = RB.getString("gui.NBFindPanelControls.progressReferenceTitle");
 			label = RB.getString("gui.NBFindPanelControls.progressReferenceLabel");
 		}
-		
+
 		ProgressDialog dialog = new ProgressDialog(finder, title, label, Tablet.winMain);
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
