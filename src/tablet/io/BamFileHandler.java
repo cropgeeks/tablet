@@ -13,7 +13,6 @@ import tablet.gui.*;
 import tablet.io.samtools.*;
 
 import net.sf.samtools.*;
-import net.sf.samtools.util.*;
 
 import scri.commons.gui.*;
 
@@ -262,10 +261,7 @@ public class BamFileHandler
 				if (Prefs.ioSamtoolsPath.length() > 0)
 					msg = RB.getString("io.BamFileHandler.statsError2");
 
-				TaskDialog.showFileOpen(msg, TaskDialog.ERR, 0,
-					new String[] { RB.getString("gui.text.openLog"), RB.getString("gui.text.close") },
-					new boolean [] { true, true },
-					Tablet.getLogFile().getAbsolutePath());
+				TaskDialog.showOpenLog(msg, Tablet.getLogFile());
 			}
 		}
 	}
