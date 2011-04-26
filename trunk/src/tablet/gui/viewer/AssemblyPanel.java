@@ -247,13 +247,8 @@ public class AssemblyPanel extends JPanel
 		{
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
 			{
-				String msg = RB.format("gui.viewer.assemblyPanel.ddcError",
-					dialog.getException());
-
-				TaskDialog.showFileOpen(msg, TaskDialog.ERR, 1,
-					new String[] { RB.getString("gui.text.openLog"),
-					RB.getString("gui.text.close") }, new boolean[] { true, true },
-					Tablet.getLogFile().getAbsolutePath());
+				TaskDialog.showOpenLog(RB.format("gui.viewer.assemblyPanel.ddcError",
+					dialog.getException()), Tablet.getLogFile());
 			}
 
 			System.out.println("contig load failed for " + contig.getName());

@@ -323,9 +323,9 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
 			{
 				dialog.getException().printStackTrace();
-				TaskDialog.showFileOpen(RB.format("gui.ContigsPanel.saveReads.exception",
-					dialog.getException()), TaskDialog.ERR, 1, new String[] { RB.getString("gui.text.openLog"), RB.getString("gui.text.close") },
-					new boolean[] { true, true }, Tablet.getLogFile().getAbsolutePath());
+
+				TaskDialog.showOpenLog(RB.format("gui.ContigsPanel.saveReads.exception",
+					dialog.getException()), Tablet.getLogFile());
 			}
 
 			return;
