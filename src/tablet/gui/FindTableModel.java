@@ -4,6 +4,7 @@
 package tablet.gui;
 
 import java.util.*;
+import javax.swing.event.*;
 import javax.swing.table.*;
 
 import scri.commons.gui.*;
@@ -16,10 +17,21 @@ import tablet.data.*;
  */
 public class FindTableModel extends AbstractTableModel
 {
-	private ArrayList<SearchResult> results;
-	private String[] columnNames;
+	private ArrayList<SearchResult> results = new ArrayList<SearchResult>();
+	private String[] columnNames = new String[0];
 
-	FindTableModel(ArrayList<SearchResult> results)
+	FindTableModel()
+	{
+	}
+
+	void clear()
+	{
+		results.clear();
+
+		fireTableChanged(new TableModelEvent(this));
+	}
+
+	void setResults(ArrayList<SearchResult> results)
 	{
 		this.results = results;
 
@@ -33,14 +45,22 @@ public class FindTableModel extends AbstractTableModel
 			String col5 = RB.getString("gui.FindTableModel.start");
 			String col6 = RB.getString("gui.FindTableModel.end");
 			columnNames = new String[] { col1, col2, col3, col4, col5, col6 };
+
+			System.out.println("if1");
 		}
 		else if(results != null && !results.isEmpty() && !(results.get(0) instanceof SubsequenceSearchResult) && !(results.get(0) instanceof ReadSearchResult))
 		{
 			col1 = col4;
 			columnNames = new String[] { col1, col2, col3 };
+			System.out.println("if2");
 		}
 		else
+		{
 			columnNames = new String[] { col1, col2, col3, col4 };
+			System.out.println("if3");
+		}
+
+		fireTableStructureChanged();
 	}
 
 	public String getColumnName(int col)
@@ -75,7 +95,7 @@ public class FindTableModel extends AbstractTableModel
 	{
 		if(!(results.get(row) instanceof SubsequenceSearchResult) && !(results.get(row) instanceof ReadSearchResult))
 			return getSearchResultValue(row, col);
-		
+
 		else if(!(results.get(row) instanceof SubsequenceSearchResult))
 			return getReadSearchResultValue(row, col);
 

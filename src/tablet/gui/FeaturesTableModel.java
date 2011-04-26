@@ -6,6 +6,7 @@ package tablet.gui;
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.event.*;
 import javax.swing.table.*;
 
 import tablet.data.*;
@@ -21,15 +22,13 @@ class FeaturesTableModel extends AbstractTableModel
 	private FeaturesPanel panel;
 	private Contig contig;
 
-	private ArrayList<Feature> features;
+	private ArrayList<Feature> features = new ArrayList<Feature>();
 
 	private String[] columnNames;
 
-	FeaturesTableModel(FeaturesPanel panel, Contig contig)
+	FeaturesTableModel(FeaturesPanel panel)
 	{
 		this.panel = panel;
-		this.contig = contig;
-		features = contig.getFeatures();
 
 		String col1 = RB.getString("gui.FeaturesTableModel.col1");
 		String col2 = RB.getString("gui.FeaturesTableModel.col2");
@@ -37,6 +36,21 @@ class FeaturesTableModel extends AbstractTableModel
 		String col4 = RB.getString("gui.FeaturesTableModel.col4");
 
 		columnNames = new String[] { col1, col2, col3, col4 };
+	}
+
+	void setContig(Contig contig)
+	{
+		this.contig = contig;
+		features = contig.getFeatures();
+
+		fireTableChanged(new TableModelEvent(this));
+	}
+
+	void clear()
+	{
+		features = new ArrayList<Feature>();
+
+		fireTableChanged(new TableModelEvent(this));
 	}
 
 	public String getColumnName(int col)
