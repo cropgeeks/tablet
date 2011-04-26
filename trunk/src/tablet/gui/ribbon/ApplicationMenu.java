@@ -8,7 +8,6 @@ import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
 
-import tablet.analysis.*;
 import tablet.gui.dialog.*;
 import tablet.gui.dialog.prefs.*;
 import tablet.gui.*;
@@ -47,6 +46,7 @@ public class ApplicationMenu extends RibbonApplicationMenu
 
 	public static JCommandButton bExport;
 	public static JCommandButton bCoverage;
+	public static JCommandButton bExportSNPs;
 
 	ApplicationMenu(WinMain winMain)
 	{
@@ -158,6 +158,15 @@ public class ApplicationMenu extends RibbonApplicationMenu
 			RB.getString("gui.ribbon.ApplicationMenu.bCoverage"),
 			RB.getString("gui.ribbon.ApplicationMenu.bCoverage.tooltip")));
 		bCoverage.addActionListener(this);
+
+		// Export SNPs
+		bExportSNPs = new JCommandButton("Detected SNPs (BAM only)",
+			RibbonController.getIcon("COVERAGE16", 16));
+		bExportSNPs.setHorizontalAlignment(SwingUtilities.LEFT);
+//		bExportSNPs.setActionRichTooltip(new RichTooltip(
+//			RB.getString("gui.ribbon.ApplicationMenu.bCoverage"),
+//			RB.getString("gui.ribbon.ApplicationMenu.bCoverage.tooltip")));
+		bExportSNPs.addActionListener(this);
 	}
 
 	// Creates the application menu's list of recently opened documents
@@ -263,6 +272,9 @@ public class ApplicationMenu extends RibbonApplicationMenu
 
 		else if (e.getSource() == bCoverage)
 			winMain.getCommands().exportCoverage();
+
+		else if (e.getSource() == bExportSNPs)
+			winMain.getCommands().exportSNPs();
 	}
 
 	public static void displayPreferences(Integer tab)
@@ -283,6 +295,8 @@ public class ApplicationMenu extends RibbonApplicationMenu
 
 			recentPanel.addButtonToLastGroup(bExport);
 			recentPanel.addButtonToLastGroup(bCoverage);
+			if (Prefs.isSCRIUser)
+				recentPanel.addButtonToLastGroup(bExportSNPs);
 
 			recentPanel.setMaxButtonColumns(1);
 			targetPanel.setLayout(new BorderLayout());

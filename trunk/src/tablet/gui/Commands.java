@@ -347,6 +347,56 @@ public class Commands
 			TaskDialog.INF, new File(filename));
 	}
 
+	public void exportSNPs()
+	{
+		Assembly assembly = winMain.getAssemblyPanel().getAssembly();
+
+		if(assembly.getBamBam() != null)
+		{
+			String aName = assembly.getName();
+			File saveAs = new File(Prefs.guiCurrentDir, aName+".txt");
+
+			FileNameExtensionFilter filter = new FileNameExtensionFilter(
+				RB.getString("gui.text.formats.txt"), "txt");
+
+			// Ask the user for a filename to save the current view as
+			String filename = TabletUtils.getSaveFilename(
+				RB.getString("gui.Commands.exportCoverage.saveDialog"), saveAs, filter);
+
+			// Quit if the user cancelled the file selection
+			if (filename == null)
+				return;
+
+			SNPFinder finder = new SNPFinder(new File(filename), assembly);
+
+			ProgressDialog dialog = new ProgressDialog(finder,
+				"Exporting SNPs",
+				"Exporting SNPs - please be patient...",
+				Tablet.winMain);
+
+			if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
+			{
+				if (dialog.getResult() == ProgressDialog.JOB_FAILED)
+				{
+					dialog.getException().printStackTrace();
+
+					TaskDialog.showOpenLog(RB.format("gui.Commands.exportSNPs.exception",
+						dialog.getException()),	Tablet.getLogFile());
+				}
+			}
+			else
+				TaskDialog.info(
+					RB.format("gui.Commands.exportSNPs.success", filename),
+					RB.getString("gui.text.close"));
+		}
+		else
+		{
+			TaskDialog.warning("Sorry but this feature is not currently "
+				+ "supported for non-BAM assemblies.", RB.getString("gui.text.close"));
+		}
+	}
+
+
 	/**
 	 * Display a save dialog to get the filename a file should be saved under.
 	 */

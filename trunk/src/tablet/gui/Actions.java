@@ -69,6 +69,7 @@ public class Actions
 		ApplicationMenu.mClose.setEnabled(false);
 		ApplicationMenu.bExport.setEnabled(false);
 		ApplicationMenu.bCoverage.setEnabled(false);
+		ApplicationMenu.bExportSNPs.setEnabled(false);
 		applicationMenuSave16.setEnabled(false);
 		assembliesImportFeatures.setEnabled(false);
 
@@ -123,6 +124,7 @@ public class Actions
 		ApplicationMenu.mClose.setEnabled(true);
 		ApplicationMenu.bExport.setEnabled(false);
 		ApplicationMenu.bCoverage.setEnabled(true);
+		ApplicationMenu.bExportSNPs.setEnabled(true);
 		applicationMenuSave16.setEnabled(false);
 		assembliesImportFeatures.setEnabled(true);
 
@@ -177,6 +179,7 @@ public class Actions
 		ApplicationMenu.mClose.setEnabled(true);
 		ApplicationMenu.bExport.setEnabled(true);
 		ApplicationMenu.bCoverage.setEnabled(true);
+		ApplicationMenu.bExportSNPs.setEnabled(true);
 		applicationMenuSave16.setEnabled(false);
 		assembliesImportFeatures.setEnabled(true);
 
