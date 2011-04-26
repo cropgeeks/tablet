@@ -37,6 +37,19 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		setLayout(new BorderLayout());
 		add(controls = new FeaturesPanelNB(this));
 
+		createTableModel();
+
+		controls.featuresLabel.setText(getTitle(0));
+	}
+
+	private void createTableModel()
+	{
+		model = new FeaturesTableModel(this);
+
+		sorter = new TableRowSorter<FeaturesTableModel>(model);
+		controls.table.setModel(model);
+		controls.table.setRowSorter(sorter);
+
 		// Additional (duplicate) table-clicked handler to catch the user
 		// re-clicking on the same row. This doesn't generate a table event, but
 		// we still want to respond to it and highlight the selection again
@@ -49,40 +62,31 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		// Set the custom renderer on the table
 		controls.table.setDefaultRenderer(Integer.class,
 			new FeaturesTableModel.FeaturesTableRenderer());
-
-		controls.featuresLabel.setText(getTitle(0));
-
-		toggleComponentEnabled(false);
 	}
 
 	void setContig(Contig contig)
 	{
 		this.contig = contig;
 
-		// If a contig (in the main contig table) was de-selected or there are
-		// no features to actually show, disable the tab
-		if (contig == null || contig.getFeatures().isEmpty())
+		if (contig == null)
 		{
 			controls.featuresLabel.setText(getTitle(0));
 
-			model = null;
-			controls.table.setModel(new DefaultTableModel());
-			controls.table.setRowSorter(null);
-
 			// Clear the reference if it's not going to be used
 			consensus = null;
+
+			model.clear();
+			controls.toggleComponentEnabled(false);
 		}
 
 		else
 		{
-			toggleComponentEnabled(true);
-			controls.featuresLabel.setText(getTitle(contig.getFeatures().size()));
-			model = new FeaturesTableModel(this, contig);
-			sorter = new TableRowSorter<FeaturesTableModel>(model);
-			controls.table.setModel(model);
-			controls.table.setRowSorter(sorter);
-
 			consensus = contig.getConsensus();
+
+			model.setContig(contig);
+
+			controls.featuresLabel.setText(getTitle(contig.getFeatures().size()));
+			controls.toggleComponentEnabled(true);
 		}
 	}
 
@@ -151,11 +155,6 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 	{
 		controls.prevFeature();
 		ctrlTabs.setSelectedComponent(this);
-	}
-
-	void toggleComponentEnabled(boolean enabled)
-	{
-		controls.toggleComponentEnabled(enabled);
 	}
 
 	String getTableToolTip(MouseEvent e)

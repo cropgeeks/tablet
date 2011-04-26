@@ -67,6 +67,8 @@ public class FindPanelNB extends javax.swing.JPanel
 					panel.runSearch();
 			}
 		});
+
+		toggleComponentEnabled(false);
     }
 
 	// Toggle which components are enabled to ensure that the correct components
@@ -78,7 +80,7 @@ public class FindPanelNB extends javax.swing.JPanel
 		findCombo.setEnabled(enabled);
 		searchTypeCombo.setEnabled(enabled);
 		resultsLabel.setEnabled(enabled);
-		table.setEnabled(enabled);
+//		table.getTableHeader().setVisible(enabled);
 		findInCheckBox.setEnabled(enabled);
 
 		if(searchTypeCombo.getSelectedIndex() != Finder.READ_NAME)

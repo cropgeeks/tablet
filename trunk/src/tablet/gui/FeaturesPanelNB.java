@@ -39,6 +39,8 @@ class FeaturesPanelNB extends JPanel
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getSelectionModel().addListSelectionListener(panel);
+
+		toggleComponentEnabled(false);
     }
 
 	public void changedUpdate(DocumentEvent e)
@@ -98,7 +100,7 @@ class FeaturesPanelNB extends JPanel
 		filterLabel.setEnabled(enabled);
 		filterText.setEnabled(enabled);
 		featuresLabel.setEnabled(enabled);
-		table.setEnabled(enabled);
+		table.getTableHeader().setVisible(enabled);
 	}
 
 	public void nextFeature()

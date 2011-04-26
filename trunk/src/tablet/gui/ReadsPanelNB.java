@@ -27,6 +27,8 @@ public class ReadsPanelNB extends javax.swing.JPanel
 		exportLinkLabel.setEnabled(false);
 
 		readsLabel.setText(RB.format("gui.ReadsPanel.readsLabel", 0));
+
+		toggleComponentEnabled(false);
     }
 
 	private JTable createTable()
@@ -95,7 +97,7 @@ public class ReadsPanelNB extends javax.swing.JPanel
 		pairLabel.setEnabled(enabled);
 		properlyPairedLabel.setEnabled(enabled);
 		readsLabel.setEnabled(enabled);
-		table.setEnabled(enabled);
+		table.getTableHeader().setVisible(enabled);
 	}
 
     /** This method is called from within the constructor to

@@ -21,7 +21,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 {
 	private FindPanelNB controls;
 	private AssemblyPanel aPanel;
-	private AbstractTableModel tableModel;
+	private FindTableModel tableModel;
 	private ContigsPanel cPanel;
 	private Finder finder;
 	private TableRowSorter<AbstractTableModel> sorter;
@@ -34,14 +34,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		setLayout(new BorderLayout());
 		add(controls = new FindPanelNB(this));
 
-		// Additional (duplicate) table-clicked handler to catch the user
-		// re-clicking on the same row. This doesn't generate a table event, but
-		// we still want to respond to it and highlight the selection again
-		controls.table.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				processTableSelection();
-			}
-		});
+		createTableModel();
 
 		//Keyboard shortcut code
 		Action openFind = new AbstractAction() {
@@ -53,18 +46,27 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		ctrlTabs.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
 			KeyStroke.getKeyStroke(KeyEvent.VK_F, Tablet.menuShortcut), "find");
 		ctrlTabs.getActionMap().put("find", openFind);
-
-		controls.toggleComponentEnabled(false);
-		controls.table.setDefaultRenderer(Number.class, new NumberFormatCellRenderer());
 	}
 
-	void setTableModel(ArrayList<SearchResult> results)
+	private void createTableModel()
 	{
-		tableModel = new FindTableModel(results);
+		tableModel = new FindTableModel();
 
 		sorter = new TableRowSorter<AbstractTableModel>(tableModel);
 		controls.table.setModel(tableModel);
 		controls.table.setRowSorter(sorter);
+
+		// Additional (duplicate) table-clicked handler to catch the user
+		// re-clicking on the same row. This doesn't generate a table event, but
+		// we still want to respond to it and highlight the selection again
+		controls.table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				processTableSelection();
+			}
+		});
+
+		controls.table.setDefaultRenderer(Number.class,
+			new NumberFormatCellRenderer());
 	}
 
 	public void valueChanged(ListSelectionEvent e)
@@ -211,20 +213,17 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		}
 	}
 
-	void toggleComponentEnabled(boolean enabled)
-	{
-		controls.toggleComponentEnabled(enabled);
-	}
-
 	public void setAssembly(Assembly assembly)
 	{
 		if (assembly == null)
-			toggleComponentEnabled(false);
+			controls.toggleComponentEnabled(false);
+		else
+			controls.toggleComponentEnabled(true);
 
 		if (finder != null)
 			finder.setResults(null);
+		tableModel.clear();
 
-		controls.table.setModel(new DefaultTableModel());
 		controls.resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", 0));
 	}
 
@@ -238,7 +237,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		}
 
 		resetFinder();
-		setTableModel(null);
+		tableModel.clear();
 
 		if (controls.findCombo.getText() != null)
 		{
@@ -253,7 +252,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		if(results != null && !results.isEmpty())
 		{
 			controls.resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", results.size()));
-			setTableModel(results);
+			tableModel.setResults(results);
 		}
 
 		else

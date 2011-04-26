@@ -26,7 +26,7 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 	private TableRowSorter<AbstractTableModel> sorter;
 	private AssemblyPanel aPanel;
 	private Contig contig;
-	
+
 	private JMenuItem mClipboardName, mClipboardData;
 	private JMenuItem mFindStart, mFindEnd, mJumpToPair;
 
@@ -35,26 +35,32 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 		this.aPanel = aPanel;
 		controls = new ReadsPanelNB(this);
 
-		// Additional (duplicate) table-clicked handler to catch the user
-		// re-clicking on the same row. This doesn't generate a table event, but
-		// we still want to respond to it and highlight the selection againm
-		controls.table.addMouseListener(new TableMouseListener());
+		createTableModel();
 
 		setLayout(new BorderLayout());
 		add(controls);
-
-		toggleComponentEnabled(false);
 	}
 
-	void setTableModel(List<Read> reads)
+	private void createTableModel()
 	{
-		// Note: the model is created to be non-editable
-		tableModel = new ReadsTableModel(reads);
+		tableModel = new ReadsTableModel();
 
 		sorter = new TableRowSorter<AbstractTableModel>(tableModel);
 		controls.table.setModel(tableModel);
 		controls.table.setRowSorter(sorter);
-		controls.readsLabel.setText(RB.format("gui.ReadsPanel.readsLabel", reads.size()));
+
+		// Additional (duplicate) table-clicked handler to catch the user
+		// re-clicking on the same row. This doesn't generate a table event, but
+		// we still want to respond to it and highlight the selection againm
+		controls.table.addMouseListener(new TableMouseListener());
+	}
+
+	void setTableModel(List<Read> reads)
+	{
+		tableModel.setReads(reads);
+
+		controls.readsLabel.setText(
+			RB.format("gui.ReadsPanel.readsLabel", reads.size()));
 	}
 
 	public void valueChanged(ListSelectionEvent e)
@@ -134,27 +140,18 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 		}
 	}
 
-	void setAssembly(Assembly assembly)
-	{
-		if (assembly == null)
-			toggleComponentEnabled(false);
-	}
-
 	void setContig(Contig contig)
 	{
 		if (contig != null)
 		{
 			this.contig = contig;
 			controls.setLabelStates(Assembly.hasCigar(), Assembly.isPaired());
+			controls.toggleComponentEnabled(true);
 		}
-
 		else
 		{
 			clear();
-
-			tableModel = null;
-			controls.table.setModel(new DefaultTableModel());
-			controls.table.setRowSorter(null);
+			controls.toggleComponentEnabled(false);
 		}
 
 		controls.readsLabel.setText(RB.format("gui.ReadsPanel.readsLabel", 0));
@@ -266,29 +263,29 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 				ex.printStackTrace();
 			}
 		}
-		
+
 		else if (e.getSource() == mClipboardName)
 			copyReadNameToClipboard();
-		
+
 		else if (e.getSource() == mClipboardData)
 			copyDataToClipboard();
-		
+
 		else if (e.getSource() == mFindStart)
 		{
 			Read read = getReadFromTable();
 			highlightReadAtPosition(read, read.getStartPosition());
 		}
-		
+
 		else if (e.getSource() == mFindEnd)
 		{
 			Read read = getReadFromTable();
 			highlightReadAtPosition(read, read.getEndPosition());
 		}
-		
+
 		else if (e.getSource() == mJumpToPair)
 		{
 			Read read = getReadFromTable();
-			
+
 			if (read instanceof MatedRead)
 			{
 				int matePos = ((MatedRead)read).getMatePos();
@@ -318,7 +315,7 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 	private void highlightReadAtPosition(Read read, int position)
 	{
 		int lineIndex = contig.getReadManager().getLineForRead(read);
-		
+
 		aPanel.moveToPosition(lineIndex, position, true);
 		new ReadHighlighter(aPanel, read, lineIndex);
 	}
@@ -332,10 +329,10 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 		mClipboardData = new JMenuItem("", Icons.getIcon("CLIPBOARD"));
 		RB.setText(mClipboardData, "gui.viewer.ReadsCanvasMenu.mClipboardData");
 		mClipboardData.addActionListener(this);
-		
+
 		JMenu mJumpTo = new JMenu("");
 		RB.setText(mJumpTo, "gui.viewer.ReadsCanvasMenu.mJumpTo");
-		
+
 		mFindStart = new JMenuItem("", Icons.getIcon("START16"));
 		RB.setText(mFindStart, "gui.viewer.ReadsCanvasMenu.mJumpToReadStart");
 		mFindStart.addActionListener(this);
@@ -351,7 +348,7 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 		mJumpTo.add(mFindStart);
 		mJumpTo.add(mFindEnd);
 		mJumpTo.add(mJumpToPair);
-		
+
 		JPopupMenu menu = new JPopupMenu();
 		menu.add(mClipboardName);
 		menu.add(mClipboardData);
@@ -367,13 +364,8 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 
 		if (!rmd.getMateMapped())
 			mJumpToPair.setEnabled(false);
-		
-		menu.show(e.getComponent(), e.getX(), e.getY());
-	}
 
-	void toggleComponentEnabled(boolean enabled)
-	{
-		controls.toggleComponentEnabled(enabled);
+		menu.show(e.getComponent(), e.getX(), e.getY());
 	}
 
 	private class TableMouseListener extends MouseInputAdapter

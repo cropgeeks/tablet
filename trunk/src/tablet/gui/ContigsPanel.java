@@ -79,9 +79,6 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 
 			controls.table.setModel(new DefaultTableModel());
 			controls.table.setRowSorter(null);
-			featuresPanel.toggleComponentEnabled(false);
-			findPanel.toggleComponentEnabled(false);
-			readsPanel.toggleComponentEnabled(false);
 		}
 		else
 		{
@@ -90,9 +87,6 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 
 			controls.table.setModel(model);
 			controls.table.setRowSorter(sorter);
-			featuresPanel.toggleComponentEnabled(true);
-			findPanel.toggleComponentEnabled(true);
-			readsPanel.toggleComponentEnabled(true);
 		}
 
 

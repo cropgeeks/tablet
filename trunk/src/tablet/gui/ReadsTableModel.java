@@ -13,18 +13,23 @@ import tablet.data.*;
 
 class ReadsTableModel extends AbstractTableModel
 {
-	private List<Read> reads;
+	private List<Read> reads = new ArrayList<Read>();
 	private String[] columnNames;
 
-	ReadsTableModel(List<Read> reads)
+	ReadsTableModel()
 	{
-		this.reads = reads;
-
 		String col1 = RB.getString("gui.ReadsTableModel.name");
 		String col2 = RB.getString("gui.ReadsTableModel.position");
 		String col3 = RB.getString("gui.ReadsTableModel.length");
 
 		columnNames = new String[] { col1, col2, col3 };
+	}
+
+	void setReads(List<Read> reads)
+	{
+		this.reads = reads;
+//		fireTableChanged(new TableModelEvent(this));
+		fireTableDataChanged();
 	}
 
 	@Override
@@ -70,7 +75,7 @@ class ReadsTableModel extends AbstractTableModel
 		else
 			return null;
 	}
-	
+
 	static TableCellRenderer getCellRenderer(int col)
 	{
 		switch (col)
