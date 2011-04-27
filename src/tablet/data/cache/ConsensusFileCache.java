@@ -41,10 +41,7 @@ public class ConsensusFileCache extends TabletCache
 		throws IOException
 	{
 		if (out != null)
-		{
-			out.close();
-			out = null;
-		}
+			out.flush();
 
 		if (rnd == null)
 			rnd = new BufferedRandomAccessFile(cacheFile, "r", 1024);
