@@ -22,6 +22,20 @@ that have been made to Tablet in recent versions. For full details on all the
 changes between versions, please see the <a href="http://bioinf.hutton.ac.uk/tablet/svn.txt">
 subversion change log</a>.</p>
 
+<h3>New in 1.11.05.03</h3>
+<ul>
+<li>NEW: Consensus sequence data is now cached to disk which should result in less memory being used with large contigs.</li>
+<li>CHG: Improved the mechanism used to search for read names across non-BAM datasets (should be significantly faster).</li>
+<li>CHG: Simplified the Search UI so that all secondary options are check boxes and search type is the only remaining combo box.</li>
+<li>CHG: Changed Tablet's look and feel now that SCRI has become part of The James Hutton Institute.</li>
+<li>BUG: The total read count shown in the contigs panel was suffering from integer overflow with more than 2 billion reads.</li>
+<li>BUG: Fixed an "off by one" bug in the position attribute of the read printer output.</li>
+<li>BUG: Read names with :1 /1 etc postfixes were being truncated by one character prior to the postfix.</li>
+<li>BUG: Fixed various enabled/disabled UI issues.</li>
+<li>BUG: The Find Panel was not allowing reselection (and highlighting) of its results.</li>
+</ul>
+
+
 <h3>New in 1.11.03.14</h3>
 <ul>
 <li>BUG: OS X only. Added a temporary workaround for BAM files not being detected with the latest (1.6.0_24) version of Java due to changes in gzip handling.
