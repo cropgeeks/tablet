@@ -204,6 +204,7 @@ public class ReadsCanvas extends JPanel
 		proteins = ProteinScheme.getScheme(Prefs.visColorScheme, ntW, ntH);
 
 		updateBuffer = true;
+		repaint();
 	}
 
 	public void paintComponent(Graphics graphics)
