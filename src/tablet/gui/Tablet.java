@@ -11,6 +11,7 @@ import javax.swing.*;
 
 import tablet.gui.dialog.*;
 import tablet.gui.ribbon.*;
+import tablet.gui.viewer.colors.*;
 
 import scri.commons.gui.*;
 import scri.commons.file.*;
@@ -43,6 +44,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		// - see: http://www.allaboutbalance.com/articles/disableprefs
 //		System.setProperty("java.util.prefs.PreferencesFactory", "scri.commons.gui.DisabledPreferencesFactory");
 
+		ColorPrefs.load();
 		prefs.loadPreferences(prefsFile, Prefs.class);
 		prefs.savePreferences(prefsFile, Prefs.class);
 		prefs.setVariables();
@@ -180,6 +182,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 		Prefs.isFirstRun = false;
 		prefs.savePreferences(prefsFile, Prefs.class);
+		ColorPrefs.save();
 
 		System.exit(0);
 	}
@@ -221,6 +224,9 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		// Ensure the .scri-bioinf folder exists
 		File fldr = new File(System.getProperty("user.home"), ".scri-bioinf");
 		fldr.mkdirs();
+
+		// Color-prefs file
+		ColorPrefs.setFile(new File(fldr, "tablet-colors.xml"));
 
 		// This is the file we really want
 		File file = new File(fldr, "tablet.xml");
