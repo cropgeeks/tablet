@@ -30,6 +30,9 @@ public class BamFileHandler
 	private boolean okToRun = true;
 	private boolean refLengthsOK = true;
 
+	private ArrayList<String> readGroups = new ArrayList<String>();
+	private HashMap<String, Short> sampleHash = new HashMap<String, Short>();
+
 	BamFileHandler(IReadCache readCache, ReadSQLCache nameCache, AssemblyFile bamFile, AssemblyFile baiFile, Assembly assembly)
 	{
 		this.bamFile = bamFile;
@@ -115,6 +118,8 @@ public class BamFileHandler
 
 		if (Assembly.isPaired())
 			nameCache.indexNames();
+
+		assembly.setReadGroups(readGroups);
 	}
 
 	private void createRead(Contig contig, final SAMRecord record, CigarParser parser) throws Exception
@@ -122,10 +127,22 @@ public class BamFileHandler
 		int readStartPos = record.getAlignmentStart()-1;
 
 		ReadNameData rnd = new ReadNameData(record.getReadName());
-
 		ReadMetaData rmd = new ReadMetaData(record.getReadNegativeStrandFlag());
 
 		rmd.setIsPaired(record.getReadPairedFlag());
+
+		// Setup reads groups if they exist
+		if (record.getReadGroup() != null)
+		{
+			String sample = record.getReadGroup().getSample();
+			if (!readGroups.contains(sample))
+			{
+				readGroups.add(sample);
+				sampleHash.put(sample, (short)(readGroups.size()-1));
+			}
+
+			rmd.setReadGroup(sampleHash.get(sample));
+		}
 
 		Read read;
 		// If the read is paired

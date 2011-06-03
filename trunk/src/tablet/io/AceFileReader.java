@@ -10,7 +10,6 @@ import java.util.regex.*;
 import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
-import tablet.data.auxiliary.*;
 import static tablet.io.ReadException.*;
 
 import scri.commons.gui.*;
@@ -110,6 +109,7 @@ public class AceFileReader extends TrackableReader
 		}
 
 		assembly.setName(files[ASBINDEX].getName());
+		assembly.setReadGroups(new ArrayList<String>());
 
 
 		// Remove any reads that got marked as null due to being poor quality

@@ -18,7 +18,6 @@ import org.jvnet.flamingo.ribbon.resize.*;
 
 import scri.commons.gui.*;
 
-import tablet.data.Assembly;
 
 public class BandStyles extends JRibbonBand implements ActionListener
 {
@@ -27,6 +26,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 	private JCommandToggleButton bStandard;
 	private JCommandToggleButton bDirection;
 	private JCommandToggleButton bReadType;
+	private JCommandToggleButton bReadGroup;
 	private JCommandToggleButton bText;
 
 	private JCommandToggleButton bPacked, bStacked, bPairPacked, bPairStacked;
@@ -131,7 +131,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 		styleButtons.add(bDirection);
 
 
-		// Orientation/direction colour scheme button
+		// Paired read type colour scheme button
 		boolean readtypeOn = Prefs.visColorScheme == ReadScheme.READTYPE;
 
 		bReadType = new JCommandToggleButton(
@@ -147,6 +147,22 @@ public class BandStyles extends JRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.BandStyles.bReadType.tooltip"),
 			RB.getString("gui.ribbon.BandStyles.bReadType.richtip")));
 		styleButtons.add(bReadType);
+
+		boolean readGroupOn = Prefs.visColorScheme == ReadScheme.READGROUP;
+
+		bReadGroup = new JCommandToggleButton(
+			RB.getString("gui.ribbon.BandStyles.bReadGroup"),
+			RibbonController.getIcon("READTYPE32", 32));
+		Actions.stylesReadGroup = new ActionToggleButtonModel(false);
+		Actions.stylesReadGroup.setSelected(readGroupOn);
+		Actions.stylesReadGroup.addActionListener(this);
+		bReadGroup.setActionModel(Actions.stylesReadGroup);
+		bReadGroup.setActionKeyTip("R");
+		bReadGroup.addMouseListener(styleListener);
+		bReadGroup.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.BandStyles.bReadGroup.tooltip"),
+			RB.getString("gui.ribbon.BandStyles.bReadGroup.richtip")));
+		styleButtons.add(bReadGroup);
 
 
 		// Text ("classic") colour scheme button
@@ -170,9 +186,9 @@ public class BandStyles extends JRibbonBand implements ActionListener
 		// Set up the ribbon gallery (gawd knows what this code is doing)
 		Map<RibbonElementPriority, Integer> counts =
 			new HashMap<RibbonElementPriority, Integer>();
-		counts.put(RibbonElementPriority.LOW, 4);
-		counts.put(RibbonElementPriority.MEDIUM, 4);
-		counts.put(RibbonElementPriority.TOP, 4);
+		counts.put(RibbonElementPriority.LOW, 5);
+		counts.put(RibbonElementPriority.MEDIUM, 5);
+		counts.put(RibbonElementPriority.TOP, 5);
 
 		List<StringValuePair<List<JCommandToggleButton>>> galleryButtons =
 			new ArrayList<StringValuePair<List<JCommandToggleButton>>>();
@@ -180,7 +196,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 		galleryButtons.add(
 			new StringValuePair<List<JCommandToggleButton>>(null, styleButtons));
 		addRibbonGallery(
-			"Style", galleryButtons, counts, 5, 2, RibbonElementPriority.TOP);
+			"Style", galleryButtons, counts, 6, 2, RibbonElementPriority.TOP);
 	}
 
 	// The listeners for the "live preview" styles track the previous style so
@@ -213,6 +229,18 @@ public class BandStyles extends JRibbonBand implements ActionListener
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
 			Actions.stylesReadType.setSelected(true);
+		}
+
+		else if (e.getSource() == Actions.stylesReadGroup)
+		{
+			setColorScheme(ReadScheme.READGROUP);
+			styleListener.previousScheme = ReadScheme.READGROUP;
+
+			//winMain.getAssemblyPanel().updateColorScheme();
+			winMain.getReadGroupsPanel().updateModel();
+
+			// BUG: Workaround for API allowing toggle groups to be unselected
+			Actions.stylesReadGroup.setSelected(true);
 		}
 
 		else if (e.getSource() == Actions.stylesText)
@@ -280,6 +308,11 @@ public class BandStyles extends JRibbonBand implements ActionListener
 	{
 		Prefs.visColorScheme = scheme;
 		winMain.getAssemblyPanel().forceRedraw();
+
+		if (scheme == ReadScheme.READGROUP)
+			winMain.getReadGroupsPanel().toggleComponentEnabled(true);
+		else
+			winMain.getReadGroupsPanel().toggleComponentEnabled(false);
 	}
 
 	private void createPackingPopupMenu()
@@ -313,6 +346,11 @@ public class BandStyles extends JRibbonBand implements ActionListener
 		packMenu.show(bPackStyle, 0, bPackStyle.getHeight());
 	}
 
+	public JCommandToggleButton getBStandard()
+	{
+		return bStandard;
+	}
+
 	// Tracks the mouse entering or exiting the colour scheme style buttons
 	private class StyleListener extends MouseAdapter
 	{
@@ -334,6 +372,10 @@ public class BandStyles extends JRibbonBand implements ActionListener
 			else if (e.getSource() == bReadType && Actions.stylesReadType.isEnabled() &&
 				previousScheme != ReadScheme.READTYPE)
 				setColorScheme(ReadScheme.READTYPE);
+
+			else if (e.getSource() == bReadGroup && Actions.stylesReadGroup.isEnabled() &&
+				previousScheme != ReadScheme.READGROUP)
+				setColorScheme(ReadScheme.READGROUP);
 
 			else if (e.getSource() == bText && Actions.stylesText.isEnabled() &&
 				previousScheme != ReadScheme.CLASSIC)

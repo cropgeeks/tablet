@@ -25,6 +25,7 @@ public class ReadMetaData extends Sequence
 	private boolean isPaired;
 	// True if this read's mate has been mapped to a contig in the assembly
 	private boolean mateMapped;
+	private short readGroup;
 
 	public ReadMetaData()
 	{
@@ -137,4 +138,10 @@ public class ReadMetaData extends Sequence
 		else
 			return UNPAIRED;
 	}
+
+	public short getReadGroup()
+		{ return readGroup; }
+
+	public void setReadGroup(short readGroup)
+		{ this.readGroup = readGroup; }
 }

@@ -3,7 +3,7 @@
 
 package tablet.data;
 
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 import tablet.data.auxiliary.*;
@@ -27,8 +27,9 @@ public class Assembly implements Iterable<Contig>
 
 	private BamBam bambam;
 	private static boolean hasCigar;
-
 	private static boolean isPaired = false;
+
+	private static ArrayList<String> readGroups = new ArrayList<String>();
 
 	/** Constructs a new, empty assembly. */
 	public Assembly(String cacheID)
@@ -179,4 +180,10 @@ public class Assembly implements Iterable<Contig>
 
 	public static void setIsPaired(boolean isPaired)
 		{ Assembly.isPaired = isPaired; }
+
+	public static ArrayList<String> getReadGroups()
+		{ return readGroups; }
+
+	public void setReadGroups(ArrayList<String> readGroups)
+		{ Assembly.readGroups = readGroups;	}
 }

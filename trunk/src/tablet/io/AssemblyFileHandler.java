@@ -72,7 +72,7 @@ public class AssemblyFileHandler extends SimpleJob
 			aFile.canDetermineType();
 
 		Arrays.sort(files);
-
+		
 
 		// For each file format that we understand...
 		switch (files[0].getType())

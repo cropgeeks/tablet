@@ -27,6 +27,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 	private ContigsPanelNB controls;
 	private FindPanel findPanel;
 	private ReadsPanel readsPanel;
+	private ReadGroupsPanel readGroupsPanel;
 	private JTabbedPane ctrlTabs;
 
 	private ContigsTableModel model;
@@ -54,6 +55,9 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 
 	void setReadsPanel(ReadsPanel readsPanel)
 		{ this.readsPanel = readsPanel; }
+
+	void setReadGroupsPanel(ReadGroupsPanel readGroupsPanel)
+		{ this.readGroupsPanel = readGroupsPanel; }
 
 	String getTitle(int count)
 	{
@@ -109,6 +113,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		controls.setEnabledState(assembly != null);
 
 		findPanel.setAssembly(assembly);
+		readGroupsPanel.setAssembly(assembly);
 	}
 
 	private long calculateTotalReadCount()
@@ -180,7 +185,8 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		if (aPanel.setContig(contig))
 		{
 			featuresPanel.setContig(contig);
-			winMain.getReadsPanel().setContig(contig);
+			readsPanel.setContig(contig);
+			readGroupsPanel.setContig(contig);
 
 			Actions.openedContigSelected();
 
@@ -204,7 +210,8 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 	{
 		aPanel.setContig(null);
 		featuresPanel.setContig(null);
-		winMain.getReadsPanel().setContig(null);
+		readsPanel.setContig(null);
+		readGroupsPanel.setContig(null);
 
 		winMain.setAssemblyPanelVisible(false);
 	}

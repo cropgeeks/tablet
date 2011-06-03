@@ -4,9 +4,11 @@
 package tablet.gui.viewer.colors;
 
 import java.awt.*;
+import javax.swing.SwingUtilities;
 
 import tablet.data.*;
 import tablet.gui.*;
+import tablet.gui.ribbon.RibbonController;
 
 public abstract class ReadScheme
 {
@@ -14,6 +16,7 @@ public abstract class ReadScheme
 	public static final int CLASSIC = 20;
 	public static final int DIRECTION = 30;
 	public static final int READTYPE = 40;
+	public static final int READGROUP = 50;
 
 
 	/** Returns a DNA colouring scheme from the cache of schemes. */
@@ -38,6 +41,22 @@ public abstract class ReadScheme
 
 		else if (type == READTYPE)
 			scheme = new ReadTypeScheme(w, h);
+
+		else if (type == READGROUP)
+		{
+			if (Assembly.getReadGroups().size() > 0)
+				scheme = new ReadGroupScheme(w, h);
+			else
+			{
+				SwingUtilities.invokeLater(new Runnable() {
+					@Override
+					public void run()
+					{
+						RibbonController.bandStyles.getBStandard().doActionClick();
+					}
+				});
+			}
+		}
 
 		return scheme;
 	}
