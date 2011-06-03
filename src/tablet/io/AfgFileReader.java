@@ -7,7 +7,7 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 
-import tablet.analysis.BasePositionComparator;
+import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.cache.*;
 
@@ -93,6 +93,7 @@ class AfgFileReader extends TrackableReader
 
 		Assembly.setIsPaired(false);
 		assembly.setName(files[ASBINDEX].getName());
+		assembly.setReadGroups(new ArrayList<String>());
 	}
 
 	//parses a CTG tag -- this contains contig information (internal ID, external ID i.e. name, unpadded sequence, quality scores)

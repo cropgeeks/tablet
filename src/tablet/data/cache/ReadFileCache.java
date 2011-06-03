@@ -96,12 +96,15 @@ public class ReadFileCache extends TabletCache implements IReadCache
 
 					boolean mateMapped = rnd.readBooleanFromBuffer();
 
+					short readGroup = rnd.readShort();
+
 					rmd = new ReadMetaData(isComplemented);
 					rmd.setRawData(data);
 					rmd.setLength(dataLength);
 					rmd.setNumberInPair(numberInPair);
 					rmd.setIsPaired(isPaired);
 					rmd.setMateMapped(mateMapped);
+					rmd.setReadGroup(readGroup);
 				}
 				catch (Exception e)	{
 					e.printStackTrace();
@@ -132,16 +135,24 @@ public class ReadFileCache extends TabletCache implements IReadCache
 		// Byte (0, 1, or 2) for pair information
 		out.writeByte(readMetaData.getNumberInPair());
 
+		// Write a boolean for whether or not this is a paired read
 		out.writeBoolean(readMetaData.getIsPaired());
 
+		// Write a boolean for whether or not its mate is mapped
 		out.writeBoolean(readMetaData.getMateMapped());
+
+		// Writre a short for the readGroup of the read
+		out.writeShort(readMetaData.getReadGroup());
 
 		// Bytes written:
 		//   4   - INT, data length
 		//   [d] - BYTES, the data
 		//   1   - BYTE, 0 or 1 (for C or U)
-		//   1   - BYTE, pair info
-		// = 6
-		byteCount += (8 + data.length);
+		//   1   - BYTE, number in pair
+		//	 1	 - BOOLEAN, is paired
+		//	 1	 - BOOLEAN, mate mapped
+		//	 2	 - SHORT, read group
+		// = 10
+		byteCount += (10 + data.length);
 	}
 }

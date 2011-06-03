@@ -31,6 +31,7 @@ public class Actions
 	public static ActionToggleButtonModel stylesStandard;
 	public static ActionToggleButtonModel stylesDirection;
 	public static ActionToggleButtonModel stylesReadType;
+	public static ActionToggleButtonModel stylesReadGroup;
 	public static ActionToggleButtonModel stylesText;
 	public static ActionRepeatableButtonModel stylesPackStyles;
 	public static ActionToggleButtonModel stylesTagVariants;
@@ -86,6 +87,7 @@ public class Actions
 		stylesStandard.setEnabled(false);
 		stylesDirection.setEnabled(false);
 		stylesReadType.setEnabled(false);
+		stylesReadGroup.setEnabled(false);
 		stylesText.setEnabled(false);
 		stylesPackStyles.setEnabled(false);
 		stylesTagVariants.setEnabled(false);
@@ -141,6 +143,7 @@ public class Actions
 		stylesStandard.setEnabled(false);
 		stylesDirection.setEnabled(false);
 		stylesReadType.setEnabled(false);
+		stylesReadGroup.setEnabled(false);
 		stylesText.setEnabled(false);
 		stylesPackStyles.setEnabled(false);
 		stylesTagVariants.setEnabled(false);
@@ -196,6 +199,7 @@ public class Actions
 		stylesStandard.setEnabled(true);
 		stylesDirection.setEnabled(true);
 		stylesReadType.setEnabled(true);
+		stylesReadGroup.setEnabled(true);
 		stylesText.setEnabled(true);
 		stylesPackStyles.setEnabled(true);
 		stylesTagVariants.setEnabled(true);

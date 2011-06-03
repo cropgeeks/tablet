@@ -8,10 +8,10 @@ import java.util.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
+import tablet.data.auxiliary.*;
 import tablet.data.cache.*;
 
 import scri.commons.gui.*;
-import tablet.data.auxiliary.CigarFeature;
 
 class SamFileReader extends TrackableReader
 {
@@ -30,6 +30,10 @@ class SamFileReader extends TrackableReader
 	private int readID = 0;
 
 	private boolean indexingCache = false;
+
+	private ArrayList<String> readGroups = new ArrayList<String>();
+	private HashMap<String, Short> sampleHash = new HashMap<String, Short>();
+	private HashMap<String, String> readGroupIDHash = new HashMap<String, String>();
 
 
 	SamFileReader()
@@ -57,6 +61,7 @@ class SamFileReader extends TrackableReader
 		}
 	}
 
+	@Override
 	public void runJob(int jobIndex)
 		throws Exception
 	{
@@ -71,11 +76,16 @@ class SamFileReader extends TrackableReader
 
 		readID = 0;
 
-		Contig prev = null;
-
 		while ((str = readLine()) != null && okToRun)
 		{
-			if (str.startsWith("@"))
+			// Parse outread groups from header
+			if (str.startsWith("@RG"))
+			{
+				parseReadGroupHeader();
+				continue;
+			}
+
+			else if (str.startsWith("@"))
 				continue;
 
 			String[] tokens = str.split("\t");
@@ -117,38 +127,29 @@ class SamFileReader extends TrackableReader
 			if ((flags & 0x0004) != 0)
 				continue;
 
-			Contig contigToAddTo = contigHash.get(chr);
+			Contig contig = contigHash.get(chr);
 
 			// If it wasn't found (and we don't have ref data), make it
-			if (contigToAddTo == null && refReader == null)
+			if (contig == null && refReader == null)
 			{
-				contigToAddTo = new Contig(chr);
-				contigHash.put(chr, contigToAddTo);
+				contig = new Contig(chr);
+				contigHash.put(chr, contig);
 
-				assembly.addContig(contigToAddTo);
+				assembly.addContig(contig);
 			}
 
-			if (contigToAddTo != null)
+			if (contig != null)
 			{
 				// Unsorted check...
-				if (contigToAddTo.getName().equals(currentContig) == false)
+				if (contig.getName().equals(currentContig) == false)
 				{
-					currentContig = contigToAddTo.getName();
+					currentContig = contig.getName();
 
-					if (contigToAddTo.getReads().size() > 0)
+					if (contig.getReads().size() > 0)
 						isUnsorted = true;
 				}
 
-				if(prev == null)
-				{
-					prev = contigToAddTo;
-					cigarParser.setCurrentContigName(contigToAddTo.getName());
-				}
-				else if(prev != contigToAddTo)
-				{
-					prev = contigToAddTo;
-					cigarParser.setCurrentContigName(contigToAddTo.getName());
-				}
+				cigarParser.setCurrentContigName(contig.getName());
 
 				Read read;
 
@@ -157,46 +158,30 @@ class SamFileReader extends TrackableReader
 
 				rmd.setIsPaired((flags & 0x0001) == 1 ? true : false);
 
+				// Determine the read group this read belongs to (if any)
+				determineReadGroup(tokens, rmd);
+
+				// If paired flag is set setup the pair info
 				if((flags & 0x0001) != 0)
-				{
-					MatedRead pr = new MatedRead(readID, pos);
-					pr.setMatePos(mPos);
-					read = pr;
-					rnd.setInsertSize(iSize);
-					rnd.setIsProperPair((flags & 0x0002) != 0);
-
-					if(mrnm.equals("="))
-						mrnm = chr;
-
-					rnd.setMateContig(mrnm);
-
-					rmd.setNumberInPair((flags & 0x0040) != 0 ? 1 : 2);
-					rmd.setMateMapped((flags & 0x0008) != 0 ? false : true);
-
-					Assembly.setIsPaired(true);
-
-					boolean isMateContig = mrnm.equals(chr);
-					pr.setIsMateContig(isMateContig);
-				}
+					read = setupPairInfo(pos, mPos, rnd, iSize, flags, mrnm, chr, rmd);
 				else
 					read = new Read(readID, pos);
 
-				contigToAddTo.getReads().add(read);
+				contig.getReads().add(read);
 
 				StringBuilder fullRead = new StringBuilder(cigarParser.parse(
 					data.toString(), pos, cigar, read));
 
 				rmd.setData(fullRead);
 
-				int uLength = rmd.calculateUnpaddedLength();
-				rnd.setUnpaddedLength(uLength);
+				rnd.setUnpaddedLength(rmd.calculateUnpaddedLength());
 				rnd.setCigar(cigar);
-				nameCache.setReadNameData(rnd, contigToAddTo);
+				nameCache.setReadNameData(rnd, contig);
 
 				read.setLength(rmd.length());
 
 				// Do base-position comparison...
-				BasePositionComparator.compare(contigToAddTo, rmd,
+				BasePositionComparator.compare(contig, rmd,
 					read.getStartPosition());
 
 				readCache.setReadMetaData(rmd);
@@ -224,6 +209,75 @@ class SamFileReader extends TrackableReader
 					RB.getString("gui.text.close"));
 			}
 		}
+
+		assembly.setReadGroups(readGroups);
+	}
+
+	// Setup paired read information when we have a paired read
+	private MatedRead setupPairInfo(int pos, int mPos, ReadNameData rnd, int iSize,
+		int flags, String mrnm, String chr, ReadMetaData rmd)
+	{
+		MatedRead pr = new MatedRead(readID, pos);
+		pr.setMatePos(mPos);
+
+		rnd.setInsertSize(iSize);
+		// If mate is in same contig its reference can be set as = instead of contig name
+		rnd.setMateContig(mrnm.equals("=") ? mrnm : chr);
+		// If mate reference name equals contig name its mate is in the same contig
+		pr.setIsMateContig(mrnm.equals(chr));
+
+		// Parse properly paired, number in pair and mate mapped out from flag field
+		rnd.setIsProperPair((flags & 0x0002) != 0);
+		rmd.setNumberInPair((flags & 0x0040) != 0 ? 1 : 2);
+		rmd.setMateMapped((flags & 0x0008) != 0 ? false : true);
+
+		Assembly.setIsPaired(true);
+
+		return pr;
+	}
+
+	// Parse out the read group information from @RG lines in the header
+	private void parseReadGroupHeader()
+	{
+		String [] tokens = str.split("\t");
+		String id = tokens[1].split(":")[1];
+
+		if (readGroupIDHash.containsKey(id) == false)
+		{
+			String sample = tokens[2].split(":")[1];
+			readGroupIDHash.put(id, sample);
+
+			if (readGroups.contains(sample) == false)
+			{
+				readGroups.add(sample);
+				sampleHash.put(sample, (short)(readGroups.size()-1));
+			}
+		}
+	}
+
+	// Determine read group and set read group field in ReadMetaData
+	private void determineReadGroup(String[] tokens, ReadMetaData rmd)
+	{
+		int tagStart = 10;
+
+		// Loop over all the tags in the read
+		if (tokens.length < tagStart)
+			return;
+
+		String readGroupID = "";
+
+		for (int i=tagStart; i < tokens.length; i++)
+			if (tokens[i].startsWith("RG"))
+				readGroupID = tokens[i].split(":")[2];
+
+		// If a read group id was found, get the sample number and set it in rmd
+		if (!readGroupID.isEmpty())
+		{
+			String sample = readGroupIDHash.get(readGroupID);
+			// If there are no @RG lines in header sample will be null
+			if (sample != null)
+				rmd.setReadGroup(sampleHash.get(sample));
+		}
 	}
 
 	private void processCigarFeatures(CigarParser parser)
@@ -246,6 +300,7 @@ class SamFileReader extends TrackableReader
 			Collections.sort(contig.getFeatures());
 	}
 
+	@Override
 	public String getMessage()
 	{
 		if (!indexingCache)

@@ -87,7 +87,7 @@ class MaqFileReader extends TrackableReader
 				contigToAddTo.getReads().add(read);
 
 				ReadNameData rnd = new ReadNameData(name);
-				
+
 
 				ReadMetaData rmd = new ReadMetaData(complemented);
 				rmd.setData(data);
@@ -112,6 +112,7 @@ class MaqFileReader extends TrackableReader
 
 		Assembly.setIsPaired(false);
 		assembly.setName(files[0].getName());
+		assembly.setReadGroups(new ArrayList<String>());
 	}
 
 	public String getMessage()

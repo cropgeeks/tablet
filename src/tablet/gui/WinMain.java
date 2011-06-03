@@ -35,6 +35,7 @@ public class WinMain extends JRibbonFrame
 	private FeaturesPanel featuresPanel;
 	private FindPanel findPanel;
 	private ReadsPanel readsPanel;
+	private ReadGroupsPanel readGroupsPanel;
 
 	private Assembly assembly;
 
@@ -89,10 +90,12 @@ public class WinMain extends JRibbonFrame
 		featuresPanel = new FeaturesPanel(assemblyPanel, ctrlTabs);
 		findPanel = new FindPanel(assemblyPanel, this, ctrlTabs);
 		readsPanel = new ReadsPanel(assemblyPanel, ctrlTabs);
+		readGroupsPanel = new ReadGroupsPanel();
 
 		contigsPanel.setFeaturesPanel(featuresPanel);
 		contigsPanel.setFindPanel(findPanel);
 		contigsPanel.setReadsPanel(readsPanel);
+		contigsPanel.setReadGroupsPanel(readGroupsPanel);
 
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(this, dropAdapter));
@@ -109,6 +112,9 @@ public class WinMain extends JRibbonFrame
 		ctrlTabs.addTab("", findPanel);
 		ctrlTabs.setIconAt(3, Icons.getIcon("FIND"));
 		ctrlTabs.setToolTipTextAt(3, RB.getString("gui.WinMain.tabsSearch"));
+		ctrlTabs.addTab("", readGroupsPanel);
+		ctrlTabs.setIconAt(4, Icons.getIcon("FIND"));
+		ctrlTabs.setToolTipTextAt(4, "Read Groups");
 
 		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		splitter.setBorder(BorderFactory.createEmptyBorder());
@@ -238,6 +244,9 @@ public class WinMain extends JRibbonFrame
 
 	public ReadsPanel getReadsPanel()
 		{ return readsPanel; }
+
+	public ReadGroupsPanel getReadGroupsPanel()
+		{ return readGroupsPanel; }
 
 	public JumpToDialog getJumpToDialog()
 	{

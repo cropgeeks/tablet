@@ -29,7 +29,7 @@ public class ColorPrefs
 		}
 	}
 
-	static void setColor(String key, Color color)
+	public static void setColor(String key, Color color)
 	{
 		p.setProperty(key,
 			color.getRed() + "," + color.getGreen() + "," + color.getBlue());
@@ -39,6 +39,9 @@ public class ColorPrefs
 	{
 		file = colorFile;
 	}
+
+	public static void removeColor(String key)
+		{ p.remove(key); }
 
 	public static void load()
 		throws Exception
