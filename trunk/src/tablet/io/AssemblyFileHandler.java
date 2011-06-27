@@ -29,15 +29,14 @@ public class AssemblyFileHandler extends SimpleJob
 	private Assembly assembly;
 	private boolean refLengthsOK = true;
 
-	public AssemblyFileHandler(String[] filenames, File cacheDir)
+	public AssemblyFileHandler(AssemblyFile[] files, File cacheDir)
 	{
-		files = new AssemblyFile[filenames.length];
-
-		for (int i=0; i < filenames.length; i++)
-			files[i] = new AssemblyFile(filenames[i]);
-
+		this.files = files;
 		this.cacheDir = cacheDir;
 	}
+
+	public AssemblyFile[] getFiles()
+		{ return files; }
 
 	public Assembly getAssembly()
 		{ return assembly; }
@@ -67,12 +66,6 @@ public class AssemblyFileHandler extends SimpleJob
 		readCache.openForWriting();
 		sqlCache.openForWriting();
 
-		// Determine assembly type and sort into order (assembly before ref)
-		for (AssemblyFile aFile: files)
-			aFile.canDetermineType();
-
-		Arrays.sort(files);
-		
 
 		// For each file format that we understand...
 		switch (files[0].getType())
