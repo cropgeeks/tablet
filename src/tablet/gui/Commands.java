@@ -5,6 +5,7 @@ package tablet.gui;
 
 import java.awt.image.*;
 import java.io.*;
+import java.util.*;
 import javax.imageio.*;
 import javax.swing.*;
 import javax.swing.filechooser.*;
@@ -14,6 +15,7 @@ import tablet.data.*;
 import tablet.gui.dialog.*;
 import tablet.gui.viewer.*;
 import tablet.io.*;
+import static tablet.io.AssemblyFile.*;
 
 import scri.commons.gui.*;
 
@@ -47,10 +49,40 @@ public class Commands
 				return;
 		}
 
+		// Now that we have filenames, convert them into AssemblyFile objects
+		AssemblyFile[] files = new AssemblyFile[filenames.length];
+
+		boolean hasAssembly = false;
+		for (int i=0; i < filenames.length; i++)
+		{
+			files[i] = new AssemblyFile(filenames[i]);
+			files[i].canDetermineType();
+
+			if (files[i].isAssemblyFile())
+				hasAssembly = true;
+		}
+
+		Arrays.sort(files);
+
+		// Attempt to open the assembly
+		if (hasAssembly)
+			if (openAssembly(files) == false)
+				return;
+
+		// Attempt to open any GFF files (if an assembly is loaded)
+		if (winMain.getAssemblyPanel().getAssembly() != null)
+			for (AssemblyFile file: files)
+				if (file.getType() == AssemblyFile.GFF3)
+					importFeatures(file.getPath(), true);
+	}
+
+	private boolean openAssembly(AssemblyFile[] files)
+	{
 		winMain.closeAssembly();
 		System.gc();
 
-		AssemblyFileHandler assemblyFileHandler = new AssemblyFileHandler(filenames, new File(Prefs.cacheDir));
+		AssemblyFileHandler assemblyFileHandler = new AssemblyFileHandler(files, new File(Prefs.cacheDir));
+
 
 		String title = RB.getString("gui.Commands.fileOpen.title");
 		String label = RB.getString("gui.Commands.fileOpen.label");
@@ -61,28 +93,21 @@ public class Commands
 		{
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
 			{
-				String files = "";
-				for (int i = 0; i < filenames.length; i++)
-					files += "\n     " + filenames[i];
+				String filenames = "";
+				for (int i = 0; i < files.length; i++)
+					filenames += "\n     " + files[i].getPath();
 
 				TaskDialog.showOpenLog(RB.format("gui.Commands.fileOpen.error",
-					dialog.getException(), files), Tablet.getLogFile());
+					dialog.getException(), filenames), Tablet.getLogFile());
 
 			}
 
-			return;
+			return false;
 		}
 
-		Prefs.setRecentDocument(filenames);
+		Prefs.setRecentDocument(files);
 		winMain.setAssembly(assemblyFileHandler.getAssembly());
 
-		// See if a feature file can be loaded at this point too
-		if(filenames.length == 1)
-		{
-			File file = new File(filenames[0]);
-			if (getFeatureFile(file) != null)
-				importFeatures(getFeatureFile(file).getPath(), false);
-		}
 
 		// Pop up a warning if the ref lengths don't match
 		if (!assemblyFileHandler.refLengthsOK() && Prefs.guiWarnRefLengths)
@@ -96,6 +121,8 @@ public class Commands
 			int response = TaskDialog.show(msg, TaskDialog.WAR, 0, chkbox, options);
 			Prefs.guiWarnRefLengths = !chkbox.isSelected();
 		}
+
+		return true;
 	}
 
 	public void importFeatures(String filename, boolean showSummary)

@@ -53,6 +53,15 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 	public String getPath()
 		{ return filename; }
 
+	/**
+	 * Returns true if this file is an actual ASSEMBLY file (ie, not a reference
+	 * or GFF3 file, etc).
+	 */
+	public boolean isAssemblyFile()
+	{
+		return type > 0 && type < 20;
+	}
+
 	public String getName()
 	{
 		// Return either the name of the file
@@ -178,7 +187,7 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 	 * recognised by Tablet. So far, every type can be uniquely distingished by
 	 * looking at just the first "line" of the file (including binary BAM).
 	 */
-	boolean canDetermineType()
+	public boolean canDetermineType()
 	{
 		try
 		{
