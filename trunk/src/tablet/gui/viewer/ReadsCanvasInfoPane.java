@@ -124,7 +124,7 @@ class ReadsCanvasInfoPane
 		int readE = read.getEndPosition();
 
 		// Name
-		box.readName = rnd.getName();
+		box.readName = truncate(rnd.getName());
 		if (boxNum == 2)
 			box.readName += " " + RB.getString("gui.viewer.ReadsCanvasInfoPane.mateRead");
 
@@ -144,7 +144,7 @@ class ReadsCanvasInfoPane
 
 		// Cigar
 		if (Assembly.hasCigar())
-			box.cigar = RB.format("gui.viewer.ReadsCanvasInfoPane.cigar", rnd.getCigar());
+			box.cigar = RB.format("gui.viewer.ReadsCanvasInfoPane.cigar", truncate(rnd.getCigar()));
 
 		// Inserted bases
 		getInsertedBases(read, box);
@@ -179,6 +179,15 @@ class ReadsCanvasInfoPane
 		return box;
 	}
 
+	private String truncate(String str)
+	{
+		if (str.length() < Prefs.visToolTipLimit)
+			return str;
+
+		else
+			return str.substring(0, Prefs.visToolTipLimit) + "...";
+	}
+
 	private BoxData getMissingMateData(Read read)
 	{
 		box = new BoxData();
@@ -186,7 +195,7 @@ class ReadsCanvasInfoPane
 		ReadNameData rnd = Assembly.getReadNameData(read);
 
 		// Name
-		box.readName = rnd.getName() + " "
+		box.readName = truncate(rnd.getName()) + " "
 			+ RB.getString("gui.viewer.ReadsCanvasInfoPane.mateRead");
 
 		// Position data left blank to create some space in the box onscreen
@@ -230,13 +239,19 @@ class ReadsCanvasInfoPane
 				if (insert.getRead().equals(read))
 				{
 					if (box.insertedBases == null)
-						box.insertedBases = RB.format("gui.viewer.ReadsCanvasInfoPane.inserted", insert.getInsertedBases());
+						box.insertedBases = insert.getInsertedBases();
 					else
 						box.insertedBases += " - " + insert.getInsertedBases();
 
 					break;
 				}
 			}
+		}
+
+		if (box.insertedBases != null)
+		{
+			box.insertedBases = truncate(box.insertedBases);
+			box.insertedBases = RB.format("gui.viewer.ReadsCanvasInfoPane.inserted", box.insertedBases);
 		}
 	}
 

@@ -221,6 +221,7 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 				SAMFileReader reader = new SAMFileReader(getInputStream());
 				if (reader.isBinary())
 					type = BAM;
+				reader.close();
 			}
 		}
 		catch (Exception e) { System.out.println(e);}
