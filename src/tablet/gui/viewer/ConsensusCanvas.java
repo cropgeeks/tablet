@@ -117,16 +117,24 @@ class ConsensusCanvas extends TrackingCanvas
 		}
 
 
+		// Because only one consensus at a time is in memory, it is possible for
+		// this drawing code to crap-out if another part of Tablet loads a
+		// different consensus (eg, the finder or export coverage) because the
+		// consensus data will no longer be available to this class
+		try
+		{
+			byte[] data = consensus.getRange(xS+offset, xE+offset);
+			y += qualityH;
 
-		byte[] data = consensus.getRange(xS+offset, xE+offset);
-		y += qualityH;
+			// Draw the consensus sequence
+			for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
+				if (data[i] != -1)
+					g.drawImage(colors.getConsensusImage(data[i]), x, y, null);
+		}
+		catch (Exception e) {};
 
-		// Draw the consensus sequence
-		for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
-			if (data[i] != -1)
-				g.drawImage(colors.getConsensusImage(data[i]), x, y, null);
 
-		// Then allow any overlays to be painted on top of it
+		// Allow any overlays to be painted on top of it
 		try
 		{
 			for (IOverlayRenderer renderer: overlays)

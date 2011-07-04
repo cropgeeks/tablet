@@ -204,6 +204,19 @@ public class AssemblyPanel extends JPanel
 	public Contig getContig()
 		{ return contig; }
 
+	/**
+	 * Because only one consensus at a time is in memory, it is possible for
+	 * another component to invalidate the one we "think" we pointing at.
+	 * This method can be called by those components *after* they're finished to
+	 * ensure the correct consensus get loaded back into memory.
+	 */
+	public void validateConsensusCache()
+	{
+		if (contig != null)
+			contig.getConsensus().getSequence();
+
+		repaint();
+	}
 
 	void canvasViewChanged(int xIndex, int xNum, int yIndex, int yNum)
 	{
