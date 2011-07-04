@@ -77,7 +77,7 @@ public class Finder extends SimpleJob
 
 		try
 		{
-			pattern = Pattern.compile(searchTerm);
+			pattern = Pattern.compile(searchTerm, Pattern.CASE_INSENSITIVE);
 		}
 		catch (PatternSyntaxException e)
 		{

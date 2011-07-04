@@ -228,7 +228,7 @@ public class Commands
 	{
 		Assembly assembly = winMain.getAssemblyPanel().getAssembly();
 
-		if(assembly.getBamBam() == null)
+		if (assembly.getBamBam() == null)
 		{
 			String aName = assembly.getName();
 			File saveAs = new File(Prefs.guiCurrentDir, aName+".txt");
@@ -264,6 +264,8 @@ public class Commands
 				TaskDialog.info(
 					RB.format("gui.Commands.exportCoverage.success", filename),
 					RB.getString("gui.text.close"));
+
+			winMain.getAssemblyPanel().validateConsensusCache();
 		}
 		else
 		{
@@ -415,6 +417,8 @@ public class Commands
 				TaskDialog.info(
 					RB.format("gui.Commands.exportSNPs.success", filename),
 					RB.getString("gui.text.close"));
+
+			winMain.getAssemblyPanel().validateConsensusCache();
 		}
 		else
 		{

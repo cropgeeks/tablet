@@ -285,6 +285,8 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 			if (dialog.getResult() == ProgressDialog.JOB_FAILED)
 				System.out.println(dialog.getException());
 		}
+
+		aPanel.validateConsensusCache();
 	}
 
 	public void actionPerformed(ActionEvent e)
