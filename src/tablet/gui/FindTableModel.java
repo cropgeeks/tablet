@@ -45,19 +45,15 @@ public class FindTableModel extends AbstractTableModel
 			String col5 = RB.getString("gui.FindTableModel.start");
 			String col6 = RB.getString("gui.FindTableModel.end");
 			columnNames = new String[] { col1, col2, col3, col4, col5, col6 };
-
-			System.out.println("if1");
 		}
 		else if(results != null && !results.isEmpty() && !(results.get(0) instanceof SubsequenceSearchResult) && !(results.get(0) instanceof ReadSearchResult))
 		{
 			col1 = col4;
 			columnNames = new String[] { col1, col2, col3 };
-			System.out.println("if2");
 		}
 		else
 		{
 			columnNames = new String[] { col1, col2, col3, col4 };
-			System.out.println("if3");
 		}
 
 		fireTableStructureChanged();
