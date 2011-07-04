@@ -7,12 +7,12 @@ import java.util.*;
 import java.util.regex.*;
 import javax.swing.*;
 
-import scri.commons.gui.*;
-
 import tablet.data.*;
-import tablet.data.cache.ReadSQLCache;
+import tablet.data.cache.*;
 import tablet.gui.*;
 import tablet.gui.viewer.*;
+
+import scri.commons.gui.*;
 
 /**
  * Class extends Simplejob such that a search on reads can be run
@@ -23,6 +23,21 @@ public class Finder extends SimpleJob
 	public static final int READ_NAME = 0;
 	public static final int READ_SEQUENCE = 1;
 	public static final int CON_SEQUENCE = 2;
+	public static final int ENZYME = 3;
+
+	public static String AMBIG_M = "[AC]";
+	public static String AMBIG_R = "[AG]";
+	public static String AMBIG_W = "[AT]";
+	public static String AMBIG_S = "[CG]";
+	public static String AMBIG_Y = "[CT]";
+	public static String AMBIG_K = "[GT]";
+	public static String AMBIG_V = "[ACG]";
+	public static String AMBIG_H = "[ACT]";
+	public static String AMBIG_D = "[AGT]";
+	public static String AMBIG_B = "[CGT]";
+	public static String AMBIG_XN = "[GATC]";
+
+	private HashMap<String, String> enzymeHash;
 
 	protected AssemblyPanel aPanel;
 
@@ -46,13 +61,19 @@ public class Finder extends SimpleJob
 		useRegex = Prefs.guiRegexSearching;
 
 		results = new ArrayList<SearchResult>();
+
+		setupEnzymeHash();
 	}
 
 	// Run job method so this can be run in a progress dialog.
 	public void runJob(int jobIndex) throws Exception
 	{
-		if(searchTerm.equals(""))
+		if (searchTerm.isEmpty())
 			return;
+
+		// TODO implement method fully
+		if (searchType == ENZYME)
+			createRegex();
 
 		try
 		{
@@ -95,6 +116,9 @@ public class Finder extends SimpleJob
 
 				if (searchType == CON_SEQUENCE)
 					searchConsensus(contig);
+				else if (searchType == ENZYME)
+					searchForEnzymes(contig.getConsensus().toString(), 0,
+					contig.getConsensus().length(), contig, null);
 				else
 					searchReadSubsequences(contig);
 			}
@@ -161,6 +185,8 @@ public class Finder extends SimpleJob
 	protected void searchConsensus(Contig contig)
 	{
 		Consensus con = contig.getConsensus();
+		// Get sequence needed to avoid crapout
+		con.getSequence();
 		searchSequence(con.toString(), 0, con.length(), contig, null);
 	}
 
@@ -181,48 +207,57 @@ public class Finder extends SimpleJob
 	// Does the string matching for subsequence and consensus / reference
 	protected void searchSequence(String seq, int sPos, int len, Contig contig, String name)
 	{
-		int matchIndex, matchS;
-		matchIndex = matchS = 0;
+		Pattern p;
 
-		for (int i = 0; i < seq.length() && okToRun(); i++)
+		if (Prefs.guiSearchIgnorePads)
 		{
-			char seqChar = seq.charAt(i);
+			String charClass = "[" + Pattern.quote("*") + "N]*";
+			String regex = addPadCharClass(charClass);
 
-			if (seqChar == searchTerm.charAt(matchIndex))
-			{
-				// Denotes the start of a potential match
-				if (matchIndex == 0)
-					matchS = i;
-
-				matchIndex++;
-			}
-
-			// Skip pad characters
-			else if (Prefs.guiSearchIgnorePads && (seqChar == '*' || seqChar == 'N'))
-				continue;
-
-			else
-			{
-				// Jump back to next potential match start character
-				if (matchIndex > 0 && matchS != seq.length()-1)
-					i = matchS;
-				matchIndex = 0;
-			}
-
-			// We have found a result
-			if (matchIndex == searchTerm.length())
-			{
-				if (searchType == CON_SEQUENCE)
-					results.add(new SearchResult(matchS, i - matchS + 1, contig));
-				else
-					results.add(new SubsequenceSearchResult(name, sPos, len, contig, sPos + matchS, sPos + i));
-
-				matchIndex = 0;
-
-				if (matchS != seq.length()-1)
-					i = matchS;
-			}
+			p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 		}
+
+		else
+			p = pattern;
+
+		Matcher m = p.matcher(seq);
+
+		while (m.find())
+		{
+			if (searchType == CON_SEQUENCE)
+				results.add(new SearchResult(m.start(), m.end()-m.start(), contig));
+			else
+				results.add(new SubsequenceSearchResult(name, sPos, len, contig, sPos+m.start(), sPos+m.end()-1));
+		}
+	}
+
+	// Does the string matching for restriction enzyme
+	protected void searchForEnzymes(String seq, int sPos, int len, Contig contig, String name)
+	{
+		// Create a pattern which will ignore pad characters
+		String charClass = "[" + Pattern.quote("*")+ "]*";
+		String regex = addPadCharClass(charClass);
+
+		Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
+
+		// Search the sequence looking for matches
+		Matcher m = p.matcher(seq);
+		while (m.find())
+			results.add(new SearchResult(m.start(), m.end()-m.start(), contig));
+	}
+
+	private String addPadCharClass(String charClass)
+	{
+		StringBuilder regex = new StringBuilder();
+
+		for (int i=0; i < searchTerm.length(); i++)
+		{
+			regex.append(searchTerm.charAt(i));
+			if (i < searchTerm.length()-1)
+				regex.append(charClass);
+		}
+
+		return regex.toString();
 	}
 
 	// Calculate the maximum for the progress bar based on search type
@@ -291,6 +326,30 @@ public class Finder extends SimpleJob
 	public int getValue()
 	{
 		return Math.round(((progressLong)/ (float) maximumLong) * 5555);
+	}
+
+	private void setupEnzymeHash()
+	{
+		enzymeHash = new HashMap<String, String>();
+
+		enzymeHash.put("M", AMBIG_M);
+		enzymeHash.put("R", AMBIG_R);
+		enzymeHash.put("W", AMBIG_W);
+		enzymeHash.put("S", AMBIG_S);
+		enzymeHash.put("Y", AMBIG_Y);
+		enzymeHash.put("K", AMBIG_K);
+		enzymeHash.put("V", AMBIG_V);
+		enzymeHash.put("H", AMBIG_H);
+		enzymeHash.put("D", AMBIG_D);
+		enzymeHash.put("B", AMBIG_B);
+		enzymeHash.put("X", AMBIG_XN);
+		enzymeHash.put("N", AMBIG_XN);
+	}
+
+	private void createRegex()
+	{
+		for (String key : enzymeHash.keySet())
+			searchTerm = searchTerm.replaceAll(key, enzymeHash.get(key));
 	}
 
 
