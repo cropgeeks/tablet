@@ -188,6 +188,8 @@ public class Finder extends SimpleJob
 		// Get sequence needed to avoid crapout
 		con.getSequence();
 		searchSequence(con.toString(), 0, con.length(), contig, null);
+
+		progressLong++;
 	}
 
 	protected void searchReadSubsequences(Contig contig)
@@ -201,6 +203,8 @@ public class Finder extends SimpleJob
 
 			String name = Assembly.getReadName(read);
 			searchSequence(rmd.toString(), read.getStartPosition(), read.length(), contig, name);
+
+			progressLong++;
 		}
 	}
 
@@ -276,12 +280,14 @@ public class Finder extends SimpleJob
 
 		// Consensus search in current contig
 		else if(!searchAllContigs && searchType == CON_SEQUENCE)
-			maximumLong = aPanel.getContig().getConsensus().length();
+//			maximumLong = aPanel.getContig().getConsensus().length();
+			maximumLong = 0; // indeterminate
 
 		// Consensus search across all contigs
-		else if(searchAllContigs  && searchType == CON_SEQUENCE)
+		else if(searchAllContigs && searchType == CON_SEQUENCE)
 			for(Contig contig : aPanel.getAssembly())
-				maximumLong += contig.getConsensus().length();
+//				maximumLong += contig.getConsensus().length();
+				maximumLong++;
 	}
 
 	public String getMessage()
