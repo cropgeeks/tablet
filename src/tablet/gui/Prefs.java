@@ -136,6 +136,9 @@ public class Prefs extends XMLPreferences
 	public static int guiFindPanelSearchType = 0;
 	public static String recentSearches = "";
 
+	// Truncation limit (number of characters) for text in the tooltip
+	public static int visToolTipLimit = 75;
+
 	// Should the CoveragePrinter class write values for consensus bases that
 	// are padded?
 	public static boolean printPads = true;
