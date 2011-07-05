@@ -5,7 +5,8 @@ package tablet.io;
 
 import java.io.*;
 import java.net.*;
-import java.util.zip.*;
+
+import tablet.io.samtools.*;
 
 import net.sf.samtools.*;
 
@@ -135,9 +136,13 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 	{
 		InputStream is = getInputStream();
 
+		System.out.println();
+		System.out.println("testing " + file);
+
 		try
 		{
 			isCompressed = true;
+
 			return new GZIPInputStream(is);
 		}
 		catch (Exception e)
@@ -196,14 +201,17 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 
 			if (str != null)
 			{
+				if (isBam(str))
+					type = BAM;
+
 				if (isAce(str))
 					type = ACE;
 				else if (isAfg(str))
 					type = AFG;
 				else if (isSam(str))
 					type = SAM;
-//				else if (isBam(str))
-//					type = BAM;
+				else if (isBam(str))
+					type = BAM;
 				else if (isMaq(str))
 					type = MAQ;
 				else if (isSoap(str))
@@ -218,10 +226,10 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 
 			if (type == UNKNOWN)
 			{
-				SAMFileReader reader = new SAMFileReader(getInputStream());
-				if (reader.isBinary())
-					type = BAM;
-				reader.close();
+//				SAMFileReader reader = new SAMFileReader(getInputStream());
+//				if (reader.isBinary())
+//					type = BAM;
+//				reader.close();
 			}
 		}
 		catch (Exception e) { System.out.println(e);}
@@ -328,7 +336,7 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 	{
 		try
 		{
-			Reader rd = new InputStreamReader(getDataStream(), "ASCII");
+			Reader rd = new InputStreamReader(getDataStream());//, "ASCII");
 	        char[] buf = new char[2048];
 
 			int num = rd.read(buf);
