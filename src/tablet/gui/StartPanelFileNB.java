@@ -86,6 +86,8 @@ public class StartPanelFileNB extends javax.swing.JPanel implements ActionListen
 		{
 			if (filenames[i] != null)
 			{
+				tooltips[i] = tooltips[i].replaceAll("/", "&#47;");
+
 				labels[i].addActionListener(this);
 				labels[i].setText(filenames[i]);
 				labels[i].setToolTipText("<html>" + tooltips[i] + "</html>");
