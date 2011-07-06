@@ -20,6 +20,7 @@ public class Prefs extends XMLPreferences
 	public static boolean isHuttonised = false;
 	public static boolean isSCRIUser = false;
 	public static int rating = 0;
+	public static String visColorSeed = "0";
 
 	// The local working directory for disk caching
 	public static String cacheDir =
