@@ -159,7 +159,7 @@ public class Prefs extends XMLPreferences
 
 
 	public static boolean ioAceProcessQA = true;
-	public static boolean ioBamValidationLenient = false;
+	public static boolean ioBamValidationIsLenient = true;
 	public static boolean ioAmbiguousToN = false;
 
 	public static String ioSamtoolsPath = "";
@@ -204,6 +204,6 @@ public class Prefs extends XMLPreferences
 
 		// tablet.io:
 		AceFileReader.PROCESS_QA = Prefs.ioAceProcessQA;
-		BamFileHandler.VALIDATION_LENIENT = Prefs.ioBamValidationLenient;
+		BamFileHandler.VALIDATION_LENIENT = Prefs.ioBamValidationIsLenient;
 	}
 }

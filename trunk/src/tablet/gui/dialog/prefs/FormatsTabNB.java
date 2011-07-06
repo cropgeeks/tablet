@@ -35,7 +35,7 @@ class FormatsTabNB extends JPanel implements ActionListener
 
 		checkAmbiguousToN.setSelected(Prefs.ioAmbiguousToN);
 		checkAceQA.setSelected(Prefs.ioAceProcessQA);
-		checkBamValidation.setSelected(Prefs.ioBamValidationLenient);
+		checkBamValidation.setSelected(Prefs.ioBamValidationIsLenient);
 
 		bBrowse.addActionListener(this);
     }
@@ -44,7 +44,7 @@ class FormatsTabNB extends JPanel implements ActionListener
 	{
 		Prefs.ioAmbiguousToN = checkAmbiguousToN.isSelected();
 		Prefs.ioAceProcessQA = checkAceQA.isSelected();
-		Prefs.ioBamValidationLenient = checkBamValidation.isSelected();
+		Prefs.ioBamValidationIsLenient = checkBamValidation.isSelected();
 
 		Prefs.ioSamtoolsPath = stPath.getText();
 	}
