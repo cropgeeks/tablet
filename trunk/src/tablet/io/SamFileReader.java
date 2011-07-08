@@ -250,7 +250,8 @@ class SamFileReader extends TrackableReader
 			if (readGroups.contains(sample) == false)
 			{
 				readGroups.add(sample);
-				sampleHash.put(sample, (short)(readGroups.size()-1));
+				// Note we put the FIRST read group in as index 1 (not 0)
+				sampleHash.put(sample, (short)(readGroups.size()));
 			}
 		}
 	}

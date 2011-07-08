@@ -10,6 +10,9 @@ public class ReadGroupScheme extends EnhancedScheme
 	// One ArrayList of ColorStamp objects for each ReadGroup
 	private ArrayList<ArrayList<ColorStamp>> statesRG;
 
+	// A reference to the list of sample names held in Assembly
+	private static ArrayList<String> readGroups;
+	// Which are mirrored in the ColorInfo objects; one per sample name
 	private static ColorInfo[] colorInfos;
 
 	public ReadGroupScheme(int w, int h)
@@ -18,11 +21,17 @@ public class ReadGroupScheme extends EnhancedScheme
 
 		statesRG = new ArrayList<ArrayList<ColorStamp>>();
 
-		// Setup the colours then set up the ColorStamp arrays in initStates
-		setupColors();
+		getColourInfos();
+
+		// Initialize a set of "grey" stamps for reads that don't have a sample
+		// name associated (ReadMetaData.readGroup == 0)
+		initStates(Color.LIGHT_GRAY, w, h);
 
 		for (short i=0; i < colorInfos.length; i++)
-			initStates(colorInfos[i].color, w, h);
+			if (colorInfos[i].enabled)
+				initStates(colorInfos[i].color, w, h);
+			else
+				initStates(getGreyScale(colorInfos[i].color), w, h);
 	}
 
 	private void initStates(Color color, int w, int h)
@@ -41,6 +50,25 @@ public class ReadGroupScheme extends EnhancedScheme
 		statesRG.add(rgStamps);
 	}
 
+	private Color getGreyScale(Color color)
+	{
+		// Cheap and simple conversion - average of the three colours
+//		int gs = (int) ((color.getRed()+color.getGreen()+color.getBlue())/3);
+
+		// Luminance conversion - reflects human vision better (apparently)
+		int gs = (int) (0.3*color.getRed()+0.59*color.getGreen()+0.11*color.getBlue());
+
+		return new Color(gs, gs, gs);
+
+
+		// For future reference: color-convert op that modifies an existing
+		// image and changes it to greyscale - SLOW
+
+//		ColorConvertOp op = new ColorConvertOp(
+//			ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
+//		image = op.filter(image, null);
+	}
+
 	@Override
 	public Image getImage(ReadMetaData rmd, int index)
 	{
@@ -55,15 +83,13 @@ public class ReadGroupScheme extends EnhancedScheme
 		return stamps.get(rmd.getStateAt(index)).getColor();
 	}
 
-	private void setupColors()
+	private static void setupColors()
 	{
-		ArrayList<String> readGroups = Assembly.getReadGroups();
-		colorInfos = new ColorInfo[readGroups.size()];
-
+		// For each sample name, find (or create) its colour
 		for (int i=0; i < colorInfos.length; i++)
 		{
 			// Attempt to load color for read group from prefs file
-			Color color = ColorPrefs.getColor(readGroups.get(i));
+			Color color = ColorPrefs.getColor("Sample_" + readGroups.get(i));
 
 			if (color != null)
 				colorInfos[i] = new ColorInfo(color, readGroups.get(i));
@@ -73,23 +99,38 @@ public class ReadGroupScheme extends EnhancedScheme
 			{
 				colorInfos[i] = new ColorInfo(WebsafePalette.getColor(i),
 					readGroups.get(i));
-				ColorPrefs.setColor(colorInfos[i].name, colorInfos[i].color);
+				ColorPrefs.setColor("Sample_" + colorInfos[i].name, colorInfos[i].color);
 			}
 		}
 	}
 
 	// Update the color in the array, ColorInfo and the colour prefs xml.
-	public void setColor(int index, Color color)
+	public static void setColor(int index, Color color)
 	{
-		ColorPrefs.setColor(colorInfos[index].name, color);
+		ColorPrefs.setColor("Sample_" + colorInfos[index].name, color);
 		colorInfos[index].color = color;
+	}
+
+	public static void resetColors()
+	{
+		// Remove the current set of colours from the preferences file
+		for (ColorInfo info: colorInfos)
+			ColorPrefs.removeColor("Sample_" + info.name);
+
+		// And then let them get recreated
+		setupColors();
 	}
 
 	public static ColorInfo[] getColourInfos()
 	{
-		if (Assembly.getReadGroups().isEmpty())
-			colorInfos = new ColorInfo[0];
-		
+		if (readGroups != Assembly.getReadGroups())
+		{
+			readGroups = Assembly.getReadGroups();
+			colorInfos = new ColorInfo[readGroups.size()];
+
+			setupColors();
+		}
+
 		return colorInfos;
 	}
 
@@ -130,11 +171,14 @@ public class ReadGroupScheme extends EnhancedScheme
 	{
 		public Color color;
 		public String name;
+		public boolean enabled;
 
 		ColorInfo(Color colour, String name)
 		{
 			this.color = colour;
 			this.name = name;
+
+			enabled = true;
 		}
 
 		@Override

@@ -62,7 +62,7 @@ class ReadsTableModel extends AbstractTableModel
 	void clear()
 	{
 		reads.clear();
-		fireTableChanged(new TableModelEvent(this));
+		fireTableDataChanged();
 	}
 
 	@Override

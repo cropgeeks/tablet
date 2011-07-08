@@ -113,7 +113,6 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		controls.setEnabledState(assembly != null);
 
 		findPanel.setAssembly(assembly);
-		readGroupsPanel.setAssembly(assembly);
 	}
 
 	private long calculateTotalReadCount()

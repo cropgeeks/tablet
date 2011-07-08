@@ -3,24 +3,31 @@ package tablet.gui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.event.*;
+import javax.swing.table.*;
 
 import tablet.data.*;
 import tablet.gui.viewer.colors.*;
 
 import scri.commons.gui.*;
 
+/**
+ * Table control class for the Read Groups panel.
+ */
 public class ReadGroupsPanel extends JPanel implements ActionListener
 {
 	private ReadGroupsPanelNB controls;
+	private ReadGroupsTableModel tableModel;
+	private TableRowSorter<AbstractTableModel> sorter;
 
 	ReadGroupsPanel()
 	{
 		setLayout(new BorderLayout());
 		add(controls = new ReadGroupsPanelNB(this));
 
-		// Add handling for double click event
-		controls.colourList.addMouseListener(new MouseAdapter() {
-			@Override
+		createTableModel();
+
+		controls.table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e)
 			{
 				if (e.getClickCount() == 2)
@@ -29,14 +36,15 @@ public class ReadGroupsPanel extends JPanel implements ActionListener
 		});
 	}
 
-	public void setAssembly(Assembly assembly)
+	private void createTableModel()
 	{
-		toggleComponentEnabled(false);
+		tableModel = new ReadGroupsTableModel();
 
-		controls.model.clear();
-		controls.colourList.removeAll();
+		sorter = new TableRowSorter<AbstractTableModel>(tableModel);
+		controls.table.setModel(tableModel);
+		controls.table.setRowSorter(sorter);
 
-		controls.readGroupLabel.setText(RB.format("gui.ReadGroupsPanelNB.readGroupLabel", ""));
+		controls.table.getColumnModel().getColumn(1).setPreferredWidth(15);
 	}
 
 	// Handle contig changes
@@ -44,76 +52,80 @@ public class ReadGroupsPanel extends JPanel implements ActionListener
 	{
 		if (contig == null)
 		{
-			controls.model.clear();
-			controls.readGroupLabel.setText(RB.format("gui.ReadGroupsPanelNB.readGroupLabel", ""));
-			toggleComponentEnabled(false);
+			tableModel.clear();
+			controls.readGroupLabel.setText(RB.format("gui.ReadGroupsPanelNB.readGroupLabel", "0"));
+			controls.toggleComponentEnabled(false);
 		}
 
 		else
 		{
-			controls.updateModel();
-
-			if (Assembly.getReadGroups().isEmpty() == false && Prefs.visColorScheme == ReadScheme.READGROUP)
-			{
-				toggleComponentEnabled(true);
-				controls.readGroupLabel.setText(RB.format("gui.ReadGroupsPanelNB.readGroupLabel",
-					Assembly.getReadGroups().size()));
-			}
-			else
-			{
-				toggleComponentEnabled(false);
-				controls.readGroupLabel.setText(RB.format("gui.ReadGroupsPanelNB.readGroupLabel", ""));
-			}
+			tableModel.setColors();
+			controls.readGroupLabel.setText(
+				RB.format("gui.ReadGroupsPanelNB.readGroupLabel", tableModel.getRowCount()));
+			controls.toggleComponentEnabled(true);
 		}
 	}
 
 	// Display colour chooser to select colour for read group
 	private void selectColor()
 	{
-		// Display colour chooser dialog (defaulting to the current ReadGroup colour)
-		Color newColor = JColorChooser.showDialog(this,
-			RB.getString("gui.ReadsGroupsPanel.colourChooser"),
-			((ReadGroupScheme.ColorInfo)controls.colourList.getSelectedValue()).color);
+		int row = controls.table.getSelectedRow();
+		if (row == -1)
+			return;
+
+		// Convert the selection from a "sorter" to "model" index
+		row = sorter.convertRowIndexToModel(row);
+
+		ReadGroupScheme.ColorInfo info =
+			(ReadGroupScheme.ColorInfo) tableModel.getValueAt(row, 0);
+
+		// Display colour chooser dialog (defaulting to the current colour)
+		Color newColor = JColorChooser.showDialog(Tablet.winMain,
+			RB.getString("gui.ReadsGroupsPanel.colourChooser"), info.color);
 
 		// If a colour was chosen, set that colour in the ReadGroupScheme
 		if (newColor != null)
 		{
-			int row = controls.colourList.getSelectedIndex();
-			ColorPrefs.setColor(Assembly.getReadGroups().get(row), newColor);
+			ReadGroupScheme.setColor(row, newColor);
+
+			Tablet.winMain.getAssemblyPanel().updateColorScheme();
+			tableModel.fireTableDataChanged();
 		}
-
-		// Update displays to reflect new colour
-		Tablet.winMain.getAssemblyPanel().updateColorScheme();
-		// Update model after the color scheme has been upadted
-		controls.updateModel();
-	}
-
-	public void toggleComponentEnabled(boolean enabled)
-	{
-		controls.readGroupLabel.setEnabled(enabled);
-		controls.colourList.setEnabled(enabled);
-		controls.resetLabel.setEnabled(false);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == controls.resetLabel)
+		// Select all entries in the table...
+		if (e.getSource() == controls.colorAll)
 		{
-			for (int i=0; i < controls.model.size(); i++)
-				ColorPrefs.removeColor(Assembly.getReadGroups().get(i));
-
-			// Update displays to reflect new colour
-			Tablet.winMain.getAssemblyPanel().updateColorScheme();
-			// Update model after the color scheme has been upadted
-			controls.updateModel();
+			for (int i = 0; i < tableModel.getRowCount(); i++)
+				tableModel.setValueAt(true, i, 1);
 		}
-	}
 
-	public void updateModel()
-	{
-		controls.updateModel();
-		controls.readGroupLabel.setText(RB.format("gui.ReadGroupsPanelNB.readGroupLabel",
-			Assembly.getReadGroups().size()));
+		// Select no entries in the table...
+		else if (e.getSource() == controls.colorNone)
+		{
+			for (int i = 0; i < tableModel.getRowCount(); i++)
+				tableModel.setValueAt(false, i, 1);
+		}
+
+		// Reset the colours to their defaults...
+		else if (e.getSource() == controls.reset)
+		{
+			String msg = RB.getString("gui.ReadsGroupsPanel.confirmReset");
+			String[] options = new String[] {
+				RB.getString("gui.ReadGroupsPanelNB.reset"),
+				RB.getString("gui.text.cancel")
+			};
+
+			if (TaskDialog.show(msg, TaskDialog.QST, 1, options) != 0)
+				return;
+
+			ReadGroupScheme.resetColors();
+
+			Tablet.winMain.getAssemblyPanel().updateColorScheme();
+			tableModel.fireTableDataChanged();
+		}
 	}
 }
