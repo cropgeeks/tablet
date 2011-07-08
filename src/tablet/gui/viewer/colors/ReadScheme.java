@@ -43,20 +43,7 @@ public abstract class ReadScheme
 			scheme = new ReadTypeScheme(w, h);
 
 		else if (type == READGROUP)
-		{
-			if (Assembly.getReadGroups().size() > 0)
-				scheme = new ReadGroupScheme(w, h);
-			else
-			{
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run()
-					{
-						RibbonController.bandStyles.getBStandard().doActionClick();
-					}
-				});
-			}
-		}
+			scheme = new ReadGroupScheme(w, h);
 
 		return scheme;
 	}

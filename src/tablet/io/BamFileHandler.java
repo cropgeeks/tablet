@@ -30,7 +30,6 @@ public class BamFileHandler
 	private boolean okToRun = true;
 	private boolean refLengthsOK = true;
 
-	private ArrayList<String> readGroups = new ArrayList<String>();
 	private HashMap<String, Short> sampleHash = new HashMap<String, Short>();
 
 	BamFileHandler(IReadCache readCache, ReadSQLCache nameCache, AssemblyFile bamFile, AssemblyFile baiFile, Assembly assembly)
@@ -118,8 +117,6 @@ public class BamFileHandler
 
 		if (Assembly.isPaired())
 			nameCache.indexNames();
-
-		assembly.setReadGroups(readGroups);
 	}
 
 	private void createRead(Contig contig, final SAMRecord record, CigarParser parser) throws Exception
@@ -131,16 +128,10 @@ public class BamFileHandler
 
 		rmd.setIsPaired(record.getReadPairedFlag());
 
-		// Setup reads groups if they exist
+		// Map the read's sample name to its ID (if it exists)
 		if (record.getReadGroup() != null)
 		{
 			String sample = record.getReadGroup().getSample();
-			if (!readGroups.contains(sample))
-			{
-				readGroups.add(sample);
-				sampleHash.put(sample, (short)(readGroups.size()-1));
-			}
-
 			rmd.setReadGroup(sampleHash.get(sample));
 		}
 
@@ -264,6 +255,9 @@ public class BamFileHandler
 					contig.getTableData().readCount = -1;
 			}
 
+			// Attempt to read sample group information
+			readSampleGroups();
+
 
 			// If all read counts were zero, chances are it's not a "new" index
 			if (totalReadCount == 0 && statsOK)
@@ -288,4 +282,24 @@ public class BamFileHandler
 
 	boolean refLengthsOK()
 		{ return refLengthsOK; }
+
+	private void readSampleGroups()
+		throws Exception
+	{
+		ArrayList<String> readGroups = new ArrayList<String>();
+
+		for (SAMReadGroupRecord record: bamReader.getFileHeader().getReadGroups())
+		{
+			String sample = record.getSample();
+
+			if (sampleHash.get(sample) == null)
+			{
+				readGroups.add(sample);
+				// Note we put the FIRST read group in as index 1 (not 0)
+				sampleHash.put(sample, (short)(readGroups.size()));
+			}
+		}
+
+		assembly.setReadGroups(readGroups);
+	}
 }

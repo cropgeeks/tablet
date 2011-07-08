@@ -236,9 +236,6 @@ public class BandStyles extends JRibbonBand implements ActionListener
 			setColorScheme(ReadScheme.READGROUP);
 			styleListener.previousScheme = ReadScheme.READGROUP;
 
-			//winMain.getAssemblyPanel().updateColorScheme();
-			winMain.getReadGroupsPanel().updateModel();
-
 			// BUG: Workaround for API allowing toggle groups to be unselected
 			Actions.stylesReadGroup.setSelected(true);
 		}
@@ -308,11 +305,6 @@ public class BandStyles extends JRibbonBand implements ActionListener
 	{
 		Prefs.visColorScheme = scheme;
 		winMain.getAssemblyPanel().forceRedraw();
-
-		if (scheme == ReadScheme.READGROUP)
-			winMain.getReadGroupsPanel().toggleComponentEnabled(true);
-		else
-			winMain.getReadGroupsPanel().toggleComponentEnabled(false);
 	}
 
 	private void createPackingPopupMenu()

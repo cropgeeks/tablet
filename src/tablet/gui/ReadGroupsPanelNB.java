@@ -1,71 +1,59 @@
 package tablet.gui;
 
-import java.awt.*;
-import java.awt.image.*;
 import javax.swing.*;
+import javax.swing.table.*;
 
-import tablet.gui.viewer.colors.*;
+import scri.commons.gui.*;
 
 public class ReadGroupsPanelNB extends JPanel
 {
-	DefaultListModel model;
-
 	/** Creates new form ReadGroupsPanelNB */
 	public ReadGroupsPanelNB(ReadGroupsPanel panel)
 	{
 		initComponents();
 
-		colourList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		colourList.setCellRenderer(new ColorListRenderer());
+		table.getTableHeader().setReorderingAllowed(false);
 
-		model = new DefaultListModel();
-		colourList.setModel(model);
+		RB.setText(colorAll, "gui.ReadGroupsPanelNB.colorAll");
+		RB.setText(colorNone, "gui.ReadGroupsPanelNB.colorNone");
+		RB.setText(reset, "gui.ReadGroupsPanelNB.reset");
 
-		resetLabel.addActionListener(panel);
+		colorAll.addActionListener(panel);
+		colorNone.addActionListener(panel);
+		reset.addActionListener(panel);
+
+		toggleComponentEnabled(false);
 	}
 
-	// Update the model for the currently displayed contig.
-	void updateModel()
+	private JTable createTable()
 	{
-		model.clear();
-
-		if (ReadGroupScheme.getColourInfos() != null && ReadGroupScheme.getColourInfos().length > 0)
-			for (ReadGroupScheme.ColorInfo info: ReadGroupScheme.getColourInfos())
-				model.addElement(info);
-	}
-
-	static class ColorListRenderer extends DefaultListCellRenderer
-	{
-		// Set the attributes of the class and return a reference
-		@Override
-		public Component getListCellRendererComponent(JList list, Object o,
-				int i, boolean iss, boolean chf)
+		return new JTable()
 		{
-			super.getListCellRendererComponent(list, o, i, iss, chf);
+			@Override
+			public TableCellRenderer getCellRenderer(int row, int col)
+			{
+				TableCellRenderer tcr = ReadGroupsTableModel.getCellRenderer(col);
+				return (tcr != null) ? tcr : super.getCellRenderer(row, col);
+			}
 
-			ReadGroupScheme.ColorInfo info = (ReadGroupScheme.ColorInfo) o;
+/*			@Override
+			public String getToolTipText(MouseEvent e)
+			{
+				return panel.getTableToolTip(e);
+			}
+*/
+		};
+	}
 
-			// Set the text
-			setText(info.name);
+	public void toggleComponentEnabled(boolean enabled)
+	{
+		readGroupLabel.setEnabled(enabled);
+		colorAll.setEnabled(enabled);
+		colorNone.setEnabled(enabled);
+		reset.setEnabled(enabled);
 
-			// Set the icon
-			BufferedImage image = new BufferedImage(20, 10, BufferedImage.TYPE_INT_RGB);
-			Graphics2D g = image.createGraphics();
-
-			g.setColor(info.color);
-			g.fillRect(0, 0, 20, 10);
-			g.setColor(Color.black);
-			g.drawRect(0, 0, 20, 10);
-			g.dispose();
-
-			setIcon(new ImageIcon(image));
-
-			return this;
-		}
-
-		@Override
-		public Insets getInsets(Insets i)
-			{ return new Insets(0, 3, 0, 0); }
+		table.setEnabled(enabled);
+		table.getTableHeader().setVisible(enabled);
 	}
 
 	/** This method is called from within the constructor to
@@ -79,15 +67,28 @@ public class ReadGroupsPanelNB extends JPanel
 
         readGroupLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        colourList = new javax.swing.JList();
-        resetLabel = new scri.commons.gui.matisse.HyperLinkLabel();
+        table = createTable();
+        colorAll = new scri.commons.gui.matisse.HyperLinkLabel();
+        jLabel1 = new javax.swing.JLabel();
+        colorNone = new scri.commons.gui.matisse.HyperLinkLabel();
+        reset = new scri.commons.gui.matisse.HyperLinkLabel();
 
         readGroupLabel.setText("Read groups colors: 0");
 
-        jScrollPane1.setViewportView(colourList);
+        table.setModel(new DefaultTableModel());
+        table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane1.setViewportView(table);
 
-        resetLabel.setForeground(new java.awt.Color(68, 106, 156));
-        resetLabel.setText("Reset read groups");
+        colorAll.setForeground(new java.awt.Color(68, 106, 156));
+        colorAll.setText("Colour All");
+
+        jLabel1.setText("|");
+
+        colorNone.setForeground(new java.awt.Color(68, 106, 156));
+        colorNone.setText("Colour None");
+
+        reset.setForeground(new java.awt.Color(68, 106, 156));
+        reset.setText("Reset");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -96,12 +97,18 @@ public class ReadGroupsPanelNB extends JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(readGroupLabel)
-                .addContainerGap(286, Short.MAX_VALUE))
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 401, Short.MAX_VALUE)
+                .addContainerGap(122, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(302, Short.MAX_VALUE)
-                .addComponent(resetLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap()
+                .addComponent(colorAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(colorNone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
+                .addComponent(reset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -109,17 +116,24 @@ public class ReadGroupsPanelNB extends JPanel
                 .addContainerGap()
                 .addComponent(readGroupLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(resetLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(reset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(colorAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
+                    .addComponent(colorNone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    javax.swing.JList colourList;
+    scri.commons.gui.matisse.HyperLinkLabel colorAll;
+    scri.commons.gui.matisse.HyperLinkLabel colorNone;
+    private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     javax.swing.JLabel readGroupLabel;
-    scri.commons.gui.matisse.HyperLinkLabel resetLabel;
+    scri.commons.gui.matisse.HyperLinkLabel reset;
+    javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 
 }
