@@ -70,7 +70,7 @@ class ReadGroupsTableModel extends AbstractTableModel
 	@Override
 	public void setValueAt(Object value, int row, int col)
 	{
-		colors[row].enabled = !colors[row].enabled;
+		colors[row].enabled = (Boolean) value;
 
 		Tablet.winMain.getAssemblyPanel().updateColorScheme();
 

@@ -88,7 +88,7 @@ public class ReadGroupsPanel extends JPanel implements ActionListener
 		{
 			ReadGroupScheme.setColor(row, newColor);
 
-			Tablet.winMain.getAssemblyPanel().updateColorScheme();
+			Tablet.winMain.getAssemblyPanel().forceRedraw();
 			tableModel.fireTableDataChanged();
 		}
 	}
@@ -123,9 +123,9 @@ public class ReadGroupsPanel extends JPanel implements ActionListener
 				return;
 
 			ReadGroupScheme.resetColors();
-
-			Tablet.winMain.getAssemblyPanel().updateColorScheme();
 			tableModel.fireTableDataChanged();
 		}
+
+		Tablet.winMain.getAssemblyPanel().forceRedraw();
 	}
 }
