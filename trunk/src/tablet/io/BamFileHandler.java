@@ -181,11 +181,13 @@ public class BamFileHandler
 	{
 		for (String feature : parser.getFeatureMap().keySet())
 		{
-			String[] featureElements = feature.split("Tablet-Separator");
 			CigarFeature cigarFeature = parser.getFeatureMap().get(feature);
 
-			if (contig.addFeature(cigarFeature))
-				cigarFeature.verifyType();
+			// Only add cigar features with more than a required number
+			// of inserts associated with them
+			if (cigarFeature.getCount() >= Prefs.visCigarInsertMinimum)
+				if (contig.addFeature(cigarFeature))
+					cigarFeature.verifyType();
 		}
 
 		Collections.sort(contig.getFeatures());

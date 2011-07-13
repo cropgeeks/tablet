@@ -10,6 +10,7 @@ import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.auxiliary.*;
 import tablet.data.cache.*;
+import tablet.gui.*;
 
 import scri.commons.gui.*;
 
@@ -292,8 +293,11 @@ class SamFileReader extends TrackableReader
 			Contig contig = contigHash.get(featureElements[0]);
 			if (contig != null)
 			{
-				if (contig.addFeature(cigarFeature))
-					cigarFeature.verifyType();
+				// Only add cigar features with more than a required number
+				// of inserts associated with them
+				if (cigarFeature.getCount() >= Prefs.visCigarInsertMinimum)
+					if (contig.addFeature(cigarFeature))
+						cigarFeature.verifyType();
 			}
 		}
 
