@@ -141,6 +141,8 @@ public class Prefs extends XMLPreferences
 	// Truncation limit (number of characters) for text in the tooltip
 	public static int visToolTipLimit = 75;
 
+	public static int visCigarInsertMinimum = 10;
+
 	// Should the CoveragePrinter class write values for consensus bases that
 	// are padded?
 	public static boolean printPads = true;
