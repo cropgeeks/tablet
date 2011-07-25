@@ -201,9 +201,6 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 
 			if (str != null)
 			{
-				if (isBam(str))
-					type = BAM;
-
 				if (isAce(str))
 					type = ACE;
 				else if (isAfg(str))
@@ -224,13 +221,14 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 					type = GFF3;
 			}
 
-			if (type == UNKNOWN)
+/*			if (type == UNKNOWN)
 			{
-//				SAMFileReader reader = new SAMFileReader(getInputStream());
-//				if (reader.isBinary())
-//					type = BAM;
-//				reader.close();
+				SAMFileReader reader = new SAMFileReader(getInputStream());
+				if (reader.isBinary())
+					type = BAM;
+				reader.close();
 			}
+*/
 		}
 		catch (Exception e) { System.out.println(e);}
 
@@ -345,6 +343,8 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 			for (int c = 0; c < num; c++)
 				if (buf[c] == '\n' || buf[c] == '\r')
 					return new String(buf, 0, c);
+
+			return new String(buf);
 		}
 		catch (Exception e) { e.printStackTrace(); }
 
