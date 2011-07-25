@@ -5,6 +5,7 @@ package tablet.io;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.*;
 
 import tablet.data.*;
 import tablet.data.cache.*;
@@ -115,7 +116,8 @@ public class BamFileReader extends TrackableReader
 		if (typeTwo)
 			newName = name.substring(0, name.lastIndexOf(".bam")) + ".bai";
 
-		return new AssemblyFile(file.getPath().replaceAll(name, newName));
+		return new AssemblyFile(file.getPath().replaceAll(
+			Pattern.quote(name), newName));
 	}
 
 	private void readReferenceFile()
