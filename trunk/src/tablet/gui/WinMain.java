@@ -109,12 +109,12 @@ public class WinMain extends JRibbonFrame
 		ctrlTabs.addTab("", readsPanel);
 		ctrlTabs.setIconAt(2, Icons.getIcon("VISIBLEREADSTAB"));
 		ctrlTabs.setToolTipTextAt(2, RB.getString("gui.WinMain.tabsVisibleReads"));
-		ctrlTabs.addTab("", findPanel);
-		ctrlTabs.setIconAt(3, Icons.getIcon("FIND"));
-		ctrlTabs.setToolTipTextAt(3, RB.getString("gui.WinMain.tabsSearch"));
 		ctrlTabs.addTab("", readGroupsPanel);
+		ctrlTabs.setIconAt(3, Icons.getIcon("READGROUPSTAB"));
+		ctrlTabs.setToolTipTextAt(3, RB.getString("gui.WinMain.tabsReadGroups"));
+		ctrlTabs.addTab("", findPanel);
 		ctrlTabs.setIconAt(4, Icons.getIcon("FIND"));
-		ctrlTabs.setToolTipTextAt(4, "Read Groups");
+		ctrlTabs.setToolTipTextAt(4, RB.getString("gui.WinMain.tabsSearch"));
 
 		splitter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		splitter.setBorder(BorderFactory.createEmptyBorder());

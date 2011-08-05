@@ -148,7 +148,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 					Prefs.isHuttonised = true;
 				}
 
-				long thirtyDays = 3600000; // This is 30 days: 2592000000L;
+				long thirtyDays = 2592000000L; // This is 30 days: 2592000000L;
 				long thirtyDaysAgo = System.currentTimeMillis() - thirtyDays;
 
 				if (!Prefs.isFirstRun &&
