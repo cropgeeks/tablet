@@ -15,6 +15,10 @@ public class ReadGroupScheme extends EnhancedScheme
 	// Which are mirrored in the ColorInfo objects; one per sample name
 	private static ColorInfo[] colorInfos;
 
+	private static Color[] palette;
+
+	static { setupPalette(); }
+
 	public ReadGroupScheme(int w, int h)
 	{
 		super(w, h, true, false);
@@ -83,8 +87,43 @@ public class ReadGroupScheme extends EnhancedScheme
 		return stamps.get(rmd.getStateAt(index)).getColor();
 	}
 
+	private static void setupPalette()
+	{
+		palette = new Color[20];
+
+		palette[0] = new Color(182, 189, 112).darker();
+		palette[1] = new Color(244, 233, 154).darker();
+		palette[2] = new Color(222, 147, 136).darker();
+		palette[3] = new Color(202, 184, 136).darker();
+		palette[4] = new Color(174, 197, 223).darker();
+		palette[5] = new Color(158, 192, 187).darker();
+		palette[6] = new Color(241, 194, 132).darker();
+		palette[7] = new Color(120, 144, 120).darker();
+		palette[8] = new Color(168, 120, 120).darker();
+		palette[9] = new Color(216, 216, 168).darker();
+		palette[10] = new Color(230, 198, 163).darker();
+		palette[11] = new Color(91, 171, 163).darker();
+		palette[12] = new Color(153, 99, 131).darker();
+		palette[13] = new Color(222, 171, 201).darker();
+		palette[14] = new Color(106, 100, 209).darker();
+		palette[15] = new Color(90, 189, 219).darker();
+		palette[16] = new Color(222, 197, 207).darker();
+		palette[17] = new Color(118, 222, 182).darker();
+		palette[18] = new Color(219, 198, 189).darker();
+		palette[19] = new Color(107, 86, 87).darker();
+	}
+
+	private static Color getPaletteColor(int index)
+	{
+		if (index < 0)
+			index *= -1;
+
+		return palette[index % palette.length];
+	}
+
 	private static void setupColors()
 	{
+
 		// For each sample name, find (or create) its colour
 		for (int i=0; i < colorInfos.length; i++)
 		{
@@ -97,7 +136,7 @@ public class ReadGroupScheme extends EnhancedScheme
 			// If colour doesn't exist assign a color and set this in the prefs file
 			else
 			{
-				colorInfos[i] = new ColorInfo(WebsafePalette.getColor(i),
+				colorInfos[i] = new ColorInfo(getPaletteColor(readGroups.get(i).hashCode()),
 					readGroups.get(i));
 				ColorPrefs.setColor("Sample_" + colorInfos[i].name, colorInfos[i].color);
 			}
@@ -133,38 +172,6 @@ public class ReadGroupScheme extends EnhancedScheme
 
 		return colorInfos;
 	}
-
-	// A collection of 216 "web safe" colors
-	private static class WebsafePalette
-	{
-		private static Color[] colors;
-
-		static
-		{
-			int c = 0;
-			colors = new Color[125];
-
-			for (int r = 51; r < 256; r += 51)
-				for (int g = 51; g < 256; g += 51)
-					for (int b = 51; b < 256; b += 51)
-					{
-						colors[c] = new Color(r, g, b);
-						c++;
-					}
-		}
-
-		public static int getColorCount()
-			{ return colors.length; }
-
-		public static Color getColor(int index)
-		{
-			if (index < 0)
-				index *= -1;
-
-			return colors[index % colors.length].brighter();
-		}
-	}
-
 
 	// For use in the JList in ReadGroupsPanelNB
 	public static class ColorInfo
