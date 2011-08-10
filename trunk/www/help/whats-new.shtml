@@ -22,6 +22,25 @@ that have been made to Tablet in recent versions. For full details on all the
 changes between versions, please see the <a href="http://bioinf.hutton.ac.uk/tablet/svn.txt">
 subversion change log</a>.</p>
 
+
+<h3>New in 1.11.08.10</h3>
+<ul>
+<li>NEW: Added a new colour scheme for displaying Read Groups in SAM and BAM files.</li>
+<li>NEW: Added a new control panel tab for viewing and editing Read Group colours.</li>
+<li>NEW: GFF files now support drag and drop loading.</li>
+<li>NEW: GFF files can now be specified on the command line (or via web start).</li>
+<li>NEW: Reduced the initial detection time for BAM files, which should speed loading.</li>
+<li>NEW: Added a tablet.xml preferences variable which governs the number of insert events a CIGAR-I feature has to relate to before it is included.</li>
+<li>CHG: String values longer than 75 characters in the graphical tooltips are now be truncated.</li>
+<li>CHG: All searches are now case insensitive.</li>
+<li>CHG: The setting for using less-strict BAM validation checks is now on by default.</li>
+<li>BUG: Toggling Show Bases wasn't causing the screen to refresh.</li>
+<li>BUG: Fixed a crash that could occur when searching over consensus sequences.</li>
+<li>BUG: The recent-file tooltips on Linux and OS X weren’t working with paths beginning with "/".</li>
+<li>BUG: RegEx characters included in a BAM file’s name (eg ‘[]’) were stopping Tablet from locating the corresponding BAI file.</li>
+</ul>
+
+
 <h3>New in 1.11.05.03</h3>
 <ul>
 <li>NEW: Consensus sequence data is now cached to disk which should result in less memory being used with large contigs.</li>
