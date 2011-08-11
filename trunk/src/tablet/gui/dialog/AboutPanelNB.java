@@ -30,7 +30,7 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
 		NumberFormat nf = NumberFormat.getInstance();
 
 		versionLabel.setText(RB.format("gui.dialog.NBAboutPanel.versionLabel", Install4j.VERSION));
-		RB.setText(copyrightLabel, "gui.dialog.NBAboutPanel.copyrightLabel");
+		copyrightLabel.setText(RB.format("gui.dialog.NBAboutPanel.copyrightLabel", "\u0026"));
 		RB.setText(nameLabel, "gui.dialog.NBAboutPanel.nameLabel");
 		javaLabel.setText(RB.format("gui.dialog.NBAboutPanel.javaLabel", javaVer));
 		memLabel.setText(RB.format("gui.dialog.NBAboutPanel.memLabel", nf.format((long)(freeMem/1024f/1024f)) + "MB"));

@@ -16,7 +16,8 @@ public class StartPanelWelcomeNB extends javax.swing.JPanel implements ActionLis
         initComponents();
 		setOpaque(false);
 
-		tabletLabel.setText("<html>" + RB.format("gui.NBStartWelcomePanel.panel.label", Install4j.VERSION));
+		tabletLabel.setText("<html>" + RB.format("gui.NBStartWelcomePanel.panel.label",
+			Install4j.VERSION, "\u0026"));
 		feedbackLabel.setText(RB.getString("gui.NBStartWelcomePanel.panel.feedback"));
 		twitterLabel.setText(RB.getString("gui.NBStartWelcomePanel.panel.twitter"));
 
