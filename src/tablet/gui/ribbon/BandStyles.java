@@ -152,7 +152,7 @@ public class BandStyles extends JRibbonBand implements ActionListener
 
 		bReadGroup = new JCommandToggleButton(
 			RB.getString("gui.ribbon.BandStyles.bReadGroup"),
-			RibbonController.getIcon("READTYPE32", 32));
+			RibbonController.getIcon("READGROUP32", 32));
 		Actions.stylesReadGroup = new ActionToggleButtonModel(false);
 		Actions.stylesReadGroup.setSelected(readGroupOn);
 		Actions.stylesReadGroup.addActionListener(this);
