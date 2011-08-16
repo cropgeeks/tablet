@@ -173,7 +173,7 @@ class ContigsPanelNB extends JPanel implements ActionListener, DocumentListener
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        combo = new javax.swing.JComboBox();
+        combo = new javax.swing.JComboBox<String>();
         textField = new javax.swing.JTextField();
         filterLabel = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -240,7 +240,7 @@ class ContigsPanelNB extends JPanel implements ActionListener, DocumentListener
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox combo;
+    private javax.swing.JComboBox<String> combo;
     public javax.swing.JLabel contigsLabel;
     private javax.swing.JLabel filterLabel;
     private javax.swing.JScrollPane jScrollPane1;

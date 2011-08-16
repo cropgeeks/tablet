@@ -80,7 +80,7 @@ public class ExampleDatasetDialog extends JDialog implements ActionListener
 	 */
 	private void setupDialogComponents()
 	{
-		DefaultComboBoxModel model = new DefaultComboBoxModel();
+		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
 
 		Enumeration<Object> e = properties.keys();
 		while(e.hasMoreElements())

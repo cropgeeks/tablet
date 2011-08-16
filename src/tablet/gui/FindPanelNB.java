@@ -33,7 +33,7 @@ public class FindPanelNB extends javax.swing.JPanel
 		RB.setText(label, "gui.NBFindPanelControls.label");
 
 		findCombo.setHistory(Prefs.recentSearches);
-		findCombo.setPrototypeDisplayValue(25);
+		findCombo.setPrototypeDisplayValue("");
 
 		findInCheckBox.setSelected(Prefs.guiFindPanelSearchCurrentContig);
 		findInCheckBox.addActionListener(panel);
@@ -114,7 +114,7 @@ public class FindPanelNB extends javax.swing.JPanel
         };
         helpLabel = new scri.commons.gui.matisse.HyperLinkLabel();
         checkUseRegex = new javax.swing.JCheckBox();
-        searchTypeCombo = new javax.swing.JComboBox();
+        searchTypeCombo = new javax.swing.JComboBox<String>();
         label = new javax.swing.JLabel();
         checkIgnorePads = new javax.swing.JCheckBox();
         findInCheckBox = new javax.swing.JCheckBox();
@@ -207,7 +207,7 @@ public class FindPanelNB extends javax.swing.JPanel
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel label;
     public javax.swing.JLabel resultsLabel;
-    javax.swing.JComboBox searchTypeCombo;
+    javax.swing.JComboBox<String> searchTypeCombo;
     public javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 

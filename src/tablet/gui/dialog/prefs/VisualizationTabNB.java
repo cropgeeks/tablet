@@ -6,16 +6,14 @@ package tablet.gui.dialog.prefs;
 import java.awt.*;
 import javax.swing.*;
 
-import tablet.data.*;
 import tablet.gui.*;
-import tablet.gui.viewer.*;
 
 import scri.commons.gui.*;
 
 class VisualizationTabNB extends JPanel
 {
-	private DefaultComboBoxModel dnaModel;
-	private DefaultComboBoxModel proteinModel;
+	private DefaultComboBoxModel<String> dnaModel;
+	private DefaultComboBoxModel<String> proteinModel;
 
 	public VisualizationTabNB()
     {
@@ -31,13 +29,13 @@ class VisualizationTabNB extends JPanel
 		RB.setText(proteinLabel, "gui.dialog.prefs.NBVisualizationPanel.proteinLabel");
 		RB.setText(padLabel, "gui.dialog.prefs.NBVisualizationPanel.padLabel");
 
-		dnaModel = new DefaultComboBoxModel();
+		dnaModel = new DefaultComboBoxModel<String>();
         dnaModel.addElement("*");
 		dnaModel.addElement("-");
         dnaCombo.setModel(dnaModel);
 		dnaCombo.setSelectedIndex(Prefs.visPadCharType);
 
-		proteinModel = new DefaultComboBoxModel();
+		proteinModel = new DefaultComboBoxModel<String>();
         proteinModel.addElement(".");
 		proteinModel.addElement("*");
         proteinCombo.setModel(proteinModel);
@@ -83,9 +81,9 @@ class VisualizationTabNB extends JPanel
 
         panel1 = new javax.swing.JPanel();
         dnaLabel = new javax.swing.JLabel();
-        dnaCombo = new javax.swing.JComboBox();
+        dnaCombo = new javax.swing.JComboBox<String>();
         proteinLabel = new javax.swing.JLabel();
-        proteinCombo = new javax.swing.JComboBox();
+        proteinCombo = new javax.swing.JComboBox<String>();
         padSpinner = new javax.swing.JSpinner();
         padLabel = new javax.swing.JLabel();
         panel2 = new javax.swing.JPanel();
@@ -192,13 +190,13 @@ class VisualizationTabNB extends JPanel
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox cacheMappings;
     private javax.swing.JCheckBox cacheReads;
-    private javax.swing.JComboBox dnaCombo;
+    private javax.swing.JComboBox<String> dnaCombo;
     private javax.swing.JLabel dnaLabel;
     private javax.swing.JLabel padLabel;
     private javax.swing.JSpinner padSpinner;
     private javax.swing.JPanel panel1;
     private javax.swing.JPanel panel2;
-    private javax.swing.JComboBox proteinCombo;
+    private javax.swing.JComboBox<String> proteinCombo;
     private javax.swing.JLabel proteinLabel;
     // End of variables declaration//GEN-END:variables
 }

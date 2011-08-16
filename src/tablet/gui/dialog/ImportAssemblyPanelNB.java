@@ -49,8 +49,8 @@ class ImportAssemblyPanelNB extends JPanel implements DocumentListener
 
 		file1Combo.setHistory(Prefs.assRecentDocs);
 		file2Combo.setHistory(Prefs.refRecentDocs);
-		file1Combo.setPrototypeDisplayValue(100);
-		file2Combo.setPrototypeDisplayValue(100);
+		file1Combo.setPrototypeDisplayValue("");
+		file2Combo.setPrototypeDisplayValue("");
 
 		if (Prefs.refNotUsed)
 			((JTextComponent) file2Combo.getEditor().getEditorComponent()).setText("");
