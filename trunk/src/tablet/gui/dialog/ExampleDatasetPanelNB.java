@@ -38,7 +38,7 @@ public class ExampleDatasetPanelNB extends javax.swing.JPanel
     private void initComponents() {
 
         panel = new javax.swing.JPanel();
-        datasetCombo = new javax.swing.JComboBox();
+        datasetCombo = new javax.swing.JComboBox<String>();
         jScrollPane1 = new javax.swing.JScrollPane();
         descriptionTextArea = new javax.swing.JTextArea();
         lblT = new javax.swing.JLabel();
@@ -126,7 +126,7 @@ public class ExampleDatasetPanelNB extends javax.swing.JPanel
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    javax.swing.JComboBox datasetCombo;
+    javax.swing.JComboBox<String> datasetCombo;
     javax.swing.JTextArea descriptionTextArea;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel labelMore;

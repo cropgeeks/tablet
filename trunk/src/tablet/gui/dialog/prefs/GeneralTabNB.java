@@ -14,8 +14,8 @@ import scri.commons.gui.*;
 
 class GeneralTabNB extends JPanel implements ActionListener
 {
-	private DefaultComboBoxModel displayModel;
-	private DefaultComboBoxModel updateModel;
+	private DefaultComboBoxModel<String> displayModel;
+	private DefaultComboBoxModel<String> updateModel;
 
     public GeneralTabNB()
     {
@@ -30,7 +30,7 @@ class GeneralTabNB extends JPanel implements ActionListener
 		RB.setText(displayLabel, "gui.dialog.prefs.NBGeneralPanel.displayLabel");
 		RB.setText(displayHint, "gui.dialog.prefs.NBGeneralPanel.displayHint");
 
-        displayModel = new DefaultComboBoxModel();
+        displayModel = new DefaultComboBoxModel<String>();
         displayModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.auto"));
         displayModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.en_GB"));
         displayModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.en_US"));
@@ -40,7 +40,7 @@ class GeneralTabNB extends JPanel implements ActionListener
         // Update settings
         RB.setText(updateLabel, "gui.dialog.prefs.NBGeneralPanel.updateLabel");
 
-        updateModel = new DefaultComboBoxModel();
+        updateModel = new DefaultComboBoxModel<String>();
         updateModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.updateNever"));
         updateModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.updateStartup"));
         updateModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.updateDaily"));
@@ -101,8 +101,8 @@ class GeneralTabNB extends JPanel implements ActionListener
     private void initComponents() {
 
         generalPanel = new javax.swing.JPanel();
-        displayCombo = new javax.swing.JComboBox();
-        updateCombo = new javax.swing.JComboBox();
+        displayCombo = new javax.swing.JComboBox<String>();
+        updateCombo = new javax.swing.JComboBox<String>();
         displayLabel = new javax.swing.JLabel();
         updateLabel = new javax.swing.JLabel();
         displayHint = new javax.swing.JLabel();
@@ -213,11 +213,11 @@ class GeneralTabNB extends JPanel implements ActionListener
     private javax.swing.JTextField cacheField;
     private javax.swing.JLabel cacheLabel;
     private javax.swing.JPanel cachePanel;
-    private javax.swing.JComboBox displayCombo;
+    private javax.swing.JComboBox<String> displayCombo;
     private javax.swing.JLabel displayHint;
     private javax.swing.JLabel displayLabel;
     private javax.swing.JPanel generalPanel;
-    private javax.swing.JComboBox updateCombo;
+    private javax.swing.JComboBox<String> updateCombo;
     private javax.swing.JLabel updateLabel;
     // End of variables declaration//GEN-END:variables
 }
