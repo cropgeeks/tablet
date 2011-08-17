@@ -132,6 +132,9 @@ public class Prefs extends XMLPreferences
 	public static int visPadCharType = 0;
 	public static int visStopCharType = 0;
 
+	// True if ?, *, N characters should *not* be marked up in red as variants
+	public static boolean visNeverTagUnknownBases = false;
+
 	public static boolean visOverlayNames = false;
 
 	public static boolean guiFindPanelSearchCurrentContig = true;

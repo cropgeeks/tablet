@@ -28,6 +28,7 @@ class Nimbus
 		UIManager.put("Button[Enabled].font", FONT);
 		UIManager.put("ToggleButton[Enabled].font", FONT);
 		UIManager.put("TextField[Enabled].font", FONT);
+		UIManager.put("CheckBox[Enabled].font", FONT);
 
 		for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels())
 			if (laf.getName().equals("Nimbus"))

@@ -28,7 +28,6 @@ class GeneralTabNB extends JPanel implements ActionListener
 		// Interface settings
 		generalPanel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.prefs.NBGeneralPanel.generalPanelTitle")));
 		RB.setText(displayLabel, "gui.dialog.prefs.NBGeneralPanel.displayLabel");
-		RB.setText(displayHint, "gui.dialog.prefs.NBGeneralPanel.displayHint");
 
         displayModel = new DefaultComboBoxModel<String>();
         displayModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.auto"));
@@ -105,21 +104,18 @@ class GeneralTabNB extends JPanel implements ActionListener
         updateCombo = new javax.swing.JComboBox<String>();
         displayLabel = new javax.swing.JLabel();
         updateLabel = new javax.swing.JLabel();
-        displayHint = new javax.swing.JLabel();
         cachePanel = new javax.swing.JPanel();
         cacheLabel = new javax.swing.JLabel();
         cacheField = new javax.swing.JTextField();
         bBrowse = new javax.swing.JButton();
 
-        generalPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("General options:"));
+        generalPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("General options (restart to apply):"));
 
         displayLabel.setLabelFor(displayCombo);
         displayLabel.setText("Interface display language:");
 
         updateLabel.setLabelFor(updateCombo);
         updateLabel.setText("Check for newer Tablet versions:");
-
-        displayHint.setText("(Restart Tablet to apply)");
 
         javax.swing.GroupLayout generalPanelLayout = new javax.swing.GroupLayout(generalPanel);
         generalPanel.setLayout(generalPanelLayout);
@@ -132,9 +128,8 @@ class GeneralTabNB extends JPanel implements ActionListener
                     .addComponent(updateLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(updateCombo, 0, 215, Short.MAX_VALUE)
-                    .addComponent(displayHint)
-                    .addComponent(displayCombo, 0, 215, Short.MAX_VALUE))
+                    .addComponent(displayCombo, 0, 217, Short.MAX_VALUE)
+                    .addComponent(updateCombo, 0, 217, Short.MAX_VALUE))
                 .addContainerGap())
         );
         generalPanelLayout.setVerticalGroup(
@@ -145,8 +140,6 @@ class GeneralTabNB extends JPanel implements ActionListener
                     .addComponent(displayLabel)
                     .addComponent(displayCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(displayHint)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(generalPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(updateLabel)
                     .addComponent(updateCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -203,8 +196,8 @@ class GeneralTabNB extends JPanel implements ActionListener
                 .addContainerGap()
                 .addComponent(generalPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cachePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(cachePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -214,7 +207,6 @@ class GeneralTabNB extends JPanel implements ActionListener
     private javax.swing.JLabel cacheLabel;
     private javax.swing.JPanel cachePanel;
     private javax.swing.JComboBox<String> displayCombo;
-    private javax.swing.JLabel displayHint;
     private javax.swing.JLabel displayLabel;
     private javax.swing.JPanel generalPanel;
     private javax.swing.JComboBox<String> updateCombo;
