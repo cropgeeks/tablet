@@ -6,6 +6,9 @@ package tablet.gui.viewer.colors;
 import java.awt.*;
 import java.awt.image.*;
 
+import tablet.data.*;
+import tablet.gui.*;
+
 abstract class Stamp
 {
 	// AWT representation of this color
@@ -29,4 +32,16 @@ abstract class Stamp
 
 	public Color getColor()
 		{ return color; }
+
+
+	// Special case for ?, *, or N characters (when deltas) that decides whether
+	// they should be in red or not based on the user's settings
+	protected boolean displayInRed(String text)
+	{
+		if (text.equals("?") || text.equals(Sequence.PAD) || text.equals("N"))
+			return (Prefs.visNeverTagUnknownBases == false);
+
+		// All other delta bases should always be in red
+		return true;
+	}
 }

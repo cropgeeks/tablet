@@ -28,6 +28,7 @@ class VisualizationTabNB extends JPanel
 		RB.setText(dnaLabel, "gui.dialog.prefs.NBVisualizationPanel.dnaLabel");
 		RB.setText(proteinLabel, "gui.dialog.prefs.NBVisualizationPanel.proteinLabel");
 		RB.setText(padLabel, "gui.dialog.prefs.NBVisualizationPanel.padLabel");
+		RB.setText(tagCheckbox, "gui.dialog.prefs.NBVisualizationPanel.tagCheckbox");
 
 		dnaModel = new DefaultComboBoxModel<String>();
         dnaModel.addElement("*");
@@ -43,17 +44,8 @@ class VisualizationTabNB extends JPanel
 
 		padSpinner.getModel().setValue(Prefs.visPadReads);
 
-
-		// Bottom panel
-		panel2.setBackground(Color.white);
-		panel2.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.prefs.NBVisualizationPanel.panel2Title")));
-
-		RB.setText(cacheReads, "gui.dialog.prefs.NBVisualizationPanel.cacheReads");
-		RB.setText(cacheMappings, "gui.dialog.prefs.NBVisualizationPanel.cacheMappings");
-
-		cacheReads.setSelected(Prefs.cacheReads);
-		cacheMappings.setSelected(Prefs.cacheMappings);
-
+		tagCheckbox.setSelected(Prefs.visNeverTagUnknownBases);
+		tagCheckbox.setBorder(BorderFactory.createEmptyBorder(0, -2, 0, 0));
     }
 
 	public void applySettings()
@@ -61,9 +53,7 @@ class VisualizationTabNB extends JPanel
 		Prefs.visPadCharType = dnaCombo.getSelectedIndex();
 		Prefs.visStopCharType = proteinCombo.getSelectedIndex();
 		Prefs.visPadReads = (Integer) padSpinner.getModel().getValue();
-
-		Prefs.cacheReads = cacheReads.isSelected();
-		Prefs.cacheMappings = cacheMappings.isSelected();
+		Prefs.visNeverTagUnknownBases = tagCheckbox.isSelected();
 
 		// This will force the visualization area to recreate its color schemes
 		// which will change the rendered characters to their new states
@@ -86,9 +76,7 @@ class VisualizationTabNB extends JPanel
         proteinCombo = new javax.swing.JComboBox<String>();
         padSpinner = new javax.swing.JSpinner();
         padLabel = new javax.swing.JLabel();
-        panel2 = new javax.swing.JPanel();
-        cacheReads = new javax.swing.JCheckBox();
-        cacheMappings = new javax.swing.JCheckBox();
+        tagCheckbox = new javax.swing.JCheckBox();
 
         panel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Display options:"));
 
@@ -103,6 +91,8 @@ class VisualizationTabNB extends JPanel
         padLabel.setLabelFor(padSpinner);
         padLabel.setText("Allow at least the following base gap between reads:");
 
+        tagCheckbox.setText("Dont' tag unknown, padded, or N bases as variants");
+
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
         panel1Layout.setHorizontalGroup(
@@ -110,58 +100,36 @@ class VisualizationTabNB extends JPanel
             .addGroup(panel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(padLabel)
-                    .addComponent(proteinLabel)
-                    .addComponent(dnaLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(proteinCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 67, Short.MAX_VALUE)
-                    .addComponent(dnaCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 67, Short.MAX_VALUE)
-                    .addComponent(padSpinner, javax.swing.GroupLayout.DEFAULT_SIZE, 67, Short.MAX_VALUE))
+                    .addComponent(tagCheckbox)
+                    .addGroup(panel1Layout.createSequentialGroup()
+                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(padLabel)
+                            .addComponent(proteinLabel)
+                            .addComponent(dnaLabel))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(padSpinner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                            .addComponent(dnaCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 105, Short.MAX_VALUE)
+                            .addComponent(proteinCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 105, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(padSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(padLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(dnaLabel)
-                    .addComponent(dnaCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(dnaCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(dnaLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(proteinLabel)
-                    .addComponent(proteinCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
-        panel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Performance options:"));
-
-        cacheReads.setText("Cache read data to disk");
-
-        cacheMappings.setText("Cache padded/unpadded mapping data to disk");
-
-        javax.swing.GroupLayout panel2Layout = new javax.swing.GroupLayout(panel2);
-        panel2.setLayout(panel2Layout);
-        panel2Layout.setHorizontalGroup(
-            panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(cacheReads)
-                    .addComponent(cacheMappings))
-                .addContainerGap(90, Short.MAX_VALUE))
-        );
-        panel2Layout.setVerticalGroup(
-            panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(panel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(cacheReads)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(proteinCombo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(proteinLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cacheMappings)
+                .addComponent(tagCheckbox)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -169,11 +137,9 @@ class VisualizationTabNB extends JPanel
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(panel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -181,22 +147,18 @@ class VisualizationTabNB extends JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(panel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JCheckBox cacheMappings;
-    private javax.swing.JCheckBox cacheReads;
     private javax.swing.JComboBox<String> dnaCombo;
     private javax.swing.JLabel dnaLabel;
     private javax.swing.JLabel padLabel;
     private javax.swing.JSpinner padSpinner;
     private javax.swing.JPanel panel1;
-    private javax.swing.JPanel panel2;
     private javax.swing.JComboBox<String> proteinCombo;
     private javax.swing.JLabel proteinLabel;
+    private javax.swing.JCheckBox tagCheckbox;
     // End of variables declaration//GEN-END:variables
 }

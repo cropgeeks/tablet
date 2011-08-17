@@ -24,9 +24,9 @@ way Tablet is used and is displayed.</p>
 
 <p>The <b>General</b> tab includes options which are specific to Tablet's general operation.</p>
 
-<p><a href="images/gui.dialog.prefs.NBGeneralPanel.png">
-<img class="capture" src="images/gui.dialog.prefs.NBGeneralPanel2.png" alt="Tablet Screenshot"></a></p>
+<p><img class="capture" src="images/gui.dialog.prefs.NBGeneralPanel.png" alt="Tablet Screenshot"></p>
 
+<p>General options (restart to apply):</p>
 <ul>
 	<li><b>Interface Display Language</b><br>
 	This setting determines what language Tablet will display its user interface in.</li>
@@ -34,6 +34,10 @@ way Tablet is used and is displayed.</p>
 	This setting determines how often Tablet will attempt to connect back to its
 	download server to see if a newer version is available. The options available are
 	Never, At application startup, Once a day, Once a week, and Once a month.</li>
+</ul>
+
+<p>Cache options:</p>
+<ul>
 	<li><b>Tablet requires a local directory for storing temporary files</b><br>
 	Specifies the directory where Tablet will keep its disk cache (of the assembly
 	data). The size of the cache depends on the size of the assembly, so it is
@@ -45,9 +49,9 @@ way Tablet is used and is displayed.</p>
 
 <p>The <b>Visualization</b> tab allows you to customise elements of Tablet's visual display.</p>
 
-<p><a href="images/gui.dialog.prefs.NBVisualizationPanel.png">
-<img class="capture" src="images/gui.dialog.prefs.NBVisualizationPanel2.png" alt="Tablet Screenshot"></a></p>
+<p><img class="capture" src="images/gui.dialog.prefs.NBVisualizationPanel.png" alt="Tablet Screenshot"></p>
 
+<p>Display options:</p>
 <ul>
     <li><b>Always allow at least this number of bases between reads</b><br>
     Forces Tablet to ensure that adjoining reads are always separated by at least
@@ -58,17 +62,9 @@ way Tablet is used and is displayed.</p>
 	<li><b>Character to display for Protein stop codons</b><br>
 	Determines what character will be shown whenever DNA translates to a stop
 	codon.</li>
-</ul>
-
-<ul>
-<li><b>Cache read data to disk</b><br>
-  Selecting this option will ensure Tablet keeps the majority of read data for
-  an assembly in a disk-based cache, rather than in memory. This marginally
-  reduces performance, but has a significant saving on memory.</li>
-
-<li><b>Cache padded/unpadded mapping data to disk</b><br>
-  As above, selecting this option will ensure Tablet keeps the data for mapping between
-  padded and unpadded locations in a disk-based cache, rather than in memory.</li>
+	<li><b>Don't tag unknown, padded, or N bases as variants</b><br>
+	If selected, Tablet will no longer render these bases as variants, meaning they
+	will not stand out from the rest of the data (or be highlighted in red).</li>
 </ul>
 
 
@@ -76,9 +72,9 @@ way Tablet is used and is displayed.</p>
 
 <p>The <b>Importing</b> tab allows you to modify how Tablet reads from data files.</p>
 
-<p><a href="images/gui.dialog.prefs.NBFormatsPanel.png">
-<img class="capture" src="images/gui.dialog.prefs.NBFormatsPanel2.png" alt="Tablet Screenshot"></a></p>
+<p><img class="capture" src="images/gui.dialog.prefs.NBFormatsPanel.png" alt="Tablet Screenshot"></p>
 
+<p>Assembly import options:</p>
 <ul>
     <li><b>Convert all DNA ambuiguity codes to 'N', rather than treating as unknowns</b><br>
     If selected, any nucleotides encoded using ambuiguity codes will be read as N rather
@@ -96,7 +92,10 @@ way Tablet is used and is displayed.</p>
     assemblies and will attempt to display the file as if it was OK. Any errors that
     are found will be written to the output.log file in Tablet's install directory.
     See samtools/picard documentation for more details on strict/lenient parsing options.</li>
-	
+</ul>
+
+<p>Samtools:</p>
+<ul>
 	<li><b>Alternative path to samtools</b></br>
 	When opening BAM files, Tablet attempts to use its own bundled copy of samtools to gather
 	read count statistics from the index file (using the "samtools idxstats" command). Tablet's
@@ -112,8 +111,7 @@ Tablet can pop up from time to time. If an item is checked, Tablet will display
 a relevant warning to you whenever its associated action occurs. Unchecking an
 item means that Tablet will proceed with the action without warning you.</p>
 
-<p><a href="images/gui.dialog.prefs.NBWarningPanel.png">
-<img class="capture" src="images/gui.dialog.prefs.NBWarningPanel2.png" alt="Tablet Screenshot"></a></p>
+<p><img class="capture" src="images/gui.dialog.prefs.NBWarningPanel.png" alt="Tablet Screenshot"></p>
 
 <ul>
 	<li><b>Before closing an assembly if a file is already in memory</b><br>

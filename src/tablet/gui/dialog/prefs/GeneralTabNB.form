@@ -32,8 +32,8 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="generalPanel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="cachePanel" max="32767" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
+              <Component id="cachePanel" min="-2" max="-2" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -43,7 +43,7 @@
       <Properties>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
           <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
-            <TitledBorder title="General options:"/>
+            <TitledBorder title="General options (restart to apply):"/>
           </Border>
         </Property>
       </Properties>
@@ -59,9 +59,8 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="updateCombo" alignment="0" pref="215" max="32767" attributes="1"/>
-                      <Component id="displayHint" alignment="0" min="-2" max="-2" attributes="1"/>
-                      <Component id="displayCombo" alignment="0" pref="215" max="32767" attributes="0"/>
+                      <Component id="displayCombo" alignment="0" pref="217" max="32767" attributes="0"/>
+                      <Component id="updateCombo" alignment="0" pref="217" max="32767" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -76,8 +75,6 @@
                       <Component id="displayCombo" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="displayHint" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="updateLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="updateCombo" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -122,11 +119,6 @@
               <ComponentRef name="updateCombo"/>
             </Property>
             <Property name="text" type="java.lang.String" value="Check for newer Tablet versions:"/>
-          </Properties>
-        </Component>
-        <Component class="javax.swing.JLabel" name="displayHint">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="(Restart Tablet to apply)"/>
           </Properties>
         </Component>
       </SubComponents>

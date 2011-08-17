@@ -25,7 +25,7 @@ class GrayscaleStamp extends Stamp
 		if (useAlpha)
 		{
 			// Overlay for bases that are different from the consensus
-			if (isDeltaBase)
+			if (isDeltaBase && displayInRed(text))
 			{
 				g.setPaint(new Color(255, 255, 255, 130));
 				if (Prefs.visTagVariants)
@@ -45,7 +45,7 @@ class GrayscaleStamp extends Stamp
 		Rectangle2D bounds = fm.getStringBounds(text, g);
 
 		g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-		if (isDeltaBase)
+		if (isDeltaBase && displayInRed(text))
 			g.setColor(Color.red);
 		else
 			g.setColor(Color.black);
