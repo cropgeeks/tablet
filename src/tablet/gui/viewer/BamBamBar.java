@@ -258,8 +258,15 @@ class BamBamBar extends JPanel implements IOverlayRenderer
 				// Update contig
 				if (vS != gVS || vE != gVE)
 				{
-					aPanel.processBamDataChange();
-					aPanel.moveToPosition(-1, vS, false);
+					try
+					{
+						aPanel.processBamDataChange();
+						aPanel.moveToPosition(-1, vS, false);
+					}
+					catch (Exception ex)
+					{
+						ex.printStackTrace();
+					}
 				}
 
 				isDragging = false;

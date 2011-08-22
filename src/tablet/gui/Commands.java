@@ -23,14 +23,39 @@ public class Commands
 {
 	private WinMain winMain;
 
+	private AssemblyFile[] files;
+	private boolean hasAssembly;
+
 	Commands(WinMain winMain)
 	{
 		this.winMain = winMain;
 	}
 
+	private void checkFiles(String[] filenames)
+	{
+		// Now that we have filenames, convert them into AssemblyFile objects
+		files = new AssemblyFile[filenames.length];
+
+		for (int i=0; i < filenames.length; i++)
+		{
+			files[i] = new AssemblyFile(filenames[i]);
+			files[i].canDetermineType();
+
+			if (files[i].isAssemblyFile())
+				hasAssembly = true;
+		}
+
+		Arrays.sort(files);
+	}
+
 	public void fileOpen(String[] filenames)
 	{
-		if (winMain.okToExit(true) == false)
+		hasAssembly = false;
+
+		if (filenames != null)
+			checkFiles(filenames);
+
+		if (hasAssembly && winMain.okToExit(true) == false)
 			return;
 
 		// If no file was passed in then we need to prompt the user to pick one
@@ -47,22 +72,9 @@ public class Commands
 
 			else if ((filenames = importDialog.getFilenames()) == null)
 				return;
+
+			checkFiles(filenames);
 		}
-
-		// Now that we have filenames, convert them into AssemblyFile objects
-		AssemblyFile[] files = new AssemblyFile[filenames.length];
-
-		boolean hasAssembly = false;
-		for (int i=0; i < filenames.length; i++)
-		{
-			files[i] = new AssemblyFile(filenames[i]);
-			files[i].canDetermineType();
-
-			if (files[i].isAssemblyFile())
-				hasAssembly = true;
-		}
-
-		Arrays.sort(files);
 
 		// Attempt to open the assembly
 		if (hasAssembly)
@@ -73,7 +85,7 @@ public class Commands
 		if (winMain.getAssemblyPanel().getAssembly() != null)
 			for (AssemblyFile file: files)
 				if (file.getType() == AssemblyFile.GFF3)
-					importFeatures(file.getPath(), true);
+					importFeatures(file.getPath(), !hasAssembly);
 	}
 
 	private boolean openAssembly(AssemblyFile[] files)
