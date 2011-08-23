@@ -89,6 +89,23 @@ public class FeatureTrack implements Comparator<Feature>
 	{
 		ArrayList<Feature> list = new ArrayList<Feature>();
 
+		// Temporary fix for overlapping features (features that perhaps span
+		// the entire contig) that don't appear
+		for (Feature f: features)
+		{
+			int c = compare(f, new Feature(s, e));
+
+			if (c == 0)
+				list.add(f);
+			if (c == 1)
+				break;
+		}
+
+		if (true)
+			return list;
+
+
+
 		// Start by finding ANY feature that is inside the window
 		int index = Collections.binarySearch(features, new Feature(s, e), this);
 
