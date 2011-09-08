@@ -28,12 +28,13 @@ public class Actions
 	public static ActionToggleButtonModel optionsHideContigs;
 	public static ActionRepeatableButtonModel optionsHideOverview;
 
-	public static ActionToggleButtonModel stylesStandard;
-	public static ActionToggleButtonModel stylesDirection;
-	public static ActionToggleButtonModel stylesReadType;
-	public static ActionToggleButtonModel stylesReadGroup;
-	public static ActionToggleButtonModel stylesText;
+	public static ActionToggleButtonModel colorsStandard;
+	public static ActionToggleButtonModel colorsDirection;
+	public static ActionToggleButtonModel colorsReadType;
+	public static ActionToggleButtonModel colorsReadGroup;
+	public static ActionToggleButtonModel colorsText;
 	public static ActionRepeatableButtonModel stylesPackStyles;
+	public static ActionRepeatableButtonModel stylesColorSchemes;
 	public static ActionToggleButtonModel stylesTagVariants;
 	//public static ActionToggleButtonModel stylesPacked;
 
@@ -84,12 +85,13 @@ public class Actions
 		optionsHideScaleBar.setEnabled(false);
 		optionsHideCoverage.setEnabled(false);
 
-		stylesStandard.setEnabled(false);
-		stylesDirection.setEnabled(false);
-		stylesReadType.setEnabled(false);
-		stylesReadGroup.setEnabled(false);
-		stylesText.setEnabled(false);
+		colorsStandard.setEnabled(false);
+		colorsDirection.setEnabled(false);
+		colorsReadType.setEnabled(false);
+		colorsReadGroup.setEnabled(false);
+		colorsText.setEnabled(false);
 		stylesPackStyles.setEnabled(false);
+		stylesColorSchemes.setEnabled(false);
 		stylesTagVariants.setEnabled(false);
 		//stylesPacked.setEnabled(false);
 
@@ -140,12 +142,13 @@ public class Actions
 		optionsHideScaleBar.setEnabled(false);
 		optionsHideCoverage.setEnabled(false);
 
-		stylesStandard.setEnabled(false);
-		stylesDirection.setEnabled(false);
-		stylesReadType.setEnabled(false);
-		stylesReadGroup.setEnabled(false);
-		stylesText.setEnabled(false);
+		colorsStandard.setEnabled(false);
+		colorsDirection.setEnabled(false);
+		colorsReadType.setEnabled(false);
+		colorsReadGroup.setEnabled(false);
+		colorsText.setEnabled(false);
 		stylesPackStyles.setEnabled(false);
+		stylesColorSchemes.setEnabled(false);
 		stylesTagVariants.setEnabled(false);
 		//stylesPacked.setEnabled(false);
 
@@ -196,12 +199,13 @@ public class Actions
 		optionsHideScaleBar.setEnabled(true);
 		optionsHideCoverage.setEnabled(true);
 
-		stylesStandard.setEnabled(true);
-		stylesDirection.setEnabled(true);
-		stylesReadType.setEnabled(true);
-		stylesReadGroup.setEnabled(true);
-		stylesText.setEnabled(true);
+		colorsStandard.setEnabled(true);
+		colorsDirection.setEnabled(true);
+		colorsReadType.setEnabled(true);
+		colorsReadGroup.setEnabled(true);
+		colorsText.setEnabled(true);
 		stylesPackStyles.setEnabled(true);
+		stylesColorSchemes.setEnabled(true);
 		stylesTagVariants.setEnabled(true);
 		//stylesPacked.setEnabled(true);
 

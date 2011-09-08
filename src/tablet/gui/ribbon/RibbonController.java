@@ -23,10 +23,12 @@ public class RibbonController
 	private static JLabel memoryLabel = new JLabel(" ");
 
 	public static BandAssemblies bandAssemblies;
-	public static BandStyles bandStyles;
+	public static BandLayout bandLayout;
 	public static BandAdjust bandAdjust;
 	public static BandNavigate bandNavigate;
 	public static BandOverlays bandOverlays;
+
+	public static BandColors bandStyles;
 
 	public static BandProtein bandProtein;
 	public static BandBAM bandBAM;
@@ -41,13 +43,22 @@ public class RibbonController
 		RibbonTask homeTask = new RibbonTask(
 			RB.getString("gui.ribbon.RibbonController.home"),
 			bandAssemblies = new BandAssemblies(winMain),
-			bandStyles = new BandStyles(winMain),
+			bandLayout = new BandLayout(winMain),
 			bandAdjust = new BandAdjust(winMain),
 			bandNavigate = new BandNavigate(winMain),
 			bandOverlays = new BandOverlays(winMain));
 
 		homeTask.setKeyTip("H");
 		ribbon.addTask(homeTask);
+
+
+		// The Colors ribbon
+		RibbonTask colorsTask = new RibbonTask(
+			RB.getString("gui.ribbon.RibbonController.colors"),
+			bandStyles = new BandColors(winMain));
+
+		colorsTask.setKeyTip("C");
+		ribbon.addTask(colorsTask);
 
 
 		// The Advanced ribbon
