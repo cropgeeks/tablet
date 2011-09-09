@@ -48,8 +48,11 @@ public class Feature implements Comparable<Feature>
 	protected int pE;
 
 	// Start and end, converted from unpadded->padded (if required)
-	protected Integer u2pS;
-	protected Integer u2pE;
+	protected int u2pS;
+	protected boolean u2pSDefined;
+
+	protected int u2pE;
+	protected boolean u2pEDefined;
 
 
 	// Used by FeatureTrack to quickly make dummy features to aid in searching
@@ -151,11 +154,14 @@ public class Feature implements Comparable<Feature>
 			return pS;
 
 		// Convert the value from unpadded to padded space (and store it)
-		if (u2pS != null)
+		if (u2pSDefined)
 			return u2pS;
 
 		if (DisplayData.hasUnpaddedToPadded())
+		{
+			u2pSDefined = true;
 			return (u2pS = DisplayData.unpaddedToPadded(pS));
+		}
 
 		// If it can't be converted (yet) we'll hopefully get it next time
 		else
@@ -168,11 +174,14 @@ public class Feature implements Comparable<Feature>
 			return pE;
 
 		// Convert the value from unpadded to padded space (and store it)
-		if (u2pE != null)
+		if (u2pEDefined)
 			return u2pE;
 
 		if (DisplayData.hasUnpaddedToPadded())
+		{
+			u2pEDefined = true;
 			return (u2pE = DisplayData.unpaddedToPadded(pE));
+		}
 
 		// If it can't be converted (yet) we'll hopefully get it next time
 		else
