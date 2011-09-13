@@ -263,35 +263,6 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 			TabletUtils.nf.format(contig.getTableData().featureCount()), mm);
 	}
 
-	private void copyTableToClipboard()
-	{
-		StringBuilder text = new StringBuilder();
-		String newline = System.getProperty("line.separator");
-
-		text.append(RB.getString("gui.ContigsTableModel.col1") + "\t");
-		text.append(RB.getString("gui.ContigsTableModel.col2") + "\t");
-		text.append(RB.getString("gui.ContigsTableModel.col3") + "\t");
-		text.append(RB.getString("gui.ContigsTableModel.col4") + "\t");
-		text.append(RB.getString("gui.ContigsTableModel.col5") + newline);
-
-		for (int i = 0; i < controls.table.getRowCount(); i++)
-		{
-			int row = controls.table.convertRowIndexToModel(i);
-			Contig contig = (Contig) model.getValueAt(row, 0);
-
-			text.append(contig.getName() + "\t"
-				+ contig.getTableData().consensusLength() + "\t"
-				+ contig.getTableData().readCount() + "\t"
-				+ contig.getTableData().featureCount() + "\t"
-				+ contig.getTableData().mismatchPercentage());
-			text.append(newline);
-		}
-
-		StringSelection selection = new StringSelection(text.toString());
-		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
-			selection, null);
-	}
-
 	private void saveReadsSummary()
 	{
 		int row = controls.table.getSelectedRow();
@@ -353,7 +324,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		RB.setText(mTableCopy, "gui.ContigsPanel.mTableCopy");
 		mTableCopy.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				copyTableToClipboard();
+				TabletUtils.copyTableToClipboard(controls.table, model);
 			}
 		});
 

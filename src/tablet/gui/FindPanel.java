@@ -4,6 +4,7 @@
 package tablet.gui;
 
 import java.awt.*;
+import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
@@ -25,6 +26,8 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 	private ContigsPanel cPanel;
 	private Finder finder;
 	private TableRowSorter<AbstractTableModel> sorter;
+
+	private JMenuItem mClipboard;
 
 	public FindPanel(AssemblyPanel aPanel, WinMain winMain, final JTabbedPane ctrlTabs)
 	{
@@ -59,11 +62,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		// Additional (duplicate) table-clicked handler to catch the user
 		// re-clicking on the same row. This doesn't generate a table event, but
 		// we still want to respond to it and highlight the selection again
-		controls.table.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				processTableSelection();
-			}
-		});
+		controls.table.addMouseListener(new TableMouseListener());
 
 		controls.table.setDefaultRenderer(Number.class,
 			new NumberFormatCellRenderer());
@@ -345,5 +344,42 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 			i++;
 		}
 		return null;
+	}
+
+	private void displayMenu(MouseEvent e)
+	{
+		mClipboard = new JMenuItem("", Icons.getIcon("CLIPBOARD"));
+		RB.setText(mClipboard, "gui.viewer.FeaturesPanel.mClipboard");
+		mClipboard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				TabletUtils.copyTableToClipboard(controls.table, tableModel);
+			}
+		});
+
+		JPopupMenu menu = new JPopupMenu();
+		menu.add(mClipboard);
+
+		menu.show(e.getComponent(), e.getX(), e.getY());
+	}
+
+	private final class TableMouseListener extends MouseInputAdapter
+	{
+		public void mouseClicked(MouseEvent e)
+		{
+			if (!e.isPopupTrigger())
+				processTableSelection();
+		}
+
+		public void mousePressed(MouseEvent e)
+		{
+			if (e.isPopupTrigger())
+				displayMenu(e);
+		}
+
+		public void mouseReleased(MouseEvent e)
+		{
+			if (e.isPopupTrigger())
+				displayMenu(e);
+		}
 	}
 }
