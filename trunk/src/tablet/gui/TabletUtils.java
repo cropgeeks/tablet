@@ -4,12 +4,14 @@
 package tablet.gui;
 
 import java.awt.*;
+import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.io.File;
 import java.net.*;
 import java.text.*;
 import javax.swing.*;
 import javax.swing.filechooser.*;
+import javax.swing.table.*;
 
 import scri.commons.gui.*;
 
@@ -195,5 +197,34 @@ public class TabletUtils
 		}
 
 		return null;
+	}
+
+	public static void copyTableToClipboard(JTable table, AbstractTableModel model)
+	{
+		StringBuilder text = new StringBuilder();
+		String newline = System.getProperty("line.separator");
+
+		// Column headers
+		for (int c = 0; c < model.getColumnCount(); c++)
+		{
+			text.append(model.getColumnName(c));
+			text.append(c < model.getColumnCount()-1 ? "\t" : newline);
+		}
+
+		// Each row
+		for (int r = 0; r < table.getRowCount(); r++)
+		{
+			int row = table.convertRowIndexToModel(r);
+
+			for (int c = 0; c < model.getColumnCount(); c++)
+			{
+				text.append(model.getValueAt(row, c));
+				text.append(c < model.getColumnCount()-1 ? "\t" : newline);
+			}
+		}
+
+		StringSelection selection = new StringSelection(text.toString());
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+			selection, null);
 	}
 }

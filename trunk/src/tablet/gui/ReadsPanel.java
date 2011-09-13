@@ -27,7 +27,7 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 	private AssemblyPanel aPanel;
 	private Contig contig;
 
-	private JMenuItem mClipboardName, mClipboardData;
+	private JMenuItem mClipboardName, mClipboardData, mClipboard;
 	private JMenuItem mFindStart, mFindEnd, mJumpToPair;
 
 	ReadsPanel(AssemblyPanel aPanel, JTabbedPane ctrlTabs)
@@ -184,13 +184,13 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 	}
 
 	// Copies the name of the given read to the clipboard.
-	private void copyReadNameToClipboard()
-	{
-		Read read = getReadFromTable();
-		StringSelection selection = new StringSelection(Assembly.getReadName(read));
-		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
-			selection, null);
-	}
+//	private void copyReadNameToClipboard()
+//	{
+//		Read read = getReadFromTable();
+//		StringSelection selection = new StringSelection(Assembly.getReadName(read));
+//		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+//			selection, null);
+//	}
 
 	// Copies the data relating to the given read to the clipboard.
 	private void copyDataToClipboard()
@@ -264,11 +264,14 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 			}
 		}
 
-		else if (e.getSource() == mClipboardName)
-			copyReadNameToClipboard();
+//		else if (e.getSource() == mClipboardName)
+//			copyReadNameToClipboard();
 
 		else if (e.getSource() == mClipboardData)
 			copyDataToClipboard();
+
+		else if (e.getSource() == mClipboard)
+			TabletUtils.copyTableToClipboard(controls.table, tableModel);
 
 		else if (e.getSource() == mFindStart)
 		{
@@ -322,13 +325,17 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 
 	private void displayMenu(MouseEvent e)
 	{
-		mClipboardName = new JMenuItem("", Icons.getIcon("CLIPBOARDNAME"));
-		RB.setText(mClipboardName, "gui.viewer.ReadsCanvasMenu.mClipboardName");
-		mClipboardName.addActionListener(this);
+//		mClipboardName = new JMenuItem("", Icons.getIcon("CLIPBOARDNAME"));
+//		RB.setText(mClipboardName, "gui.viewer.ReadsCanvasMenu.mClipboardName");
+//		mClipboardName.addActionListener(this);
 
 		mClipboardData = new JMenuItem("", Icons.getIcon("CLIPBOARD"));
 		RB.setText(mClipboardData, "gui.viewer.ReadsCanvasMenu.mClipboardData");
 		mClipboardData.addActionListener(this);
+
+		mClipboard = new JMenuItem("", Icons.getIcon("CLIPBOARD"));
+		RB.setText(mClipboard, "gui.viewer.ReadsCanvasMenu.mClipboard");
+		mClipboard.addActionListener(this);
 
 		JMenu mJumpTo = new JMenu("");
 		RB.setText(mJumpTo, "gui.viewer.ReadsCanvasMenu.mJumpTo");
@@ -350,8 +357,9 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 		mJumpTo.add(mJumpToPair);
 
 		JPopupMenu menu = new JPopupMenu();
-		menu.add(mClipboardName);
+//		menu.add(mClipboardName);
 		menu.add(mClipboardData);
+		menu.add(mClipboard);
 		menu.addSeparator();
 		menu.add(mJumpTo);
 
