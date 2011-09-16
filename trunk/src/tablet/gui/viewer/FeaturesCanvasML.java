@@ -3,6 +3,8 @@
 
 package tablet.gui.viewer;
 
+import java.awt.*;
+import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
@@ -21,7 +23,11 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 
 	private AssemblyPanel aPanel;
 
+	private JMenuItem mCopyReference;
 	private JMenuItem mSelectTracks;
+
+	// A list of features under the mouse (will only be > 1 if features overlap)
+	private ArrayList<Feature> features;
 
 	FeaturesCanvasML(AssemblyPanel aPanel)
 	{
@@ -35,10 +41,6 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		fCanvas.addMouseMotionListener(this);
 
 		new ReadsCanvasDragHandler(aPanel, fCanvas);
-
-		mSelectTracks = new JMenuItem("");
-		RB.setText(mSelectTracks, "gui.viewer.FeaturesCanvasML.mSelectTracks");
-		mSelectTracks.addActionListener(this);
 	}
 
 	public void mouseExited(MouseEvent e)
@@ -50,7 +52,7 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 	{
 		int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) + rCanvas.offset;
 		int yIndex = e.getY() / fCanvas.H;
-		
+
 		sCanvas.setMouseBase(xIndex);
 
 		detectFeature(xIndex, yIndex);
@@ -72,13 +74,51 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 	{
 		JPopupMenu menu = new JPopupMenu();
 
+		mCopyReference = new JMenuItem("");
+		RB.setText(mCopyReference, "gui.viewer.FeaturesCanvasML.mCopyReference");
+		mCopyReference.setIcon(Icons.getIcon("CLIPBOARD"));
+		mCopyReference.addActionListener(this);
+		mCopyReference.setEnabled(features.size() > 0);
+
+		mSelectTracks = new JMenuItem("");
+		RB.setText(mSelectTracks, "gui.viewer.FeaturesCanvasML.mSelectTracks");
+		mSelectTracks.addActionListener(this);
+
+		menu.add(mCopyReference);
+		menu.addSeparator();
 		menu.add(mSelectTracks);
 		menu.show(e.getComponent(), e.getX(), e.getY());
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
-		if (e.getSource() == mSelectTracks)
+		if (e.getSource() == mCopyReference)
+		{
+			StringBuilder str = new StringBuilder();
+
+			for (Feature feature: features)
+			{
+				int start = feature.getDataPS();
+				int end   = feature.getDataPE();
+
+				// Get contig name and consensus / reference string
+				String name = aPanel.getContig().getName()
+					+ "_" + (start+1) + "-" + (end+1);
+				String consensus = aPanel.getContig().getConsensus().toString();
+
+				// Carry out the substring operation and format data as fasta
+				String seq = consensus.substring(start, end+1);
+				String text = TabletUtils.formatFASTA(name, seq);
+
+				str.append(text + System.getProperty("line.separator"));
+			}
+
+			StringSelection selection = new StringSelection(str.toString());
+				Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+					selection, null);
+		}
+
+		else if (e.getSource() == mSelectTracks)
 			Tablet.winMain.getFeaturesPanel().editFeatures();
 	}
 
@@ -92,12 +132,12 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		else
 			return;
 
-		ArrayList<Feature> data = fCanvas.vContig.getTrack(track).getFeatures(x, x);
+		features = fCanvas.vContig.getTrack(track).getFeatures(x, x);
 
-		if (data.isEmpty())
+		if (features.isEmpty())
 			fCanvas.setToolTipText(null);
 
-		for (Feature f: data)
+		for (Feature f: features)
 		{
 			if(f.getGFFType().equals("CIGAR-I") && !aPanel.getCigarIHighlighter().isVisible())
 			{
@@ -115,12 +155,13 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 
 	public void mouseClicked(MouseEvent e)
 	{
+		if (e.isPopupTrigger())
+			return;
+
 		int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) + rCanvas.offset;
 		int track = 0;
 
-		ArrayList<Feature> data = fCanvas.vContig.getTrack(0).getFeatures(xIndex, xIndex);
-
-		for (Feature f: data)
+		for (Feature f: features)
 		{
 			if(f.getGFFType().equals("CIGAR-I"))
 			{
