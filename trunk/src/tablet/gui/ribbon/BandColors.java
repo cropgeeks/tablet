@@ -27,6 +27,7 @@ public class BandColors extends JRibbonBand implements ActionListener
 	static JCommandToggleButton bDirection;
 	static JCommandToggleButton bReadType;
 	static JCommandToggleButton bReadGroup;
+	static JCommandToggleButton bReadLength;
 	static JCommandToggleButton bText;
 
 	private StyleListener styleListener = new StyleListener();
@@ -93,13 +94,15 @@ public class BandColors extends JRibbonBand implements ActionListener
 		Actions.colorsReadType.setSelected(readtypeOn);
 		Actions.colorsReadType.addActionListener(this);
 		bReadType.setActionModel(Actions.colorsReadType);
-		bReadType.setActionKeyTip("R");
+		bReadType.setActionKeyTip("T");
 		bReadType.addMouseListener(styleListener);
 		bReadType.setActionRichTooltip(new RichTooltip(
 			RB.getString("gui.ribbon.BandColors.bReadType.tooltip"),
 			RB.getString("gui.ribbon.BandColors.bReadType.richtip")));
 		styleButtons.add(bReadType);
 
+
+		// Read group colour scheme button
 		boolean readGroupOn = Prefs.visColorScheme == ReadScheme.READGROUP;
 
 		bReadGroup = new JCommandToggleButton(
@@ -109,12 +112,29 @@ public class BandColors extends JRibbonBand implements ActionListener
 		Actions.colorsReadGroup.setSelected(readGroupOn);
 		Actions.colorsReadGroup.addActionListener(this);
 		bReadGroup.setActionModel(Actions.colorsReadGroup);
-		bReadGroup.setActionKeyTip("R");
+		bReadGroup.setActionKeyTip("G");
 		bReadGroup.addMouseListener(styleListener);
 		bReadGroup.setActionRichTooltip(new RichTooltip(
 			RB.getString("gui.ribbon.BandColors.bReadGroup.tooltip"),
 			RB.getString("gui.ribbon.BandColors.bReadGroup.richtip")));
 		styleButtons.add(bReadGroup);
+
+		// Read length colour scheme button
+		boolean readLengthOn = Prefs.visColorScheme == ReadScheme.READLENGTH;
+
+		bReadLength = new JCommandToggleButton(
+			RB.getString("gui.ribbon.BandColors.bReadLength"),
+			RibbonController.getIcon("READGROUP32", 32));
+		Actions.colorsReadLength = new ActionToggleButtonModel(false);
+		Actions.colorsReadLength.setSelected(readLengthOn);
+		Actions.colorsReadLength.addActionListener(this);
+		bReadLength.setActionModel(Actions.colorsReadLength);
+		bReadLength.setActionKeyTip("L");
+		bReadLength.addMouseListener(styleListener);
+		bReadLength.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.BandColors.bReadLength.tooltip"),
+			RB.getString("gui.ribbon.BandColors.bReadLength.richtip")));
+		styleButtons.add(bReadLength);
 
 
 		// Text ("classic") colour scheme button
@@ -138,9 +158,9 @@ public class BandColors extends JRibbonBand implements ActionListener
 		// Set up the ribbon gallery (gawd knows what this code is doing)
 		Map<RibbonElementPriority, Integer> counts =
 			new HashMap<RibbonElementPriority, Integer>();
-		counts.put(RibbonElementPriority.LOW, 5);
-		counts.put(RibbonElementPriority.MEDIUM, 5);
-		counts.put(RibbonElementPriority.TOP, 5);
+		counts.put(RibbonElementPriority.LOW, 6);
+		counts.put(RibbonElementPriority.MEDIUM, 6);
+		counts.put(RibbonElementPriority.TOP, 6);
 
 		List<StringValuePair<List<JCommandToggleButton>>> galleryButtons =
 			new ArrayList<StringValuePair<List<JCommandToggleButton>>>();
@@ -192,6 +212,15 @@ public class BandColors extends JRibbonBand implements ActionListener
 			Actions.colorsReadGroup.setSelected(true);
 		}
 
+		else if (e.getSource() == Actions.colorsReadLength)
+		{
+			setColorScheme(ReadScheme.READLENGTH);
+			styleListener.previousScheme = ReadScheme.READLENGTH;
+
+			// BUG: Workaround for API allowing toggle groups to be unselected
+			Actions.colorsReadGroup.setSelected(true);
+		}
+
 		else if (e.getSource() == Actions.colorsText)
 		{
 			setColorScheme(ReadScheme.CLASSIC);
@@ -233,6 +262,10 @@ public class BandColors extends JRibbonBand implements ActionListener
 			else if (e.getSource() == bReadGroup && Actions.colorsReadGroup.isEnabled() &&
 				previousScheme != ReadScheme.READGROUP)
 				setColorScheme(ReadScheme.READGROUP);
+
+			else if (e.getSource() == bReadLength && Actions.colorsReadLength.isEnabled() &&
+				previousScheme != ReadScheme.READLENGTH)
+				setColorScheme(ReadScheme.READLENGTH);
 
 			else if (e.getSource() == bText && Actions.colorsText.isEnabled() &&
 				previousScheme != ReadScheme.CLASSIC)

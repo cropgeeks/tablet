@@ -17,6 +17,7 @@ public abstract class ReadScheme
 	public static final int DIRECTION = 30;
 	public static final int READTYPE = 40;
 	public static final int READGROUP = 50;
+	public static final int READLENGTH = 60;
 
 
 	/** Returns a DNA colouring scheme from the cache of schemes. */
@@ -44,6 +45,9 @@ public abstract class ReadScheme
 
 		else if (type == READGROUP)
 			scheme = new ReadGroupScheme(w, h);
+
+		else if (type == READLENGTH)
+			scheme = new ReadLengthScheme(w, h);
 
 		return scheme;
 	}

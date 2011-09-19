@@ -3,6 +3,8 @@
 
 package tablet.data;
 
+import tablet.gui.viewer.colors.*;
+
 /**
  * Represents and holds additional meta data about a read. Chances are this is
  * data that was cached elsewhere (eg on disk) because it uses too much memory
@@ -26,6 +28,11 @@ public class ReadMetaData extends Sequence
 	// True if this read's mate has been mapped to a contig in the assembly
 	private boolean mateMapped;
 	private short readGroup;
+
+	// Caches information about the length of this read (in memory cache only)
+	// that is used to determine which colour bin will be used to draw this read
+	// when using the read length colour scheme
+	private int lengthBin;
 
 	public ReadMetaData()
 	{
@@ -69,6 +76,8 @@ public class ReadMetaData extends Sequence
 	public void setLength(int length)
 	{
 		this.length = length;
+
+		lengthBin = ReadLengthScheme.getBin(length);
 	}
 
 	public boolean getIsPaired()
@@ -144,4 +153,8 @@ public class ReadMetaData extends Sequence
 
 	public void setReadGroup(short readGroup)
 		{ this.readGroup = readGroup; }
+
+	public int getLengthBin()
+		{ return lengthBin; }
+
 }
