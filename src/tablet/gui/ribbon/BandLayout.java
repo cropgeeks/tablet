@@ -29,7 +29,7 @@ public class BandLayout extends JRibbonBand implements ActionListener
 
 	// Button for the Color Schemes and its drop-down menu options
 	private JCommandButton bColorScheme;
-	private JCheckBoxMenuItem mEnhanced, mDirection, mReadType, mReadGroup, mText;
+	private JCheckBoxMenuItem mEnhanced, mDirection, mReadType, mReadGroup, mReadLength, mText;
 
 	private JCommandToggleButton bTagVariants;
 //	private JCommandButton bSort;
@@ -174,6 +174,8 @@ public class BandLayout extends JRibbonBand implements ActionListener
 			BandColors.bReadType.doActionClick();
 		else if (e.getSource() == mReadGroup)
 			BandColors.bReadGroup.doActionClick();
+		else if (e.getSource() == mReadLength)
+			BandColors.bReadLength.doActionClick();
 		else if (e.getSource() == mText)
 			BandColors.bText.doActionClick();
 	}
@@ -223,6 +225,9 @@ public class BandLayout extends JRibbonBand implements ActionListener
 		mReadGroup = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandColors.bReadGroup"));
 		mReadGroup.addActionListener(this);
 
+		mReadLength = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandColors.bReadLength"));
+		mReadLength.addActionListener(this);
+
 		mText = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandColors.bText"));
 		mText.addActionListener(this);
 
@@ -230,6 +235,7 @@ public class BandLayout extends JRibbonBand implements ActionListener
 		colorMenu.add(mDirection);
 		colorMenu.add(mReadType);
 		colorMenu.add(mReadGroup);
+		colorMenu.add(mReadLength);
 		colorMenu.add(mText);
 	}
 
@@ -239,6 +245,7 @@ public class BandLayout extends JRibbonBand implements ActionListener
 		mDirection.setSelected(Prefs.visColorScheme == ReadScheme.DIRECTION);
 		mReadType.setSelected(Prefs.visColorScheme == ReadScheme.READTYPE);
 		mReadGroup.setSelected(Prefs.visColorScheme == ReadScheme.READGROUP);
+		mReadLength.setSelected(Prefs.visColorScheme == ReadScheme.READLENGTH);
 		mText.setSelected(Prefs.visColorScheme == ReadScheme.CLASSIC);
 
 		colorMenu.show(bColorScheme, 0, bColorScheme.getHeight());
