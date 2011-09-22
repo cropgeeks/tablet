@@ -58,6 +58,8 @@ public class BamFileHandler
 			openBamFile(null);
 			nameCache = nameCache.resetCache();
 
+			ex.printStackTrace();
+
 			throw new Exception(ex.toString() + "\n\n"
 				+ RB.getString("io.BamFileHandler.bamError"), ex);
 		}
@@ -132,7 +134,8 @@ public class BamFileHandler
 		if (record.getReadGroup() != null)
 		{
 			String sample = record.getReadGroup().getSample();
-			rmd.setReadGroup(sampleHash.get(sample));
+			if (sample != null)
+				rmd.setReadGroup(sampleHash.get(sample));
 		}
 
 		Read read;
@@ -196,13 +199,16 @@ public class BamFileHandler
 	public void openBamFile(HashMap<String, Contig> contigHash)
 		throws Exception
 	{
+		if (VALIDATION_LENIENT)
+			SAMFileReader.setDefaultValidationStringency(SAMFileReader.ValidationStringency.LENIENT);
+
 		if (bamFile.isURL())
 			bamReader = new SAMFileReader(bamFile.getURL(), baiFile.getFile(), false);
 		else
 			bamReader = new SAMFileReader(bamFile.getFile(), baiFile.getFile());
 
-		if (VALIDATION_LENIENT)
-			bamReader.setValidationStringency(SAMFileReader.ValidationStringency.LENIENT);
+//		if (VALIDATION_LENIENT)
+//			bamReader.setValidationStringency(SAMFileReader.ValidationStringency.LENIENT);
 
 
 		// contigHash will be non-null on first open, so add information on any
@@ -294,7 +300,7 @@ public class BamFileHandler
 		{
 			String sample = record.getSample();
 
-			if (sampleHash.get(sample) == null)
+			if (sample != null && sampleHash.get(sample) == null)
 			{
 				readGroups.add(sample);
 				// Note we put the FIRST read group in as index 1 (not 0)

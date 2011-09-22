@@ -245,14 +245,21 @@ class SamFileReader extends TrackableReader
 
 		if (readGroupIDHash.containsKey(id) == false)
 		{
-			String sample = tokens[2].split(":")[1];
-			readGroupIDHash.put(id, sample);
-
-			if (readGroups.contains(sample) == false)
+			for (String token: tokens)
 			{
-				readGroups.add(sample);
-				// Note we put the FIRST read group in as index 1 (not 0)
-				sampleHash.put(sample, (short)(readGroups.size()));
+				if (token.startsWith("SM:"))
+				{
+					String sample = token.substring(3);
+
+					readGroupIDHash.put(id, sample);
+
+					if (readGroups.contains(sample) == false)
+					{
+						readGroups.add(sample);
+						// Note we put the FIRST read group in as index 1 (not 0)
+						sampleHash.put(sample, (short)(readGroups.size()));
+					}
+				}
 			}
 		}
 	}
