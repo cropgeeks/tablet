@@ -130,11 +130,15 @@ public class AssemblyPanel extends JPanel
 		if (contig != null)
 		{
 			String length = TabletUtils.nf.format(
-				contig.getConsensus().length()) + " ("
+				contig.getTableData().consensusLength()) + " ("
 				+ TabletUtils.nf.format(
-					contig.getConsensus().getUnpaddedLength()) + ")";
+					contig.getTableData().consensusDefined ?
+						contig.getConsensus().getUnpaddedLength() :
+						contig.getTableData().consensusLength())
+				+ ")";
+				
 			if (Prefs.visHideUnpaddedValues)
-				length = TabletUtils.nf.format(contig.getConsensus().length());
+				length = TabletUtils.nf.format(contig.getTableData().consensusLength());
 
 			String label = RB.format("gui.viewer.AssemblyPanel.summaryLabel",
 				contig.getName(),
