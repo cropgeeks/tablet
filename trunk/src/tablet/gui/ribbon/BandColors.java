@@ -5,7 +5,6 @@ package tablet.gui.ribbon;
 
 import java.awt.event.*;
 import java.util.*;
-import javax.swing.*;
 
 import tablet.gui.*;
 import tablet.gui.viewer.colors.*;
@@ -28,7 +27,7 @@ public class BandColors extends JRibbonBand implements ActionListener
 	static JCommandToggleButton bReadType;
 	static JCommandToggleButton bReadGroup;
 	static JCommandToggleButton bReadLength;
-	static JCommandToggleButton bText;
+	static JCommandToggleButton bVariants;
 
 	private StyleListener styleListener = new StyleListener();
 
@@ -137,22 +136,22 @@ public class BandColors extends JRibbonBand implements ActionListener
 		styleButtons.add(bReadLength);
 
 
-		// Text ("classic") colour scheme button
-		boolean textOn = Prefs.visColorScheme == ReadScheme.CLASSIC;
+		// Variants colour scheme button
+		boolean variantsOn = Prefs.visColorScheme == ReadScheme.VARIANTS;
 
-		bText = new JCommandToggleButton(
-			RB.getString("gui.ribbon.BandColors.bText"),
+		bVariants = new JCommandToggleButton(
+			RB.getString("gui.ribbon.BandColors.bVariants"),
 			RibbonController.getIcon("CLASSIC32", 32));
-		Actions.colorsText = new ActionToggleButtonModel(false);
-		Actions.colorsText.setSelected(textOn);
-		Actions.colorsText.addActionListener(this);
-		bText.setActionModel(Actions.colorsText);
-		bText.setActionKeyTip("C");
-		bText.addMouseListener(styleListener);
-		bText.setActionRichTooltip(new RichTooltip(
-			RB.getString("gui.ribbon.BandColors.bText.tooltip"),
-			RB.getString("gui.ribbon.BandColors.bText.richtip")));
-		styleButtons.add(bText);
+		Actions.colorsVariants = new ActionToggleButtonModel(false);
+		Actions.colorsVariants.setSelected(variantsOn);
+		Actions.colorsVariants.addActionListener(this);
+		bVariants.setActionModel(Actions.colorsVariants);
+		bVariants.setActionKeyTip("C");
+		bVariants.addMouseListener(styleListener);
+		bVariants.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.BandColors.bVariants.tooltip"),
+			RB.getString("gui.ribbon.BandColors.bVariants.richtip")));
+		styleButtons.add(bVariants);
 
 
 		// Set up the ribbon gallery (gawd knows what this code is doing)
@@ -218,16 +217,16 @@ public class BandColors extends JRibbonBand implements ActionListener
 			styleListener.previousScheme = ReadScheme.READLENGTH;
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
-			Actions.colorsReadGroup.setSelected(true);
+			Actions.colorsReadLength.setSelected(true);
 		}
 
-		else if (e.getSource() == Actions.colorsText)
+		else if (e.getSource() == Actions.colorsVariants)
 		{
-			setColorScheme(ReadScheme.CLASSIC);
-			styleListener.previousScheme = ReadScheme.CLASSIC;
+			setColorScheme(ReadScheme.VARIANTS);
+			styleListener.previousScheme = ReadScheme.VARIANTS;
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
-			Actions.colorsText.setSelected(true);
+			Actions.colorsVariants.setSelected(true);
 		}
 	}
 
@@ -267,9 +266,9 @@ public class BandColors extends JRibbonBand implements ActionListener
 				previousScheme != ReadScheme.READLENGTH)
 				setColorScheme(ReadScheme.READLENGTH);
 
-			else if (e.getSource() == bText && Actions.colorsText.isEnabled() &&
-				previousScheme != ReadScheme.CLASSIC)
-				setColorScheme(ReadScheme.CLASSIC);
+			else if (e.getSource() == bVariants && Actions.colorsVariants.isEnabled() &&
+				previousScheme != ReadScheme.VARIANTS)
+				setColorScheme(ReadScheme.VARIANTS);
 		}
 
 		// On mouse exit we can just reinstate the previous scheme (if it's not

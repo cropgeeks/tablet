@@ -4,7 +4,6 @@
 package tablet.gui.ribbon;
 
 import java.awt.event.*;
-import java.util.*;
 import javax.swing.*;
 
 import tablet.gui.*;
@@ -29,7 +28,7 @@ public class BandLayout extends JRibbonBand implements ActionListener
 
 	// Button for the Color Schemes and its drop-down menu options
 	private JCommandButton bColorScheme;
-	private JCheckBoxMenuItem mEnhanced, mDirection, mReadType, mReadGroup, mReadLength, mText;
+	private JCheckBoxMenuItem mEnhanced, mDirection, mReadType, mReadGroup, mReadLength, mVariants;
 
 	private JCommandToggleButton bTagVariants;
 //	private JCommandButton bSort;
@@ -176,8 +175,8 @@ public class BandLayout extends JRibbonBand implements ActionListener
 			BandColors.bReadGroup.doActionClick();
 		else if (e.getSource() == mReadLength)
 			BandColors.bReadLength.doActionClick();
-		else if (e.getSource() == mText)
-			BandColors.bText.doActionClick();
+		else if (e.getSource() == mVariants)
+			BandColors.bVariants.doActionClick();
 	}
 
 	private void createPackingPopupMenu()
@@ -228,15 +227,15 @@ public class BandLayout extends JRibbonBand implements ActionListener
 		mReadLength = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandColors.bReadLength"));
 		mReadLength.addActionListener(this);
 
-		mText = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandColors.bText"));
-		mText.addActionListener(this);
+		mVariants = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandColors.bVariants"));
+		mVariants.addActionListener(this);
 
 		colorMenu.add(mEnhanced);
 		colorMenu.add(mDirection);
 		colorMenu.add(mReadType);
 		colorMenu.add(mReadGroup);
 		colorMenu.add(mReadLength);
-		colorMenu.add(mText);
+		colorMenu.add(mVariants);
 	}
 
 	private void handleColorsPopup()
@@ -246,7 +245,7 @@ public class BandLayout extends JRibbonBand implements ActionListener
 		mReadType.setSelected(Prefs.visColorScheme == ReadScheme.READTYPE);
 		mReadGroup.setSelected(Prefs.visColorScheme == ReadScheme.READGROUP);
 		mReadLength.setSelected(Prefs.visColorScheme == ReadScheme.READLENGTH);
-		mText.setSelected(Prefs.visColorScheme == ReadScheme.CLASSIC);
+		mVariants.setSelected(Prefs.visColorScheme == ReadScheme.VARIANTS);
 
 		colorMenu.show(bColorScheme, 0, bColorScheme.getHeight());
 	}
