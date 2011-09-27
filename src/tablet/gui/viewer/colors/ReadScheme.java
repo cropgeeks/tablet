@@ -4,16 +4,14 @@
 package tablet.gui.viewer.colors;
 
 import java.awt.*;
-import javax.swing.SwingUtilities;
 
 import tablet.data.*;
 import tablet.gui.*;
-import tablet.gui.ribbon.RibbonController;
 
 public abstract class ReadScheme
 {
 	public static final int STANDARD = 10;
-	public static final int CLASSIC = 20;
+	public static final int VARIANTS = 20;
 	public static final int DIRECTION = 30;
 	public static final int READTYPE = 40;
 	public static final int READGROUP = 50;
@@ -34,8 +32,8 @@ public abstract class ReadScheme
 		if (type == STANDARD)
 			scheme = new EnhancedScheme(w, h, true, true);
 
-		else if (type == CLASSIC)
-			scheme = new ClassicScheme(w, h);
+		else if (type == VARIANTS)
+			scheme = new VariantsScheme(w, h);
 
 		else if (type == DIRECTION)
 			scheme = new DirectionScheme(w, h);

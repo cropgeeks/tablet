@@ -19,15 +19,7 @@ public abstract class ProteinScheme
 		else if (Prefs.visStopCharType == 1)
 			ProteinTranslator.setStopCharacter("*");
 
-		ProteinScheme scheme = null;
-
-		if (type == ReadScheme.CLASSIC)
-			scheme = new ProteinClassicScheme(w, h);
-
-		else
-			scheme = new ProteinEnhancedScheme(w, h);
-
-		return scheme;
+		return new ProteinEnhancedScheme(w, h);
 	}
 
 	public abstract Image getImage(int data);
