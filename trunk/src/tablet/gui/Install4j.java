@@ -96,7 +96,7 @@ public class Install4j
 		catch (IOException e) {}
 	}
 
-	private static void getVersion()
+	static String getVersion()
 	{
 		// Attempt to get the version string from the jar's manifest
 		VERSION = Tablet.class.getPackage().getImplementationVersion();
@@ -104,6 +104,8 @@ public class Install4j
 		// If it's not found, we must be running the development version
 		if (VERSION == null)
 			VERSION = "x.xx.xx.xx";
+
+		return VERSION;
 	}
 
 	private static void pingServer()
