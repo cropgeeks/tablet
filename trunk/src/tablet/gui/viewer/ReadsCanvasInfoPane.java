@@ -242,8 +242,6 @@ class ReadsCanvasInfoPane
 						box.insertedBases = insert.getInsertedBases();
 					else
 						box.insertedBases += " - " + insert.getInsertedBases();
-
-					break;
 				}
 			}
 		}
