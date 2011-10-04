@@ -44,6 +44,10 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		// - see: http://www.allaboutbalance.com/articles/disableprefs
 //		System.setProperty("java.util.prefs.PreferencesFactory", "scri.commons.gui.DisabledPreferencesFactory");
 
+		System.out.println("Tablet " + Install4j.getVersion() + " on "
+			+ System.getProperty("os.name")	+ " (" + System.getProperty("os.arch") + ")");
+		System.out.println("Using " + prefsFile);
+
 		ColorPrefs.load();
 		prefs.loadPreferences(prefsFile, Prefs.class);
 		prefs.savePreferences(prefsFile, Prefs.class);
