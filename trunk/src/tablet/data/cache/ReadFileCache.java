@@ -87,16 +87,20 @@ public class ReadFileCache extends TabletCache implements IReadCache
 						data = new byte[(dataLength/2)+1];
 					rnd.read(data);
 
-					// Then C or U
-					boolean isComplemented = rnd.readBooleanFromBuffer();
-
-					int numberInPair = rnd.read();
-
-					boolean isPaired = rnd.readBooleanFromBuffer();
-
-					boolean mateMapped = rnd.readBooleanFromBuffer();
+					byte numberInPair = rnd.readByte();
 
 					short readGroup = rnd.readShort();
+
+					byte b = rnd.readByte();
+
+					// No left shift required as desired byte is least significant
+					// bit Bitwise & check returns 1 when both operands are 1 (in
+					// this case it means it won't evaluate to 0 if the bit in the
+					// byte is set)
+					boolean isComplemented = ((b & 1) != 0);
+					boolean isPaired = ((b & (1 << 1)) != 0);
+					boolean mateMapped = ((b & (1 << 2)) != 0);
+					boolean isMateContig = ((b & (1 << 3)) != 0);
 
 					rmd = new ReadMetaData(isComplemented);
 					rmd.setRawData(data);
@@ -105,6 +109,7 @@ public class ReadFileCache extends TabletCache implements IReadCache
 					rmd.setIsPaired(isPaired);
 					rmd.setMateMapped(mateMapped);
 					rmd.setReadGroup(readGroup);
+					rmd.setIsMateContig(isMateContig);
 				}
 				catch (Exception e)	{
 					e.printStackTrace();
@@ -129,30 +134,52 @@ public class ReadFileCache extends TabletCache implements IReadCache
 		// And the data itself
 		out.write(data);
 
-		// Write a single byte for C or U
-		out.writeBoolean(readMetaData.isComplemented());
-
 		// Byte (0, 1, or 2) for pair information
 		out.writeByte(readMetaData.getNumberInPair());
-
-		// Write a boolean for whether or not this is a paired read
-		out.writeBoolean(readMetaData.getIsPaired());
-
-		// Write a boolean for whether or not its mate is mapped
-		out.writeBoolean(readMetaData.getMateMapped());
 
 		// Writre a short for the readGroup of the read
 		out.writeShort(readMetaData.getReadGroup());
 
+		byte b = packByte(readMetaData);
+
+		out.write(b);
+
 		// Bytes written:
 		//   4   - INT, data length
 		//   [d] - BYTES, the data
-		//   1   - BYTE, 0 or 1 (for C or U)
 		//   1   - BYTE, number in pair
-		//	 1	 - BOOLEAN, is paired
-		//	 1	 - BOOLEAN, mate mapped
+		//	 1	 - BYTE, is paired, mate mapped, complemented, isMateContig
 		//	 2	 - SHORT, read group
 		// = 10
-		byteCount += (10 + data.length);
+		byteCount += (8 + data.length);
+	}
+
+	/**
+	 * Sets bits in a byte at specific positions representing the four booleans
+	 * in the ReadMetaData class. The bit at position 0 is set with 0 or 1 for
+	 * complemented. Similarly the bits at positions 1, 2 and 3 are set for
+	 * isPaired, mateMapped and isMateContig. Bits set using bitwise or operator
+	 * which sets the bit to 1 if either operand is 1.
+	 */
+	private byte packByte(ReadMetaData rmd)
+	{
+		byte b = 0;
+
+		// No bit shift required bit we want is lsb.
+		if (rmd.isComplemented())
+			b = (byte) (b | 1);
+
+		// Need to shift each of the following by the given number of positions
+		// so 1 becomes 10, 1 becomes 100 and 1 becomes 1000
+		if (rmd.getIsPaired())
+			b = (byte) (b | (1 << 1));
+
+		if (rmd.getMateMapped())
+			b = (byte) (b | (1 << 2));
+
+		if (rmd.isMateContig())
+			b = (byte) (b | (1 << 3));
+
+		return b;
 	}
 }

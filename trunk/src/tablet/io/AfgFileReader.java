@@ -250,7 +250,7 @@ class AfgFileReader extends TrackableReader
 		if((isComplemented && !readMetaData.isComplemented()) || (!isComplemented && readMetaData.isComplemented()))
 		{
 			reverseComplementRead(readMetaData);
-			readMetaData.setComplmented(isComplemented);
+			readMetaData.setComplemented(isComplemented);
 		}
 
 		//check for gaps and insert if present
@@ -324,7 +324,7 @@ class AfgFileReader extends TrackableReader
 
 		int uLength = readMetaData.calculateUnpaddedLength();
 		rnd.setUnpaddedLength(uLength);
-		readMetaData.setComplmented(false);
+		readMetaData.setComplemented(false);
 
 		//store this read in the local list so we can look it up later when we are dealing with the alignment of reads against the
 		//consensus sequence

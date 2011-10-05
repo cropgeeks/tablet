@@ -229,8 +229,9 @@ class SamFileReader extends TrackableReader
 
 		// Parse properly paired, number in pair and mate mapped out from flag field
 		rnd.setIsProperPair((flags & 0x0002) != 0);
-		rmd.setNumberInPair((flags & 0x0040) != 0 ? 1 : 2);
+		rmd.setNumberInPair((flags & 0x0040) != 0 ? (byte)1 : 2);
 		rmd.setMateMapped((flags & 0x0008) != 0 ? false : true);
+		rmd.setIsMateContig(mrnm.equals(chr));
 
 		Assembly.setIsPaired(true);
 
