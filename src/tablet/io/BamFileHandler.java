@@ -149,13 +149,14 @@ public class BamFileHandler
 			rnd.setIsProperPair(record.getProperPairFlag());
 			rnd.setMateContig(record.getMateReferenceName());
 
-			rmd.setNumberInPair(record.getFirstOfPairFlag() ? 1 : 2);
+			rmd.setNumberInPair(record.getFirstOfPairFlag() ? (byte)1 : 2);
 			rmd.setMateMapped(!record.getMateUnmappedFlag());
 
 			Assembly.setIsPaired(true);
 
 			boolean isMateContig = record.getMateReferenceName().equals(record.getReferenceName());
 			pr.setIsMateContig(isMateContig);
+			rmd.setIsMateContig(isMateContig);
 		}
 		else
 			read = new Read(readID, readStartPos);

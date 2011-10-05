@@ -18,15 +18,18 @@ public class ReadMetaData extends Sequence
 	public static final int FIRSTINP = 1;
 	public static final int SECNDINP = 2;
 	public static final int ORPHANED = 3;
+	public static final int DFRSTINP = 4;
+	public static final int DSCNDINP = 5;
 
 	private int length;
-	private int numberInPair;
+	private byte numberInPair;
 
 	// Is the read complemented or uncomplemented
 	private boolean isComplemented;
 	private boolean isPaired;
 	// True if this read's mate has been mapped to a contig in the assembly
 	private boolean mateMapped;
+	private boolean isMateContig;
 	private short readGroup;
 
 	// Caches information about the length of this read (in memory cache only)
@@ -43,7 +46,7 @@ public class ReadMetaData extends Sequence
 		this.isComplemented = isComplemented;
 	}
 
-	public void setComplmented(boolean isComplemented)
+	public void setComplemented(boolean isComplemented)
 	{
 		this.isComplemented = isComplemented;
 	}
@@ -125,21 +128,31 @@ public class ReadMetaData extends Sequence
 		length = sequence.length();
 	}
 
-	public int getNumberInPair()
+	public byte getNumberInPair()
 		{ return numberInPair; }
 
-	public void setNumberInPair(int numberInPair)
+	public void setNumberInPair(byte numberInPair)
 	{
 		this.numberInPair = numberInPair;
 	}
 
 	public int getPairedType()
 	{
-		if (numberInPair == 1 && mateMapped)
-			return FIRSTINP;
+		if (mateMapped && isMateContig)
+		{
+			if (numberInPair == 1)
+				return FIRSTINP;
+			else
+				return SECNDINP;
+		}
 
-		else if (numberInPair == 2 && mateMapped)
-			return SECNDINP;
+		else if (mateMapped && !isMateContig)
+		{
+			if (numberInPair == 1)
+				return DFRSTINP;
+			else
+				return DSCNDINP;
+		}
 
 		else if (isPaired && !mateMapped)
 			return ORPHANED;
@@ -157,4 +170,9 @@ public class ReadMetaData extends Sequence
 	public int getLengthBin()
 		{ return lengthBin; }
 
+	public boolean isMateContig()
+		{ return isMateContig; }
+
+	public void setIsMateContig(boolean isMateContig)
+		{ this.isMateContig = isMateContig; }
 }

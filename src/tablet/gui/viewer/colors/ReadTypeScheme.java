@@ -15,6 +15,8 @@ public class ReadTypeScheme extends EnhancedScheme
 	private ArrayList<ColorStamp> firstInP = new ArrayList<ColorStamp>();
 	private ArrayList<ColorStamp> secndInP = new ArrayList<ColorStamp>();
 	private ArrayList<ColorStamp> orphaned = new ArrayList<ColorStamp>();
+	private ArrayList<ColorStamp> fInPDiff = new ArrayList<ColorStamp>();
+	private ArrayList<ColorStamp> sInPDiff = new ArrayList<ColorStamp>();
 
 	public ReadTypeScheme(int w, int h)
 	{
@@ -25,6 +27,8 @@ public class ReadTypeScheme extends EnhancedScheme
 		initStates(firstInP, new Color(120, 255, 120), w, h);
 		initStates(secndInP, new Color(120, 120, 255), w, h);
 		initStates(orphaned, new Color(255, 120, 120), w, h);
+		initStates(fInPDiff, new Color(255, 255, 120), w, h);
+		initStates(sInPDiff, new Color(255, 120, 255), w, h);
 	}
 
 	private void initStates(ArrayList<ColorStamp> states, Color c, int w, int h)
@@ -50,6 +54,12 @@ public class ReadTypeScheme extends EnhancedScheme
 
 			case ORPHANED:
 				return orphaned.get(rmd.getStateAt(index)).getImage();
+
+			case DFRSTINP:
+				return fInPDiff.get(rmd.getStateAt(index)).getImage();
+
+			case DSCNDINP:
+				return sInPDiff.get(rmd.getStateAt(index)).getImage();
 		}
 
 		return unpaired.get(rmd.getStateAt(index)).getImage();
@@ -67,6 +77,12 @@ public class ReadTypeScheme extends EnhancedScheme
 
 			case ORPHANED:
 				return orphaned.get(rmd.getStateAt(index)).getColor();
+
+			case DFRSTINP:
+				return fInPDiff.get(rmd.getStateAt(index)).getColor();
+
+			case DSCNDINP:
+				return sInPDiff.get(rmd.getStateAt(index)).getColor();
 		}
 
 		return unpaired.get(rmd.getStateAt(index)).getColor();
