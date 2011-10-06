@@ -9,6 +9,7 @@ import java.lang.management.*;
 import java.text.*;
 
 import tablet.gui.*;
+import tablet.io.samtools.*;
 
 import scri.commons.gui.*;
 
@@ -25,6 +26,7 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
 		webLabel.addActionListener(this);
 
 		String javaVer = System.getProperty("java.version");
+		String samtoolsVer = SamtoolsHelper.getVersion();
 		long freeMem = (ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getMax()
 				- ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed());
 		NumberFormat nf = NumberFormat.getInstance();
@@ -33,6 +35,7 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
 		copyrightLabel.setText(RB.format("gui.dialog.NBAboutPanel.copyrightLabel", "\u0026"));
 		RB.setText(nameLabel, "gui.dialog.NBAboutPanel.nameLabel");
 		javaLabel.setText(RB.format("gui.dialog.NBAboutPanel.javaLabel", javaVer));
+		samtoolsLabel.setText(RB.format("gui.dialog.NBAboutPanel.samtoolsLabel", samtoolsVer));
 		memLabel.setText(RB.format("gui.dialog.NBAboutPanel.memLabel", nf.format((long)(freeMem/1024f/1024f)) + "MB"));
 		localeLabel.setText(RB.format("gui.dialog.NBAboutPanel.localeLabel", java.util.Locale.getDefault()));
 		idLabel.setText(RB.format("gui.dialog.NBAboutPanel.idLabel", Prefs.tabletID));
@@ -77,6 +80,7 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
         versionLabel = new javax.swing.JLabel();
         javaLabel = new javax.swing.JLabel();
         memLabel = new javax.swing.JLabel();
+        samtoolsLabel = new javax.swing.JLabel();
         webLabel = new scri.commons.gui.matisse.HyperLinkLabel();
         scriIcon = new javax.swing.JLabel();
 
@@ -99,6 +103,9 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
         memLabel.setForeground(java.awt.Color.gray);
         memLabel.setText("Memory available to JVM:");
 
+        samtoolsLabel.setForeground(java.awt.Color.gray);
+        samtoolsLabel.setText("Samtools version:");
+
         webLabel.setText("http://bioinf.hutton.ac.uk/tablet");
 
         scriIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -111,16 +118,21 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
             .addGroup(p2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(p2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(versionLabel)
-                    .addComponent(webLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(copyrightLabel)
-                    .addComponent(nameLabel)
-                    .addComponent(javaLabel)
+                    .addGroup(p2Layout.createSequentialGroup()
+                        .addGroup(p2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(versionLabel)
+                            .addComponent(webLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(copyrightLabel)
+                            .addComponent(nameLabel)
+                            .addComponent(javaLabel)
+                            .addComponent(scriIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+                            .addComponent(localeLabel)
+                            .addComponent(idLabel))
+                        .addContainerGap())
                     .addComponent(memLabel)
-                    .addComponent(localeLabel)
-                    .addComponent(idLabel)
-                    .addComponent(scriIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addGroup(p2Layout.createSequentialGroup()
+                        .addComponent(samtoolsLabel)
+                        .addContainerGap(318, Short.MAX_VALUE))))
         );
         p2Layout.setVerticalGroup(
             p2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -137,6 +149,8 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
                 .addComponent(javaLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(memLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(samtoolsLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(localeLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -173,6 +187,7 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
     private javax.swing.JLabel memLabel;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JPanel p2;
+    private javax.swing.JLabel samtoolsLabel;
     private javax.swing.JLabel scriIcon;
     private javax.swing.JLabel versionLabel;
     private scri.commons.gui.matisse.HyperLinkLabel webLabel;

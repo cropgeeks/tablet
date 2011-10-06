@@ -249,7 +249,7 @@ public class BamFileHandler
 			}
 
 			// Run idxstats and try to fill the contigs with read counts
-			IdxStats idxStats = new IdxStats(contigHash, assembly.getCacheID());
+			SamtoolsHelper idxStats = new SamtoolsHelper(contigHash, assembly.getCacheID());
 			boolean statsOK = idxStats.run(bamFile, baiFile);
 
 			long totalReadCount = 0;

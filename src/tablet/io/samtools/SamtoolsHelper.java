@@ -13,12 +13,15 @@ import tablet.io.*;
 
 import scri.commons.gui.*;
 
-public class IdxStats
+public class SamtoolsHelper
 {
+	// Holds the version of samtools once read from it
+	private static String version;
+
 	private HashMap<String, Contig> contigHash;
 	private String cacheID;
 
-	public IdxStats(HashMap<String, Contig> contigHash, String cacheID)
+	public SamtoolsHelper(HashMap<String, Contig> contigHash, String cacheID)
 	{
 		this.contigHash = contigHash;
 		this.cacheID = cacheID;
@@ -28,7 +31,7 @@ public class IdxStats
 	{
 		try
 		{
-			File samtools = extractSamtools();
+			File samtools = extractSamtools(cacheID);
 
 			System.out.println("Running IDXSTATS on " + baiFile.getPath());
 
@@ -52,6 +55,31 @@ public class IdxStats
 			e.printStackTrace();
 			return false;
 		}
+	}
+
+	public static String getVersion()
+	{
+		if (version != null)
+			return version;
+
+		try
+		{
+			File samtools = extractSamtools("" + System.currentTimeMillis());
+
+			ProcessBuilder pb = new ProcessBuilder(samtools.getPath());
+			pb.redirectErrorStream(true);
+
+			Process proc = pb.start();
+
+			VersionCatcher iostream = new VersionCatcher(proc.getInputStream());
+
+			while (iostream.isRunning())
+				try { Thread.sleep(10); }
+				catch (InterruptedException e) {}
+		}
+		catch (Exception e) { System.out.println(e);}
+
+		return (version != null) ? version : "";
 	}
 
 	private class IdxStatsCatcher extends StreamCatcher
@@ -78,12 +106,25 @@ public class IdxStats
 			{
 				e.printStackTrace();
 			}
-
-//			System.out.println(line);
 		}
 	}
 
-	private File extractSamtools()
+	private static class VersionCatcher extends StreamCatcher
+	{
+		VersionCatcher(InputStream in) { super(in); }
+
+		protected void processLine(String line)
+		{
+			try
+			{
+				if (line.startsWith("Version:"))
+					version = line.substring(9);
+			}
+			catch (Exception e) {}
+		}
+	}
+
+	private static File extractSamtools(String cacheID)
 		throws Exception
 	{
 		if (Prefs.ioSamtoolsPath.length() > 0)
@@ -104,7 +145,7 @@ public class IdxStats
 		else if (SystemUtils.isLinux())
 			path = "/linux/samtools";
 
-		InputStream src = IdxStats.class.getResource(path).openStream();
+		InputStream src = SamtoolsHelper.class.getResource(path).openStream();
 		FileOutputStream out = new FileOutputStream(samtools);
 
 		byte[] temp = new byte[32768];
