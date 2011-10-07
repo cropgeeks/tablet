@@ -7,6 +7,8 @@ import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.io.File;
+import java.math.*;
+import java.security.*;
 import java.net.*;
 import java.text.*;
 import javax.swing.*;
@@ -226,5 +228,23 @@ public class TabletUtils
 		StringSelection selection = new StringSelection(text.toString());
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
 			selection, null);
+	}
+
+	public static String getMD5Sum(String str)
+	{
+		try
+		{
+			MessageDigest md = MessageDigest.getInstance("MD5");
+        	byte[] md5Digest = md.digest(str.getBytes());
+        	BigInteger md5Number = new BigInteger(1, md5Digest);
+        	String md5String = md5Number.toString(16);
+
+        	return md5String;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 }
