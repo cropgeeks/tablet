@@ -14,6 +14,9 @@ import tablet.gui.*;
 
 import scri.commons.gui.*;
 
+import net.sf.samtools.*;
+import static net.sf.samtools.SAMReadGroupRecord.*;
+
 class SamFileReader extends TrackableReader
 {
 	private IReadCache readCache;
@@ -32,9 +35,10 @@ class SamFileReader extends TrackableReader
 
 	private boolean indexingCache = false;
 
-	private ArrayList<String> readGroups = new ArrayList<String>();
-	private HashMap<String, Short> sampleHash = new HashMap<String, Short>();
-	private HashMap<String, String> readGroupIDHash = new HashMap<String, String>();
+	// Stores a list of @RG (read group) records as they are found
+	private ArrayList<SAMReadGroupRecord> readGroups = new ArrayList<SAMReadGroupRecord>();
+	// Stores a hash of @RG (read group) IDs and their associated information
+	private HashMap<String, Short> rgHash = new HashMap<String, Short>();
 
 
 	SamFileReader()
@@ -83,6 +87,12 @@ class SamFileReader extends TrackableReader
 			if (str.startsWith("@RG"))
 			{
 				parseReadGroupHeader();
+				continue;
+			}
+
+			else if (str.startsWith("@SQ"))
+			{
+				parseSequenceHeader();
 				continue;
 			}
 
@@ -244,24 +254,37 @@ class SamFileReader extends TrackableReader
 		String [] tokens = str.split("\t");
 		String id = tokens[1].split(":")[1];
 
-		if (readGroupIDHash.containsKey(id) == false)
+		if (rgHash.containsKey(id) == false)
 		{
-			for (String token: tokens)
+			SAMReadGroupRecord record = new SAMReadGroupRecord(id);
+
+			for (String tag: tokens)
 			{
-				if (token.startsWith("SM:"))
-				{
-					String sample = token.substring(3);
-
-					readGroupIDHash.put(id, sample);
-
-					if (readGroups.contains(sample) == false)
-					{
-						readGroups.add(sample);
-						// Note we put the FIRST read group in as index 1 (not 0)
-						sampleHash.put(sample, (short)(readGroups.size()));
-					}
-				}
+				if (tag.startsWith("CN:"))
+					record.setAttribute(SEQUENCING_CENTER_TAG, tag.substring(3));
+				else if (tag.startsWith("DS:"))
+					record.setAttribute(DESCRIPTION_TAG, tag.substring(3));
+				else if (tag.startsWith("DT:"))
+					record.setAttribute(DATE_RUN_PRODUCED_TAG, tag.substring(3));
+				else if (tag.startsWith("FO:"))
+					record.setAttribute(FLOW_ORDER_TAG, tag.substring(3));
+				else if (tag.startsWith("KS:"))
+					record.setAttribute(KEY_SEQUENCE_TAG, tag.substring(3));
+				else if (tag.startsWith("LB:"))
+					record.setAttribute(LIBRARY_TAG, tag.substring(3));
+				else if (tag.startsWith("PI:"))
+					record.setAttribute(PREDICTED_MEDIAN_INSERT_SIZE_TAG, tag.substring(3));
+				else if (tag.startsWith("PL:"))
+					record.setAttribute(PLATFORM_TAG, tag.substring(3));
+				else if (tag.startsWith("PU:"))
+					record.setAttribute(PLATFORM_UNIT_TAG, tag.substring(3));
+				else if (tag.startsWith("SM:"))
+					record.setAttribute(READ_GROUP_SAMPLE_TAG, tag.substring(3));
 			}
+
+			readGroups.add(record);
+			// Note we put the FIRST read group in as index 1 (not 0)
+			rgHash.put(record.getId(), (short)readGroups.size());
 		}
 	}
 
@@ -276,17 +299,50 @@ class SamFileReader extends TrackableReader
 
 		String readGroupID = "";
 
-		for (int i=tagStart; i < tokens.length; i++)
-			if (tokens[i].startsWith("RG"))
-				readGroupID = tokens[i].split(":")[2];
-
-		// If a read group id was found, get the sample number and set it in rmd
-		if (!readGroupID.isEmpty())
+		try
 		{
-			String sample = readGroupIDHash.get(readGroupID);
-			// If there are no @RG lines in header sample will be null
-			if (sample != null)
-				rmd.setReadGroup(sampleHash.get(sample));
+			// TODO: Mapping quality can start with a string with RG: !!!
+			for (int i=tagStart; i < tokens.length; i++)
+				if (tokens[i].startsWith("RG:"))
+					readGroupID = tokens[i].split(":")[2];
+
+			// If a read group id was found...
+			if (!readGroupID.isEmpty())
+			{
+				if (rgHash.containsKey(readGroupID))
+					rmd.setReadGroup(rgHash.get(readGroupID));
+			}
+
+		}
+		catch (Exception e) {}
+	}
+
+	private void parseSequenceHeader()
+	{
+		try
+		{
+			String [] tokens = str.split("\t");
+
+			String name = null, md5sum = null;
+
+			for (String token: tokens)
+			{
+				if (token.startsWith("SN:"))
+					name = token.substring(3);
+
+				else if (token.startsWith("M5:"))
+					md5sum = token.substring(3);
+			}
+
+			if (md5sum != null)
+			{
+				// TODO: Decide if MD5sum from sam/bam file matches that of the
+				// actual reference sequence we have stored (if any)
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
 		}
 	}
 

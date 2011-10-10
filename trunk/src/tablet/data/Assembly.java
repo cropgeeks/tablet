@@ -10,6 +10,8 @@ import tablet.data.auxiliary.*;
 import tablet.data.cache.*;
 import tablet.io.*;
 
+import net.sf.samtools.*;
+
 /**
  * The top-level of Tablet's data structures, an assembly holds a list of
  * contigs. It also contains methods for accessing meta data on all the reads in
@@ -29,7 +31,7 @@ public class Assembly implements Iterable<Contig>
 	private static boolean hasCigar;
 	private static boolean isPaired = false;
 
-	private static ArrayList<String> readGroups = new ArrayList<String>();
+	private static ArrayList<SAMReadGroupRecord> readGroups = new ArrayList<SAMReadGroupRecord>();
 
 	/** Constructs a new, empty assembly. */
 	public Assembly(String cacheID)
@@ -181,9 +183,9 @@ public class Assembly implements Iterable<Contig>
 	public static void setIsPaired(boolean isPaired)
 		{ Assembly.isPaired = isPaired; }
 
-	public static ArrayList<String> getReadGroups()
+	public static ArrayList<SAMReadGroupRecord> getReadGroups()
 		{ return readGroups; }
 
-	public void setReadGroups(ArrayList<String> readGroups)
+	public void setReadGroups(ArrayList<SAMReadGroupRecord> readGroups)
 		{ Assembly.readGroups = readGroups;	}
 }

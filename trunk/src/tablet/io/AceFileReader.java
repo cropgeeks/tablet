@@ -109,7 +109,7 @@ public class AceFileReader extends TrackableReader
 		}
 
 		assembly.setName(files[ASBINDEX].getName());
-		assembly.setReadGroups(new ArrayList<String>());
+		assembly.getReadGroups().clear();
 
 
 		// Remove any reads that got marked as null due to being poor quality

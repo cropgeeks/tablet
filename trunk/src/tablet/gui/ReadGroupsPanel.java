@@ -44,7 +44,7 @@ public class ReadGroupsPanel extends JPanel implements ActionListener
 		controls.table.setModel(tableModel);
 		controls.table.setRowSorter(sorter);
 
-		controls.table.getColumnModel().getColumn(1).setPreferredWidth(15);
+		controls.table.getColumnModel().getColumn(2).setPreferredWidth(25);
 	}
 
 	// Handle contig changes

@@ -30,7 +30,8 @@ public class BamFileHandler
 	private boolean okToRun = true;
 	private boolean refLengthsOK = true;
 
-	private HashMap<String, Short> sampleHash = new HashMap<String, Short>();
+	// Stores a hash of @RG (read group) IDs and their associated information
+	private HashMap<String, Short> rgHash = new HashMap<String, Short>();
 
 	BamFileHandler(IReadCache readCache, ReadSQLCache nameCache, AssemblyFile bamFile, AssemblyFile baiFile, Assembly assembly)
 	{
@@ -130,13 +131,10 @@ public class BamFileHandler
 
 		rmd.setIsPaired(record.getReadPairedFlag());
 
-		// Map the read's sample name to its ID (if it exists)
-		if (record.getReadGroup() != null)
-		{
-			String sample = record.getReadGroup().getSample();
-			if (sample != null)
-				rmd.setReadGroup(sampleHash.get(sample));
-		}
+		// Map the read's readgroup to the ID for it (if it exists)
+		SAMReadGroupRecord rgRecord = record.getReadGroup();
+		if (rgRecord != null)
+			rmd.setReadGroup(rgHash.get(rgRecord.getId()));
 
 		Read read;
 		// If the read is paired
@@ -295,17 +293,15 @@ public class BamFileHandler
 	private void readSampleGroups()
 		throws Exception
 	{
-		ArrayList<String> readGroups = new ArrayList<String>();
+		ArrayList<SAMReadGroupRecord> readGroups = new ArrayList<SAMReadGroupRecord>();
 
 		for (SAMReadGroupRecord record: bamReader.getFileHeader().getReadGroups())
 		{
-			String sample = record.getSample();
-
-			if (sample != null && sampleHash.get(sample) == null)
+			if (rgHash.get(record.getId()) == null)
 			{
-				readGroups.add(sample);
+				readGroups.add(record);
 				// Note we put the FIRST read group in as index 1 (not 0)
-				sampleHash.put(sample, (short)(readGroups.size()));
+				rgHash.put(record.getId(), (short)readGroups.size());
 			}
 		}
 

@@ -24,8 +24,10 @@ class ReadGroupsTableModel extends AbstractTableModel
 	{
 		String col1 = RB.getString("gui.ReadsGroupTableModel.col1");
 		String col2 = RB.getString("gui.ReadsGroupTableModel.col2");
+		String col3 = RB.getString("gui.ReadsGroupTableModel.col3");
 
-		columnNames = new String[] { col1, col2 };
+
+		columnNames = new String[] { col1, col2, col3 };
 
 		clear();
 	}
@@ -61,7 +63,14 @@ class ReadGroupsTableModel extends AbstractTableModel
 		switch (col)
 		{
 			case 0: return info;
-			case 1:	return info.enabled;
+
+			case 1:
+				if (info.record.getPlatform() != null)
+					return info.record.getPlatform();
+				else
+					return "";
+
+			case 2:	return info.enabled;
 		}
 
 		return null;
@@ -82,6 +91,8 @@ class ReadGroupsTableModel extends AbstractTableModel
 	{
 		if (col == 0)
 			return ReadGroupScheme.ColorInfo.class;
+		else if (col == 1)
+			return String.class;
 		else
 			return Boolean.class;
 	}
@@ -97,7 +108,7 @@ class ReadGroupsTableModel extends AbstractTableModel
 
 	@Override
 	public boolean isCellEditable(int rowIndex, int mColIndex)
-		{ return mColIndex == 1; }
+		{ return mColIndex == 2; }
 
 	static class ColorListRenderer extends DefaultTableCellRenderer
 	{
@@ -121,7 +132,7 @@ class ReadGroupsTableModel extends AbstractTableModel
 			g.drawRect(0, 0, 20, 10);
 			g.dispose();
 
-			setText(info.name);
+			setText(info.getDisplayName());
 			setIcon(new ImageIcon(image));
 
 			return this;
