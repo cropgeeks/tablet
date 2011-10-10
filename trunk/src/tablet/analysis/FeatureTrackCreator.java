@@ -37,7 +37,7 @@ public class FeatureTrackCreator extends SimpleJob
 
 			for (Feature feature: contig.getFeatures())
 				if (feature.getGFFType().toLowerCase().equals(type))
-					track.addFeatureNoSort(feature);
+					track.addFeature(feature);
 		}
 	}
 }

@@ -5,7 +5,7 @@ package tablet.data.auxiliary;
 
 import java.util.*;
 
-import tablet.data.*;
+import scri.commons.*;
 
 /**
  * Simple class to encapsulate a list of features (on one "track").
@@ -14,120 +14,33 @@ public class FeatureTrack implements Comparator<Feature>
 {
 	private String name;
 
-	// A "track" might be a container for sub tracks...
-//	private ArrayList<FeatureTrack> tracks = new ArrayList<FeatureTrack>();
-
-	// ... or just a standard track with some features on it
-	private ArrayList<Feature> features = new ArrayList<Feature>();
-
-
-	public FeatureTrack()
-	{
-	}
+	// Store features in an interval tree so that they can be searched and
+	// overlapping features can be found easily.
+	private IntervalTree<Feature> tree = new IntervalTree<Feature>();
 
 	public FeatureTrack(String name)
 		{ this.name = name; }
 
-//	public int getSubTrackCount()
-//		{ return tracks.size(); }
-
 	/**
-	 * Adds a new feature to this track without performing checks to ensure it
-	 * is unique or inserted at the correct (sorted) position). Use when
-	 * building visual tracks from an existing - and sorted - data track
+	 * Adds a feature to the interval tree (a modified binary search tree).
+	 * Interval trees make it easy to find all the features which can be found
+	 * by given start and end points.
 	 */
-	public void addFeatureNoSort(Feature feature)
+	public void addFeature(Feature feature)
 	{
-		features.add(feature);
-	}
-
-	/**
-	 * Adds a new feature to this track, checking to see whether it exists first
-	 * or not, and if it doesn't, also ensuring it is added at the correct
-	 * location. Use when importing features to a data set.
-	 */
-	public boolean addFeatureDoSort(Feature feature)
-	{
-		int result = Collections.binarySearch(features, feature);
-
-		// If result >= 0 we've found a duplicate and don't add. Otherwise add.
-		if (result < 0)
-		{
-			features.add((-result)-1, feature);
-			return true;
-		}
-
-		// Replace any existing cigar features because their references become
-		// invalid after a data reload.
-		else if (feature.gffType.equals("CIGAR-I"))
-		{
-			features.set(result, feature);
-		}
-
-		return false;
-	}
-
-	public int size()
-	{
-		return features.size();
-	}
-
-	public ArrayList<Feature> getFeatures()
-	{
-		return features;
+		tree.add(feature, feature.getVisualPS(), feature.getVisualPE());
 	}
 
 	public String getName()
 		{ return name; }
 
 	/**
-	 * Returns a list of features between the given start and end points
-	 * (inclusive). Uses a binary search to locate them as quickly as possible,
-	 * using the compare() method defined below.
+	 * Returns an ArrayList of features between the given start and end points
+	 * (inclusive). Uses an interval tree search to locate the required features.
 	 */
 	public ArrayList<Feature> getFeatures(int s, int e)
 	{
-		ArrayList<Feature> list = new ArrayList<Feature>();
-
-		// Temporary fix for overlapping features (features that perhaps span
-		// the entire contig) that don't appear
-		for (Feature f: features)
-		{
-			int c = compare(f, new Feature(s, e));
-
-			if (c == 0)
-				list.add(f);
-			if (c == 1)
-				break;
-		}
-
-		if (true)
-			return list;
-
-
-
-		// Start by finding ANY feature that is inside the window
-		int index = Collections.binarySearch(features, new Feature(s, e), this);
-
-		if (index >= 0)
-		{
-			// Then search left to find the FIRST feature within the window
-			while (index > 0 && features.get(index-1).getVisualPE() >= s)
-				index--;
-
-			// Now add all the features from here until the RHS of the window
-			for (int i = index; i < features.size(); i++)
-			{
-				Feature toAdd = features.get(i);
-
-				if (toAdd.getVisualPS() <= e)
-					list.add(toAdd);
-				else
-					break;
-			}
-		}
-
-		return list;
+		return tree.intervalSearch(s, e);
 	}
 
 	/**
@@ -136,6 +49,7 @@ public class FeatureTrack implements Comparator<Feature>
 	 * methods returns -1 if it is to the left of it, 0 if any part of it is
 	 * within the window, and 1 if it is to the right of it.
 	 */
+	@Override
 	public int compare(Feature feature, Feature window)
 	{
 		// RHS of the window...

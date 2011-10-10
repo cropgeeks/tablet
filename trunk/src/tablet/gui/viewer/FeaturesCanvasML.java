@@ -132,7 +132,9 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		else
 			return;
 
-		features = fCanvas.vContig.getTrack(track).getFeatures(x, x);
+		// Get the features directly from the features canvas (which in turn
+		// searches the interval tree of features.
+		features = fCanvas.getFeatures(track, x);
 
 		if (features.isEmpty())
 			fCanvas.setToolTipText(null);

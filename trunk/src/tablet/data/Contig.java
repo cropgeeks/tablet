@@ -46,14 +46,11 @@ public class Contig
 	private Stack stack;
 	private PairedStack pairedStack;
 
-	// Main set of features associated with this contig (basically every feature
-	// held in a single FeatureTrack object)
-	private FeatureTrack features = new FeatureTrack();
+	// Main set of features associated with this contig
+	private ArrayList<Feature> features = new ArrayList<Feature>();
+
 	// Supplementary set of features used purely for graphical outlining
 	private ArrayList<Feature> outlines;
-
-
-
 
 	/** Constructs a new, empty contig. */
 	public Contig()
@@ -145,7 +142,7 @@ public class Contig
 	 * @return the features held by this contig as a vector
 	 */
 	public ArrayList<Feature> getFeatures()
-		{ return features.getFeatures(); }
+		{ return features; }
 
 	/**
 	 * Returns the supplementary (outliner) features held within this contig.
@@ -300,9 +297,29 @@ public class Contig
 			outlines.remove(0);
 	}
 
-	public boolean addFeature(Feature newFeature)
+	 /**
+	 * Adds a new feature to this contig, checking to see whether it exists first
+	 * and if it doesn't, ensures it is added at the correct location.
+	 * Use when importing features to a data set. Features are later added to
+	 * feature tracks and contig load time.
+	 */
+	public boolean addFeature(Feature feature)
 	{
-		return features.addFeatureDoSort(newFeature);
+		int result = Collections.binarySearch(features, feature);
+
+		// If result >= 0 we've found a duplicate and don't add. Otherwise add.
+		if (result < 0)
+		{
+			features.add((-result)-1, feature);
+			return true;
+		}
+
+		// Replace any existing cigar features because their references become
+		// invalid after a data reload.
+		else if (feature.getGFFType().equals("CIGAR-I"))
+			features.set(result, feature);
+
+		return false;
 	}
 
 	// Stores a count of the number of reads that exist in the cache BEFORE you
