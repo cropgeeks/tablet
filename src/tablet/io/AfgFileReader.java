@@ -93,7 +93,7 @@ class AfgFileReader extends TrackableReader
 
 		Assembly.setIsPaired(false);
 		assembly.setName(files[ASBINDEX].getName());
-		assembly.setReadGroups(new ArrayList<String>());
+		assembly.getReadGroups().clear();
 	}
 
 	//parses a CTG tag -- this contains contig information (internal ID, external ID i.e. name, unpadded sequence, quality scores)

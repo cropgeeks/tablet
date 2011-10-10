@@ -5,14 +5,16 @@ import java.util.*;
 
 import tablet.data.*;
 
+import net.sf.samtools.*;
+
 public class ReadGroupScheme extends EnhancedScheme
 {
 	// One ArrayList of ColorStamp objects for each ReadGroup
 	private ArrayList<ArrayList<ColorStamp>> statesRG;
 
-	// A reference to the list of sample names held in Assembly
-	private static ArrayList<String> readGroups;
-	// Which are mirrored in the ColorInfo objects; one per sample name
+	// A reference to the list of read groups held in Assembly
+	private static ArrayList<SAMReadGroupRecord> readGroups;
+	// Which are mirrored in the ColorInfo objects; one per read group
 	private static ColorInfo[] colorInfos;
 
 	private static Color[] palette;
@@ -124,21 +126,25 @@ public class ReadGroupScheme extends EnhancedScheme
 	private static void setupColors()
 	{
 
-		// For each sample name, find (or create) its colour
+		// For each read group name, find (or create) its colour
 		for (int i=0; i < colorInfos.length; i++)
 		{
+			SAMReadGroupRecord record = readGroups.get(i);
+
+			String id = record.getId();
+			String prefsID = "ReadGroup_" + id;
+
 			// Attempt to load color for read group from prefs file
-			Color color = ColorPrefs.getColor("Sample_" + readGroups.get(i));
+			Color color = ColorPrefs.getColor(prefsID);
 
 			if (color != null)
-				colorInfos[i] = new ColorInfo(color, readGroups.get(i));
+				colorInfos[i] = new ColorInfo(color, record);
 
 			// If colour doesn't exist assign a color and set this in the prefs file
 			else
 			{
-				colorInfos[i] = new ColorInfo(getPaletteColor(readGroups.get(i).hashCode()),
-					readGroups.get(i));
-				ColorPrefs.setColor("Sample_" + colorInfos[i].name, colorInfos[i].color);
+				colorInfos[i] = new ColorInfo(getPaletteColor(id.hashCode()), record);
+				ColorPrefs.setColor(prefsID, colorInfos[i].color);
 			}
 		}
 	}
@@ -146,7 +152,7 @@ public class ReadGroupScheme extends EnhancedScheme
 	// Update the color in the array, ColorInfo and the colour prefs xml.
 	public static void setColor(int index, Color color)
 	{
-		ColorPrefs.setColor("Sample_" + colorInfos[index].name, color);
+		ColorPrefs.setColor("ReadGroup_" + colorInfos[index].getDisplayName(), color);
 		colorInfos[index].color = color;
 	}
 
@@ -154,7 +160,7 @@ public class ReadGroupScheme extends EnhancedScheme
 	{
 		// Remove the current set of colours from the preferences file
 		for (ColorInfo info: colorInfos)
-			ColorPrefs.removeColor("Sample_" + info.name);
+			ColorPrefs.removeColor("ReadGroup_" + info.getDisplayName());
 
 		// And then let them get recreated
 		setupColors();
@@ -177,21 +183,20 @@ public class ReadGroupScheme extends EnhancedScheme
 	public static class ColorInfo
 	{
 		public Color color;
-		public String name;
+		public SAMReadGroupRecord record;
 		public boolean enabled;
 
-		ColorInfo(Color colour, String name)
+		ColorInfo(Color colour, SAMReadGroupRecord record)
 		{
 			this.color = colour;
-			this.name = name;
+			this.record = record;
 
 			enabled = true;
 		}
 
-		@Override
-		public String toString()
+		public String getDisplayName()
 		{
-			return name;
+			return record.getId();
 		}
 	}
 }

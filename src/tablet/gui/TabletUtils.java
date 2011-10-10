@@ -235,11 +235,11 @@ public class TabletUtils
 		try
 		{
 			MessageDigest md = MessageDigest.getInstance("MD5");
-        	byte[] md5Digest = md.digest(str.getBytes());
-        	BigInteger md5Number = new BigInteger(1, md5Digest);
-        	String md5String = md5Number.toString(16);
+			byte[] md5Digest = md.digest(str.getBytes());
+			BigInteger md5Number = new BigInteger(1, md5Digest);
+			String md5String = md5Number.toString(16);
 
-        	return md5String;
+			return md5String;
 		}
 		catch (Exception e)
 		{

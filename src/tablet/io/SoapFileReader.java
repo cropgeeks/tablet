@@ -112,7 +112,7 @@ class SoapFileReader extends TrackableReader
 
 		Assembly.setIsPaired(false);
 		assembly.setName(files[ASBINDEX].getName());
-		assembly.setReadGroups(new ArrayList<String>());
+		assembly.getReadGroups().clear();
 	}
 
 	public String getMessage()
