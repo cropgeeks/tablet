@@ -5,15 +5,14 @@ package tablet.gui.viewer;
 
 import java.awt.*;
 import java.awt.geom.*;
-import java.awt.image.*;
 import static java.awt.RenderingHints.*;
 import java.util.*;
+import javax.swing.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.auxiliary.*;
 import tablet.gui.*;
-import tablet.gui.viewer.colors.*;
 
 public class FeaturesCanvas extends TrackingCanvas
 {
@@ -34,6 +33,8 @@ public class FeaturesCanvas extends TrackingCanvas
 
 	private Paint snpPaint;
 	private Paint cigarPaint;
+
+	private ArrayList<ArrayList<Feature>> featuresOnScreen = new ArrayList<ArrayList<Feature>>();
 
 	FeaturesCanvas()
 	{
@@ -57,8 +58,9 @@ public class FeaturesCanvas extends TrackingCanvas
 		if (contig != null)
 		{
 			consensus = contig.getConsensus();
-
+			vContig = aPanel.getVisualContig();
 			prepareTracks(contig);
+
 			dimension = new Dimension(0, vContig.getTrackCount()*H+5);
 		}
 
@@ -93,9 +95,11 @@ public class FeaturesCanvas extends TrackingCanvas
 		catch (Exception e) { e.printStackTrace(); }
 	}
 
+	@Override
 	public Dimension getPreferredSize()
 		{ return dimension; }
 
+	@Override
 	public void paintComponent(Graphics graphics)
 	{
 		super.paintComponent(graphics);
@@ -109,11 +113,13 @@ public class FeaturesCanvas extends TrackingCanvas
 		int xS = rCanvas.xS + offset;
 		int xE = rCanvas.xE + offset;
 
+		featuresOnScreen = new ArrayList<ArrayList<Feature>>();
 
 		for (int trackNum = 0; trackNum < vContig.getTrackCount(); trackNum++)
 		{
 			FeatureTrack track = vContig.getTrack(trackNum);
 			ArrayList<Feature> features = track.getFeatures(xS, xE);
+			featuresOnScreen.add(features);
 
 			if (trackNum > 0)
 				g.translate(0, H);
@@ -184,5 +190,18 @@ public class FeaturesCanvas extends TrackingCanvas
 
 		long e = System.currentTimeMillis();
 //		System.out.println("FeaturesCanvas: " + (e-s) + "ms");
+	}
+
+	// Used by the mouse handling code in FeaturesCanvasML. Returns the features
+	// on a given track, at a given position.
+	ArrayList<Feature> getFeatures(int track, int pos)
+	{
+		ArrayList<Feature> results = new ArrayList<Feature>();
+
+		for (Feature f : featuresOnScreen.get(track))
+			if (f.getDataPS() <= pos && f.getDataPE() >= pos)
+				results.add(f);
+
+		return results;
 	}
 }
