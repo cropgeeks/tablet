@@ -14,10 +14,10 @@ import scri.commons.gui.*;
 /**
  * Table control class for the Read Groups panel.
  */
-public class ReadGroupsPanel extends JPanel implements ActionListener
+public class ReadGroupsPanel extends JPanel implements ActionListener, ListSelectionListener
 {
 	private ReadGroupsPanelNB controls;
-	private ReadGroupsTableModel tableModel;
+	private ReadGroupsTableModel model;
 	private TableRowSorter<AbstractTableModel> sorter;
 
 	ReadGroupsPanel()
@@ -34,14 +34,16 @@ public class ReadGroupsPanel extends JPanel implements ActionListener
 					selectColor();
 			}
 		});
+
+		controls.table.getSelectionModel().addListSelectionListener(this);
 	}
 
 	private void createTableModel()
 	{
-		tableModel = new ReadGroupsTableModel();
+		model = new ReadGroupsTableModel();
 
-		sorter = new TableRowSorter<AbstractTableModel>(tableModel);
-		controls.table.setModel(tableModel);
+		sorter = new TableRowSorter<AbstractTableModel>(model);
+		controls.table.setModel(model);
 		controls.table.setRowSorter(sorter);
 
 		controls.table.getColumnModel().getColumn(2).setPreferredWidth(25);
@@ -52,17 +54,36 @@ public class ReadGroupsPanel extends JPanel implements ActionListener
 	{
 		if (contig == null)
 		{
-			tableModel.clear();
+			model.clear();
 			controls.readGroupLabel.setText(RB.format("gui.ReadGroupsPanelNB.readGroupLabel", "0"));
 			controls.toggleComponentEnabled(false);
 		}
 
 		else
 		{
-			tableModel.setColors();
+			model.setColors();
 			controls.readGroupLabel.setText(
-				RB.format("gui.ReadGroupsPanelNB.readGroupLabel", tableModel.getRowCount()));
+				RB.format("gui.ReadGroupsPanelNB.readGroupLabel", model.getRowCount()));
 			controls.toggleComponentEnabled(true);
+		}
+	}
+
+	public void valueChanged(ListSelectionEvent e)
+	{
+		if (e.getValueIsAdjusting())
+			return;
+
+		int row = controls.table.getSelectedRow();
+
+		if (row == -1)
+			controls.clearLabels();
+
+		else
+		{
+			row = controls.table.convertRowIndexToModel(row);
+			ReadGroupScheme.ColorInfo info = model.getItem(row);
+
+			controls.setLabels(info.record);
 		}
 	}
 
@@ -77,7 +98,7 @@ public class ReadGroupsPanel extends JPanel implements ActionListener
 		row = sorter.convertRowIndexToModel(row);
 
 		ReadGroupScheme.ColorInfo info =
-			(ReadGroupScheme.ColorInfo) tableModel.getValueAt(row, 0);
+			(ReadGroupScheme.ColorInfo) model.getValueAt(row, 0);
 
 		// Display colour chooser dialog (defaulting to the current colour)
 		Color newColor = JColorChooser.showDialog(Tablet.winMain,
@@ -89,7 +110,7 @@ public class ReadGroupsPanel extends JPanel implements ActionListener
 			ReadGroupScheme.setColor(row, newColor);
 
 			Tablet.winMain.getAssemblyPanel().forceRedraw();
-			tableModel.fireTableDataChanged();
+			model.fireTableDataChanged();
 		}
 	}
 
@@ -99,15 +120,15 @@ public class ReadGroupsPanel extends JPanel implements ActionListener
 		// Select all entries in the table...
 		if (e.getSource() == controls.colorAll)
 		{
-			for (int i = 0; i < tableModel.getRowCount(); i++)
-				tableModel.setValueAt(true, i, 1);
+			for (int i = 0; i < model.getRowCount(); i++)
+				model.setValueAt(true, i, 1);
 		}
 
 		// Select no entries in the table...
 		else if (e.getSource() == controls.colorNone)
 		{
-			for (int i = 0; i < tableModel.getRowCount(); i++)
-				tableModel.setValueAt(false, i, 1);
+			for (int i = 0; i < model.getRowCount(); i++)
+				model.setValueAt(false, i, 1);
 		}
 
 		// Reset the colours to their defaults...
@@ -123,7 +144,7 @@ public class ReadGroupsPanel extends JPanel implements ActionListener
 				return;
 
 			ReadGroupScheme.resetColors();
-			tableModel.fireTableDataChanged();
+			model.fireTableDataChanged();
 		}
 
 		Tablet.winMain.getAssemblyPanel().forceRedraw();

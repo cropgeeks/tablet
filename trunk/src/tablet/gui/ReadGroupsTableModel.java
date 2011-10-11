@@ -56,6 +56,10 @@ class ReadGroupsTableModel extends AbstractTableModel
 		return colors.length;
 	}
 
+	// Shortcut method to a ColorInfo object rather than going via getValueAt()
+	ReadGroupScheme.ColorInfo getItem(int row)
+		{ return colors[row]; }
+
 	public Object getValueAt(int row, int col)
 	{
 		ReadGroupScheme.ColorInfo info = colors[row];

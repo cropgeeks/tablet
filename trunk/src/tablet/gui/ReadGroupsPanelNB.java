@@ -3,6 +3,9 @@ package tablet.gui;
 import javax.swing.*;
 import javax.swing.table.*;
 
+import net.sf.samtools.*;
+import static net.sf.samtools.SAMReadGroupRecord.*;
+
 import scri.commons.gui.*;
 
 public class ReadGroupsPanelNB extends JPanel
@@ -23,6 +26,12 @@ public class ReadGroupsPanelNB extends JPanel
 		reset.addActionListener(panel);
 
 		toggleComponentEnabled(false);
+		clearLabels();
+	}
+
+	void clearLabels()
+	{
+		setLabels(new SAMReadGroupRecord(""));
 	}
 
 	private JTable createTable()
@@ -43,6 +52,61 @@ public class ReadGroupsPanelNB extends JPanel
 			}
 */
 		};
+	}
+
+	void setLabels(SAMReadGroupRecord record)
+	{
+		// The ID can never be null, but we pass in a "blank" record when we
+		// don't want anything shown, so use its length as the visibility check
+		id.setText(record.getId());
+		id.setVisible(record.getId().length() > 0);
+		labelID.setVisible(id.isVisible());
+
+		// For all other tags, use null as the visibility check
+
+		cn.setText(record.getAttribute(SEQUENCING_CENTER_TAG));
+		cn.setVisible(record.getAttribute(SEQUENCING_CENTER_TAG) != null);
+		labelCN.setVisible(cn.isVisible());
+
+		ds.setText(record.getAttribute(DESCRIPTION_TAG));
+		ds.setVisible(record.getAttribute(DESCRIPTION_TAG) != null);
+		labelDS.setVisible(ds.isVisible());
+
+		dt.setText(record.getAttribute(DATE_RUN_PRODUCED_TAG));
+		dt.setVisible(record.getAttribute(DATE_RUN_PRODUCED_TAG) != null);
+		labelDT.setVisible(dt.isVisible());
+
+		fo.setText(record.getAttribute(FLOW_ORDER_TAG));
+		fo.setVisible(record.getAttribute(FLOW_ORDER_TAG) != null);
+		labelFO.setVisible(fo.isVisible());
+
+		ks.setText(record.getAttribute(KEY_SEQUENCE_TAG));
+		ks.setVisible(record.getAttribute(KEY_SEQUENCE_TAG) != null);
+		labelKS.setVisible(ks.isVisible());
+
+		lb.setText(record.getAttribute(LIBRARY_TAG));
+		lb.setVisible(record.getAttribute(LIBRARY_TAG) != null);
+		labelLB.setVisible(lb.isVisible());
+
+		// TODO: Tag not yet handled by Picard
+		pg.setVisible(false);
+		labelPG.setVisible(false);
+
+		pi.setText(record.getAttribute(PREDICTED_MEDIAN_INSERT_SIZE_TAG));
+		pi.setVisible(record.getAttribute(PREDICTED_MEDIAN_INSERT_SIZE_TAG) != null);
+		labelPI.setVisible(pi.isVisible());
+
+		pl.setText(record.getAttribute(PLATFORM_TAG));
+		pl.setVisible(record.getAttribute(PLATFORM_TAG) != null);
+		labelPL.setVisible(pl.isVisible());
+
+		pu.setText(record.getAttribute(PLATFORM_UNIT_TAG));
+		pu.setVisible(record.getAttribute(PLATFORM_UNIT_TAG) != null);
+		labelPU.setVisible(pu.isVisible());
+
+		sm.setText(record.getAttribute(READ_GROUP_SAMPLE_TAG));
+		sm.setVisible(record.getAttribute(READ_GROUP_SAMPLE_TAG) != null);
+		labelSM.setVisible(sm.isVisible());
 	}
 
 	public void toggleComponentEnabled(boolean enabled)
@@ -72,6 +136,30 @@ public class ReadGroupsPanelNB extends JPanel
         jLabel1 = new javax.swing.JLabel();
         colorNone = new scri.commons.gui.matisse.HyperLinkLabel();
         reset = new scri.commons.gui.matisse.HyperLinkLabel();
+        labelID = new javax.swing.JLabel();
+        id = new javax.swing.JLabel();
+        labelCN = new javax.swing.JLabel();
+        cn = new javax.swing.JLabel();
+        labelDS = new javax.swing.JLabel();
+        ds = new javax.swing.JLabel();
+        labelDT = new javax.swing.JLabel();
+        dt = new javax.swing.JLabel();
+        labelFO = new javax.swing.JLabel();
+        fo = new javax.swing.JLabel();
+        labelKS = new javax.swing.JLabel();
+        ks = new javax.swing.JLabel();
+        labelLB = new javax.swing.JLabel();
+        lb = new javax.swing.JLabel();
+        labelPG = new javax.swing.JLabel();
+        pg = new javax.swing.JLabel();
+        labelPI = new javax.swing.JLabel();
+        pi = new javax.swing.JLabel();
+        labelPL = new javax.swing.JLabel();
+        pl = new javax.swing.JLabel();
+        labelPU = new javax.swing.JLabel();
+        pu = new javax.swing.JLabel();
+        labelSM = new javax.swing.JLabel();
+        sm = new javax.swing.JLabel();
 
         readGroupLabel.setText("Read groups colors: 0");
 
@@ -90,15 +178,102 @@ public class ReadGroupsPanelNB extends JPanel
         reset.setForeground(new java.awt.Color(68, 106, 156));
         reset.setText("Reset");
 
+        labelID.setText("ID:");
+
+        id.setForeground(new java.awt.Color(255, 0, 0));
+        id.setText("  ");
+
+        labelCN.setText("CN:");
+
+        cn.setForeground(new java.awt.Color(255, 0, 0));
+        cn.setText("  ");
+
+        labelDS.setText("DS:");
+
+        ds.setForeground(new java.awt.Color(255, 0, 0));
+        ds.setText("  ");
+
+        labelDT.setText("DT:");
+
+        dt.setForeground(new java.awt.Color(255, 0, 0));
+        dt.setText("  ");
+
+        labelFO.setText("FO:");
+
+        fo.setForeground(new java.awt.Color(255, 0, 0));
+        fo.setText("  ");
+
+        labelKS.setText("KS:");
+
+        ks.setForeground(new java.awt.Color(255, 0, 0));
+        ks.setText("  ");
+
+        labelLB.setText("LB:");
+
+        lb.setForeground(new java.awt.Color(255, 0, 0));
+        lb.setText("  ");
+
+        labelPG.setText("PG:");
+
+        pg.setForeground(new java.awt.Color(255, 0, 0));
+        pg.setText("  ");
+
+        labelPI.setText("PI:");
+
+        pi.setForeground(new java.awt.Color(255, 0, 0));
+        pi.setText("  ");
+
+        labelPL.setText("PL:");
+
+        pl.setForeground(new java.awt.Color(255, 0, 0));
+        pl.setText("  ");
+
+        labelPU.setText("PU:");
+
+        pu.setForeground(new java.awt.Color(255, 0, 0));
+        pu.setText("  ");
+
+        labelSM.setText("SM:");
+
+        sm.setForeground(new java.awt.Color(255, 0, 0));
+        sm.setText("  ");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(readGroupLabel)
-                .addContainerGap(122, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(labelCN)
+                    .addComponent(labelDS)
+                    .addComponent(labelDT)
+                    .addComponent(labelFO)
+                    .addComponent(labelKS)
+                    .addComponent(labelLB)
+                    .addComponent(labelPG)
+                    .addComponent(labelPI)
+                    .addComponent(labelPL)
+                    .addComponent(labelPU)
+                    .addComponent(labelSM)
+                    .addComponent(labelID))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(fo)
+                    .addComponent(dt)
+                    .addComponent(ks)
+                    .addComponent(pg)
+                    .addComponent(lb)
+                    .addComponent(sm)
+                    .addComponent(pl)
+                    .addComponent(pi)
+                    .addComponent(pu)
+                    .addComponent(id)
+                    .addComponent(cn)
+                    .addComponent(ds))
+                .addContainerGap(193, Short.MAX_VALUE))
+            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(colorAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -108,7 +283,10 @@ public class ReadGroupsPanelNB extends JPanel
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                 .addComponent(reset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(readGroupLabel)
+                .addContainerGap(122, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -116,23 +294,95 @@ public class ReadGroupsPanelNB extends JPanel
                 .addContainerGap()
                 .addComponent(readGroupLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(reset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(colorAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addComponent(colorNone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelID)
+                    .addComponent(id))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelCN)
+                    .addComponent(cn))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelDS)
+                    .addComponent(ds))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelDT)
+                    .addComponent(dt))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelFO)
+                    .addComponent(fo))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelKS)
+                    .addComponent(ks))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelLB)
+                    .addComponent(lb))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelPG)
+                    .addComponent(pg))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelPI)
+                    .addComponent(pi))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelPL)
+                    .addComponent(pl))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelPU)
+                    .addComponent(pu))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(labelSM)
+                    .addComponent(sm))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    javax.swing.JLabel cn;
     scri.commons.gui.matisse.HyperLinkLabel colorAll;
     scri.commons.gui.matisse.HyperLinkLabel colorNone;
+    javax.swing.JLabel ds;
+    javax.swing.JLabel dt;
+    javax.swing.JLabel fo;
+    javax.swing.JLabel id;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    javax.swing.JLabel ks;
+    private javax.swing.JLabel labelCN;
+    private javax.swing.JLabel labelDS;
+    private javax.swing.JLabel labelDT;
+    private javax.swing.JLabel labelFO;
+    private javax.swing.JLabel labelID;
+    private javax.swing.JLabel labelKS;
+    private javax.swing.JLabel labelLB;
+    private javax.swing.JLabel labelPG;
+    private javax.swing.JLabel labelPI;
+    private javax.swing.JLabel labelPL;
+    private javax.swing.JLabel labelPU;
+    private javax.swing.JLabel labelSM;
+    javax.swing.JLabel lb;
+    javax.swing.JLabel pg;
+    javax.swing.JLabel pi;
+    javax.swing.JLabel pl;
+    javax.swing.JLabel pu;
     javax.swing.JLabel readGroupLabel;
     scri.commons.gui.matisse.HyperLinkLabel reset;
+    javax.swing.JLabel sm;
     javax.swing.JTable table;
     // End of variables declaration//GEN-END:variables
 
