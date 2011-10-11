@@ -235,7 +235,7 @@ class SamFileReader extends TrackableReader
 		// If mate is in same contig its reference can be set as = instead of contig name
 		rnd.setMateContig(mrnm.equals("=") ? mrnm : chr);
 		// If mate reference name equals contig name its mate is in the same contig
-		pr.setIsMateContig(mrnm.equals(chr));
+		pr.setIsMateContig(mrnm.equals("="));
 
 		// Parse properly paired, number in pair and mate mapped out from flag field
 		rnd.setIsProperPair((flags & 0x0002) != 0);
