@@ -28,6 +28,8 @@ public class ReadsPanelNB extends javax.swing.JPanel
 
 		readsLabel.setText(RB.format("gui.ReadsPanel.readsLabel", 0));
 
+		// Ensures the labels aren't visible at startup
+		setLabelStates(false, false);
 		toggleComponentEnabled(false);
     }
 
