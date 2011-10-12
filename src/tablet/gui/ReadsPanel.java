@@ -3,8 +3,7 @@
 
 package tablet.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Toolkit;
+import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.util.*;
@@ -55,7 +54,7 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 		controls.table.addMouseListener(new TableMouseListener());
 	}
 
-	void setTableModel(List<Read> reads)
+	void setTableModel(ArrayList<Read> reads)
 	{
 		tableModel.setReads(reads);
 
@@ -67,6 +66,11 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 	{
 		if (e.getValueIsAdjusting())
 			return;
+
+		int row = controls.table.getSelectedRow();
+
+		if (row == -1)
+			controls.setLabelStates(false, false);
 
 		processTableSelection();
 	}
@@ -106,6 +110,8 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 	 // in the Reads table.
 	private void updateReadInfo(Read read)
 	{
+		controls.setLabelStates(Assembly.hasCigar(), Assembly.isPaired());
+
 		ReadNameData rnd = Assembly.getReadNameData(read);
 		ReadMetaData rmd = Assembly.getReadMetaData(read, false);
 
@@ -145,7 +151,6 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 		if (contig != null)
 		{
 			this.contig = contig;
-			controls.setLabelStates(Assembly.hasCigar(), Assembly.isPaired());
 			controls.toggleComponentEnabled(true);
 		}
 		else
