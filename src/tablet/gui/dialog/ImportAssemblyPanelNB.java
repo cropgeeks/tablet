@@ -174,13 +174,15 @@ class ImportAssemblyPanelNB extends JPanel implements DocumentListener
 
         panel1 = new javax.swing.JPanel();
         bBrowse2 = new javax.swing.JButton();
-        file1Combo = new scri.commons.gui.matisse.HistoryComboBox();
-        file2Combo = new scri.commons.gui.matisse.HistoryComboBox();
         bBrowse1 = new javax.swing.JButton();
         statusText = new javax.swing.JLabel();
         statusLabel = new javax.swing.JLabel();
         refLabel = new javax.swing.JLabel();
         assLabel = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        file1Combo = new scri.commons.gui.matisse.HistoryComboBox();
+        jPanel2 = new javax.swing.JPanel();
+        file2Combo = new scri.commons.gui.matisse.HistoryComboBox();
         panel2 = new javax.swing.JPanel();
         note1 = new javax.swing.JLabel();
         note2 = new javax.swing.JLabel();
@@ -202,6 +204,14 @@ class ImportAssemblyPanelNB extends JPanel implements DocumentListener
         assLabel.setLabelFor(file1Combo);
         assLabel.setText("Primary assembly file or URL:");
 
+        jPanel1.setLayout(new java.awt.GridLayout());
+
+        jPanel1.add(file1Combo);
+
+        jPanel2.setLayout(new java.awt.GridLayout());
+
+        jPanel2.add(file2Combo);
+
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
         panel1Layout.setHorizontalGroup(
@@ -213,12 +223,12 @@ class ImportAssemblyPanelNB extends JPanel implements DocumentListener
                     .addGroup(panel1Layout.createSequentialGroup()
                         .addComponent(statusLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(statusText, javax.swing.GroupLayout.DEFAULT_SIZE, 409, Short.MAX_VALUE))
+                        .addComponent(statusText))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel1Layout.createSequentialGroup()
                         .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(file2Combo, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE)
                             .addComponent(assLabel)
-                            .addComponent(file1Combo, javax.swing.GroupLayout.DEFAULT_SIZE, 405, Short.MAX_VALUE))
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 445, Short.MAX_VALUE)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 445, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(bBrowse2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -231,15 +241,15 @@ class ImportAssemblyPanelNB extends JPanel implements DocumentListener
                 .addContainerGap()
                 .addComponent(assLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(file1Combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bBrowse1))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(refLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(file2Combo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bBrowse2))
+                .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(bBrowse2)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(statusLabel)
@@ -262,8 +272,8 @@ class ImportAssemblyPanelNB extends JPanel implements DocumentListener
             .addGroup(panel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(note1, javax.swing.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
-                    .addComponent(note2, javax.swing.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
+                    .addComponent(note1, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
+                    .addComponent(note2, javax.swing.GroupLayout.DEFAULT_SIZE, 530, Short.MAX_VALUE)
                     .addComponent(exampleLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
@@ -309,6 +319,8 @@ class ImportAssemblyPanelNB extends JPanel implements DocumentListener
     scri.commons.gui.matisse.HyperLinkLabel exampleLabel;
     scri.commons.gui.matisse.HistoryComboBox file1Combo;
     scri.commons.gui.matisse.HistoryComboBox file2Combo;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel note1;
     private javax.swing.JLabel note2;
     private javax.swing.JPanel panel1;

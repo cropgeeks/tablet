@@ -58,13 +58,13 @@
                       <Group type="102" alignment="0" attributes="0">
                           <Component id="statusLabel" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="statusText" pref="409" max="32767" attributes="0"/>
+                          <Component id="statusText" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="file2Combo" pref="405" max="32767" attributes="0"/>
                               <Component id="assLabel" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="file1Combo" alignment="0" pref="405" max="32767" attributes="0"/>
+                              <Component id="jPanel1" alignment="0" min="-2" pref="445" max="32767" attributes="0"/>
+                              <Component id="jPanel2" alignment="0" min="-2" pref="445" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="1" max="-2" attributes="0">
@@ -83,16 +83,16 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="assLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="file1Combo" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="bBrowse1" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="jPanel1" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="bBrowse1" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="refLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="file2Combo" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="bBrowse2" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="2" attributes="0">
+                      <Component id="bBrowse2" alignment="2" min="-2" max="-2" attributes="0"/>
+                      <Component id="jPanel2" alignment="2" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
@@ -108,26 +108,6 @@
         <Component class="javax.swing.JButton" name="bBrowse2">
           <Properties>
             <Property name="text" type="java.lang.String" value="Browse..."/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-          </AuxValues>
-        </Component>
-        <Component class="scri.commons.gui.matisse.HistoryComboBox" name="file1Combo">
-          <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="0"/>
-            </Property>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-          </AuxValues>
-        </Component>
-        <Component class="scri.commons.gui.matisse.HistoryComboBox" name="file2Combo">
-          <Properties>
-            <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-              <StringArray count="0"/>
-            </Property>
           </Properties>
           <AuxValues>
             <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
@@ -167,6 +147,44 @@
             <Property name="text" type="java.lang.String" value="Primary assembly file or URL:"/>
           </Properties>
         </Component>
+        <Container class="javax.swing.JPanel" name="jPanel1">
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+            <Property name="columns" type="int" value="0"/>
+            <Property name="rows" type="int" value="1"/>
+          </Layout>
+          <SubComponents>
+            <Component class="scri.commons.gui.matisse.HistoryComboBox" name="file1Combo">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="0"/>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+              </AuxValues>
+            </Component>
+          </SubComponents>
+        </Container>
+        <Container class="javax.swing.JPanel" name="jPanel2">
+
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+            <Property name="columns" type="int" value="0"/>
+            <Property name="rows" type="int" value="1"/>
+          </Layout>
+          <SubComponents>
+            <Component class="scri.commons.gui.matisse.HistoryComboBox" name="file2Combo">
+              <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="0"/>
+                </Property>
+              </Properties>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
+              </AuxValues>
+            </Component>
+          </SubComponents>
+        </Container>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="panel2">
@@ -184,8 +202,8 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="note1" pref="490" max="32767" attributes="0"/>
-                      <Component id="note2" alignment="0" pref="490" max="32767" attributes="0"/>
+                      <Component id="note1" pref="530" max="32767" attributes="0"/>
+                      <Component id="note2" alignment="0" pref="530" max="32767" attributes="0"/>
                       <Component id="exampleLabel" alignment="0" min="-2" max="-2" attributes="1"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
