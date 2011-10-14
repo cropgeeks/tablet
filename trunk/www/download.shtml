@@ -62,9 +62,8 @@ for your operating system. Tablet is currently available for:</p>
 
 </table>
 
-<p>A <b>Java Web Start</b> version of Tablet also exists, and can be made available on
-request in certain circumstances, however this is not something we can
-officially support.</p>
+<p>A <b>Java Web Start</b> version of Tablet also exists. Instructions for using it can be
+found in the <a href="faq.shtml">Tablet FAQ</a>.</p>
 
 <p>Follow the instructions provided by the graphical installer to install Tablet.
 Note that Tablet should not require administrator privileges to install or run,

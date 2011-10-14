@@ -1,5 +1,6 @@
 package tablet.gui;
 
+import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.table.*;
 
@@ -10,13 +11,18 @@ import scri.commons.gui.*;
 
 public class ReadGroupsPanelNB extends JPanel
 {
+	private ReadGroupsPanel panel;
+
 	/** Creates new form ReadGroupsPanelNB */
 	public ReadGroupsPanelNB(ReadGroupsPanel panel)
 	{
+		this.panel = panel;
+
 		initComponents();
 
 		table.getTableHeader().setReorderingAllowed(false);
 
+		RB.setText(readGroupLabel, "gui.ReadGroupsPanelNB.readGroupLabel");
 		RB.setText(colorAll, "gui.ReadGroupsPanelNB.colorAll");
 		RB.setText(colorNone, "gui.ReadGroupsPanelNB.colorNone");
 		RB.setText(reset, "gui.ReadGroupsPanelNB.reset");
@@ -45,12 +51,11 @@ public class ReadGroupsPanelNB extends JPanel
 				return (tcr != null) ? tcr : super.getCellRenderer(row, col);
 			}
 
-/*			@Override
+			@Override
 			public String getToolTipText(MouseEvent e)
 			{
 				return panel.getTableToolTip(e);
 			}
-*/
 		};
 	}
 
@@ -109,6 +114,26 @@ public class ReadGroupsPanelNB extends JPanel
 		labelSM.setVisible(sm.isVisible());
 	}
 
+	String displayToolTip(SAMReadGroupRecord record)
+	{
+		return RB.format("gui.ReadGroupsPanelNB.tooltip", record.getId(),
+			isNull(record.getAttribute(SEQUENCING_CENTER_TAG)),
+			isNull(record.getAttribute(DESCRIPTION_TAG)),
+			isNull(record.getAttribute(DATE_RUN_PRODUCED_TAG)),
+			isNull(record.getAttribute(FLOW_ORDER_TAG)),
+			isNull(record.getAttribute(KEY_SEQUENCE_TAG)),
+			isNull(record.getAttribute(LIBRARY_TAG)),
+			isNull(record.getAttribute(PREDICTED_MEDIAN_INSERT_SIZE_TAG)),
+			isNull(record.getAttribute(PLATFORM_TAG)),
+			isNull(record.getAttribute(PLATFORM_UNIT_TAG)),
+			isNull(record.getAttribute(READ_GROUP_SAMPLE_TAG)));
+	}
+
+	private String isNull(String str)
+	{
+		return str == null ? " " : str;
+	}
+
 	public void toggleComponentEnabled(boolean enabled)
 	{
 		readGroupLabel.setEnabled(enabled);
@@ -161,7 +186,7 @@ public class ReadGroupsPanelNB extends JPanel
         labelSM = new javax.swing.JLabel();
         sm = new javax.swing.JLabel();
 
-        readGroupLabel.setText("Read groups colors: 0");
+        readGroupLabel.setText("Read groups: 0");
 
         table.setModel(new DefaultTableModel());
         table.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -275,6 +300,10 @@ public class ReadGroupsPanelNB extends JPanel
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(readGroupLabel)
+                .addContainerGap(153, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addComponent(colorAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1)
@@ -283,10 +312,6 @@ public class ReadGroupsPanelNB extends JPanel
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                 .addComponent(reset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(readGroupLabel)
-                .addContainerGap(122, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -294,7 +319,7 @@ public class ReadGroupsPanelNB extends JPanel
                 .addContainerGap()
                 .addComponent(readGroupLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 54, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(reset, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
