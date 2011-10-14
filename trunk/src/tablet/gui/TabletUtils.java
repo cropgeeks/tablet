@@ -247,4 +247,17 @@ public class TabletUtils
 			return null;
 		}
 	}
+
+	/*
+	 * @param panel the panel to apply the effect to
+	 * @param opague if the panel should be opague or not on OS X
+	 */
+	public static void setPanelColor(JPanel panel, boolean opagueOnOSX)
+	{
+		if (SystemUtils.isMacOS() == false)
+			panel.setBackground(Color.white);
+
+		else
+			panel.setOpaque(opagueOnOSX);
+	}
 }

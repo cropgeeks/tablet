@@ -20,8 +20,9 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
 		initComponents();
 
 		initWebStuff();
-		setBackground(Color.white);
-		p2.setBackground(Color.white);
+
+		TabletUtils.setPanelColor(this, false);
+		TabletUtils.setPanelColor(p2, false);
 
 		webLabel.addActionListener(this);
 
@@ -90,7 +91,7 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
         localeLabel.setForeground(java.awt.Color.gray);
         localeLabel.setText("Current Locale:");
 
-        nameLabel.setText("Iain Milne, Micha Bayer, Linda Cardle, Paul Shaw, Gordon Stephen, David Marshall");
+        nameLabel.setText("Iain Milne, Gordon Stephen, Micha Bayer, Linda Cardle, Paul Shaw, David Marshall");
 
         copyrightLabel.setText("Copyright (C) 2009, Plant Bioinformatics Group, JHI");
 
@@ -155,7 +156,7 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
                 .addComponent(localeLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(idLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(scriIcon)
                 .addContainerGap())
         );

@@ -16,7 +16,7 @@ class BamWindowPanelNB extends JPanel
 	{
 		initComponents();
 
-		setBackground(Color.white);
+		TabletUtils.setPanelColor(this, true);
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		RB.setText(bamLabel, "gui.dialog.NBBamWindowPanel.bamLabel");
@@ -65,9 +65,9 @@ class BamWindowPanelNB extends JPanel
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bamLabel)
-                    .addComponent(bamSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(bamSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bamLabel))
                 .addGap(18, 18, 18)
                 .addComponent(label1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)

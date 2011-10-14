@@ -27,9 +27,10 @@ class ImportAssemblyPanelNB extends JPanel implements DocumentListener
 		initComponents();
 
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		setBackground(Color.white);
-		panel1.setBackground(Color.white);
-		panel2.setBackground(Color.white);
+
+		TabletUtils.setPanelColor(this, true);
+		TabletUtils.setPanelColor(panel1, false);
+		TabletUtils.setPanelColor(panel2, false);
 
 		// Apply i18n text to the controls
 		panel1.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.NBImportAssemblyPanel.panel1")));
@@ -204,10 +205,12 @@ class ImportAssemblyPanelNB extends JPanel implements DocumentListener
         assLabel.setLabelFor(file1Combo);
         assLabel.setText("Primary assembly file or URL:");
 
+        jPanel1.setOpaque(false);
         jPanel1.setLayout(new java.awt.GridLayout());
 
         jPanel1.add(file1Combo);
 
+        jPanel2.setOpaque(false);
         jPanel2.setLayout(new java.awt.GridLayout());
 
         jPanel2.add(file2Combo);

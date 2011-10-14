@@ -65,7 +65,7 @@ public class AboutDialog extends JDialog implements ActionListener
 	{
 		AvatarPanel()
 		{
-			setBackground(Color.white);
+			TabletUtils.setPanelColor(this, false);
 			add(new JLabel(Icons.getIcon("AVATARS")));
 
 			addMouseMotionListener(new MouseMotionAdapter()
@@ -78,14 +78,14 @@ public class AboutDialog extends JDialog implements ActionListener
 
 					if (x < 105)
 						tooltip += "Iain Milne";
-					else if (x >= 105 && x < 200)
-						tooltip += "Micha Bayer";
-					else if (x >= 200 && x < 290)
-						tooltip += "Linda Cardle";
-					else if (x >= 290 && x < 380)
-						tooltip += "Paul Shaw";
-					else if (x >= 380 && x < 467)
+					else if (x >= 100 && x < 185)
 						tooltip += "Gordon Stephen";
+					else if (x >= 185 && x < 285)
+						tooltip += "Micha Bayer";
+					else if (x >= 285 && x < 380)
+						tooltip += "Linda Cardle";
+					else if (x >= 380 && x < 475)
+						tooltip += "Paul Shaw";
 					else
 						tooltip += "David Marshall";
 

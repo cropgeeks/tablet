@@ -19,10 +19,10 @@ class VisualizationTabNB extends JPanel
     {
         initComponents();
 
-        setBackground(Color.white);
+        TabletUtils.setPanelColor(this, false);
+        TabletUtils.setPanelColor(panel1, false);
 
 		// Top panel
-        panel1.setBackground(Color.white);
 		panel1.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.prefs.NBVisualizationPanel.panel1Title")));
 
 		RB.setText(dnaLabel, "gui.dialog.prefs.NBVisualizationPanel.dnaLabel");
@@ -108,9 +108,9 @@ class VisualizationTabNB extends JPanel
                             .addComponent(dnaLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(padSpinner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE)
+                            .addComponent(proteinCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 105, Short.MAX_VALUE)
                             .addComponent(dnaCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 105, Short.MAX_VALUE)
-                            .addComponent(proteinCombo, javax.swing.GroupLayout.Alignment.TRAILING, 0, 105, Short.MAX_VALUE))))
+                            .addComponent(padSpinner, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 105, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         panel1Layout.setVerticalGroup(

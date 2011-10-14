@@ -3,8 +3,9 @@
 
 package tablet.gui.dialog;
 
-import java.awt.*;
 import javax.swing.*;
+
+import tablet.gui.*;
 
 import scri.commons.gui.*;
 
@@ -14,10 +15,11 @@ class JumpToPanelNB extends javax.swing.JPanel
 	{
 		initComponents();
 
+		TabletUtils.setPanelColor(this, true);
+
 		bJumpPadded.addActionListener(parent);
 		bJumpUnpadded.addActionListener(parent);
 
-		setBackground(Color.white);
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		RB.setText(jumpLabel, "gui.dialog.NBJumpToPanel.jumpLabel");

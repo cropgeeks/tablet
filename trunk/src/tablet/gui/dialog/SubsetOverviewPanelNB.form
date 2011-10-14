@@ -26,12 +26,12 @@
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="titledPanel" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="titledPanel" alignment="0" max="32767" attributes="0"/>
                   <Component id="dragLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="displayLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   <Component id="regionLabel" alignment="0" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace max="32767" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -93,18 +93,18 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <Component id="lblFrom" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
                           <Component id="fromSpinner" linkSize="4" min="-2" pref="136" max="-2" attributes="1"/>
-                          <EmptySpace min="10" pref="10" max="-2" attributes="0"/>
+                          <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="lblTo" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="toSpinner" linkSize="4" min="-2" pref="76" max="-2" attributes="1"/>
-                          <EmptySpace min="6" pref="6" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                           <Component id="bReset" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <Component id="bamLabel" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -114,10 +114,10 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="lblFrom" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="fromSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="lblTo" alignment="3" min="-2" max="-2" attributes="0"/>
-                      <Component id="toSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="bReset" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="toSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblTo" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="fromSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
                   <Component id="bamLabel" min="-2" max="-2" attributes="0"/>
