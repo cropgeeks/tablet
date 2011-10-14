@@ -1,7 +1,8 @@
 package tablet.gui.dialog;
 
-import java.awt.*;
 import javax.swing.*;
+
+import tablet.gui.*;
 
 import scri.commons.gui.*;
 
@@ -11,7 +12,7 @@ public class ConsensusSubsequencePanelNB extends javax.swing.JPanel
 	{
         initComponents();
 
-		setBackground(Color.white);
+		TabletUtils.setPanelColor(this, true);
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		RB.setText(lblInfo, "gui.dialog.ConsensusSubsequenceDialog.lblInfo");
@@ -32,7 +33,7 @@ public class ConsensusSubsequencePanelNB extends javax.swing.JPanel
         lblEndBase = new javax.swing.JLabel();
         spinnerEndBase = new javax.swing.JSpinner();
 
-        lblInfo.setText("Select a subsequence of the consensus / reference to copy:");
+        lblInfo.setText("Select a subsequence of the reference/consensus to copy:");
 
         lblStartBase.setLabelFor(spinnerStartBase);
         lblStartBase.setText("Start base:");
@@ -53,7 +54,7 @@ public class ConsensusSubsequencePanelNB extends javax.swing.JPanel
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblInfo)
-                        .addContainerGap(101, Short.MAX_VALUE))
+                        .addContainerGap(107, Short.MAX_VALUE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(lblStartBase)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -70,9 +71,9 @@ public class ConsensusSubsequencePanelNB extends javax.swing.JPanel
                 .addContainerGap()
                 .addComponent(lblInfo)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblStartBase)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(spinnerEndBase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblStartBase)
                     .addComponent(spinnerStartBase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(lblEndBase))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))

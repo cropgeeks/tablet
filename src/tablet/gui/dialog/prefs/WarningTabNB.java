@@ -16,8 +16,8 @@ class WarningTabNB extends JPanel
     {
         initComponents();
 
-        setBackground(Color.white);
-        panel.setBackground(Color.white);
+        TabletUtils.setPanelColor(this, false);
+        TabletUtils.setPanelColor(panel, false);
 
 		panel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.prefs.NBWarningPanel.panelTitle")));
 

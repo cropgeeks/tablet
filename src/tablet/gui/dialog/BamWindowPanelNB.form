@@ -35,9 +35,9 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="bamLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="bamSpinner" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="2" attributes="0">
+                  <Component id="bamSpinner" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="bamLabel" alignment="2" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
               <Component id="label1" min="-2" max="-2" attributes="0"/>

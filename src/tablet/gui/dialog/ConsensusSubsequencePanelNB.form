@@ -21,7 +21,7 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Component id="lblInfo" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="101" max="32767" attributes="0"/>
+                      <EmptySpace pref="107" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="lblStartBase" min="-2" max="-2" attributes="0"/>
@@ -43,11 +43,11 @@
               <EmptySpace max="-2" attributes="0"/>
               <Component id="lblInfo" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="lblStartBase" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="spinnerEndBase" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="spinnerStartBase" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lblEndBase" alignment="3" min="-2" max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="2" attributes="0">
+                  <Component id="spinnerEndBase" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblStartBase" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="spinnerStartBase" alignment="2" min="-2" max="-2" attributes="0"/>
+                  <Component id="lblEndBase" alignment="2" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="32767" attributes="0"/>
           </Group>
@@ -57,7 +57,7 @@
   <SubComponents>
     <Component class="javax.swing.JLabel" name="lblInfo">
       <Properties>
-        <Property name="text" type="java.lang.String" value="Select a subsequence of the consensus / reference to copy:"/>
+        <Property name="text" type="java.lang.String" value="Select a subsequence of the reference/consensus to copy:"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>

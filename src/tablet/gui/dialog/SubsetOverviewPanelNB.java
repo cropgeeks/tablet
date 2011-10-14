@@ -22,16 +22,16 @@ public class SubsetOverviewPanelNB extends javax.swing.JPanel
         initComponents();
 		this.parent = parent;
 
-		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		setBackground(Color.white);
+		TabletUtils.setPanelColor(this, true);
+		TabletUtils.setPanelColor(titledPanel, false);
 
-		titledPanel.setBackground(Color.white);
+		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
 
 		lblFrom.setText(RB.getString("gui.dialog.NBSubsetOverview.from"));
 		lblTo.setText(RB.getString("gui.dialog.NBSubsetOverview.to"));
 		bamLabel.setVisible(aPanel.getAssembly().getBamBam() != null);
 		bamLabel.setText(RB.format("gui.dialog.NBSubsetOverview.bamLabel", aPanel.getContig().getVisualStart()+1, aPanel.getContig().getVisualEnd()+1));
-		
+
 		if(SystemUtils.isMacOS())
 			dragLabel.setText(RB.format("gui.dialog.NBSubsetOverview.dragLabel", RB.getString("gui.text.cmnd")));
 		else
@@ -93,16 +93,16 @@ public class SubsetOverviewPanelNB extends javax.swing.JPanel
                 .addGroup(titledPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(titledPanelLayout.createSequentialGroup()
                         .addComponent(lblFrom)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(fromSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(10, 10, 10)
+                        .addGap(18, 18, 18)
                         .addComponent(lblTo)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(toSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(6, 6, 6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bReset))
                     .addComponent(bamLabel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         titledPanelLayout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {fromSpinner, toSpinner});
@@ -113,10 +113,10 @@ public class SubsetOverviewPanelNB extends javax.swing.JPanel
                 .addContainerGap()
                 .addGroup(titledPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblFrom)
-                    .addComponent(fromSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTo)
+                    .addComponent(bReset)
                     .addComponent(toSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bReset))
+                    .addComponent(lblTo)
+                    .addComponent(fromSpinner, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(bamLabel)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -129,11 +129,11 @@ public class SubsetOverviewPanelNB extends javax.swing.JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(titledPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(titledPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(dragLabel)
                     .addComponent(displayLabel)
                     .addComponent(regionLabel))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)

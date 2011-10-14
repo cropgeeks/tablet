@@ -85,7 +85,7 @@
                   <Component id="localeLabel" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="idLabel" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
+                  <EmptySpace pref="28" max="32767" attributes="0"/>
                   <Component id="scriIcon" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -111,7 +111,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="nameLabel">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Iain Milne, Micha Bayer, Linda Cardle, Paul Shaw, Gordon Stephen, David Marshall"/>
+            <Property name="text" type="java.lang.String" value="Iain Milne, Gordon Stephen, Micha Bayer, Linda Cardle, Paul Shaw, David Marshall"/>
           </Properties>
         </Component>
         <Component class="javax.swing.JLabel" name="copyrightLabel">

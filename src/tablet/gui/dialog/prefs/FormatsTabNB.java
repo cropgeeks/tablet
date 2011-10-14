@@ -18,9 +18,9 @@ class FormatsTabNB extends JPanel implements ActionListener
     {
         initComponents();
 
-        setBackground(Color.white);
-        panel1.setBackground(Color.white);
-		panel2.setBackground(Color.white);
+        TabletUtils.setPanelColor(this, false);
+        TabletUtils.setPanelColor(panel1, false);
+        TabletUtils.setPanelColor(panel2, false);
 
 		panel1.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.prefs.NBFormatsPanel.panel1Title")));
 		RB.setText(checkAmbiguousToN, "gui.dialog.prefs.NBFormatsPanel.checkAmbiguousToN");

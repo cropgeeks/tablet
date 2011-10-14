@@ -3,10 +3,11 @@
 
 package tablet.gui.dialog;
 
-import java.awt.Color;
 import javax.swing.BorderFactory;
 
-import scri.commons.gui.RB;
+import tablet.gui.*;
+
+import scri.commons.gui.*;
 
 public class ExampleDatasetPanelNB extends javax.swing.JPanel
 {
@@ -15,15 +16,16 @@ public class ExampleDatasetPanelNB extends javax.swing.JPanel
 	{
         initComponents();
 
+		TabletUtils.setPanelColor(this, true);
+		TabletUtils.setPanelColor(panel, false);
+
 		setBorder(BorderFactory.createEmptyBorder(5, 5, 5, 5));
-		setBackground(Color.white);
 
 		panel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.ExampleDatasetDialog.panel.title")));
-		panel.setBackground(Color.white);
 
-                RB.setText(lblT, "gui.dialog.ExampleDatasetDialog.lblT");
-                RB.setText(lblD, "gui.dialog.ExampleDatasetDialog.lblD");
-                RB.setText(labelMore, "gui.dialog.ExampleDatasetDialog.labelMore");
+		RB.setText(lblT, "gui.dialog.ExampleDatasetDialog.lblT");
+		RB.setText(lblD, "gui.dialog.ExampleDatasetDialog.lblD");
+		RB.setText(labelMore, "gui.dialog.ExampleDatasetDialog.labelMore");
 
 		datasetCombo.addActionListener(parent);
 	}

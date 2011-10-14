@@ -3,7 +3,6 @@
 
 package tablet.gui.dialog;
 
-import java.awt.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
@@ -11,6 +10,7 @@ import javax.swing.event.*;
 import javax.swing.table.*;
 
 import tablet.data.auxiliary.*;
+import tablet.gui.*;
 
 import scri.commons.gui.*;
 
@@ -22,8 +22,8 @@ class FeaturesPanelNB extends JPanel implements ActionListener, ListSelectionLis
 	{
 		initComponents();
 
-		setBackground(Color.white);
-		panel.setBackground(Color.white);
+		TabletUtils.setPanelColor(this, true);
+		TabletUtils.setPanelColor(panel, false);
 
 		panel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.NBFeaturesPanel.panel")));
 		RB.setText(label, "gui.dialog.NBFeaturesPanel.label");

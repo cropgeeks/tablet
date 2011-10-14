@@ -21,9 +21,9 @@ class GeneralTabNB extends JPanel implements ActionListener
     {
         initComponents();
 
-        setBackground(Color.white);
-        generalPanel.setBackground(Color.white);
-		cachePanel.setBackground(Color.white);
+        TabletUtils.setPanelColor(this, false);
+        TabletUtils.setPanelColor(generalPanel, false);
+        TabletUtils.setPanelColor(cachePanel, false);
 
 		// Interface settings
 		generalPanel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.prefs.NBGeneralPanel.generalPanelTitle")));
