@@ -87,6 +87,15 @@ public class ReadGroupsPanel extends JPanel implements ActionListener, ListSelec
 		}
 	}
 
+	String getTableToolTip(MouseEvent e)
+	{
+		int row = controls.table.rowAtPoint(e.getPoint());
+		row = controls.table.convertRowIndexToModel(row);
+
+		ReadGroupScheme.ColorInfo info = model.getItem(row);
+		return controls.displayToolTip(info.record);
+	}
+
 	// Display colour chooser to select colour for read group
 	private void selectColor()
 	{
@@ -97,8 +106,7 @@ public class ReadGroupsPanel extends JPanel implements ActionListener, ListSelec
 		// Convert the selection from a "sorter" to "model" index
 		row = sorter.convertRowIndexToModel(row);
 
-		ReadGroupScheme.ColorInfo info =
-			(ReadGroupScheme.ColorInfo) model.getValueAt(row, 0);
+		ReadGroupScheme.ColorInfo info = model.getItem(row);
 
 		// Display colour chooser dialog (defaulting to the current colour)
 		Color newColor = JColorChooser.showDialog(Tablet.winMain,

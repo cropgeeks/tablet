@@ -54,6 +54,9 @@ become available, but please be aware that the numbers you see will change as
 you move around the contig using the BAM controls. See
 <a href="help/bam-data-visualization.shtml">BAM Data Visualization</a> for more information.</p>
 
+<p><b>Updated</b> Tablet can now provide this information so long as the BAM's index file
+was generated with samtools 0.1.8 or later.</p>
+
 
 <p>&nbsp;</p>
 
@@ -75,6 +78,13 @@ copies can be started by using the Terminal and typing<br>
 
 <p>&nbsp;</p>
 
+<p><b>What command line options does Tablet support?</b></p>
+<p>Tablet supports several command line options. They are detailed in the
+<a href="help/commandline.shtml">Command Line Options</a> section of the online help.</p>
+
+
+<p>&nbsp;</p>
+
 <p><b>How do I run the maqtoace program when using OS X?</b></p>
 <p>A launcher for maqtoace isn't distributed with Tablet for OS X due to the way
 the Apple package format works. However, you can manually start the program by
@@ -83,6 +93,21 @@ opening a Terminal window, and typing:<br>
   java -Xmx1024m -cp tablet.jar tablet.io.utils.MaqToAce</pre></p>
 
 
+<p>&nbsp;</p>
+
+<p><b>Does Tablet support launching via Java Web Start?</b></p>
+<p>Yes. Tablet can be run via Java Web Start by visiting 
+<a href="http://bioinf.hutton.ac.uk/tablet/webstart/tablet.jnlp">http://bioinf.hutton.ac.uk/tablet/webstart/tablet.jnlp</a>.</p>
+<p>This will launch Tablet with its default settings, allocating 1024MB of memory for use. You can
+change this setting by including the argument<br>
+<pre>  ...tablet.jnlp?java_vm_args=-Xmx1024m</pre></p>
+<p>You can also pass it files to open (assuming they're located on a web server somewhere), for example<br>
+<pre>  ...tablet.jnlp?argument=http://bioinf.hutton.ac.uk/tablet/sample-data/brassica.ace.gz</pre></p>
+<p>If you need two files (eg reference and assembly), then it would be<br>
+<pre>  ...tablet.jnlp?argument=http://server/file1&argument=http://server/file2</pre></p>
+<p>You can combine all of the above too. The order doesn't matter - just separate arguments with &.
+Tablet requires at least Java 1.6 although we recommend using Java 1.7 to avoid issues with
+the Nimbus look and feel on Windows and Linux.</p>
 
 <!--#include virtual="footer.html" -->
 

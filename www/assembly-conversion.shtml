@@ -24,6 +24,9 @@ from an even wider range of next generation sequence assemblers, and
 converting between formats - so that a data set can be inspected with more
 than one assembly viewer - can be something of a challenge.</p>
 
+<p>The preferred file format for viewing assemblies or mappings in Tablet is
+SAM/BAM which has emerged as a <i>de facto</i> standard.</p>
+
 
 <h3>Summary of formats</h3>
 
@@ -37,7 +40,8 @@ usually accompanied by reference data in .fasta or consensus data in .fastq.
 Supported by  <a href="index.shtml">Tablet</a>.
 
 <li><b>ACE</b> - An ACE file contains all its assembly information in a single text-based
-file: both the reads and the consensus/contig information. Supported by
+file: both the reads and the consensus/contig information. Several assembly tools can produce ACE
+files, including the Roche 454 "Newbler" gsAssembler, and MIRA. Supported by
 <a href="index.shtml">Tablet</a>.</li>
 
 <li><b>AFG</b> - Similar to ACE, AFG is a single text-based file assembly container that holds
@@ -46,6 +50,10 @@ read and consensus information together. Supported by
 
 <li><b>BANK</b> - An AMOS bank folder is a special directory of binary encoded files containing
 all information on an assembly.</li>
+
+<li><b>MAF (MIRA)</b> - The MIRA assembly format (MAF) is similar to ACE but includes read quality
+scores, and explicit paired end information. This can be converted into SAM/BAM for use in
+<a href="index.shtml">Tablet</a>.</li>
 
 <li><b>SAM</b> - SAM aims to be a generic format for storing large nucleotide sequence
 alignments, which many assemblers are converging towards using. It is
@@ -117,6 +125,21 @@ This will create a folder named <code>assembly.bnk</code> that will contain a
 collection of binary files.</p>
 
 
+<h3>MIRA to SAM</h3>
+
+<p>MIRA can produce a number of output formats including ACE (which Tablet supports), and its
+own MIRA Assembly Format MAF which includes paired end information explicitly. Converting MAF
+to SAM/BAM allows you to view paired end reads (and read group information like strains) in Tablet.</p>
+
+<p>Conversion requires <a href="http://github.com/peterjc/maf2sam">maf2sam.py</a> (Cross platform;
+requires Python and <a href="http://biopython.org">Biopython</a>.)</p>
+
+<p>Convert the MAF file to (unsorted) SAM:<br>
+<pre><strong>    maf2sam.py EXAMPLE_out.unpadded.fasta EXAMPLE_out.maf > EXAMPLE_out.sam</strong></pre>
+Then follow the SAM to BAM instructions below, including sorting and indexing. Experienced Unix/Linux
+users may find it useful to pipe the maf2sam.py output into samtools view to go directly to (unsorted) BAM.</p>
+
+
 <h3>MAQ (binary) to SAM</h3>
 
 <p>Conversion requires <a href="http://samtools.sourceforge.net/">SAMtools</a>
@@ -160,6 +183,8 @@ This generates an index named <code>assembly_sorted.bam.bai</code>.</p>
     assembly_sorted.bam
     assembly_sorted.bam.bai</strong></pre>
 </p>
+
+
 
 
 <p>&nbsp;</p>
