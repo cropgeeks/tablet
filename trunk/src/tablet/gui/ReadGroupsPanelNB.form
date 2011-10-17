@@ -18,42 +18,8 @@
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="labelCN" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelDS" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelDT" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelFO" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelKS" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelLB" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelPG" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelPI" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelPL" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelPU" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelSM" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="labelID" alignment="0" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="fo" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="dt" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="ks" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="pg" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="lb" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="sm" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="pl" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="pi" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="pu" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="id" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="cn" alignment="0" min="-2" max="-2" attributes="0"/>
-                  <Component id="ds" alignment="0" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace pref="193" max="32767" attributes="0"/>
-          </Group>
-          <Component id="jScrollPane1" alignment="1" pref="237" max="32767" attributes="0"/>
-          <Group type="102" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
               <Component id="readGroupLabel" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="153" max="32767" attributes="0"/>
+              <EmptySpace pref="122" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
@@ -62,10 +28,11 @@
               <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="colorNone" min="-2" max="-2" attributes="0"/>
-              <EmptySpace pref="69" max="32767" attributes="0"/>
+              <EmptySpace pref="72" max="32767" attributes="0"/>
               <Component id="reset" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
+          <Component id="jScrollPane1" alignment="1" pref="206" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -74,73 +41,13 @@
               <EmptySpace min="-2" max="-2" attributes="0"/>
               <Component id="readGroupLabel" min="-2" max="-2" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
-              <Component id="jScrollPane1" pref="56" max="32767" attributes="0"/>
+              <Component id="jScrollPane1" pref="107" max="32767" attributes="0"/>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="reset" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="colorAll" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="colorNone" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelID" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="id" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelCN" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="cn" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelDS" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="ds" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelDT" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="dt" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelFO" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="fo" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelKS" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="ks" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelLB" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="lb" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelPG" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="pg" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelPI" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="pi" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelPL" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="pl" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelPU" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="pu" alignment="3" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="3" attributes="0">
-                  <Component id="labelSM" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="sm" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="reset" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -179,6 +86,11 @@
         </Component>
       </SubComponents>
     </Container>
+    <Component class="javax.swing.JLabel" name="jLabel1">
+      <Properties>
+        <Property name="text" type="java.lang.String" value="|"/>
+      </Properties>
+    </Component>
     <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="colorAll">
       <Properties>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -190,17 +102,12 @@
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
       </AuxValues>
     </Component>
-    <Component class="javax.swing.JLabel" name="jLabel1">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="|"/>
-      </Properties>
-    </Component>
     <Component class="scri.commons.gui.matisse.HyperLinkLabel" name="colorNone">
       <Properties>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
           <Color blue="9c" green="6a" red="44" type="rgb"/>
         </Property>
-        <Property name="text" type="java.lang.String" value="Colour None"/>
+        <Property name="text" type="java.lang.String" value="None"/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
@@ -212,198 +119,6 @@
           <Color blue="9c" green="6a" red="44" type="rgb"/>
         </Property>
         <Property name="text" type="java.lang.String" value="Reset"/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelID">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="ID:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="id">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="ff" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="  "/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelCN">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="CN:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="cn">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="ff" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="  "/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelDS">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="DS:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="ds">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="ff" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="  "/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelDT">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="DT:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="dt">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="ff" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="  "/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelFO">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="FO:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="fo">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="ff" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="  "/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelKS">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="KS:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="ks">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="ff" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="  "/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelLB">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="LB:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="lb">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="ff" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="  "/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelPG">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="PG:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="pg">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="ff" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="  "/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelPI">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="PI:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="pi">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="ff" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="  "/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelPL">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="PL:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="pl">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="ff" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="  "/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelPU">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="PU:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="pu">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="ff" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="  "/>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>
-      </AuxValues>
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelSM">
-      <Properties>
-        <Property name="text" type="java.lang.String" value="SM:"/>
-      </Properties>
-    </Component>
-    <Component class="javax.swing.JLabel" name="sm">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="0" red="ff" type="rgb"/>
-        </Property>
-        <Property name="text" type="java.lang.String" value="  "/>
       </Properties>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="0"/>

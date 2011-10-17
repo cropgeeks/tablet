@@ -36,7 +36,7 @@ class SamFileReader extends TrackableReader
 	private boolean indexingCache = false;
 
 	// Stores a list of @RG (read group) records as they are found
-	private ArrayList<SAMReadGroupRecord> readGroups = new ArrayList<SAMReadGroupRecord>();
+	private ArrayList<ReadGroup> readGroups = new ArrayList<ReadGroup>();
 	// Stores a hash of @RG (read group) IDs and their associated information
 	private HashMap<String, Short> rgHash = new HashMap<String, Short>();
 
@@ -282,7 +282,7 @@ class SamFileReader extends TrackableReader
 					record.setAttribute(READ_GROUP_SAMPLE_TAG, tag.substring(3));
 			}
 
-			readGroups.add(record);
+			readGroups.add(new ReadGroup(record));
 			// Note we put the FIRST read group in as index 1 (not 0)
 			rgHash.put(record.getId(), (short)readGroups.size());
 		}

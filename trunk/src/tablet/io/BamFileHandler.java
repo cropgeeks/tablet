@@ -293,13 +293,13 @@ public class BamFileHandler
 	private void readSampleGroups()
 		throws Exception
 	{
-		ArrayList<SAMReadGroupRecord> readGroups = new ArrayList<SAMReadGroupRecord>();
+		ArrayList<ReadGroup> readGroups = new ArrayList<ReadGroup>();
 
 		for (SAMReadGroupRecord record: bamReader.getFileHeader().getReadGroups())
 		{
 			if (rgHash.get(record.getId()) == null)
 			{
-				readGroups.add(record);
+				readGroups.add(new ReadGroup(record));
 				// Note we put the FIRST read group in as index 1 (not 0)
 				rgHash.put(record.getId(), (short)readGroups.size());
 			}

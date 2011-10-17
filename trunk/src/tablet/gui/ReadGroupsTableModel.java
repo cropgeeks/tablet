@@ -22,10 +22,11 @@ class ReadGroupsTableModel extends AbstractTableModel
 
 	ReadGroupsTableModel()
 	{
+		// Note, these are not 1, 2, 3 from the properties file, because it
+		// contains all possible column titles, even though only 3 are in use
 		String col1 = RB.getString("gui.ReadsGroupTableModel.col1");
-		String col2 = RB.getString("gui.ReadsGroupTableModel.col2");
-		String col3 = RB.getString("gui.ReadsGroupTableModel.col3");
-
+		String col2 = RB.getString("gui.ReadsGroupTableModel.col10");
+		String col3 = RB.getString("gui.ReadsGroupTableModel.col13");
 
 		columnNames = new String[] { col1, col2, col3 };
 
@@ -68,11 +69,7 @@ class ReadGroupsTableModel extends AbstractTableModel
 		{
 			case 0: return info;
 
-			case 1:
-				if (info.record.getPlatform() != null)
-					return info.record.getPlatform();
-				else
-					return "";
+			case 1: return info.readGroup.getPL();
 
 			case 2:	return info.enabled;
 		}
@@ -136,7 +133,7 @@ class ReadGroupsTableModel extends AbstractTableModel
 			g.drawRect(0, 0, 20, 10);
 			g.dispose();
 
-			setText(info.getDisplayName());
+			setText(info.readGroup.getID());
 			setIcon(new ImageIcon(image));
 
 			return this;
