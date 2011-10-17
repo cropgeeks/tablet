@@ -1,12 +1,17 @@
+// Copyright 2009-2011 Plant Bioinformatics Group, SCRI. All rights reserved.
+// Use is subject to the accompanying licence terms.
+
 package tablet.gui;
 
 import java.awt.*;
+import java.awt.datatransfer.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 
 import tablet.data.*;
+import tablet.data.auxiliary.*;
 import tablet.gui.viewer.colors.*;
 
 import scri.commons.gui.*;
@@ -17,13 +22,18 @@ import scri.commons.gui.*;
 public class ReadGroupsPanel extends JPanel implements ActionListener, ListSelectionListener
 {
 	private ReadGroupsPanelNB controls;
+	private ReadGroupsLabelNB labels;
 	private ReadGroupsTableModel model;
 	private TableRowSorter<AbstractTableModel> sorter;
+
+	private JMenuItem mClipboardData;
 
 	ReadGroupsPanel()
 	{
 		setLayout(new BorderLayout());
 		add(controls = new ReadGroupsPanelNB(this));
+
+		labels = new ReadGroupsLabelNB();
 
 		createTableModel();
 
@@ -47,6 +57,7 @@ public class ReadGroupsPanel extends JPanel implements ActionListener, ListSelec
 		controls.table.setRowSorter(sorter);
 
 		controls.table.getColumnModel().getColumn(2).setPreferredWidth(25);
+		controls.table.addMouseListener(new TableMouseListener());
 	}
 
 	// Handle contig changes
@@ -73,27 +84,40 @@ public class ReadGroupsPanel extends JPanel implements ActionListener, ListSelec
 		if (e.getValueIsAdjusting())
 			return;
 
+		processTableSelection();
+	}
+
+	private void processTableSelection()
+	{
 		int row = controls.table.getSelectedRow();
 
 		if (row == -1)
-			controls.clearLabels();
+		{
+			labels.clearLabels();
+
+			remove(labels);
+			validate();
+		}
 
 		else
 		{
-			row = controls.table.convertRowIndexToModel(row);
+			row = sorter.convertRowIndexToModel(row);
 			ReadGroupScheme.ColorInfo info = model.getItem(row);
 
-			controls.setLabels(info.record);
+			labels.setLabels(info.readGroup);
+
+			add(labels, BorderLayout.SOUTH);
+			validate();
 		}
 	}
 
 	String getTableToolTip(MouseEvent e)
 	{
 		int row = controls.table.rowAtPoint(e.getPoint());
-		row = controls.table.convertRowIndexToModel(row);
+		row = sorter.convertRowIndexToModel(row);
 
 		ReadGroupScheme.ColorInfo info = model.getItem(row);
-		return controls.displayToolTip(info.record);
+		return controls.displayToolTip(info.readGroup);
 	}
 
 	// Display colour chooser to select colour for read group
@@ -120,6 +144,47 @@ public class ReadGroupsPanel extends JPanel implements ActionListener, ListSelec
 			Tablet.winMain.getAssemblyPanel().forceRedraw();
 			model.fireTableDataChanged();
 		}
+	}
+
+	private void copyToClipboard()
+	{
+		StringBuilder text = new StringBuilder();
+		String newline = System.getProperty("line.separator");
+
+		// Column headers
+		for (int c = 0; c < 13; c++)
+		{
+			text.append(RB.getString("gui.ReadsGroupTableModel.col" + (c+1)));
+			text.append(c < 12 ? "\t" : newline);
+		}
+
+		// Each row
+		for (int r = 0; r < controls.table.getRowCount(); r++)
+		{
+			int row = sorter.convertRowIndexToModel(r);
+			ReadGroup rg = model.getItem(row).readGroup;
+
+			text.append(rg.getID() + "\t");
+			text.append(rg.getCN() + "\t");
+			text.append(rg.getDS() + "\t");
+			text.append(rg.getDT() + "\t");
+			text.append(rg.getFO() + "\t");
+			text.append(rg.getKS() + "\t");
+			text.append(rg.getLB() + "\t");
+			text.append(rg.getPG() + "\t");
+			text.append(rg.getPI() + "\t");
+			text.append(rg.getPL() + "\t");
+			text.append(rg.getPU() + "\t");
+			text.append(rg.getSM() + "\t");
+
+			Color c = model.getItem(row).color;
+			text.append(c.getRed() + "," + c.getGreen() + "," + c.getBlue());
+			text.append(newline);
+		}
+
+		StringSelection selection = new StringSelection(text.toString());
+		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+			selection, null);
 	}
 
 	@Override
@@ -155,6 +220,45 @@ public class ReadGroupsPanel extends JPanel implements ActionListener, ListSelec
 			model.fireTableDataChanged();
 		}
 
+		else if (e.getSource() == mClipboardData)
+			copyToClipboard();
+
 		Tablet.winMain.getAssemblyPanel().forceRedraw();
+	}
+
+	private void displayMenu(MouseEvent e)
+	{
+		int row = controls.table.rowAtPoint(e.getPoint());
+		controls.table.setRowSelectionInterval(row, row);
+
+		JPopupMenu menu = new JPopupMenu();
+		mClipboardData = new JMenuItem("", Icons.getIcon("CLIPBOARD"));
+		RB.setText(mClipboardData, "gui.ReadsGroupsPanel.mClipboardData");
+		mClipboardData.addActionListener(this);
+
+
+		menu.add(mClipboardData);
+		menu.show(e.getComponent(), e.getX(), e.getY());
+	}
+
+	private class TableMouseListener extends MouseInputAdapter
+	{
+		public void mouseClicked(MouseEvent e)
+		{
+			if (!e.isPopupTrigger())
+				processTableSelection();
+		}
+
+		public void mousePressed(MouseEvent e)
+		{
+			if (e.isPopupTrigger())
+				displayMenu(e);
+		}
+
+		public void mouseReleased(MouseEvent e)
+		{
+			if (e.isPopupTrigger())
+				displayMenu(e);
+		}
 	}
 }

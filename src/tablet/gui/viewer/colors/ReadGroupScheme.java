@@ -4,8 +4,7 @@ import java.awt.*;
 import java.util.*;
 
 import tablet.data.*;
-
-import net.sf.samtools.*;
+import tablet.data.auxiliary.*;
 
 public class ReadGroupScheme extends EnhancedScheme
 {
@@ -13,7 +12,7 @@ public class ReadGroupScheme extends EnhancedScheme
 	private ArrayList<ArrayList<ColorStamp>> statesRG;
 
 	// A reference to the list of read groups held in Assembly
-	private static ArrayList<SAMReadGroupRecord> readGroups;
+	private static ArrayList<ReadGroup> readGroups;
 	// Which are mirrored in the ColorInfo objects; one per read group
 	private static ColorInfo[] colorInfos;
 
@@ -129,21 +128,21 @@ public class ReadGroupScheme extends EnhancedScheme
 		// For each read group name, find (or create) its colour
 		for (int i=0; i < colorInfos.length; i++)
 		{
-			SAMReadGroupRecord record = readGroups.get(i);
+			ReadGroup readGroup = readGroups.get(i);
 
-			String id = record.getId();
+			String id = readGroup.getID();
 			String prefsID = "ReadGroup_" + id;
 
 			// Attempt to load color for read group from prefs file
 			Color color = ColorPrefs.getColor(prefsID);
 
 			if (color != null)
-				colorInfos[i] = new ColorInfo(color, record);
+				colorInfos[i] = new ColorInfo(color, readGroup);
 
 			// If colour doesn't exist assign a color and set this in the prefs file
 			else
 			{
-				colorInfos[i] = new ColorInfo(getPaletteColor(id.hashCode()), record);
+				colorInfos[i] = new ColorInfo(getPaletteColor(id.hashCode()), readGroup);
 				ColorPrefs.setColor(prefsID, colorInfos[i].color);
 			}
 		}
@@ -152,7 +151,9 @@ public class ReadGroupScheme extends EnhancedScheme
 	// Update the color in the array, ColorInfo and the colour prefs xml.
 	public static void setColor(int index, Color color)
 	{
-		ColorPrefs.setColor("ReadGroup_" + colorInfos[index].getDisplayName(), color);
+		ColorPrefs.setColor(
+			"ReadGroup_" + colorInfos[index].readGroup.getID(), color);
+
 		colorInfos[index].color = color;
 	}
 
@@ -160,7 +161,7 @@ public class ReadGroupScheme extends EnhancedScheme
 	{
 		// Remove the current set of colours from the preferences file
 		for (ColorInfo info: colorInfos)
-			ColorPrefs.removeColor("ReadGroup_" + info.getDisplayName());
+			ColorPrefs.removeColor("ReadGroup_" + info.readGroup.getID());
 
 		// And then let them get recreated
 		setupColors();
@@ -183,20 +184,15 @@ public class ReadGroupScheme extends EnhancedScheme
 	public static class ColorInfo
 	{
 		public Color color;
-		public SAMReadGroupRecord record;
+		public ReadGroup readGroup;
 		public boolean enabled;
 
-		ColorInfo(Color colour, SAMReadGroupRecord record)
+		ColorInfo(Color colour, ReadGroup readGroup)
 		{
 			this.color = colour;
-			this.record = record;
+			this.readGroup = readGroup;
 
 			enabled = true;
-		}
-
-		public String getDisplayName()
-		{
-			return record.getId();
 		}
 	}
 }
