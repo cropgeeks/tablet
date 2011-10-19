@@ -6,6 +6,7 @@ package tablet.gui;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.awt.event.*;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
@@ -27,6 +28,9 @@ public class ReadGroupsPanel extends JPanel implements ActionListener, ListSelec
 	private TableRowSorter<AbstractTableModel> sorter;
 
 	private JMenuItem mClipboardData;
+
+	private JMenu mColor;
+	private ArrayList<JMenuItem> tagItems = new ArrayList<JMenuItem>();
 
 	ReadGroupsPanel()
 	{
@@ -236,9 +240,75 @@ public class ReadGroupsPanel extends JPanel implements ActionListener, ListSelec
 		RB.setText(mClipboardData, "gui.ReadsGroupsPanel.mClipboardData");
 		mClipboardData.addActionListener(this);
 
+		mColor = new JMenu("");
+		RB.setText(mColor, "gui.ReadsGroupsPanel.mColor");
+
+		// Get the ReadGroup object under the mouse
+		row = sorter.convertRowIndexToModel(row);
+		Color color = model.getItem(row).color;
+		ReadGroup readGroup = model.getItem(row).readGroup;
+
+		// Build a menu based on its tags
+		tagItems.clear();
+		createMenuItem("CN", readGroup, color);
+		createMenuItem("DS", readGroup, color);
+		createMenuItem("DT", readGroup, color);
+		createMenuItem("FO", readGroup, color);
+		createMenuItem("KS", readGroup, color);
+		createMenuItem("LB", readGroup, color);
+		createMenuItem("PG", readGroup, color);
+		createMenuItem("PI", readGroup, color);
+		createMenuItem("PL", readGroup, color);
+		createMenuItem("PU", readGroup, color);
+		createMenuItem("SM", readGroup, color);
+		for (JMenuItem item: tagItems)
+			mColor.add(item);
 
 		menu.add(mClipboardData);
+		menu.addSeparator();
+		menu.add(mColor);
 		menu.show(e.getComponent(), e.getX(), e.getY());
+	}
+
+	private void createMenuItem(final String tag, ReadGroup readGroup, final Color color)
+	{
+		if (readGroup.getAttributeByTag(tag).length() == 0)
+			return;
+
+		final String value = readGroup.getAttributeByTag(tag);
+		JMenuItem item = new JMenuItem(tag + " = " + value);
+
+		// Action on selecting this menu item...
+		item.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				// Pick a new colour
+				Color newColor = JColorChooser.showDialog(Tablet.winMain,
+					RB.getString("gui.ReadsGroupsPanel.colourChooser"), color);
+
+				if (newColor != null)
+				{
+					// Get the list of all current colour objects in use
+					ReadGroupScheme.ColorInfo[] infos = ReadGroupScheme.getColourInfos();
+
+					// If its tag and value match what the user picked...
+					int row = 0;
+					for (ReadGroupScheme.ColorInfo info: ReadGroupScheme.getColourInfos())
+					{
+						// Then set its colour to the new choice
+						if (info.readGroup.getAttributeByTag(tag).equals(value))
+							ReadGroupScheme.setColor(row, newColor);
+
+						row++;
+					}
+
+					Tablet.winMain.getAssemblyPanel().forceRedraw();
+					model.fireTableDataChanged();
+				}
+			}
+		});
+
+		tagItems.add(item);
 	}
 
 	private class TableMouseListener extends MouseInputAdapter

@@ -40,6 +40,23 @@ public class ReadGroup
 		return "";
 	}
 
+	public String getAttributeByTag(String tag)
+	{
+		if (tag == "CN") return getCN();
+		if (tag == "DS") return getDS();
+		if (tag == "DT") return getDT();
+		if (tag == "FO") return getFO();
+		if (tag == "KS") return getKS();
+		if (tag == "LB") return getLB();
+		if (tag == "PG") return getPG();
+		if (tag == "PI") return getPI();
+		if (tag == "PL") return getPL();
+		if (tag == "PU") return getPU();
+		if (tag == "SM") return getSM();
+
+		return null;
+	}
+
 	public String getCN()
 		{ return getAttribute(SEQUENCING_CENTER_TAG); }
 
