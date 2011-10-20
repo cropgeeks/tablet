@@ -174,14 +174,16 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 				return RB.format("gui.FeaturesPanel.tooltip.padded",
 					feature.getGFFType(), feature.getName(),
 					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
-					getUnpadded(p1), getUnpadded(p2));
+					getUnpadded(p1), getUnpadded(p2),
+					feature.getTagsAsHTMLString());
 			}
 			else
 			{
 				return RB.format("gui.FeaturesPanel.tooltip.unpadded",
 					feature.getGFFType(), feature.getName(),
 					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
-					getPadded(p1), getPadded(p2));
+					getPadded(p1), getPadded(p2),
+					feature.getTagsAsHTMLString());
 			}
 		}
 		else if(feature instanceof CigarFeature)
