@@ -111,6 +111,10 @@ public class GFF3Reader extends TrackableReader
 		String gffType = new String(tokens[2].toUpperCase());
 		Feature f = new Feature(Feature.GFF3, gffType, name, start-1, end-1);
 
+		// Can we split the tags
+		String[] tags = tokens[8].split(";");
+		f.setTags(tags);
+
 		getFeatures(contigName).add(f);
 		cRead++;
 	}

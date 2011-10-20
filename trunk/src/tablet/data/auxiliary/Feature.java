@@ -4,6 +4,7 @@
 package tablet.data.auxiliary;
 
 import java.awt.*;
+import java.net.*;
 import java.util.*;
 
 /**
@@ -43,6 +44,8 @@ public class Feature implements Comparable<Feature>
 	// The name of the feature (if it exists)
 	protected String name;
 
+	protected String[] tags;
+
 	// Start and end position information (original values)
 	protected int pS;
 	protected int pE;
@@ -70,6 +73,21 @@ public class Feature implements Comparable<Feature>
 		this.name = name;
 		this.pS = pS;
 		this.pE = pE;
+	}
+
+	public void setTags(String[] tags)
+		{ this.tags = tags; }
+
+	public String getTagsAsHTMLString()
+	{
+		StringBuffer str = new StringBuffer();
+		for (String tag: tags)
+		{
+			try { str.append(URLDecoder.decode(tag, "UTF-8") + "<br>"); }
+			catch (Exception e) {}
+		}
+
+		return str.toString();
 	}
 
 	public void verifyType()

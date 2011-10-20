@@ -150,8 +150,10 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 
 			// Set tooltip for the feature under the mouse
 			fCanvas.setToolTipText(RB.format("gui.viewer.FeaturesCanvasML.tooltip",
-					f.getGFFType(), f.getName(),
-					TabletUtils.nf.format(f.getVisualPS()+1), TabletUtils.nf.format(f.getVisualPE()+1)));
+				f.getGFFType(), f.getName(),
+				TabletUtils.nf.format(f.getVisualPS()+1),
+				TabletUtils.nf.format(f.getVisualPE()+1),
+				f.getTagsAsHTMLString()));
 		}
 	}
 
