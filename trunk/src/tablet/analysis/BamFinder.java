@@ -49,7 +49,7 @@ public class BamFinder extends Finder
 		{
 			if (!okToRun())
 				break;
-			
+
 			// If not searching in all contigs, skip to the current contig
 			if (!searchAllContigs && contig != aPanel.getContig())
 				continue;
@@ -59,7 +59,7 @@ public class BamFinder extends Finder
 			while (itor.hasNext() && okToRun())
 			{
 				SAMRecord record = itor.next();
-				if (checkNameMatches(record.getReadName()))
+				if (checkNameMatches(record.getReadName()) && record.getReadUnmappedFlag() == false)
 					results.add(new ReadSearchResult(record.getReadName(), record.getAlignmentStart() - 1, record.getReadLength(), contig));
 
 				progressLong++;
