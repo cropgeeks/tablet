@@ -36,7 +36,8 @@ public class ReadGroupScheme extends EnhancedScheme
 			if (colorInfos[i].enabled)
 				initStates(colorInfos[i].color, w, h);
 			else
-				initStates(getGreyScale(colorInfos[i].color), w, h);
+				initStates(Color.LIGHT_GRAY, w, h);
+//				initStates(getGreyScale(colorInfos[i].color), w, h);
 	}
 
 	private void initStates(Color color, int w, int h)
