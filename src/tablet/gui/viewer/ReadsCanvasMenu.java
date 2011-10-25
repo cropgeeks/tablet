@@ -27,6 +27,7 @@ class ReadsCanvasMenu implements ActionListener
 	private JMenuItem mClipboardData;
 
 	private JMenu mOutline;
+	private JMenuItem mOutlineRead;
 	private JMenuItem mOutlineCol;
 	private JMenuItem mOutlineRow;
 	private JMenuItem mOutlineClear;
@@ -76,6 +77,10 @@ class ReadsCanvasMenu implements ActionListener
 
 		mOutline = new JMenu("");
 		RB.setText(mOutline, "gui.viewer.ReadsCanvasMenu.mOutline");
+
+		mOutlineRead = new JMenuItem("");
+		RB.setText(mOutlineRead, "gui.viewer.ReadsCanvasMenu.mOutlineRead");
+		mOutlineRead.addActionListener(this);
 
 		mOutlineRow = new JMenuItem("", Icons.getIcon("ROW16"));
 		RB.setText(mOutlineRow, "gui.viewer.ReadsCanvasMenu.mOutlineRow");
@@ -145,6 +150,8 @@ class ReadsCanvasMenu implements ActionListener
 		// Create the menu
 		menu = new JPopupMenu();
 
+		mOutline.add(mOutlineRead);
+		mOutline.addSeparator();
 		mOutline.add(mOutlineRow);
 		mOutline.add(mOutlineCol);
 		mOutline.addSeparator();
@@ -204,15 +211,25 @@ class ReadsCanvasMenu implements ActionListener
 			new ReadHighlighter(aPanel, read, rowIndex);
 		}
 
+		else if (e.getSource() == mOutlineRead)
+		{
+			Read read = rCanvas.reads.getReadAt(rowIndex, colIndex);
+			int p1 = read.getStartPosition();
+			int p2 = read.getEndPosition();
+
+			rCanvas.contig.addOutline(
+				new VisualOutline(VisualOutline.READ, p1, p2, rowIndex));
+		}
+
 		else if (e.getSource() == mOutlineCol)
 		{
 			rCanvas.contig.addOutline(
-				new Feature(Feature.COL_OUTLINE, null, null, colIndex, colIndex));
+				new VisualOutline(VisualOutline.COL, colIndex));
 		}
 		else if (e.getSource() == mOutlineRow)
 		{
 			rCanvas.contig.addOutline(
-				new Feature(Feature.ROW_OUTLINE, null, null, rowIndex, rowIndex));
+				new VisualOutline(VisualOutline.ROW, rowIndex));
 		}
 		else if (e.getSource() == mOutlineClear)
 			rCanvas.contig.getOutlines().clear();
@@ -364,6 +381,7 @@ class ReadsCanvasMenu implements ActionListener
 		mFindStart.setEnabled(isOverRead);
 		mFindEnd.setEnabled(isOverRead);
 		mJumpToPair.setEnabled(false);
+		mOutlineRead.setEnabled(isOverRead);
 		mOutlineClear.setEnabled(rCanvas.contig.getOutlines().size() > 0);
 
 		// Shadowing options

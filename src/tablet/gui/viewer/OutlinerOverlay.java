@@ -55,24 +55,30 @@ class OutlinerOverlay implements IOverlayRenderer
 		g.setColor(new Color(10, 10, 100));
 
 		// Deal with any additional features first
-		for (Feature f: rCanvas.contig.getOutlines())
+		for (VisualOutline f: rCanvas.contig.getOutlines())
 		{
-			if (f.getTabletType() == Feature.COL_OUTLINE)
+			if (f.type == VisualOutline.READ)
 			{
-				int position = f.getDataPS();
+				int xS = f.value1 * rCanvas.ntW + offset;
+				int xE = f.value2 * rCanvas.ntW + rCanvas.ntW + offset;
+				int y  = f.value3 * rCanvas.ntH;
 
-				int xS = position * rCanvas.ntW + offset;
+				if (xS <= rCanvas.pX2 && xE > rCanvas.pX1)
+					g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);
+			}
+
+			else if (f.type == VisualOutline.COL)
+			{
+				int xS = f.value1 * rCanvas.ntW + offset;
 				int xE = xS + rCanvas.ntW;
 
 				if (xS <= rCanvas.pX2 && xE > rCanvas.pX1)
 					g.drawRect(xS, 0, xE-xS-1, rCanvas.getHeight()-1);
 			}
 
-			else if (f.getTabletType() == Feature.ROW_OUTLINE)
+			else if (f.type == VisualOutline.ROW)
 			{
-				int position = f.getDataPS();
-
-				int yS = position * rCanvas.ntH;
+				int yS = f.value1 * rCanvas.ntH;
 				int yE = yS + rCanvas.ntH;
 
 				if (yS <= rCanvas.pY2 && yE > rCanvas.pY1)
@@ -83,9 +89,9 @@ class OutlinerOverlay implements IOverlayRenderer
 		// Draw an outline around whatever read is under the mouse
 		if (read != null)
 		{
-			int y  = lineIndex * rCanvas.ntH;
 			int xS = readS * rCanvas.ntW + offset;
 			int xE = readE * rCanvas.ntW + rCanvas.ntW + offset;
+			int y  = lineIndex * rCanvas.ntH;
 
 			g.setColor(TabletUtils.red1);
 			g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);
