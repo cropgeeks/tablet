@@ -50,7 +50,7 @@ public class Contig
 	private ArrayList<Feature> features = new ArrayList<Feature>();
 
 	// Supplementary set of features used purely for graphical outlining
-	private ArrayList<Feature> outlines;
+	private ArrayList<VisualOutline> outlines;
 
 	/** Constructs a new, empty contig. */
 	public Contig()
@@ -148,10 +148,10 @@ public class Contig
 	 * Returns the supplementary (outliner) features held within this contig.
 	 * @return the supplementary (outliner) features held within this contig
 	 */
-	public ArrayList<Feature> getOutlines()
+	public ArrayList<VisualOutline> getOutlines()
 	{
 		if (outlines == null)
-			outlines = new ArrayList<Feature>();
+			outlines = new ArrayList<VisualOutline>();
 
 		return outlines;
 	}
@@ -288,13 +288,13 @@ public class Contig
 	public IReadManager getReadManager()
 		{ return readManager; }
 
-	public void addOutline(Feature outline)
+	public void addOutline(VisualOutline outline)
 	{
 		outlines.add(outline);
 
 		// If the number of elements is higher than 5, remove the oldest
-		if (outlines.size() > 5)
-			outlines.remove(0);
+//		if (outlines.size() > 5)
+//			outlines.remove(0);
 	}
 
 	 /**

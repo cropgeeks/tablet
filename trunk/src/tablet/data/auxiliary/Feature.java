@@ -22,13 +22,6 @@ public class Feature implements Comparable<Feature>
 	// True if features are to use padded coordinates, false if unpadded
 	public static boolean ISPADDED = true;
 
-	// Defined "Tablet Types" for supported featured
-	public final static byte GFF3 = 0;
-
-	public final static byte ROW_OUTLINE = 100;
-	public final static byte COL_OUTLINE = 101;
-
-
 	// Tracks all known GFF types for the current data set. The hash is cleared
 	// by Assembly's constructor whenever new data is imported/loaded.
 	public static HashMap<String, String> types = new HashMap<String, String>();
@@ -36,8 +29,6 @@ public class Feature implements Comparable<Feature>
 	public static ArrayList<VisibleFeature> order = new ArrayList<VisibleFeature>();
 	// And their colours
 	public static HashMap<String, Color> colors = new HashMap<String, Color>();
-
-	protected byte tabletType;
 
 	// The GFF3 type of the feature
 	protected String gffType;
@@ -65,10 +56,8 @@ public class Feature implements Comparable<Feature>
 		this.pE = pE;
 	}
 
-	public Feature(byte tabletType, String gffType, String name, int pS, int pE)
+	public Feature(String gffType, String name, int pS, int pE)
 	{
-		this.tabletType = tabletType;
-
 		this.gffType = gffType;
 		this.name = name;
 		this.pS = pS;
@@ -135,9 +124,6 @@ public class Feature implements Comparable<Feature>
 
 		return 1;
 	}
-
-	public int getTabletType()
-		{ return tabletType; }
 
 	public String getGFFType()
 		{ return gffType; }
