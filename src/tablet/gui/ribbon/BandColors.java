@@ -123,7 +123,7 @@ public class BandColors extends JRibbonBand implements ActionListener
 
 		bReadLength = new JCommandToggleButton(
 			RB.getString("gui.ribbon.BandColors.bReadLength"),
-			RibbonController.getIcon("READGROUP32", 32));
+			RibbonController.getIcon("READLENGTH32", 32));
 		Actions.colorsReadLength = new ActionToggleButtonModel(false);
 		Actions.colorsReadLength.setSelected(readLengthOn);
 		Actions.colorsReadLength.addActionListener(this);
