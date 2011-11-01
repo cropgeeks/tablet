@@ -23,7 +23,7 @@ generation sequence assemblies and alignments.</p>
 <p><img class="capture" src="images/tablet-main.png" alt="Tablet Screenshot"></p>
 
 <p>Visit the <a href="download.shtml">download page</a> to get the latest version
-of Tablet (1.11.08.10; 10th August 2011) now.</p>
+of Tablet (1.11.11.01; 1st November 2011) now.</p>
 
 <p>Please cite: Milne, I, Bayer, M, Cardle, L, Shaw, P, Stephen, G, Wright, F and
 Marshall, D. 2010. <a target="new" href="http://bioinformatics.oxfordjournals.org/cgi/content/abstract/btp666">Tablet - next generation sequence assembly visualization.</a>
@@ -34,10 +34,10 @@ Bioinformatics 26(3), 401-402.</p>
 <ul>
 <li>High-performance visualization and data navigation.</li>
 <li>Display of reads in both packed and stacked formats.</li>
-<li>Paired end visualization support.</li>
-<li>File format support for ACE, AFG, MAQ, SOAP2, SAM and BAM.</li>
+<li>File format support for ACE, AFG, MAQ, SOAP2, SAM, BAM, FASTA, FASTQ, and GFF3.</li>
 <li>Import GFF3 features and quickly find/highlight/display them.</li>
 <li>Search and locate reads by name or subsequence across entire data sets.</li>
+<li>Paired end visualization support (for SAM/BAM).</li>
 <li>Entire-contig overviews, showing data layout or coverage information.</li>
 <li>Simple install routine via auto-updating graphical installers.</li>
 <li>Support for Windows, Apple Mac OS X, Linux and Solaris, in 32 and 64-bit.</li>
