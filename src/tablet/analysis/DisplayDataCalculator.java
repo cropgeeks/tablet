@@ -6,9 +6,11 @@ package tablet.analysis;
 import java.io.*;
 import java.util.*;
 
+import tablet.analysis.Finder.*;
 import tablet.analysis.tasks.*;
 import tablet.data.*;
 import tablet.data.auxiliary.*;
+import tablet.data.auxiliary.Feature.*;
 import tablet.data.cache.*;
 import tablet.gui.*;
 
@@ -33,6 +35,8 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 	private IArrayIntCache unpaddedToPadded;
 
 	private int status = 0;
+
+	private EnzymeHandler enzymeCalc = new EnzymeHandler();
 
 	public DisplayDataCalculator(Assembly assembly, Contig contig, boolean doAll)
 	{
@@ -137,6 +141,8 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 			if(packCreator != null)
 				packCreator.runJob(0);
 		}
+
+		enzymeCalc.setupEnzymeFinderTasks(contig);
 	}
 
 	private SimpleJob setupPackCreator()
@@ -152,7 +158,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 		// If PAIRED STACK is selected
 		else if(!Prefs.visPacked && Prefs.visPaired)
 			packCreator = new PairedStackCreator(contig);
-		
+
 		// If STACK is selected
 		else
 			contig.setStack();

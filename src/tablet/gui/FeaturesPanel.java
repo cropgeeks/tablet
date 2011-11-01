@@ -4,7 +4,6 @@
 package tablet.gui;
 
 import java.awt.*;
-import java.awt.datatransfer.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -20,14 +19,11 @@ import scri.commons.gui.*;
 public class FeaturesPanel extends JPanel implements ListSelectionListener
 {
 	private AssemblyPanel aPanel;
-	private ColumnHighlighter highlighter;
 
 	private JTabbedPane ctrlTabs;
 	private FeaturesTableModel model;
 	private FeaturesPanelNB controls;
 
-	private Contig contig;
-	private Consensus consensus;
 	private TableRowSorter<FeaturesTableModel> sorter;
 
 	private JMenuItem mClipboard;
@@ -63,16 +59,11 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 			new FeaturesTableModel.FeaturesTableRenderer());
 	}
 
-	void setContig(Contig contig)
+	public void setContig(Contig contig)
 	{
-		this.contig = contig;
-
 		if (contig == null)
 		{
 			controls.featuresLabel.setText(getTitle(0));
-
-			// Clear the reference if it's not going to be used
-			consensus = null;
 
 			model.clear();
 			controls.toggleComponentEnabled(false);
@@ -80,8 +71,6 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 
 		else
 		{
-			consensus = contig.getConsensus();
-
 			model.setContig(contig);
 
 			controls.featuresLabel.setText(getTitle(contig.getFeatures().size()));
@@ -113,7 +102,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		row = controls.table.convertRowIndexToModel(row);
 
 		// Pull the feature out of the model
-		Feature feature = (Feature) model.getFeature(row);
+		Feature feature = model.getFeature(row);
 
 		int start = feature.getDataPS();
 		int end   = feature.getDataPE();
@@ -136,7 +125,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		}
 
 		aPanel.moveToPosition(-1, start, true);
-		highlighter = new ColumnHighlighter(aPanel, start, end);
+		new ColumnHighlighter(aPanel, start, end);
 	}
 
 	void setTableFilter(RowFilter<FeaturesTableModel, Object> rf)

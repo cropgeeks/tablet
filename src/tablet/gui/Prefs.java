@@ -175,6 +175,7 @@ public class Prefs extends XMLPreferences
 
 	public static boolean visPairLines = true;
 
+	public static String recentCustomEnzymes = "";
 
 	// Updates the array of recently accessed documents so that 'document' is
 	// the first element, even if it has been accessed previously

@@ -11,6 +11,7 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import tablet.data.auxiliary.*;
+import tablet.data.Sequence;
 import tablet.gui.*;
 
 import scri.commons.gui.*;
@@ -25,6 +26,7 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 
 	private JMenuItem mCopyReference;
 	private JMenuItem mSelectTracks;
+	private JMenuItem mAddRestriction;
 
 	// A list of features under the mouse (will only be > 1 if features overlap)
 	private ArrayList<Feature> features;
@@ -41,6 +43,9 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		fCanvas.addMouseMotionListener(this);
 
 		new ReadsCanvasDragHandler(aPanel, fCanvas);
+
+		mAddRestriction = new JMenuItem(RB.getString("gui.viewer.FeaturesCanvasML.addRestrictionEnyme"));
+		mAddRestriction.addActionListener(this);
 	}
 
 	public void mouseExited(MouseEvent e)
@@ -78,7 +83,7 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		RB.setText(mCopyReference, "gui.viewer.FeaturesCanvasML.mCopyReference");
 		mCopyReference.setIcon(Icons.getIcon("CLIPBOARD"));
 		mCopyReference.addActionListener(this);
-		mCopyReference.setEnabled(features.size() > 0);
+		mCopyReference.setEnabled(features != null && features.size() > 0);
 
 		mSelectTracks = new JMenuItem("");
 		RB.setText(mSelectTracks, "gui.viewer.FeaturesCanvasML.mSelectTracks");
@@ -87,6 +92,7 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		menu.add(mCopyReference);
 		menu.addSeparator();
 		menu.add(mSelectTracks);
+		menu.add(mAddRestriction);
 		menu.show(e.getComponent(), e.getX(), e.getY());
 	}
 
@@ -120,6 +126,9 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 
 		else if (e.getSource() == mSelectTracks)
 			Tablet.winMain.getFeaturesPanel().editFeatures();
+
+		else if (e.getSource() == mAddRestriction)
+			Tablet.winMain.getRestrictionEnzymeDialog().setVisible(true);
 	}
 
 	private void detectFeature(int x, int y)
@@ -148,13 +157,43 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 				rCanvas.repaint();
 			}
 
-			// Set tooltip for the feature under the mouse
-			fCanvas.setToolTipText(RB.format("gui.viewer.FeaturesCanvasML.tooltip",
-				f.getGFFType(), f.getName(),
-				TabletUtils.nf.format(f.getVisualPS()+1),
-				TabletUtils.nf.format(f.getVisualPE()+1),
-				f.getTagsAsHTMLString()));
+			if (Prefs.guiFeaturesArePadded)
+			{
+				fCanvas.setToolTipText(RB.format("gui.FeaturesPanel.tooltip.padded",
+					f.getGFFType(), f.getName(),
+					TabletUtils.nf.format(f.getVisualPS()+1), TabletUtils.nf.format(f.getVisualPE()+1),
+					getUnpadded(f.getVisualPS()), getUnpadded(f.getVisualPE()),
+					f.getTagsAsHTMLString()));
+			}
+			else
+			{
+				fCanvas.setToolTipText(RB.format("gui.FeaturesPanel.tooltip.unpadded",
+					f.getGFFType(), f.getName(),
+					TabletUtils.nf.format(f.getVisualPS()+1), TabletUtils.nf.format(f.getVisualPE()+1),
+					getPadded(f.getVisualPS()), getPadded(f.getVisualPE()),
+					f.getTagsAsHTMLString()));
+			}
 		}
+	}
+
+	private String getUnpadded(int base)
+	{
+		int unpadded = DisplayData.paddedToUnpadded(base);
+
+		if (unpadded == -1)
+			return "" + Sequence.PAD;
+		else
+			return TabletUtils.nf.format(unpadded+1);
+	}
+
+	private String getPadded(int base)
+	{
+		int padded = DisplayData.unpaddedToPadded(base);
+
+		if (padded == -1)
+			return "" + Sequence.PAD;
+		else
+			return TabletUtils.nf.format(padded+1);
 	}
 
 	public void mouseClicked(MouseEvent e)

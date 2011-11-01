@@ -69,7 +69,10 @@ public class Feature implements Comparable<Feature>
 
 	public String getTagsAsHTMLString()
 	{
-		StringBuffer str = new StringBuffer();
+		if (tags == null)
+			return "";
+
+		StringBuilder str = new StringBuilder();
 		for (String tag: tags)
 		{
 			try { str.append(URLDecoder.decode(tag, "UTF-8") + "<br>"); }

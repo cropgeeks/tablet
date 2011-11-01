@@ -6,9 +6,7 @@ package tablet.gui.dialog;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import javax.swing.event.*;
 
-import tablet.data.auxiliary.*;
 import tablet.gui.*;
 
 import scri.commons.gui.*;
@@ -35,6 +33,8 @@ public class FeaturesDialog extends JDialog implements ActionListener
 
 		SwingUtils.addCloseHandler(this, bCancel);
 		getRootPane().setDefaultButton(bOK);
+
+		nbPanel.addEnzyme.addActionListener(this);
 
 		pack();
 		setResizable(false);
@@ -66,9 +66,17 @@ public class FeaturesDialog extends JDialog implements ActionListener
 		{
 			nbPanel.updateList();
 			isOK = true;
+			setVisible(false);
 		}
 
-		setVisible(false);
+		else if (e.getSource() == bCancel)
+			setVisible(false);
+
+		else if (e.getSource() == nbPanel.addEnzyme)
+		{
+			Tablet.winMain.getRestrictionEnzymeDialog().setVisible(true);
+			nbPanel.createTable();
+		}
 	}
 
 	public boolean isOK()
