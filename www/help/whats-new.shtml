@@ -23,6 +23,34 @@ changes between versions, please see the <a href="http://bioinf.hutton.ac.uk/tab
 subversion change log</a>.</p>
 
 
+<h3>New in 1.11.11.01</h3>
+<ul>
+<li>NEW: All of the tables (in the control panel) can now have their contents copied to the clipboard via right-click menu options.</li>
+<li>NEW: Two new colours are now available with the Read Type scheme. These represent first in pair (mate in different contig) and second in pair (mate in different contig). </li>
+<li>NEW: The portion of reference sequence mapping to a feature can now be copied to the clipboard.</li>
+<li>NEW: Added a new colour scheme that highlights read length.</li>
+<li>NEW: Individual reads can now be outlined by right clicking on them.</li>
+<li>NEW: Added the ability to toggle variant tagging/highlighting on or off for unknown, padded and N bases.</li>
+<li>NEW: Restriction enzyme sites can now be added to the features tracks via automatic inclusion from REBASE.</li>
+<li>NEW: Added the version of samtools used by Tablet to the About Tablet dialog box.</li>
+<li>NEW: Tooltips for features (on the canvas and in the table) now support all their tags.</li>
+<li>NEW: Significantly enhanced the read group support so that all tags (not just sample) are available.</li>
+<li>NEW: Added right-click Colour-by options to the Reads Group table.</li>
+<li>CHG: The Read Group table now displays all read groups (using IDs) along with their platform tag information.</li>
+<li>CHG: The main selections for the active colour scheme have been moved to their own tab within the ribbon bar.</li>
+<li>CHG: Tablet should now use less memory when a large number of features are loaded.</li>
+<li>CHG: BAM files loaded without reference data now display their length in the title label of the ribbon.</li>
+<li>CHG: Replaced the classic scheme with the variants scheme. The new colour scheme is designed to make it very easy to spot bases which differ from the consensus / reference.</li>
+<li>BUG: Dragging GFF files into the interface when the 'warn if existing file open' option was active was showing the message box when it shouldn’t have.</li>
+<li>BUG: Cancelling a BAM-window data load after dragging the BamBar slider resulted in the overlay not being removed from the canvas.</li>
+<li>BUG: Fixed a problem with overlapping features on the GFF tracks not being drawn.</li>
+<li>BUG: Due to a design flaw in Picard, validation stringency wasn’t being set correctly for objects that needed to parse the header.</li>
+<li>BUG: Fixed a problem with reads which had more than one CIGAR insert at the same location losing all but the first insert at that location for the read.</li>
+<li>BUG: Fixed a problem with long file paths causing problems with the combo boxes on OS X.</li>
+<li>BUG: Searching for reads within BAM files wasn't checking if the read was unmapped or not.</li>
+</ul>
+
+
 <h3>New in 1.11.08.10</h3>
 <ul>
 <li>NEW: Added a new colour scheme for displaying Read Groups in SAM and BAM files.</li>
