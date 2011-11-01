@@ -42,6 +42,7 @@ public class WinMain extends JRibbonFrame
 	private JumpToDialog jumpToDialog;
 
 	private ConsensusSubsequenceDialog consensusSubsequenceDialog;
+	private RestrictionEnzymeDialog restrictionEnzymeDialog;
 
 	WinMain()
 	{
@@ -264,6 +265,13 @@ public class WinMain extends JRibbonFrame
 		consensusSubsequenceDialog.updateModel(assemblyPanel.getContig());
 
 		return consensusSubsequenceDialog;
+	}
+
+	public RestrictionEnzymeDialog getRestrictionEnzymeDialog()
+	{
+		if (restrictionEnzymeDialog == null)
+			restrictionEnzymeDialog = new RestrictionEnzymeDialog();
+		return restrictionEnzymeDialog;
 	}
 
 	public SubsetOverviewDialog getSubsetOverviewDialog()

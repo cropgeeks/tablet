@@ -177,16 +177,16 @@ public class AssemblyPanel extends JPanel
 			assembly.getBamBam().setBlockStart(contig, 0);
 		}
 
-		if (contig != null && ((setContigOK = updateDisplayData(true)) == false))
-		{
-			clearContig();
-			contig = null;
-		}
-
 		if (contig != null)
 		{
 			if(getVisualContig() == null)
 				visualAssembly.getVisualContigs().put(contig, new VisualContig());
+		}
+
+		if (contig != null && ((setContigOK = updateDisplayData(true)) == false))
+		{
+			clearContig();
+			contig = null;
 		}
 
 		// Pass the contig to the other components for rendering

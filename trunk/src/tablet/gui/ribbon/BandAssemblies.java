@@ -22,6 +22,7 @@ class BandAssemblies extends JRibbonBand implements ActionListener
 	private WinMain winMain;
 	private JCommandButton bOpen16, bOpen32;
 	private JCommandButton bImportFeatures;
+	private JCommandButton bImportEnzymes;
 	private JCommandButton bScanner;
 
 	BandAssemblies(WinMain winMain)
@@ -81,9 +82,21 @@ class BandAssemblies extends JRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.BandAssemblies.bScanner.tooltip"),
 			RB.getString("gui.ribbon.BandAssemblies.bScanner.richtip")));
 
+		bImportEnzymes = new JCommandButton(
+			RB.getString("gui.ribbon.BandAssemblies.bImportEnzymes"),
+			RibbonController.getIcon("IMPORTENZYMES32", 32));
+		Actions.assembliesImportEnzymes = new ActionRepeatableButtonModel(bImportEnzymes);
+		Actions.assembliesImportEnzymes.addActionListener(this);
+		bImportEnzymes.setActionModel(Actions.assembliesImportEnzymes);
+		bImportEnzymes.setActionKeyTip("E");
+		bImportEnzymes.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.BandAssemblies.bImportEnzymes.tooltip"),
+			RB.getString("gui.ribbon.BandAssemblies.bImportEnzymes.richtip")));
+
 
 		addCommandButton(bOpen32, RibbonElementPriority.TOP);
 		addCommandButton(bImportFeatures, RibbonElementPriority.TOP);
+		addCommandButton(bImportEnzymes, RibbonElementPriority.TOP);
 //		addCommandButton(bScanner, RibbonElementPriority.MEDIUM);
 
 		winMain.getRibbon().addTaskbarComponent(bOpen16);
@@ -102,5 +115,8 @@ class BandAssemblies extends JRibbonBand implements ActionListener
 
 		else if (e.getSource() == Actions.assembliesScanner)
 			new ScannerFrame();
+
+		else if (e.getSource() == Actions.assembliesImportEnzymes)
+			winMain.getRestrictionEnzymeDialog().setVisible(true);
 	}
 }

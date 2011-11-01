@@ -31,6 +31,7 @@ class FeaturesPanelNB extends JPanel implements ActionListener, ListSelectionLis
 		RB.setText(bDown, "gui.dialog.NBFeaturesPanel.bDown");
 		RB.setText(selectAll, "gui.dialog.NBFeaturesPanel.selectAll");
 		RB.setText(selectNone, "gui.dialog.NBFeaturesPanel.selectNone");
+		RB.setText(addEnzyme, "gui.dialog.NBFeaturesPanel.addEnzyme");
 
 		createTable();
 
@@ -97,7 +98,7 @@ class FeaturesPanelNB extends JPanel implements ActionListener, ListSelectionLis
 		bDown.setEnabled(row >= 0 && row < table.getRowCount()-1);
 	}
 
-	private void createTable()
+	void createTable()
 	{
 		String[] columnNames = { "Enabled", "Feature type" };
 
@@ -149,6 +150,7 @@ class FeaturesPanelNB extends JPanel implements ActionListener, ListSelectionLis
         selectAll = new scri.commons.gui.matisse.HyperLinkLabel();
         label2 = new javax.swing.JLabel();
         selectNone = new scri.commons.gui.matisse.HyperLinkLabel();
+        addEnzyme = new scri.commons.gui.matisse.HyperLinkLabel();
 
         panel.setBorder(javax.swing.BorderFactory.createTitledBorder("Select feature tracks:"));
 
@@ -173,6 +175,9 @@ class FeaturesPanelNB extends JPanel implements ActionListener, ListSelectionLis
         selectNone.setForeground(new java.awt.Color(68, 106, 156));
         selectNone.setText("Select none");
 
+        addEnzyme.setForeground(new java.awt.Color(68, 106, 156));
+        addEnzyme.setText("Add restriction enzyme");
+
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
@@ -182,17 +187,20 @@ class FeaturesPanelNB extends JPanel implements ActionListener, ListSelectionLis
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(label)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                        .addComponent(sp, 0, 0, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(bUp)
-                            .addComponent(bDown)))
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addComponent(selectAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, panelLayout.createSequentialGroup()
+                                .addComponent(selectAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(label2)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(selectNone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 74, Short.MAX_VALUE)
+                                .addComponent(addEnzyme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(sp, 0, 0, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(label2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(selectNone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(bUp, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(bDown, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
 
@@ -214,7 +222,8 @@ class FeaturesPanelNB extends JPanel implements ActionListener, ListSelectionLis
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(label2)
                     .addComponent(selectAll, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(selectNone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(selectNone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(addEnzyme, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -231,13 +240,14 @@ class FeaturesPanelNB extends JPanel implements ActionListener, ListSelectionLis
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(panel, javax.swing.GroupLayout.DEFAULT_SIZE, 285, Short.MAX_VALUE)
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    scri.commons.gui.matisse.HyperLinkLabel addEnzyme;
     private javax.swing.JButton bDown;
     private javax.swing.JButton bUp;
     private javax.swing.JLabel label;

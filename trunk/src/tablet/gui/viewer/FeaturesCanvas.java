@@ -7,7 +7,6 @@ import java.awt.*;
 import java.awt.geom.*;
 import static java.awt.RenderingHints.*;
 import java.util.*;
-import javax.swing.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
@@ -20,7 +19,6 @@ public class FeaturesCanvas extends TrackingCanvas
 
 	private Contig contig;
 	VisualContig vContig;
-	private Consensus consensus;
 
 	private Dimension dimension = new Dimension();
 
@@ -33,6 +31,7 @@ public class FeaturesCanvas extends TrackingCanvas
 
 	private Paint snpPaint;
 	private Paint cigarPaint;
+	private Paint enzymePaint;
 
 	private ArrayList<ArrayList<Feature>> featuresOnScreen = new ArrayList<ArrayList<Feature>>();
 
@@ -43,6 +42,7 @@ public class FeaturesCanvas extends TrackingCanvas
 
 		snpPaint = new Color(0, 200, 0, 150);
 		cigarPaint = TabletUtils.red1;
+		enzymePaint = new Color(70, 116, 162, 150);
 	}
 
 	void setAssemblyPanel(AssemblyPanel aPanel)
@@ -57,19 +57,14 @@ public class FeaturesCanvas extends TrackingCanvas
 	{
 		if (contig != null)
 		{
-			consensus = contig.getConsensus();
 			vContig = aPanel.getVisualContig();
 			prepareTracks(contig);
 
 			dimension = new Dimension(0, vContig.getTrackCount()*H+5);
 		}
 
-		// Remove tablet.data references if nothing is going to be displayed
 		else
-		{
-			consensus = null;
 			dimension = new Dimension(0, 0);
-		}
 
 		this.contig = contig;
 
@@ -165,6 +160,25 @@ public class FeaturesCanvas extends TrackingCanvas
 					g.fillRect(p2*ntW-1, H/4+2, 2, H-3-(H/4+2));
 					// Bottom horizontal bar
 					g.drawLine(p1*ntW, H-3, p2*ntW+ntW-1, H-3);
+				}
+
+				else if (EnzymeFeature.getEnzymes().contains(f.getGFFType()))
+				{
+					EnzymeFeature enzyme = (EnzymeFeature)f;
+					int cutPoint = p1+enzyme.getCutPoint();
+
+					g.setPaint(enzymePaint);
+					g.fillRect(p1*ntW, H/4+5, (p2-p1+1)*ntW-1, H/4-1);
+					g.drawRect(p1*ntW, H/4+5, (p2-p1+1)*ntW-1, H/4-1);
+
+					// Draw line over last pixel in previous base and first pixel
+					// in next base
+					if (enzyme.getCutPoint() != -1)
+					{
+						g.setStroke(new BasicStroke(2));
+						g.drawLine(cutPoint*ntW, H/4+2, cutPoint*ntW, H-3);
+						g.setStroke(solid);
+					}
 				}
 
 				// All other features are rendered as rectangles from p1 to p2

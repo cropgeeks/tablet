@@ -20,6 +20,7 @@ public class Actions
 	public static ActionRepeatableButtonModel applicationMenuSave16;
 	public static ActionRepeatableButtonModel assembliesImportFeatures;
 	public static ActionRepeatableButtonModel assembliesScanner;
+	public static ActionRepeatableButtonModel assembliesImportEnzymes;
 
 	public static ActionToggleButtonModel optionsHidePads16;
 	public static ActionToggleButtonModel optionsHideConsensus;
@@ -75,6 +76,7 @@ public class Actions
 		ApplicationMenu.bExportSNPs.setEnabled(false);
 		applicationMenuSave16.setEnabled(false);
 		assembliesImportFeatures.setEnabled(false);
+		assembliesImportEnzymes.setEnabled(false);
 
 		// Ribbon controls
 		BandAdjust.zoomSliderComponent.setEnabled(false);
@@ -133,6 +135,7 @@ public class Actions
 		ApplicationMenu.bExportSNPs.setEnabled(true);
 		applicationMenuSave16.setEnabled(false);
 		assembliesImportFeatures.setEnabled(true);
+		assembliesImportEnzymes.setEnabled(false);
 
 		// Ribbon controls
 		BandAdjust.zoomSliderComponent.setEnabled(false);
@@ -191,6 +194,7 @@ public class Actions
 		ApplicationMenu.bExportSNPs.setEnabled(true);
 		applicationMenuSave16.setEnabled(false);
 		assembliesImportFeatures.setEnabled(true);
+		assembliesImportEnzymes.setEnabled(true);
 
 		// Ribbon controls
 		BandAdjust.zoomSliderComponent.setEnabled(true);
