@@ -3,11 +3,11 @@
 
 package tablet.gui.viewer;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import tablet.data.Read;
-import tablet.data.auxiliary.CigarFeature;
-import tablet.data.auxiliary.CigarFeature.Insert;
+import java.awt.*;
+
+import tablet.data.*;
+import tablet.data.auxiliary.*;
+import tablet.data.auxiliary.CigarFeature.*;
 
 public class CigarIHighlighter extends AlphaOverlay
 {
@@ -22,11 +22,6 @@ public class CigarIHighlighter extends AlphaOverlay
 		this.cigarFeature = cigarFeature;
 
 		start();
-	}
-
-	public CigarIHighlighter(AssemblyPanel aPanel)
-	{
-		super(aPanel);
 	}
 
 	public void render(Graphics2D g)
@@ -44,11 +39,6 @@ public class CigarIHighlighter extends AlphaOverlay
 		int offset = rCanvas.offset;
 		int ntW = rCanvas.ntW;
 
-		int xS = (pX1 - offset) / ntW;
-		int xE = (rCanvas.pX2 - offset) / ntW;
-
-		int count = 0;
-
 		if (cigarFeature == null)
 			return;
 
@@ -57,9 +47,7 @@ public class CigarIHighlighter extends AlphaOverlay
 			Read read = rCanvas.reads.getReadAt(row, insertBase);
 
 			if (read == null)
-			{
 				g.fillRect(pX1, row*ntH, pX2Max-pX1+1, ntH);
-			}
 
 			if (read != null)
 			{
@@ -92,24 +80,14 @@ public class CigarIHighlighter extends AlphaOverlay
 						requiresPaint = false;
 					}
 				}
-				
+
 				if(requiresPaint == true)
 					g.fillRect(pX1, row*ntH, pX2Max-pX1+1, ntH);
 			}
 		}
 	}
 
-	public void setMouseBase(Integer newBase)
-	{
-		this.insertBase = newBase;
-	}
-
-	public void setCigarFeature(CigarFeature cigarFeature)
-	{
-		this.cigarFeature = cigarFeature;
-	}
-
-	public void add()
+	private void add()
 	{
 		if (previous != null)
 			previous.interrupt();
@@ -121,22 +99,37 @@ public class CigarIHighlighter extends AlphaOverlay
 			alphaEffect = 200;
 
 			rCanvas.overlays.addFirst(this);
+			rCanvas.repaint();
 		}
 	}
 
-	public void remove()
+	private void remove()
 	{
 		previous = null;
 		if(visible)
 		{
 			visible = false;
-
 			alphaEffect = 0;
 
 			rCanvas.overlays.remove(this);
+			rCanvas.repaint();
 		}
 	}
 
 	public boolean isVisible()
 		{ return visible; }
+
+	public void highlightFeature(CigarFeature cigarFeature)
+	{
+		this.insertBase = cigarFeature.getVisualPS()+1;
+		this.cigarFeature = cigarFeature;
+		add();
+	}
+
+	public void removeHighlight()
+	{
+		insertBase = null;
+		cigarFeature = null;
+		remove();
+	}
 }

@@ -72,7 +72,6 @@ public class AssemblyPanel extends JPanel
 		visPanel.add(sp, BorderLayout.CENTER);
 
 		add(visPanel);
-		cigarIHighlighter = new CigarIHighlighter(this);
 	}
 
 	private void createControls()
@@ -136,7 +135,7 @@ public class AssemblyPanel extends JPanel
 						contig.getConsensus().getUnpaddedLength() :
 						contig.getTableData().consensusLength())
 				+ ")";
-				
+
 			if (Prefs.visHideUnpaddedValues)
 				length = TabletUtils.nf.format(contig.getTableData().consensusLength());
 
@@ -158,6 +157,9 @@ public class AssemblyPanel extends JPanel
 			contig.clearContigData(assembly.getBamBam() != null);
 
 		DisplayData.clearDisplayData(true);
+
+		if (cigarIHighlighter != null)
+			cigarIHighlighter.removeHighlight();
 
 		// Forces the contigs table to update its numbers properly
 		winMain.getContigsPanel().repaint();
@@ -396,6 +398,9 @@ public class AssemblyPanel extends JPanel
 
 	public CigarIHighlighter getCigarIHighlighter()
 		{ return cigarIHighlighter; }
+
+	public void setCigarIHighlighter(CigarIHighlighter cigarIHighlighter)
+		{ this.cigarIHighlighter = cigarIHighlighter; }
 
 	public ReadsCanvas getReadsCanvas()
 	{

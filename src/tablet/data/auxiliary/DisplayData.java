@@ -3,9 +3,9 @@
 
 package tablet.data.auxiliary;
 
-import java.util.*;
-
+import tablet.data.*;
 import tablet.data.cache.*;
+import tablet.gui.*;
 
 /**
  * DisplayData holds information about a contig that is *only* required when
@@ -123,6 +123,18 @@ public class DisplayData
 		catch (Exception e) {
 			return -1;
 		}
+	}
+
+	public static String getUnpadded(int base)
+	{
+		int unpadded = paddedToUnpadded(base);
+		return unpadded == -1 ? Sequence.PAD : TabletUtils.nf.format(unpadded+1);
+	}
+
+	public static String getPadded(int base)
+	{
+		int padded = unpaddedToPadded(base);
+		return padded == -1 ? Sequence.PAD : TabletUtils.nf.format(padded+1);
 	}
 
 	public static void setMappingData(MappingData newMappingData)
