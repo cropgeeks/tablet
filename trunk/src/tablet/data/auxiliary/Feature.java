@@ -82,6 +82,23 @@ public class Feature implements Comparable<Feature>
 		return str.toString();
 	}
 
+	public String getTagsAsString()
+	{
+		if (tags == null)
+			return "";
+
+		String lb = System.getProperty("line.separator");
+
+		StringBuilder str = new StringBuilder();
+		for (String tag: tags)
+		{
+			try { str.append(URLDecoder.decode(tag, "UTF-8")).append(lb); }
+			catch (Exception e) {}
+		}
+
+		return str.toString();
+	}
+
 	public void verifyType()
 	{
 		// Add this feature's type to the tracking table

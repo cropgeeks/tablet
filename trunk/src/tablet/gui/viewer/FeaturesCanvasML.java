@@ -11,7 +11,6 @@ import javax.swing.*;
 import javax.swing.event.*;
 
 import tablet.data.auxiliary.*;
-import tablet.data.Sequence;
 import tablet.gui.*;
 
 import scri.commons.gui.*;
@@ -27,6 +26,7 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 	private JMenuItem mCopyReference;
 	private JMenuItem mSelectTracks;
 	private JMenuItem mAddRestriction;
+	private JMenuItem mCopyFeature;
 
 	// A list of features under the mouse (will only be > 1 if features overlap)
 	private ArrayList<Feature> features;
@@ -89,7 +89,14 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		RB.setText(mSelectTracks, "gui.viewer.FeaturesCanvasML.mSelectTracks");
 		mSelectTracks.addActionListener(this);
 
+		mCopyFeature = new JMenuItem("");
+		RB.setText(mCopyFeature, "gui.viewer.FeaturesCanvasML.mCopyFeature");
+		mCopyFeature.setIcon(Icons.getIcon("CLIPBOARD"));
+		mCopyFeature.addActionListener(this);
+		mCopyFeature.setEnabled(features != null && features.size() > 0);
+
 		menu.add(mCopyReference);
+		menu.add(mCopyFeature);
 		menu.addSeparator();
 		menu.add(mSelectTracks);
 		menu.add(mAddRestriction);
@@ -116,7 +123,7 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 				String seq = consensus.substring(start, end+1);
 				String text = TabletUtils.formatFASTA(name, seq);
 
-				str.append(text + System.getProperty("line.separator"));
+				str.append(text).append(System.getProperty("line.separator"));
 			}
 
 			StringSelection selection = new StringSelection(str.toString());
@@ -129,6 +136,58 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 
 		else if (e.getSource() == mAddRestriction)
 			Tablet.winMain.getRestrictionEnzymeDialog().setVisible(true);
+
+		else if (e.getSource() == mCopyFeature)
+		{
+			// Doesn't deal elegantly with overlapping features (note the
+			// effectively ignored for loop)
+			String str = "";
+			for (Feature f: features)
+				str = getCopyTextForFeature(f);
+
+			StringSelection selection = new StringSelection(str);
+			Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
+				selection, null);
+		}
+	}
+
+	private String getCopyTextForFeature(Feature f)
+	{
+		StringBuilder str = new StringBuilder();
+
+		int p1 = f.getVisualPS();
+		int p2 = f.getVisualPE();
+
+		String lb = System.getProperty("line.separator");
+
+		str.append(RB.format("gui.viewer.FeaturesCanvasML.copyFeature.type", f.getGFFType())).append(lb);
+		str.append(RB.format("gui.viewer.FeaturesCanvasML.copyFeature.name", f.getName())).append(lb);
+
+		if (Prefs.guiFeaturesArePadded)
+		{
+			str.append(RB.format("gui.viewer.FeaturesCanvasML.copyFeature.padded",
+				TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1))).append(lb);
+			str.append(RB.format("gui.viewer.FeaturesCanvasML.copyFeature.unpadded",
+				DisplayData.getUnpadded(p1), DisplayData.getUnpadded(p2))).append(lb);
+		}
+		else
+		{
+			str.append(RB.format("gui.viewer.FeaturesCanvasML.copyFeature.unpadded",
+				TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1))).append(lb);
+			str.append(RB.format("gui.viewer.FeaturesCanvasML.copyFeature.padded",
+				DisplayData.getPadded(p1), DisplayData.getPadded(p2))).append(lb);
+		}
+
+		if (f instanceof CigarFeature)
+		{
+			CigarFeature cigarFeature = (CigarFeature)f;
+			int count = cigarFeature.getCount();
+			str.append(RB.format("gui.viewer.FeaturesCanvasML.copyFeature.insertCount", count));
+		}
+		else
+			str.append(RB.format("gui.viewer.FeaturesCanvasML.copyFeature.tags", f.getTagsAsString()));
+
+		return str.toString();
 	}
 
 	private void detectFeature(int x, int y)
@@ -148,52 +207,76 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		if (features.isEmpty())
 			fCanvas.setToolTipText(null);
 
-		for (Feature f: features)
+		for (Feature feature: features)
 		{
-			if(f.getGFFType().equals("CIGAR-I") && !aPanel.getCigarIHighlighter().isVisible())
+			int pS = feature.getVisualPS();
+			int pE = feature.getVisualPE();
+
+			if (feature instanceof CigarFeature)
 			{
-				CigarFeature cigarFeature = (CigarFeature)f;
-				new CigarIHighlighter(aPanel, cigarFeature.getVisualPS()+1, cigarFeature);
-				rCanvas.repaint();
+				highlightCigar(feature, pS);
+				getCigarTooltip(feature, pS, pE);
 			}
 
-			if (Prefs.guiFeaturesArePadded)
-			{
-				fCanvas.setToolTipText(RB.format("gui.FeaturesPanel.tooltip.padded",
-					f.getGFFType(), f.getName(),
-					TabletUtils.nf.format(f.getVisualPS()+1), TabletUtils.nf.format(f.getVisualPE()+1),
-					getUnpadded(f.getVisualPS()), getUnpadded(f.getVisualPE()),
-					f.getTagsAsHTMLString()));
-			}
 			else
-			{
-				fCanvas.setToolTipText(RB.format("gui.FeaturesPanel.tooltip.unpadded",
-					f.getGFFType(), f.getName(),
-					TabletUtils.nf.format(f.getVisualPS()+1), TabletUtils.nf.format(f.getVisualPE()+1),
-					getPadded(f.getVisualPS()), getPadded(f.getVisualPE()),
-					f.getTagsAsHTMLString()));
-			}
+				getNormalTooltip(feature, pS, pE);
 		}
 	}
 
-	private String getUnpadded(int base)
+	private void getNormalTooltip(Feature f, int pS, int pE)
 	{
-		int unpadded = DisplayData.paddedToUnpadded(base);
-
-		if (unpadded == -1)
-			return "" + Sequence.PAD;
+		if (Prefs.guiFeaturesArePadded)
+		{
+			fCanvas.setToolTipText(RB.format("gui.viewer.FeaturesCanvasML.tooltip.padded",
+				f.getGFFType(), f.getName(),
+				TabletUtils.nf.format(pS+1), TabletUtils.nf.format(pE+1),
+				DisplayData.getUnpadded(pS), DisplayData.getUnpadded(pE),
+				f.getTagsAsHTMLString()));
+		}
 		else
-			return TabletUtils.nf.format(unpadded+1);
+		{
+			fCanvas.setToolTipText(RB.format("gui.viewer.FeaturesCanvasML.tooltip.unpadded",
+				f.getGFFType(), f.getName(),
+				TabletUtils.nf.format(pS+1), TabletUtils.nf.format(pE+1),
+				DisplayData.getPadded(pS), DisplayData.getPadded(pE),
+				f.getTagsAsHTMLString()));
+		}
 	}
 
-	private String getPadded(int base)
+	private void getCigarTooltip(Feature f, int pS, int pE)
 	{
-		int padded = DisplayData.unpaddedToPadded(base);
-
-		if (padded == -1)
-			return "" + Sequence.PAD;
+		CigarFeature cigarFeature = (CigarFeature)f;
+		int count = cigarFeature.getCount();
+		if (Prefs.guiFeaturesArePadded)
+		{
+			fCanvas.setToolTipText(RB.format("gui.viewer.FeaturesCanvasML.tooltip.padded.cigarFeature",
+				f.getGFFType(),
+				TabletUtils.nf.format(pS+1), TabletUtils.nf.format(pE+1),
+				DisplayData.getUnpadded(pS), DisplayData.getUnpadded(pE),
+				count));
+		}
 		else
-			return TabletUtils.nf.format(padded+1);
+		{
+			fCanvas.setToolTipText(RB.format("gui.viewer.FeaturesCanvasML.tooltip.unpadded.cigarFeature",
+				f.getGFFType(),
+				TabletUtils.nf.format(pS+1), TabletUtils.nf.format(pE+1),
+				DisplayData.getPadded(pS), DisplayData.getPadded(pE),
+				count));
+		}
+	}
+
+	private void highlightCigar(Feature f, int pS)
+	{
+		CigarIHighlighter highlighter = aPanel.getCigarIHighlighter();
+
+		if (highlighter == null || highlighter.isVisible() == false)
+		{
+			CigarFeature cigarFeature = (CigarFeature)f;
+			highlighter = new CigarIHighlighter(aPanel, pS+1, cigarFeature);
+			aPanel.setCigarIHighlighter(highlighter);
+
+			rCanvas.repaint();
+		}
 	}
 
 	public void mouseClicked(MouseEvent e)
@@ -201,27 +284,17 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		if (e.isPopupTrigger())
 			return;
 
-		int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) + rCanvas.offset;
-		int track = 0;
-
 		for (Feature f: features)
 		{
-			if(f.getGFFType().equals("CIGAR-I"))
+			if(f instanceof CigarFeature)
 			{
 				CigarFeature cigarFeature = (CigarFeature)f;
-				if(!aPanel.getCigarIHighlighter().isVisible())
-				{
-					aPanel.getCigarIHighlighter().setMouseBase(cigarFeature.getVisualPS()+1);
-					aPanel.getCigarIHighlighter().setCigarFeature(cigarFeature);
-					aPanel.getCigarIHighlighter().add();
-				}
+				CigarIHighlighter cigarHighlighter = aPanel.getCigarIHighlighter();
+
+				if(cigarHighlighter.isVisible() == false)
+					cigarHighlighter.highlightFeature(cigarFeature);
 				else
-				{
-					aPanel.getCigarIHighlighter().setMouseBase(null);
-					aPanel.getCigarIHighlighter().setCigarFeature(null);
-					aPanel.getCigarIHighlighter().remove();
-				}
-				rCanvas.repaint();
+					cigarHighlighter.removeHighlight();
 			}
 		}
 	}

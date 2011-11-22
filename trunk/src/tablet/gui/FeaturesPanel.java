@@ -163,7 +163,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 				return RB.format("gui.FeaturesPanel.tooltip.padded",
 					feature.getGFFType(), feature.getName(),
 					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
-					getUnpadded(p1), getUnpadded(p2),
+					DisplayData.getUnpadded(p1), DisplayData.getUnpadded(p2),
 					feature.getTagsAsHTMLString());
 			}
 			else
@@ -171,7 +171,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 				return RB.format("gui.FeaturesPanel.tooltip.unpadded",
 					feature.getGFFType(), feature.getName(),
 					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
-					getPadded(p1), getPadded(p2),
+					DisplayData.getPadded(p1), DisplayData.getPadded(p2),
 					feature.getTagsAsHTMLString());
 			}
 		}
@@ -184,38 +184,18 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 				return RB.format("gui.FeaturesPanel.tooltip.padded.cigarFeature",
 					feature.getGFFType(),
 					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
-					getUnpadded(p1), getUnpadded(p2), count);
+					DisplayData.getUnpadded(p1), DisplayData.getUnpadded(p2), count);
 			}
 			else
 			{
 				return RB.format("gui.FeaturesPanel.tooltip.unpadded.cigarFeature",
 					feature.getGFFType(),
 					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
-					getPadded(p1), getPadded(p2), count);
+					DisplayData.getPadded(p1), DisplayData.getPadded(p2), count);
 			}
 		}
 
 		return "";
-	}
-
-	private String getUnpadded(int base)
-	{
-		int unpadded = DisplayData.paddedToUnpadded(base);
-
-		if (unpadded == -1)
-			return "" + Sequence.PAD;
-		else
-			return TabletUtils.nf.format(unpadded+1);
-	}
-
-	private String getPadded(int base)
-	{
-		int padded = DisplayData.unpaddedToPadded(base);
-
-		if (padded == -1)
-			return "" + Sequence.PAD;
-		else
-			return TabletUtils.nf.format(padded+1);
 	}
 
 	public void editFeatures()
