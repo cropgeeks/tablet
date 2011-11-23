@@ -23,21 +23,6 @@ public class Finder extends SimpleJob
 	public static final int READ_NAME = 0;
 	public static final int READ_SEQUENCE = 1;
 	public static final int CON_SEQUENCE = 2;
-	public static final int ENZYME = 3;
-
-	public static String AMBIG_M = "[AC]";
-	public static String AMBIG_R = "[AG]";
-	public static String AMBIG_W = "[AT]";
-	public static String AMBIG_S = "[CG]";
-	public static String AMBIG_Y = "[CT]";
-	public static String AMBIG_K = "[GT]";
-	public static String AMBIG_V = "[ACG]";
-	public static String AMBIG_H = "[ACT]";
-	public static String AMBIG_D = "[AGT]";
-	public static String AMBIG_B = "[CGT]";
-	public static String AMBIG_XN = "[GATC]";
-
-	private HashMap<String, String> enzymeHash;
 
 	protected AssemblyPanel aPanel;
 
@@ -47,22 +32,20 @@ public class Finder extends SimpleJob
 	protected long maximumLong;
 	protected long progressLong;
 
-	protected boolean searchAllContigs;
+	protected boolean allContigs;
 	protected boolean useRegex;
 	protected int searchType;
 
-	public Finder(AssemblyPanel aPanel, String searchTerm, boolean searchAllContigs, int searchType)
+	public Finder(AssemblyPanel aPanel, String searchTerm, boolean allContigs, int searchType)
 	{
 		this.aPanel = aPanel;
 		this.searchTerm = searchTerm;
-		this.searchAllContigs = searchAllContigs;
+		this.allContigs = allContigs;
 		this.searchType = searchType;
 
 		useRegex = Prefs.guiRegexSearching;
 
 		results = new ArrayList<SearchResult>();
-
-		setupEnzymeHash();
 	}
 
 	// Run job method so this can be run in a progress dialog.
@@ -70,10 +53,6 @@ public class Finder extends SimpleJob
 	{
 		if (searchTerm.isEmpty())
 			return;
-
-		// TODO implement method fully
-		if (searchType == ENZYME)
-			createRegex();
 
 		try
 		{
@@ -111,14 +90,11 @@ public class Finder extends SimpleJob
 					break;
 
 				// If not searching in all contigs, skip to the current contig
-				if (!searchAllContigs && contig != aPanel.getContig())
+				if (!allContigs && contig != aPanel.getContig())
 					continue;
 
 				if (searchType == CON_SEQUENCE)
 					searchConsensus(contig);
-				else if (searchType == ENZYME)
-					searchForEnzymes(contig.getConsensus().toString(), 0,
-					contig.getConsensus().length(), contig, null);
 				else
 					searchReadSubsequences(contig);
 			}
@@ -154,7 +130,7 @@ public class Finder extends SimpleJob
 					continue;
 
 				Contig contig = aPanel.getAssembly().getContig(wrapper.contigId);
-				if (!searchAllContigs && contig != aPanel.getContig())
+				if (!allContigs && contig != aPanel.getContig())
 					continue;
 
 				for (Read read : contig.getReads())
@@ -176,10 +152,7 @@ public class Finder extends SimpleJob
 	{
 		Matcher m = pattern.matcher(name);
 
-		if ((useRegex && m.matches()) || (!useRegex && name.equals(searchTerm)))
-			return true;
-
-		return false;
+		return ((useRegex && m.matches()) || (!useRegex && name.equals(searchTerm)));
 	}
 
 	protected void searchConsensus(Contig contig)
@@ -215,9 +188,7 @@ public class Finder extends SimpleJob
 
 		if (Prefs.guiSearchIgnorePads)
 		{
-			String charClass = "[" + Pattern.quote("*") + "N]*";
-			String regex = addPadCharClass(charClass);
-
+			String regex = addPadCharClass();
 			p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 		}
 
@@ -235,28 +206,17 @@ public class Finder extends SimpleJob
 		}
 	}
 
-	// Does the string matching for restriction enzyme
-	protected void searchForEnzymes(String seq, int sPos, int len, Contig contig, String name)
-	{
-		// Create a pattern which will ignore pad characters
-		String charClass = "[" + Pattern.quote("*")+ "]*";
-		String regex = addPadCharClass(charClass);
-
-		Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
-
-		// Search the sequence looking for matches
-		Matcher m = p.matcher(seq);
-		while (m.find())
-			results.add(new SearchResult(m.start(), m.end()-m.start(), contig));
-	}
-
-	private String addPadCharClass(String charClass)
+	protected String addPadCharClass()
 	{
 		StringBuilder regex = new StringBuilder();
+		// Create a pattern which will ignore pad characters
+		String charClass = "[" + Pattern.quote("*")+ "N]*";
 
 		for (int i=0; i < searchTerm.length(); i++)
 		{
-			regex.append(searchTerm.charAt(i));
+			char c = searchTerm.charAt(i);
+			regex.append(c);
+
 			if (i < searchTerm.length()-1)
 				regex.append(charClass);
 		}
@@ -270,30 +230,26 @@ public class Finder extends SimpleJob
 		maximumLong = 0;
 
 		// Read search in current contig
-		if(!searchAllContigs && searchType == READ_SEQUENCE)
+		if(!allContigs && searchType == READ_SEQUENCE)
 			maximumLong = aPanel.getContig().getReads().size();
 
 		// Read search across all contigs
-		else if(searchType == READ_NAME || (searchAllContigs && searchType == READ_SEQUENCE))
+		else if(searchType == READ_NAME || (allContigs && searchType == READ_SEQUENCE))
 			for(Contig contig : aPanel.getAssembly())
 				maximumLong += contig.getReads().size();
 
 		// Consensus search in current contig
-		else if(!searchAllContigs && searchType == CON_SEQUENCE)
-//			maximumLong = aPanel.getContig().getConsensus().length();
+		else if(!allContigs && searchType == CON_SEQUENCE)
 			maximumLong = 0; // indeterminate
 
 		// Consensus search across all contigs
-		else if(searchAllContigs && searchType == CON_SEQUENCE)
-			for(Contig contig : aPanel.getAssembly())
-//				maximumLong += contig.getConsensus().length();
-				maximumLong++;
+		else if(allContigs && searchType == CON_SEQUENCE)
+			maximumLong += aPanel.getAssembly().size();
 	}
 
 	public String getMessage()
 	{
-		return RB.getString("gui.NBFindPanelControls.progressMessage") + " " +
-			results.size();
+		return RB.format("gui.NBFindPanelControls.progressMessage", results.size());
 	}
 
 	private void showWarning()
@@ -333,31 +289,6 @@ public class Finder extends SimpleJob
 	{
 		return Math.round(((progressLong)/ (float) maximumLong) * 5555);
 	}
-
-	private void setupEnzymeHash()
-	{
-		enzymeHash = new HashMap<String, String>();
-
-		enzymeHash.put("M", AMBIG_M);
-		enzymeHash.put("R", AMBIG_R);
-		enzymeHash.put("W", AMBIG_W);
-		enzymeHash.put("S", AMBIG_S);
-		enzymeHash.put("Y", AMBIG_Y);
-		enzymeHash.put("K", AMBIG_K);
-		enzymeHash.put("V", AMBIG_V);
-		enzymeHash.put("H", AMBIG_H);
-		enzymeHash.put("D", AMBIG_D);
-		enzymeHash.put("B", AMBIG_B);
-		enzymeHash.put("X", AMBIG_XN);
-		enzymeHash.put("N", AMBIG_XN);
-	}
-
-	private void createRegex()
-	{
-		for (String key : enzymeHash.keySet())
-			searchTerm = searchTerm.replaceAll(key, enzymeHash.get(key));
-	}
-
 
 	// Used for storing consensus subsequence search results
 	public static class SearchResult
