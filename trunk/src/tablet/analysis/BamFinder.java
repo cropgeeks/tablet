@@ -30,7 +30,7 @@ public class BamFinder extends Finder
 	@Override
 	protected void calculateMaximum()
 	{
-		if (!searchAllContigs)
+		if (!allContigs)
 			maximumLong = aPanel.getContig().getTableData().readCount;
 //			maximumLong += reader.getFileHeader().getSequenceDictionary().getSequence(
 //				aPanel.getContig().getName()).getSequenceLength();
@@ -51,7 +51,7 @@ public class BamFinder extends Finder
 				break;
 
 			// If not searching in all contigs, skip to the current contig
-			if (!searchAllContigs && contig != aPanel.getContig())
+			if (!allContigs && contig != aPanel.getContig())
 				continue;
 
 			SAMRecordIterator itor = reader.queryOverlapping(contig.getName(), 0, 0);

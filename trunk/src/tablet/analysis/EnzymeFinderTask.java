@@ -23,7 +23,7 @@ public class EnzymeFinderTask extends BackgroundTask
 			ArrayList<Finder> enzymeFinder = new ArrayList<Finder>();
 
 			for (String sequence : enzyme.getSequences())
-				enzymeFinder.add(new Finder(aPanel, sequence, false, Finder.ENZYME));
+				enzymeFinder.add(new EnzymeFinder(aPanel, sequence, false));
 
 			finders.add(enzymeFinder);
 		}
