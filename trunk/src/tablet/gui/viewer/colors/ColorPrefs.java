@@ -29,6 +29,24 @@ public class ColorPrefs
 		}
 	}
 
+	/**
+	 * Queries for a color (by key), returning it if it's found, but using the
+	 * default supplied if it's not. The default colour is also used to enter
+	 * this key into the database if it wasn't found.
+	 */
+	static Color getColor(String key, Color defaultColor)
+	{
+		Color color = getColor(key);
+
+		if (color == null)
+		{
+			setColor(key, defaultColor);
+			return defaultColor;
+		}
+
+		return color;
+	}
+
 	public static void setColor(String key, Color color)
 	{
 		p.setProperty(key,

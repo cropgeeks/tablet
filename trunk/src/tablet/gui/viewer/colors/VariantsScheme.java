@@ -18,8 +18,8 @@ public class VariantsScheme extends EnhancedScheme
 
 	private void initStates(int w, int h)
 	{
-		Color variant = new Color(255, 120, 120);
-		Color normal = Color.LIGHT_GRAY;
+		Color variant = ColorPrefs.getColor("VariantsScheme.Variant", new Color(255, 120, 120));
+		Color normal = ColorPrefs.getColor("VariantsScheme.Normal", Color.LIGHT_GRAY);
 
 		for (String base: Sequence.getStates())
 		{

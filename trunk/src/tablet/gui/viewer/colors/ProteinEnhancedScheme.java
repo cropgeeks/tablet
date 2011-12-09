@@ -12,15 +12,15 @@ public class ProteinEnhancedScheme extends ProteinScheme
 {
 	private ArrayList<Stamp> states = new ArrayList<Stamp>();
 
-	private final static Color NONPOLAR = new Color(255, 231, 95);
-	private final static Color POLAR = new Color(179, 222, 192);
-	private final static Color BASIC = new Color(187, 191, 224);
-	private final static Color ACIDIC = new Color(248, 183, 211);
-	private final static Color STOP = new Color(255, 105, 105);
-	private final static Color XXX = new Color(160, 160, 160);
-
 	public ProteinEnhancedScheme(int w, int h)
 	{
+		Color NONPOLAR = ColorPrefs.getColor("ProteinScheme.NonPolar", new Color(255, 231, 95));
+		Color POLAR = ColorPrefs.getColor("ProteinScheme.Polar", new Color(179, 222, 192));
+		Color BASIC = ColorPrefs.getColor("ProteinScheme.Basic", new Color(187, 191, 224));
+		Color ACIDIC = ColorPrefs.getColor("ProteinScheme.Acidic", new Color(248, 183, 211));
+		Color STOP = ColorPrefs.getColor("ProteinScheme.Stop", new Color(255, 105, 105));
+		Color XXX = ColorPrefs.getColor("ProteinScheme.XXX", new Color(160, 160, 160));
+
 		// VERY IMPORTANT: These MUST be in the same order as the codes within
 		// the string array from the ProteinTranslator
 

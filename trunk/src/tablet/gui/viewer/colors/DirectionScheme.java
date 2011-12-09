@@ -17,9 +17,12 @@ public class DirectionScheme extends EnhancedScheme
 	{
 		super(w, h, true, false);
 
+		Color cForward = ColorPrefs.getColor("DirectionScheme.Forward", new Color(165, 200, 175));
+		Color cReverse = ColorPrefs.getColor("DirectionScheme.Reverse", new Color(70, 116, 162));
+
 		// Create two sets of colours: one for each direction
-		initStates(statesF, new Color(165, 200, 175), w, h);
-		initStates(statesR, new Color(70, 116, 162), w, h);
+		initStates(statesF, cForward, w, h);
+		initStates(statesR, cReverse, w, h);
 	}
 
 	private void initStates(ArrayList<ColorStamp> states, Color c, int w, int h)
