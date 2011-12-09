@@ -24,20 +24,21 @@ public class ReadGroupScheme extends EnhancedScheme
 	{
 		super(w, h, true, false);
 
+		Color cDisabled = ColorPrefs.getColor("ReadGroupScheme.Disabled", Color.LIGHT_GRAY);
+
 		statesRG = new ArrayList<ArrayList<ColorStamp>>();
 
 		getColourInfos();
 
 		// Initialize a set of "grey" stamps for reads that don't have a sample
 		// name associated (ReadMetaData.readGroup == 0)
-		initStates(Color.LIGHT_GRAY, w, h);
+		initStates(cDisabled, w, h);
 
 		for (short i=0; i < colorInfos.length; i++)
 			if (colorInfos[i].enabled)
 				initStates(colorInfos[i].color, w, h);
 			else
-				initStates(Color.LIGHT_GRAY, w, h);
-//				initStates(getGreyScale(colorInfos[i].color), w, h);
+				initStates(cDisabled, w, h);
 	}
 
 	private void initStates(Color color, int w, int h)
@@ -54,25 +55,6 @@ public class ReadGroupScheme extends EnhancedScheme
 
 		// Add the stamps this read group's stamps as an emelment of statesRG
 		statesRG.add(rgStamps);
-	}
-
-	private Color getGreyScale(Color color)
-	{
-		// Cheap and simple conversion - average of the three colours
-//		int gs = (int) ((color.getRed()+color.getGreen()+color.getBlue())/3);
-
-		// Luminance conversion - reflects human vision better (apparently)
-		int gs = (int) (0.3*color.getRed()+0.59*color.getGreen()+0.11*color.getBlue());
-
-		return new Color(gs, gs, gs);
-
-
-		// For future reference: color-convert op that modifies an existing
-		// image and changes it to greyscale - SLOW
-
-//		ColorConvertOp op = new ColorConvertOp(
-//			ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
-//		image = op.filter(image, null);
 	}
 
 	@Override

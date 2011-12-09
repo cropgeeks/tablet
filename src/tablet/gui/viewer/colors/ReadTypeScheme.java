@@ -22,13 +22,20 @@ public class ReadTypeScheme extends EnhancedScheme
 	{
 		super(w, h, true, false);
 
-		// Create four sets of colours for each type of read available
-		initStates(unpaired, new Color(255, 160, 120), w, h);
-		initStates(firstInP, new Color(120, 255, 120), w, h);
-		initStates(secndInP, new Color(120, 120, 255), w, h);
-		initStates(orphaned, new Color(255, 120, 120), w, h);
-		initStates(fInPDiff, new Color(255, 255, 120), w, h);
-		initStates(sInPDiff, new Color(255, 120, 255), w, h);
+		// Create six sets of colours for each type of read available
+		Color cUnpaired = ColorPrefs.getColor("ReadTypeScheme.Unpaired", new Color(255, 160, 120));
+		Color cFirstInP = ColorPrefs.getColor("ReadTypeScheme.FirstInP", new Color(120, 255, 120));
+		Color cSecndInP = ColorPrefs.getColor("ReadTypeScheme.SecndInP", new Color(120, 120, 255));
+		Color cOrphaned = ColorPrefs.getColor("ReadTypeScheme.Orphaned", new Color(255, 120, 120));
+		Color cFInPDiff = ColorPrefs.getColor("ReadTypeScheme.FInPDiff", new Color(255, 255, 120));
+		Color cSInPDiff = ColorPrefs.getColor("ReadTypeScheme.SInPDiff", new Color(255, 120, 255));
+
+		initStates(unpaired, cUnpaired, w, h);
+		initStates(firstInP, cFirstInP, w, h);
+		initStates(secndInP, cSecndInP, w, h);
+		initStates(orphaned, cOrphaned, w, h);
+		initStates(fInPDiff, cFInPDiff, w, h);
+		initStates(sInPDiff, cSInPDiff, w, h);
 	}
 
 	private void initStates(ArrayList<ColorStamp> states, Color c, int w, int h)

@@ -54,13 +54,13 @@ public class EnhancedScheme extends ReadScheme
 
 	private void createColors()
 	{
-		colors.put("?", Color.lightGray);
-		colors.put(Sequence.PAD, Color.lightGray);
-		colors.put("N", Color.lightGray);
-		colors.put("A", new Color(120, 255, 120));
-		colors.put("C", new Color(255, 160, 120));
-		colors.put("G", new Color(255, 120, 120));
-		colors.put("T", new Color(120, 120, 255));
+		colors.put("?", ColorPrefs.getColor("EnhancedScheme.?", Color.lightGray));
+		colors.put(Sequence.PAD, ColorPrefs.getColor("EnhancedScheme.PAD", Color.lightGray));
+		colors.put("N", ColorPrefs.getColor("EnhancedScheme.N", Color.lightGray));
+		colors.put("A", ColorPrefs.getColor("EnhancedScheme.A", new Color(120, 255, 120)));
+		colors.put("C", ColorPrefs.getColor("EnhancedScheme.C", new Color(255, 160, 120)));
+		colors.put("G", ColorPrefs.getColor("EnhancedScheme.G", new Color(255, 120, 120)));
+		colors.put("T", ColorPrefs.getColor("EnhancedScheme.T", new Color(120, 120, 255)));
 	}
 
 	public Image getConsensusImage(int data)

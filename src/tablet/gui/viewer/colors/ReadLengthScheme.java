@@ -16,14 +16,21 @@ public class ReadLengthScheme extends EnhancedScheme
 	{
 		super(w, h, true, false);
 
-		// Create two sets of colours: one for each direction
-		initStates(new Color(120, 255, 120), w, h);
-		initStates(new Color(255, 160, 120), w, h);
-		initStates(new Color(255, 120, 120), w, h);
-		initStates(new Color(120, 120, 255), w, h);
-		initStates(new Color(165, 200, 175), w, h);
-		initStates(new Color(070, 116, 162), w, h);
-		initStates(new Color(116, 162, 070), w, h);
+		Color c50  = ColorPrefs.getColor("ReadLengthScheme.50",  new Color(120, 255, 120));
+		Color c100 = ColorPrefs.getColor("ReadLengthScheme.100", new Color(255, 160, 120));
+		Color c150 = ColorPrefs.getColor("ReadLengthScheme.150", new Color(255, 120, 120));
+		Color c250 = ColorPrefs.getColor("ReadLengthScheme.250", new Color(120, 120, 255));
+		Color c500 = ColorPrefs.getColor("ReadLengthScheme.500", new Color(165, 200, 175));
+		Color c750 = ColorPrefs.getColor("ReadLengthScheme.750", new Color(070, 116, 162));
+		Color cOth = ColorPrefs.getColor("ReadLengthScheme.Other", new Color(116, 162, 070));
+
+		initStates(c50, w, h);
+		initStates(c100, w, h);
+		initStates(c150, w, h);
+		initStates(c250, w, h);
+		initStates(c500, w, h);
+		initStates(c750, w, h);
+		initStates(cOth, w, h);
 	}
 
 	private void initStates(Color c, int w, int h)
