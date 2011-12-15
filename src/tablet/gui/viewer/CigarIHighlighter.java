@@ -15,11 +15,9 @@ public class CigarIHighlighter extends AlphaOverlay
 	private CigarFeature cigarFeature;
 	private boolean visible = false;
 
-	public CigarIHighlighter(AssemblyPanel aPanel, Integer insertBase, CigarFeature cigarFeature)
+	public CigarIHighlighter(AssemblyPanel aPanel)
 	{
 		super(aPanel);
-		this.insertBase = insertBase;
-		this.cigarFeature = cigarFeature;
 
 		start();
 	}
@@ -63,19 +61,6 @@ public class CigarIHighlighter extends AlphaOverlay
 						int x2 = (read.getEndPosition()+1 - offset) * ntW;
 						int w2 = (pX2Max * ntW) -x2;
 						g.fillRect(x2, row * ntH, w2, ntH);
-
-						g.setColor(Color.BLACK);
-						int x3 = (insertBase - offset) * ntW;
-						// Top horizontal line
-						//g.drawLine(x3-ntW, row*ntH, x3+ntW-1, row*ntH);
-						g.fillRect(x3-(ntW/2), row*ntH, ntW, 2);
-						// Vertical line
-						//g.drawLine(x3, row*ntH, x3, row*ntH + ntH);
-						g.fillRect(x3-1, row*ntH, 2, ntH);
-						// Bottom horizontal line
-						//g.drawLine(x3-ntW, row*ntH+ntH-1, x3+ntW-1, row*ntH+ntH-1);
-						g.fillRect(x3-(ntW/2), row*ntH+ntH-2, ntW, 2);
-						g.setPaint(new Color(0, 0, 0, alphaEffect));
 
 						requiresPaint = false;
 					}

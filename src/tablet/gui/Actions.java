@@ -55,6 +55,7 @@ public class Actions
 	public static ActionToggleButtonModel overlayShadowingOff;
 	public static ActionToggleButtonModel overlayShadowingCenter;
 	public static ActionToggleButtonModel overlayShadowingCustom;
+	public static ActionToggleButtonModel overlayShowCigarInsertions;
 
 	public static ActionToggleButtonModel[] proteinEnable;
 
@@ -116,6 +117,7 @@ public class Actions
 		overlayShadowingOff.setEnabled(false);
 		overlayShadowingCenter.setEnabled(false);
 		overlayShadowingCustom.setEnabled(false);
+		overlayShowCigarInsertions.setEnabled(false);
 
 		overviewScaled.setEnabled(false);
 		overviewCoverage.setEnabled(false);
@@ -175,6 +177,7 @@ public class Actions
 		overlayShadowingOff.setEnabled(false);
 		overlayShadowingCenter.setEnabled(false);
 		overlayShadowingCustom.setEnabled(false);
+		overlayShowCigarInsertions.setEnabled(false);
 
 		overviewScaled.setEnabled(false);
 		overviewCoverage.setEnabled(false);
@@ -235,6 +238,7 @@ public class Actions
 		overlayShadowingOff.setEnabled(true);
 		overlayShadowingCenter.setEnabled(true);
 		overlayShadowingCustom.setEnabled(true);
+		overlayShowCigarInsertions.setEnabled(true);
 
 		overviewScaled.setEnabled(true);
 		overviewCoverage.setEnabled(true);

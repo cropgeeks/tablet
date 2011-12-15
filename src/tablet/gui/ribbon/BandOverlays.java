@@ -6,7 +6,6 @@ package tablet.gui.ribbon;
 import java.awt.event.*;
 import javax.swing.*;
 
-import tablet.data.auxiliary.*;
 import tablet.gui.*;
 
 import org.jvnet.flamingo.common.model.*;
@@ -29,6 +28,8 @@ public class BandOverlays extends JRibbonBand implements ActionListener
 	private JCommandToggleButton bShadowingOff;
 	private JCommandToggleButton bShadowingCenter;
 	private JCommandToggleButton bShadowingCustom;
+
+	private JCommandToggleButton bHideCigarOverlayer;
 
 	BandOverlays(WinMain winMain)
 	{
@@ -136,6 +137,21 @@ public class BandOverlays extends JRibbonBand implements ActionListener
 		addCommandButton(bShadowingOff, RibbonElementPriority.MEDIUM);
 		addCommandButton(bShadowingCenter, RibbonElementPriority.MEDIUM);
 		addCommandButton(bShadowingCustom, RibbonElementPriority.MEDIUM);
+
+			// Hide the overview panel
+		bHideCigarOverlayer = new JCommandToggleButton(
+			RB.getString("gui.ribbon.BandOverlays.bShowCigarOverlayer"),
+			RibbonController.getIcon("CIGAROVERLAY", 16));
+		Actions.overlayShowCigarInsertions = new ActionToggleButtonModel(false);
+		Actions.overlayShowCigarInsertions.setSelected(Prefs.visCigarOverlayVisible);
+		Actions.overlayShowCigarInsertions.addActionListener(this);
+		bHideCigarOverlayer.setActionModel(Actions.overlayShowCigarInsertions);
+		bHideCigarOverlayer.setActionKeyTip("HC");
+		bHideCigarOverlayer.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.BandOverlays.bShowCigarOverlayer.tooltip"),
+			RB.getString("gui.ribbon.BandOverlays.bShowCigarOverlayer.richtip")));
+
+		addCommandButton(bHideCigarOverlayer, RibbonElementPriority.MEDIUM);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -163,6 +179,12 @@ public class BandOverlays extends JRibbonBand implements ActionListener
 
 		else if (e.getSource() == Actions.overlayShadowingCustom)
 			actionShadowingCustom();
+
+		else if (e.getSource() == Actions.overlayShowCigarInsertions)
+		{
+			Prefs.visCigarOverlayVisible = !Prefs.visCigarOverlayVisible;
+			winMain.getAssemblyPanel().toggleCigarOverlayer();
+		}
 	}
 
 	public void actionShadowingOff()

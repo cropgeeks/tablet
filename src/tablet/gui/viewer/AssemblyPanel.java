@@ -39,6 +39,8 @@ public class AssemblyPanel extends JPanel
 
 	private CigarIHighlighter cigarIHighlighter;
 
+	private CigarOverlayer cigarIOverlayer;
+
 	public AssemblyPanel(WinMain winMain)
 	{
 		this.winMain = winMain;
@@ -200,7 +202,10 @@ public class AssemblyPanel extends JPanel
 		bambamBar.setContig(contig);
 
 		if (contig != null)
+		{
 			overviewCanvas.setSubset(contig.getVisualStart(), contig.getVisualEnd());
+			toggleCigarOverlayer();
+		}
 
 		forceRedraw();
 
@@ -390,6 +395,25 @@ public class AssemblyPanel extends JPanel
 	public void updateColorScheme()
 		{ readsCanvas.updateColorScheme(); }
 
+	public void toggleCigarOverlayer()
+	{
+		// Start fade out animation for overlay
+		if(Prefs.visCigarOverlayVisible)
+		{
+			cigarIOverlayer = new CigarOverlayer(this, false);
+			cigarIOverlayer.start();
+		}
+		// Start fade in animation for overlay
+		else
+		{
+			if (cigarIOverlayer != null)
+			{
+				cigarIOverlayer = new CigarOverlayer(this, true);
+				cigarIOverlayer.start();
+			}
+		}
+	}
+
 	public OverviewCanvas getOverviewCanvas()
 		{ return overviewCanvas; }
 
@@ -397,7 +421,12 @@ public class AssemblyPanel extends JPanel
 		{ return featuresCanvas; }
 
 	public CigarIHighlighter getCigarIHighlighter()
-		{ return cigarIHighlighter; }
+	{
+		if (cigarIHighlighter == null)
+			cigarIHighlighter = new CigarIHighlighter(this);
+
+		return cigarIHighlighter;
+	}
 
 	public void setCigarIHighlighter(CigarIHighlighter cigarIHighlighter)
 		{ this.cigarIHighlighter = cigarIHighlighter; }
