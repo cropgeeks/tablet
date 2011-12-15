@@ -4,7 +4,6 @@
 package tablet.gui;
 
 import java.awt.*;
-import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.util.*;
 import javax.swing.*;
@@ -42,7 +41,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		//Keyboard shortcut code
 		Action openFind = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
-				ctrlTabs.setSelectedIndex(3);
+				ctrlTabs.setSelectedIndex(4);
 			}
 		};
 

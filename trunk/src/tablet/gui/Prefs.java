@@ -177,6 +177,10 @@ public class Prefs extends XMLPreferences
 
 	public static String recentCustomEnzymes = "";
 
+	public static boolean visOutlineAlpha = true;
+
+	public static boolean visCigarOverlayVisible = true;
+
 	// Updates the array of recently accessed documents so that 'document' is
 	// the first element, even if it has been accessed previously
 	public static void setRecentDocument(AssemblyFile[] files)

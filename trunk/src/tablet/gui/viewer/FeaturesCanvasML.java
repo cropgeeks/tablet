@@ -43,9 +43,6 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		fCanvas.addMouseMotionListener(this);
 
 		new ReadsCanvasDragHandler(aPanel, fCanvas);
-
-		mAddRestriction = new JMenuItem(RB.getString("gui.viewer.FeaturesCanvasML.addRestrictionEnyme"));
-		mAddRestriction.addActionListener(this);
 	}
 
 	public void mouseExited(MouseEvent e)
@@ -94,6 +91,9 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		mCopyFeature.setIcon(Icons.getIcon("CLIPBOARD"));
 		mCopyFeature.addActionListener(this);
 		mCopyFeature.setEnabled(features != null && features.size() > 0);
+
+		mAddRestriction = new JMenuItem(RB.getString("gui.viewer.FeaturesCanvasML.addRestrictionEnyme"));
+		mAddRestriction.addActionListener(this);
 
 		menu.add(mCopyReference);
 		menu.add(mCopyFeature);
@@ -213,11 +213,7 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 			int pE = feature.getVisualPE();
 
 			if (feature instanceof CigarFeature)
-			{
-				highlightCigar(feature, pS);
-				getCigarTooltip(feature, pS, pE);
-			}
-
+				getCigarTooltip(feature, pS, pE); //highlightCigar(feature, pS);
 			else
 				getNormalTooltip(feature, pS, pE);
 		}
@@ -265,24 +261,28 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		}
 	}
 
-	private void highlightCigar(Feature f, int pS)
-	{
-		CigarIHighlighter highlighter = aPanel.getCigarIHighlighter();
-
-		if (highlighter == null || highlighter.isVisible() == false)
-		{
-			CigarFeature cigarFeature = (CigarFeature)f;
-			highlighter = new CigarIHighlighter(aPanel, pS+1, cigarFeature);
-			aPanel.setCigarIHighlighter(highlighter);
-
-			rCanvas.repaint();
-		}
-	}
+//	private void highlightCigar(Feature f, int pS)
+//	{
+//		CigarIHighlighter highlighter = aPanel.getCigarIHighlighter();
+//
+//		if (highlighter == null || highlighter.isVisible() == false)
+//		{
+//			CigarFeature cigarFeature = (CigarFeature)f;
+//			highlighter = new CigarIHighlighter(aPanel);
+//			highlighter.highlightFeature(cigarFeature);
+//			aPanel.setCigarIHighlighter(highlighter);
+//
+//			rCanvas.repaint();
+//		}
+//	}
 
 	public void mouseClicked(MouseEvent e)
 	{
 		if (e.isPopupTrigger())
 			return;
+
+		if (aPanel.getCigarIHighlighter().isVisible())
+			aPanel.getCigarIHighlighter().removeHighlight();
 
 		for (Feature f: features)
 		{
@@ -291,7 +291,7 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 				CigarFeature cigarFeature = (CigarFeature)f;
 				CigarIHighlighter cigarHighlighter = aPanel.getCigarIHighlighter();
 
-				if(cigarHighlighter.isVisible() == false)
+				if (cigarHighlighter.isVisible() == false)
 					cigarHighlighter.highlightFeature(cigarFeature);
 				else
 					cigarHighlighter.removeHighlight();
