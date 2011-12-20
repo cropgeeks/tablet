@@ -8,6 +8,7 @@ import java.awt.*;
 import tablet.data.*;
 import tablet.data.auxiliary.*;
 import tablet.gui.*;
+import tablet.gui.viewer.colors.*;
 
 /**
  * Responsible for drawing outlines around either the current read-under-the-
@@ -52,7 +53,7 @@ class OutlinerOverlay implements IOverlayRenderer
 		else if (Prefs.visReadsCanvasZoom > 8)
 			g.setStroke(new BasicStroke(2));
 
-		g.setColor(new Color(10, 10, 100));
+		g.setColor(ColorPrefs.get("User.OutlinerOverlay.RowColOutliner"));
 
 		// Deal with any additional features first
 		for (VisualOutline f: rCanvas.contig.getOutlines())
@@ -99,7 +100,7 @@ class OutlinerOverlay implements IOverlayRenderer
 				g.fillRect(xS, y, xE-xS-1, rCanvas.ntH-1);
 			}
 
-			g.setColor(TabletUtils.red1);
+			g.setColor(ColorPrefs.get("User.OutlinerOverlay.ReadOutliner"));
 			g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);
 		}
 
