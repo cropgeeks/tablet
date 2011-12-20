@@ -23,12 +23,12 @@ public class ReadTypeScheme extends EnhancedScheme
 		super(w, h, true, false);
 
 		// Create six sets of colours for each type of read available
-		Color cUnpaired = ColorPrefs.getColor("ReadTypeScheme.Unpaired", new Color(255, 160, 120));
-		Color cFirstInP = ColorPrefs.getColor("ReadTypeScheme.FirstInP", new Color(120, 255, 120));
-		Color cSecndInP = ColorPrefs.getColor("ReadTypeScheme.SecndInP", new Color(120, 120, 255));
-		Color cOrphaned = ColorPrefs.getColor("ReadTypeScheme.Orphaned", new Color(255, 120, 120));
-		Color cFInPDiff = ColorPrefs.getColor("ReadTypeScheme.FInPDiff", new Color(255, 255, 120));
-		Color cSInPDiff = ColorPrefs.getColor("ReadTypeScheme.SInPDiff", new Color(255, 120, 255));
+		Color cUnpaired = ColorPrefs.get("User.ReadTypeScheme.Unpaired");
+		Color cFirstInP = ColorPrefs.get("User.ReadTypeScheme.FirstInP");
+		Color cSecndInP = ColorPrefs.get("User.ReadTypeScheme.SecndInP");
+		Color cOrphaned = ColorPrefs.get("User.ReadTypeScheme.Orphaned");
+		Color cFInPDiff = ColorPrefs.get("User.ReadTypeScheme.FInPDiff");
+		Color cSInPDiff = ColorPrefs.get("User.ReadTypeScheme.SInPDiff");
 
 		initStates(unpaired, cUnpaired, w, h);
 		initStates(firstInP, cFirstInP, w, h);

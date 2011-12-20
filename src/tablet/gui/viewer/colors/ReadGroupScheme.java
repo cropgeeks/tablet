@@ -24,7 +24,7 @@ public class ReadGroupScheme extends EnhancedScheme
 	{
 		super(w, h, true, false);
 
-		Color cDisabled = ColorPrefs.getColor("ReadGroupScheme.Disabled", Color.LIGHT_GRAY);
+		Color cDisabled = ColorPrefs.get("User.ReadGroupScheme.Disabled");
 
 		statesRG = new ArrayList<ArrayList<ColorStamp>>();
 
@@ -117,7 +117,7 @@ public class ReadGroupScheme extends EnhancedScheme
 			String prefsID = "ReadGroup_" + id;
 
 			// Attempt to load color for read group from prefs file
-			Color color = ColorPrefs.getColor(prefsID);
+			Color color = ColorPrefs.get(prefsID);
 
 			if (color != null)
 				colorInfos[i] = new ColorInfo(color, readGroup);

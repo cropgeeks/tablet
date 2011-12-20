@@ -16,13 +16,13 @@ public class ReadLengthScheme extends EnhancedScheme
 	{
 		super(w, h, true, false);
 
-		Color c50  = ColorPrefs.getColor("ReadLengthScheme.50",  new Color(120, 255, 120));
-		Color c100 = ColorPrefs.getColor("ReadLengthScheme.100", new Color(255, 160, 120));
-		Color c150 = ColorPrefs.getColor("ReadLengthScheme.150", new Color(255, 120, 120));
-		Color c250 = ColorPrefs.getColor("ReadLengthScheme.250", new Color(120, 120, 255));
-		Color c500 = ColorPrefs.getColor("ReadLengthScheme.500", new Color(165, 200, 175));
-		Color c750 = ColorPrefs.getColor("ReadLengthScheme.750", new Color(070, 116, 162));
-		Color cOth = ColorPrefs.getColor("ReadLengthScheme.Other", new Color(116, 162, 070));
+		Color c50  = ColorPrefs.get("User.ReadLengthScheme.50");
+		Color c100 = ColorPrefs.get("User.ReadLengthScheme.100");
+		Color c150 = ColorPrefs.get("User.ReadLengthScheme.150");
+		Color c250 = ColorPrefs.get("User.ReadLengthScheme.250");
+		Color c500 = ColorPrefs.get("User.ReadLengthScheme.500");
+		Color c750 = ColorPrefs.get("User.ReadLengthScheme.750");
+		Color cOth = ColorPrefs.get("User.ReadLengthScheme.Other");
 
 		initStates(c50, w, h);
 		initStates(c100, w, h);
