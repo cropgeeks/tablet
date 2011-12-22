@@ -6,6 +6,7 @@ package tablet.gui.ribbon;
 import java.awt.event.*;
 import java.util.*;
 
+import tablet.gui.dialog.*;
 import tablet.gui.*;
 import tablet.gui.viewer.colors.*;
 
@@ -28,6 +29,8 @@ public class BandColors extends JRibbonBand implements ActionListener
 	static JCommandToggleButton bReadGroup;
 	static JCommandToggleButton bReadLength;
 	static JCommandToggleButton bVariants;
+
+	private JCommandButton bColors;
 
 	private StyleListener styleListener = new StyleListener();
 
@@ -154,6 +157,19 @@ public class BandColors extends JRibbonBand implements ActionListener
 		styleButtons.add(bVariants);
 
 
+		// Customise colours option
+		bColors = new JCommandButton(
+			RB.getString("gui.ribbon.BandColors.bColors"),
+			RibbonController.getIcon("COLORIZE", 32));
+		Actions.colorsCustom = new ActionRepeatableButtonModel(bColors);
+		Actions.colorsCustom.addActionListener(this);
+		bColors.setActionModel(Actions.colorsCustom);
+		bColors.setActionKeyTip("C");
+		bColors.setActionRichTooltip(new RichTooltip(
+			RB.format("gui.ribbon.BandColors.bColors.tooltip", Tablet.winKey),
+			RB.getString("gui.ribbon.BandColors.bColors.richtip")));
+
+
 		// Set up the ribbon gallery (gawd knows what this code is doing)
 		Map<RibbonElementPriority, Integer> counts =
 			new HashMap<RibbonElementPriority, Integer>();
@@ -164,6 +180,7 @@ public class BandColors extends JRibbonBand implements ActionListener
 		List<StringValuePair<List<JCommandToggleButton>>> galleryButtons =
 			new ArrayList<StringValuePair<List<JCommandToggleButton>>>();
 
+		addCommandButton(bColors, RibbonElementPriority.TOP);
 		galleryButtons.add(
 			new StringValuePair<List<JCommandToggleButton>>(null, styleButtons));
 		addRibbonGallery(
@@ -228,6 +245,14 @@ public class BandColors extends JRibbonBand implements ActionListener
 			// BUG: Workaround for API allowing toggle groups to be unselected
 			Actions.colorsVariants.setSelected(true);
 		}
+
+		else if (e.getSource() == Actions.colorsCustom)
+			customizeColors();
+	}
+
+	public void customizeColors()
+	{
+		new CustomizeColorsDialog(Tablet.winMain);
 	}
 
 	private void setColorScheme(int scheme)

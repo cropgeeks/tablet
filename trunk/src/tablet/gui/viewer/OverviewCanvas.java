@@ -13,6 +13,7 @@ import scri.commons.gui.*;
 
 import tablet.data.auxiliary.*;
 import tablet.gui.*;
+import tablet.gui.viewer.colors.*;
 
 public class OverviewCanvas extends JPanel
 {
@@ -373,12 +374,12 @@ public class OverviewCanvas extends JPanel
 			int bXR = bX2 - scaledAdjust;
 
 			g.fillRect(bXL, bY1, bXR-bXL, bY2-bY1);
-			g.setColor(TabletUtils.red1);
+			g.setColor(ColorPrefs.get("User.Overview.Outline"));
 			g.drawRect(bXL, bY1, bXR-bXL, bY2-bY1);
 
 			if (readX >= 0)
 			{
-				g.setColor(TabletUtils.red1);
+				g.setColor(ColorPrefs.get("User.Overview.ReadHighlight"));
 				g.drawRect(readX-scaledAdjust, readY, readW-1, readH-1);
 			}
 

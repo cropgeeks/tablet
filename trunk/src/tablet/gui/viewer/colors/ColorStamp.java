@@ -52,9 +52,9 @@ class ColorStamp extends Stamp
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
 			if (isDeltaBase && displayInRed(text))
-				g.setColor(Color.red);
+				g.setColor(ColorPrefs.get("User.Nucleotides.DeltaText"));
 			else
-				g.setColor(Color.black);
+				g.setColor(ColorPrefs.get("User.Nucleotides.Text"));
 
 			g.drawString(text,
 				(int)((float)w/2-bounds.getWidth()/2),

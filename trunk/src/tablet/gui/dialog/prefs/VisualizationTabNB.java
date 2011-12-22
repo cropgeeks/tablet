@@ -4,9 +4,11 @@
 package tablet.gui.dialog.prefs;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 import tablet.gui.*;
+import static tablet.gui.ribbon.RibbonController.*;
 
 import scri.commons.gui.*;
 
@@ -21,6 +23,7 @@ class VisualizationTabNB extends JPanel
 
         TabletUtils.setPanelColor(this, false);
         TabletUtils.setPanelColor(panel1, false);
+		TabletUtils.setPanelColor(panel2, false);
 
 		// Top panel
 		panel1.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.prefs.NBVisualizationPanel.panel1Title")));
@@ -46,6 +49,18 @@ class VisualizationTabNB extends JPanel
 
 		tagCheckbox.setSelected(Prefs.visNeverTagUnknownBases);
 		tagCheckbox.setBorder(BorderFactory.createEmptyBorder(0, -2, 0, 0));
+
+
+		// Bottom panel
+		panel2.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.prefs.NBVisualizationPanel.panel2Title")));
+		RB.setText(bColors, "gui.dialog.prefs.NBVisualizationPanel.bColors");
+
+		bColors.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e)
+			{
+				bandStyles.customizeColors();
+			}
+		});
     }
 
 	public void applySettings()
@@ -77,6 +92,8 @@ class VisualizationTabNB extends JPanel
         padSpinner = new javax.swing.JSpinner();
         padLabel = new javax.swing.JLabel();
         tagCheckbox = new javax.swing.JCheckBox();
+        panel2 = new javax.swing.JPanel();
+        bColors = new javax.swing.JButton();
 
         panel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Display options:"));
 
@@ -133,13 +150,36 @@ class VisualizationTabNB extends JPanel
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        panel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Colour options:"));
+
+        bColors.setText("Customise Tablet Colours");
+
+        javax.swing.GroupLayout panel2Layout = new javax.swing.GroupLayout(panel2);
+        panel2.setLayout(panel2Layout);
+        panel2Layout.setHorizontalGroup(
+            panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bColors)
+                .addContainerGap(220, Short.MAX_VALUE))
+        );
+        panel2Layout.setVerticalGroup(
+            panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(bColors)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(panel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -147,16 +187,20 @@ class VisualizationTabNB extends JPanel
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(panel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bColors;
     private javax.swing.JComboBox<String> dnaCombo;
     private javax.swing.JLabel dnaLabel;
     private javax.swing.JLabel padLabel;
     private javax.swing.JSpinner padSpinner;
     private javax.swing.JPanel panel1;
+    private javax.swing.JPanel panel2;
     private javax.swing.JComboBox<String> proteinCombo;
     private javax.swing.JLabel proteinLabel;
     private javax.swing.JCheckBox tagCheckbox;

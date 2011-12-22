@@ -28,7 +28,9 @@ public class BandLayout extends JRibbonBand implements ActionListener
 
 	// Button for the Color Schemes and its drop-down menu options
 	private JCommandButton bColorScheme;
-	private JCheckBoxMenuItem mEnhanced, mDirection, mReadType, mReadGroup, mReadLength, mVariants;
+	private JCheckBoxMenuItem mEnhanced, mDirection, mReadType, mReadGroup;
+	private JCheckBoxMenuItem mReadLength, mVariants;
+	private JMenuItem mCustomize;
 
 	private JCommandToggleButton bTagVariants;
 //	private JCommandButton bSort;
@@ -177,6 +179,8 @@ public class BandLayout extends JRibbonBand implements ActionListener
 			BandColors.bReadLength.doActionClick();
 		else if (e.getSource() == mVariants)
 			BandColors.bVariants.doActionClick();
+		else if (e.getSource() == mCustomize)
+			RibbonController.bandStyles.customizeColors();
 	}
 
 	private void createPackingPopupMenu()
@@ -230,12 +234,17 @@ public class BandLayout extends JRibbonBand implements ActionListener
 		mVariants = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandColors.bVariants"));
 		mVariants.addActionListener(this);
 
+		mCustomize = new JMenuItem(RB.getString("gui.ribbon.BandColors.bColorsMenu"));
+		mCustomize.addActionListener(this);
+
 		colorMenu.add(mEnhanced);
 		colorMenu.add(mDirection);
 		colorMenu.add(mReadType);
 		colorMenu.add(mReadGroup);
 		colorMenu.add(mReadLength);
 		colorMenu.add(mVariants);
+		colorMenu.addSeparator();
+		colorMenu.add(mCustomize);
 	}
 
 	private void handleColorsPopup()
