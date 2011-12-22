@@ -29,6 +29,7 @@ public class Actions
 	public static ActionToggleButtonModel optionsHideContigs;
 	public static ActionRepeatableButtonModel optionsHideOverview;
 
+	public static ActionRepeatableButtonModel colorsCustom;
 	public static ActionToggleButtonModel colorsStandard;
 	public static ActionToggleButtonModel colorsDirection;
 	public static ActionToggleButtonModel colorsReadType;

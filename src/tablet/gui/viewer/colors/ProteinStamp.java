@@ -39,7 +39,7 @@ class ProteinStamp extends Stamp
 		if (Prefs.visEnableText)
 		{
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-			g.setColor(Color.black);
+			g.setColor(ColorPrefs.get("User.Protein.Text"));
 			g.drawString(txt,
 				(int)((float)w3/2-bounds.getWidth()/2),
 				h - fm.getMaxDescent());

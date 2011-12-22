@@ -29,6 +29,25 @@ public class ColorPrefs
 		}
 	}
 
+	public static HashMap<String,Color> getColors()
+	{
+		return colors;
+	}
+
+	public static void resetUserColors()
+	{
+		// Search (and clear) all colours beginning with "User." from the hash
+		ArrayList<String> toRemove = new ArrayList<String>();
+		for (String key: colors.keySet())
+			if (key.startsWith("User."))
+				toRemove.add(key);
+		for (String key: toRemove)
+			colors.remove(key);
+
+		// Then rebuild them
+		initializeColors();
+	}
+
 	private static void initializeColors()
 	{
 		// ENHANCED scheme
@@ -80,6 +99,18 @@ public class ColorPrefs
 		initColor("User.OutlinerOverlay.ReadOutliner", new Color(169, 46, 34));
 		// Outlines rows and columns
 		initColor("User.OutlinerOverlay.RowColOutliner", new Color(10, 10, 100));
+
+		// ScaleBar font color
+		initColor("User.ScaleBar.Text", Color.red);
+
+		// Font colour for rendering on top of nucleotides
+		initColor("User.Protein.Text", Color.black);
+		initColor("User.Nucleotides.Text", Color.black);
+		initColor("User.Nucleotides.DeltaText", Color.red);
+
+		// Overview window
+		initColor("User.Overview.Outline", new Color(169, 46, 34));
+		initColor("User.Overview.ReadHighlight", new Color(169, 46, 34));
 	}
 
 

@@ -10,6 +10,7 @@ import javax.swing.*;
 import tablet.data.*;
 import tablet.data.auxiliary.*;
 import tablet.gui.*;
+import tablet.gui.viewer.colors.*;
 
 import scri.commons.gui.*;
 
@@ -116,7 +117,7 @@ class ScaleCanvas extends TrackingCanvas
 				g.drawLine(i*ntW+(ntW/2), 3, i*ntW+(ntW/2), 8);
 		}
 
-		g.setColor(Color.red);
+		g.setColor(ColorPrefs.get("User.ScaleBar.Text"));
 
 		int mouseBaseS = 0, mouseBaseE =  0;
 
