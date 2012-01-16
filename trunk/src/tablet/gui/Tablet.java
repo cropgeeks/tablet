@@ -146,12 +146,6 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 			{
 				winMain.validateCacheFolder();
 
-				if (Prefs.isFirstRun == false && Prefs.isHuttonised == false)
-				{
-					new HuttonDialog();
-					Prefs.isHuttonised = true;
-				}
-
 				long thirtyDays = 2592000000L; // This is 30 days: 2592000000L;
 				long thirtyDaysAgo = System.currentTimeMillis() - thirtyDays;
 
