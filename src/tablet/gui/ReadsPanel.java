@@ -29,7 +29,7 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 	private JMenuItem mClipboardName, mClipboardData, mClipboard;
 	private JMenuItem mFindStart, mFindEnd, mJumpToPair;
 
-	ReadsPanel(AssemblyPanel aPanel, JTabbedPane ctrlTabs)
+	ReadsPanel(AssemblyPanel aPanel)
 	{
 		this.aPanel = aPanel;
 		controls = new ReadsPanelNB(this);

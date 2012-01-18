@@ -89,8 +89,8 @@ public class WinMain extends JRibbonFrame
 		assemblyPanel = new AssemblyPanel(this);
 		contigsPanel = new ContigsPanel(this, assemblyPanel, ctrlTabs);
 		featuresPanel = new FeaturesPanel(assemblyPanel, ctrlTabs);
-		findPanel = new FindPanel(assemblyPanel, this, ctrlTabs);
-		readsPanel = new ReadsPanel(assemblyPanel, ctrlTabs);
+		findPanel = new FindPanel(assemblyPanel, this);
+		readsPanel = new ReadsPanel(assemblyPanel);
 		readGroupsPanel = new ReadGroupsPanel();
 
 		contigsPanel.setFeaturesPanel(featuresPanel);
@@ -248,6 +248,11 @@ public class WinMain extends JRibbonFrame
 
 	public ReadGroupsPanel getReadGroupsPanel()
 		{ return readGroupsPanel; }
+
+	public void focusOnFindPanel()
+	{
+		ctrlTabs.setSelectedIndex(4);
+	}
 
 	public JumpToDialog getJumpToDialog()
 	{

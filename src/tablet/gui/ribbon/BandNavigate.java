@@ -70,8 +70,6 @@ class BandNavigate extends JRibbonBand implements ActionListener
 		bJumpTo.setActionRichTooltip(new RichTooltip(
 			RB.format("gui.ribbon.BandNavigate.bJumpTo.tooltip", Tablet.winKey),
 			RB.getString("gui.ribbon.BandNavigate.bJumpTo.richtip")));
-		RibbonController.assignShortcut(bJumpTo,
-			KeyStroke.getKeyStroke(KeyEvent.VK_J, Tablet.menuShortcut));
 
 		// Next Feature...
 		bNextFeature = new JCommandButton(
@@ -84,8 +82,6 @@ class BandNavigate extends JRibbonBand implements ActionListener
 		bNextFeature.setActionRichTooltip(new RichTooltip(
 			RB.format("gui.ribbon.BandNavigate.bNextFeature.tooltip", Tablet.winKey),
 			RB.getString("gui.ribbon.BandNavigate.bNextFeature.richtip")));
-//		RibbonController.assignShortcut(bNextFeature,
-//			KeyStroke.getKeyStroke(KeyEvent.VK_PERIOD, Tablet.menuShortcut));
 
 		// Previous Feature...
 		bPrevFeature = new JCommandButton(
@@ -98,8 +94,6 @@ class BandNavigate extends JRibbonBand implements ActionListener
 		bPrevFeature.setActionRichTooltip(new RichTooltip(
 			RB.format("gui.ribbon.BandNavigate.bPrevFeature.tooltip", Tablet.winKey),
 			RB.getString("gui.ribbon.BandNavigate.bPrevFeature.richtip")));
-//		RibbonController.assignShortcut(bPrevFeature,
-//			KeyStroke.getKeyStroke(KeyEvent.VK_COMMA, Tablet.menuShortcut));
 
 		addCommandButton(bPageLeft, RibbonElementPriority.MEDIUM);
 		addCommandButton(bPageRight, RibbonElementPriority.MEDIUM);
@@ -111,33 +105,42 @@ class BandNavigate extends JRibbonBand implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == Actions.navigatePageLeft)
-			winMain.getAssemblyPanel().getController().pageLeft();
+			pageLeft();
 
 		else if (e.getSource() == Actions.navigatePageRight)
-			winMain.getAssemblyPanel().getController().pageRight();
+			pageRight();
 
 		else if (e.getSource() == Actions.navigateJumpTo)
-		{
-			if (DisplayData.hasPaddedToUnpadded() == false &&
-				DisplayData.hasUnpaddedToPadded() == false)
-			{
-				TaskDialog.info(
-					RB.getString("gui.ribbon.BandNavigate.jumpError"),
-					RB.getString("gui.text.close"));
-				return;
-			}
-
-			winMain.getJumpToDialog().setVisible(true);
-		}
+			jumpToBase();
 
 		else if(e.getSource() == Actions.navigateNextFeature)
-		{
 			winMain.getFeaturesPanel().nextFeature();
-		}
 
 		else if(e.getSource() == Actions.navigatePrevFeature)
-		{
 			winMain.getFeaturesPanel().prevFeature();
+	}
+
+	void pageLeft()
+	{
+		winMain.getAssemblyPanel().getController().pageLeft();
+	}
+
+	void pageRight()
+	{
+		winMain.getAssemblyPanel().getController().pageRight();
+	}
+
+	void jumpToBase()
+	{
+		if (DisplayData.hasPaddedToUnpadded() == false &&
+			DisplayData.hasUnpaddedToPadded() == false)
+		{
+			TaskDialog.info(
+				RB.getString("gui.ribbon.BandNavigate.jumpError"),
+				RB.getString("gui.text.close"));
+			return;
 		}
+
+		winMain.getJumpToDialog().setVisible(true);
 	}
 }

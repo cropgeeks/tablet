@@ -80,8 +80,6 @@ public class BandOverlays extends JRibbonBand implements ActionListener
 		bReadNames.setActionRichTooltip(new RichTooltip(
 			RB.format("gui.ribbon.BandOverlays.bReadNames.tooltip", Tablet.winKey),
 			RB.getString("gui.ribbon.BandOverlays.bReadNames.richtip")));
-		RibbonController.assignShortcut(bReadNames,
-			KeyStroke.getKeyStroke(KeyEvent.VK_N, Tablet.menuShortcut));
 
 
 		addCommandButton(bInfoPane, RibbonElementPriority.MEDIUM);
@@ -166,10 +164,7 @@ public class BandOverlays extends JRibbonBand implements ActionListener
 		}
 
 		else if (e.getSource() == Actions.overlayReadNames)
-		{
-			Prefs.visOverlayNames = !Prefs.visOverlayNames;
-			winMain.getAssemblyPanel().toggleNameOverlay();
-		}
+			actionReadNames();
 
 		else if (e.getSource() == Actions.overlayShadowingOff)
 			actionShadowingOff();
@@ -212,5 +207,11 @@ public class BandOverlays extends JRibbonBand implements ActionListener
 
 		// BUG: Workaround for API allowing toggle groups to be unselected
 		Actions.overlayShadowingCustom.setSelected(true);
+	}
+
+	void actionReadNames()
+	{
+		Prefs.visOverlayNames = !Prefs.visOverlayNames;
+		winMain.getAssemblyPanel().toggleNameOverlay();
 	}
 }

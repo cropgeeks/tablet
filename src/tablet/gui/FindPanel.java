@@ -28,7 +28,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 
 	private JMenuItem mClipboard;
 
-	public FindPanel(AssemblyPanel aPanel, WinMain winMain, final JTabbedPane ctrlTabs)
+	public FindPanel(AssemblyPanel aPanel, WinMain winMain)
 	{
 		this.aPanel = aPanel;
 		this.cPanel = winMain.getContigsPanel();
@@ -37,17 +37,6 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		add(controls = new FindPanelNB(this));
 
 		createTableModel();
-
-		//Keyboard shortcut code
-		Action openFind = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				ctrlTabs.setSelectedIndex(4);
-			}
-		};
-
-		ctrlTabs.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-			KeyStroke.getKeyStroke(KeyEvent.VK_F, Tablet.menuShortcut), "find");
-		ctrlTabs.getActionMap().put("find", openFind);
 	}
 
 	private void createTableModel()

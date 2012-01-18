@@ -19,7 +19,7 @@ public class RibbonController
 {
 	private static JRibbon ribbon;
 
-	private static JLabel titleLabel = new JLabel(" ");
+	public static JLabel titleLabel = new JLabel(" ");
 	private static JLabel memoryLabel = new JLabel(" ");
 
 	public static BandAssemblies bandAssemblies;
@@ -90,6 +90,8 @@ public class RibbonController
 				bHelp.doClick();
 			}
 		});
+
+		KeyManager.createKeyboardShortcuts(winMain);
 	}
 
 	public static void setTitleLabel(String str)

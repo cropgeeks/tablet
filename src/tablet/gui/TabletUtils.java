@@ -15,6 +15,8 @@ import javax.swing.*;
 import javax.swing.filechooser.*;
 import javax.swing.table.*;
 
+import tablet.gui.ribbon.*;
+
 import scri.commons.gui.*;
 
 public class TabletUtils
@@ -52,15 +54,13 @@ public class TabletUtils
 
 		// TODO: is there a better way of doing this that doesn't rely on having
 		// an actionListener AND an AbstractAction both doing the same thing
-		AbstractAction helpAction = new AbstractAction() {
+		AbstractAction help = new AbstractAction() {
 			public void actionPerformed(ActionEvent e) {
 				visitURL(html);
 			}
 		};
 
-		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0);
-		button.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "help");
-		button.getActionMap().put("help", helpAction);
+		KeyManager.map(help, KeyStroke.getKeyStroke(KeyEvent.VK_F1, 0), "help");
 	}
 
 	public static void sendFeedback()
