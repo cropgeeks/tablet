@@ -1,5 +1,5 @@
-// Copyright 2009-2011 Plant Bioinformatics Group, SCRI. All rights reserved.
-// Use is subject to the accompanying licence terms.
+// Copyright 2009-2012 Information & Computational Sciences, JHI. All rights
+// reserved. Use is subject to the accompanying licence terms.
 
 package tablet.analysis;
 
