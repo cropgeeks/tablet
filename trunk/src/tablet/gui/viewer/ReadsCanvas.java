@@ -75,24 +75,6 @@ public class ReadsCanvas extends JPanel
 	{
 		setOpaque(false);
 
-		// Set up some keyboard navigation
-		Action pageLeft = new AbstractAction() {
-			public void actionPerformed(ActionEvent e)
-				{ aPanel.getController().pageLeft(); }
-		};
-		Action pageRight = new AbstractAction() {
-			public void actionPerformed(ActionEvent e)
-				{ aPanel.getController().pageRight(); }
-		};
-
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-			KeyStroke.getKeyStroke(KeyEvent.VK_OPEN_BRACKET, 0), "left");
-		getActionMap().put("left", pageLeft);
-
-		getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-			KeyStroke.getKeyStroke(KeyEvent.VK_CLOSE_BRACKET, 0), "right");
-		getActionMap().put("right", pageRight);
-
 		// Prepare the background threads that will do the main painting
 		executor = Executors.newFixedThreadPool(cores);
 		tasks = new Future[cores];

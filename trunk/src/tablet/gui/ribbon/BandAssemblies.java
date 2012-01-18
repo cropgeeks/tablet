@@ -45,8 +45,6 @@ class BandAssemblies extends JRibbonBand implements ActionListener
 		bOpen32.setActionRichTooltip(new RichTooltip(
 			RB.format("gui.ribbon.BandAssemblies.bOpen.tooltip", Tablet.winKey),
 			RB.getString("gui.ribbon.BandAssemblies.bOpen.richtip")));
-		RibbonController.assignShortcut(bOpen32,
-			KeyStroke.getKeyStroke(KeyEvent.VK_O, Tablet.menuShortcut));
 
 		// Open an assembly (16x16 shortcut button)
 		bOpen16 = new JCommandButton("",
@@ -107,7 +105,7 @@ class BandAssemblies extends JRibbonBand implements ActionListener
 		if (e.getSource() == Actions.assembliesOpen32 ||
 			e.getSource() == Actions.assembliesOpen16)
 		{
-			winMain.getCommands().fileOpen(null);
+			openAssembly();
 		}
 
 		else if (e.getSource() == Actions.assembliesImportFeatures)
@@ -118,5 +116,10 @@ class BandAssemblies extends JRibbonBand implements ActionListener
 
 		else if (e.getSource() == Actions.assembliesImportEnzymes)
 			winMain.getRestrictionEnzymeDialog().setVisible(true);
+	}
+
+	void openAssembly()
+	{
+		winMain.getCommands().fileOpen(null);
 	}
 }

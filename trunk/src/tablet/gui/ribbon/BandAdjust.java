@@ -73,8 +73,6 @@ public class BandAdjust extends JRibbonBand implements ChangeListener
 
 		addRibbonComponent(zoomSliderComponent);
 		addRibbonComponent(variantSliderComponent);
-
-		createKeyboardShortcuts();
 	}
 
 	public static void zoomIn(int amount)
@@ -93,46 +91,9 @@ public class BandAdjust extends JRibbonBand implements ChangeListener
 			zoomSlider.setValue(ZOOM_MIN);
 	}
 
-	private void createKeyboardShortcuts()
+	static void zoomReset()
 	{
-		Action zoomIn = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				zoomIn(1);
-			}
-		};
-
-		KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Tablet.menuShortcut);
-		zoomSlider.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "zoomInMain");
-		zoomSlider.getActionMap().put("zoomInMain", zoomIn);
-		ks = KeyStroke.getKeyStroke(KeyEvent.VK_ADD, Tablet.menuShortcut);
-		zoomSlider.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "zoomInNumPad");
-		zoomSlider.getActionMap().put("zoomInNumPad", zoomIn);
-
-		Action zoomOut = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				zoomOut(1);
-			}
-		};
-
-		ks = KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Tablet.menuShortcut);
-		zoomSlider.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "zoomOutMain");
-		zoomSlider.getActionMap().put("zoomOutMain", zoomOut);
-		ks = KeyStroke.getKeyStroke(KeyEvent.VK_SUBTRACT, Tablet.menuShortcut);
-		zoomSlider.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "zoomOutNumPad");
-		zoomSlider.getActionMap().put("zoomOutNumPad", zoomOut);
-
-		Action zoomReset = new AbstractAction() {
-			public void actionPerformed(ActionEvent e) {
-				zoomSlider.setValue(ZOOM_DEF);
-			}
-		};
-
-		ks = KeyStroke.getKeyStroke(KeyEvent.VK_0, Tablet.menuShortcut);
-		zoomSlider.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "zoomResetMain");
-		zoomSlider.getActionMap().put("zoomResetMain", zoomReset);
-		ks = KeyStroke.getKeyStroke(KeyEvent.VK_NUMPAD0, Tablet.menuShortcut);
-		zoomSlider.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(ks, "zoomResetNumPad");
-		zoomSlider.getActionMap().put("zoomResetNumPad", zoomReset);
+		zoomSlider.setValue(ZOOM_DEF);
 	}
 
 	public void stateChanged(ChangeEvent e)
