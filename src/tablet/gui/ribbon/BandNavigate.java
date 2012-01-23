@@ -25,6 +25,8 @@ class BandNavigate extends JRibbonBand implements ActionListener
 	private JCommandButton bJumpTo;
 	private JCommandButton bNextFeature;
 	private JCommandButton bPrevFeature;
+	private JCommandButton bNextView;
+	private JCommandButton bPrevView;
 
 	BandNavigate(WinMain winMain)
 	{
@@ -95,11 +97,37 @@ class BandNavigate extends JRibbonBand implements ActionListener
 			RB.format("gui.ribbon.BandNavigate.bPrevFeature.tooltip", Tablet.winKey),
 			RB.getString("gui.ribbon.BandNavigate.bPrevFeature.richtip")));
 
+		// Next View...
+		bNextView = new JCommandButton(
+			RB.getString("gui.ribbon.BandNavigate.bNextView"),
+			RibbonController.getIcon("NEXTVIEW32", 32));
+		Actions.navigateNextView = new ActionRepeatableButtonModel(bNextView);
+		Actions.navigateNextView.addActionListener(this);
+		bNextView.setActionModel(Actions.navigateNextView);
+		bNextView.setActionKeyTip(".");
+		bNextView.setActionRichTooltip(new RichTooltip(
+			RB.format("gui.ribbon.BandNavigate.bNextView.tooltip", Tablet.winKey),
+			RB.getString("gui.ribbon.BandNavigate.bNextView.richtip")));
+
+		// Previous View...
+		bPrevView = new JCommandButton(
+			RB.getString("gui.ribbon.BandNavigate.bPrevView"),
+			RibbonController.getIcon("PREVVIEW32", 32));
+		Actions.navigatePrevView = new ActionRepeatableButtonModel(bPrevView);
+		Actions.navigatePrevView.addActionListener(this);
+		bPrevView.setActionModel(Actions.navigatePrevView);
+		bPrevView.setActionKeyTip(",");
+		bPrevView.setActionRichTooltip(new RichTooltip(
+			RB.format("gui.ribbon.BandNavigate.bPrevView.tooltip", Tablet.winKey),
+			RB.getString("gui.ribbon.BandNavigate.bPrevView.richtip")));
+
 		addCommandButton(bPageLeft, RibbonElementPriority.MEDIUM);
-		addCommandButton(bPageRight, RibbonElementPriority.MEDIUM);
-		addCommandButton(bJumpTo, RibbonElementPriority.MEDIUM);
 		addCommandButton(bPrevFeature, RibbonElementPriority.MEDIUM);
+		addCommandButton(bPrevView, RibbonElementPriority.MEDIUM);
+		addCommandButton(bPageRight, RibbonElementPriority.MEDIUM);
 		addCommandButton(bNextFeature, RibbonElementPriority.MEDIUM);
+		addCommandButton(bNextView, RibbonElementPriority.MEDIUM);
+		addCommandButton(bJumpTo, RibbonElementPriority.MEDIUM);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -118,6 +146,12 @@ class BandNavigate extends JRibbonBand implements ActionListener
 
 		else if(e.getSource() == Actions.navigatePrevFeature)
 			winMain.getFeaturesPanel().prevFeature();
+
+		else if (e.getSource() == Actions.navigateNextView)
+			winMain.getAssemblyPanel().getSnapshotController().nextSnapshot();
+
+		else if (e.getSource() == Actions.navigatePrevView)
+			winMain.getAssemblyPanel().getSnapshotController().previousSnapshot();
 	}
 
 	void pageLeft()

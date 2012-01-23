@@ -46,6 +46,8 @@ public class Actions
 	public static ActionRepeatableButtonModel navigateJumpTo;
 	public static ActionRepeatableButtonModel navigateNextFeature;
 	public static ActionRepeatableButtonModel navigatePrevFeature;
+	public static ActionRepeatableButtonModel navigateNextView;
+	public static ActionRepeatableButtonModel navigatePrevView;
 
 	public static ActionRepeatableButtonModel bamWindow;
 	public static ActionRepeatableButtonModel bamPrevious;
@@ -106,6 +108,8 @@ public class Actions
 		navigateJumpTo.setEnabled(false);
 		navigateNextFeature.setEnabled(false);
 		navigatePrevFeature.setEnabled(false);
+		navigateNextView.setEnabled(false);
+		navigatePrevView.setEnabled(false);
 
 		for (ActionToggleButtonModel b: proteinEnable)
 			b.setEnabled(false);
@@ -166,6 +170,8 @@ public class Actions
 		navigateJumpTo.setEnabled(false);
 		navigateNextFeature.setEnabled(false);
 		navigatePrevFeature.setEnabled(false);
+		navigateNextView.setEnabled(false);
+		navigatePrevView.setEnabled(false);
 
 		for (ActionToggleButtonModel b: proteinEnable)
 			b.setEnabled(false);
@@ -226,6 +232,8 @@ public class Actions
 		navigateJumpTo.setEnabled(true);
 		navigateNextFeature.setEnabled(true);
 		navigatePrevFeature.setEnabled(true);
+		//navigateNextView.setEnabled(true);
+		//navigatePrevView.setEnabled(true);
 
 		for (ActionToggleButtonModel b: proteinEnable)
 			b.setEnabled(true);
