@@ -32,14 +32,13 @@ public class AssemblyPanel extends JPanel
 	ReadsCanvas readsCanvas;
 
 	private CanvasController controller;
+	private SnapshotController snapController;
 
 	private NameOverlayer nameOverlayer;
+	private CigarIHighlighter cigarIHighlighter;
+	private CigarOverlayer cigarIOverlayer;
 
 	private VisualAssembly visualAssembly;
-
-	private CigarIHighlighter cigarIHighlighter;
-
-	private CigarOverlayer cigarIOverlayer;
 
 	public AssemblyPanel(WinMain winMain)
 	{
@@ -105,6 +104,7 @@ public class AssemblyPanel extends JPanel
 		sp.setWheelScrollingEnabled(false);
 
 		controller = new CanvasController(this, sp);
+		snapController = new SnapshotController(this);
 	}
 
 	public void setAssembly(Assembly assembly)
@@ -124,6 +124,9 @@ public class AssemblyPanel extends JPanel
 
 	public CanvasController getController()
 		{ return controller; }
+
+	public SnapshotController getSnapshotController()
+		{ return snapController; }
 
 	public void updateContigInformation()
 	{
@@ -185,6 +188,8 @@ public class AssemblyPanel extends JPanel
 		{
 			if(getVisualContig() == null)
 				visualAssembly.getVisualContigs().put(contig, new VisualContig());
+
+			snapController.reset();
 		}
 
 		if (contig != null && ((setContigOK = updateDisplayData(true)) == false))
@@ -331,7 +336,7 @@ public class AssemblyPanel extends JPanel
 		return true;
 	}
 
-	public void moveToPosition(int rowIndex, int colIndex, final boolean centre)
+	public void moveToPosition(int rowIndex, int colIndex, boolean centre)
 	{
 		// If it's a BAM assembly, we might need to load in a different block
 		// of data before the view can be moved to that position
@@ -353,14 +358,10 @@ public class AssemblyPanel extends JPanel
 				if (processBamDataChange() == false)
 					return;
 			}
-
 		}
-
-		final int row = rowIndex;
 		// Adjust the colIndex so that it is valid for the current (visual) data
-		final int col = colIndex += (-contig.getVisualStart());
-
-		controller.moveToLater(row, col, centre);
+		int col = colIndex += (-contig.getVisualStart());
+		controller.moveToLater(rowIndex, col, centre);
 	}
 
 	public void highlightColumn(int index)

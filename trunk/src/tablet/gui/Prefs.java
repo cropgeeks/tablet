@@ -180,6 +180,8 @@ public class Prefs extends XMLPreferences
 
 	public static boolean visCigarOverlayVisible = true;
 
+	public static int snapshotDelay = 2000;
+
 	// Updates the array of recently accessed documents so that 'document' is
 	// the first element, even if it has been accessed previously
 	public static void setRecentDocument(AssemblyFile[] files)

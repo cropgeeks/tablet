@@ -208,6 +208,7 @@ public class ReadsCanvas extends JPanel
 
 			yS = pY1 / ntH;
 			new VisibleReadsGrabberThread(reads, xS+offset, xE+offset, yS, yE);
+			new SnapshotGrabber(this, aPanel.getSnapshotController());
 		}
 
 		// Then paint it to the screen

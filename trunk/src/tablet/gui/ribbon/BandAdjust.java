@@ -114,4 +114,10 @@ public class BandAdjust extends JRibbonBand implements ChangeListener
 			winMain.getAssemblyPanel().repaint();
 		}
 	}
+
+	public static void setZoom(int zoom)
+	{
+		Prefs.visReadsCanvasZoom = zoom;
+		zoomSlider.setValue(zoom);
+	}
 }

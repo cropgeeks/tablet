@@ -115,6 +115,19 @@ public class KeyManager
 			}
 		};
 		map(find, KeyStroke.getKeyStroke(KeyEvent.VK_F, ctrl), "find");
+
+		// Set up some keyboard navigation
+		Action previousSnapshot = new AbstractAction() {
+			public void actionPerformed(ActionEvent e)
+				{ winMain.getAssemblyPanel().getSnapshotController().previousSnapshot(); }
+		};
+		map(previousSnapshot, KeyStroke.getKeyStroke(KeyEvent.VK_LEFT, KeyEvent.ALT_DOWN_MASK), "previous");
+
+		Action nextSnapshot = new AbstractAction() {
+			public void actionPerformed(ActionEvent e)
+				{ winMain.getAssemblyPanel().getSnapshotController().nextSnapshot(); }
+		};
+		map(nextSnapshot, KeyStroke.getKeyStroke(KeyEvent.VK_RIGHT, KeyEvent.ALT_DOWN_MASK), "next");
 	}
 
 	public static void map(Action action, KeyStroke keyStroke, String command)
