@@ -14,8 +14,6 @@ import tablet.io.*;
  */
 public class BamFinder extends Finder
 {
-	private String prevContig = "";
-	private long totalProgress;
 	private SAMFileReader reader;
 	private CigarParser parser;
 
@@ -32,14 +30,10 @@ public class BamFinder extends Finder
 	{
 		if (!allContigs)
 			maximumLong = aPanel.getContig().getTableData().readCount;
-//			maximumLong += reader.getFileHeader().getSequenceDictionary().getSequence(
-//				aPanel.getContig().getName()).getSequenceLength();
 
 		else
 			for (Contig contig : aPanel.getAssembly())
 				maximumLong += contig.getTableData().readCount;
-//			for(SAMSequenceRecord record : reader.getFileHeader().getSequenceDictionary().getSequences())
-//				maximumLong += record.getSequenceLength();
 	}
 
 	@Override
@@ -60,7 +54,7 @@ public class BamFinder extends Finder
 			{
 				SAMRecord record = itor.next();
 				if (checkNameMatches(record.getReadName()) && record.getReadUnmappedFlag() == false)
-					results.add(new ReadSearchResult(record.getReadName(), record.getAlignmentStart() - 1, record.getReadLength(), contig));
+					results.add(new ReadSearchResult(record.getReadName(), record.getAlignmentStart() - 1, record.getReadLength(), contig, false));
 
 				progressLong++;
 			}
@@ -80,7 +74,9 @@ public class BamFinder extends Finder
 			try
 			{
 				String read = parser.parse(record.getReadString(), record.getAlignmentStart() - 1, record.getCigarString(), null);
-				searchSequence(read, record.getAlignmentStart() - 1, record.getReadLength(), contig, record.getReadName());
+				searchSequence(read, record.getAlignmentStart() - 1, record.getReadLength(), contig, record.getReadName(), searchTerm);
+				// Search the reverse complement
+				searchSequence(read, record.getAlignmentStart() - 1, record.getReadLength(), contig, record.getReadName(), reverse);
 			}
 			catch (Exception e) {}
 

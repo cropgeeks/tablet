@@ -21,8 +21,10 @@ import scri.commons.gui.*;
 public class Finder extends SimpleJob
 {
 	public static final int READ_NAME = 0;
-	public static final int READ_SEQUENCE = 1;
-	public static final int CON_SEQUENCE = 2;
+	public static final int READ_SEQUENCE = 2;
+	public static final int CON_SEQUENCE = 1;
+
+	public static int CURRENT_TYPE = READ_NAME;
 
 	protected AssemblyPanel aPanel;
 
@@ -36,6 +38,9 @@ public class Finder extends SimpleJob
 	protected boolean useRegex;
 	protected int searchType;
 
+	protected String reverse;
+	protected Pattern revPat;
+
 	public Finder(AssemblyPanel aPanel, String searchTerm, boolean allContigs, int searchType)
 	{
 		this.aPanel = aPanel;
@@ -46,6 +51,8 @@ public class Finder extends SimpleJob
 		useRegex = Prefs.guiRegexSearching;
 
 		results = new ArrayList<SearchResult>();
+
+		CURRENT_TYPE = searchType;
 	}
 
 	// Run job method so this can be run in a progress dialog.
@@ -57,6 +64,13 @@ public class Finder extends SimpleJob
 		try
 		{
 			pattern = Pattern.compile(searchTerm, Pattern.CASE_INSENSITIVE);
+
+			// Set up the pattern for the reverse complement search
+			if (searchType == READ_SEQUENCE || searchType == CON_SEQUENCE)
+			{
+				reverse = reverseComplement(searchTerm);
+				revPat = Pattern.compile(reverse, Pattern.CASE_INSENSITIVE);
+			}
 		}
 		catch (PatternSyntaxException e)
 		{
@@ -137,7 +151,7 @@ public class Finder extends SimpleJob
 				{
 					if (read.getID() == readID)
 					{
-						results.add(new ReadSearchResult(wrapper.name, read.getStartPosition(), read.length(), contig));
+						results.add(new ReadSearchResult(wrapper.name, read.getStartPosition(), read.length(), contig, false));
 						break;
 					}
 				}
@@ -160,7 +174,9 @@ public class Finder extends SimpleJob
 		Consensus con = contig.getConsensus();
 		// Get sequence needed to avoid crapout
 		con.getSequence();
-		searchSequence(con.toString(), 0, con.length(), contig, null);
+		searchSequence(con.toString(), 0, con.length(), contig, null, searchTerm);
+		// Search for the reverse complement
+		searchSequence(con.toString(), 0, con.length(), contig, null, reverse);
 
 		progressLong++;
 	}
@@ -175,49 +191,57 @@ public class Finder extends SimpleJob
 			ReadMetaData rmd = Assembly.getReadMetaData(read, true);
 
 			String name = Assembly.getReadName(read);
-			searchSequence(rmd.toString(), read.getStartPosition(), read.length(), contig, name);
+			searchSequence(rmd.toString(), read.getStartPosition(), read.length(), contig, name, searchTerm);
+			// Search for the reverse complement
+			searchSequence(rmd.toString(), read.getStartPosition(), read.length(), contig, name, reverse);
 
 			progressLong++;
 		}
 	}
 
 	// Does the string matching for subsequence and consensus / reference
-	protected void searchSequence(String seq, int sPos, int len, Contig contig, String name)
+	protected void searchSequence(String seq, int sPos, int len, Contig contig, String name, String term)
 	{
 		Pattern p;
 
 		if (Prefs.guiSearchIgnorePads)
 		{
-			String regex = addPadCharClass();
+			String regex = addPadCharClass(term);
 			p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 		}
-
-		else
+		else if (term.equals(searchTerm))
 			p = pattern;
+		else
+			p = revPat;
 
 		Matcher m = p.matcher(seq);
 
 		while (m.find())
 		{
-			if (searchType == CON_SEQUENCE)
-				results.add(new SearchResult(m.start(), m.end()-m.start(), contig));
-			else
-				results.add(new SubsequenceSearchResult(name, sPos, len, contig, sPos+m.start(), sPos+m.end()-1));
+			if (searchType == CON_SEQUENCE && term.equals(searchTerm))
+				results.add(new SearchResult(m.start(), m.end()-m.start(), contig, true));
+			else if (searchType == CON_SEQUENCE)
+				results.add(new SearchResult(m.start(), m.end()-m.start(), contig, false));
+
+			if (searchType == READ_SEQUENCE && term.equals(searchTerm))
+				results.add(new SubsequenceSearchResult(name, sPos, len, contig, sPos+m.start(), sPos+m.end()-1, true));
+			else if (searchType == READ_SEQUENCE)
+				results.add(new SubsequenceSearchResult(name, sPos, len, contig, sPos+m.start(), sPos+m.end()-1, false));
 		}
 	}
 
-	protected String addPadCharClass()
+	protected String addPadCharClass(String term)
 	{
 		StringBuilder regex = new StringBuilder();
 		// Create a pattern which will ignore pad characters
 		String charClass = "[" + Pattern.quote("*")+ "N]*";
 
-		for (int i=0; i < searchTerm.length(); i++)
+		for (int i=0; i < term.length(); i++)
 		{
-			char c = searchTerm.charAt(i);
+			char c = term.charAt(i);
 			regex.append(c);
 
-			if (i < searchTerm.length()-1)
+			if (i < term.length()-1)
 				regex.append(charClass);
 		}
 
@@ -290,18 +314,53 @@ public class Finder extends SimpleJob
 		return Math.round(((progressLong)/ (float) maximumLong) * 5555);
 	}
 
+	private String reverseComplement(String forward)
+	{
+		StringBuilder revComp = new StringBuilder();
+
+		for (int i = forward.length() - 1; i >= 0; i--)
+			revComp.append(complement("" + forward.charAt(i)));
+
+		return revComp.toString();
+	}
+
+	private String complement(String c)
+	{
+		String complement;
+
+		if (c.equalsIgnoreCase("A"))
+			complement = "T";
+		else if (c.equalsIgnoreCase("T"))
+			complement = "A";
+		else if (c.equalsIgnoreCase("C"))
+			complement = "G";
+		else if (c.equalsIgnoreCase("G"))
+			complement = "C";
+		else
+			complement = c;
+
+		return complement;
+	}
+
 	// Used for storing consensus subsequence search results
 	public static class SearchResult
 	{
 		private int position;
 		private int length;
 		private Contig contig;
+		private boolean forward;
 
 		SearchResult(int position, int length, Contig contig)
 		{
 			this.position = position;
 			this.length = length;
 			this.contig = contig;
+		}
+
+		SearchResult(int position, int length, Contig contig, boolean forward)
+		{
+			this(position, length, contig);
+			this.forward = forward;
 		}
 
 		public int getPosition()
@@ -312,6 +371,9 @@ public class Finder extends SimpleJob
 
 		public Contig getContig()
 			{ return contig; }
+
+		public boolean isForward()
+			{ return forward; }
 	}
 
 
@@ -320,9 +382,9 @@ public class Finder extends SimpleJob
 	{
 		private String name;
 
-		ReadSearchResult(String name, int position, int length, Contig contig)
+		ReadSearchResult(String name, int position, int length, Contig contig, boolean forward)
 		{
-			super(position, length, contig);
+			super(position, length, contig, forward);
 			this.name = name;
 		}
 
@@ -337,9 +399,9 @@ public class Finder extends SimpleJob
 		private int sIndex;
 		private int eIndex;
 
-		SubsequenceSearchResult(String name, int position, int length, Contig contig, int sIndex, int eIndex)
+		SubsequenceSearchResult(String name, int position, int length, Contig contig, int sIndex, int eIndex, boolean forward)
 		{
-			super(name, position, length, contig);
+			super(name, position, length, contig, forward);
 			this.sIndex = sIndex;
 			this.eIndex = eIndex;
 		}

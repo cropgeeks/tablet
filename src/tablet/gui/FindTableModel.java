@@ -10,7 +10,6 @@ import javax.swing.table.*;
 import scri.commons.gui.*;
 
 import tablet.analysis.Finder.*;
-import tablet.data.*;
 
 /**
  * Class which provides the table model for the find reads table.
@@ -19,10 +18,6 @@ public class FindTableModel extends AbstractTableModel
 {
 	private ArrayList<SearchResult> results = new ArrayList<SearchResult>();
 	private String[] columnNames = new String[0];
-
-	FindTableModel()
-	{
-	}
 
 	void clear()
 	{
@@ -36,9 +31,9 @@ public class FindTableModel extends AbstractTableModel
 		this.results = results;
 
 		String col1 = RB.getString("gui.FindTableModel.name");
-		String col2 = RB.getString("gui.FindTableModel.position");
-		String col3 = RB.getString("gui.FindTableModel.length");
-		String col4 = RB.getString("gui.FindTableModel.contig");
+		String col2 = RB.getString("gui.FindTableModel.contig");
+		String col3 = RB.getString("gui.FindTableModel.position");
+		String col4 = RB.getString("gui.FindTableModel.length");
 
 		if(results != null && !results.isEmpty() && results.get(0) instanceof SubsequenceSearchResult)
 		{
@@ -48,8 +43,11 @@ public class FindTableModel extends AbstractTableModel
 		}
 		else if(results != null && !results.isEmpty() && !(results.get(0) instanceof SubsequenceSearchResult) && !(results.get(0) instanceof ReadSearchResult))
 		{
-			col1 = col4;
-			columnNames = new String[] { col1, col2, col3 };
+			col1 = RB.getString("gui.FindTableModel.contig");
+			col2 = RB.getString("gui.FindTableModel.position");
+			col3 = RB.getString("gui.FindTableModel.length");
+			col4 = RB.getString("gui.FindTableModel.direction");
+			columnNames = new String[] { col1, col2, col3, col4 };
 		}
 		else
 		{
@@ -73,20 +71,6 @@ public class FindTableModel extends AbstractTableModel
 			return 0;
 	}
 
-	public Class getColumnClass(int col)
-	{
-		if (col == 0 || col == 3)
-			return String.class;
-		else if(col == 1 || col == 2 || col == 6 || col == 7)
-			return Integer.class;
-		else if(col == 4)
-			return Read.class;
-		else if(col == 5)
-			return Contig.class;
-		else
-			return null;
-	}
-
 	public Object getValueAt(int row, int col)
 	{
 		if(!(results.get(row) instanceof SubsequenceSearchResult) && !(results.get(row) instanceof ReadSearchResult))
@@ -107,6 +91,9 @@ public class FindTableModel extends AbstractTableModel
 			case 0:		return result.getContig().getName();
 			case 1:		return result.getPosition() + 1;
 			case 2:		return result.getLength();
+			case 3:		return result.isForward() ?
+					RB.getString("gui.FindTableModel.forward")
+					: RB.getString("gui.FindTableModel.reverse");
 			case 9:		return result.getContig();
 		}
 		return null;
@@ -118,9 +105,9 @@ public class FindTableModel extends AbstractTableModel
 		switch (col)
 		{
 			case 0:		return result.getName();
-			case 1:		return result.getPosition() + 1;
-			case 2:		return result.getLength();
-			case 3:		return result.getContig().getName();
+			case 1:		return result.getContig().getName();
+			case 2:		return result.getPosition() + 1;
+			case 3:		return result.getLength();
 			case 9:		return result.getContig();
 		}
 		return null;
