@@ -40,7 +40,7 @@ public class EnzymeFinder extends Finder
 	// Does the string matching for restriction enzymes
 	protected void searchForEnzymes(String seq, Contig contig)
 	{
-		String regex = addPadCharClass();
+		String regex = addPadCharClass(searchTerm);
 		Pattern p = Pattern.compile(regex, Pattern.CASE_INSENSITIVE);
 
 		// Look for matches (m.find moves onto the next match where there is one)

@@ -10,10 +10,10 @@ import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.table.*;
 
-import tablet.data.*;
-import tablet.gui.viewer.*;
 import tablet.analysis.*;
 import tablet.analysis.Finder.*;
+import tablet.data.*;
+import tablet.gui.viewer.*;
 
 import scri.commons.gui.*;
 
@@ -77,38 +77,44 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		// Convert from view->model (deals with user-sorted table)
 		row = controls.table.convertRowIndexToModel(row);
 		Contig contig = (Contig) tableModel.getValueAt(row, 9);
-		int pos = (Integer)tableModel.getValueAt(row, 1)-1;
 
 		updateContigsTable(contig);
 
-		if (aPanel.getAssembly().getBamBam() != null)
-			aPanel.moveToPosition(0, pos, true);
 
 		// If we are searching in the consensus / reference
-		if(tableModel.getValueAt(row, 3) == null)
+		if(Finder.CURRENT_TYPE == Finder.CON_SEQUENCE)
 		{
+			int pos = (Integer)tableModel.getValueAt(row, 1)-1;
 			int length = (Integer) tableModel.getValueAt(row, 2);
+
+			if (aPanel.getAssembly().getBamBam() != null)
+				aPanel.moveToPosition(0, pos, true);
 
 			highlightReference(pos, length);
 		}
 		// If we are searching for reads
-		else if((Integer) tableModel.getValueAt(row, 4) == null)
+		else if(Finder.CURRENT_TYPE == Finder.READ_NAME)
 		{
+			int pos = (Integer)tableModel.getValueAt(row, 2)-1;
+
+			if (aPanel.getAssembly().getBamBam() != null)
+				aPanel.moveToPosition(0, pos, true);
+
 			Read r = getRead(pos, (String)tableModel.getValueAt(row, 0));
 			if(r != null)
 				highlightRead(r, contig.getReadManager(), r.getStartPosition(), r.getEndPosition());
 		}
 		// If we are searching for read subsequences
-		else
-		{
-			int sPos = (Integer)tableModel.getValueAt(row, 4)-1;
-			int ePos = (Integer)tableModel.getValueAt(row, 5)-1;
-
-			Read r = getRead(pos, (String)tableModel.getValueAt(row, 0));
-
-			if(r != null)
-				highlightRead(r, contig.getReadManager(), sPos, ePos);
-		}
+//		else
+//		{
+//			int sPos = (Integer)tableModel.getValueAt(row, 4)-1;
+//			int ePos = (Integer)tableModel.getValueAt(row, 5)-1;
+//
+//			Read r = getRead(pos, (String)tableModel.getValueAt(row, 0));
+//
+//			if(r != null)
+//				highlightRead(r, contig.getReadManager(), sPos, ePos);
+//		}
 	}
 
 	String getTableToolTip(MouseEvent e)
@@ -116,24 +122,27 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		int row = controls.table.rowAtPoint(e.getPoint());
 		row = controls.table.convertRowIndexToModel(row);
 
-		int end = ((Integer)tableModel.getValueAt(row, 1) + (Integer)tableModel.getValueAt(row, 2));
-
-		if (controls.table.getColumnCount() != 3)
+		if (Finder.CURRENT_TYPE == Finder.READ_NAME)
 		{
+			int end = ((Integer)tableModel.getValueAt(row, 2) + (Integer)tableModel.getValueAt(row, 3));
+
 			return RB.format("gui.NBFindPanelControls.tooltip",
 				tableModel.getValueAt(row, 0),
-				tableModel.getValueAt(row, 3),
-				TabletUtils.nf.format(tableModel.getValueAt(row, 1)),
+				tableModel.getValueAt(row, 1),
+				TabletUtils.nf.format(tableModel.getValueAt(row, 2)),
 				TabletUtils.nf.format(end),
-				tableModel.getValueAt(row, 2));
+				tableModel.getValueAt(row, 3));
 		}
 		else
 		{
+			int end = ((Integer)tableModel.getValueAt(row, 1) + (Integer)tableModel.getValueAt(row, 2));
+
 			return RB.format("gui.NBFindPanelControls.consensusTooltip",
 				tableModel.getValueAt(row, 0),
 				TabletUtils.nf.format(tableModel.getValueAt(row, 1)),
 				TabletUtils.nf.format(end),
-				tableModel.getValueAt(row, 2));
+				tableModel.getValueAt(row, 2),
+				tableModel.getValueAt(row, 3));
 		}
 
 	}
@@ -209,6 +218,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 
 		if (finder != null)
 			finder.setResults(null);
+
 		tableModel.clear();
 
 		controls.resultsLabel.setText(RB.format("gui.NBFindPanelControls.resultsLabel", 0));
