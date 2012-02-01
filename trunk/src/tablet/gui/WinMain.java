@@ -68,10 +68,8 @@ public class WinMain extends JRibbonFrame
 		int scrnH = SwingUtils.getVirtualScreenDimension().height;
 
 		// Determine where on screen to display
-		if (Prefs.isFirstRun || Prefs.guiWinMainX > (scrnW-50) || Prefs.guiWinMainY > (scrnH-50))
-			setLocationRelativeTo(null);
-		else
-			setLocation(Prefs.guiWinMainX, Prefs.guiWinMainY);
+		SwingUtils.positionWindow(
+			this, null, Prefs.guiWinMainY, Prefs.guiWinMainY);
 
 		// Maximize the frame if neccassary
 		if (Prefs.guiWinMainMaximized)
