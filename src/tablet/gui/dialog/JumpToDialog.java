@@ -55,11 +55,9 @@ public class JumpToDialog extends JDialog
 
 		pack();
 		setResizable(false);
-		setLocationRelativeTo(winMain);
 
-		// Position on screen...
-		if (Prefs.guiJumpToX != -9999 || Prefs.guiJumpToY != -9999)
-			setLocation(Prefs.guiJumpToX, Prefs.guiJumpToY);
+		SwingUtils.positionWindow(
+				this, winMain, Prefs.guiJumpToX, Prefs.guiJumpToY);
 	}
 
 	private void addListeners()
@@ -123,7 +121,7 @@ public class JumpToDialog extends JDialog
 	{
 		if (contigToJumpTo != aPanel.getContig())
 			Tablet.winMain.getContigsPanel().setContigInTable(contigToJumpTo.getName());
-		
+
 		aPanel.highlightColumn(index);
 	}
 
