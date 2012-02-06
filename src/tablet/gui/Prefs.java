@@ -137,7 +137,7 @@ public class Prefs extends XMLPreferences
 	public static boolean visOverlayNames = false;
 
 	public static boolean guiFindPanelSearchCurrentContig = true;
-	public static int guiFindPanelSearchType = 0;
+	public static int guiSearchType = 0;
 	public static String recentSearches = "";
 
 	// Truncation limit (number of characters) for text in the tooltip

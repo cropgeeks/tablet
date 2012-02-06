@@ -23,6 +23,21 @@ changes between versions, please see the <a href="http://bioinf.hutton.ac.uk/tab
 subversion change log</a>.</p>
 
 
+<h3>New in 1.12.02.06</h3>
+<ul>
+<li>NEW: The majority of colours used for the various visualization components are now customizable.</li>
+<li>NEW: Cigar insertions can now be shown with a permanent overlay. This is in place of the previous mouse-over highlight code.</li>
+<li>NEW: Added a snapshot history feature which tracks previously visited points of interest within the current contig.</li>
+<li>NEW: Searching for subsequences now also searches the reverse complement of a sequence.</li>
+<li>NEW: It is now possible to copy features to the clipboard from the features track.</li>
+<li>CHG: Removed the ability to search for subsequences within reads (searching within consensus/reference is still possible).
+<li>BUG: Fixed Ctrl+F shortcut opening up the Read Group tab instead of the Find panel.</li>
+<li>BUG: Fixed keyboard shortcuts only working if their associated ribbon button was on the active tab.</li>
+<li>BUG: Fixed incorrect page left/right functionality in contigs with negative coordinate space.</li>
+<li>BUG: Fixed dialogs disappearing off-screen if the resolution or number of monitors had changed since the last run.</li>
+</ul>
+
+
 <h3>New in 1.11.11.01</h3>
 <ul>
 <li>NEW: All of the tables (in the control panel) can now have their contents copied to the clipboard via right-click menu options.</li>

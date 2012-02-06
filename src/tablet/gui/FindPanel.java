@@ -306,7 +306,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 
 		else if (e.getSource() == controls.searchTypeCombo)
 		{
-			Prefs.guiFindPanelSearchType = controls.searchTypeCombo.getSelectedIndex();
+			Prefs.guiSearchType = controls.searchTypeCombo.getSelectedIndex();
 			if(controls.searchTypeCombo.getSelectedIndex() == Finder.READ_NAME)
 			{
 				controls.checkUseRegex.setEnabled(true);
