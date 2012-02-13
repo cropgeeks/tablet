@@ -1,0 +1,19 @@
+http://rebase.neb.com/rebase/rebcit.html
+
+
+REBASE - The Restriction Enzyme Database
+
+The Restriction Enzyme   data BASE
+A collection of information about restriction enzymes and related proteins.
+It contains published and unpublished references, recognition and cleavage
+sites, isoschizomers, commercial availability, methylation sensitivity,
+crystal, genome, and sequence data. DNA methyltransferases, homing
+endonucleases, nicking enzymes, specificity subunits and control proteins
+are also included. Putative DNA methyltransferases and restriction enzymes,
+as predicted from analysis of genomic sequences, are also listed. REBASE is
+updated daily and is constantly expanding.
+
+
+Roberts, R.J., Vincze, T., Posfai, J., Macelis, D. (2010)
+REBASE--a database for DNA restriction and modification: enzymes, genes and genomes.
+Nucl. Acids Res. 38: D234-D236.

@@ -1,0 +1,44 @@
+#!/usr/bin/perl
+
+use CGI;
+use strict;
+
+my $cgi_query = CGI->new();
+
+my $date = `date`;
+chomp $date;
+
+my @arguments = $cgi_query->param("argument");
+my $argument = "";
+
+if(defined($cgi_query->param("argument")))
+{
+	foreach my $value(@arguments)
+	{
+		$argument .= "<argument>$value</argument>\n\t\t";
+	}
+
+	$argument =~ s/\n\t\t$//;
+}
+
+my $java_vm_args = "-Xmx1024m";
+
+if(defined($cgi_query->param("java_vm_args")))
+{
+	$java_vm_args = $cgi_query->param("java_vm_args");
+}
+
+open(FILE, "tablet.jnlp.template");
+my @file = <FILE>;
+close FILE;
+
+print "Content-type: application/x-java-jnlp-file\n\n";
+
+foreach my $line(@file)
+{
+	$line =~ s/\@DATE\@/$date/;
+ 	$line =~ s/\@JAVA_VM_ARGS\@/$java_vm_args/;
+	$line =~ s/\@ARGUMENTS\@/$argument/;
+
+	print $line;
+}
