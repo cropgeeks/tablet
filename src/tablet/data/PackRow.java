@@ -80,6 +80,102 @@ public class PackRow
 		return getLineData(read+1, start, end);
 	}
 
+	public static int count = 0;
+
+	// startBase = nucleotide base to start at
+	// arraysize = array same size as number of pixels on screen
+	// scale = maps number of nucletides to pixels (eg 0.1 = 10 bases per pixel)
+	protected LineData getPixelData(int startBase, int arraySize, float scale)
+	{
+		ReadMetaData[] rmds = new ReadMetaData[arraySize];
+		int[] indexes = new int[arraySize];
+
+		int prevBase = Integer.MIN_VALUE;
+		ReadIndex prevRead = null;
+
+		// the start index within the array we'll be searching from
+		int prevReadIndex = -1;
+
+		ReadMetaData d = new ReadMetaData();
+
+		for (int i = 0; i < arraySize; i++)
+		{
+			// Work out what the nucleotide position is for each pixel point
+			int base = startBase + (int)(i / scale);
+
+			// If one base stretches over more than one pixel, then just reuse
+			// the data from the last iteration
+			if (prevBase == base)
+			{
+				rmds[i] = rmds[i-1];
+				indexes[i] = indexes[i-1];
+			}
+			else
+			{
+				// If the read over the last pixel is also over this pixel...
+				if (prevRead != null && prevRead.read.getEndPosition() >= base)
+				{
+					rmds[i] = rmds[i-1];
+					indexes[i] = base-prevRead.read.getStartPosition();
+				}
+				else // we don't yet know what maps to this pixel
+				{
+					ReadIndex ri = getReadIndexAt(base);
+					count++;
+
+					// If it's a read...
+					if (ri != null)
+					{
+						if (scale > 1)
+							rmds[i] = Assembly.getReadMetaData(ri.read, true);
+						else
+							rmds[i] = d;
+
+
+						// Index (within the read) of its data at this base
+						indexes[i] = base-ri.read.getStartPosition();
+
+						prevReadIndex = ri.index;
+					}
+					// No read to be drawn on this pixel
+					else
+					{
+						int j = i+1;
+
+						// Work out what pixel (if any) the *next* read in the
+						// PackRow would be on
+						if (++prevReadIndex < reads.size())
+						{
+							Read nextRead = reads.get(prevReadIndex);
+							int s = nextRead.getStartPosition();
+							int pixel = (int) ((s-startBase) * scale);
+
+							// Next read will be offscreen
+							if (pixel >= arraySize)
+								j = arraySize;
+							else
+								j = pixel;
+						}
+						else
+							j = arraySize;
+
+						for (; i < j; i++)
+						{
+							rmds[i] = null;
+							indexes[i] = -1;
+						}
+					}
+
+					prevRead = ri;
+				}
+			}
+
+			prevBase = base;
+		}
+
+		return new LineData(indexes, rmds);
+	}
+
 	protected LineData getLineData(int fromRead, int start, int end)
 	{
 		ReadMetaData[] rmds = new ReadMetaData[end-start+1];
@@ -130,10 +226,23 @@ public class PackRow
 		return new LineData(indexes, rmds);
 	}
 
-	/**
-	 * Returns the read at the given nucleotide position in the pack.
-	 */
 	Read getReadAt(int position)
+	{
+		ReadIndex ri = getReadIndexAt(position);
+
+		if (ri != null)
+			return ri.read;
+
+		return null;
+	}
+
+	/**
+	 * Returns the read at the given nucleotide position in the pack. Can be
+	 * passed a starting left index to reduce the size of the array that needs
+	 * to be searched (eg, if you're after a read that you know must be to the
+	 * RHS of a previously found read at leftIndex-1.
+	 */
+	private ReadIndex getReadIndexAt(int position)
 	{
 		// Binary search to find the read that contains the nucleotide position
 		int L = 0, M = 0, R = reads.size()-1;
@@ -150,7 +259,7 @@ public class PackRow
 				L = M + 1;
 			// Position must be within this read
 			else
-				return reads.get(M);
+				return new ReadIndex(reads.get(M), M);
 		}
 
 		return null;
@@ -159,5 +268,18 @@ public class PackRow
 	public ArrayList<Read> getReads()
 	{
 		return reads;
+	}
+
+	// Simple wrapper around a Read and its position within this PackRow
+	private static class ReadIndex
+	{
+		Read read;
+		int index;
+
+		ReadIndex(Read read, int index)
+		{
+			this.read = read;
+			this.index = index;
+		}
 	}
 }

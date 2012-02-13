@@ -71,6 +71,11 @@ public class ReadsCanvas extends JPanel
 
 	ReadsCanvasML readsCanvasML;
 
+	float _ntW;
+	int _ntOnCanvasX, _canvasW;
+	int _ntOnScreenX;
+	int _pixelsOnScreenX;
+
 	ReadsCanvas()
 	{
 		setOpaque(false);
@@ -129,16 +134,37 @@ public class ReadsCanvas extends JPanel
 		FontMetrics fm = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)
 			.getGraphics().getFontMetrics(font);
 
+		// If greater than 10 use current font based scaling, otherwise 10 == 1:1
+		// scaling and every notch below that double the zoom out.
 		ntW = sizeX*2;
+
+		if (sizeX > 15)
+			_ntW = sizeX * 2;
+		else
+			_ntW = (float) (1 / Math.pow(2, (15-sizeX)));
+
 		ntH = fm.getHeight();
+
+		System.out.println("New _NTW: " + Math.pow(2, (15-sizeX)));
 
 		ntOnCanvasX = contig.getVisualWidth();
 		ntOnCanvasY = contig.getVisualHeight();
 
+		_ntOnCanvasX = contig.getVisualWidth();
+
 		canvasW = (ntOnCanvasX * ntW);
 		canvasH = (ntOnCanvasY * ntH);
 
-		dimension = new Dimension(canvasW, canvasH);
+		// Round UP to cope with 3.3 pixels needed for ten bases at 0.3 pixels per base (4 pixels actually needed)
+		_canvasW = (int)Math.ceil(_ntOnCanvasX * _ntW);
+
+		if (_canvasW < 1)
+			_canvasW = 1;
+
+//		System.out.println("_ntW: " + _ntW + " _ntOnCnavasX: " + _ntOnCanvasX + " _canvasW: " + _canvasW);
+
+		//dimension = new Dimension(canvasW, canvasH);
+		dimension = new Dimension(_canvasW, canvasH);
 
 		updateColorScheme();
 	}
@@ -153,11 +179,19 @@ public class ReadsCanvas extends JPanel
 		ntOnScreenX = 1 + (int) ((float) viewSize.width  / ntW);
 		ntOnScreenY = 1 + (int) ((float) viewSize.height / ntH);
 
+		_pixelsOnScreenX = viewSize.width;
+		_ntOnScreenX = 1 + (int) ((float) viewSize.width / _ntW);
+
+//		System.out.println("ntOnScreenX: " + _ntOnScreenX);
+
 		pX1 = viewPosition.x;
 		pX2 = pX2Max = pX1 + viewSize.width -1;
 		// Adjust for canvases that are smaller than the window size
-		if (pX2 > canvasW)
-			pX2 = canvasW - 1;
+		//if (pX2 > canvasW)
+		//	pX2 = canvasW - 1;
+
+		if (pX2 > _canvasW)
+			pX2 = _canvasW -1;
 
 		pY1 = viewPosition.y;
 		pY2 = pY1 + viewSize.height - 1;
@@ -225,7 +259,7 @@ public class ReadsCanvas extends JPanel
 		}
 
 		long e = System.nanoTime();
-//		System.out.println("Render time: " + ((e-s)/1000000f) + "ms");
+		System.out.println("Render time: " + ((e-s)/1000000f) + "ms");
 	}
 
 	private void paintBuffer()
@@ -250,15 +284,18 @@ public class ReadsCanvas extends JPanel
 
 
 		// Index positions within the dataset that we'll start drawing from
-		xS = pX1 / ntW;
+		//xS = pX1 / ntW;
+		xS = (int)(pX1 / _ntW);
 		int yS = pY1 / ntH;
 
 		// The end indices are calculated as the:
 		//   (the start index) + (the number that can be drawn on screen)
 		// with a check to set the end index to the last value in the array if
 		// the calculated index would go out of bounds
-		xE = xS + ntOnScreenX;
-		if (xE >= ntOnCanvasX) xE = ntOnCanvasX-1;
+		//xE = xS + ntOnScreenX;
+		//if (xE >= ntOnCanvasX) xE = ntOnCanvasX-1;
+		xE = xS + _ntOnScreenX;
+		if (xE >= _ntOnCanvasX) xE = _ntOnCanvasX-1;
 
 		yE = yS + ntOnScreenY;
 		if (yE >= ntOnCanvasY) yE = ntOnCanvasY-1;
@@ -304,23 +341,55 @@ public class ReadsCanvas extends JPanel
 			ReadMetaData[] rmds;
 			int[] indexes;
 
+			PackRow.count = 0;
+
+			long total = 0;
+
+
 			// For every [nth] row, where n = number of available CPU cores...
 			for (int row = yS, y = (ntH*yS); row <= yE; row += cores, y += ntH*cores)
 			{
+
+
+				long s = System.nanoTime();
+				data = reads.getPixelData(row, xS, _pixelsOnScreenX, _ntW);
+				total += System.nanoTime() - s;
+
 				// Ask the read manager to calculate the data for this row
-				data = reads.getLineData(row, xS+offset, xE+offset);
 				rmds = data.getReads();
 				indexes = data.getIndexes();
 
-				for (int i = 0, x = (ntW*xS); i < rmds.length; i++, x += ntW)
+				if (_ntW > 1)
 				{
-					if (indexes[i] >= 0)
-						g.drawImage(colors.getImage(rmds[i], indexes[i]), x, y, null);
+					for (int i = 0, x = (int)(_ntW*xS); i < _pixelsOnScreenX; i += _ntW, x += _ntW)
+					{
+						if (indexes[i] >= 0)
+							g.drawImage(colors.getImage(rmds[i], indexes[i]), x, y, null);
 
-					else if (indexes[i] == LineData.PAIRLINK)
-						g.drawImage(colors.getPairLink(), x, y, null);
+						else if (indexes[i] == LineData.PAIRLINK)
+							g.drawImage(colors.getPairLink(), x, y, null);
+					}
+				}
+				else
+				{
+					g.setColor(Color.red);
+					for (int i = 0, x = (int)(_ntW*xS); i < _pixelsOnScreenX; i++, x++)
+					{
+						if (rmds[i] != null)
+							g.drawLine(x, y, x, y);
+					}
 				}
 			}
+
+//	data = reads.getPixelData(row, xS, _pixelsOnScreenX, /*pixels2Bases*/ _ntW);
+//float pixels2Bases = /*_pixelsOnScreenX*/ canvasW / (float) ntOnCanvasX;
+//			long e = System.nanoTime();
+//			float average = ((e-s)/(float)rowCount);
+			System.out.println("Total Data time: " + (total/1000000f) + "ms");
+
+//			System.out.println("Binary searches: " + PackRow.count);
+			System.out.println();
+
 		}
 	}
 
