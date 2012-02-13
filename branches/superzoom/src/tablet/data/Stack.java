@@ -13,6 +13,11 @@ public class Stack implements IReadManager
 	{
 	}
 
+	public LineData getPixelData(int line, int start, int end, float scale)
+	{
+		return null;
+	}
+
 	Stack(ArrayList<Read> reads)
 	{
 		stack = reads;

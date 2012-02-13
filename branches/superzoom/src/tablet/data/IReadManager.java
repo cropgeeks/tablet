@@ -28,6 +28,8 @@ public interface IReadManager
 	 */
 	public LineData getLineData(int line, int start, int end);
 
+	public LineData getPixelData(int line, int start, int end, float scale);
+
 	/**
 	 * Returns the pair of reads that form each end of the (possible) link line
 	 * at the given position. Returns null if no link line is at that position.
