@@ -89,6 +89,7 @@ public class PackRow
 	{
 		ReadMetaData[] rmds = new ReadMetaData[arraySize];
 		int[] indexes = new int[arraySize];
+		Read[] pixReads = new Read[arraySize];
 
 		int prevBase = Integer.MIN_VALUE;
 		ReadIndex prevRead = null;
@@ -109,6 +110,7 @@ public class PackRow
 			{
 				rmds[i] = rmds[i-1];
 				indexes[i] = indexes[i-1];
+				pixReads[i] = pixReads[i-1];
 			}
 			else
 			{
@@ -117,6 +119,7 @@ public class PackRow
 				{
 					rmds[i] = rmds[i-1];
 					indexes[i] = base-prevRead.read.getStartPosition();
+					pixReads[i] = prevRead.read;
 				}
 				else // we don't yet know what maps to this pixel
 				{
@@ -134,6 +137,7 @@ public class PackRow
 
 						// Index (within the read) of its data at this base
 						indexes[i] = base-ri.read.getStartPosition();
+						pixReads[i] = ri.read;
 
 						prevReadIndex = ri.index;
 					}
@@ -148,7 +152,11 @@ public class PackRow
 						{
 							Read nextRead = reads.get(prevReadIndex);
 							int s = nextRead.getStartPosition();
-							int pixel = (int) ((s-startBase) * scale);
+
+							// -1 otherwise the next iteration of loop starts
+							// already in the next base and fails to fill the
+							// arrays correctly
+							int pixel = (int) ((s-startBase) * scale) -1;
 
 							// Next read will be offscreen
 							if (pixel >= arraySize)
@@ -163,6 +171,7 @@ public class PackRow
 						{
 							rmds[i] = null;
 							indexes[i] = -1;
+							pixReads[i] = null;
 						}
 					}
 
@@ -173,7 +182,7 @@ public class PackRow
 			prevBase = base;
 		}
 
-		return new LineData(indexes, rmds);
+		return new LineData(indexes, rmds, pixReads);
 	}
 
 	protected LineData getLineData(int fromRead, int start, int end)
@@ -223,7 +232,7 @@ public class PackRow
 			indexes[dataI] = -1;
 
 
-		return new LineData(indexes, rmds);
+		return new LineData(indexes, rmds, null);
 	}
 
 	Read getReadAt(int position)
