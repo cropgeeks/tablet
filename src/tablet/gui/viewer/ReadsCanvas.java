@@ -179,8 +179,17 @@ public class ReadsCanvas extends JPanel
 		ntOnScreenX = 1 + (int) ((float) viewSize.width  / ntW);
 		ntOnScreenY = 1 + (int) ((float) viewSize.height / ntH);
 
+		// This holds the number of pixels we need to get (and render) data for
+		// but note that it will often be WIDER than the size of the screen...
 		_pixelsOnScreenX = viewSize.width;
-		_ntOnScreenX = 1 + (int) ((float) viewSize.width / _ntW);
+
+		// ...because we need to adjust for the "jiggle" offscreen to the left
+		// when a base is using more than 1 pixel, to ensure the far right-hand
+		// edge is still painted. So we ask for more pixels to fill that gap
+		if (_ntW >= 1)
+			_pixelsOnScreenX += _ntW;
+
+		_ntOnScreenX = (int) ((float) _pixelsOnScreenX / _ntW);
 
 //		System.out.println("ntOnScreenX: " + _ntOnScreenX);
 

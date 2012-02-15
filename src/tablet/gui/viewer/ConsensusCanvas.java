@@ -84,17 +84,18 @@ class ConsensusCanvas extends TrackingCanvas
 
 		offset = contig.getVisualStart();
 
-		int ntW = rCanvas.ntW;
+		float ntW = rCanvas._ntW;
 		int ntH = rCanvas.ntH;
 		int xS = rCanvas.xS;
 		int xE = rCanvas.xE;
+		int pixelsOnScreenX = rCanvas._pixelsOnScreenX;
 
 		ReadScheme colors = rCanvas.colors;
 
 		int y = 0;
 
 		// Draw the quality scores
-		if (hasBaseQualities)
+/*		if (hasBaseQualities)
 		{
 			byte[] bq = consensus.getBaseQualityRange(xS+offset, xE+offset);
 
@@ -115,7 +116,7 @@ class ConsensusCanvas extends TrackingCanvas
 				}
 			}
 		}
-
+*/
 
 		// Because only one consensus at a time is in memory, it is possible for
 		// this drawing code to crap-out if another part of Tablet loads a
@@ -123,13 +124,35 @@ class ConsensusCanvas extends TrackingCanvas
 		// consensus data will no longer be available to this class
 		try
 		{
-			byte[] data = consensus.getRange(xS+offset, xE+offset);
 			y += qualityH;
 
-			// Draw the consensus sequence
-			for (int i = 0, x = (ntW*xS); i < data.length; i++, x += ntW)
-				if (data[i] != -1)
-					g.drawImage(colors.getConsensusImage(data[i]), x, y, null);
+			// "Old" style rendering (one base = one (or more) pixels)
+			if (ntW > 1)
+			{
+				byte[] data = consensus.getRange(xS+offset, xE+offset);
+
+				// Draw the consensus sequence
+				for (int i = 0, x = (int)(ntW*xS); i < data.length; i++, x += ntW)
+					if (data[i] != -1)
+						g.drawImage(colors.getConsensusImage(data[i]), x, y, null);
+			}
+			// "Super-zoom" rendering
+			else
+			{
+				// x = first pixel to draw on
+				// loop will iterate over every pixel
+				for (int i = 0, x = (int)(ntW*xS); i < pixelsOnScreenX; i++, x++)
+				{
+					int base = offset + xS + (int)(i / ntW);
+					byte state = consensus.getStateAt(base);
+					if (state != -1)
+					{
+						g.setColor(colors.getConsensusColor(state));
+						g.drawLine(x, y, x, y+ntH);
+					}
+				}
+			}
+
 		}
 		catch (Exception e) {};
 

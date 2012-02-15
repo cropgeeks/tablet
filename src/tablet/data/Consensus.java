@@ -121,6 +121,14 @@ public class Consensus //extends Sequence
 		return data;
 	}
 
+	public byte getStateAt(int pos)
+	{
+		if (pos < 0 || pos >= length)
+			return -1;
+
+		return consensus.getStateAt(pos);
+	}
+
 	/**
 	 * Returns a string representation of this sequence.
 	 * @return a string representation of this thread

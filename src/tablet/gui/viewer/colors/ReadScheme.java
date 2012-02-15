@@ -52,6 +52,8 @@ public abstract class ReadScheme
 
 	public abstract Image getConsensusImage(int data);
 
+	public abstract Color getConsensusColor(int data);
+
 	public abstract Image getImage(ReadMetaData rmd, int index);
 
 	public abstract Color getColor(ReadMetaData rmd, int index);
