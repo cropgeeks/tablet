@@ -42,7 +42,7 @@ public class PairedStackRow
 		if (readB != null)
 			getLineDataForRead(readB, reads, indexes, start, end);
 
-		return new LineData(indexes, reads);
+		return new LineData(indexes, reads, null);
 	}
 
 	// If a read is off screen do nothing, otherwise jump to where it begins and

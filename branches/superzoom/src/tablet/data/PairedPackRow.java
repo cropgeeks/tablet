@@ -41,7 +41,7 @@ public class PairedPackRow extends PackRow
 			prev = read;
 		}
 
-		return new LineData(indexes, rmds);
+		return new LineData(indexes, rmds, null);
 	}
 
 	// If a read is off screen do nothing, otherwise jump to where it begins and

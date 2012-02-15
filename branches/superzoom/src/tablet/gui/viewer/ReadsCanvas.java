@@ -278,9 +278,11 @@ public class ReadsCanvas extends JPanel
 
 		// Calculate and draw the blue/gray background for offset regions
 		g.setColor(new Color(240, 240, 255));
-		g.fillRect(0, 0, -offset*ntW, getHeight());
+		//g.fillRect(0, 0, -offset*ntW, getHeight());
+		g.fillRect(0, 0, (int)(-offset*_ntW), getHeight());
 		int cLength = -offset + contig.getConsensus().length();
-		g.fillRect(cLength*ntW, 0, canvasW-(cLength*ntW), getHeight());
+		//g.fillRect(cLength*ntW, 0, canvasW-(cLength*ntW), getHeight());
+		g.fillRect((int)(cLength*_ntW), 0, canvasW-(int)(cLength*_ntW), getHeight());
 
 
 		// Index positions within the dataset that we'll start drawing from
@@ -340,30 +342,28 @@ public class ReadsCanvas extends JPanel
 			LineData data;
 			ReadMetaData[] rmds;
 			int[] indexes;
+			Read[] readArr;
 
 			PackRow.count = 0;
-
 			long total = 0;
-
 
 			// For every [nth] row, where n = number of available CPU cores...
 			for (int row = yS, y = (ntH*yS); row <= yE; row += cores, y += ntH*cores)
 			{
-
-
 				long s = System.nanoTime();
-				data = reads.getPixelData(row, xS, _pixelsOnScreenX, _ntW);
+				data = reads.getPixelData(row, xS+offset, _pixelsOnScreenX, _ntW);
 				total += System.nanoTime() - s;
 
 				// Ask the read manager to calculate the data for this row
-				rmds = data.getReads();
+				rmds = data.getRMDs();
 				indexes = data.getIndexes();
+				readArr = data.getReads();
 
 				if (_ntW > 1)
 				{
 					for (int i = 0, x = (int)(_ntW*xS); i < _pixelsOnScreenX; i += _ntW, x += _ntW)
 					{
-						if (indexes[i] >= 0)
+						if (indexes[i] >= 0 && readArr[i] != null)
 							g.drawImage(colors.getImage(rmds[i], indexes[i]), x, y, null);
 
 						else if (indexes[i] == LineData.PAIRLINK)
@@ -375,7 +375,7 @@ public class ReadsCanvas extends JPanel
 					g.setColor(Color.red);
 					for (int i = 0, x = (int)(_ntW*xS); i < _pixelsOnScreenX; i++, x++)
 					{
-						if (rmds[i] != null)
+						if (readArr[i] != null)
 							g.drawLine(x, y, x, y);
 					}
 				}

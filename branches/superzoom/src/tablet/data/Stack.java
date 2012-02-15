@@ -62,7 +62,7 @@ public class Stack implements IReadManager
 		for (; index <= end; index++, dataI++)
 			indexes[dataI] = -1;
 
-		return new LineData(indexes, reads);
+		return new LineData(indexes, reads, null);
 	}
 
 	public Read getReadAt(int line, int nucleotidePosition)
