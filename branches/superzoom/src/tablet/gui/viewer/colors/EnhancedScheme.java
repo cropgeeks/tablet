@@ -68,6 +68,11 @@ public class EnhancedScheme extends ReadScheme
 		return statesCS.get(data).getImage();
 	}
 
+	public Color getConsensusColor(int data)
+	{
+		return statesCS.get(data).getColor();
+	}
+
 	public Image getImage(ReadMetaData rmd, int index)
 	{
 		return statesRD.get(rmd.getStateAt(index)).getImage();
