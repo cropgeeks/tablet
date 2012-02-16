@@ -130,40 +130,51 @@ public class ReadsCanvas extends JPanel
 		if (contig == null)
 			return;
 
+		// Notch on the slider where one base equals one pixel
+		int one2one = 5;
+
+		// Work out how high base rendering will be (it's either fixed at 2 for
+		// super-zoom levels, or based on font height for old-style zooming
+		if (sizeY > one2one)
+			sizeY = sizeY-one2one;
+
 		Font font = new Font("Monospaced", Font.PLAIN, sizeY);
 		FontMetrics fm = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)
 			.getGraphics().getFontMetrics(font);
 
-		// If greater than 10 use current font based scaling, otherwise 10 == 1:1
-		// scaling and every notch below that double the zoom out.
+		// TODO: Remove eventually...
 		ntW = sizeX*2;
 
-		if (sizeX > 15)
-			_ntW = sizeX * 2;
+		// "Old-style" zoom levels
+		if (sizeX > one2one)
+		{
+			_ntW = (sizeX-one2one) * 2;
+			ntH = fm.getHeight();
+		}
+		// Super-zoom levels
 		else
-			_ntW = (float) (1 / Math.pow(2, (15-sizeX)));
+		{
+			_ntW = (float) (1 / Math.pow(2, (one2one-sizeX)));
+			ntH = 2;
+		}
 
-		ntH = fm.getHeight();
+		System.out.println("ntW: " + _ntW + ", ntH: " + ntH);
 
-		System.out.println("New _NTW: " + Math.pow(2, (15-sizeX)));
 
 		ntOnCanvasX = contig.getVisualWidth();
+		_ntOnCanvasX = contig.getVisualWidth();
 		ntOnCanvasY = contig.getVisualHeight();
 
-		_ntOnCanvasX = contig.getVisualWidth();
-
 		canvasW = (ntOnCanvasX * ntW);
+		// Round UP to cope with 3.3 pixels needed for ten bases at 0.3 pixels
+		// per base (4 pixels actually needed)
+		_canvasW = (int)Math.ceil(_ntOnCanvasX * _ntW);
 		canvasH = (ntOnCanvasY * ntH);
 
-		// Round UP to cope with 3.3 pixels needed for ten bases at 0.3 pixels per base (4 pixels actually needed)
-		_canvasW = (int)Math.ceil(_ntOnCanvasX * _ntW);
 
 		if (_canvasW < 1)
 			_canvasW = 1;
 
-//		System.out.println("_ntW: " + _ntW + " _ntOnCnavasX: " + _ntOnCanvasX + " _canvasW: " + _canvasW);
-
-		//dimension = new Dimension(canvasW, canvasH);
 		dimension = new Dimension(_canvasW, canvasH);
 
 		updateColorScheme();
@@ -225,8 +236,13 @@ public class ReadsCanvas extends JPanel
 
 	void updateColorScheme()
 	{
-		colors = ReadScheme.getScheme(Prefs.visColorScheme, ntW, ntH);
-		proteins = ProteinScheme.getScheme(Prefs.visColorScheme, ntW, ntH);
+		// The colour schemes' bitmaps won't be used when the zoom ratio is < 1
+		// but we still need to make them (for the actual colours), so just
+		// ensure the width passed to the BufferedImages is still >= 1.
+		int w = _ntW >= 1 ? (int)_ntW : 1;
+
+		colors = ReadScheme.getScheme(Prefs.visColorScheme, w, ntH);
+		proteins = ProteinScheme.getScheme(Prefs.visColorScheme, w, ntH);
 
 		updateBuffer = true;
 		repaint();
