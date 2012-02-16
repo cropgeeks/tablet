@@ -40,9 +40,9 @@ public class PairedPackCreator extends SimpleJob
 
 			startRow = 0;
 
-			if(read.getStartPosition() == startPos)
+			if(read.s() == startPos)
 				startRow = rowIndex+1;
-			
+
 			added = pairAdded = false;
 
 			ReadMetaData rmd = Assembly.getReadMetaData(read, false);
@@ -67,7 +67,7 @@ public class PairedPackCreator extends SimpleJob
 					createPackRowForRead(read);
 			}
 
-			startPos = read.getStartPosition();
+			startPos = read.s();
 
 			progress++;
 		}
@@ -75,7 +75,7 @@ public class PairedPackCreator extends SimpleJob
 		// Trim the packs down to size once finished
 		for (PackRow packRow: pack)
 			packRow.trimToSize();
-		
+
 		pack.trimToSize();
 
 		contig.setPairedPack(pack);
@@ -96,7 +96,7 @@ public class PairedPackCreator extends SimpleJob
 			if (canAddToExistingPackRow(read, i))
 			{
 				rowIndex = i;
-				
+
 				if(read.getMate() == null)
 					break;
 
@@ -136,7 +136,7 @@ public class PairedPackCreator extends SimpleJob
 	 */
 	private void addToNewPackRow(MatedRead read)
 	{
-	
+
 		if (canAddToNewPackRow(read))
 		{
 			PairedPackRow packRow = new PairedPackRow();
@@ -177,7 +177,7 @@ public class PairedPackCreator extends SimpleJob
 
 	private boolean canAddToNewPackRow(MatedRead matedRead)
 	{
-		return (matedRead.getStartPosition() < matedRead.getMatePos() || 
+		return (matedRead.s() < matedRead.getMatePos() ||
 				(matedRead.getMate() == null && matedRead.getMatePos() < dataS))
 				|| !matedRead.isMateContig();
 	}

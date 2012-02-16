@@ -49,8 +49,8 @@ public class PairedStackRow
 	// fill the array up to where it ends (or hits the edge of the window)
 	private void getLineDataForRead(Read read, ReadMetaData[] reads, int[] indexes, int start, int end)
 	{
-		int readS = read.getStartPosition();
-		int readE = read.getEndPosition();
+		int readS = read.s();
+		int readE = read.e();
 		int index = start;
 
 		// No point doing anything for reads which aren't on screen
@@ -72,8 +72,8 @@ public class PairedStackRow
 
 	private void getLineDataForPairLink(int[] indexes, int start, int end)
 	{
-		int index = readA.getEndPosition()+1;
-		int readB_s = readB.getStartPosition();
+		int index = readA.e()+1;
+		int readB_s = readB.s();
 
 		if (index < start)
 			index = start;
@@ -87,10 +87,10 @@ public class PairedStackRow
 	 */
 	Read getReadAt(int position)
 	{
-		if(readA.getStartPosition() <= position && readA.getEndPosition() >= position)
+		if(readA.s() <= position && readA.e() >= position)
 			return readA;
 
-		else if(readB != null && readB != null && readB.getStartPosition() <= position && readB.getEndPosition() >= position)
+		else if(readB != null && readB != null && readB.s() <= position && readB.e() >= position)
 			return readB;
 
 		return null;

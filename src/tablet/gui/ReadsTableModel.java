@@ -50,7 +50,7 @@ class ReadsTableModel extends AbstractTableModel
 		switch (col)
 		{
 			case 0:	return Assembly.getReadName(read);
-			case 1: return read.getStartPosition() + 1;
+			case 1: return read.s() + 1;
 			case 2: return read.length();
 		}
 		return null;

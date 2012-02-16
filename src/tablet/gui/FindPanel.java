@@ -102,7 +102,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 
 			Read r = getRead(pos, (String)tableModel.getValueAt(row, 0));
 			if(r != null)
-				highlightRead(r, contig.getReadManager(), r.getStartPosition(), r.getEndPosition());
+				highlightRead(r, contig.getReadManager(), r.s(), r.e());
 		}
 		// If we are searching for read subsequences
 //		else
@@ -332,7 +332,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		{
 			// Get the read at this row and position.
 			Read read = manager.getReadAt(i, position);
-			if (read != null && read.getStartPosition() == position)
+			if (read != null && read.s() == position)
 			{
 				ReadNameData rnd = Assembly.getReadNameData(read);
 				// Check if this is the read we are looking for

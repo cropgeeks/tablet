@@ -63,15 +63,15 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 		int y = (lineIndex * ntH) + (ntH / 2);
 		int xS;
 		int xE;
-		if (readA.getStartPosition() < readB.getStartPosition())
+		if (readA.s() < readB.s())
 		{
-			xS = (readA.getEndPosition() * ntW) + offset + ntW;
-			xE = (readB.getStartPosition() * ntW) + offset;
+			xS = (readA.e() * ntW) + offset + ntW;
+			xE = (readB.s() * ntW) + offset;
 		}
 		else
 		{
-			xS = (readB.getEndPosition() * ntW) + offset + ntW;
-			xE = (readA.getStartPosition() * ntW) + offset;
+			xS = (readB.e() * ntW) + offset + ntW;
+			xE = (readA.s() * ntW) + offset;
 		}
 		g.setColor(Color.BLACK);
 		g.drawLine(xS, y, xE, y);
@@ -80,8 +80,8 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 	private void renderReadOutline(Read read, int line, int ntH, int ntW, int offset, Graphics2D g)
 	{
 		int y  = line * ntH;
-		int xS = (read.getStartPosition() * ntW) + offset;
-		int xE = (read.getEndPosition() * ntW) + ntW + offset;
+		int xS = (read.s() * ntW) + offset;
+		int xE = (read.e() * ntW) + ntW + offset;
 
 		g.drawRect(xS, y, xE-xS-1, ntH-1);
 	}
@@ -99,15 +99,15 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 		int s, e;
 		s = e = columnIndex;
 
-		if(readA.getStartPosition() < readB.getStartPosition())
+		if(readA.s() < readB.s())
 		{
-			s = readA.getStartPosition();
-			e = readB.getEndPosition();
+			s = readA.s();
+			e = readB.e();
 		}
 		else
 		{
-			s = readB.getStartPosition();
-			e = readA.getEndPosition();
+			s = readB.s();
+			e = readA.e();
 		}
 
 		return (columnIndex >= s && columnIndex <= e ? true : false);

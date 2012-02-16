@@ -72,7 +72,7 @@ public class NameOverlayer extends Thread implements IOverlayRenderer
 			for(Read read : reads)
 			{
 				ReadNameData rnd = Assembly.getReadNameData(read);
-				g.drawString(rnd.getName(), ((read.getStartPosition()-rCanvas.offset)*rCanvas.ntW)+5, y);
+				g.drawString(rnd.getName(), ((read.s()-rCanvas.offset)*rCanvas.ntW)+5, y);
 				y += rCanvas.ntH;
 			}
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);

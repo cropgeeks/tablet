@@ -55,10 +55,10 @@ public class CigarIHighlighter extends AlphaOverlay
 					if(insert.getRead().equals(read))
 					{
 						int x1 = pX1;
-						int w1 = (read.getStartPosition() - offset) * ntW - x1;
+						int w1 = (read.s() - offset) * ntW - x1;
 						g.fillRect(x1, row * ntH, w1, ntH);
 
-						int x2 = (read.getEndPosition()+1 - offset) * ntW;
+						int x2 = (read.e()+1 - offset) * ntW;
 						int w2 = (pX2Max * ntW) -x2;
 						g.fillRect(x2, row * ntH, w2, ntH);
 

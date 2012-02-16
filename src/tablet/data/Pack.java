@@ -49,7 +49,7 @@ public class Pack implements IReadManager, Iterable<PackRow>
 	{
 		for(PackRow packRow : packRows)
 		{
-			Read found = packRow.getReadAt(read.getStartPosition());
+			Read found = packRow.getReadAt(read.s());
 			if (found != null && found.getID() == read.getID())
 				return packRows.indexOf(packRow);
 		}

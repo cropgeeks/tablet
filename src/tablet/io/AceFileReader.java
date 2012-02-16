@@ -292,7 +292,7 @@ public class AceFileReader extends TrackableReader
 			if (qa_start != -2 && qa_end != -2)
 			{
 				seq = new StringBuilder(seq.substring(qa_start, qa_end+1));
-				read.setStartPosition(read.getStartPosition() + qa_start);
+				read.setStartPosition(read.s() + qa_start);
 			}
 			else
 				contig.getReads().set(rdIndex, null);
@@ -312,7 +312,7 @@ public class AceFileReader extends TrackableReader
 
 		// Do base-position comparison...
 		BasePositionComparator.compare(contig, rmd,
-			read.getStartPosition());
+			read.s());
 
 		readCache.setReadMetaData(rmd);
 
