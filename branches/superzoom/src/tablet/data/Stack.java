@@ -40,8 +40,8 @@ public class Stack implements IReadManager
 		// Tracking index on the start->end scale
 		int index = start;
 
-		int readS = read.getStartPosition();
-		int readE = read.getEndPosition();
+		int readS = read.s();
+		int readE = read.e();
 
 		ReadMetaData rmd = Assembly.getReadMetaData(read, true);
 
@@ -73,8 +73,8 @@ public class Stack implements IReadManager
 		Read read = stack.get(line);
 
 		// Check to see if the nucleotide position falls within this read's zone
-		if (nucleotidePosition >= read.getStartPosition() &&
-			nucleotidePosition <= read.getEndPosition())
+		if (nucleotidePosition >= read.s() &&
+			nucleotidePosition <= read.e())
 		{
 			return read;
 		}
@@ -110,13 +110,13 @@ public class Stack implements IReadManager
 					return mid;
 				else
 				{
-					while(stack.get(mid).getStartPosition() >= read.getStartPosition())
+					while(stack.get(mid).s() >= read.s())
 					{
 						mid--;
 						if(stack.get(mid).getID() == read.getID())
 							return mid;
 					}
-					while(stack.get(mid).getStartPosition() <= read.getStartPosition())
+					while(stack.get(mid).s() <= read.s())
 					{
 						mid++;
 						if(stack.get(mid).getID() == read.getID())

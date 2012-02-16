@@ -291,7 +291,7 @@ public class ReadsCanvas extends JPanel
 		g.fillRect(0, 0, (int)(-offset*_ntW), getHeight());
 		int cLength = -offset + contig.getConsensus().length();
 		//g.fillRect(cLength*ntW, 0, canvasW-(cLength*ntW), getHeight());
-		g.fillRect((int)(cLength*_ntW), 0, canvasW-(int)(cLength*_ntW), getHeight());
+		g.fillRect((int)(cLength*_ntW), 0, _canvasW-(int)(Math.ceil(cLength*_ntW)), getHeight());
 
 
 		// Index positions within the dataset that we'll start drawing from
@@ -353,7 +353,6 @@ public class ReadsCanvas extends JPanel
 			int[] indexes;
 			Read[] readArr;
 
-			PackRow.count = 0;
 			long total = 0;
 
 			// For every [nth] row, where n = number of available CPU cores...
@@ -372,7 +371,7 @@ public class ReadsCanvas extends JPanel
 				{
 					for (int i = 0, x = (int)(_ntW*xS); i < _pixelsOnScreenX; i += _ntW, x += _ntW)
 					{
-						if (indexes[i] >= 0 && readArr[i] != null)
+						if (indexes[i] >= 0)
 							g.drawImage(colors.getImage(rmds[i], indexes[i]), x, y, null);
 
 						else if (indexes[i] == LineData.PAIRLINK)

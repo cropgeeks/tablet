@@ -68,8 +68,8 @@ class ReadsCanvasInfoPane
 		{
 			// Tell the overview canvas to paint this read too
 			int offset = -rCanvas.offset;
-			int start = read.getStartPosition()+offset;
-			int end = read.getEndPosition()+offset;
+			int start = read.s()+offset;
+			int end = read.e()+offset;
 
 			oCanvas.updateRead(lineIndex, start, end);
 		}
@@ -120,8 +120,8 @@ class ReadsCanvasInfoPane
 		ReadMetaData rmd = Assembly.getReadMetaData(read, false);
 
 		// Start and ending positions (against consensus)
-		int readS = read.getStartPosition();
-		int readE = read.getEndPosition();
+		int readS = read.s();
+		int readE = read.e();
 
 		// Name
 		box.readName = truncate(rnd.getName());
@@ -227,7 +227,7 @@ class ReadsCanvasInfoPane
 		if(aPanel.getVisualContig().getTrackCount() <= 0)
 			return;
 
-		ArrayList<Feature> features = aPanel.getVisualContig().getTrack(0).getFeatures(read.getStartPosition(), read.getEndPosition());
+		ArrayList<Feature> features = aPanel.getVisualContig().getTrack(0).getFeatures(read.s(), read.e());
 		for (Feature feature : features)
 		{
 			if (!(feature.getGFFType().equals("CIGAR-I")))

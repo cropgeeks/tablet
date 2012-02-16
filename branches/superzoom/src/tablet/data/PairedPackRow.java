@@ -48,8 +48,8 @@ public class PairedPackRow extends PackRow
 	// fill the array up to where it ends (or hits the edge of the window)
 	private void getLineDataForRead(Read read, ReadMetaData[] rmds, int[] indexes, int start, int end)
 	{
-		int readS = read.getStartPosition();
-		int readE = read.getEndPosition();
+		int readS = read.s();
+		int readE = read.e();
 		int index = start;
 
 		// No point doing anything for reads which aren't on screen
@@ -71,8 +71,8 @@ public class PairedPackRow extends PackRow
 
 	private void getLineDataForPairLink(Read read, Read prev, int[] indexes, int start, int end)
 	{
-		int prevE = prev.getEndPosition()+1;
-		int readS = read.getStartPosition();
+		int prevE = prev.e()+1;
+		int readS = read.s();
 
 		if (prevE < start)
 			prevE = start;

@@ -23,7 +23,7 @@ public class VisibleReadsGrabberThread extends Thread
 		this.xE = xE;
 		this.yS = yS;
 		this.yE = yE;
-		
+
 		// Cancel any previous rendering threads that might be running
 		if (previousThread != null)
 		{
@@ -59,7 +59,7 @@ public class VisibleReadsGrabberThread extends Thread
 		{
 			ArrayList<Read> line = manager.getLine(i);
 
-			for(int j=findStartRead(line); j < line.size() && line.get(j).getStartPosition() < xE; j++)
+			for(int j=findStartRead(line); j < line.size() && line.get(j).s() < xE; j++)
 				reads.add(line.get(j));
 		}
 
@@ -93,14 +93,14 @@ public class VisibleReadsGrabberThread extends Thread
 		// Binary search only guarantees finding a read in the window, must search
 		// back to find first read in window
 		Read read = line.get(m);
-		while(m > 0 && read.getStartPosition() > xS)
+		while(m > 0 && read.s() > xS)
 		{
 			m--;
 			read = line.get(m);
 		}
 
 		// Adjust if we've gone too far
-		if (read.getEndPosition() < xS)
+		if (read.e() < xS)
 			m++;
 
 		return m;

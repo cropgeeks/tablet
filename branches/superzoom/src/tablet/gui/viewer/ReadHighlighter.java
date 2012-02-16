@@ -22,8 +22,8 @@ public class ReadHighlighter extends AlphaOverlay
 
 		this.lineIndex = lineIndex;
 
-		start = read.getStartPosition() - rCanvas.offset;
-		end = read.getEndPosition() - rCanvas.offset;
+		start = read.s() - rCanvas.offset;
+		end = read.e() - rCanvas.offset;
 
 		start();
 	}

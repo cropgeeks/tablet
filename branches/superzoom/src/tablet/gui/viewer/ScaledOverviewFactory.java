@@ -73,7 +73,7 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 				{
 					ReadMetaData rmd = Assembly.getReadMetaData(read, true);
 
-					g.setColor(colors.getColor(rmd, dataX-read.getStartPosition()));
+					g.setColor(colors.getColor(rmd, dataX-read.s()));
 					g.drawLine(x, y, x, y);
 				}
 			}

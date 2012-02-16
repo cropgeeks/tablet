@@ -47,7 +47,7 @@ public class PairedStack implements IReadManager
 	{
 		for(PairedStackRow pairedStackRow : stack)
 		{
-			Read found = pairedStackRow.getReadAt(read.getStartPosition());
+			Read found = pairedStackRow.getReadAt(read.s());
 
 			if(found != null && found.getID() == read.getID())
 				return stack.indexOf(pairedStackRow);
@@ -85,7 +85,7 @@ public class PairedStack implements IReadManager
 
 			// But only return them if it really is a pair (ie TWO reads), and
 			// the point asked for is between them (on the link)
-			if (pair[1] != null && colIndex > pair[0].getEndPosition() && colIndex < pair[1].getStartPosition())
+			if (pair[1] != null && colIndex > pair[0].e() && colIndex < pair[1].s())
 				return pair;
 		}
 

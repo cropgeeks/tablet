@@ -35,8 +35,8 @@ class OutlinerOverlay implements IOverlayRenderer
 		if (read != null)
 		{
 			// Start and ending positions (against consensus)
-			readS = read.getStartPosition();
-			readE = read.getEndPosition();
+			readS = read.s();
+			readE = read.e();
 		}
 	}
 
