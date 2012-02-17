@@ -40,4 +40,9 @@ public class VariantsScheme extends EnhancedScheme
 	{
 		return statesRD.get(rmd.getStateAt(index)).getColor();
 	}
+
+	public Color getOverviewColor(ReadMetaData rmd, int index)
+	{
+		return statesRD.get(rmd.getStateAt(index)).getOverviewColor();
+	}
 }
