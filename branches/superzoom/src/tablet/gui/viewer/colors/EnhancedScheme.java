@@ -83,6 +83,11 @@ public class EnhancedScheme extends ReadScheme
 		return statesRD.get(rmd.getStateAt(index)).getColor();
 	}
 
+	public Color getOverviewColor(ReadMetaData rmd, int index)
+	{
+		return statesRD.get(rmd.getStateAt(index)).getOverviewColor();
+	}
+
 	public Image getPairLink()
 		{ return pairLink.getImage(); }
 }

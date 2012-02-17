@@ -74,6 +74,13 @@ public class ReadGroupScheme extends EnhancedScheme
 		return stamps.get(rmd.getStateAt(index)).getColor();
 	}
 
+	@Override
+	public Color getOverviewColor(ReadMetaData rmd, int index)
+	{
+		ArrayList<ColorStamp> stamps = statesRG.get(rmd.getReadGroup());
+		return stamps.get(rmd.getStateAt(index)).getOverviewColor();
+	}
+
 	private static void setupPalette()
 	{
 		palette = new Color[20];

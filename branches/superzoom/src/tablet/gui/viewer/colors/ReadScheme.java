@@ -58,5 +58,7 @@ public abstract class ReadScheme
 
 	public abstract Color getColor(ReadMetaData rmd, int index);
 
+	public abstract Color getOverviewColor(ReadMetaData rmd, int index);
+
 	public abstract Image getPairLink();
 }

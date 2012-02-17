@@ -51,4 +51,12 @@ public class DirectionScheme extends EnhancedScheme
 		else
 			return statesF.get(rmd.getStateAt(index)).getColor();
 	}
+
+	public Color getOverviewColor(ReadMetaData rmd, int index)
+	{
+		if (rmd.isComplemented())
+			return statesR.get(rmd.getStateAt(index)).getOverviewColor();
+		else
+			return statesF.get(rmd.getStateAt(index)).getOverviewColor();
+	}
 }

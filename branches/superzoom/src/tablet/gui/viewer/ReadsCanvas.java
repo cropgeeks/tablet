@@ -155,7 +155,7 @@ public class ReadsCanvas extends JPanel
 		else
 		{
 			_ntW = (float) (1 / Math.pow(2, (one2one-sizeX)));
-			ntH = 2;
+			ntH = 3;
 		}
 
 		System.out.println("ntW: " + _ntW + ", ntH: " + ntH);
@@ -240,9 +240,10 @@ public class ReadsCanvas extends JPanel
 		// but we still need to make them (for the actual colours), so just
 		// ensure the width passed to the BufferedImages is still >= 1.
 		int w = _ntW >= 1 ? (int)_ntW : 1;
+		int h = _ntW >= 2 ? ntH : 2;
 
-		colors = ReadScheme.getScheme(Prefs.visColorScheme, w, ntH);
-		proteins = ProteinScheme.getScheme(Prefs.visColorScheme, w, ntH);
+		colors = ReadScheme.getScheme(Prefs.visColorScheme, w, h);
+		proteins = ProteinScheme.getScheme(Prefs.visColorScheme, w, h);
 
 		updateBuffer = true;
 		repaint();
@@ -400,7 +401,7 @@ public class ReadsCanvas extends JPanel
 				}
 				else
 				{
-					g.setColor(Color.red);
+					g.setColor(new Color(70, 116, 162));
 
 					for (int i = 0, x = (int)(_ntW*xS); i < _pixelsOnScreenX; i++, x++)
 					{
@@ -408,7 +409,8 @@ public class ReadsCanvas extends JPanel
 						{
 							if (_ntW == 1)
 								g.setColor(colors.getColor(rmds[i], indexes[i]));
-							g.drawLine(x, y, x, y);
+
+							g.fillRect(x, y, 1, 2);
 						}
 
 //						if (readArr[i] != null)
