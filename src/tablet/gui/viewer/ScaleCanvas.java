@@ -5,7 +5,6 @@ package tablet.gui.viewer;
 
 import java.awt.*;
 import java.awt.event.*;
-import javax.swing.*;
 
 import tablet.data.*;
 import tablet.data.auxiliary.*;
@@ -49,7 +48,7 @@ class ScaleCanvas extends TrackingCanvas
 		{
 			public void mouseMoved(MouseEvent e)
 			{
-				int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) + offset;
+				int xIndex = (int)((rCanvas.pX1 + e.getX()) / rCanvas._ntW) + offset;
 				setMouseBase(xIndex);
 			}
 		});
@@ -96,10 +95,13 @@ class ScaleCanvas extends TrackingCanvas
 
 		offset = contig.getVisualStart();
 
-		int ntW = rCanvas.ntW;
-		//int ntH = rCanvas.ntH;
-		int xS = x1 / ntW;
-		int xE = x2 / ntW;
+		float ntW = (int)rCanvas._ntW;
+
+		int xS = (int)(x1 / ntW);
+		int xE = (int)((x2+1) / ntW)-1;
+
+		if (xE > contig.getVisualEnd())
+			xE = contig.getVisualEnd();
 
 		// Draw the scale bar
 		g.setColor(new Color(167, 166, 170));
@@ -108,13 +110,19 @@ class ScaleCanvas extends TrackingCanvas
 		g.drawLine(x2, 0, x2, h);
 
 		// And ticks at intervals of 5 and 25 bases
-		for (int i = xS; i <= xE; i++)
+		if (ntW >= 1)
 		{
-			if ((i+offset+1) % 25 == 0)
-				g.drawLine(i*ntW+(ntW/2), 0, i*ntW+(ntW/2), 8);
+			// Temporary int used for the drawing of ticks on the scale bar.
+			int ntWInt = (int)ntW;
 
-			else if ((i+offset+1) % 5 == 0)
-				g.drawLine(i*ntW+(ntW/2), 3, i*ntW+(ntW/2), 8);
+			for (int i = xS; i <= xE; i++)
+			{
+				if ((i+offset+1) % 25 == 0)
+					g.drawLine(i*ntWInt+(ntWInt/2), 0, i*ntWInt+(ntWInt/2), 8);
+
+				else if ((i+offset+1) % 5 == 0)
+					g.drawLine(i*ntWInt+(ntWInt/2), 3, i*ntWInt+(ntWInt/2), 8);
+			}
 		}
 
 		g.setColor(ColorPrefs.get("User.ScaleBar.Text"));
@@ -124,12 +132,15 @@ class ScaleCanvas extends TrackingCanvas
 		// REMINDER: mouseBase = base pos under mouse (0 indexed on consensus)
 		if (mouseBase != null)
 		{
+			int ntOnCanvasX = rCanvas._ntOnCanvasX;
+
 			// If the mouse is beyond the edge of the data, don't do anything
-			if (mouseBase-offset+1 > rCanvas.ntOnCanvasX)
+			if (mouseBase-offset+1 > ntOnCanvasX)
 				return;
 
 			// Work out where to start drawing: base position + 1/2 a base
-			int x = (mouseBase-offset) * ntW + (ntW/2);
+			int x = (int) ((mouseBase-offset) * ntW + (ntW/2));
+
 			// Draw a tick there
 			g.drawLine(x, 0, x, 8);
 
