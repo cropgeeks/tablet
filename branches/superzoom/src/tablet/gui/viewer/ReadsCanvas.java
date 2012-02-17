@@ -131,7 +131,7 @@ public class ReadsCanvas extends JPanel
 			return;
 
 		// Notch on the slider where one base equals one pixel
-		int one2one = 5;
+		int one2one = 8;
 
 		// Work out how high base rendering will be (it's either fixed at 2 for
 		// super-zoom levels, or based on font height for old-style zooming
@@ -256,7 +256,7 @@ public class ReadsCanvas extends JPanel
 		long s = System.nanoTime();
 
 		// Update the back buffer (if it needs redrawn)
-		if (updateBuffer)
+//		if (updateBuffer)
 		{
 			isRendering = true;
 
@@ -329,7 +329,11 @@ public class ReadsCanvas extends JPanel
 
 		// Paint the lines using multiple cores...
 		for (int i = 0; i < tasks.length; i++)
-			tasks[i] = executor.submit(new LinePainter(g, yS+i));
+		{
+			Graphics tG = buffer.createGraphics();
+			tG.translate(-pX1, -pY1);
+			tasks[i] = executor.submit(new LinePainter(tG, yS+i));
+		}
 		for (Future task: tasks)
 			task.get();
 
@@ -397,23 +401,26 @@ public class ReadsCanvas extends JPanel
 				else
 				{
 					g.setColor(Color.red);
+
 					for (int i = 0, x = (int)(_ntW*xS); i < _pixelsOnScreenX; i++, x++)
 					{
-						if (readArr[i] != null)
+						if (indexes[i] >= 0)
+						{
+							if (_ntW == 1)
+								g.setColor(colors.getColor(rmds[i], indexes[i]));
 							g.drawLine(x, y, x, y);
+						}
+
+//						if (readArr[i] != null)
+//							g.drawLine(x, y, x, y);
 					}
 				}
 			}
 
-//	data = reads.getPixelData(row, xS, _pixelsOnScreenX, /*pixels2Bases*/ _ntW);
-//float pixels2Bases = /*_pixelsOnScreenX*/ canvasW / (float) ntOnCanvasX;
-//			long e = System.nanoTime();
-//			float average = ((e-s)/(float)rowCount);
 			System.out.println("Total Data time: " + (total/1000000f) + "ms");
-
-//			System.out.println("Binary searches: " + PackRow.count);
 			System.out.println();
 
+			g.dispose();
 		}
 	}
 

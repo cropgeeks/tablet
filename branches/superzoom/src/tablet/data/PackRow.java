@@ -124,7 +124,7 @@ public class PackRow
 					// If it's a read...
 					if (rIndex != null)
 					{
-						if (scale > 1)
+						if (scale >= 1)
 							rmds[i] = Assembly.getReadMetaData(rIndex.read, true);
 
 						// Index (within the read) of its data at this base
