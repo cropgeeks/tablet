@@ -117,9 +117,9 @@ public class CanvasController extends JPanel implements ChangeListener
 		if (colIndex != -1)
 		{
 			if (centre)
-				offset = ((readsCanvas.ntOnScreenX * readsCanvas.ntW) / 2) - readsCanvas.ntW;
+				offset = (int)(((readsCanvas._ntOnScreenX * readsCanvas._ntW) / 2) - readsCanvas._ntW);
 
-			int x = colIndex * readsCanvas.ntW - offset;
+			int x = (int)(colIndex * readsCanvas._ntW - offset);
 			hBar.setValue(x);
 		}
 	}
@@ -168,14 +168,22 @@ public class CanvasController extends JPanel implements ChangeListener
 	// Jumps the screen left by one "page"
 	public void pageLeft()
 	{
-		int jumpTo = scaleCanvas.ntL - (readsCanvas.ntOnScreenX) - readsCanvas.offset;
-		moveToLater(-1, jumpTo, false);
+		// Calculate the total number of pixels to move the display by
+		int jumpToX = readsCanvas.pX1 - (readsCanvas.pX2Max - readsCanvas.pX1 + 1);
+		// Convert this pixel value into a base in nucleotide coordinates
+		int ntJumpTo = (int)(jumpToX / readsCanvas._ntW);
+
+		moveToLater(-1, ntJumpTo, false);
 	}
 
 	// Jumps the screen right by one "page"
 	public void pageRight()
 	{
-		int jumpTo = scaleCanvas.ntR + 1 - readsCanvas.offset;
-		moveToLater(-1, jumpTo, false);
+		// Calculate the total number of pixels to move the display by
+		int jumpToX = readsCanvas.pX1 + (readsCanvas.pX2Max - readsCanvas.pX1 + 1);
+		// Convert this pixel value into a base in nucleotide coordinates
+		int ntJumpTo = (int)(jumpToX / readsCanvas._ntW);
+
+		moveToLater(-1, ntJumpTo, false);
 	}
 }
