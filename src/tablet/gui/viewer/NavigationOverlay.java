@@ -100,7 +100,7 @@ class NavigationOverlay implements IOverlayRenderer
 		}
 
 		// Extra check: are we at the far right hand side of the view?
-		if (rCanvas.pX2 == rCanvas.canvasW-1)
+		if (rCanvas.pX2 == rCanvas._canvasW-1)
 		{
 			// If we are...perhaps there's still more data (not yet loaded)
 			if (rCanvas.contig.getDataEnd() > rCanvas.contig.getVisualEnd())
