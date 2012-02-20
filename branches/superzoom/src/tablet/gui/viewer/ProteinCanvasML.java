@@ -60,8 +60,8 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 	// the full name of the protein under the mouse
 	public void mouseMoved(MouseEvent e)
 	{
-		int xIndex =
-			((rCanvas.pX1 + e.getX()) / rCanvas.ntW) + rCanvas.offset;
+		int x = pCanvas.getMouseX(e);
+		int ntIndex = (int) (((rCanvas.pX1 + x)) / rCanvas._ntW) + rCanvas.offset;
 
 		try
 		{
@@ -70,7 +70,7 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 			track = getActualTrack(track);
 
 			// And get the data value at that point
-			short value = pCanvas.translations.get(track)[(xIndex)];
+			short value = pCanvas.translations.get(track)[(ntIndex)];
 
 			// Values greater than LBASE/RBASE are positions without the text
 			if (value > RBASE) value -= RBASE;
@@ -80,14 +80,14 @@ class ProteinCanvasML extends MouseInputAdapter implements ActionListener
 			if (value > 0)
 			{
 				String msg = RB.getString("gui.viewer.ProteinCanvasML.p" + value);
-				sCanvas.setMouseBase(xIndex, msg);
+				sCanvas.setMouseBase(ntIndex, msg);
 			}
 			else
-				sCanvas.setMouseBase(xIndex, null);
+				sCanvas.setMouseBase(ntIndex, null);
 		}
 		catch (Exception exception)
 		{
-			sCanvas.setMouseBase(xIndex, null);
+			sCanvas.setMouseBase(ntIndex, null);
 		}
 	}
 
