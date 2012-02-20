@@ -161,6 +161,13 @@ class ReadsCanvasML extends MouseInputAdapter
 		int xIndex = ((int) ((e.getX() / rCanvas._ntW))) + rCanvas.offset;
 		int yIndex = (e.getY() / rCanvas.ntH);
 
+		// DISABLED because it causes tooltip flicker as the mouse moves on and
+		// off each read
+		// At zoom levels <= 1, we put a spacer line between each read. This
+		// detects when the mouse is in this space and therefore not over a read
+//		if (rCanvas.ntH != rCanvas.readH && e.getY() % rCanvas.ntH == 2)
+//			yIndex = -1;
+
 		System.out.println("Mouse over base: " + xIndex);
 
 		// Track the mouse position

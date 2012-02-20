@@ -33,6 +33,8 @@ public class ReadsCanvas extends JPanel
 
 	// Width and height of a single nucleotide when it is drawn
 	int ntW, ntH;
+	// "Read height" - may be the same as ntH, but sometimes is less (by 1 pixel)
+	int readH;
 	// The number of nucleotides that fit on the current screen?
 	int ntOnScreenX, ntOnScreenY;
 	// And the total number of nucleotides that span the entire canvas
@@ -150,12 +152,14 @@ public class ReadsCanvas extends JPanel
 		{
 			_ntW = (sizeX-one2one) * 2;
 			ntH = fm.getHeight();
+			readH = fm.getHeight();
 		}
 		// Super-zoom levels
 		else
 		{
 			_ntW = (float) (1 / Math.pow(2, (one2one-sizeX)));
 			ntH = 3;
+			readH = 2;
 		}
 
 		System.out.println("ntW: " + _ntW + ", ntH: " + ntH);
@@ -305,7 +309,7 @@ public class ReadsCanvas extends JPanel
 		// Calculate and draw the blue/gray background for offset regions
 		g.setColor(new Color(240, 240, 255));
 		//g.fillRect(0, 0, -offset*ntW, getHeight());
-		g.fillRect(0, 0, (int)(-offset*_ntW), getHeight());
+		g.fillRect(0, 0, (int)Math.ceil(-offset*_ntW), getHeight());
 		int cLength = -offset + contig.getConsensus().length();
 		//g.fillRect(cLength*ntW, 0, canvasW-(cLength*ntW), getHeight());
 		g.fillRect((int)(cLength*_ntW), 0, _canvasW-(int)(Math.ceil(cLength*_ntW)), getHeight());
