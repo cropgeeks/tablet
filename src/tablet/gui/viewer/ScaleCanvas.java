@@ -48,8 +48,10 @@ class ScaleCanvas extends TrackingCanvas
 		{
 			public void mouseMoved(MouseEvent e)
 			{
-				int xIndex = (int)((rCanvas.pX1 + e.getX()) / rCanvas._ntW) + offset;
-				setMouseBase(xIndex);
+				int x = getMouseX(e);
+				int ntIndex = (int) (((rCanvas.pX1 + x)) / rCanvas._ntW) + rCanvas.offset;
+
+				setMouseBase(ntIndex);
 			}
 		});
 	}
