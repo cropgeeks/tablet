@@ -97,13 +97,13 @@ class ScaleCanvas extends TrackingCanvas
 
 		offset = contig.getVisualStart();
 
-		float ntW = (int)rCanvas._ntW;
+		float ntW = rCanvas._ntW;
 
 		int xS = (int)(x1 / ntW);
 		int xE = (int)((x2+1) / ntW)-1;
 
-		if (xE > contig.getVisualEnd())
-			xE = contig.getVisualEnd();
+		if (xE > contig.getVisualWidth())
+			xE = contig.getVisualWidth()-1;
 
 		// Draw the scale bar
 		g.setColor(new Color(167, 166, 170));
