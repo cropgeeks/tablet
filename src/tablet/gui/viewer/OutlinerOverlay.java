@@ -42,17 +42,6 @@ class OutlinerOverlay implements IOverlayRenderer
 
 	public void render(Graphics2D g)
 	{
-		int offset = -rCanvas.offset * rCanvas.ntW;
-
-		// Remember the current stroke so it can be reset afterwards
-		Stroke oldStroke = g.getStroke();
-
-		// Set the outline width based on the zoom level
-		if (Prefs.visReadsCanvasZoom > 18)
-			g.setStroke(new BasicStroke(3));
-		else if (Prefs.visReadsCanvasZoom > 8)
-			g.setStroke(new BasicStroke(2));
-
 		g.setColor(ColorPrefs.get("User.OutlinerOverlay.RowColOutliner"));
 
 		// Deal with any additional features first
@@ -60,21 +49,27 @@ class OutlinerOverlay implements IOverlayRenderer
 		{
 			if (f.type == VisualOutline.READ)
 			{
-				int xS = f.value1 * rCanvas.ntW + offset;
-				int xE = f.value2 * rCanvas.ntW + rCanvas.ntW + offset;
+				int xS = (int) Math.ceil((f.value1-rCanvas.offset) * rCanvas._ntW);
+				int xE = (int) Math.floor((f.value2-rCanvas.offset) * rCanvas._ntW);
 				int y  = f.value3 * rCanvas.ntH;
 
+				if (rCanvas._ntW > 1)
+					xE += rCanvas._ntW - 1;
+
 				if (xS <= rCanvas.pX2 && xE > rCanvas.pX1)
-					g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);
+					g.drawRect(xS, y, xE-xS, rCanvas.readH-1);
 			}
 
 			else if (f.type == VisualOutline.COL)
 			{
-				int xS = f.value1 * rCanvas.ntW + offset;
-				int xE = xS + rCanvas.ntW;
+				int xS = (int) Math.ceil((f.value1-rCanvas.offset) * rCanvas._ntW);
+				int xE = xS;
+
+				if (rCanvas._ntW > 1)
+					xE += rCanvas._ntW - 1;
 
 				if (xS <= rCanvas.pX2 && xE > rCanvas.pX1)
-					g.drawRect(xS, 0, xE-xS-1, rCanvas.getHeight()-1);
+					g.drawRect(xS, 0, xE-xS, rCanvas.getHeight()-1);
 			}
 
 			else if (f.type == VisualOutline.ROW)
@@ -90,20 +85,23 @@ class OutlinerOverlay implements IOverlayRenderer
 		// Draw an outline around whatever read is under the mouse
 		if (read != null)
 		{
-			int xS = readS * rCanvas.ntW + offset;
-			int xE = readE * rCanvas.ntW + rCanvas.ntW + offset;
+			// 1st base ceiled, because it might map to pixel 5.5 - the render
+			// code will have looked at 5.0 and decided no read gets drawn on it
+			// and starts at 6 instead
+			int xS = (int) Math.ceil((readS-rCanvas.offset) * rCanvas._ntW);
+			// Last base floored, because if it ends at 7.7 then the last pixel
+			// painted by the renderer will be 7
+			int xE = (int) Math.floor((readE-rCanvas.offset) * rCanvas._ntW);
 			int y  = lineIndex * rCanvas.ntH;
 
-			if (Prefs.visOutlineAlpha)
-			{
-				g.setPaint(new Color(255, 255, 255, 75));
-				g.fillRect(xS, y, xE-xS-1, rCanvas.ntH-1);
-			}
+			// Compensate for zoom levels where 1 base is greater than 1 pixel
+			if (rCanvas._ntW > 1)
+				xE += rCanvas._ntW - 1;
 
+			g.setPaint(new Color(255, 255, 255, 75));
+			g.fillRect(xS, y, xE-xS, rCanvas.readH-1);
 			g.setColor(ColorPrefs.get("User.OutlinerOverlay.ReadOutliner"));
-			g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);
+			g.drawRect(xS, y, xE-xS, rCanvas.readH-1);
 		}
-
-		g.setStroke(oldStroke);
 	}
 }
