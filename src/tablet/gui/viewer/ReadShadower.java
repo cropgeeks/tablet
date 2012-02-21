@@ -52,15 +52,24 @@ class ReadShadower implements IOverlayRenderer
 		int top = rCanvas.pY1 / rCanvas.ntH;
 		int bottom = rCanvas.pY2 / rCanvas.ntH;
 		int ntH = rCanvas.ntH;
-		int ntW = rCanvas.ntW;
+		float ntW = rCanvas._ntW;
 		int offset = rCanvas.offset;
 
 		for (int row = top; row <= bottom; row++)
 		{
-			Read read = rCanvas.reads.getReadAt(row, mid/ntW+offset);
+			int base = ((int) ((mid / ntW))) + offset;
+			Read read = rCanvas.reads.getReadAt(row, base);
 
 			if (read != null)
-				g.fillRect((read.s()-offset) * ntW, row * ntH, (read.e()-read.s()+1) * ntW, ntH);
+			{
+				int xS = (int) Math.ceil((read.s()-rCanvas.offset) * ntW);
+				int xE = (int) Math.floor((read.e()-rCanvas.offset) * ntW);
+
+				if (ntW > 1)
+					xE += ntW - 1;
+
+				g.fillRect(xS, row * ntH, xE-xS+1, rCanvas.readH);
+			}
 		}
 		// Draws a vertical line down the middle of the display
 		g.setColor(lineColor);
@@ -84,7 +93,7 @@ class ReadShadower implements IOverlayRenderer
 			return;
 
 		int ntH = rCanvas.ntH;
-		int ntW = rCanvas.ntW;
+		float ntW = rCanvas._ntW;
 		int offset = rCanvas.offset;
 		int yS = rCanvas.pY1 / ntH;
 		int yE = rCanvas.pY2 / ntH;
@@ -94,12 +103,20 @@ class ReadShadower implements IOverlayRenderer
 			Read read = rCanvas.reads.getReadAt(row, iPosition);
 
 			if (read != null)
-				g.fillRect((read.s() - offset) * ntW, row * ntH, ((read.e() - offset) - (read.s() - offset) + 1) * ntW, ntH);
+			{
+				int xS = (int) Math.ceil((read.s()-rCanvas.offset) * ntW);
+				int xE = (int) Math.floor((read.e()-rCanvas.offset) * ntW);
+
+				if (ntW > 1)
+					xE += ntW - 1;
+
+				g.fillRect(xS, row * ntH, xE-xS+1, rCanvas.readH);
+			}
 		}
 		// Draws a vertical line down the display
 		g.setColor(lineColor);
 
-		int linePos = (iPosition - offset) * ntW + ntW / 2;
+		int linePos = (int) ((iPosition - offset) * ntW + ntW / 2);
 		g.drawLine(linePos, rCanvas.pY1, linePos, rCanvas.pY2);
 	}
 
