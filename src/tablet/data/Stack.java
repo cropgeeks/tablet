@@ -13,9 +13,38 @@ public class Stack implements IReadManager
 	{
 	}
 
-	public LineData getPixelData(int line, int start, int end, float scale)
+	public LineData getPixelData(int line, int startBase, int arraySize, float scale)
 	{
-		return null;
+		// Arrays which will eventually make up the LineData object
+		ReadMetaData[] rmds = new ReadMetaData[arraySize];
+		int[] indexes = new int[arraySize];
+		Read[] pixReads = new Read[arraySize];
+
+		// The read on the given line of the display
+		Read read = stack.get(line);
+		ReadMetaData rmd = null;
+
+		// If we're rendering data at the current zoom level, grab the RMD for
+		// the read on this row of the Stack
+		if (scale >= 1)
+			rmd = Assembly.getReadMetaData(read, true);
+
+		for (int i=0, readS = read.s(), readE = read.e(); i < arraySize; i++)
+		{
+			int base = startBase + (int)(i / scale);
+
+			if (base >= readS && base <= readE)
+			{
+				rmds[i] = rmd;
+				// Index (within the read) of its data at this base
+				indexes[i] = base-readS;
+				pixReads[i] = read;
+			}
+			else
+				indexes[i] = -1;
+		}
+
+		return new LineData(indexes, rmds, pixReads);
 	}
 
 	Stack(ArrayList<Read> reads)
