@@ -22,6 +22,54 @@ public class PairedStackRow
 			readB = read;
 	}
 
+	public LineData getPixelData(int startBase, int arraySize, float scale)
+	{
+		// Arrays which will eventually make up the LineData object
+		ReadMetaData[] rmds = new ReadMetaData[arraySize];
+		int[] indexes = new int[arraySize];
+		Read[] pixReads = new Read[arraySize];
+
+		ReadMetaData rmdA = null;
+		ReadMetaData rmdB = null;
+
+		// If we're rendering data at the current zoom level, grab the RMDs for
+		// the reads on this row of the Stack
+		if (scale >= 1)
+		{
+			rmdA = Assembly.getReadMetaData(readA, true);
+			if (readB != null)
+				rmdB = Assembly.getReadMetaData(readB, true);
+		}
+
+		for (int i=0; i < arraySize; i++)
+		{
+			int base = startBase + (int)(i / scale);
+
+			// If base is found within the first read
+			if (base >= readA.s() && base <= readA.e())
+			{
+				indexes[i] = base - readA.s();
+				rmds[i] = rmdA;
+				pixReads[i] = readA;
+			}
+			// If base is found within the second read
+			else if (readB != null && base >= readB.s() && base <= readB.e())
+			{
+				indexes[i] = base - readB.s();
+				rmds[i] = rmdB;
+				pixReads[i] = readB;
+			}
+			// If base is part of a pair link line
+			else if (base > readA.e() && readB != null && base < readB.s())
+				indexes[i] = -2;
+			// Base isn't over any data
+			else
+				indexes[i] = -1;
+		}
+
+		return new LineData(indexes, rmds, pixReads);
+	}
+
 	public LineData getLineData(int start, int end)
 	{
 		ReadMetaData[] reads = new ReadMetaData[end-start+1];

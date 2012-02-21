@@ -15,7 +15,9 @@ public class PairedStack implements IReadManager
 
 	public LineData getPixelData(int line, int start, int end, float scale)
 	{
-		return null;
+		PairedStackRow pairedStackRow = stack.get(line);
+
+		return pairedStackRow.getPixelData(start, end, scale);
 	}
 
 	public LineData getLineData(int line, int start, int end)
