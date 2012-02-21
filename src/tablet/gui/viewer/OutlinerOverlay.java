@@ -49,12 +49,9 @@ class OutlinerOverlay implements IOverlayRenderer
 		{
 			if (f.type == VisualOutline.READ)
 			{
-				int xS = (int) Math.ceil((f.value1-rCanvas.offset) * rCanvas._ntW);
-				int xE = (int) Math.floor((f.value2-rCanvas.offset) * rCanvas._ntW);
+				int xS = rCanvas.getFirstRenderedPixel(f.value1);
+				int xE = rCanvas.getFinalRenderedPixel(f.value2);
 				int y  = f.value3 * rCanvas.ntH;
-
-				if (rCanvas._ntW > 1)
-					xE += rCanvas._ntW - 1;
 
 				if (xS <= rCanvas.pX2 && xE > rCanvas.pX1)
 					g.drawRect(xS, y, xE-xS, rCanvas.readH-1);
@@ -62,11 +59,8 @@ class OutlinerOverlay implements IOverlayRenderer
 
 			else if (f.type == VisualOutline.COL)
 			{
-				int xS = (int) Math.ceil((f.value1-rCanvas.offset) * rCanvas._ntW);
-				int xE = xS;
-
-				if (rCanvas._ntW > 1)
-					xE += rCanvas._ntW - 1;
+				int xS = rCanvas.getFirstRenderedPixel(f.value1);
+				int xE = rCanvas.getFinalRenderedPixel(f.value1);
 
 				if (xS <= rCanvas.pX2 && xE > rCanvas.pX1)
 					g.drawRect(xS, 0, xE-xS, rCanvas.getHeight()-1);
@@ -85,18 +79,9 @@ class OutlinerOverlay implements IOverlayRenderer
 		// Draw an outline around whatever read is under the mouse
 		if (read != null)
 		{
-			// 1st base ceiled, because it might map to pixel 5.5 - the render
-			// code will have looked at 5.0 and decided no read gets drawn on it
-			// and starts at 6 instead
-			int xS = (int) Math.ceil((readS-rCanvas.offset) * rCanvas._ntW);
-			// Last base floored, because if it ends at 7.7 then the last pixel
-			// painted by the renderer will be 7
-			int xE = (int) Math.floor((readE-rCanvas.offset) * rCanvas._ntW);
+			int xS = rCanvas.getFirstRenderedPixel(read.s());
+			int xE = rCanvas.getFinalRenderedPixel(read.e());
 			int y  = lineIndex * rCanvas.ntH;
-
-			// Compensate for zoom levels where 1 base is greater than 1 pixel
-			if (rCanvas._ntW > 1)
-				xE += rCanvas._ntW - 1;
 
 			g.setPaint(new Color(255, 255, 255, 75));
 			g.fillRect(xS, y, xE-xS, rCanvas.readH-1);
