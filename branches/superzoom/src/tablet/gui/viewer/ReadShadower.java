@@ -48,32 +48,27 @@ class ReadShadower implements IOverlayRenderer
 	 */
 	private void renderLockedToMiddle(Graphics2D g)
 	{
-		int mid = (rCanvas.pX1 + ((rCanvas.pX2Max-rCanvas.pX1)/2));
+		int midPointPixel = (rCanvas.pX1 + ((rCanvas.pX2Max-rCanvas.pX1)/2));
 		int top = rCanvas.pY1 / rCanvas.ntH;
 		int bottom = rCanvas.pY2 / rCanvas.ntH;
 		int ntH = rCanvas.ntH;
-		float ntW = rCanvas._ntW;
-		int offset = rCanvas.offset;
 
 		for (int row = top; row <= bottom; row++)
 		{
-			int base = ((int) ((mid / ntW))) + offset;
+			int base = rCanvas.getBaseForPixel(midPointPixel);
 			Read read = rCanvas.reads.getReadAt(row, base);
 
 			if (read != null)
 			{
-				int xS = (int) Math.ceil((read.s()-rCanvas.offset) * ntW);
-				int xE = (int) Math.floor((read.e()-rCanvas.offset) * ntW);
-
-				if (ntW > 1)
-					xE += ntW - 1;
+				int xS = rCanvas.getFirstRenderedPixel(read.s());
+				int xE = rCanvas.getFinalRenderedPixel(read.e());
 
 				g.fillRect(xS, row * ntH, xE-xS+1, rCanvas.readH);
 			}
 		}
 		// Draws a vertical line down the middle of the display
 		g.setColor(lineColor);
-		g.drawLine(mid, rCanvas.pY1, mid, rCanvas.pY2);
+		g.drawLine(midPointPixel, rCanvas.pY1, midPointPixel, rCanvas.pY2);
 	}
 
 	/**
@@ -93,8 +88,6 @@ class ReadShadower implements IOverlayRenderer
 			return;
 
 		int ntH = rCanvas.ntH;
-		float ntW = rCanvas._ntW;
-		int offset = rCanvas.offset;
 		int yS = rCanvas.pY1 / ntH;
 		int yE = rCanvas.pY2 / ntH;
 
@@ -104,11 +97,8 @@ class ReadShadower implements IOverlayRenderer
 
 			if (read != null)
 			{
-				int xS = (int) Math.ceil((read.s()-rCanvas.offset) * ntW);
-				int xE = (int) Math.floor((read.e()-rCanvas.offset) * ntW);
-
-				if (ntW > 1)
-					xE += ntW - 1;
+				int xS = rCanvas.getFirstRenderedPixel(read.s());
+				int xE = rCanvas.getFinalRenderedPixel(read.e());
 
 				g.fillRect(xS, row * ntH, xE-xS+1, rCanvas.readH);
 			}
@@ -116,7 +106,9 @@ class ReadShadower implements IOverlayRenderer
 		// Draws a vertical line down the display
 		g.setColor(lineColor);
 
-		int linePos = (int) ((iPosition - offset) * ntW + ntW / 2);
+		int linePos = rCanvas.getFirstRenderedPixel(iPosition)
+			+ (int) rCanvas._ntW / 2;
+
 		g.drawLine(linePos, rCanvas.pY1, linePos, rCanvas.pY2);
 	}
 

@@ -49,7 +49,7 @@ class ScaleCanvas extends TrackingCanvas
 			public void mouseMoved(MouseEvent e)
 			{
 				int x = getMouseX(e);
-				int ntIndex = (int) (((rCanvas.pX1 + x)) / rCanvas._ntW) + rCanvas.offset;
+				int ntIndex = rCanvas.getBaseForPixel(rCanvas.pX1 + x);
 
 				setMouseBase(ntIndex);
 			}
@@ -141,7 +141,8 @@ class ScaleCanvas extends TrackingCanvas
 				return;
 
 			// Work out where to start drawing: base position + 1/2 a base
-			int x = (int) ((mouseBase-offset) * ntW + (ntW/2));
+//			int x = (int) ((mouseBase-offset) * ntW + (ntW/2));
+			int x = rCanvas.getFirstRenderedPixel(mouseBase) + (int) (ntW/2);
 
 			// Draw a tick there
 			g.drawLine(x, 0, x, 8);

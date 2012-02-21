@@ -261,7 +261,7 @@ public class ReadsCanvas extends JPanel
 		long s = System.nanoTime();
 
 		// Update the back buffer (if it needs redrawn)
-//		if (updateBuffer)
+		if (updateBuffer)
 		{
 			isRendering = true;
 
@@ -308,10 +308,8 @@ public class ReadsCanvas extends JPanel
 
 		// Calculate and draw the blue/gray background for offset regions
 		g.setColor(new Color(240, 240, 255));
-		//g.fillRect(0, 0, -offset*ntW, getHeight());
 		g.fillRect(0, 0, (int)Math.ceil(-offset*_ntW), getHeight());
 		int cLength = -offset + contig.getConsensus().length();
-		//g.fillRect(cLength*ntW, 0, canvasW-(cLength*ntW), getHeight());
 		g.fillRect((int)(cLength*_ntW), 0, _canvasW-(int)(Math.ceil(cLength*_ntW)), getHeight());
 
 
@@ -448,5 +446,41 @@ public class ReadsCanvas extends JPanel
 	public int getYE()
 	{
 		return yE;
+	}
+
+	// Utility methods to help with conversions
+	int getFirstRenderedPixel(int base)
+	{
+		// 1st base ceiled, because it might map to pixel 5.5 - the render
+		// code will have looked at 5.0 and decided no read gets drawn on it
+		// and starts at 6 instead
+
+		int xS = (int) Math.ceil((base-offset) * _ntW);
+
+		return xS;
+	}
+
+	int getFinalRenderedPixel(int base)
+	{
+		// Last base floored, because if it ends at 7.7 then the last pixel
+		// painted by the renderer will be 7
+
+		int xE = (int) Math.floor((base-offset) * _ntW);
+
+		// Compensate for zoom levels where 1 base is greater than 1 pixel, so
+		// we need to add a base's width (of pixels) to get to the last pixel
+		if (_ntW > 1)
+			xE += _ntW - 1;
+
+		return xE;
+	}
+
+	int getBaseForPixel(int pixel)
+	{
+		// Works out what base maps to the given pixel. The base then needs to
+		// be adjusted by the canvas offset amount (the number of bases *before*
+		// base 0 in the nucleotide coordinate space)
+
+		return ((int) ((pixel / _ntW))) + offset;
 	}
 }

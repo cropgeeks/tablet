@@ -158,7 +158,7 @@ class ReadsCanvasML extends MouseInputAdapter
 
 	private void trackMouse(MouseEvent e)
 	{
-		int xIndex = ((int) ((e.getX() / rCanvas._ntW))) + rCanvas.offset;
+		int ntIndex = rCanvas.getBaseForPixel(e.getX());
 		int yIndex = (e.getY() / rCanvas.ntH);
 
 		// DISABLED because it causes tooltip flicker as the mouse moves on and
@@ -168,20 +168,20 @@ class ReadsCanvasML extends MouseInputAdapter
 //		if (rCanvas.ntH != rCanvas.readH && e.getY() % rCanvas.ntH == 2)
 //			yIndex = -1;
 
-		System.out.println("Mouse over base: " + xIndex);
+		System.out.println("Mouse over base: " + ntIndex);
 
 		// Track the mouse position
-		sCanvas.setMouseBase(xIndex);
-		infoPane.setMousePosition(e.getPoint(), yIndex, xIndex);
+		sCanvas.setMouseBase(ntIndex);
+		infoPane.setMousePosition(e.getPoint(), yIndex, ntIndex);
 		nOverlay.setMousePosition(e.getPoint());
 
-		pairOutliner.setColumnIndex(xIndex);
-		ReadShadower.setMouseBase(xIndex);
+		pairOutliner.setColumnIndex(ntIndex);
+		ReadShadower.setMouseBase(ntIndex);
 
 		// Track the read under the mouse (if any)
-		Read read = rCanvas.reads.getReadAt(yIndex, xIndex);
-		outliner.setRead(read, xIndex, yIndex);
-		outlinePair(read, yIndex, xIndex);
+		Read read = rCanvas.reads.getReadAt(yIndex, ntIndex);
+		outliner.setRead(read, ntIndex, yIndex);
+		outlinePair(read, yIndex, ntIndex);
 
 
 		aPanel.repaint();

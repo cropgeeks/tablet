@@ -143,8 +143,9 @@ class ConsensusCanvas extends TrackingCanvas
 				// loop will iterate over every pixel
 				for (int i = 0, x = (int)(ntW*xS); i < pixelsOnScreenX; i++, x++)
 				{
-					int base = offset + xS + (int)(i / ntW);
+					int base = xS + rCanvas.getBaseForPixel(i);
 					byte state = consensus.getStateAt(base);
+
 					if (state != -1)
 					{
 						g.setColor(colors.getConsensusColor(state));
