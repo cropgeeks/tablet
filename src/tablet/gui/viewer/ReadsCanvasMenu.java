@@ -366,8 +366,8 @@ class ReadsCanvasMenu implements ActionListener
 
 	void handlePopup(MouseEvent e)
 	{
+		colIndex = rCanvas.getBaseForPixel(e.getX());
 		rowIndex = (e.getY() / rCanvas.ntH);
-		colIndex = (e.getX() / rCanvas.ntW) + rCanvas.offset;
 
 		if (aPanel.getAssembly().getBamBam() == null)
 			RB.setText(mExportContig, "gui.viewer.ReadsCanvasMenu.mExportContig");
