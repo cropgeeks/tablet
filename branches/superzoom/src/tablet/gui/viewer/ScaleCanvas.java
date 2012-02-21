@@ -141,7 +141,6 @@ class ScaleCanvas extends TrackingCanvas
 				return;
 
 			// Work out where to start drawing: base position + 1/2 a base
-//			int x = (int) ((mouseBase-offset) * ntW + (ntW/2));
 			int x = rCanvas.getFirstRenderedPixel(mouseBase) + (int) (ntW/2);
 
 			// Draw a tick there
