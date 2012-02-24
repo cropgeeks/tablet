@@ -11,7 +11,13 @@ public class PairedPack extends Pack
 	}
 
 	public void addPackRow(PairedPackRow packRow)
-		{ packRows.add(packRow); }
+	{ packRows.add(packRow); }
+
+	public LineData getPixelData(int line, int start, int end, float scale)
+	{
+		PairedPackRow packRow = (PairedPackRow) packRows.get(line);
+		return packRow.getPixelData(start, end, scale);
+	}
 
 	public LineData getLineData(int line, int start, int end)
 	{
