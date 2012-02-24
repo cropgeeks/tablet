@@ -250,7 +250,7 @@ public class PackRow
 	 * to be searched (eg, if you're after a read that you know must be to the
 	 * RHS of a previously found read at leftIndex-1.
 	 */
-	private ReadIndex getReadIndexAt(int position)
+	protected ReadIndex getReadIndexAt(int position)
 	{
 		// Binary search to find the read that contains the nucleotide position
 		int L = 0, M = 0, R = reads.size()-1;
@@ -278,8 +278,11 @@ public class PackRow
 		return reads;
 	}
 
+	public int getPositionE()
+		{ return positionE; }
+
 	// Simple wrapper around a Read and its position within this PackRow
-	private static class ReadIndex
+	protected static class ReadIndex
 	{
 		Read read;
 		int index;
