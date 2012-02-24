@@ -26,8 +26,18 @@ public class ColumnHighlighter extends AlphaOverlay
 	{
 		g.setPaint(new Color(20, 20, 20, alphaEffect));
 
-		int x1 = (start - rCanvas.offset) * rCanvas.ntW;
-		int x2 = x1 + (end-start+1) * rCanvas.ntW;
+		int x1 = rCanvas.getFirstRenderedPixel(start);
+		int x2 = x1 + rCanvas.getFinalRenderedPixel(end-start);
+
+		if (rCanvas._ntW < 1)
+		{
+			x1 = rCanvas.getFinalRenderedPixel(start);
+			// As we're drawing two separate grey rectangles either side of the
+			// highlighted column, when zoomed out we need to ensure there is
+			// always at least one pixel between the rectangles.
+			if (x2 <= x1)
+				x2 = x1 + 1;
+		}
 
 		g.fillRect(0, 0, x1, rCanvas.pY2+1);
 		g.fillRect(x2, 0, rCanvas.pX2Max, rCanvas.pY2+1);
