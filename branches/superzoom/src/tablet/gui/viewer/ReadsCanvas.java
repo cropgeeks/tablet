@@ -232,10 +232,10 @@ public class ReadsCanvas extends JPanel
 
 	void updateOverview()
 	{
-		int xS = (pX1/ntW);
+		int xS = (int)(pX1/_ntW);
 		int yS = (pY1/ntH);
 
-		aPanel.canvasViewChanged(xS, ntOnScreenX, yS, ntOnScreenY);
+		aPanel.canvasViewChanged(xS, _ntOnScreenX, yS, ntOnScreenY);
 	}
 
 	void updateColorScheme()
