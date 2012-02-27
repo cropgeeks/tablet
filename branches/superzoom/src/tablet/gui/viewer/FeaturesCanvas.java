@@ -104,7 +104,7 @@ public class FeaturesCanvas extends TrackingCanvas
 
 		offset = contig.getVisualStart();
 
-		int ntW = rCanvas.ntW;
+		float ntW = rCanvas._ntW;
 		int xS = rCanvas.xS + offset;
 		int xE = rCanvas.xE + offset;
 
@@ -126,14 +126,22 @@ public class FeaturesCanvas extends TrackingCanvas
 
 			for (Feature f: features)
 			{
-				int p1 = f.getVisualPS() - offset;
-				int p2 = f.getVisualPE() - offset;
+				int p1 = f.getVisualPS();
+				int p2 = f.getVisualPE();
 
 				// Paint a SNP as a triangle, pointing down at the position
 				if (f.getGFFType().equals("SNP"))
 				{
-					g.translate(p1*ntW, 0);
-					int w = (p2-p1+1)*ntW;
+					int start = rCanvas.getFirstRenderedPixel(p1);
+					int w = rCanvas.getFinalRenderedPixel(p2) - rCanvas.getFirstRenderedPixel(p1);
+
+					if (ntW < 1)
+						start = rCanvas.getFinalRenderedPixel(p1);
+
+					if (ntW <= 1)
+						w = 1;
+
+					g.translate(start, 0);
 
 					Path2D.Double path = new Path2D.Double();
 					path.moveTo(0, H/4);
@@ -146,20 +154,34 @@ public class FeaturesCanvas extends TrackingCanvas
 					g.fill(path);
 					g.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_OFF);
 
-					g.translate(-(p1*ntW), 0);
+					g.translate(-start, 0);
 				}
 
 				// Paint a cigar_insertion feature as an "I" bar
 				else if (f.getGFFType().equals("CIGAR-I"))
 				{
 					g.setPaint(cigarPaint);
+					int start = rCanvas.getFirstRenderedPixel(p1);
+					int end = rCanvas.getFinalRenderedPixel(p2);
+					int middle = start + ((end - start) / 2);
+					int centWidth = 2;
+
+					if (ntW < 1)
+					{
+						start = rCanvas.getFinalRenderedPixel(p1);
+						middle = start;
+						centWidth = 1;
+					}
+
+					int above = H/4 + 2;
+					int below = H-4;
 
 					// Top horizontal bar
-					g.drawLine(p1*ntW, H/4+2, p2*ntW+ntW-1, H/4+2);
+					g.drawLine(start, above, end, above);
 					// Vertical bar
-					g.fillRect(p2*ntW-1, H/4+2, 2, H-3-(H/4+2));
+					g.fillRect(middle, H/4+2, centWidth, below-above);
 					// Bottom horizontal bar
-					g.drawLine(p1*ntW, H-3, p2*ntW+ntW-1, H-3);
+					g.drawLine(start, below, end, below);
 				}
 
 				else if (EnzymeFeature.getEnzymes().contains(f.getGFFType()))
@@ -167,16 +189,29 @@ public class FeaturesCanvas extends TrackingCanvas
 					EnzymeFeature enzyme = (EnzymeFeature)f;
 					int cutPoint = p1+enzyme.getCutPoint();
 
+					int cPoint = rCanvas.getFirstRenderedPixel(cutPoint);
+
+					int start = rCanvas.getFirstRenderedPixel(p1);
+					int end = rCanvas.getFinalRenderedPixel(p2-p1);
+
+					if (ntW < 1)
+					{
+						cPoint = rCanvas.getFinalRenderedPixel(cutPoint);
+						start = rCanvas.getFinalRenderedPixel(p1);
+					}
+
 					g.setPaint(enzymePaint);
-					g.fillRect(p1*ntW, H/4+5, (p2-p1+1)*ntW-1, H/4-1);
-					g.drawRect(p1*ntW, H/4+5, (p2-p1+1)*ntW-1, H/4-1);
+					g.fillRect(start, H/4+5, end, H/4-1);
+					//g.drawRect(start, H/4+5, end, H/4-1);
 
 					// Draw line over last pixel in previous base and first pixel
 					// in next base
 					if (enzyme.getCutPoint() != -1)
 					{
 						g.setStroke(new BasicStroke(2));
-						g.drawLine(cutPoint*ntW, H/4+2, cutPoint*ntW, H-3);
+						if (ntW < 1)
+							g.setStroke(new BasicStroke(1));
+						g.drawLine(cPoint, H/4+2, cPoint, H-3);
 						g.setStroke(solid);
 					}
 				}
@@ -189,10 +224,16 @@ public class FeaturesCanvas extends TrackingCanvas
 					// Alpha version
 					Color cA = new Color(cF.getRed(), cF.getGreen(), cF.getBlue(), 50);
 
+					int start = rCanvas.getFirstRenderedPixel(p1);
+					int end = rCanvas.getFinalRenderedPixel(p2-p1);
+
+					if (ntW < 1)
+						start = rCanvas.getFinalRenderedPixel(p1);
+
 					g.setPaint(cA);
-					g.fillRect(p1*ntW, H/4+2, (p2-p1+1)*ntW-1, H/2);
+					g.fillRect(start, H/4+2, end, H/2);
 					g.setPaint(cF);
-					g.drawRect(p1*ntW, H/4+2, (p2-p1+1)*ntW-1, H/2);
+					g.drawRect(start, H/4+2, end, H/2);
 				}
 			}
 
