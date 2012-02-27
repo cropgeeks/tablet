@@ -17,7 +17,6 @@ public class CigarOverlayer extends AlphaOverlay
 	private static CigarOverlayer previous;
 
 	private Color cigarColor;
-	private Color washedOut;
 	private Color vibrant;
 
 	public CigarOverlayer(AssemblyPanel aPanel, boolean hidden)
@@ -42,11 +41,11 @@ public class CigarOverlayer extends AlphaOverlay
 	{
 		VisualContig vContig = aPanel.getVisualContig();
 
-		int ntW = rCanvas.ntW;
+		float ntW = rCanvas._ntW;
 		int pX1 = rCanvas.pX1;
 		int pX2Max = rCanvas.pX2Max;
-		int xS = pX1 / ntW;
-		int xE = pX2Max / ntW;
+		int xS = (int)(pX1 / ntW);
+		int xE = (int)(pX2Max / ntW);
 
 		Stroke oldStroke = g.getStroke();
 
@@ -73,10 +72,10 @@ public class CigarOverlayer extends AlphaOverlay
 			int yS = rCanvas.pY1 / rCanvas.ntH;
 			int yE = rCanvas.pY2 / rCanvas.ntH;
 			int ntH = rCanvas.ntH;
-			int offset = rCanvas.offset;
 
-			int topLeft = (insertBase -1 -offset) * ntW;
-			int length = (ntW * 2) -1;
+			int start = rCanvas.getFirstRenderedPixel(insertBase-1);
+			int end = rCanvas.getFinalRenderedPixel(insertBase);
+			int length = end-start;
 
 			for (int row = yS; row <= yE; row++)
 			{
@@ -84,7 +83,7 @@ public class CigarOverlayer extends AlphaOverlay
 
 				for(Insert insert : cigarFeature.getInserts())
 					if(insert.getRead().equals(read))
-						g.drawRect(topLeft, row*ntH, length, ntH-1);
+						g.drawRect(start, row*ntH, length, rCanvas.readH-1);
 			}
 		}
 		g.setStroke(oldStroke);
@@ -124,14 +123,12 @@ public class CigarOverlayer extends AlphaOverlay
 	private void updateAlphas()
 	{
 		cigarColor = new Color(169, 46, 34, alphaEffect);
-		washedOut = new Color(123, 85, 81, alphaEffect);
 		vibrant = new Color(104, 20, 0, alphaEffect);
 	}
 
 	private void defaultColors()
 	{
 		cigarColor = new Color(169, 46, 34);
-		washedOut = new Color(123, 85, 81);
 		vibrant = new Color(204, 20, 0);
 	}
 
@@ -139,12 +136,10 @@ public class CigarOverlayer extends AlphaOverlay
 	{
 		Color current;
 
-		if (zoom > 5)
+		if (zoom > 7 || zoom < 21)
 			current = cigarColor;
-		else if (zoom > 13)
-			current = vibrant;
 		else
-			current = washedOut;
+			current = vibrant;
 
 		return current;
 	}
@@ -153,9 +148,7 @@ public class CigarOverlayer extends AlphaOverlay
 	{
 		Stroke stroke;
 
-		if (zoom > 18)
-			stroke = new BasicStroke(3);
-		else if (zoom > 8)
+		if (zoom > 15)
 			stroke = new BasicStroke(2);
 		else
 			stroke = oldStroke;
