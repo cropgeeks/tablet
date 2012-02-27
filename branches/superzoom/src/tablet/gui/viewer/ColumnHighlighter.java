@@ -27,7 +27,9 @@ public class ColumnHighlighter extends AlphaOverlay
 		g.setPaint(new Color(20, 20, 20, alphaEffect));
 
 		int x1 = rCanvas.getFirstRenderedPixel(start);
-		int x2 = x1 + rCanvas.getFinalRenderedPixel(end-start);
+		// We actually want the render of the grey rectangle to start at the first
+		// pixel of the base following the highlight
+		int x2 = rCanvas.getFirstRenderedPixel(end+1);
 
 		if (rCanvas._ntW < 1)
 		{
