@@ -42,7 +42,7 @@ public class NameOverlayer extends Thread implements IOverlayRenderer
 	 */
 	public void render(Graphics2D g)
 	{
-		if(!Prefs.visPacked)
+		if(!Prefs.visPacked && !Prefs.visPaired && rCanvas.ntW >= 12)
 		{
 			//set to white paint with overlayOpacity, draw a rectangle the size
 			//of the screen, then set the paint back to black
@@ -72,7 +72,8 @@ public class NameOverlayer extends Thread implements IOverlayRenderer
 			for(Read read : reads)
 			{
 				ReadNameData rnd = Assembly.getReadNameData(read);
-				g.drawString(rnd.getName(), ((read.s()-rCanvas.offset)*rCanvas.ntW)+5, y);
+				int pos = rCanvas.getFirstRenderedPixel(read.s()) + 5;
+				g.drawString(rnd.getName(), pos, y);
 				y += rCanvas.ntH;
 			}
 			g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_OFF);
