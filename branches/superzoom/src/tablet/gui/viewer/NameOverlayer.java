@@ -42,7 +42,7 @@ public class NameOverlayer extends Thread implements IOverlayRenderer
 	 */
 	public void render(Graphics2D g)
 	{
-		if(!Prefs.visPacked && !Prefs.visPaired && rCanvas.ntW >= 12)
+		if(!Prefs.visPacked && !Prefs.visPaired && rCanvas._ntW >= 12)
 		{
 			//set to white paint with overlayOpacity, draw a rectangle the size
 			//of the screen, then set the paint back to black
