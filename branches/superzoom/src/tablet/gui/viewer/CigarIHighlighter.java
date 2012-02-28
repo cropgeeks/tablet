@@ -33,9 +33,8 @@ public class CigarIHighlighter extends AlphaOverlay
 		int yE = rCanvas.pY2 / rCanvas.ntH;
 		int pX1 = rCanvas.pX1;
 		int ntH = rCanvas.ntH;
+		int readH = rCanvas.readH;
 		int pX2Max = rCanvas.pX2Max;
-		int offset = rCanvas.offset;
-		int ntW = rCanvas.ntW;
 
 		if (cigarFeature == null)
 			return;
@@ -55,12 +54,15 @@ public class CigarIHighlighter extends AlphaOverlay
 					if(insert.getRead().equals(read))
 					{
 						int x1 = pX1;
-						int w1 = (read.s() - offset) * ntW - x1;
-						g.fillRect(x1, row * ntH, w1, ntH);
+						int w1 = rCanvas.getFirstRenderedPixel(read.s()) - x1;
+						g.fillRect(x1, row * ntH, w1, readH);
 
-						int x2 = (read.e()+1 - offset) * ntW;
-						int w2 = (pX2Max * ntW) -x2;
-						g.fillRect(x2, row * ntH, w2, ntH);
+						int x2 = rCanvas.getFirstRenderedPixel(read.e()+1);
+						int w2 = pX2Max -x2;
+						g.fillRect(x2, row * ntH, w2, readH);
+
+						if (rCanvas._ntW <= 1)
+							g.fillRect(pX1, row * ntH + readH, pX2Max, ntH - readH);
 
 						requiresPaint = false;
 					}
