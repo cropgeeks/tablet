@@ -40,6 +40,13 @@ public class CoveragePrinter extends SimpleJob
 			out.write(contig.getName());
 			out.newLine();
 
+			if (assembly.getBamBam() != null)
+			{
+				assembly.getBamBam().reset(Prefs.bamSize);
+				assembly.getBamBam().setBlockStart(contig, 0);
+				assembly.getBamBam().loadDataBlock(contig);
+			}
+
 			CoverageCalculator cc = new CoverageCalculator(contig);
 			cc.runJob(0);
 
