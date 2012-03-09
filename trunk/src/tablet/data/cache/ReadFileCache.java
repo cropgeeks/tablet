@@ -89,7 +89,7 @@ public class ReadFileCache extends TabletCache implements IReadCache
 
 					byte numberInPair = rnd.readByte();
 
-					short readGroup = rnd.readShort();
+					short readGroup = rnd.readShortFromBuffer();
 
 					byte b = rnd.readByte();
 
