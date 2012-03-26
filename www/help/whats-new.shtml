@@ -23,6 +23,12 @@ changes between versions, please see the <a href="http://bioinf.hutton.ac.uk/tab
 subversion change log</a>.</p>
 
 
+<h3>New in 1.12.03.26</h3>
+<ul>
+<li>BUG: Fixed a critical bug that was causing i/o problems with certain types of BAM file.</li>
+</ul>
+
+
 <h3>New in 1.12.02.06</h3>
 <ul>
 <li>NEW: The majority of colours used for the various visualization components are now customizable.</li>
