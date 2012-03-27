@@ -45,7 +45,11 @@ public class Install4j
 			}
 		};
 
-		new Thread(r).start();
+		try
+		{
+			javax.swing.SwingUtilities.invokeAndWait(r);
+		}
+		catch (Exception e) {}
 	}
 
 	private static void checkForUpdate()
