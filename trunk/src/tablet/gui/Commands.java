@@ -37,11 +37,23 @@ public class Commands
 
 		for (int i=0; i < filenames.length; i++)
 		{
+			System.out.println("i now " + i + " of " + filenames.length);
+
 			files[i] = new AssemblyFile(filenames[i]);
 			files[i].canDetermineType();
 
 			if (files[i].isAssemblyFile())
 				hasAssembly = true;
+
+			// Special processing for a .tablet file
+			if (files[i].isTabletFile())
+			{
+				// Get a new list of files...
+				filenames = new TabletFile(files[i]).process(filenames, i);
+				// And call this method again to process it
+				checkFiles(filenames);
+				return;
+			}
 		}
 
 		Arrays.sort(files);

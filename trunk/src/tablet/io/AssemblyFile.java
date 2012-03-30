@@ -27,6 +27,8 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 	public static final int FASTQ   = 21;
 	public static final int GFF3    = 40;
 
+	public static final int TABLET  = 100;
+
 	private String filename;
 	private URL url;
 	private File file;
@@ -60,7 +62,12 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 	 */
 	public boolean isAssemblyFile()
 	{
-		return type > 0 && type < 20;
+		return (type > 0 && type < 20);
+	}
+
+	public boolean isTabletFile()
+	{
+		return type == TABLET;
 	}
 
 	public String getName()
@@ -201,7 +208,10 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 
 			if (str != null)
 			{
-				if (isAce(str))
+				if (isTablet(str))
+					type = TABLET;
+
+				else if (isAce(str))
 					type = ACE;
 				else if (isAfg(str))
 					type = AFG;
@@ -233,6 +243,11 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 		catch (Exception e) { System.out.println(e);}
 
 		return (type != UNKNOWN);
+	}
+
+	private boolean isTablet(String str)
+	{
+		return str.startsWith("<tablet");
 	}
 
 	private boolean isAce(String str)
