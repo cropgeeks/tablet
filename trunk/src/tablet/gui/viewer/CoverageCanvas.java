@@ -69,33 +69,37 @@ class CoverageCanvas extends TrackingCanvas
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
 
-		int ntW = rCanvas.ntW;
-		int xS = rCanvas.xS;
-		int xE = rCanvas.xE;
-
-		int[] coverage = DisplayData.getCoverage();
-		int maxCoverage = DisplayData.getMaxCoverage();
-		float avgCoverage = DisplayData.getAverageCoverage();
-
-		for (int i = xS; i <= xE; i++)
+		try
 		{
-			float percent = coverage[i] / (float) maxCoverage;
-			int barHeight = (int) (percent * h);
+			int ntW = rCanvas.ntW;
+			int xS = rCanvas.xS;
+			int xE = rCanvas.xE;
 
-			// Work out an intensity value for it (0-255 gives light shades too
-			// close to white, so adjust the scale to 25-255)
-			int alpha = 25 + (int) (((255-25) * (255*percent)) / 255f);
-			g.setColor(new Color(70, 116, 162, alpha));
+			int[] coverage = DisplayData.getCoverage();
+			int maxCoverage = DisplayData.getMaxCoverage();
+			float avgCoverage = DisplayData.getAverageCoverage();
 
-			// Then fill a bar for it
-			g.fillRect(i * ntW, 0, ntW, barHeight);
+			for (int i = xS; i <= xE; i++)
+			{
+				float percent = coverage[i] / (float) maxCoverage;
+				int barHeight = (int) (percent * h);
+
+				// Work out an intensity value for it (0-255 gives light shades too
+				// close to white, so adjust the scale to 25-255)
+				int alpha = 25 + (int) (((255-25) * (255*percent)) / 255f);
+				g.setColor(new Color(70, 116, 162, alpha));
+
+				// Then fill a bar for it
+				g.fillRect(i * ntW, 0, ntW, barHeight);
+			}
+
+			// Overlay the average value across all the data
+			float percent = avgCoverage / (float) maxCoverage;
+			int avgY = (int) (percent * h);
+			g.setColor(new Color(45, 100, 162));
+			g.setStroke(dashed);
+			g.drawLine(x1, avgY, x2, avgY);
 		}
-
-		// Overlay the average value across all the data
-		float percent = avgCoverage / (float) maxCoverage;
-		int avgY = (int) (percent * h);
-		g.setColor(new Color(45, 100, 162));
-		g.setStroke(dashed);
-		g.drawLine(x1, avgY, x2, avgY);
+		catch (Exception e) {}
 	}
 }
