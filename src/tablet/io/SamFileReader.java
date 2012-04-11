@@ -33,6 +33,8 @@ class SamFileReader extends TrackableReader
 
 	private int readID = 0;
 
+	private boolean refLengthsOK = true;
+
 	private boolean indexingCache = false;
 
 	// Stores a list of @RG (read group) records as they are found
@@ -324,14 +326,38 @@ class SamFileReader extends TrackableReader
 			String [] tokens = str.split("\t");
 
 			String name = null, md5sum = null;
+			int length = 0;
 
 			for (String token: tokens)
 			{
 				if (token.startsWith("SN:"))
 					name = token.substring(3);
 
+				else if (token.startsWith("LN:"))
+					length = Integer.parseInt(token.substring(3));
+
 				else if (token.startsWith("M5:"))
 					md5sum = token.substring(3);
+			}
+
+			// If we found a match, check that its length matches what was found
+			// in the reference file too
+			if (name != null)
+			{
+				Contig contig = contigHash.get(name);
+				if (contig != null)
+				{
+					int cLength = contig.getConsensus().length();
+
+					if (length != contig.getConsensus().length())
+					{
+						System.out.println("Contig " + contig.getName()
+							+ " lengths do not match: " + cLength + " (ref "
+							+ "file), " + length + " (BAM file)");
+
+						refLengthsOK = false;
+					}
+				}
 			}
 
 			if (md5sum != null)
@@ -385,4 +411,7 @@ class SamFileReader extends TrackableReader
 		isIndeterminate = true;
 		indexingCache = true;
 	}
+
+	protected boolean refLengthsOK()
+		{ return refLengthsOK; }
 }
