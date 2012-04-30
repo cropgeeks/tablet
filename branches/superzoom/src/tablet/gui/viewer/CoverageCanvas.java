@@ -42,8 +42,10 @@ class CoverageCanvas extends TrackingCanvas
 		{
 			public void mouseMoved(MouseEvent e)
 			{
-				int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) + offset;
-				sCanvas.setMouseBase(xIndex);
+				int x = getMouseX(e);
+				int ntIndex = rCanvas.getBaseForPixel(rCanvas.pX1 + x);
+
+				sCanvas.setMouseBase(ntIndex);
 			}
 		});
 
@@ -69,13 +71,36 @@ class CoverageCanvas extends TrackingCanvas
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
 
-		int ntW = rCanvas.ntW;
+		// The paint mechanism differs based on zoom level
+		if (rCanvas._ntW > 1)
+			paintNormal(g);
+		else
+			paintSuperZoom(g);
+
+		paintAverage(g);
+	}
+
+	private void paintAverage(Graphics2D g)
+	{
+		int maxCoverage = DisplayData.getMaxCoverage();
+		float avgCoverage = DisplayData.getAverageCoverage();
+
+		// Overlay the average value across all the data
+		float percent = avgCoverage / (float) maxCoverage;
+		int avgY = (int) (percent * h);
+		g.setColor(new Color(45, 100, 162));
+		g.setStroke(dashed);
+		g.drawLine(x1, avgY, x2, avgY);
+	}
+
+	private void paintNormal(Graphics2D g)
+	{
+		float ntW = rCanvas._ntW;
 		int xS = rCanvas.xS;
 		int xE = rCanvas.xE;
 
 		int[] coverage = DisplayData.getCoverage();
 		int maxCoverage = DisplayData.getMaxCoverage();
-		float avgCoverage = DisplayData.getAverageCoverage();
 
 		for (int i = xS; i <= xE; i++)
 		{
@@ -88,14 +113,46 @@ class CoverageCanvas extends TrackingCanvas
 			g.setColor(new Color(70, 116, 162, alpha));
 
 			// Then fill a bar for it
-			g.fillRect(i * ntW, 0, ntW, barHeight);
+			g.fillRect((int)(i * ntW), 0, (int)ntW, barHeight);
 		}
+	}
 
-		// Overlay the average value across all the data
-		float percent = avgCoverage / (float) maxCoverage;
-		int avgY = (int) (percent * h);
-		g.setColor(new Color(45, 100, 162));
-		g.setStroke(dashed);
-		g.drawLine(x1, avgY, x2, avgY);
+	private void paintSuperZoom(Graphics2D g)
+	{
+		int[] coverage = DisplayData.getCoverage();
+		int maxCoverage = DisplayData.getMaxCoverage();
+
+		int basesPerPixel = Math.round(1 / rCanvas._ntW);
+
+		// For each pixel to be painted
+		for (int x = rCanvas.pX1; x <= rCanvas.pX2; x++)
+		{
+			// Work out what the average coverage level is across this pixel
+			// by looking at every base that maps to it
+			int base = rCanvas.getBaseForPixel(x);
+			float averageValue = 0;
+			float averageCount = 0;
+
+			for (int i = 0; i < basesPerPixel; i++, averageCount++)
+			{
+				// Quit counting if we've reached the end of the data
+				if (base+i >= coverage.length)
+					break;
+
+				averageValue += coverage[base+i];
+			}
+
+			float value = averageValue / averageCount;
+			float percent = value / (float) maxCoverage;
+			int barHeight = (int) (percent * h);
+
+			// Work out an intensity value for it (0-255 gives light shades too
+			// close to white, so adjust the scale to 25-255)
+			int alpha = 25 + (int) (((255-25) * (255*percent)) / 255f);
+			g.setColor(new Color(70, 116, 162, alpha));
+
+			// Then fill a bar for it
+			g.drawLine(x, 0, x, barHeight);
+		}
 	}
 }
