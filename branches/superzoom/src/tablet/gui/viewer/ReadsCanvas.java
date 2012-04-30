@@ -221,8 +221,8 @@ public class ReadsCanvas extends JPanel
 		pY2 = pY1 + viewSize.height - 1;
 
 		// Track the base closest to the center of the current view
-		ntCenterX = (pX1 / ntW)	+ ((viewSize.width  / ntW) / 2);
-		ntCenterY = (pY1 / ntH)	+ ((viewSize.height / ntH) / 2);
+		ntCenterX = (pX1 / _ntW) + ((viewSize.width  / _ntW) / 2);
+		ntCenterY = (pY1 / ntH) + ((viewSize.height / ntH) / 2);
 
 		updateOverview();
 		updateBuffer = true;

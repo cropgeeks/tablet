@@ -87,7 +87,8 @@ public class CanvasController extends JPanel implements ChangeListener
 
 		// Once the canvas knows how big it needs to be, adjust the scrollbars
 		// so that they work on the same canvas size
-		setScrollbarAdjustmentValues(readsCanvas.ntW, readsCanvas.ntH);
+		int minSize = (int) (readsCanvas._ntW >= 1 ? readsCanvas._ntW : 1);
+		setScrollbarAdjustmentValues(minSize, readsCanvas.ntH);
 	}
 
 	void moveToLater(final int rowIndex, final int colIndex, final boolean centre)
@@ -157,10 +158,10 @@ public class CanvasController extends JPanel implements ChangeListener
 	{
 		isClickZooming = true;
 
-		ntCenterX = (e.getX() / readsCanvas.ntW);
+		ntCenterX = (e.getX() / readsCanvas._ntW);
 		ntCenterY = (e.getY() / readsCanvas.ntH);
 
-		BandAdjust.zoomIn(6);
+		BandAdjust.zoomIn(3);
 
 		isClickZooming = false;
 	}
