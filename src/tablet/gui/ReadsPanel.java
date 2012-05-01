@@ -212,8 +212,8 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 		text.append(rnd.getName()).append(lb);
 
 		// Position
-		int readS = read.getStartPosition();
-		int readE = read.getEndPosition();
+		int readS = read.s();
+		int readE = read.e();
 
 		String pos = RB.format("gui.ReadsPanel.from",
 			(TabletUtils.nf.format(readS+1) + " U" + DisplayData.paddedToUnpadded(readS+1)),
@@ -281,13 +281,13 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 		else if (e.getSource() == mFindStart)
 		{
 			Read read = getReadFromTable();
-			highlightReadAtPosition(read, read.getStartPosition());
+			highlightReadAtPosition(read, read.s());
 		}
 
 		else if (e.getSource() == mFindEnd)
 		{
 			Read read = getReadFromTable();
-			highlightReadAtPosition(read, read.getEndPosition());
+			highlightReadAtPosition(read, read.e());
 		}
 
 		else if (e.getSource() == mJumpToPair)
@@ -310,7 +310,7 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run()
 						{
-							aPanel.moveToPosition(lineIndex, found.getStartPosition(), true);
+							aPanel.moveToPosition(lineIndex, found.s(), true);
 							new ReadHighlighter(aPanel, found, lineIndex);
 						}
 					});

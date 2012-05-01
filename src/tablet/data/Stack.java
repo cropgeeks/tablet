@@ -13,6 +13,40 @@ public class Stack implements IReadManager
 	{
 	}
 
+	public LineData getPixelData(int line, int startBase, int arraySize, float scale)
+	{
+		// Arrays which will eventually make up the LineData object
+		ReadMetaData[] rmds = new ReadMetaData[arraySize];
+		int[] indexes = new int[arraySize];
+		Read[] pixReads = new Read[arraySize];
+
+		// The read on the given line of the display
+		Read read = stack.get(line);
+		ReadMetaData rmd = null;
+
+		// If we're rendering data at the current zoom level, grab the RMD for
+		// the read on this row of the Stack
+		if (scale >= 1)
+			rmd = Assembly.getReadMetaData(read, true);
+
+		for (int i=0, readS = read.s(), readE = read.e(); i < arraySize; i++)
+		{
+			int base = startBase + (int)(i / scale);
+
+			if (base >= readS && base <= readE)
+			{
+				rmds[i] = rmd;
+				// Index (within the read) of its data at this base
+				indexes[i] = base-readS;
+				pixReads[i] = read;
+			}
+			else
+				indexes[i] = -1;
+		}
+
+		return new LineData(indexes, rmds, pixReads);
+	}
+
 	Stack(ArrayList<Read> reads)
 	{
 		stack = reads;
@@ -35,8 +69,8 @@ public class Stack implements IReadManager
 		// Tracking index on the start->end scale
 		int index = start;
 
-		int readS = read.getStartPosition();
-		int readE = read.getEndPosition();
+		int readS = read.s();
+		int readE = read.e();
 
 		ReadMetaData rmd = Assembly.getReadMetaData(read, true);
 
@@ -57,7 +91,7 @@ public class Stack implements IReadManager
 		for (; index <= end; index++, dataI++)
 			indexes[dataI] = -1;
 
-		return new LineData(indexes, reads);
+		return new LineData(indexes, reads, null);
 	}
 
 	public Read getReadAt(int line, int nucleotidePosition)
@@ -68,8 +102,8 @@ public class Stack implements IReadManager
 		Read read = stack.get(line);
 
 		// Check to see if the nucleotide position falls within this read's zone
-		if (nucleotidePosition >= read.getStartPosition() &&
-			nucleotidePosition <= read.getEndPosition())
+		if (nucleotidePosition >= read.s() &&
+			nucleotidePosition <= read.e())
 		{
 			return read;
 		}
@@ -105,13 +139,13 @@ public class Stack implements IReadManager
 					return mid;
 				else
 				{
-					while(stack.get(mid).getStartPosition() >= read.getStartPosition())
+					while(stack.get(mid).s() >= read.s())
 					{
 						mid--;
 						if(stack.get(mid).getID() == read.getID())
 							return mid;
 					}
-					while(stack.get(mid).getStartPosition() <= read.getStartPosition())
+					while(stack.get(mid).s() <= read.s())
 					{
 						mid++;
 						if(stack.get(mid).getID() == read.getID())

@@ -167,10 +167,10 @@ public class Contig
 			// lhs or the rhs of the consensus...
 			for (Read read: reads)
 			{
-				if (read.getStartPosition() < dataS)
-					dataS = visualS = read.getStartPosition();
-				if (read.getEndPosition() > dataE)
-					dataE = visualE = read.getEndPosition();
+				if (read.s() < dataS)
+					dataS = visualS = read.s();
+				if (read.e() > dataE)
+					dataE = visualE = read.e();
 			}
 		}
 		else

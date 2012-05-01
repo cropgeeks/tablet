@@ -40,9 +40,9 @@ public class PairedPackCreator extends SimpleJob
 
 			startRow = 0;
 
-			if(read.getStartPosition() == startPos)
+			if(read.s() == startPos)
 				startRow = rowIndex+1;
-			
+
 			added = pairAdded = false;
 
 			ReadMetaData rmd = Assembly.getReadMetaData(read, false);
@@ -67,7 +67,7 @@ public class PairedPackCreator extends SimpleJob
 					createPackRowForRead(read);
 			}
 
-			startPos = read.getStartPosition();
+			startPos = read.s();
 
 			progress++;
 		}
@@ -75,7 +75,7 @@ public class PairedPackCreator extends SimpleJob
 		// Trim the packs down to size once finished
 		for (PackRow packRow: pack)
 			packRow.trimToSize();
-		
+
 		pack.trimToSize();
 
 		contig.setPairedPack(pack);
@@ -96,9 +96,17 @@ public class PairedPackCreator extends SimpleJob
 			if (canAddToExistingPackRow(read, i))
 			{
 				rowIndex = i;
-				
+
 				if(read.getMate() == null)
 					break;
+
+				// Can we add read's mate? If so add a MateLink as well
+				if (pack.get(i).getPositionE() < read.getMatePos())
+				{
+					MateLink link = new MateLink(-1, pack.get(i).getPositionE()+1);
+					link.setLength(read.getMatePos()-link.s());
+					pack.get(i).addRead(link);
+				}
 
 				// Try to add the second read in the pair
 				if (!(pairAdded = pack.get(i).addRead(read.getMate())))
@@ -136,7 +144,7 @@ public class PairedPackCreator extends SimpleJob
 	 */
 	private void addToNewPackRow(MatedRead read)
 	{
-	
+
 		if (canAddToNewPackRow(read))
 		{
 			PairedPackRow packRow = new PairedPackRow();
@@ -144,7 +152,17 @@ public class PairedPackCreator extends SimpleJob
 			added = true;
 
 			if(read.getMate() != null)
+			{
+				// Can we add read's mate? If so add a MateLink as well
+				if (packRow.getPositionE() < read.getMatePos())
+				{
+					MateLink link = new MateLink(-1, packRow.getPositionE()+1);
+					link.setLength(read.getMatePos()-link.s());
+					packRow.addRead(link);
+				}
+
 				pairAdded = packRow.addRead(read.getMate());
+			}
 
 			pack.addPackRow(packRow);
 
@@ -177,7 +195,7 @@ public class PairedPackCreator extends SimpleJob
 
 	private boolean canAddToNewPackRow(MatedRead matedRead)
 	{
-		return (matedRead.getStartPosition() < matedRead.getMatePos() || 
+		return (matedRead.s() < matedRead.getMatePos() ||
 				(matedRead.getMate() == null && matedRead.getMatePos() < dataS))
 				|| !matedRead.isMateContig();
 	}

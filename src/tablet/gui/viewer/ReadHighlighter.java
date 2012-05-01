@@ -22,8 +22,8 @@ public class ReadHighlighter extends AlphaOverlay
 
 		this.lineIndex = lineIndex;
 
-		start = read.getStartPosition() - rCanvas.offset;
-		end = read.getEndPosition() - rCanvas.offset;
+		start = rCanvas.getFirstRenderedPixel(read.s());
+		end = rCanvas.getFirstRenderedPixel(read.e()+1);
 
 		start();
 	}
@@ -42,8 +42,8 @@ public class ReadHighlighter extends AlphaOverlay
 
 		this.lineIndex = lineIndex;
 
-		this.start = start - rCanvas.offset;
-		this.end = end - rCanvas.offset;
+		this.start = rCanvas.getFirstRenderedPixel(start);
+		this.end = rCanvas.getFirstRenderedPixel(end+1);
 
 		start();
 	}
@@ -55,17 +55,17 @@ public class ReadHighlighter extends AlphaOverlay
 		g.setPaint(new Color(20, 20, 20, alphaEffect));
 
 		// Top-left corner of the read
-		int x1 = start * rCanvas.ntW;
+		int x1 = start;
 		int y1 = lineIndex * rCanvas.ntH;
 		// Bottom-right corner of the read
-		int x2 = end * rCanvas.ntW + rCanvas.ntW;
-		int y2 = y1 + rCanvas.ntH;
+		int x2 = end;
+		int y2 = y1 + rCanvas.readH;
 
 		// Fill in the four boxes that fir around the read:
 		//  above it, to the left and right of it (same height) and below it
 		g.fillRect(0, 0, rCanvas.pX2Max+1, y1);
-		g.fillRect(0, y1, x1, rCanvas.ntH);
-		g.fillRect(x2, y1, rCanvas.pX2Max-x2+1, rCanvas.ntH);
+		g.fillRect(0, y1, x1, rCanvas.readH);
+		g.fillRect(x2, y1, rCanvas.pX2Max-x2+1, rCanvas.readH);
 		g.fillRect(0, y2, rCanvas.pX2Max+1, rCanvas.pY2-y2+1);
 	}
 }

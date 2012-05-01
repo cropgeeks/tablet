@@ -100,7 +100,7 @@ class SoapFileReader extends TrackableReader
 
 				// Do base-position comparison...
 				BasePositionComparator.compare(contigToAddTo, rmd,
-					read.getStartPosition());
+					read.s());
 
 				readCache.setReadMetaData(rmd);
 

@@ -60,6 +60,12 @@ public class ReadLengthScheme extends EnhancedScheme
 		return states.get(bin).get(rmd.getStateAt(index)).getColor();
 	}
 
+	public Color getOverviewColor(ReadMetaData rmd, int index)
+	{
+		int bin = rmd.getLengthBin();
+		return states.get(bin).get(rmd.getStateAt(index)).getOverviewColor();
+	}
+
 	public static int getBin(int length)
 	{
 		if (length < 50)

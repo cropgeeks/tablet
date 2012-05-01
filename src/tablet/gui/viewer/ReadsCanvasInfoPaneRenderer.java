@@ -189,7 +189,7 @@ class ReadsCanvasInfoPaneRenderer implements IOverlayRenderer
 			// Working out where each pixel maps to in the data...
 			int dataX = (int) (x * xScale);
 
-			g.setColor(rCanvas.colors.getColor(box.rmd, dataX));
+			g.setColor(rCanvas.colors.getOverviewColor(box.rmd, dataX));
 			g.drawLine(x, yPos, x, yPos+10);
 		}
 

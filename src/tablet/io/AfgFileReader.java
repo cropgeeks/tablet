@@ -271,7 +271,7 @@ class AfgFileReader extends TrackableReader
 		//add read to this contig
 		contig.getReads().add(read);
 
-		BasePositionComparator.compare(contig, readMetaData, read.getStartPosition());
+		BasePositionComparator.compare(contig, readMetaData, read.s());
 
 		ReadNameData rnd = sqlCache.getReadNameData(id);
 

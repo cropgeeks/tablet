@@ -404,8 +404,13 @@ public class OverviewCanvas extends JPanel
 				g.setColor(Color.BLACK);
 				g.drawString(overviewCoordinates, 5, h - 6);
 				// rhs
-				int rCanvasL = (rCanvas.pX1 / rCanvas.ntW) + 1 + rCanvas.offset;
-				int rCanvasR = (rCanvas.pX2 / rCanvas.ntW) + 1 + rCanvas.offset;
+				int rCanvasL = rCanvas.getBaseForPixel(rCanvas.pX1) + 1;
+				// Get the value of the base one past the final pixel. Need to
+				// adjust back down at end of dataset / loaded block.
+				int rCanvasR = rCanvas.getBaseForPixel(rCanvas.pX2+1) + 1;
+				if (rCanvasR > rCanvas.contig.getVisualEnd())
+					rCanvasR = rCanvas.contig.getVisualEnd() + 1;
+
 				String rCanvasCoordinates = "" + TabletUtils.nf.format(rCanvasL) + " to " + TabletUtils.nf.format(rCanvasR) + getBasePairString(rCanvasR - rCanvasL + 1);
 				g.setPaint(new Color(255, 255, 255, 130));
 				g.fillRect(w - (fm.stringWidth(rCanvasCoordinates) + 10), h - 6 - fm.getHeight(), fm.stringWidth(rCanvasCoordinates) + 10, fm.getHeight() + 6);

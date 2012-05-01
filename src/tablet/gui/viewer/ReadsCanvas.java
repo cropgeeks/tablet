@@ -33,6 +33,8 @@ public class ReadsCanvas extends JPanel
 
 	// Width and height of a single nucleotide when it is drawn
 	int ntW, ntH;
+	// "Read height" - may be the same as ntH, but sometimes is less (by 1 pixel)
+	int readH;
 	// The number of nucleotides that fit on the current screen?
 	int ntOnScreenX, ntOnScreenY;
 	// And the total number of nucleotides that span the entire canvas
@@ -70,6 +72,11 @@ public class ReadsCanvas extends JPanel
 	boolean isRendering = false;
 
 	ReadsCanvasML readsCanvasML;
+
+	float _ntW;
+	int _ntOnCanvasX, _canvasW;
+	int _ntOnScreenX;
+	int _pixelsOnScreenX;
 
 	ReadsCanvas()
 	{
@@ -125,20 +132,54 @@ public class ReadsCanvas extends JPanel
 		if (contig == null)
 			return;
 
+		// Notch on the slider where one base equals one pixel
+		int one2one = 8;
+
+		// Work out how high base rendering will be (it's either fixed at 2 for
+		// super-zoom levels, or based on font height for old-style zooming
+		if (sizeY > one2one)
+			sizeY = sizeY-one2one;
+
 		Font font = new Font("Monospaced", Font.PLAIN, sizeY);
 		FontMetrics fm = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB)
 			.getGraphics().getFontMetrics(font);
 
+		// TODO: Remove eventually...
 		ntW = sizeX*2;
-		ntH = fm.getHeight();
+
+		// "Old-style" zoom levels
+		if (sizeX > one2one)
+		{
+			_ntW = (sizeX-one2one) * 2;
+			ntH = fm.getHeight();
+			readH = fm.getHeight();
+		}
+		// Super-zoom levels
+		else
+		{
+			_ntW = (float) (1 / Math.pow(2, (one2one-sizeX)));
+			ntH = 3;
+			readH = 2;
+		}
+
+		System.out.println("ntW: " + _ntW + ", ntH: " + ntH);
+
 
 		ntOnCanvasX = contig.getVisualWidth();
+		_ntOnCanvasX = contig.getVisualWidth();
 		ntOnCanvasY = contig.getVisualHeight();
 
 		canvasW = (ntOnCanvasX * ntW);
+		// Round UP to cope with 3.3 pixels needed for ten bases at 0.3 pixels
+		// per base (4 pixels actually needed)
+		_canvasW = (int)Math.ceil(_ntOnCanvasX * _ntW);
 		canvasH = (ntOnCanvasY * ntH);
 
-		dimension = new Dimension(canvasW, canvasH);
+
+		if (_canvasW < 1)
+			_canvasW = 1;
+
+		dimension = new Dimension(_canvasW, canvasH);
 
 		updateColorScheme();
 	}
@@ -153,18 +194,35 @@ public class ReadsCanvas extends JPanel
 		ntOnScreenX = 1 + (int) ((float) viewSize.width  / ntW);
 		ntOnScreenY = 1 + (int) ((float) viewSize.height / ntH);
 
+		// This holds the number of pixels we need to get (and render) data for
+		// but note that it will often be WIDER than the size of the screen...
+		_pixelsOnScreenX = viewSize.width;
+
+		// ...because we need to adjust for the "jiggle" offscreen to the left
+		// when a base is using more than 1 pixel, to ensure the far right-hand
+		// edge is still painted. So we ask for more pixels to fill that gap
+		if (_ntW >= 1)
+			_pixelsOnScreenX += _ntW;
+
+		_ntOnScreenX = (int) ((float) _pixelsOnScreenX / _ntW);
+
+//		System.out.println("ntOnScreenX: " + _ntOnScreenX);
+
 		pX1 = viewPosition.x;
 		pX2 = pX2Max = pX1 + viewSize.width -1;
 		// Adjust for canvases that are smaller than the window size
-		if (pX2 > canvasW)
-			pX2 = canvasW - 1;
+		//if (pX2 > canvasW)
+		//	pX2 = canvasW - 1;
+
+		if (pX2 > _canvasW)
+			pX2 = _canvasW -1;
 
 		pY1 = viewPosition.y;
 		pY2 = pY1 + viewSize.height - 1;
 
 		// Track the base closest to the center of the current view
-		ntCenterX = (pX1 / ntW)	+ ((viewSize.width  / ntW) / 2);
-		ntCenterY = (pY1 / ntH)	+ ((viewSize.height / ntH) / 2);
+		ntCenterX = (pX1 / _ntW) + ((viewSize.width  / _ntW) / 2);
+		ntCenterY = (pY1 / ntH) + ((viewSize.height / ntH) / 2);
 
 		updateOverview();
 		updateBuffer = true;
@@ -174,16 +232,22 @@ public class ReadsCanvas extends JPanel
 
 	void updateOverview()
 	{
-		int xS = (pX1/ntW);
+		int xS = (int)(pX1/_ntW);
 		int yS = (pY1/ntH);
 
-		aPanel.canvasViewChanged(xS, ntOnScreenX, yS, ntOnScreenY);
+		aPanel.canvasViewChanged(xS, _ntOnScreenX, yS, ntOnScreenY);
 	}
 
 	void updateColorScheme()
 	{
-		colors = ReadScheme.getScheme(Prefs.visColorScheme, ntW, ntH);
-		proteins = ProteinScheme.getScheme(Prefs.visColorScheme, ntW, ntH);
+		// The colour schemes' bitmaps won't be used when the zoom ratio is < 1
+		// but we still need to make them (for the actual colours), so just
+		// ensure the width passed to the BufferedImages is still >= 1.
+		int w = _ntW >= 1 ? (int)_ntW : 1;
+		int h = _ntW >= 2 ? ntH : 2;
+
+		colors = ReadScheme.getScheme(Prefs.visColorScheme, w, h);
+		proteins = ProteinScheme.getScheme(Prefs.visColorScheme, w, h);
 
 		updateBuffer = true;
 		repaint();
@@ -225,7 +289,7 @@ public class ReadsCanvas extends JPanel
 		}
 
 		long e = System.nanoTime();
-//		System.out.println("Render time: " + ((e-s)/1000000f) + "ms");
+		System.out.println("Render time: " + ((e-s)/1000000f) + "ms");
 	}
 
 	private void paintBuffer()
@@ -244,28 +308,35 @@ public class ReadsCanvas extends JPanel
 
 		// Calculate and draw the blue/gray background for offset regions
 		g.setColor(new Color(240, 240, 255));
-		g.fillRect(0, 0, -offset*ntW, getHeight());
+		g.fillRect(0, 0, (int)Math.ceil(-offset*_ntW), getHeight());
 		int cLength = -offset + contig.getConsensus().length();
-		g.fillRect(cLength*ntW, 0, canvasW-(cLength*ntW), getHeight());
+		g.fillRect((int)(cLength*_ntW), 0, _canvasW-(int)(Math.ceil(cLength*_ntW)), getHeight());
 
 
 		// Index positions within the dataset that we'll start drawing from
-		xS = pX1 / ntW;
+		//xS = pX1 / ntW;
+		xS = (int)(pX1 / _ntW);
 		int yS = pY1 / ntH;
 
 		// The end indices are calculated as the:
 		//   (the start index) + (the number that can be drawn on screen)
 		// with a check to set the end index to the last value in the array if
 		// the calculated index would go out of bounds
-		xE = xS + ntOnScreenX;
-		if (xE >= ntOnCanvasX) xE = ntOnCanvasX-1;
+		//xE = xS + ntOnScreenX;
+		//if (xE >= ntOnCanvasX) xE = ntOnCanvasX-1;
+		xE = xS + _ntOnScreenX;
+		if (xE >= _ntOnCanvasX) xE = _ntOnCanvasX-1;
 
 		yE = yS + ntOnScreenY;
 		if (yE >= ntOnCanvasY) yE = ntOnCanvasY-1;
 
 		// Paint the lines using multiple cores...
 		for (int i = 0; i < tasks.length; i++)
-			tasks[i] = executor.submit(new LinePainter(g, yS+i));
+		{
+			Graphics tG = buffer.createGraphics();
+			tG.translate(-pX1, -pY1);
+			tasks[i] = executor.submit(new LinePainter(tG, yS+i));
+		}
 		for (Future task: tasks)
 			task.get();
 
@@ -303,24 +374,57 @@ public class ReadsCanvas extends JPanel
 			LineData data;
 			ReadMetaData[] rmds;
 			int[] indexes;
+			Read[] readArr;
+
+			long total = 0;
 
 			// For every [nth] row, where n = number of available CPU cores...
 			for (int row = yS, y = (ntH*yS); row <= yE; row += cores, y += ntH*cores)
 			{
+				long s = System.nanoTime();
+				data = reads.getPixelData(row, xS+offset, _pixelsOnScreenX, _ntW);
+				total += System.nanoTime() - s;
+
 				// Ask the read manager to calculate the data for this row
-				data = reads.getLineData(row, xS+offset, xE+offset);
-				rmds = data.getReads();
+				rmds = data.getRMDs();
 				indexes = data.getIndexes();
+				readArr = data.getReads();
 
-				for (int i = 0, x = (ntW*xS); i < rmds.length; i++, x += ntW)
+				if (_ntW > 1)
 				{
-					if (indexes[i] >= 0)
-						g.drawImage(colors.getImage(rmds[i], indexes[i]), x, y, null);
+					for (int i = 0, x = (int)(_ntW*xS); i < _pixelsOnScreenX; i += _ntW, x += _ntW)
+					{
+						if (indexes[i] >= 0)
+							g.drawImage(colors.getImage(rmds[i], indexes[i]), x, y, null);
 
-					else if (indexes[i] == LineData.PAIRLINK)
-						g.drawImage(colors.getPairLink(), x, y, null);
+						else if (indexes[i] == LineData.PAIRLINK)
+							g.drawImage(colors.getPairLink(), x, y, null);
+					}
+				}
+				else
+				{
+					g.setColor(new Color(70, 116, 162));
+
+					for (int i = 0, x = (int)(_ntW*xS); i < _pixelsOnScreenX; i++, x++)
+					{
+						if (indexes[i] >= 0)
+						{
+							if (_ntW == 1)
+								g.setColor(colors.getColor(rmds[i], indexes[i]));
+
+							g.fillRect(x, y, 1, 2);
+						}
+
+//						if (readArr[i] != null)
+//							g.drawLine(x, y, x, y);
+					}
 				}
 			}
+
+			System.out.println("Total Data time: " + (total/1000000f) + "ms");
+			System.out.println();
+
+			g.dispose();
 		}
 	}
 
@@ -342,5 +446,41 @@ public class ReadsCanvas extends JPanel
 	public int getYE()
 	{
 		return yE;
+	}
+
+	// Utility methods to help with conversions
+	int getFirstRenderedPixel(int base)
+	{
+		// 1st base ceiled, because it might map to pixel 5.5 - the render
+		// code will have looked at 5.0 and decided no read gets drawn on it
+		// and starts at 6 instead
+
+		int xS = (int) Math.ceil((base-offset) * _ntW);
+
+		return xS;
+	}
+
+	int getFinalRenderedPixel(int base)
+	{
+		// Last base floored, because if it ends at 7.7 then the last pixel
+		// painted by the renderer will be 7
+
+		int xE = (int) Math.floor((base-offset) * _ntW);
+
+		// Compensate for zoom levels where 1 base is greater than 1 pixel, so
+		// we need to add a base's width (of pixels) to get to the last pixel
+		if (_ntW > 1)
+			xE += _ntW - 1;
+
+		return xE;
+	}
+
+	int getBaseForPixel(int pixel)
+	{
+		// Works out what base maps to the given pixel. The base then needs to
+		// be adjusted by the canvas offset amount (the number of bases *before*
+		// base 0 in the nucleotide coordinate space)
+
+		return ((int) ((pixel / _ntW))) + offset;
 	}
 }

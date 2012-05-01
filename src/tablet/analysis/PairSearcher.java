@@ -41,7 +41,7 @@ public class PairSearcher
 			potentialMate = contig.getReads().get(potentialMateID-cacheOffset);
 
 			// ... with the same EXPECTED start position for the mate
-			if (read.getMatePos() == potentialMate.getStartPosition())
+			if (read.getMatePos() == potentialMate.s())
 				return potentialMate;
 		}
 
@@ -70,7 +70,7 @@ public class PairSearcher
 		{
 			// Get mid while avoiding potential integer overflow
 			int mid = low + ((high - low) / 2);
-			int startPos = contig.getReads().get(mid).getStartPosition();
+			int startPos = contig.getReads().get(mid).s();
 
 			if (startPos < pos)
 				low = mid + 1;
@@ -112,7 +112,7 @@ public class PairSearcher
 		Read mate = contig.getReads().get(index);
 		String mateName = Assembly.getReadName(mate);
 
-		while (mate != null && pos == mate.getStartPosition() && index > 0)
+		while (mate != null && pos == mate.s() && index > 0)
 		{
 			if (mateName.equals(name))
 				return mate;

@@ -151,7 +151,7 @@ public class Finder extends SimpleJob
 				{
 					if (read.getID() == readID)
 					{
-						results.add(new ReadSearchResult(wrapper.name, read.getStartPosition(), read.length(), contig, false));
+						results.add(new ReadSearchResult(wrapper.name, read.s(), read.length(), contig, false));
 						break;
 					}
 				}
@@ -191,9 +191,9 @@ public class Finder extends SimpleJob
 			ReadMetaData rmd = Assembly.getReadMetaData(read, true);
 
 			String name = Assembly.getReadName(read);
-			searchSequence(rmd.toString(), read.getStartPosition(), read.length(), contig, name, searchTerm);
+			searchSequence(rmd.toString(), read.s(), read.length(), contig, name, searchTerm);
 			// Search for the reverse complement
-			searchSequence(rmd.toString(), read.getStartPosition(), read.length(), contig, name, reverse);
+			searchSequence(rmd.toString(), read.s(), read.length(), contig, name, reverse);
 
 			progressLong++;
 		}

@@ -52,7 +52,9 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 
 	public void mouseMoved(MouseEvent e)
 	{
-		int xIndex = ((rCanvas.pX1 + e.getX()) / rCanvas.ntW) + rCanvas.offset;
+		int x = fCanvas.getMouseX(e);
+		int xIndex = rCanvas.getBaseForPixel(rCanvas.pX1 + x);
+		
 		int yIndex = e.getY() / fCanvas.H;
 
 		sCanvas.setMouseBase(xIndex);
