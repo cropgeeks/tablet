@@ -43,7 +43,7 @@ public class PackCreator extends SimpleJob
 			if (okToRun == false)
 				return;
 
-			if(read.getStartPosition() == startPos)
+			if(read.s() == startPos)
 				startRow = rowIndex+1;
 
 			// Can this read be added to any of the existing pack lines?
@@ -66,7 +66,7 @@ public class PackCreator extends SimpleJob
 				rowIndex = pack.size()-1;
 			}
 
-			startPos = read.getStartPosition();
+			startPos = read.s();
 
 			progress++;
 		}

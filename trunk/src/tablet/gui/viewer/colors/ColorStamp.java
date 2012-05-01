@@ -20,7 +20,11 @@ class ColorStamp extends Stamp
 
 		Color c1 = c.brighter();
 		Color c2 = c.darker();
-		g.setPaint(new GradientPaint(0, 0, c1, w, h, c2));
+		// Only use gradient paints for bitmaps of 2 pixels or wider
+		if (w > 1)
+			g.setPaint(new GradientPaint(0, 0, c1, w, h, c2));
+		else
+			g.setColor(c);
 
 		Rectangle2D.Float r = new Rectangle2D.Float(0, 0, w, h);
 		g.fill(r);
@@ -31,14 +35,23 @@ class ColorStamp extends Stamp
 			if (isDeltaBase && displayInRed(text))
 			{
 				g.setPaint(new Color(255, 255, 255, 130));
+				color = c1;
 				if (Prefs.visTagVariants)
-					color = Color.red;
+					ovColor = Color.red;
 			}
 			// Overlay for bases that are identical to the consensus
 			else
 				g.setPaint(new Color(20, 20, 20, Prefs.visVariantAlpha));
 
 			g.fillRect(0, 0, w, h);
+
+			// Extract the colour back from the bitmap (so we can use variant
+			// highlighting when painting with Colors rather than bitmaps
+			int clr = image.getRGB(0,0);
+			int rd = (clr & 0x00ff0000) >> 16;
+			int gr = (clr & 0x0000ff00) >> 8;
+			int bl =  clr & 0x000000ff;
+			color = new Color(rd, gr, bl);
 		}
 
 		if (Prefs.visEnableText)

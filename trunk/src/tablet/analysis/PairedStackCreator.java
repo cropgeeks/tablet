@@ -14,7 +14,7 @@ public class PairedStackCreator extends SimpleJob
 {
 	private PairedStack pairedStack;
 	private Contig contig;
-	
+
 	public PairedStackCreator(Contig contig)
 	{
 		this.contig = contig;
@@ -31,7 +31,7 @@ public class PairedStackCreator extends SimpleJob
 			// Check for quit/cancel on the job...
 			if (okToRun == false)
 				return;
-			
+
 			if(read instanceof MatedRead)
 			{
 				// Search for its pair and set up the link between them
@@ -60,20 +60,20 @@ public class PairedStackCreator extends SimpleJob
 	private void addToPairedStackRow(MatedRead matedRead)
 	{
 		// If this is the first in the pair
-		if (matedRead.getStartPosition() < matedRead.getMatePos())
+		if (matedRead.s() < matedRead.getMatePos())
 		{
 			PairedStackRow pairedStackRow = new PairedStackRow();
 			pairedStackRow.addRead(matedRead);
 
 			// If it has a valid paired read
-			if (matedRead.getMatePos() > matedRead.getEndPosition())
+			if (matedRead.getMatePos() > matedRead.e())
 				pairedStackRow.addRead(matedRead.getMate());
 
 			pairedStack.addPairedStackRow(pairedStackRow);
 
 			// In the case where the paired reads overlap, assign the second
 			// read to a new paired stack in the view.
-			if (matedRead.getMatePos() < matedRead.getEndPosition())
+			if (matedRead.getMatePos() < matedRead.e())
 			{
 				PairedStackRow stack = new PairedStackRow();
 				stack.addRead(matedRead.getMate());

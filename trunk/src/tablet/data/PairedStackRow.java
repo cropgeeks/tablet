@@ -22,6 +22,54 @@ public class PairedStackRow
 			readB = read;
 	}
 
+	public LineData getPixelData(int startBase, int arraySize, float scale)
+	{
+		// Arrays which will eventually make up the LineData object
+		ReadMetaData[] rmds = new ReadMetaData[arraySize];
+		int[] indexes = new int[arraySize];
+		Read[] pixReads = new Read[arraySize];
+
+		ReadMetaData rmdA = null;
+		ReadMetaData rmdB = null;
+
+		// If we're rendering data at the current zoom level, grab the RMDs for
+		// the reads on this row of the Stack
+		if (scale >= 1)
+		{
+			rmdA = Assembly.getReadMetaData(readA, true);
+			if (readB != null)
+				rmdB = Assembly.getReadMetaData(readB, true);
+		}
+
+		for (int i=0; i < arraySize; i++)
+		{
+			int base = startBase + (int)(i / scale);
+
+			// If base is found within the first read
+			if (base >= readA.s() && base <= readA.e())
+			{
+				indexes[i] = base - readA.s();
+				rmds[i] = rmdA;
+				pixReads[i] = readA;
+			}
+			// If base is found within the second read
+			else if (readB != null && base >= readB.s() && base <= readB.e())
+			{
+				indexes[i] = base - readB.s();
+				rmds[i] = rmdB;
+				pixReads[i] = readB;
+			}
+			// If base is part of a pair link line
+			else if (base > readA.e() && readB != null && base < readB.s())
+				indexes[i] = -2;
+			// Base isn't over any data
+			else
+				indexes[i] = -1;
+		}
+
+		return new LineData(indexes, rmds, pixReads);
+	}
+
 	public LineData getLineData(int start, int end)
 	{
 		ReadMetaData[] reads = new ReadMetaData[end-start+1];
@@ -42,15 +90,15 @@ public class PairedStackRow
 		if (readB != null)
 			getLineDataForRead(readB, reads, indexes, start, end);
 
-		return new LineData(indexes, reads);
+		return new LineData(indexes, reads, null);
 	}
 
 	// If a read is off screen do nothing, otherwise jump to where it begins and
 	// fill the array up to where it ends (or hits the edge of the window)
 	private void getLineDataForRead(Read read, ReadMetaData[] reads, int[] indexes, int start, int end)
 	{
-		int readS = read.getStartPosition();
-		int readE = read.getEndPosition();
+		int readS = read.s();
+		int readE = read.e();
 		int index = start;
 
 		// No point doing anything for reads which aren't on screen
@@ -72,8 +120,8 @@ public class PairedStackRow
 
 	private void getLineDataForPairLink(int[] indexes, int start, int end)
 	{
-		int index = readA.getEndPosition()+1;
-		int readB_s = readB.getStartPosition();
+		int index = readA.e()+1;
+		int readB_s = readB.s();
 
 		if (index < start)
 			index = start;
@@ -87,10 +135,10 @@ public class PairedStackRow
 	 */
 	Read getReadAt(int position)
 	{
-		if(readA.getStartPosition() <= position && readA.getEndPosition() >= position)
+		if(readA.s() <= position && readA.e() >= position)
 			return readA;
 
-		else if(readB != null && readB != null && readB.getStartPosition() <= position && readB.getEndPosition() >= position)
+		else if(readB != null && readB != null && readB.s() <= position && readB.e() >= position)
 			return readB;
 
 		return null;

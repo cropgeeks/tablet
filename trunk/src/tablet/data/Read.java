@@ -61,14 +61,14 @@ public class Read implements Comparable<Read>
 	 * Returns this read's starting position (aligned against the consensus).
 	 * @return this read's starting position
 	 */
-	public int getStartPosition()
+	public int s()
 		{ return position; }
 
 	/**
 	 * Returns this read's ending position (aligned against the consensus).
 	 * @return this read's ending position
 	 */
-	public int getEndPosition()
+	public int e()
 		{ return position + length() -1; }
 
 	/**
@@ -109,7 +109,7 @@ public class Read implements Comparable<Read>
 			return 1;
 
 		// LHS of the window...
-		if (getEndPosition() < start)
+		if (e() < start)
 			return -1;
 
 		// Otherwise must be within the window

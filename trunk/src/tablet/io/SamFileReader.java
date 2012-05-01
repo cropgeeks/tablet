@@ -195,7 +195,7 @@ class SamFileReader extends TrackableReader
 
 				// Do base-position comparison...
 				BasePositionComparator.compare(contig, rmd,
-					read.getStartPosition());
+					read.s());
 
 				readCache.setReadMetaData(rmd);
 

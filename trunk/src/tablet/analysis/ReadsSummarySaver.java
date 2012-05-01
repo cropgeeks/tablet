@@ -47,7 +47,7 @@ public class ReadsSummarySaver extends SimpleJob
 
 			lastRead = rnd.getName();
 
-			out.write(lastRead + "\t" + (read.getStartPosition() + 1)
+			out.write(lastRead + "\t" + (read.s() + 1)
 				+ "\t" + rmd.length());
 			out.newLine();
 

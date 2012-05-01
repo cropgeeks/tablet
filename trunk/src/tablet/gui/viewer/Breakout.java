@@ -92,7 +92,7 @@ class Breakout extends MouseInputAdapter implements IOverlayRenderer, Runnable
 				if (read != null)
 				{
 					ReadMetaData rmd = Assembly.getReadMetaData(read, true);
-					int value = rmd.getStateAt(dataX-read.getStartPosition());
+					int value = rmd.getStateAt(dataX-read.s());
 
 					if (i < toHide)
 						grid[i][j] = value;

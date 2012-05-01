@@ -35,24 +35,13 @@ class OutlinerOverlay implements IOverlayRenderer
 		if (read != null)
 		{
 			// Start and ending positions (against consensus)
-			readS = read.getStartPosition();
-			readE = read.getEndPosition();
+			readS = read.s();
+			readE = read.e();
 		}
 	}
 
 	public void render(Graphics2D g)
 	{
-		int offset = -rCanvas.offset * rCanvas.ntW;
-
-		// Remember the current stroke so it can be reset afterwards
-		Stroke oldStroke = g.getStroke();
-
-		// Set the outline width based on the zoom level
-		if (Prefs.visReadsCanvasZoom > 18)
-			g.setStroke(new BasicStroke(3));
-		else if (Prefs.visReadsCanvasZoom > 8)
-			g.setStroke(new BasicStroke(2));
-
 		g.setColor(ColorPrefs.get("User.OutlinerOverlay.RowColOutliner"));
 
 		// Deal with any additional features first
@@ -60,21 +49,27 @@ class OutlinerOverlay implements IOverlayRenderer
 		{
 			if (f.type == VisualOutline.READ)
 			{
-				int xS = f.value1 * rCanvas.ntW + offset;
-				int xE = f.value2 * rCanvas.ntW + rCanvas.ntW + offset;
+				int xS = rCanvas.getFirstRenderedPixel(f.value1);
+				int xE = rCanvas.getFinalRenderedPixel(f.value2);
 				int y  = f.value3 * rCanvas.ntH;
 
 				if (xS <= rCanvas.pX2 && xE > rCanvas.pX1)
-					g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);
+					g.drawRect(xS, y, xE-xS, rCanvas.readH-1);
 			}
 
 			else if (f.type == VisualOutline.COL)
 			{
-				int xS = f.value1 * rCanvas.ntW + offset;
-				int xE = xS + rCanvas.ntW;
+				int xS = rCanvas.getFirstRenderedPixel(f.value1);
+				int xE = rCanvas.getFinalRenderedPixel(f.value1);
+
+				// "Hack" to deal with ensuring a one-pixel wide base stays on
+				// screen at all zoom levels (remember the methods above were
+				// written to deal with Reads and how they are rendered)
+				if (rCanvas._ntW < 1)
+					xS = rCanvas.getFinalRenderedPixel(f.value1);
 
 				if (xS <= rCanvas.pX2 && xE > rCanvas.pX1)
-					g.drawRect(xS, 0, xE-xS-1, rCanvas.getHeight()-1);
+					g.drawRect(xS, 0, xE-xS, rCanvas.getHeight()-1);
 			}
 
 			else if (f.type == VisualOutline.ROW)
@@ -90,20 +85,14 @@ class OutlinerOverlay implements IOverlayRenderer
 		// Draw an outline around whatever read is under the mouse
 		if (read != null)
 		{
-			int xS = readS * rCanvas.ntW + offset;
-			int xE = readE * rCanvas.ntW + rCanvas.ntW + offset;
+			int xS = rCanvas.getFirstRenderedPixel(read.s());
+			int xE = rCanvas.getFinalRenderedPixel(read.e());
 			int y  = lineIndex * rCanvas.ntH;
 
-			if (Prefs.visOutlineAlpha)
-			{
-				g.setPaint(new Color(255, 255, 255, 75));
-				g.fillRect(xS, y, xE-xS-1, rCanvas.ntH-1);
-			}
-
+			g.setPaint(new Color(255, 255, 255, 75));
+			g.fillRect(xS, y, xE-xS, rCanvas.readH-1);
 			g.setColor(ColorPrefs.get("User.OutlinerOverlay.ReadOutliner"));
-			g.drawRect(xS, y, xE-xS-1, rCanvas.ntH-1);
+			g.drawRect(xS, y, xE-xS, rCanvas.readH-1);
 		}
-
-		g.setStroke(oldStroke);
 	}
 }

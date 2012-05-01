@@ -41,8 +41,8 @@ public class CoverageCalculator extends SimpleJob
 
 		for (Read read: contig.getReads())
 		{
-			int s = read.getStartPosition() - vS;
-			int e = read.getEndPosition()   - vS;
+			int s = read.s() - vS;
+			int e = read.e() - vS;
 
 			// Extra checks that may happen with BAM (but shouldn't with non-BAM)
 			if (s < 0)

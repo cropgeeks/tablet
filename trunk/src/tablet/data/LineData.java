@@ -15,17 +15,22 @@ public class LineData
 	public static final int PAIRLINK = -2;
 
 	private int[] indexes;
-	private ReadMetaData[] reads;
+	private ReadMetaData[] rmds;
+	private Read[] reads;
 
-	LineData(int[] indexes, ReadMetaData[] reads)
+	LineData(int[] indexes, ReadMetaData[] rmds, Read[] reads)
 	{
 		this.indexes = indexes;
+		this.rmds = rmds;
 		this.reads = reads;
 	}
 
 	public int[] getIndexes()
 		{ return indexes; }
 
-	public ReadMetaData[] getReads()
+	public ReadMetaData[] getRMDs()
+		{ return rmds; }
+
+	public Read[] getReads()
 		{ return reads; }
 }

@@ -197,7 +197,7 @@ class ReadsCanvasMenu implements ActionListener
 		else if (e.getSource() == mFindStart)
 		{
 			Read read = rCanvas.reads.getReadAt(rowIndex, colIndex);
-			int position = read.getStartPosition();
+			int position = read.s();
 
 			aPanel.moveToPosition(-1, position, true);
 			new ReadHighlighter(aPanel, read, rowIndex);
@@ -205,7 +205,7 @@ class ReadsCanvasMenu implements ActionListener
 		else if (e.getSource() == mFindEnd)
 		{
 			Read read = rCanvas.reads.getReadAt(rowIndex, colIndex);
-			int position = read.getEndPosition();
+			int position = read.e();
 
 			aPanel.moveToPosition(-1, position, true);
 			new ReadHighlighter(aPanel, read, rowIndex);
@@ -214,8 +214,8 @@ class ReadsCanvasMenu implements ActionListener
 		else if (e.getSource() == mOutlineRead)
 		{
 			Read read = rCanvas.reads.getReadAt(rowIndex, colIndex);
-			int p1 = read.getStartPosition();
-			int p2 = read.getEndPosition();
+			int p1 = read.s();
+			int p2 = read.e();
 
 			rCanvas.contig.addOutline(
 				new VisualOutline(VisualOutline.READ, p1, p2, rowIndex));
@@ -294,7 +294,7 @@ class ReadsCanvasMenu implements ActionListener
 					SwingUtilities.invokeLater(new Runnable() {
 						public void run()
 						{
-							aPanel.moveToPosition(lineIndex, r.getStartPosition(), true);
+							aPanel.moveToPosition(lineIndex, r.s(), true);
 							new ReadHighlighter(aPanel, r, lineIndex);
 						}
 					 });
@@ -311,7 +311,7 @@ class ReadsCanvasMenu implements ActionListener
 		{
 			Read[] pair = rCanvas.reads.getPairForLink(rowIndex, colIndex);
 
-			aPanel.moveToPosition(-1, pair[0].getStartPosition(), true);
+			aPanel.moveToPosition(-1, pair[0].s(), true);
 			new ReadHighlighter(aPanel, pair[0], rowIndex);
 		}
 
@@ -320,7 +320,7 @@ class ReadsCanvasMenu implements ActionListener
 		{
 			Read[] pair = rCanvas.reads.getPairForLink(rowIndex, colIndex);
 
-			aPanel.moveToPosition(-1, pair[1].getStartPosition(), true);
+			aPanel.moveToPosition(-1, pair[1].s(), true);
 			new ReadHighlighter(aPanel, pair[1], rowIndex);
 		}
 
@@ -366,8 +366,8 @@ class ReadsCanvasMenu implements ActionListener
 
 	void handlePopup(MouseEvent e)
 	{
+		colIndex = rCanvas.getBaseForPixel(e.getX());
 		rowIndex = (e.getY() / rCanvas.ntH);
-		colIndex = (e.getX() / rCanvas.ntW) + rCanvas.offset;
 
 		if (aPanel.getAssembly().getBamBam() == null)
 			RB.setText(mExportContig, "gui.viewer.ReadsCanvasMenu.mExportContig");

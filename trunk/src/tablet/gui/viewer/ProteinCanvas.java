@@ -81,12 +81,12 @@ class ProteinCanvas extends TrackingCanvas implements ITaskListener
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
 
-		if (translations == null)
+		if (translations == null || rCanvas._ntW < 1)
 			return;
 
 		offset = contig.getVisualStart();
 
-		int ntW = rCanvas.ntW;
+		int ntW = (int) rCanvas._ntW;
 		int ntH = rCanvas.ntH;
 		int xS = rCanvas.xS;
 		int xE = rCanvas.xE;

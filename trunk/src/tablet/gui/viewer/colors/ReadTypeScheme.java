@@ -94,4 +94,27 @@ public class ReadTypeScheme extends EnhancedScheme
 
 		return unpaired.get(rmd.getStateAt(index)).getColor();
 	}
+
+	public Color getOverviewColor(ReadMetaData rmd, int index)
+	{
+		switch (rmd.getPairedType())
+		{
+			case FIRSTINP:
+				return firstInP.get(rmd.getStateAt(index)).getOverviewColor();
+
+			case SECNDINP:
+				return secndInP.get(rmd.getStateAt(index)).getOverviewColor();
+
+			case ORPHANED:
+				return orphaned.get(rmd.getStateAt(index)).getOverviewColor();
+
+			case DFRSTINP:
+				return fInPDiff.get(rmd.getStateAt(index)).getOverviewColor();
+
+			case DSCNDINP:
+				return sInPDiff.get(rmd.getStateAt(index)).getOverviewColor();
+		}
+
+		return unpaired.get(rmd.getStateAt(index)).getOverviewColor();
+	}
 }

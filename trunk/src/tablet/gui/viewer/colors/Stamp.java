@@ -13,6 +13,9 @@ abstract class Stamp
 {
 	// AWT representation of this color
 	protected Color color;
+	// AWT representation of the overview color used (which is different for
+	// deltas/variant bases
+	protected Color ovColor;
 
 	// Buffered image used to draw this to the canvas
 	protected BufferedImage image;
@@ -23,6 +26,7 @@ abstract class Stamp
 	Stamp(Color c, int w, int h)
 	{
 		this.color = c;
+		this.ovColor = c;
 		this.w = w;
 		this.h = h;
 	}
@@ -32,6 +36,9 @@ abstract class Stamp
 
 	public Color getColor()
 		{ return color; }
+
+	public Color getOverviewColor()
+		{ return ovColor; }
 
 
 	// Special case for ?, *, or N characters (when deltas) that decides whether

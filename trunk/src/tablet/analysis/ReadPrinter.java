@@ -111,11 +111,11 @@ public class ReadPrinter extends SimpleJob
 		{
 			if(!okToRun)
 				return;
-			
+
 			ArrayList<Read> line = manager.getLine(i);
 
-			for(int j=findStartRead(line); j < line.size() && line.get(j).getStartPosition() < xE; j++)
-			{				
+			for(int j=findStartRead(line); j < line.size() && line.get(j).s() < xE; j++)
+			{
 				Read read = line.get(j);
 				printRead(read, out);
 			}
@@ -151,7 +151,7 @@ public class ReadPrinter extends SimpleJob
 	}
 
 	/**
-	 * (Binary) Searches for the first read in the current window, for the current 
+	 * (Binary) Searches for the first read in the current window, for the current
 	 * line of the display. Returns its index within the reads ArrayList.
 	 */
 	private int findStartRead(ArrayList<Read> reads)
@@ -177,14 +177,14 @@ public class ReadPrinter extends SimpleJob
 		// Binary search only guarantees finding a read in the window, must search
 		// back to find first read in window
 		Read read = reads.get(m);
-		while(m > 0 && read.getStartPosition() > xS)
+		while(m > 0 && read.s() > xS)
 		{
 			m--;
 			read = reads.get(m);
 		}
 
 		// Adjust if we've gone too far
-		if (read.getEndPosition() < xS)
+		if (read.e() < xS)
 			m++;
 
 		return m;
@@ -199,7 +199,7 @@ public class ReadPrinter extends SimpleJob
 		ReadMetaData rmd = Assembly.getReadMetaData(read, false);
 		ReadNameData rnd = Assembly.getReadNameData(read);
 
-		out.write(">" + rnd.getName() + " pos=" + (read.getStartPosition() + 1)
+		out.write(">" + rnd.getName() + " pos=" + (read.s() + 1)
 				+ " len=" + read.length());
 		out.newLine();
 
@@ -222,7 +222,7 @@ public class ReadPrinter extends SimpleJob
 
 		if (newLine != true)
 			out.newLine();
-		
+
 		progress++;
 	}
 

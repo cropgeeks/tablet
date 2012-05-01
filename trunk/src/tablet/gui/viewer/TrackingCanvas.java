@@ -4,6 +4,7 @@
 package tablet.gui.viewer;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
 
 /**
@@ -12,6 +13,8 @@ import javax.swing.*;
  */
 abstract class TrackingCanvas extends JPanel
 {
+	private static int TRACK_OFFSET = 3;
+
 	protected ReadsCanvas rCanvas;
 
 	// The LHS offset (difference) between the left-most read and the consensus
@@ -38,7 +41,12 @@ abstract class TrackingCanvas extends JPanel
 
 		// Clip to only draw what's needed (mainly ignoring what would appear
 		// above the vertical scrollbar of the reads canvas)
-		g.setClip(3, 0, width, getHeight());
-		g.translate(3-x1, 0);
+		g.setClip(TRACK_OFFSET, 0, width, getHeight());
+		g.translate(TRACK_OFFSET-x1, 0);
+	}
+
+	protected int getMouseX(MouseEvent e)
+	{
+		return e.getX() - TRACK_OFFSET;
 	}
 }

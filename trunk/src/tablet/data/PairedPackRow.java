@@ -7,6 +7,85 @@ import java.util.*;
 
 public class PairedPackRow extends PackRow
 {
+	// startBase = nucleotide base to start at
+	// arraysize = array same size as number of pixels on screen
+	// scale = maps number of nucletides to pixels (eg 0.1 = 10 bases per pixel)
+	protected LineData getPixelData(int startBase, int arraySize, float scale)
+	{
+		ReadMetaData[] rmds = new ReadMetaData[arraySize];
+		int[] indexes = new int[arraySize];
+		Read[] pixReads = new Read[arraySize];
+
+		int prevBase = Integer.MIN_VALUE;
+		ReadIndex prevRead = null;
+
+		for (int i = 0; i < arraySize; i++)
+		{
+			// Work out what the nucleotide position is for each pixel point
+			int currBase = startBase + (int)(i / scale);
+
+			// If one base stretches over more than one pixel, then just reuse
+			// the data from the last iteration
+			if (prevBase == currBase)
+			{
+				rmds[i] = rmds[i-1];
+				indexes[i] = indexes[i-1];
+				pixReads[i] = pixReads[i-1];
+			}
+			else
+			{
+				// If the read over the last pixel is also over this pixel...
+				if (prevRead != null && prevRead.read.e() >= currBase)
+				{
+					if (prevRead.read instanceof MateLink == false)
+					{
+						rmds[i] = rmds[i-1];
+						indexes[i] = currBase-prevRead.read.s();
+						pixReads[i] = prevRead.read;
+					}
+					else
+						indexes[i] = -2;
+				}
+				else // we don't yet know what maps to this pixel
+				{
+					ReadIndex rIndex = getReadIndexAt(currBase);
+
+					// If it's a read...
+					if (rIndex != null)
+					{
+						boolean isLink = (rIndex.read instanceof MateLink);
+
+						if (scale >= 1 && isLink == false)
+							rmds[i] = Assembly.getReadMetaData(rIndex.read, true);
+
+						// If we don't have a mate link fill data as normal
+						// otherwise use -2 to indicate the base is in a MateLink
+						if (isLink == false)
+						{
+							// Index (within the read) of its data at this base
+							indexes[i] = currBase-rIndex.read.s();
+							pixReads[i] = rIndex.read;
+						}
+						else
+							indexes[i] = -2;
+					}
+					// No read to be drawn on this pixel
+					// Optimisations commented out as they don't quite work
+					else
+					{
+							indexes[i] = -1;
+					}
+
+					prevRead = rIndex;
+				}
+			}
+
+			prevBase = currBase;
+		}
+
+		return new LineData(indexes, rmds, pixReads);
+	}
+
 	@Override
 	protected LineData getLineData(int fromRead, int start, int end)
 	{
@@ -41,15 +120,15 @@ public class PairedPackRow extends PackRow
 			prev = read;
 		}
 
-		return new LineData(indexes, rmds);
+		return new LineData(indexes, rmds, null);
 	}
 
 	// If a read is off screen do nothing, otherwise jump to where it begins and
 	// fill the array up to where it ends (or hits the edge of the window)
 	private void getLineDataForRead(Read read, ReadMetaData[] rmds, int[] indexes, int start, int end)
 	{
-		int readS = read.getStartPosition();
-		int readE = read.getEndPosition();
+		int readS = read.s();
+		int readE = read.e();
 		int index = start;
 
 		// No point doing anything for reads which aren't on screen
@@ -71,8 +150,8 @@ public class PairedPackRow extends PackRow
 
 	private void getLineDataForPairLink(Read read, Read prev, int[] indexes, int start, int end)
 	{
-		int prevE = prev.getEndPosition()+1;
-		int readS = read.getStartPosition();
+		int prevE = prev.e()+1;
+		int readS = read.s();
 
 		if (prevE < start)
 			prevE = start;
