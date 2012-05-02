@@ -169,7 +169,7 @@ public class CanvasController extends JPanel implements ChangeListener
 	// Jumps the screen left by one "page"
 	public void pageLeft()
 	{
-		int jumpTo = scaleCanvas.ntL - (readsCanvas.ntOnScreenX);// - readsCanvas.offset;
+		int jumpTo = scaleCanvas.ntL - (readsCanvas._ntOnScreenX);// - readsCanvas.offset;
 //		moveToLater(-1, jumpTo, false);
 		aPanel.moveToPosition(-1, jumpTo, false);
 	}
