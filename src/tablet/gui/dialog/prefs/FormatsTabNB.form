@@ -1,4 +1,4 @@
-<?xml version="1.1" encoding="UTF-8" ?>
+<?xml version="1.0" encoding="UTF-8" ?>
 
 <Form version="1.3" maxVersion="1.5" type="org.netbeans.modules.form.forminfo.JPanelFormInfo">
   <AuxValues>
@@ -16,11 +16,11 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="1" attributes="0">
+          <Group type="102" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="panel1" max="32767" attributes="0"/>
                   <Component id="panel2" alignment="0" max="32767" attributes="0"/>
-                  <Component id="panel1" alignment="0" max="32767" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
@@ -51,12 +51,14 @@
       <Layout>
         <DimensionLayout dim="0">
           <Group type="103" groupAlignment="0" attributes="0">
-              <Group type="102" alignment="0" attributes="0">
+              <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Component id="checkAmbiguousToN" min="-2" max="-2" attributes="0"/>
                       <Component id="checkAceQA" min="-2" max="-2" attributes="0"/>
                       <Component id="checkBamValidation" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="cacheReads" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="neverCacheBAM" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -71,6 +73,10 @@
                   <Component id="checkAceQA" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="checkBamValidation" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="cacheReads" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="neverCacheBAM" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -92,6 +98,16 @@
             <Property name="text" type="java.lang.String" value="Set BAM validation stringency to lenient rather than strict (BAM only)"/>
           </Properties>
         </Component>
+        <Component class="javax.swing.JCheckBox" name="cacheReads">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Always cache read data to disk while importing"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="neverCacheBAM">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Bypass read disk caching for BAM files"/>
+          </Properties>
+        </Component>
       </SubComponents>
     </Container>
     <Container class="javax.swing.JPanel" name="panel2">
@@ -110,7 +126,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
-                          <Component id="stPath" pref="290" max="32767" attributes="0"/>
+                          <Component id="stPath" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="bBrowse" min="-2" max="-2" attributes="0"/>
                       </Group>
@@ -141,6 +157,9 @@
       <SubComponents>
         <Component class="javax.swing.JLabel" name="stLabel1">
           <Properties>
+            <Property name="labelFor" type="java.awt.Component" editor="org.netbeans.modules.form.ComponentChooserEditor">
+              <ComponentRef name="stPath"/>
+            </Property>
             <Property name="text" type="java.lang.String" value="Alternative path to samtools:"/>
           </Properties>
         </Component>

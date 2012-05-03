@@ -79,7 +79,7 @@ public class CanvasController extends JPanel implements ChangeListener
 
 	private void computePanelSizes()
 	{
-		int zoom = Prefs.visReadsCanvasZoom;
+		int zoom = Prefs.visReadsZoomLevel;
 
 		readsCanvas.setDimensions(zoom, zoom);
 		consensusCanvas.setDimensions();

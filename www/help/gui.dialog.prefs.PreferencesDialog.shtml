@@ -92,6 +92,16 @@ way Tablet is used and is displayed.</p>
     assemblies and will attempt to display the file as if it was OK. Any errors that
     are found will be written to the output.log file in Tablet's install directory.
     See samtools/picard documentation for more details on strict/lenient parsing options.</li>
+	
+	<li><b>Always cache read data to disk while importing</b><br>
+    Selecting this option will ensure Tablet keeps the majority of read data for
+    an assembly in a disk-based cache, rather than in memory. This marginally
+    reduces performance, but has a significant saving on memory.</li>
+	
+	<li><b>Bypass read disk caching for BAM files</b>
+	Because BAM files are already indexed and allow for quick access, there is no need for Tablet
+	to (re)cache them for its own use. The only time you may wish to disable this option is if
+	you are running Tablet with a very large BAM window size and wish to further reduce memory usage.</li>
 </ul>
 
 <p>Samtools:</p>

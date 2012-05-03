@@ -36,7 +36,7 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 		Stroke oldStroke = g.getStroke();
 
 		// Set the outline width based on the zoom level
-		if (Prefs.visReadsCanvasZoom > 15)
+		if (Prefs.visReadsZoomLevel > 15)
 			g.setStroke(new BasicStroke(2));
 
 		// If the reads are on the row, draw a line connecting them

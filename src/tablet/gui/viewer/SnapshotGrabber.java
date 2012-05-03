@@ -48,7 +48,7 @@ public class SnapshotGrabber extends Thread
 		int colIndex = rCanvas.contig.getVisualStart() + (int)(rCanvas.pX1 / rCanvas._ntW);
 		int rowIndex = rCanvas.pY1 / rCanvas.ntH;
 
-		Snapshot snapshot = new Snapshot(colIndex, rowIndex, Prefs.visReadsCanvasZoom);
+		Snapshot snapshot = new Snapshot(colIndex, rowIndex, Prefs.visReadsZoomLevel);
 
 		controller.addSnapshot(snapshot);
 	}

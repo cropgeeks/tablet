@@ -115,7 +115,7 @@ public class Prefs extends XMLPreferences
 	public static int visOverviewType = OverviewCanvas.SCALEDDATA;
 
 	// Current zoom level of the reads canvas
-	public static int visReadsCanvasZoom = 7;
+	public static int visReadsZoomLevel = 16;
 	// Current intensity level for the variant highlighting
 	public static int visVariantAlpha = 0;
 
@@ -150,7 +150,8 @@ public class Prefs extends XMLPreferences
 	public static boolean printPads = true;
 
 	// Disk caching options
-	public static boolean cacheReads = true;
+	public static boolean ioCacheReads = true;
+	public static boolean ioNeverCacheBAM = true;
 	public static boolean cacheMappings = true;
 
 	// Bam assembly options
