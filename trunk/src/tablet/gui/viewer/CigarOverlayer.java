@@ -50,9 +50,9 @@ public class CigarOverlayer extends AlphaOverlay
 		Stroke oldStroke = g.getStroke();
 
 
-		g.setPaint(currentColor(Prefs.visReadsCanvasZoom));
+		g.setPaint(currentColor(Prefs.visReadsZoomLevel));
 		// Set the outline width based on the zoom level
-		g.setStroke(calculateStroke(Prefs.visReadsCanvasZoom, oldStroke));
+		g.setStroke(calculateStroke(Prefs.visReadsZoomLevel, oldStroke));
 
 		ArrayList<Feature> features = new ArrayList<Feature>();
 

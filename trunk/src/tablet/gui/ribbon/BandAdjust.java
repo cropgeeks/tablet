@@ -36,7 +36,7 @@ public class BandAdjust extends JRibbonBand implements ChangeListener
 		this.winMain = winMain;
 
 		// Determine the initial zoom level for the reads canvas
-		int zoom = Prefs.visReadsCanvasZoom;
+		int zoom = Prefs.visReadsZoomLevel;
 		if (zoom < ZOOM_MIN || zoom > ZOOM_MAX)
 			zoom = ZOOM_DEF;
 
@@ -100,7 +100,7 @@ public class BandAdjust extends JRibbonBand implements ChangeListener
 	{
 		if (e.getSource() == zoomSlider)
 		{
-			Prefs.visReadsCanvasZoom = zoomSlider.getValue();
+			Prefs.visReadsZoomLevel = zoomSlider.getValue();
 
 			winMain.getAssemblyPanel().getController().doZoom();
 			winMain.getAssemblyPanel().repaint();
@@ -117,7 +117,7 @@ public class BandAdjust extends JRibbonBand implements ChangeListener
 
 	public static void setZoom(int zoom)
 	{
-		Prefs.visReadsCanvasZoom = zoom;
+		Prefs.visReadsZoomLevel = zoom;
 		zoomSlider.setValue(zoom);
 	}
 }

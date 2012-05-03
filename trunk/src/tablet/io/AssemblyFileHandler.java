@@ -41,6 +41,10 @@ public class AssemblyFileHandler extends SimpleJob
 	public Assembly getAssembly()
 		{ return assembly; }
 
+	private void setupCaches()
+	{
+	}
+
 	public void runJob(int jobIndex)
 		throws Exception
 	{
@@ -51,14 +55,18 @@ public class AssemblyFileHandler extends SimpleJob
 		IReadCache readCache = null;
 		ReadSQLCache sqlCache = null;
 
-		if (Prefs.cacheReads)
+		// If it's a BAM file and we don't want read caching for BAM, or we don't
+		// want reach caching full stop, then just use in-memory caching
+		if ((files[0].getType() == BAM && Prefs.ioNeverCacheBAM) || Prefs.ioCacheReads == false)
+			readCache = new ReadMemCache();
+
+		// Otherwise, use a disk cache
+		else
 		{
 			File cache = new File(cacheDir, "Tablet-" + cacheid + ".reads");
 			File index = new File(cacheDir, "Tablet-" + cacheid + ".readsndx");
 			readCache = new ReadFileCache(cache, index);
 		}
-		else
-			readCache = new ReadMemCache();
 
 		sqlCache = new ReadSQLCache(new File(cacheDir, "Tablet-" + cacheid + ".sqlite"));
 		Consensus.prepareCache(new File(cacheDir, "Tablet-" + cacheid + ".refs"));

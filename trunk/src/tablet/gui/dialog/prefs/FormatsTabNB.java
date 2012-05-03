@@ -26,6 +26,8 @@ class FormatsTabNB extends JPanel implements ActionListener
 		RB.setText(checkAmbiguousToN, "gui.dialog.prefs.NBFormatsPanel.checkAmbiguousToN");
 		RB.setText(checkAceQA, "gui.dialog.prefs.NBFormatsPanel.checkAceQA");
 		RB.setText(checkBamValidation, "gui.dialog.prefs.NBFormatsPanel.checkBamValidation");
+		RB.setText(cacheReads, "gui.dialog.prefs.NBFormatsPanel.cacheReads");
+		RB.setText(neverCacheBAM, "gui.dialog.prefs.NBFormatsPanel.neverCacheBAM");
 
 		panel2.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.prefs.NBFormatsPanel.panel2Title")));
 		RB.setText(stLabel1, "gui.dialog.prefs.NBFormatsPanel.stLabel1");
@@ -36,28 +38,45 @@ class FormatsTabNB extends JPanel implements ActionListener
 		checkAmbiguousToN.setSelected(Prefs.ioAmbiguousToN);
 		checkAceQA.setSelected(Prefs.ioAceProcessQA);
 		checkBamValidation.setSelected(Prefs.ioBamValidationIsLenient);
+		cacheReads.setSelected(Prefs.ioCacheReads);
+		neverCacheBAM.setSelected(Prefs.ioNeverCacheBAM);
+		checkStates();
 
 		bBrowse.addActionListener(this);
+		cacheReads.addActionListener(this);
     }
+
+	private void checkStates()
+	{
+		neverCacheBAM.setEnabled(cacheReads.isSelected());
+	}
 
 	public void applySettings()
 	{
 		Prefs.ioAmbiguousToN = checkAmbiguousToN.isSelected();
 		Prefs.ioAceProcessQA = checkAceQA.isSelected();
 		Prefs.ioBamValidationIsLenient = checkBamValidation.isSelected();
+		Prefs.ioCacheReads = cacheReads.isSelected();
+		Prefs.ioNeverCacheBAM = neverCacheBAM.isSelected();
 
 		Prefs.ioSamtoolsPath = stPath.getText();
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
-		JFileChooser fc = new JFileChooser();
-		fc.setDialogTitle("");
-		fc.setSelectedFile(new File(stPath.getText()));
-		fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		if (e.getSource() == bBrowse)
+		{
+			JFileChooser fc = new JFileChooser();
+			fc.setDialogTitle("");
+			fc.setSelectedFile(new File(stPath.getText()));
+			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
 
-		if (fc.showOpenDialog(Tablet.winMain) == JFileChooser.APPROVE_OPTION)
-			stPath.setText(fc.getSelectedFile().getPath());
+			if (fc.showOpenDialog(Tablet.winMain) == JFileChooser.APPROVE_OPTION)
+				stPath.setText(fc.getSelectedFile().getPath());
+		}
+
+		else if (e.getSource() == cacheReads)
+			checkStates();
 	}
 
 
@@ -73,6 +92,8 @@ class FormatsTabNB extends JPanel implements ActionListener
         checkAmbiguousToN = new javax.swing.JCheckBox();
         checkAceQA = new javax.swing.JCheckBox();
         checkBamValidation = new javax.swing.JCheckBox();
+        cacheReads = new javax.swing.JCheckBox();
+        neverCacheBAM = new javax.swing.JCheckBox();
         panel2 = new javax.swing.JPanel();
         stLabel1 = new javax.swing.JLabel();
         stPath = new javax.swing.JTextField();
@@ -87,6 +108,10 @@ class FormatsTabNB extends JPanel implements ActionListener
 
         checkBamValidation.setText("Set BAM validation stringency to lenient rather than strict (BAM only)");
 
+        cacheReads.setText("Always cache read data to disk while importing");
+
+        neverCacheBAM.setText("Bypass read disk caching for BAM files");
+
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
         panel1Layout.setHorizontalGroup(
@@ -96,7 +121,9 @@ class FormatsTabNB extends JPanel implements ActionListener
                 .addGroup(panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(checkAmbiguousToN)
                     .addComponent(checkAceQA)
-                    .addComponent(checkBamValidation))
+                    .addComponent(checkBamValidation)
+                    .addComponent(cacheReads)
+                    .addComponent(neverCacheBAM))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panel1Layout.setVerticalGroup(
@@ -108,11 +135,16 @@ class FormatsTabNB extends JPanel implements ActionListener
                 .addComponent(checkAceQA)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(checkBamValidation)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(cacheReads)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(neverCacheBAM)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         panel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Samtools:"));
 
+        stLabel1.setLabelFor(stPath);
         stLabel1.setText("Alternative path to samtools:");
 
         bBrowse.setText("Browse...");
@@ -127,7 +159,7 @@ class FormatsTabNB extends JPanel implements ActionListener
                 .addContainerGap()
                 .addGroup(panel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panel2Layout.createSequentialGroup()
-                        .addComponent(stPath, javax.swing.GroupLayout.DEFAULT_SIZE, 290, Short.MAX_VALUE)
+                        .addComponent(stPath)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(bBrowse))
                     .addComponent(stLabel1)
@@ -152,11 +184,11 @@ class FormatsTabNB extends JPanel implements ActionListener
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(panel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(panel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(panel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -172,9 +204,11 @@ class FormatsTabNB extends JPanel implements ActionListener
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bBrowse;
+    private javax.swing.JCheckBox cacheReads;
     private javax.swing.JCheckBox checkAceQA;
     private javax.swing.JCheckBox checkAmbiguousToN;
     private javax.swing.JCheckBox checkBamValidation;
+    private javax.swing.JCheckBox neverCacheBAM;
     private javax.swing.JPanel panel1;
     private javax.swing.JPanel panel2;
     private javax.swing.JLabel stLabel1;
