@@ -123,13 +123,14 @@ class CoverageCanvas extends TrackingCanvas
 		int maxCoverage = DisplayData.getMaxCoverage();
 
 		int basesPerPixel = Math.round(1 / rCanvas._ntW);
+		int offset = rCanvas.offset;
 
 		// For each pixel to be painted
 		for (int x = rCanvas.pX1; x <= rCanvas.pX2; x++)
 		{
 			// Work out what the average coverage level is across this pixel
-			// by looking at every base that maps to it
-			int base = rCanvas.getBaseForPixel(x);
+			// by looking at every base that maps to it (and adjust for offset)
+			int base = rCanvas.getBaseForPixel(x) - offset;
 			float averageValue = 0;
 			float averageCount = 0;
 
