@@ -14,7 +14,6 @@ import tablet.gui.Prefs;
 public class CigarOverlayer extends AlphaOverlay
 {
 	boolean hidden;
-	private static CigarOverlayer previous;
 
 	private Color cigarColor;
 	private Color vibrant;
@@ -42,10 +41,8 @@ public class CigarOverlayer extends AlphaOverlay
 		VisualContig vContig = aPanel.getVisualContig();
 
 		float ntW = rCanvas._ntW;
-		int pX1 = rCanvas.pX1;
-		int pX2Max = rCanvas.pX2Max;
-		int xS = (int)(pX1 / ntW);
-		int xE = (int)(pX2Max / ntW);
+		int xS = rCanvas.getBaseForPixel(rCanvas.pX1);
+		int xE = rCanvas.getBaseForPixel(rCanvas.pX2);
 
 		Stroke oldStroke = g.getStroke();
 
