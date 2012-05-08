@@ -13,11 +13,11 @@ public class PairedStack implements IReadManager
 {
 	private ArrayList<PairedStackRow> stack = new ArrayList<PairedStackRow>();
 
-	public LineData getPixelData(int line, int start, int end, float scale)
+	public LineData getPixelData(int line, int start, int end, float scale, boolean getMetaData)
 	{
 		PairedStackRow pairedStackRow = stack.get(line);
 
-		return pairedStackRow.getPixelData(start, end, scale);
+		return pairedStackRow.getPixelData(start, end, scale, getMetaData);
 	}
 
 	public LineData getLineData(int line, int start, int end)

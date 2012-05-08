@@ -101,6 +101,8 @@ public class Prefs extends XMLPreferences
 
 	// Colour scheme in use
 	public static int visColorScheme = ReadScheme.STANDARD;
+	// Whether to always draw with colours at all zoom levels
+	public static boolean visColorsAtAllZooms = false;
 
 	// Display reads in packed or stacked form?
 	public static boolean visPacked = true;

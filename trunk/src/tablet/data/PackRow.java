@@ -83,7 +83,7 @@ public class PackRow
 	// startBase = nucleotide base to start at
 	// arraysize = array same size as number of pixels on screen
 	// scale = maps number of nucletides to pixels (eg 0.1 = 10 bases per pixel)
-	protected LineData getPixelData(int startBase, int arraySize, float scale)
+	protected LineData getPixelData(int startBase, int arraySize, float scale, boolean getMetaData)
 	{
 		ReadMetaData[] rmds = new ReadMetaData[arraySize];
 		int[] indexes = new int[arraySize];
@@ -124,7 +124,7 @@ public class PackRow
 					// If it's a read...
 					if (rIndex != null)
 					{
-						if (scale >= 1)
+						if (scale >= 1 || getMetaData)
 							rmds[i] = Assembly.getReadMetaData(rIndex.read, true);
 
 						// Index (within the read) of its data at this base
