@@ -28,11 +28,11 @@ public class Pack implements IReadManager, Iterable<PackRow>
 		return packRow.getLineData(start, end);
 	}
 
-	public LineData getPixelData(int line, int start, int end, float scale)
+	public LineData getPixelData(int line, int start, int end, float scale, boolean getMetaData)
 	{
 		PackRow packRow = packRows.get(line);
 
-		return packRow.getPixelData(start, end, scale);
+		return packRow.getPixelData(start, end, scale, getMetaData);
 	}
 
 	public Read getReadAt(int line, int nucleotidePosition)

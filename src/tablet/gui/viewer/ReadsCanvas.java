@@ -17,6 +17,7 @@ import tablet.gui.viewer.colors.*;
 public class ReadsCanvas extends JPanel
 {
 	private AssemblyPanel aPanel;
+	private boolean usingMemCache = false;
 
 	BufferedImage buffer;
 	private boolean updateBuffer = true;
@@ -114,6 +115,8 @@ public class ReadsCanvas extends JPanel
 				reads = contig.getStackManager();
 
 			offset = contig.getVisualStart();
+
+			usingMemCache = aPanel.getAssembly().isUsingMemCache();
 		}
 
 		// We need to ensure that any references to tablet.data objects are
@@ -378,11 +381,17 @@ public class ReadsCanvas extends JPanel
 
 			long total = 0;
 
+			// Decide whether to (get) and draw colours at all zooms
+			// But override if (and always draw colours) if using a mem cache
+			boolean getMetaData = Prefs.visColorsAtAllZooms || usingMemCache;
+
+			System.out.println("getMetaData=" + getMetaData);
+
 			// For every [nth] row, where n = number of available CPU cores...
 			for (int row = yS, y = (ntH*yS); row <= yE; row += cores, y += ntH*cores)
 			{
 				long s = System.nanoTime();
-				data = reads.getPixelData(row, xS+offset, _pixelsOnScreenX, _ntW);
+				data = reads.getPixelData(row, xS+offset, _pixelsOnScreenX, _ntW, getMetaData);
 				total += System.nanoTime() - s;
 
 				// Ask the read manager to calculate the data for this row
@@ -409,7 +418,7 @@ public class ReadsCanvas extends JPanel
 					{
 						if (indexes[i] >= 0)
 						{
-							if (_ntW == 1)
+							if (_ntW == 1 || getMetaData)
 								g.setColor(colors.getColor(rmds[i], indexes[i]));
 
 							g.fillRect(x, y, 1, 2);

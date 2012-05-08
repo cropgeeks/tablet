@@ -22,7 +22,7 @@ public class PairedStackRow
 			readB = read;
 	}
 
-	public LineData getPixelData(int startBase, int arraySize, float scale)
+	public LineData getPixelData(int startBase, int arraySize, float scale, boolean getMetaData)
 	{
 		// Arrays which will eventually make up the LineData object
 		ReadMetaData[] rmds = new ReadMetaData[arraySize];
@@ -34,7 +34,7 @@ public class PairedStackRow
 
 		// If we're rendering data at the current zoom level, grab the RMDs for
 		// the reads on this row of the Stack
-		if (scale >= 1)
+		if (scale >= 1 || getMetaData)
 		{
 			rmdA = Assembly.getReadMetaData(readA, true);
 			if (readB != null)

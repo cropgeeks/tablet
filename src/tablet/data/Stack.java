@@ -13,7 +13,7 @@ public class Stack implements IReadManager
 	{
 	}
 
-	public LineData getPixelData(int line, int startBase, int arraySize, float scale)
+	public LineData getPixelData(int line, int startBase, int arraySize, float scale, boolean getMetaData)
 	{
 		// Arrays which will eventually make up the LineData object
 		ReadMetaData[] rmds = new ReadMetaData[arraySize];
@@ -26,7 +26,7 @@ public class Stack implements IReadManager
 
 		// If we're rendering data at the current zoom level, grab the RMD for
 		// the read on this row of the Stack
-		if (scale >= 1)
+		if (scale >= 1 || getMetaData)
 			rmd = Assembly.getReadMetaData(read, true);
 
 		for (int i=0, readS = read.s(), readE = read.e(); i < arraySize; i++)

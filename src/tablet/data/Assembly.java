@@ -126,6 +126,11 @@ public class Assembly implements Iterable<Contig>
 	public IReadCache getCache()
 		{ return cache; }
 
+	public boolean isUsingMemCache()
+	{
+		return cache instanceof ReadMemCache;
+	}
+
 	public static boolean hasCigar()
 		{ return hasCigar; }
 

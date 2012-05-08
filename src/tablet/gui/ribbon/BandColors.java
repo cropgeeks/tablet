@@ -29,6 +29,7 @@ public class BandColors extends JRibbonBand implements ActionListener
 	static JCommandToggleButton bReadGroup;
 	static JCommandToggleButton bReadLength;
 	static JCommandToggleButton bVariants;
+	static JCommandToggleButton bAtAllZooms;
 
 	private JCommandButton bColors;
 
@@ -170,6 +171,22 @@ public class BandColors extends JRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.BandColors.bColors.richtip")));
 
 
+		// Colors at all zooms toggle
+		bAtAllZooms = new JCommandToggleButton(
+			RB.getString("gui.ribbon.BandColors.bAtAllZooms"),
+			RibbonController.getIcon("COLORALLZOOMS32", 32));
+		Actions.colorsAtAllZooms = new ActionToggleButtonModel(false);
+		Actions.colorsAtAllZooms.setSelected(Prefs.visColorsAtAllZooms);
+		Actions.colorsAtAllZooms.addActionListener(this);
+		bAtAllZooms.setActionModel(Actions.colorsAtAllZooms);
+		bAtAllZooms.setActionKeyTip("C");
+		bAtAllZooms.addMouseListener(styleListener);
+		bAtAllZooms.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.BandColors.bAtAllZooms.tooltip"),
+			RB.getString("gui.ribbon.BandColors.bAtAllZooms.richtip")));
+
+
+
 		// Set up the ribbon gallery (gawd knows what this code is doing)
 		Map<RibbonElementPriority, Integer> counts =
 			new HashMap<RibbonElementPriority, Integer>();
@@ -180,6 +197,7 @@ public class BandColors extends JRibbonBand implements ActionListener
 		List<StringValuePair<List<JCommandToggleButton>>> galleryButtons =
 			new ArrayList<StringValuePair<List<JCommandToggleButton>>>();
 
+		addCommandButton(bAtAllZooms, RibbonElementPriority.TOP);
 		addCommandButton(bColors, RibbonElementPriority.TOP);
 		galleryButtons.add(
 			new StringValuePair<List<JCommandToggleButton>>(null, styleButtons));
@@ -248,6 +266,12 @@ public class BandColors extends JRibbonBand implements ActionListener
 
 		else if (e.getSource() == Actions.colorsCustom)
 			customizeColors();
+
+		else if (e.getSource() == Actions.colorsAtAllZooms)
+		{
+			Prefs.visColorsAtAllZooms = !Prefs.visColorsAtAllZooms;
+			winMain.getAssemblyPanel().updateColorScheme();
+		}
 	}
 
 	public void customizeColors()

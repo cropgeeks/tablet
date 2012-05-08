@@ -30,6 +30,7 @@ public class BandLayout extends JRibbonBand implements ActionListener
 	private JCommandButton bColorScheme;
 	private JCheckBoxMenuItem mEnhanced, mDirection, mReadType, mReadGroup;
 	private JCheckBoxMenuItem mReadLength, mVariants;
+	private JCheckBoxMenuItem mAtAllZooms;
 	private JMenuItem mCustomize;
 
 	private JCommandToggleButton bTagVariants;
@@ -179,6 +180,8 @@ public class BandLayout extends JRibbonBand implements ActionListener
 			BandColors.bReadLength.doActionClick();
 		else if (e.getSource() == mVariants)
 			BandColors.bVariants.doActionClick();
+		else if (e.getSource() == mAtAllZooms)
+			BandColors.bAtAllZooms.doActionClick();
 		else if (e.getSource() == mCustomize)
 			RibbonController.bandStyles.customizeColors();
 	}
@@ -234,6 +237,9 @@ public class BandLayout extends JRibbonBand implements ActionListener
 		mVariants = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandColors.bVariants"));
 		mVariants.addActionListener(this);
 
+		mAtAllZooms = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandColors.bAtAllZooms2"));
+		mAtAllZooms.addActionListener(this);
+
 		mCustomize = new JMenuItem(RB.getString("gui.ribbon.BandColors.bColorsMenu"));
 		mCustomize.addActionListener(this);
 
@@ -243,6 +249,8 @@ public class BandLayout extends JRibbonBand implements ActionListener
 		colorMenu.add(mReadGroup);
 		colorMenu.add(mReadLength);
 		colorMenu.add(mVariants);
+		colorMenu.addSeparator();
+		colorMenu.add(mAtAllZooms);
 		colorMenu.addSeparator();
 		colorMenu.add(mCustomize);
 	}
@@ -255,6 +263,7 @@ public class BandLayout extends JRibbonBand implements ActionListener
 		mReadGroup.setSelected(Prefs.visColorScheme == ReadScheme.READGROUP);
 		mReadLength.setSelected(Prefs.visColorScheme == ReadScheme.READLENGTH);
 		mVariants.setSelected(Prefs.visColorScheme == ReadScheme.VARIANTS);
+		mAtAllZooms.setSelected(Prefs.visColorsAtAllZooms);
 
 		colorMenu.show(bColorScheme, 0, bColorScheme.getHeight());
 	}

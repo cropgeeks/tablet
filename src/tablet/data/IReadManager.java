@@ -28,7 +28,7 @@ public interface IReadManager
 	 */
 	public LineData getLineData(int line, int start, int end);
 
-	public LineData getPixelData(int line, int start, int end, float scale);
+	public LineData getPixelData(int line, int start, int end, float scale, boolean getMetaData);
 
 	/**
 	 * Returns the pair of reads that form each end of the (possible) link line

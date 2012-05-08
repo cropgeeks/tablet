@@ -40,6 +40,7 @@ public class Actions
 	public static ActionRepeatableButtonModel stylesColorSchemes;
 	public static ActionToggleButtonModel stylesTagVariants;
 	//public static ActionToggleButtonModel stylesPacked;
+	public static ActionToggleButtonModel colorsAtAllZooms;
 
 	public static ActionRepeatableButtonModel navigatePageLeft;
 	public static ActionRepeatableButtonModel navigatePageRight;
@@ -102,6 +103,7 @@ public class Actions
 		stylesColorSchemes.setEnabled(false);
 		stylesTagVariants.setEnabled(false);
 		//stylesPacked.setEnabled(false);
+		colorsAtAllZooms.setEnabled(false);
 
 		navigatePageLeft.setEnabled(false);
 		navigatePageRight.setEnabled(false);
@@ -164,6 +166,7 @@ public class Actions
 		stylesColorSchemes.setEnabled(false);
 		stylesTagVariants.setEnabled(false);
 		//stylesPacked.setEnabled(false);
+		colorsAtAllZooms.setEnabled(false);
 
 		navigatePageLeft.setEnabled(false);
 		navigatePageRight.setEnabled(false);
@@ -226,6 +229,7 @@ public class Actions
 		stylesColorSchemes.setEnabled(true);
 		stylesTagVariants.setEnabled(true);
 		//stylesPacked.setEnabled(true);
+		colorsAtAllZooms.setEnabled(true);
 
 		navigatePageLeft.setEnabled(true);
 		navigatePageRight.setEnabled(true);
