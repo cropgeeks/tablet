@@ -119,6 +119,7 @@ class ReadsCanvasInfoPane
 		ReadNameData rnd = Assembly.getReadNameData(read);
 		ReadMetaData rmd = Assembly.getReadMetaData(read, false);
 
+
 		// Start and ending positions (against consensus)
 		int readS = read.s();
 		int readE = read.e();
@@ -148,6 +149,11 @@ class ReadsCanvasInfoPane
 
 		// Inserted bases
 		getInsertedBases(read, box);
+
+		// ReadGroup
+		if (rmd.getReadGroup() != 0)
+			box.readGroupInfo = RB.format("gui.viewer.ReadsCanvasInfoPane.readGroupInfo",
+				Assembly.getReadGroups().get(rmd.getReadGroup()-1).getID());
 
 		// Pair info
 		if (read instanceof MatedRead && rmd.getIsPaired() && rmd.getMateMapped())
@@ -190,7 +196,7 @@ class ReadsCanvasInfoPane
 
 	private BoxData getMissingMateData(Read read)
 	{
-		box = new BoxData();
+		BoxData box = new BoxData();
 
 		ReadNameData rnd = Assembly.getReadNameData(read);
 
@@ -272,6 +278,9 @@ class ReadsCanvasInfoPane
 		if(Assembly.hasCigar())
 			text.append(box.cigar).append(lb);
 
+		if (box.readGroupInfo != null)
+			text.append(box.readGroupInfo).append(lb);
+
 		if (box.rmd.isComplemented())
 			text.append(RB.getString("gui.viewer.ReadsCanvasInfoPane.directionReverse")).append(lb).append(lb);
 		else
@@ -292,6 +301,7 @@ class ReadsCanvasInfoPane
 		String pairInfo;
 		String insertedBases;
 		String mateStatus, matePosition;
+		String readGroupInfo;
 
 		Read read;
 		ReadMetaData rmd;
