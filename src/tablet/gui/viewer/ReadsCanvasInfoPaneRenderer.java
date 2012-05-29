@@ -145,6 +145,10 @@ class ReadsCanvasInfoPaneRenderer implements IOverlayRenderer
 		if (box.cigar != null)
 			g.drawString(box.cigar, 10, (yPos += lineSpacing));
 
+		// ReadGroup
+		if (box.readGroupInfo != null)
+			g.drawString(box.readGroupInfo, 10, (yPos += lineSpacing));
+
 		if (box.insertedBases != null)
 			g.drawString(box.insertedBases, 10, (yPos += lineSpacing));
 
@@ -225,6 +229,8 @@ class ReadsCanvasInfoPaneRenderer implements IOverlayRenderer
 			w = fmTitle.stringWidth(box.lengthData) + 20;
 		if (box.cigar != null && fmTitle.stringWidth(box.cigar) > (w - 20))
 			w = fmTitle.stringWidth(box.cigar) + 20;
+		if (box.readGroupInfo != null && fmTitle.stringWidth(box.readGroupInfo) > (w - 20))
+			w = fmTitle.stringWidth(box.readGroupInfo) + 20;
 		if (box.pairInfo != null && fmTitle.stringWidth(box.pairInfo) > (w - 20))
 			w = fmTitle.stringWidth(box.pairInfo) + 20;
 		if (box.insertedBases != null && fmTitle.stringWidth(box.insertedBases) > (w - 20))
@@ -243,6 +249,7 @@ class ReadsCanvasInfoPaneRenderer implements IOverlayRenderer
 		boxH += box.posData != null ? lineSpacing : 0;
 		boxH += box.lengthData != null ? lineSpacing : 0;
 		boxH += box.cigar != null ? lineSpacing : 0;
+		boxH += box.readGroupInfo != null ? lineSpacing : 0;
 		boxH += box.pairInfo != null ? lineSpacing : 0;
 		boxH += box.insertedBases != null ? lineSpacing : 0;
 		boxH += box.mateStatus != null ? lineSpacing : 0;
