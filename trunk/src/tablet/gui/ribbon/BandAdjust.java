@@ -110,7 +110,7 @@ public class BandAdjust extends JRibbonBand implements ChangeListener
 		{
 			Prefs.visVariantAlpha = variantSlider.getValue();
 
-			winMain.getAssemblyPanel().getController().doZoom();
+			winMain.getAssemblyPanel().forceRedraw();
 			winMain.getAssemblyPanel().repaint();
 		}
 	}
