@@ -19,15 +19,23 @@ public class TabletFile
 	private String assembly;
 	private String reference;
 	private String gff3;
+	private String contig;
+	private Integer position;
 
 	public TabletFile(AssemblyFile file)
 	{
 		this.file = file;
 	}
 
+	public String getContig()
+		{ return contig; }
+
+	public Integer getPosition()
+		{ return position; }
+
 	public String[] process(String[] filenames, int index)
 	{
-		System.out.println("TabletFile: " + file.getPath());
+		System.out.println("TabletFile:  " + file.getPath());
 
 		try
 		{
@@ -61,14 +69,37 @@ public class TabletFile
 				Node node = list.item(0);
 				gff3 = node.getTextContent();
 			}
+
+
+			// Contig name (if any)
+			list = doc.getElementsByTagName("contig");
+			if (list.getLength() == 1)
+			{
+				Node node = list.item(0);
+				contig = node.getTextContent();
+			}
+
+
+			// Position within the contig (if any)
+			list = doc.getElementsByTagName("position");
+			if (list.getLength() == 1)
+			{
+				Node node = list.item(0);
+
+				try { position = Integer.parseInt(node.getTextContent()); }
+				catch (Exception e) {}
+			}
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 
-		System.out.println("Assembly:  " + assembly);
-		System.out.println("Reference: " + reference);
+		System.out.println("- Assembly:  " + (assembly != null ? assembly : ""));
+		System.out.println("- Reference: " + (reference != null ? reference : ""));
+		System.out.println("- GFF3:      " + (gff3 != null ? gff3 : ""));
+		System.out.println("- Contig:    " + (contig != null ? contig : ""));
+		System.out.println("- Position:  " + (position != null ? position : ""));
 
 		// Convert the original array of filenames into a workable list
 		ArrayList<String> list = new ArrayList<String>();
@@ -85,7 +116,6 @@ public class TabletFile
 			list.add(reference);
 		if (gff3 != null)
 			list.add(gff3);
-
 
 		return list.toArray(filenames);
 	}

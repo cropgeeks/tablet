@@ -23,6 +23,7 @@ public class Commands
 	private WinMain winMain;
 
 	private AssemblyFile[] files;
+	private TabletFile tabletFile;
 	private boolean hasAssembly;
 
 	Commands(WinMain winMain)
@@ -37,8 +38,6 @@ public class Commands
 
 		for (int i=0; i < filenames.length; i++)
 		{
-			System.out.println("i now " + i + " of " + filenames.length);
-
 			files[i] = new AssemblyFile(filenames[i]);
 			files[i].canDetermineType();
 
@@ -49,7 +48,8 @@ public class Commands
 			if (files[i].isTabletFile())
 			{
 				// Get a new list of files...
-				filenames = new TabletFile(files[i]).process(filenames, i);
+				tabletFile = new TabletFile(files[i]);
+				filenames = tabletFile.process(filenames, i);
 				// And call this method again to process it
 				checkFiles(filenames);
 				return;
@@ -97,6 +97,19 @@ public class Commands
 			for (AssemblyFile file: files)
 				if (file.getType() == AssemblyFile.GFF3)
 					importFeatures(file.getPath(), !hasAssembly);
+
+
+		// Do any further TabletFile post-load operations (eg, jump to contig)
+		if (tabletFile != null)
+		{
+			String contig = tabletFile.getContig();
+			Integer position = tabletFile.getPosition();
+
+			if (contig != null)
+				winMain.getContigsPanel().moveToContigPosition(contig, position-1);
+
+			tabletFile = null;
+		}
 	}
 
 	private boolean openAssembly(AssemblyFile[] files)
