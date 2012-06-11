@@ -7,7 +7,6 @@ import java.awt.*;
 
 import tablet.data.*;
 import tablet.data.auxiliary.*;
-import tablet.gui.*;
 import tablet.gui.viewer.colors.*;
 
 /**
@@ -19,7 +18,6 @@ class OutlinerOverlay implements IOverlayRenderer
 	private ReadsCanvas rCanvas;
 
 	private Read read;
-	private int readS, readE;
 	private int lineIndex;
 
 	OutlinerOverlay(AssemblyPanel aPanel)
@@ -31,13 +29,6 @@ class OutlinerOverlay implements IOverlayRenderer
 	{
 		this.read = read;
 		this.lineIndex = lineIndex;
-
-		if (read != null)
-		{
-			// Start and ending positions (against consensus)
-			readS = read.s();
-			readE = read.e();
-		}
 	}
 
 	public void render(Graphics2D g)

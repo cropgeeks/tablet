@@ -32,13 +32,6 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 		if(!isValidOutline())
 			return;
 
-		// Remember the current stroke so it can be reset afterwards
-		Stroke oldStroke = g.getStroke();
-
-		// Set the outline width based on the zoom level
-		if (Prefs.visReadsZoomLevel > 15)
-			g.setStroke(new BasicStroke(2));
-
 		// If the reads are on the row, draw a line connecting them
 		if(lineIndex == mateLineIndex && Prefs.visPaired)
 			renderLinkLine(g);
@@ -48,8 +41,6 @@ public class PairOutlinerOverlay implements IOverlayRenderer
 		// Draw outlines around the reads in the pair
 		renderReadOutline(readA, lineIndex, g);
 		renderReadOutline(readB, mateLineIndex, g);
-
-		g.setStroke(oldStroke);
 	}
 
 	private void renderLinkLine(Graphics2D g)
