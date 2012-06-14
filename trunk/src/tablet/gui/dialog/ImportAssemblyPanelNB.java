@@ -48,12 +48,12 @@ class ImportAssemblyPanelNB extends JPanel implements DocumentListener
 		bBrowse2.addActionListener(parent);
 		exampleLabel.addActionListener(parent);
 
-		file1Combo.setHistory(Prefs.assRecentDocs);
-		file2Combo.setHistory(Prefs.refRecentDocs);
+		file1Combo.setHistory(TabletFileHandler.getAssemblyHistory());
+		file2Combo.setHistory(TabletFileHandler.getReferenceHistory());
 		file1Combo.setPrototypeDisplayValue("");
 		file2Combo.setPrototypeDisplayValue("");
 
-		if (Prefs.refNotUsed)
+		if (TabletFileHandler.mruHasReference() == false)
 			((JTextComponent) file2Combo.getEditor().getEditorComponent()).setText("");
 
 		doc1 = ((JTextComponent) file1Combo.getEditor().getEditorComponent()).getDocument();

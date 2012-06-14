@@ -12,13 +12,14 @@ import javax.swing.*;
 import scri.commons.gui.*;
 
 import tablet.gui.*;
+import tablet.io.*;
 
 public class ExampleDatasetDialog extends JDialog implements ActionListener
 {
 	private ExampleDatasetPanelNB panel;
 	private Properties properties;
 	private JButton bClose, bLoad;
-	private String[] filenames;
+	private TabletFile tabletFile;
 
 	public ExampleDatasetDialog()
 	{
@@ -138,19 +139,21 @@ public class ExampleDatasetDialog extends JDialog implements ActionListener
 		String referenceFile = getValueElement("ref_file");
 		if (referenceFile == null)
 		{
-			filenames = new String[1];
+			String[] filenames = new String[1];
 			filenames[0] = assemblyFile;
+			tabletFile = TabletFileHandler.createFromFileList(filenames);
 		}
 		else
 		{
-			filenames = new String[2];
+			String[] filenames = new String[2];
 			filenames[0] = assemblyFile;
 			filenames[1] = referenceFile;
+			tabletFile = TabletFileHandler.createFromFileList(filenames);
 		}
 	}
 
-	public String[] getFilenames()
-		{ return filenames; }
+	public TabletFile getTabletFile()
+		{ return tabletFile; }
 
 	public void actionPerformed(ActionEvent e)
 	{

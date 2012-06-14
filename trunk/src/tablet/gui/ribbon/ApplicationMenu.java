@@ -11,6 +11,7 @@ import javax.swing.*;
 import tablet.gui.dialog.*;
 import tablet.gui.dialog.prefs.*;
 import tablet.gui.*;
+import tablet.io.*;
 
 import org.jvnet.flamingo.common.*;
 import org.jvnet.flamingo.common.JCommandButton.CommandButtonKind;
@@ -179,27 +180,19 @@ public class ApplicationMenu extends RibbonApplicationMenu
 		recentPanel.addButtonGroup(groupName);
 
 		// Parse the list of recent documents
-		for (final String path: Prefs.guiRecentDocs)
+		for (final TabletFile tabletFile: TabletFileHandler.recentFiles)
 		{
-			// Ignore any that haven't been set yet
-			if (path == null || path.equals(" "))
-				continue;
+			// Button text will be "name" (or "name1" ~ "name2")
+			String text = tabletFile.assembly.getName();
+			String tooltip = tabletFile.assembly.getPath();
 
-			// Split multi-file inputs
-			final String[] paths = path.split("<!TABLET!>");
-
-			File[] files = new File[paths.length];
-			for (int i = 0; i < files.length; i++)
-				files[i] = new File(paths[i]);
-
-			// Button text will be "name" (or "name1" | "name2")
-			String text = files[0].getName();
-			String tooltip = files[0].getPath();
-			for (int i = 1; i < files.length; i++)
+			if (tabletFile.hasReference())
 			{
-				text += "  ~  " + files[i].getName();
-				tooltip += "\n" + files[i].getPath();
+				text += "  ~  " + tabletFile.reference.getName();
+				tooltip += "\n" + tabletFile.reference.getPath();
 			}
+			for (AssemblyFile annotation: tabletFile.annotations)
+				tooltip += "\n" + annotation.getPath();
 
 
 			// Make the button
@@ -216,7 +209,7 @@ public class ApplicationMenu extends RibbonApplicationMenu
 			// And give it an action
 			button.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
-					winMain.getCommands().fileOpen(paths);
+					winMain.getCommands().fileOpen(tabletFile);
 				}
 			});
 		}

@@ -12,6 +12,7 @@ import javax.swing.*;
 import tablet.gui.dialog.*;
 import tablet.gui.ribbon.*;
 import tablet.gui.viewer.colors.*;
+import tablet.io.*;
 
 import scri.commons.gui.*;
 import scri.commons.file.*;
@@ -21,6 +22,7 @@ import apple.dts.samplecode.osxadapter.*;
 public class Tablet implements Thread.UncaughtExceptionHandler
 {
 	private static File prefsFile = getPrefsFile();
+	private static File mruFile;
 	private static Prefs prefs = new Prefs();
 
 	public static WinMain winMain;
@@ -32,7 +34,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 	public static int menuShortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 	public static String winKey;
 
-	private static String contig = "";
+	private static String contig = null;
 	private static Integer position = null;
 
 	public static void main(String[] args)
@@ -48,10 +50,14 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 			+ System.getProperty("os.name")	+ " (" + System.getProperty("os.arch") + ")");
 		System.out.println("Using " + prefsFile);
 
+		mruFile = new File(prefsFile.getParent(), "tablet-recent.xml");
+		TabletFileHandler.loadMRUList(mruFile);
+
 		ColorPrefs.load();
 		prefs.loadPreferences(prefsFile, Prefs.class);
 		prefs.savePreferences(prefsFile, Prefs.class);
 		prefs.setVariables();
+
 
 		Icons.initialize("/res/icons", ".png");
 		RB.initialize(Prefs.localeText, "res.text.tablet");
@@ -165,12 +171,13 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 				// Do we want to open an initial project?
 				if (initialFiles != null)
 				{
-					winMain.getCommands().fileOpen(initialFiles);
+					// Create a TabletFile object from the command line args
+					TabletFile tabletFile = TabletFileHandler.createFromFileList(initialFiles);
+					// And also add in any contig:position arguments too
+					tabletFile.contig = contig;
+					tabletFile.position = position;
 
-					// If the contig argument was provided attempt to set this
-					// as the displayed contig
-					if (contig.length() > 0)
-						winMain.getContigsPanel().moveToContigPosition(contig, position-1);
+					winMain.getCommands().fileOpen(tabletFile);
 				}
 			}
 
@@ -197,6 +204,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		Prefs.isFirstRun = false;
 		prefs.savePreferences(prefsFile, Prefs.class);
 		ColorPrefs.save();
+		TabletFileHandler.saveMRUList(mruFile);
 
 		System.exit(0);
 	}
@@ -308,7 +316,9 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		if (winMain != null && winMain.isVisible())
 		{
 			// TODO: If we have project modified checks, do them here too
-			winMain.getCommands().fileOpen(new String[] { path });
+			TabletFile tabletFile =
+				TabletFileHandler.createFromFileList(new String[] { path });
+			winMain.getCommands().fileOpen(tabletFile);
 		}
 
 		// Otherwise, mark it for opening once Tablet is ready

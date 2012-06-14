@@ -50,6 +50,14 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 		}
 	}
 
+	public boolean equals(Object obj)
+	{
+		if (obj == null || obj.getClass() != getClass())
+            return false;
+
+		return ((AssemblyFile)obj).getPath().equals(getPath());
+	}
+
 	public int getType()
 		{ return type; }
 
@@ -68,6 +76,11 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 	public boolean isTabletFile()
 	{
 		return type == TABLET;
+	}
+
+	public boolean isAnnotationFile()
+	{
+		return type == GFF3;
 	}
 
 	public String getName()
