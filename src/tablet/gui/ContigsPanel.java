@@ -169,13 +169,15 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		}
 	}
 
+	// ONLY TO BE USED BY POST_LOAD OPERATIONS - otherwise tweaks will need to be
+	// made to cope with position-1.
 	public void moveToContigPosition(String contigName, Integer position)
 	{
 		setContigInTable(contigName);
 
 		// If we can, move to the position within the contig and highlight it
 		if (position != null)
-			winMain.getAssemblyPanel().highlightColumn(position);
+			winMain.getAssemblyPanel().highlightColumn(position-1);
 	}
 
 	public void setDisplayedContig(Contig contig)

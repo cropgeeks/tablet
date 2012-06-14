@@ -53,9 +53,6 @@ public class Prefs extends XMLPreferences
 	// The last used directory location in file chooser dialogs
 	public static String guiCurrentDir = "";
 
-	// A list of previously accessed documents
-	public static String[] guiRecentDocs = new String[10];
-
 	// Prompt for okToClose messages?
 	public static boolean guiWarnOnClose = true;
 	public static boolean guiWarnOnExit = true;
@@ -66,12 +63,6 @@ public class Prefs extends XMLPreferences
 	// Warn when SAM/BAM expected reference lengths don't match what's provided
 	public static boolean guiWarnRefLengths = true;
 
-	// A list of previously accessed assembly documents
-	public static String assRecentDocs = "";
-	// A list of previously accessed referebce documents
-	public static String refRecentDocs = "";
-	// Was a selection made from the reference file
-	public static boolean refNotUsed = true;
 	public static boolean guiWarnNoRef = true;
 
 	public static String guiScannerRecent = "";
@@ -185,27 +176,6 @@ public class Prefs extends XMLPreferences
 
 	public static int snapshotDelay = 2000;
 
-	// Updates the array of recently accessed documents so that 'document' is
-	// the first element, even if it has been accessed previously
-	public static void setRecentDocument(AssemblyFile[] files)
-	{
-		// Convert the array of files back into a single string
-		String mostRecent = files[0].getPath();
-		for (int i = 1; i < files.length; i++)
-			mostRecent += "<!TABLET!>" + files[i].getPath();
-
-		LinkedList<String> list = new LinkedList<String>();
-		for (String file: guiRecentDocs)
-			list.add(file);
-
-		if (list.contains(mostRecent))
-			list.remove(mostRecent);
-
-		list.addFirst(mostRecent);
-
-		for (int i = 0; i < guiRecentDocs.length; i++)
-			guiRecentDocs[i] = list.get(i);
-	}
 
 	// Sets some static variables within other classes to their correct values.
 	// Done for classes that we'd prefer not to have direct access to Prefs.

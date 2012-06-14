@@ -10,6 +10,7 @@ import javax.swing.*;
 import javax.swing.filechooser.*;
 
 import tablet.gui.*;
+import tablet.io.*;
 
 import scri.commons.gui.*;
 import scri.commons.gui.matisse.*;
@@ -24,9 +25,9 @@ public class ImportAssemblyDialog extends JDialog
 	private JButton bCancel, bHelp, bOpen;
 
 	private ImportAssemblyPanelNB nbPanel;
-
-	private String[] filenames;
 	private boolean useExamples;
+
+	private TabletFile tabletFile;
 
 	public ImportAssemblyDialog()
 	{
@@ -88,11 +89,13 @@ public class ImportAssemblyDialog extends JDialog
 		};
 	}
 
-	public String[] getFilenames()
-		{ return filenames; }
-
 	public boolean useExamples()
 		{ return useExamples; }
+
+	public TabletFile getTabletFile()
+	{
+		return tabletFile;
+	}
 
 	public void actionPerformed(ActionEvent e)
 	{
@@ -107,24 +110,18 @@ public class ImportAssemblyDialog extends JDialog
 
 			if (nbPanel.isUsingReference())
 			{
-				filenames = new String[] {
+				String[] filenames = new String[] {
 					nbPanel.file1Combo.getText(),
 					nbPanel.file2Combo.getText() };
-				Prefs.refNotUsed = false;
+				tabletFile = TabletFileHandler.createFromFileList(filenames);
 			}
 			else
 			{
-				filenames = new String[] { nbPanel.file1Combo.getText() };
-				Prefs.refNotUsed = true;
+				String[] filenames = new String[] { nbPanel.file1Combo.getText() };
+				tabletFile = TabletFileHandler.createFromFileList(filenames);
 			}
 
-			if (filenames != null)
-			{
-				Prefs.assRecentDocs = nbPanel.file1Combo.getHistory();
-				Prefs.refRecentDocs = nbPanel.file2Combo.getHistory();
-
-				setVisible(false);
-			}
+			setVisible(false);
 		}
 
 		else if (e.getSource() == nbPanel.bBrowse1)

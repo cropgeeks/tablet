@@ -18,7 +18,7 @@ public class StartPanelFileNB extends javax.swing.JPanel implements ActionListen
 {
 	private HyperLinkLabel[] labels = new HyperLinkLabel[10];
 
-	private String[] files = new String[10];
+	private TabletFile[] files = new TabletFile[10];
 	private String[] filenames = new String[10];
 	private String[] tooltips = new String[10];
 
@@ -43,34 +43,30 @@ public class StartPanelFileNB extends javax.swing.JPanel implements ActionListen
 
 		int j=0;
 		// Parse the list of recent documents
-		for (final String path: Prefs.guiRecentDocs)
+		for (final TabletFile tabletFile: TabletFileHandler.recentFiles)
 		{
-			// Ignore any that haven't been set yet
-			if (path == null || path.equals(" "))
-				continue;
+			// Button text will be "name" (or "name1" ~ "name2")
+			String text = tabletFile.assembly.getName();
+			String tooltip = tabletFile.assembly.getPath();
 
-			// Split multi-file inputs
-			final String[] paths = path.split("<!TABLET!>");
-
-			AssemblyFile[] tempFiles = new AssemblyFile[paths.length];
-			for (int i = 0; i < tempFiles.length; i++)
-				tempFiles[i] = new AssemblyFile(paths[i]);
-
-			// Button text will be "name" (or "name1" | "name2")
-			String text = tempFiles[0].getName();
-			String filePath = tempFiles[0].getPath();
-			String tooltip = tempFiles[0].getPath();
-			for (int i = 1; i < tempFiles.length; i++)
+			if (tabletFile.hasReference())
 			{
-				text += "&nbsp;&nbsp;~&nbsp;&nbsp;" + tempFiles[i].getName();
-				filePath += " ~ " + tempFiles[i].getPath();
-				tooltip += "<br>" + tempFiles[i].getPath();
+				text += "&nbsp;&nbsp;~&nbsp;&nbsp;" + tabletFile.reference.getName();
+				tooltip += "<br>" + tabletFile.reference.getPath();
+			}
+			for (AssemblyFile annotation: tabletFile.annotations)
+				tooltip += "<br>" + annotation.getPath();
+			if (tabletFile.contig != null)
+			{
+				tooltip += "<br>" + tabletFile.contig;
+				if (tabletFile.position != null)
+					tooltip += ":" + TabletUtils.nf.format(tabletFile.position);
 			}
 
 			if(j < filenames.length)
 			{
 				filenames[j] = text;
-				files[j] = filePath;
+				files[j] = tabletFile;
 				tooltips[j] = tooltip;
 			}
 			else
@@ -106,14 +102,14 @@ public class StartPanelFileNB extends javax.swing.JPanel implements ActionListen
 	{
 		WinMain wm = Tablet.winMain;
 
-		if(e.getSource() == importLabel)
+		if (e.getSource() == importLabel)
 		{
 			wm.getCommands().fileOpen(null);
 		}
 
 		for (int i = 0; i < labels.length; i++)
 			if (e.getSource() == labels[i])
-				wm.getCommands().fileOpen(files[i].split(" ~ "));
+				wm.getCommands().fileOpen(files[i]);
 	}
 
     /** This method is called from within the constructor to

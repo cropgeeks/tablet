@@ -12,111 +12,73 @@ import org.w3c.dom.*;
  * Represents a .tablet file, that is a simple xml wrapper around actual
  * references to assembly, reference, feature, etc files or URLs.
  */
-public class TabletFile
+public class TabletFile //implements Comparable<TabletFile>
 {
-	private AssemblyFile file;
+	public AssemblyFile assembly;
+	public AssemblyFile reference;
+	public ArrayList<AssemblyFile> annotations = new ArrayList<AssemblyFile>();
+	public String contig;
+	public Integer position;
 
-	private String assembly;
-	private String reference;
-	private String gff3;
-	private String contig;
-	private Integer position;
+	public boolean hasDeterminedTypes = false;
 
-	public TabletFile(AssemblyFile file)
+	// Keep with default access so the GUI code can't make a TabletFile object
+	// as we always want to create them via TabletFileHandler instead
+	TabletFile()
 	{
-		this.file = file;
 	}
 
-	public String getContig()
-		{ return contig; }
+	public boolean hasAssembly()
+		{ return assembly != null; }
 
-	public Integer getPosition()
-		{ return position; }
+	public boolean hasReference()
+		{ return reference != null; }
 
-	public String[] process(String[] filenames, int index)
+	public boolean hasAnnotations()
+		{ return annotations.size() > 0; }
+
+	public AssemblyFile[] getFileList()
 	{
-		System.out.println("TabletFile:  " + file.getPath());
+		ArrayList<AssemblyFile> list = new ArrayList<AssemblyFile>();
 
-		try
-		{
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(file.getInputStream());
-			doc.getDocumentElement().normalize();
-
-			NodeList list = doc.getElementsByTagName("assembly");
-			// For now, we are assuming only one assembly element
-			if (list.getLength() == 1)
-			{
-				Node node = list.item(0);
-				assembly = node.getTextContent();
-			}
-
-
-			list = doc.getElementsByTagName("reference");
-			// For now, we are assuming only one reference element
-			if (list.getLength() == 1)
-			{
-				Node node = list.item(0);
-				reference = node.getTextContent();
-			}
-
-
-			list = doc.getElementsByTagName("gff3");
-			// For now, we are assuming only one gff3 element
-			if (list.getLength() == 1)
-			{
-				Node node = list.item(0);
-				gff3 = node.getTextContent();
-			}
-
-
-			// Contig name (if any)
-			list = doc.getElementsByTagName("contig");
-			if (list.getLength() == 1)
-			{
-				Node node = list.item(0);
-				contig = node.getTextContent();
-			}
-
-
-			// Position within the contig (if any)
-			list = doc.getElementsByTagName("position");
-			if (list.getLength() == 1)
-			{
-				Node node = list.item(0);
-
-				try { position = Integer.parseInt(node.getTextContent()); }
-				catch (Exception e) {}
-			}
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
-
-		System.out.println("- Assembly:  " + (assembly != null ? assembly : ""));
-		System.out.println("- Reference: " + (reference != null ? reference : ""));
-		System.out.println("- GFF3:      " + (gff3 != null ? gff3 : ""));
-		System.out.println("- Contig:    " + (contig != null ? contig : ""));
-		System.out.println("- Position:  " + (position != null ? position : ""));
-
-		// Convert the original array of filenames into a workable list
-		ArrayList<String> list = new ArrayList<String>();
-		for (String filename: filenames)
-			list.add(filename);
-
-		// Remove the TabletFile from it
-		list.remove(index);
-
-		// Now add whatever files the TabletFile referenced within it
 		if (assembly != null)
 			list.add(assembly);
 		if (reference != null)
 			list.add(reference);
-		if (gff3 != null)
-			list.add(gff3);
+		for (AssemblyFile annotation: annotations)
+			list.add(annotation);
 
-		return list.toArray(filenames);
+		return list.toArray(new AssemblyFile[] {});
+	}
+
+	public void determineFileTypes()
+	{
+		if (assembly != null)
+			assembly.canDetermineType();
+		if (reference != null)
+			reference.canDetermineType();
+		for (AssemblyFile annotation: annotations)
+			annotation.canDetermineType();
+	}
+
+	public boolean equals(Object obj)
+	{
+		if (obj == null || obj.getClass() != getClass())
+            return false;
+
+		TabletFile o = (TabletFile) obj;
+
+		if ((assembly == null ? o.assembly == null : assembly.equals(o.assembly)) == false)
+			return false;
+		if ((reference == null ? o.reference == null : reference.equals(o.reference)) == false)
+			return false;
+		if (annotations.equals(o.annotations) == false)
+			return false;
+		if ((contig == null ? o.contig == null : contig.equals(o.contig)) == false)
+			return false;
+		if ((position == null ? o.position == null : position.equals(o.position)) == false)
+			return false;
+
+		return true;
 	}
 }

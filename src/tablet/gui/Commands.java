@@ -31,93 +31,59 @@ public class Commands
 		this.winMain = winMain;
 	}
 
-	private void checkFiles(String[] filenames)
+	public void fileOpen(TabletFile tabletFile)
 	{
-		// Now that we have filenames, convert them into AssemblyFile objects
-		files = new AssemblyFile[filenames.length];
-
-		for (int i=0; i < filenames.length; i++)
+		if (tabletFile != null)
 		{
-			files[i] = new AssemblyFile(filenames[i]);
-			files[i].canDetermineType();
+			if (tabletFile.hasDeterminedTypes == false)
+				tabletFile.determineFileTypes();
 
-			if (files[i].isAssemblyFile())
-				hasAssembly = true;
-
-			// Special processing for a .tablet file
-			if (files[i].isTabletFile())
-			{
-				// Get a new list of files...
-				tabletFile = new TabletFile(files[i]);
-				filenames = tabletFile.process(filenames, i);
-				// And call this method again to process it
-				checkFiles(filenames);
+			if (tabletFile.hasAssembly() && winMain.okToExit(true) == false)
 				return;
-			}
 		}
 
-		Arrays.sort(files);
-	}
-
-	public void fileOpen(String[] filenames)
-	{
-		hasAssembly = false;
-
-		if (filenames != null)
-			checkFiles(filenames);
-
-		if (hasAssembly && winMain.okToExit(true) == false)
-			return;
-
 		// If no file was passed in then we need to prompt the user to pick one
-		if (filenames == null)
+		if (tabletFile == null)
 		{
 			ImportAssemblyDialog importDialog = new ImportAssemblyDialog();
 
 			if (importDialog.useExamples())
 			{
 				ExampleDatasetDialog exampleDialog = new ExampleDatasetDialog();
-				if((filenames = exampleDialog.getFilenames()) == null)
+				if ((tabletFile = exampleDialog.getTabletFile()) == null)
 					return;
 			}
 
-			else if ((filenames = importDialog.getFilenames()) == null)
+			else if ((tabletFile = importDialog.getTabletFile()) == null)
 				return;
-
-			checkFiles(filenames);
 		}
 
+
 		// Attempt to open the assembly
-		if (hasAssembly)
-			if (openAssembly(files) == false)
+		if (tabletFile.hasAssembly())
+			if (openAssembly(tabletFile) == false)
 				return;
 
 		// Attempt to open any GFF files (if an assembly is loaded)
 		if (winMain.getAssemblyPanel().getAssembly() != null)
-			for (AssemblyFile file: files)
-				if (file.getType() == AssemblyFile.GFF3)
-					importFeatures(file.getPath(), !hasAssembly);
+			for (AssemblyFile annotation: tabletFile.annotations)
+				importFeatures(annotation.getPath(), !tabletFile.hasAssembly());
 
 
 		// Do any further TabletFile post-load operations (eg, jump to contig)
-		if (tabletFile != null)
-		{
-			String contig = tabletFile.getContig();
-			Integer position = tabletFile.getPosition();
-
-			if (contig != null)
-				winMain.getContigsPanel().moveToContigPosition(contig, position-1);
-
-			tabletFile = null;
-		}
+		if (tabletFile.contig != null)
+			winMain.getContigsPanel().moveToContigPosition(tabletFile.contig, tabletFile.position);
 	}
 
-	private boolean openAssembly(AssemblyFile[] files)
+	private boolean openAssembly(TabletFile tabletFile)
 	{
 		winMain.closeAssembly();
 		System.gc();
 
-		AssemblyFileHandler assemblyFileHandler = new AssemblyFileHandler(files, new File(Prefs.cacheDir));
+		AssemblyFile[] files = tabletFile.getFileList();
+
+		AssemblyFileHandler assemblyFileHandler = new AssemblyFileHandler(
+			files, new File(Prefs.cacheDir));
 
 
 		String title = RB.getString("gui.Commands.fileOpen.title");
@@ -141,7 +107,7 @@ public class Commands
 			return false;
 		}
 
-		Prefs.setRecentDocument(files);
+		TabletFileHandler.addAsMostRecent(tabletFile);
 		winMain.setAssembly(assemblyFileHandler.getAssembly());
 
 

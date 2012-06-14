@@ -7,6 +7,8 @@ import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import java.util.*;
 
+import tablet.io.*;
+
 class FileDropAdapter extends DropTargetAdapter
 {
 	private WinMain winMain;
@@ -36,9 +38,12 @@ class FileDropAdapter extends DropTargetAdapter
 					for (int fn = 0; fn < filenames.length; fn++)
 						filenames[fn] = list.get(fn).toString();
 
-					winMain.getCommands().fileOpen(filenames);
-					dtde.dropComplete(true);
+					// Parse the list of filenames and turn them into a usable
+					// TabletFile object that encapsulates this information
+					TabletFile tabletFile = TabletFileHandler.createFromFileList(filenames);
+					winMain.getCommands().fileOpen(tabletFile);
 
+					dtde.dropComplete(true);
 					return;
 				}
 			}
