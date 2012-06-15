@@ -204,7 +204,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 			}
 			catch (Exception e)
 			{
-				TaskDialog.error(e.getMessage(), RB.getString("gui.findPanel.fileNotFound"));
+				TaskDialog.error(e.getMessage(), RB.getString("gui.FindPanel.fileNotFound"));
 			}
 		}
 	}
@@ -228,7 +228,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 	{
 		if(Prefs.guiFindPanelSearchCurrentContig && aPanel.getContig() == null)
 		{
-			TaskDialog.error(RB.getString("gui.findPanel.noContigError"),
+			TaskDialog.error(RB.getString("gui.FindPanel.noContigError"),
 				RB.getString("gui.text.close"));
 			return;
 		}
