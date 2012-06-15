@@ -280,10 +280,10 @@ public class Finder extends SimpleJob
 	{
 		if (Prefs.guiWarnSearchLimitExceeded)
 		{
-			String msg = RB.format("gui.findPanel.guiWarnSearchLimitExceeded",
+			String msg = RB.format("gui.FindPanel.guiWarnSearchLimitExceeded",
 				Prefs.guiSearchLimit);
 			JCheckBox checkbox = new JCheckBox();
-			RB.setText(checkbox, "gui.findPanel.checkWarning");
+			RB.setText(checkbox, "gui.FindPanel.checkWarning");
 			String[] options = new String[]{RB.getString("gui.text.ok")};
 			TaskDialog.show(msg, TaskDialog.QST, 0, checkbox, options);
 			Prefs.guiWarnSearchLimitExceeded = !checkbox.isSelected();
