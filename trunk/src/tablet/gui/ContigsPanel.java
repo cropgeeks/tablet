@@ -304,9 +304,14 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 			return;
 		}
 
-		TaskDialog.info(
-			RB.format("gui.ContigsPanel.saveReads.success", filename),
-			RB.getString("gui.text.close"));
+		// Decide which message to display, based on whether we're dealing with
+		// a BAM assembly or not
+		String msg = "gui.ContigsPanel.saveReads.success";
+		if (aPanel.getAssembly().getBamBam() != null)
+			msg += "BAM";
+
+		TaskDialog.showFileOpen(
+			RB.format(msg, filename), TaskDialog.INF, new File(filename));
 	}
 
 	private void displayMenu(MouseEvent e)
