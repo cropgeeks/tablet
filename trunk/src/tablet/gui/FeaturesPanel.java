@@ -177,8 +177,8 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		}
 		else if(feature instanceof CigarFeature)
 		{
-			CigarFeature cigarFeature = (CigarFeature)feature;
-			int count = cigarFeature.getCount();
+			int count = ((CigarFeature)feature).getCount();
+
 			if (Prefs.guiFeaturesArePadded)
 			{
 				return RB.format("gui.FeaturesPanel.tooltip.padded.cigarFeature",

@@ -5,16 +5,14 @@ package tablet.gui.viewer;
 
 import java.awt.*;
 import java.awt.datatransfer.*;
-import java.awt.image.*;
-import java.util.ArrayList;
-import javax.swing.*;
+import java.util.*;
 
 import tablet.data.*;
 import tablet.gui.*;
 
 import scri.commons.gui.*;
 import tablet.data.auxiliary.*;
-import tablet.data.auxiliary.CigarFeature.Insert;
+import tablet.data.auxiliary.CigarFeature.*;
 
 /** Manages and paints the advanced tool tips for the reads canvas. */
 class ReadsCanvasInfoPane
@@ -240,14 +238,14 @@ class ReadsCanvasInfoPane
 				continue;
 
 			CigarFeature cigarFeature = (CigarFeature) feature;
-			for (Insert insert : cigarFeature.getInserts())
+			for (CigarEvent insert : cigarFeature.getEvents())
 			{
 				if (insert.getRead().equals(read))
 				{
 					if (box.insertedBases == null)
-						box.insertedBases = insert.getInsertedBases();
+						box.insertedBases = ((CigarInsertEvent)insert).getInsertedBases();
 					else
-						box.insertedBases += " - " + insert.getInsertedBases();
+						box.insertedBases += " - " + ((CigarInsertEvent)insert).getInsertedBases();
 				}
 			}
 		}
