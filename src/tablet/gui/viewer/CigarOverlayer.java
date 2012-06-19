@@ -40,50 +40,62 @@ public class CigarOverlayer extends AlphaOverlay
 	{
 		VisualContig vContig = aPanel.getVisualContig();
 
-		float ntW = rCanvas._ntW;
 		int xS = rCanvas.getBaseForPixel(rCanvas.pX1);
 		int xE = rCanvas.getBaseForPixel(rCanvas.pX2);
 
-		Stroke oldStroke = g.getStroke();
+		g.setPaint(currentColor(Prefs.visReadsZoomLevel));
 
+		Stroke oldStroke = g.getStroke();
 
 		g.setPaint(currentColor(Prefs.visReadsZoomLevel));
 		// Set the outline width based on the zoom level
 		g.setStroke(calculateStroke(Prefs.visReadsZoomLevel, oldStroke));
 
+		ArrayList<Feature> cigarI = getTrackByName(vContig, "CIGAR-I", xS, xE);
+		renderCigar(cigarI, g);
+
+		ArrayList<Feature> cigarD = getTrackByName(vContig, "CIGAR-D", xS, xE);
+		g.setPaint(Color.BLUE);
+		renderCigar(cigarD, g);
+
+		g.setStroke(oldStroke);
+	}
+
+	private ArrayList<Feature> getTrackByName(VisualContig vContig, String name, int xS, int xE)
+	{
 		ArrayList<Feature> features = new ArrayList<Feature>();
 
 		for (int i=0; i < vContig.getTrackCount(); i++)
 		{
 			FeatureTrack track = vContig.getTrack(i);
-			if (track.getName().equals("CIGAR-I"))
+			if (track.getName().equals(name))
 				features = track.getFeatures(xS, xE);
 		}
 
+		return features;
+	}
+
+	private void renderCigar(ArrayList<Feature> features, Graphics2D g)
+	{
 		for (Feature feature : features)
 		{
-			CigarFeature cigarFeature = (CigarFeature)feature;
+			int base = feature.getVisualPS();
 
-			int insertBase = cigarFeature.getVisualPS()+1;
-
+			int start = rCanvas.getFirstRenderedPixel(base);
+			int end = rCanvas.getFinalRenderedPixel(feature.getVisualPE());
+			int length = end-start;
 			int yS = rCanvas.pY1 / rCanvas.ntH;
 			int yE = rCanvas.pY2 / rCanvas.ntH;
-			int ntH = rCanvas.ntH;
-
-			int start = rCanvas.getFirstRenderedPixel(insertBase-1);
-			int end = rCanvas.getFinalRenderedPixel(insertBase);
-			int length = end-start;
 
 			for (int row = yS; row <= yE; row++)
 			{
-				Read read = rCanvas.reads.getReadAt(row, insertBase);
+				Read read = rCanvas.reads.getReadAt(row, base);
 
-				for(Insert insert : cigarFeature.getInserts())
-					if(insert.getRead().equals(read))
-						g.drawRect(start, row*ntH, length, rCanvas.readH-1);
+				for(CigarEvent event : ((CigarFeature)feature).getEvents())
+					if(event.getRead().equals(read))
+						g.drawRect(start, row*rCanvas.ntH, length, rCanvas.readH-1);
 			}
 		}
-		g.setStroke(oldStroke);
 	}
 
 	@Override

@@ -3,11 +3,14 @@
 
 package tablet.io;
 
-import java.util.HashMap;
-import tablet.data.Read;
-import tablet.data.auxiliary.CigarFeature;
+import java.util.*;
 
-/**
+import tablet.data.*;
+import tablet.data.auxiliary.*;
+import tablet.gui.*;
+
+
+	/**
  * Class which contains the logic for parsing the CIGAR strings found in BAM to
  * give correct read strings and also an updated consensus sequence to reflect
  * any insertions which may have occurred.
@@ -17,9 +20,13 @@ public class CigarParser
 	private int position;
 	private int readPos;
 	private String currentContigName;
-	private HashMap<String, CigarFeature> featureMap = new HashMap<String, CigarFeature>();
-
-	boolean first = true;
+	private HashMap<String, CigarFeature> insertionMap;
+	private HashMap<String, CigarFeature> deletionMap;
+	private HashMap<String, CigarFeature> skippedMap;
+	private LinkedList<HashMap<String, CigarFeature>> featureMaps;
+	private static final String CIGAR_D = "CIGAR-D";
+	private static final String CIGAR_I = "CIGAR-I";
+	private static final String CIGAR_N = "CIGAR-N";
 
 	/**
 	 * Constructor for CIGAR parser. Takes the reference sequence that was passed
@@ -29,22 +36,26 @@ public class CigarParser
 	 */
 	public CigarParser()
 	{
+		setup();
 	}
 
 	CigarParser(String currentContigName)
 	{
 		this.currentContigName = currentContigName;
+		setup();
 	}
 
-	/**
-	 * The method to call when attempting to parse a CIGAR string.
-	 *
-	 * @param readString The read string as presented in BAM.
-	 * @param position the position given by BAM.
-	 * @param cigarString the CIGAR string to decode.
-	 * @return
-	 * @throws Exception
-	 */
+	private void setup()
+	{
+		insertionMap = new HashMap<String, CigarFeature>();
+		deletionMap = new HashMap<String, CigarFeature>();
+		skippedMap = new HashMap<String, CigarFeature>();
+		featureMaps = new LinkedList<HashMap<String, CigarFeature>>();
+		featureMaps.add(insertionMap);
+		featureMaps.add(deletionMap);
+		featureMaps.add(skippedMap);
+	}
+
 	public String parse(String readString, int position, String cigarString, Read read)
 		throws Exception
 	{
@@ -97,11 +108,11 @@ public class CigarParser
 							readString = processInsertion(operationLength, readString, read);
 							break;
 						case 'D':
-							builder.append(processDeletion(operationLength));
+							builder.append(processDeletion(operationLength, read));
 							readPos += operationLength;
 							break;
 						case 'N':
-							builder.append(processSkipped(operationLength));
+							builder.append(processSkipped(operationLength, read));
 							readPos += operationLength;
 							break;
 						case 'S':
@@ -129,30 +140,23 @@ public class CigarParser
 		throws Exception
 	{
 		String insertion = new String(readString.substring(0, operationLength));
-		String hashMap = currentContigName + "Tablet-Separator" + readPos;
-		if(featureMap.get(hashMap) == null)
-		{
-			CigarFeature cigarFeature = new CigarFeature("CIGAR-I", "", readPos-1, readPos);
-			cigarFeature.addInsert(read, insertion);
-			featureMap.put(hashMap, cigarFeature);
-		}
-		else
-		{
-			CigarFeature cigarFeature = featureMap.get(hashMap);
-			cigarFeature.addInsert(read, insertion);
-			featureMap.put(hashMap, cigarFeature);
-		}
+		CigarEvent event = new CigarInsertEvent(read, insertion);
+		addCigarEventToMap(insertionMap, CIGAR_I, operationLength, event);
+
 		return new String(readString.substring(operationLength));
 	}
 
-	private String processDeletion(int operationLength)
+	private String processDeletion(int operationLength, Read read)
 		throws Exception
 	{
 		StringBuilder pad = new StringBuilder();
+
 		for(int i=0; i < operationLength; i++)
-		{
 			pad.append('*');
-		}
+
+		CigarEvent event = new CigarEvent(read);
+		addCigarEventToMap(deletionMap, CIGAR_D, operationLength, event);
+
 		return pad.toString();
 	}
 
@@ -160,9 +164,8 @@ public class CigarParser
 	{
 		StringBuilder pad = new StringBuilder();
 		for(int i=0; i < operationLength; i++)
-		{
 			pad.append('*');
-		}
+
 		return pad.toString();
 	}
 
@@ -172,38 +175,70 @@ public class CigarParser
 		return new String(read.substring(operationLength));
 	}
 
-	private String processSkipped(int operationLength)
+	private String processSkipped(int operationLength, Read read)
 		throws Exception
 	{
 		StringBuilder skip = new StringBuilder();
 		for(int i=0; i < operationLength; i++)
-		{
 			skip.append('N');
-		}
+
+		CigarEvent event = new CigarEvent(read);
+		addCigarEventToMap(skippedMap, CIGAR_N, operationLength, event);
+
 		return skip.toString();
 	}
 
-	/**
-	 * @return the position
-	 */
-	public int getPosition()
+	private void addCigarEventToMap(HashMap<String, CigarFeature> map, String cigarType, int operationLength, CigarEvent event)
 	{
-		return position;
+		String key = currentContigName + "Tablet-Separator" + readPos + "-" + operationLength;
+		CigarFeature feature;
+		if (cigarType.equals(CIGAR_I))
+			feature = new CigarFeature(cigarType, "", readPos-1, readPos);
+		else
+			feature = new CigarFeature(cigarType, "", readPos, readPos + operationLength - 1);
+
+		// If a map contains a key, get and update the corresponding value. Otherwise
+		// add this key and new value to the map. Method created to minimise repetition
+		// of code for processing inserts, deletions and skips.
+		if(map.get(key) == null)
+		{
+			feature.addEvent(event);
+			map.put(key, feature);
+		}
+		else
+		{
+			CigarFeature cigarFeature = map.get(key);
+			cigarFeature.addEvent(event);
+			map.put(key, cigarFeature);
+		}
 	}
 
-	public String getCurrentContigName()
+	void processCigarFeatures(Contig contig)
 	{
-		return currentContigName;
+		for (HashMap<String, CigarFeature> map : featureMaps)
+		{
+			for (String feature : map.keySet())
+			{
+				CigarFeature cigarFeature = map.get(feature);
+
+				if (cigarFeature.getCount() >= Prefs.visCigarInsertMinimum)
+					if (contig.addFeature(cigarFeature))
+						cigarFeature.verifyType();
+			}
+		}
 	}
+
+	public int getPosition()
+		{ return position; }
+
+	public String getCurrentContigName()
+		{ return currentContigName; }
 
 	public void setCurrentContigName(String currentContigName)
 	{
 		this.currentContigName = currentContigName;
 	}
 
-	public HashMap<String, CigarFeature> getFeatureMap()
-	{
-		return featureMap;
-	}
-
+	LinkedList<HashMap<String, CigarFeature>> getFeatureMaps()
+		{ return featureMaps; }
 }

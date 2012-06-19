@@ -375,10 +375,19 @@ class SamFileReader extends TrackableReader
 	private void processCigarFeatures(CigarParser parser)
 		throws Exception
 	{
-		for (String feature : parser.getFeatureMap().keySet())
+		for (HashMap<String, CigarFeature> map : parser.getFeatureMaps())
+			processFeaturesForMap(map, parser);
+
+		for (Contig contig: assembly)
+			Collections.sort(contig.getFeatures());
+	}
+
+	private void processFeaturesForMap(HashMap<String, CigarFeature> map, CigarParser parser)
+	{
+		for (String feature : map.keySet())
 		{
 			String[] featureElements = feature.split("Tablet-Separator");
-			CigarFeature cigarFeature = parser.getFeatureMap().get(feature);
+			CigarFeature cigarFeature = map.get(feature);
 
 			Contig contig = contigHash.get(featureElements[0]);
 			if (contig != null)
@@ -390,9 +399,6 @@ class SamFileReader extends TrackableReader
 						cigarFeature.verifyType();
 			}
 		}
-
-		for (Contig contig: assembly)
-			Collections.sort(contig.getFeatures());
 	}
 
 	@Override

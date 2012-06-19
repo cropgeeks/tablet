@@ -49,7 +49,7 @@ public class CigarIHighlighter extends AlphaOverlay
 			if (read != null)
 			{
 				boolean requiresPaint = true;
-				for(Insert insert : cigarFeature.getInserts())
+				for(CigarEvent insert : cigarFeature.getEvents())
 				{
 					if(insert.getRead().equals(read))
 					{

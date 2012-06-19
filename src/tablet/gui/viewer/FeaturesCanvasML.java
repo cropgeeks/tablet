@@ -54,7 +54,7 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 	{
 		int x = fCanvas.getMouseX(e);
 		int xIndex = rCanvas.getBaseForPixel(rCanvas.pX1 + x);
-		
+
 		int yIndex = e.getY() / fCanvas.H;
 
 		sCanvas.setMouseBase(xIndex);
@@ -182,9 +182,12 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 
 		if (f instanceof CigarFeature)
 		{
-			CigarFeature cigarFeature = (CigarFeature)f;
-			int count = cigarFeature.getCount();
-			str.append(RB.format("gui.viewer.FeaturesCanvasML.copyFeature.insertCount", count));
+			int count = ((CigarFeature)f).getCount();
+
+			if (f instanceof CigarFeature)
+				str.append(RB.format("gui.viewer.FeaturesCanvasML.copyFeature.insertCount", count));
+			else if (f instanceof CigarFeature)
+				str.append(RB.format("gui.viewer.FeaturesCanvasML.copyFeature.deletionCount", count));
 		}
 		else
 			str.append(RB.format("gui.viewer.FeaturesCanvasML.copyFeature.tags", f.getTagsAsString()));
@@ -215,7 +218,7 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 			int pE = feature.getVisualPE();
 
 			if (feature instanceof CigarFeature)
-				getCigarTooltip(feature, pS, pE); //highlightCigar(feature, pS);
+				getCigarTooltip((CigarFeature)feature, pS, pE);
 			else
 				getNormalTooltip(feature, pS, pE);
 		}
@@ -241,10 +244,9 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 		}
 	}
 
-	private void getCigarTooltip(Feature f, int pS, int pE)
+	private void getCigarTooltip(CigarFeature f, int pS, int pE)
 	{
-		CigarFeature cigarFeature = (CigarFeature)f;
-		int count = cigarFeature.getCount();
+		int count = f.getCount();
 		if (Prefs.guiFeaturesArePadded)
 		{
 			fCanvas.setToolTipText(RB.format("gui.viewer.FeaturesCanvasML.tooltip.padded.cigarFeature",
@@ -262,21 +264,6 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 				count));
 		}
 	}
-
-//	private void highlightCigar(Feature f, int pS)
-//	{
-//		CigarIHighlighter highlighter = aPanel.getCigarIHighlighter();
-//
-//		if (highlighter == null || highlighter.isVisible() == false)
-//		{
-//			CigarFeature cigarFeature = (CigarFeature)f;
-//			highlighter = new CigarIHighlighter(aPanel);
-//			highlighter.highlightFeature(cigarFeature);
-//			aPanel.setCigarIHighlighter(highlighter);
-//
-//			rCanvas.repaint();
-//		}
-//	}
 
 	public void mouseClicked(MouseEvent e)
 	{

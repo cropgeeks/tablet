@@ -100,7 +100,10 @@ public class BamFileHandler
 		itor.close();
 
 		if (okToRun)
-			processCigarFeatures(parser, contig);
+		{
+			parser.processCigarFeatures(contig);
+			Collections.sort(contig.getFeatures());
+		}
 
 		if (okToRun)
 		{
@@ -176,23 +179,6 @@ public class BamFileHandler
 
 		readCache.setReadMetaData(rmd);
 		readID++;
-	}
-
-	private void processCigarFeatures(CigarParser parser, Contig contig)
-		throws Exception
-	{
-		for (String feature : parser.getFeatureMap().keySet())
-		{
-			CigarFeature cigarFeature = parser.getFeatureMap().get(feature);
-
-			// Only add cigar features with more than a required number
-			// of inserts associated with them
-			if (cigarFeature.getCount() >= Prefs.visCigarInsertMinimum)
-				if (contig.addFeature(cigarFeature))
-					cigarFeature.verifyType();
-		}
-
-		Collections.sort(contig.getFeatures());
 	}
 
 	public void openBamFile(HashMap<String, Contig> contigHash)
