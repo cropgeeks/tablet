@@ -53,7 +53,7 @@ public class VisibleReadsGrabberThread extends Thread
 		if (killMe)
 			return;
 
-		ArrayList<Read> reads = new ArrayList<Read>();
+		ArrayList<Read> reads = new ArrayList<>();
 
 		for(int i=yS; i <= yE && i < manager.size(); i++)
 		{

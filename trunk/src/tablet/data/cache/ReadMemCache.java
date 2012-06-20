@@ -10,7 +10,7 @@ import tablet.data.*;
 
 public class ReadMemCache implements IReadCache
 {
-	private ArrayList<ReadMetaData> cache = new ArrayList<ReadMetaData>();
+	private ArrayList<ReadMetaData> cache = new ArrayList<>();
 
 	public void openForWriting()
 		throws IOException

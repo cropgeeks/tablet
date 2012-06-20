@@ -19,7 +19,7 @@ public class VisualAssembly
 
 	public VisualAssembly()
 	{
-		visualContigs = new HashMap<Contig, VisualContig>();
+		visualContigs = new HashMap<>();
 	}
 
 	public HashMap<Contig, VisualContig> getVisualContigs()

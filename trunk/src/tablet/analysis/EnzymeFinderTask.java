@@ -19,11 +19,11 @@ public class EnzymeFinderTask extends BackgroundTask
 	// add it to a list of finders to be run as a background task
 	public EnzymeFinderTask(ArrayList<RestrictionEnzyme> enzymes, AssemblyPanel aPanel)
 	{
-		finders = new ArrayList<ArrayList<Finder>>();
+		finders = new ArrayList<>();
 
 		for (RestrictionEnzyme enzyme : enzymes)
 		{
-			ArrayList<Finder> enzymeFinder = new ArrayList<Finder>();
+			ArrayList<Finder> enzymeFinder = new ArrayList<>();
 
 			for (String sequence : enzyme.getSequences())
 				enzymeFinder.add(new EnzymeFinder(aPanel, sequence, false));
@@ -57,13 +57,13 @@ public class EnzymeFinderTask extends BackgroundTask
 
 	public ArrayList<ArrayList<ArrayList<SearchResult>>> getResults()
 	{
-		ArrayList<ArrayList<ArrayList<SearchResult>>> results = new ArrayList<ArrayList<ArrayList<SearchResult>>>();
+		ArrayList<ArrayList<ArrayList<SearchResult>>> results = new ArrayList<>();
 
 		for (ArrayList<Finder> enzymeFinder : finders)
 		{
 			// The results for a single RestrictionEnzyme (commonly more than one
 			// sequence so more than one set of reuslts)
-			ArrayList<ArrayList<SearchResult>> enzymeResults = new ArrayList<ArrayList<SearchResult>>();
+			ArrayList<ArrayList<SearchResult>> enzymeResults = new ArrayList<>();
 
 			for (Finder f : enzymeFinder)
 				enzymeResults.add(f.getResults());

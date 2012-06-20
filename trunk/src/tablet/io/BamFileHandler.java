@@ -31,7 +31,7 @@ public class BamFileHandler
 	private boolean refLengthsOK = true;
 
 	// Stores a hash of @RG (read group) IDs and their associated information
-	private HashMap<String, Short> rgHash = new HashMap<String, Short>();
+	private HashMap<String, Short> rgHash = new HashMap<>();
 
 	BamFileHandler(IReadCache readCache, ReadSQLCache nameCache, AssemblyFile bamFile, AssemblyFile baiFile, Assembly assembly)
 	{
@@ -279,7 +279,7 @@ public class BamFileHandler
 	private void readSampleGroups()
 		throws Exception
 	{
-		ArrayList<ReadGroup> readGroups = new ArrayList<ReadGroup>();
+		ArrayList<ReadGroup> readGroups = new ArrayList<>();
 
 		for (SAMReadGroupRecord record: bamReader.getFileHeader().getReadGroups())
 		{

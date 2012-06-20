@@ -30,7 +30,7 @@ public class SNPFinder extends SimpleJob
 	public void runJob(int jobNum) throws Exception
 	{
 		out = new BufferedWriter(new FileWriter(file));
-		
+
 		for (Contig contig : assembly)
 			maximum += contig.getTableData().readCount;
 
@@ -44,11 +44,11 @@ public class SNPFinder extends SimpleJob
 
 			if (contig.getTableData().readCount == 0)
 				continue;
-			
+
 			Consensus consensus = contig.getConsensus();
 
 			// Allocate the data array ready for processing
-			data = new ArrayList<HashMap<String, Metric>>();
+			data = new ArrayList<>();
 			for (int i=0; i < consensus.length(); i++)
 				data.add(new HashMap<String, Metric>());
 
@@ -91,7 +91,7 @@ public class SNPFinder extends SimpleJob
 			metric.coverage++;
 
 			byte state = rmd.getStateAt(i);
-			
+
 			metric.bases[state]++;
 		}
 
@@ -157,7 +157,7 @@ public class SNPFinder extends SimpleJob
 
 	private ArrayList<Metric> getMetrics(int base)
 	{
-		ArrayList<Metric> metrics = new ArrayList<Metric>();
+		ArrayList<Metric> metrics = new ArrayList<>();
 
 		HashMap<String, Metric> hashMap = data.get(base);
 
@@ -182,7 +182,7 @@ public class SNPFinder extends SimpleJob
 		boolean hasDelta()
 		{
 			int deltaCount = 0;
-			
+
 			for (int i=1; i < bases.length; i += 2)
 				deltaCount += bases[i];
 

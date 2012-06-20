@@ -7,7 +7,7 @@ import java.util.*;
 
 public class EnzymeFeature extends Feature
 {
-	public static ArrayList<String> enzymes = new ArrayList<String>();
+	public static ArrayList<String> enzymes = new ArrayList<>();
 	private int cutPoint;
 
 	public EnzymeFeature(String gffType, String name, int p1, int p2, int cutPoint)

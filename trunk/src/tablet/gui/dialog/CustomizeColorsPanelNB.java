@@ -42,9 +42,9 @@ class CustomizeColorsPanelNB extends javax.swing.JPanel
 	void initializeList()
 	{
 		HashMap<String, Color> colors = ColorPrefs.getColors();
-		DefaultListModel<EditableColor> model = new DefaultListModel<EditableColor>();
+		DefaultListModel<EditableColor> model = new DefaultListModel<>();
 
-		ArrayList<String> keys = new ArrayList<String>();
+		ArrayList<String> keys = new ArrayList<>();
 		for (String key: colors.keySet())
 			if (key.startsWith("User."))
 				keys.add(key);

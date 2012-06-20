@@ -125,8 +125,8 @@ public class RestrictionEnzymeDialog extends JDialog implements ActionListener
 		String name = tokens[0];
 
 		// Parse sequence strings and cut points from string input
-		ArrayList<String> sequences = new ArrayList<String>();
-		ArrayList<Integer> cutPoints = new ArrayList<Integer>();
+		ArrayList<String> sequences = new ArrayList<>();
+		ArrayList<Integer> cutPoints = new ArrayList<>();
 
 		for (int i=1; i < tokens.length; i++)
 		{
@@ -205,8 +205,8 @@ public class RestrictionEnzymeDialog extends JDialog implements ActionListener
 			String seqs = (String) panel.enzymeTable.getValueAt(modelRow, 1);
 			String cuts = (String) panel.enzymeTable.getValueAt(modelRow, 2);
 
-			ArrayList<String> sequences = new ArrayList<String>();
-			ArrayList<Integer> cutPoints = new ArrayList<Integer>();
+			ArrayList<String> sequences = new ArrayList<>();
+			ArrayList<Integer> cutPoints = new ArrayList<>();
 
 			// Parse the sequences out of the string and place them in an ArrayList
 			String[] s = seqs.split(" - ");

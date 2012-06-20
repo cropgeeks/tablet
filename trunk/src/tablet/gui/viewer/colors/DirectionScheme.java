@@ -10,8 +10,8 @@ import tablet.data.*;
 
 public class DirectionScheme extends EnhancedScheme
 {
-	private ArrayList<ColorStamp> statesF = new ArrayList<ColorStamp>();
-	private ArrayList<ColorStamp> statesR = new ArrayList<ColorStamp>();
+	private ArrayList<ColorStamp> statesF = new ArrayList<>();
+	private ArrayList<ColorStamp> statesR = new ArrayList<>();
 
 	public DirectionScheme(int w, int h)
 	{

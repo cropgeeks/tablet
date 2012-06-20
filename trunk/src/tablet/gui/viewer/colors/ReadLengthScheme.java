@@ -10,7 +10,7 @@ import tablet.data.*;
 
 public class ReadLengthScheme extends EnhancedScheme
 {
-	private ArrayList<ArrayList<ColorStamp>> states = new ArrayList<ArrayList<ColorStamp>>();
+	private ArrayList<ArrayList<ColorStamp>> states = new ArrayList<>();
 
 	public ReadLengthScheme(int w, int h)
 	{
@@ -35,7 +35,7 @@ public class ReadLengthScheme extends EnhancedScheme
 
 	private void initStates(Color c, int w, int h)
 	{
-		ArrayList<ColorStamp> list = new ArrayList<ColorStamp>();
+		ArrayList<ColorStamp> list = new ArrayList<>();
 
 		for (String base: Sequence.getStates())
 		{

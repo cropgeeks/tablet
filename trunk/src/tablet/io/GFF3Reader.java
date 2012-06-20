@@ -23,7 +23,7 @@ public class GFF3Reader extends TrackableReader
 		AssemblyFile[] files = { new AssemblyFile(filename) };
 		setInputs(files, assembly);
 
-		contigs = new HashMap<String, ArrayList<Feature>>();
+		contigs = new HashMap<>();
 	}
 
 	public boolean canRead()
@@ -128,7 +128,7 @@ public class GFF3Reader extends TrackableReader
 
 		if (list == null)
 		{
-			list = new ArrayList<Feature>();
+			list = new ArrayList<>();
 			contigs.put(contigName, list);
 		}
 
