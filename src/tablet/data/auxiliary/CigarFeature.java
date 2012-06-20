@@ -9,7 +9,7 @@ public class CigarFeature extends Feature
 	public CigarFeature(String gffType, String name, int p1, int p2)
 	{
 		super(gffType, name, p1, p2);
-		events = new ArrayList<CigarEvent>();
+		events = new ArrayList<>();
 	}
 
 	public void addEvent(CigarEvent event)

@@ -17,14 +17,14 @@ import tablet.gui.viewer.*;
 public class EnzymeHandler implements ITaskListener
 {
 	private ArrayList<EnzymeFeature> features;
-	private static ArrayList<RestrictionEnzyme> enzymes = new ArrayList<RestrictionEnzyme>();
+	private static ArrayList<RestrictionEnzyme> enzymes = new ArrayList<>();
 
 	private Contig contig;
 
 	public void setupEnzymeFinderTasks(Contig contig)
 	{
 		this.contig = contig;
-		features = new ArrayList<EnzymeFeature>();
+		features = new ArrayList<>();
 
 		// Runs finders for all restriction enzymes that have been selected
 		EnzymeFinderTask finderTask = new EnzymeFinderTask(enzymes,

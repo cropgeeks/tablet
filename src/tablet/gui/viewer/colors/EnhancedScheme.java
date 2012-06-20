@@ -10,12 +10,12 @@ import tablet.data.*;
 
 public class EnhancedScheme extends ReadScheme
 {
-	private HashMap<String, Color> colors = new HashMap<String, Color>();
+	private HashMap<String, Color> colors = new HashMap<>();
 
 	// Holds the states needed by the reads canvas
-	protected ArrayList<Stamp> statesRD = new ArrayList<Stamp>();
+	protected ArrayList<Stamp> statesRD = new ArrayList<>();
 	// Holds the states needed by the consensus canvas
-	protected ArrayList<Stamp> statesCS = new ArrayList<Stamp>();
+	protected ArrayList<Stamp> statesCS = new ArrayList<>();
 
 	// Holds the image used to draw a "link" between two reads
 	protected LinkStamp pairLink;

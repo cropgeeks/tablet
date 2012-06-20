@@ -29,7 +29,7 @@ class GeneralTabNB extends JPanel implements ActionListener
 		generalPanel.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.prefs.NBGeneralPanel.generalPanelTitle")));
 		RB.setText(displayLabel, "gui.dialog.prefs.NBGeneralPanel.displayLabel");
 
-        displayModel = new DefaultComboBoxModel<String>();
+        displayModel = new DefaultComboBoxModel<>();
         displayModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.auto"));
         displayModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.en_GB"));
         displayModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.en_US"));
@@ -39,7 +39,7 @@ class GeneralTabNB extends JPanel implements ActionListener
         // Update settings
         RB.setText(updateLabel, "gui.dialog.prefs.NBGeneralPanel.updateLabel");
 
-        updateModel = new DefaultComboBoxModel<String>();
+        updateModel = new DefaultComboBoxModel<>();
         updateModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.updateNever"));
         updateModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.updateStartup"));
         updateModel.addElement(RB.getString("gui.dialog.prefs.NBGeneralPanel.updateDaily"));

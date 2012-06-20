@@ -74,7 +74,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		if (args.length > 0)
 		{
 			// Temporary arrayList for potential files
-			ArrayList<String> initFiles = new ArrayList<String>();
+			ArrayList<String> initFiles = new ArrayList<>();
 
 			for (int i = 0; i < args.length; i++)
 			{

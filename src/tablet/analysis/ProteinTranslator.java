@@ -205,7 +205,7 @@ public class ProteinTranslator extends BackgroundTask
 
 	private void createTranslationTable()
 	{
-		acids = new HashMap<String, Integer>();
+		acids = new HashMap<>();
 		codes = new String[23];
 
 		codes[0] = "?";

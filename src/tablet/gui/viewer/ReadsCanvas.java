@@ -62,7 +62,7 @@ public class ReadsCanvas extends JPanel
 
 	// A list of renderers that will perform further drawing once the main
 	// canvas has been drawn
-	LinkedList<IOverlayRenderer> overlays = new LinkedList<IOverlayRenderer>();
+	LinkedList<IOverlayRenderer> overlays = new LinkedList<>();
 
 	// Objects for multicore rendering
 	private int cores = Runtime.getRuntime().availableProcessors();

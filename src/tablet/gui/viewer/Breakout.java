@@ -52,7 +52,7 @@ class Breakout extends MouseInputAdapter implements IOverlayRenderer, Runnable
 		catch (Exception e) { System.out.println(e); }
 
 		overlays = rCanvas.overlays;
-		rCanvas.overlays = new LinkedList<IOverlayRenderer>();
+		rCanvas.overlays = new LinkedList<>();
 		rCanvas.overlays.add(this);
 		rCanvas.removeMouseListener(rCanvas.readsCanvasML);
 		rCanvas.removeMouseListener(rCanvas.readsCanvasML.dragHandler);
