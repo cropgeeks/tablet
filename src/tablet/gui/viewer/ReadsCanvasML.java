@@ -80,10 +80,10 @@ class ReadsCanvasML extends MouseInputAdapter
 
 	public void mouseClicked(MouseEvent e)
 	{
-		if (isMetaClick(e) && e.isAltDown() && e.getClickCount() == 2)
-			new Breakout(rCanvas, aPanel);
+//		if (isMetaClick(e) && e.isAltDown() && e.getClickCount() == 2)
+//			new Breakout(rCanvas, aPanel);
 
-		else if (SwingUtilities.isLeftMouseButton(e))
+		if (SwingUtilities.isLeftMouseButton(e))
 		{
 			// Page left or right if the navigation arrows were clicked on
 			if (nOverlay.isLeftActive())

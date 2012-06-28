@@ -12,6 +12,7 @@ import tablet.data.*;
 
 import scri.commons.gui.*;
 
+/*
 class Breakout extends MouseInputAdapter implements IOverlayRenderer, Runnable
 {
 	LinkedList<IOverlayRenderer> overlays;
@@ -358,3 +359,4 @@ class Breakout extends MouseInputAdapter implements IOverlayRenderer, Runnable
 		}
 	}
 }
+*/

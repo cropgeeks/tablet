@@ -72,7 +72,7 @@ class CoverageCanvas extends TrackingCanvas
 		Graphics2D g = (Graphics2D) graphics;
 
 		// The paint mechanism differs based on zoom level
-		if (rCanvas._ntW > 1)
+		if (rCanvas.ntW > 1)
 			paintNormal(g);
 		else
 			paintSuperZoom(g);
@@ -95,7 +95,7 @@ class CoverageCanvas extends TrackingCanvas
 
 	private void paintNormal(Graphics2D g)
 	{
-		float ntW = rCanvas._ntW;
+		float ntW = rCanvas.ntW;
 		int xS = rCanvas.xS;
 		int xE = rCanvas.xE;
 
@@ -122,7 +122,7 @@ class CoverageCanvas extends TrackingCanvas
 		int[] coverage = DisplayData.getCoverage();
 		int maxCoverage = DisplayData.getMaxCoverage();
 
-		int basesPerPixel = Math.round(1 / rCanvas._ntW);
+		int basesPerPixel = Math.round(1 / rCanvas.ntW);
 		int offset = rCanvas.offset;
 
 		// For each pixel to be painted

@@ -61,7 +61,7 @@ public class CigarIHighlighter extends AlphaOverlay
 						int w2 = pX2Max -x2;
 						g.fillRect(x2, row * ntH, w2, readH);
 
-						if (rCanvas._ntW <= 1)
+						if (rCanvas.ntW <= 1)
 							g.fillRect(pX1, row * ntH + readH, pX2Max, ntH - readH);
 
 						requiresPaint = false;

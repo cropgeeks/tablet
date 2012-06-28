@@ -104,7 +104,7 @@ public class FeaturesCanvas extends TrackingCanvas
 
 		offset = contig.getVisualStart();
 
-		float ntW = rCanvas._ntW;
+		float ntW = rCanvas.ntW;
 		int xS = rCanvas.xS + offset;
 		int xE = rCanvas.xE + offset;
 

@@ -97,7 +97,7 @@ class ScaleCanvas extends TrackingCanvas
 
 		offset = contig.getVisualStart();
 
-		float ntW = rCanvas._ntW;
+		float ntW = rCanvas.ntW;
 
 		int xS = (int)(x1 / ntW);
 		int xE = (int)((x2+1) / ntW)-1;
@@ -134,7 +134,7 @@ class ScaleCanvas extends TrackingCanvas
 		// REMINDER: mouseBase = base pos under mouse (0 indexed on consensus)
 		if (mouseBase != null)
 		{
-			int ntOnCanvasX = rCanvas._ntOnCanvasX;
+			int ntOnCanvasX = rCanvas.ntOnCanvasX;
 
 			// If the mouse is beyond the edge of the data, don't do anything
 			if (mouseBase-offset+1 > ntOnCanvasX)

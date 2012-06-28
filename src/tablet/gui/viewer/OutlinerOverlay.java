@@ -56,7 +56,7 @@ class OutlinerOverlay implements IOverlayRenderer
 				// "Hack" to deal with ensuring a one-pixel wide base stays on
 				// screen at all zoom levels (remember the methods above were
 				// written to deal with Reads and how they are rendered)
-				if (rCanvas._ntW < 1)
+				if (rCanvas.ntW < 1)
 					xS = rCanvas.getFinalRenderedPixel(f.value1);
 
 				if (xS <= rCanvas.pX2 && xE > rCanvas.pX1)
@@ -69,7 +69,7 @@ class OutlinerOverlay implements IOverlayRenderer
 				int yE = yS + rCanvas.ntH;
 
 				if (yS <= rCanvas.pY2 && yE > rCanvas.pY1)
-					g.drawRect(0, yS, rCanvas.canvasW-1, yE-yS-1);
+					g.drawRect(0, yS, rCanvas._canvasW-1, yE-yS-1);
 			}
 		}
 
