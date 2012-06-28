@@ -107,7 +107,7 @@ class ReadShadower implements IOverlayRenderer
 		g.setColor(lineColor);
 
 		int linePos = rCanvas.getFirstRenderedPixel(iPosition)
-			+ (int) rCanvas._ntW / 2;
+			+ (int) rCanvas.ntW / 2;
 
 		g.drawLine(linePos, rCanvas.pY1, linePos, rCanvas.pY2);
 	}

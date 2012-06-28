@@ -87,7 +87,7 @@ public class CanvasController extends JPanel implements ChangeListener
 
 		// Once the canvas knows how big it needs to be, adjust the scrollbars
 		// so that they work on the same canvas size
-		int minSize = (int) (readsCanvas._ntW >= 1 ? readsCanvas._ntW : 1);
+		int minSize = (int) (readsCanvas.ntW >= 1 ? readsCanvas.ntW : 1);
 		setScrollbarAdjustmentValues(minSize, readsCanvas.ntH);
 
 		stateChanged(null);
@@ -125,9 +125,9 @@ public class CanvasController extends JPanel implements ChangeListener
 		if (colIndex != -1)
 		{
 			if (centre)
-				offset = (int)(((readsCanvas._ntOnScreenX * readsCanvas._ntW) / 2) - readsCanvas._ntW);
+				offset = (int)(((readsCanvas.ntOnScreenX * readsCanvas.ntW) / 2) - readsCanvas.ntW);
 
-			int x = (int)(colIndex * readsCanvas._ntW - offset);
+			int x = (int)(colIndex * readsCanvas.ntW - offset);
 			hBar.setValue(x);
 		}
 	}
@@ -160,7 +160,7 @@ public class CanvasController extends JPanel implements ChangeListener
 	{
 		isClickZooming = true;
 
-		ntCenterX = (e.getX() / readsCanvas._ntW);
+		ntCenterX = (e.getX() / readsCanvas.ntW);
 		ntCenterY = (e.getY() / readsCanvas.ntH);
 
 		BandAdjust.zoomIn(3);
@@ -171,7 +171,7 @@ public class CanvasController extends JPanel implements ChangeListener
 	// Jumps the screen left by one "page"
 	public void pageLeft()
 	{
-		int jumpTo = scaleCanvas.ntL - (readsCanvas._ntOnScreenX);// - readsCanvas.offset;
+		int jumpTo = scaleCanvas.ntL - (readsCanvas.ntOnScreenX);// - readsCanvas.offset;
 //		moveToLater(-1, jumpTo, false);
 		aPanel.moveToPosition(-1, jumpTo, false);
 	}

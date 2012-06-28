@@ -31,7 +31,7 @@ public class ColumnHighlighter extends AlphaOverlay
 		// pixel of the base following the highlight
 		int x2 = rCanvas.getFirstRenderedPixel(end+1);
 
-		if (rCanvas._ntW < 1)
+		if (rCanvas.ntW < 1)
 		{
 			x1 = rCanvas.getFinalRenderedPixel(start);
 			// As we're drawing two separate grey rectangles either side of the

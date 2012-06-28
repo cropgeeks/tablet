@@ -84,11 +84,11 @@ class ConsensusCanvas extends TrackingCanvas
 
 		offset = contig.getVisualStart();
 
-		float ntW = rCanvas._ntW;
+		float ntW = rCanvas.ntW;
 		int ntH = rCanvas.ntH;
 		int xS = rCanvas.xS;
 		int xE = rCanvas.xE;
-		int pixelsOnScreenX = rCanvas._pixelsOnScreenX;
+		int pixelsOnScreenX = rCanvas.pixelsOnScreenX;
 
 		ReadScheme colors = rCanvas.colors;
 
