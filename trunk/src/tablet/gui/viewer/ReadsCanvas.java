@@ -165,7 +165,7 @@ public class ReadsCanvas extends JPanel
 			readH = 2;
 		}
 
-		System.out.println("ntW: " + _ntW + ", ntH: " + ntH);
+//		System.out.println("ntW: " + _ntW + ", ntH: " + ntH);
 
 
 		ntOnCanvasX = contig.getVisualWidth();
@@ -292,7 +292,7 @@ public class ReadsCanvas extends JPanel
 		}
 
 		long e = System.nanoTime();
-		System.out.println("Render time: " + ((e-s)/1000000f) + "ms");
+//		System.out.println("Render time: " + ((e-s)/1000000f) + "ms");
 	}
 
 	private void paintBuffer()
@@ -385,8 +385,6 @@ public class ReadsCanvas extends JPanel
 			// But override if (and always draw colours) if using a mem cache
 			boolean getMetaData = Prefs.visColorsAtAllZooms || usingMemCache;
 
-			System.out.println("getMetaData=" + getMetaData);
-
 			// For every [nth] row, where n = number of available CPU cores...
 			for (int row = yS, y = (ntH*yS); row <= yE; row += cores, y += ntH*cores)
 			{
@@ -430,8 +428,8 @@ public class ReadsCanvas extends JPanel
 				}
 			}
 
-			System.out.println("Total Data time: " + (total/1000000f) + "ms");
-			System.out.println();
+//			System.out.println("Total Data time: " + (total/1000000f) + "ms");
+//			System.out.println();
 
 			g.dispose();
 		}

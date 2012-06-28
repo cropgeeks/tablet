@@ -347,7 +347,7 @@ public class OverviewCanvas extends JPanel
 
 				colIndex += Math.abs(rCanvas.contig.getVisualStart()-oS);
 
-				aPanel.getController().moveTo(rowIndex, colIndex, false);
+				aPanel.getController().moveToNow(rowIndex, colIndex, false);
 			}
 		}
 

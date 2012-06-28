@@ -168,8 +168,6 @@ class ReadsCanvasML extends MouseInputAdapter
 //		if (rCanvas.ntH != rCanvas.readH && e.getY() % rCanvas.ntH == 2)
 //			yIndex = -1;
 
-		System.out.println("Mouse over base: " + ntIndex);
-
 		// Track the mouse position
 		sCanvas.setMouseBase(ntIndex);
 		infoPane.setMousePosition(e.getPoint(), yIndex, ntIndex);
