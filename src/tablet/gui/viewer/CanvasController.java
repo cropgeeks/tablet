@@ -89,6 +89,8 @@ public class CanvasController extends JPanel implements ChangeListener
 		// so that they work on the same canvas size
 		int minSize = (int) (readsCanvas._ntW >= 1 ? readsCanvas._ntW : 1);
 		setScrollbarAdjustmentValues(minSize, readsCanvas.ntH);
+
+		stateChanged(null);
 	}
 
 	void moveToLater(final int rowIndex, final int colIndex, final boolean centre)
@@ -100,8 +102,13 @@ public class CanvasController extends JPanel implements ChangeListener
 		});
 	}
 
+	void moveToNow(int rowIndex, int colIndex, boolean centre)
+	{
+		moveTo(rowIndex, colIndex, centre);
+	}
+
 	// Jumps to a position relative to the given row and column
-	void moveTo(int rowIndex, int colIndex, boolean centre)
+	private void moveTo(int rowIndex, int colIndex, boolean centre)
 	{
 		// If 'centre' is true, offset by half the screen
 		int offset = 0;
@@ -144,12 +151,7 @@ public class CanvasController extends JPanel implements ChangeListener
 		// This is needed because for some crazy reason the moveToPosition call
 		// further down will not work correctly until after Swing has stopped
 		// generating endless resize events that affect the scrollbars
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				moveTo(Math.round(ntCenterY), Math.round(ntCenterX), true);
-
-			}
-		});
+		moveToLater(Math.round(ntCenterY), Math.round(ntCenterX), true);
 
 		computePanelSizes();
 	}

@@ -65,7 +65,7 @@ class ConsensusCanvas extends TrackingCanvas
 		if (hasBaseQualities == false)
 			qualityH = 0;
 
-		dimension = new Dimension(0, (qualityH + /*rCanvas.ntH*/ (int)(Math.random()*10)) + 5);
+		dimension = new Dimension(0, (qualityH + rCanvas.ntH) + 5);
 
 		setPreferredSize(dimension);
 		revalidate();
