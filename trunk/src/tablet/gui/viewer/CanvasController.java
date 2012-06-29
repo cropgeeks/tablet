@@ -18,7 +18,6 @@ public class CanvasController extends JPanel implements ChangeListener
 	private ReadsCanvas readsCanvas;
 	private ScaleCanvas scaleCanvas;
 
-	private JScrollPane sp;
 	private JScrollBar hBar, vBar;
 	private JViewport viewport;
 
@@ -30,7 +29,6 @@ public class CanvasController extends JPanel implements ChangeListener
 	CanvasController(AssemblyPanel aPanel, JScrollPane sp)
 	{
 		this.aPanel = aPanel;
-		this.sp = sp;
 
 		readsCanvas = aPanel.readsCanvas;
 		consensusCanvas = aPanel.consensusCanvas;
@@ -65,16 +63,7 @@ public class CanvasController extends JPanel implements ChangeListener
 	void forceRedraw()
 	{
 		readsCanvas.setContig(aPanel.getContig());
-
 		computePanelSizes();
-
-		// TODO: Unknown call?
-		sp.revalidate();
-
-		// This call is needed to force the canvas to recalculate its px1,px2
-		// values which might not update if the new data doesn't cause a scroll-
-		// bar event. If they don't update, the scale canvas won't be updated
-		stateChanged(null);
 	}
 
 	private void computePanelSizes()
@@ -90,7 +79,14 @@ public class CanvasController extends JPanel implements ChangeListener
 		int minSize = (int) (readsCanvas.ntW >= 1 ? readsCanvas.ntW : 1);
 		setScrollbarAdjustmentValues(minSize, readsCanvas.ntH);
 
-		stateChanged(null);
+		// Deals with (rare) occasions where zooming in from a non-scrollbarred
+		// canvas to one that needs scrollbars wouldn't make them appear
+//		sp.revalidate();
+
+		// This call is needed to force the canvas to recalculate its px1,px2
+		// values which might not update if the new data doesn't cause a scroll-
+		// bar event. If they don't update, the scale canvas won't be updated
+//		stateChanged(null);
 	}
 
 	void moveToLater(final int rowIndex, final int colIndex, final boolean centre)
@@ -148,12 +144,12 @@ public class CanvasController extends JPanel implements ChangeListener
 			ntCenterY = readsCanvas.ntCenterY;
 		}
 
+		computePanelSizes();
+
 		// This is needed because for some crazy reason the moveToPosition call
 		// further down will not work correctly until after Swing has stopped
 		// generating endless resize events that affect the scrollbars
 		moveToLater(Math.round(ntCenterY), Math.round(ntCenterX), true);
-
-		computePanelSizes();
 	}
 
 	void clickZoom(MouseEvent e)

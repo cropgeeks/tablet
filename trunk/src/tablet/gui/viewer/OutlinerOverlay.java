@@ -69,7 +69,7 @@ class OutlinerOverlay implements IOverlayRenderer
 				int yE = yS + rCanvas.ntH;
 
 				if (yS <= rCanvas.pY2 && yE > rCanvas.pY1)
-					g.drawRect(0, yS, rCanvas._canvasW-1, yE-yS-1);
+					g.drawRect(0, yS, rCanvas.canvasW-1, yE-yS-1);
 			}
 		}
 

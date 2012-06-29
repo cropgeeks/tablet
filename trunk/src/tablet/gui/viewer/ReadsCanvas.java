@@ -30,7 +30,7 @@ public class ReadsCanvas extends JPanel
 	ProteinScheme proteins;
 
 	// Width and height of the canvas
-	int _canvasW, canvasH;
+	int canvasW, canvasH;
 
 	// Width and height of a single nucleotide when it is drawn
 	float ntW;
@@ -168,14 +168,15 @@ public class ReadsCanvas extends JPanel
 
 		// Round UP to cope with 3.3 pixels needed for ten bases at 0.3 pixels
 		// per base (4 pixels actually needed)
-		_canvasW = (int)Math.ceil(ntOnCanvasX * ntW);
+		canvasW = (int)Math.ceil(ntOnCanvasX * ntW);
 		canvasH = (ntOnCanvasY * ntH);
 
 
-		if (_canvasW < 1)
-			_canvasW = 1;
+		if (canvasW < 1)
+			canvasW = 1;
 
-		dimension = new Dimension(_canvasW, canvasH);
+//		dimension = new Dimension(canvasW, canvasH);
+		setSize(dimension = new Dimension(canvasW, canvasH));
 
 		updateColorScheme();
 	}
@@ -209,8 +210,8 @@ public class ReadsCanvas extends JPanel
 		//if (pX2 > canvasW)
 		//	pX2 = canvasW - 1;
 
-		if (pX2 > _canvasW)
-			pX2 = _canvasW -1;
+		if (pX2 > canvasW)
+			pX2 = canvasW -1;
 
 		pY1 = viewPosition.y;
 		pY2 = pY1 + viewSize.height - 1;
@@ -305,7 +306,7 @@ public class ReadsCanvas extends JPanel
 		g.setColor(new Color(240, 240, 255));
 		g.fillRect(0, 0, (int)Math.ceil(-offset*ntW), getHeight());
 		int cLength = -offset + contig.getConsensus().length();
-		g.fillRect((int)(cLength*ntW), 0, _canvasW-(int)(Math.ceil(cLength*ntW)), getHeight());
+		g.fillRect((int)(cLength*ntW), 0, canvasW-(int)(Math.ceil(cLength*ntW)), getHeight());
 
 
 		// Index positions within the dataset that we'll start drawing from
