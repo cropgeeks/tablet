@@ -89,6 +89,10 @@
 	</target>
 
 	<target name="install4j" depends="getversion, jar">
+		<input message="Enter the private key password for signing:" addproperty="password">
+    		<handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
+		</input>
+
 		<taskdef name="install4j"
 			classname="com.install4j.Install4JTask"
 			classpath="C:\Program Files\Install4j\bin\ant.jar"/>
@@ -99,7 +103,10 @@
 			<fileset dir="installer" includes="**/*.dmg"/>
 		</delete>
 
-		<install4j projectfile="installer/tablet.install4j" release="${i4j.version}"/>
+		<install4j projectfile="installer/tablet.install4j"
+		           release="${i4j.version}"
+		           winKeystorePassword="${password}"
+		           macKeystorePassword="${password}"/>
 	</target>
 
 	<target name="javadoc">
@@ -117,29 +124,19 @@
 		</java>
 	</target>
 
-	<target name="profile" depends="jar">
-		<nbprofiledirect>
-			<classpath>
-				<pathelement path="${tablet.jar}"/>
-			</classpath>
-		</nbprofiledirect>
-			<java jar="${tablet.jar}">
-				<jvmarg value="-Xmx1024m"/>
-				<jvmarg value="${profiler.info.jvmargs.agent}"/>
-			</java>
-	</target>
-
 	<target name="jnlp" depends="getversion, jar">
-		<input message="Enter the storepass:" addproperty="storepass"/>
+		<input message="Enter the private key password for signing:" addproperty="storepass">
+    		<handler classname="org.apache.tools.ant.input.SecureInputHandler" />
+		</input>
 		<mkdir dir="${webstart}"/>
 		<copy todir="${webstart}">
 			<fileset dir="${lib}">
 				<include name="**/*.jar"/>
 			</fileset>
 		</copy>
-		<signjar alias="plantbio" storepass="${storepass}"
+		<signjar alias="jhi" storepass="${storepass}"
 			preservelastmodified="true" lazy="true"
-			tsaurl="https://timestamp.geotrust.com/tsa">
+			tsaurl="http://timestamp.globalsign.com/scripts/timstamp.dll">
 			<fileset dir="${webstart}">
 				<include name="**/*.jar"/>
 			</fileset>
