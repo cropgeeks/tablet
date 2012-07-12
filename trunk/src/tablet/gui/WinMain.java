@@ -69,7 +69,7 @@ public class WinMain extends JRibbonFrame
 
 		// Determine where on screen to display
 		SwingUtils.positionWindow(
-			this, null, Prefs.guiWinMainY, Prefs.guiWinMainY);
+			this, null, Prefs.guiWinMainX, Prefs.guiWinMainY);
 
 		// Maximize the frame if neccassary
 		if (Prefs.guiWinMainMaximized)
