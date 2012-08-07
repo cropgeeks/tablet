@@ -18,6 +18,7 @@ public class ReadsCanvas extends JPanel
 {
 	private AssemblyPanel aPanel;
 	private boolean usingMemCache = false;
+	JViewport viewport;
 
 	BufferedImage buffer;
 	private boolean updateBuffer = true;
@@ -42,6 +43,9 @@ public class ReadsCanvas extends JPanel
 	// And the total number of nucleotides that span the entire canvas
 	int ntOnCanvasX, ntOnCanvasY;
 
+	// Tracks the center of the screen as the canvas moves about
+	Point pCenter = new Point();
+
 	int pixelsOnScreenX;
 
 	// The LHS offset (difference) between the left-most read and the consensus
@@ -57,15 +61,14 @@ public class ReadsCanvas extends JPanel
 	// next repaint operation
 	int xS, xE, yS, yE;
 
-	// Tracks the base closest to the centre of the view
-	float ntCenterX, ntCenterY;
-
 	// Holds the current dimensions of the canvas in an AWT friendly format
 	private Dimension dimension = new Dimension();
 
 	// A list of renderers that will perform further drawing once the main
 	// canvas has been drawn
 	LinkedList<IOverlayRenderer> overlays = new LinkedList<>();
+
+
 
 	// Objects for multicore rendering
 	private int cores = Runtime.getRuntime().availableProcessors();
@@ -133,6 +136,14 @@ public class ReadsCanvas extends JPanel
 		if (contig == null)
 			return;
 
+		// Clone the current center point (in case it gets regenerated during
+		// this method's runtime)
+		Point p1 = new Point(pCenter.x, pCenter.y);
+		// Remember the current (about to be old) canvas w/h before we start
+		int oldCanvasW = canvasW;
+		int oldCanvasH = canvasH;
+
+
 		// Notch on the slider where one base equals one pixel
 		int one2one = 8;
 
@@ -160,9 +171,6 @@ public class ReadsCanvas extends JPanel
 			readH = 2;
 		}
 
-//		System.out.println("ntW: " + ntW + ", ntH: " + ntH);
-
-
 		ntOnCanvasX = contig.getVisualWidth();
 		ntOnCanvasY = contig.getVisualHeight();
 
@@ -171,14 +179,35 @@ public class ReadsCanvas extends JPanel
 		canvasW = (int)Math.ceil(ntOnCanvasX * ntW);
 		canvasH = (ntOnCanvasY * ntH);
 
-
 		if (canvasW < 1)
 			canvasW = 1;
 
-//		dimension = new Dimension(canvasW, canvasH);
-		setSize(dimension = new Dimension(canvasW, canvasH));
 
 		updateColorScheme();
+
+
+		// Now perform the zoom calculations...
+
+		// Set the canvas to its new size
+		dimension.setSize(canvasW, canvasH);
+
+		// Then determine the scaling factor used to go from the old to the new
+		float scaleByX = canvasW / (float) oldCanvasW;
+		float scaleByY = canvasH / (float) oldCanvasH;
+		Point p2 = new Point((int)(p1.x*scaleByX), (int)(p1.y*scaleByY));
+
+		int newX = p2.x - (viewport.getExtentSize().width/2);
+		int newY = p2.y - (viewport.getExtentSize().height/2);
+
+		// Fix needed to stop the canvas being displayed too far to the right
+		if (newX < 0) newX = 0; if (newY < 0) newY = 0;
+
+
+		// Needed twice? Why? Only the gods will ever know...
+    	setLocation(-newX, -newY);
+		getParent().doLayout();
+		setLocation(-newX, -newY);
+		getParent().doLayout();
 	}
 
 	// Compute real-time variables, that change as the viewpoint is moved across
@@ -202,8 +231,6 @@ public class ReadsCanvas extends JPanel
 
 		ntOnScreenX = (int) ((float) pixelsOnScreenX / ntW);
 
-//		System.out.println("ntOnScreenX: " + ntOnScreenX);
-
 		pX1 = viewPosition.x;
 		pX2 = pX2Max = pX1 + viewSize.width -1;
 		// Adjust for canvases that are smaller than the window size
@@ -216,14 +243,14 @@ public class ReadsCanvas extends JPanel
 		pY1 = viewPosition.y;
 		pY2 = pY1 + viewSize.height - 1;
 
-		// Track the base closest to the center of the current view
-		ntCenterX = (pX1 / ntW) + ((viewSize.width  / ntW) / 2);
-		ntCenterY = (pY1 / ntH) + ((viewSize.height / ntH) / 2);
+
+		// Track the center of the view
+		int pCenterX = pX1 + ((pX2-pX1+1)/2);
+		int pCenterY = pY1 + ((pY2-pY1+1)/2);
+		pCenter = new Point(pCenterX, pCenterY);
 
 		updateOverview();
 		updateBuffer = true;
-
-		repaint();
 	}
 
 	void updateOverview()
@@ -253,6 +280,8 @@ public class ReadsCanvas extends JPanel
 	{
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
+
+		computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
 
 		long s = System.nanoTime();
 
