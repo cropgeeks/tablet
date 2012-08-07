@@ -71,13 +71,21 @@ class CoverageCanvas extends TrackingCanvas
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
 
-		// The paint mechanism differs based on zoom level
-		if (rCanvas.ntW > 1)
-			paintNormal(g);
-		else
-			paintSuperZoom(g);
+		try
+		{
+			// The paint mechanism differs based on zoom level
+			if (rCanvas.ntW > 1)
+				paintNormal(g);
+			else
+				paintSuperZoom(g);
 
-		paintAverage(g);
+			paintAverage(g);
+		}
+		catch (Exception e)
+		{
+			System.out.println("CoverageCanvas: " + e);
+//			repaint();
+		}
 	}
 
 	private void paintAverage(Graphics2D g)

@@ -241,7 +241,13 @@ public class AssemblyPanel extends JPanel
 
 		// A repaint() call will also update the consensus, etc canvases that
 		// need to maintain their synchronization with the reads canvas
-		repaint();
+//		repaint();
+
+		consensusCanvas.repaint();
+		coverageCanvas.repaint();
+		scaleCanvas.repaint();
+		proteinCanvas.repaint();
+		featuresCanvas.repaint();
 	}
 
 	/**

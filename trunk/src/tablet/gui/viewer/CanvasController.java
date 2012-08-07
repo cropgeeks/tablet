@@ -3,6 +3,7 @@
 
 package tablet.gui.viewer;
 
+import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
@@ -10,7 +11,7 @@ import javax.swing.event.*;
 import tablet.gui.*;
 import tablet.gui.ribbon.*;
 
-public class CanvasController extends JPanel implements ChangeListener
+public class CanvasController extends JPanel //implements ChangeListener
 {
 	private AssemblyPanel aPanel;
 	private ConsensusCanvas consensusCanvas;
@@ -20,11 +21,6 @@ public class CanvasController extends JPanel implements ChangeListener
 
 	private JScrollBar hBar, vBar;
 	private JViewport viewport;
-
-	// Normal or click zooming (affects which base to zoom in on)
-	private boolean isClickZooming = false;
-	// Tracks the base to zoom in on
-	private float ntCenterX, ntCenterY;
 
 	CanvasController(AssemblyPanel aPanel, JScrollPane sp)
 	{
@@ -36,9 +32,11 @@ public class CanvasController extends JPanel implements ChangeListener
 		scaleCanvas = aPanel.scaleCanvas;
 
 		viewport = sp.getViewport();
-		viewport.addChangeListener(this);
+//		viewport.addChangeListener(this);
 		hBar = sp.getHorizontalScrollBar();
 		vBar = sp.getVerticalScrollBar();
+
+		readsCanvas.viewport = viewport;
 	}
 
 	JScrollBar getHBar()
@@ -47,10 +45,10 @@ public class CanvasController extends JPanel implements ChangeListener
 	JScrollBar getVBar()
 		{ return vBar; }
 
-	public void stateChanged(ChangeEvent e)
-	{
-		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
-	}
+//	public void stateChanged(ChangeEvent e)
+//	{
+//		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
+//	}
 
 	private void setScrollbarAdjustmentValues(int xIncrement, int yIncrement)
 	{
@@ -137,31 +135,14 @@ public class CanvasController extends JPanel implements ChangeListener
 
 	public void doZoom()
 	{
-		// Track the center of the screen (before the zoom)
-		if (isClickZooming == false)
-		{
-			ntCenterX = readsCanvas.ntCenterX;
-			ntCenterY = readsCanvas.ntCenterY;
-		}
-
 		computePanelSizes();
-
-		// This is needed because for some crazy reason the moveToPosition call
-		// further down will not work correctly until after Swing has stopped
-		// generating endless resize events that affect the scrollbars
-		moveToLater(Math.round(ntCenterY), Math.round(ntCenterX), true);
 	}
 
 	void clickZoom(MouseEvent e)
 	{
-		isClickZooming = true;
-
-		ntCenterX = (e.getX() / readsCanvas.ntW);
-		ntCenterY = (e.getY() / readsCanvas.ntH);
+		readsCanvas.pCenter = new Point(e.getX(), e.getY());
 
 		BandAdjust.zoomIn(3);
-
-		isClickZooming = false;
 	}
 
 	// Jumps the screen left by one "page"
