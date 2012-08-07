@@ -54,6 +54,7 @@
 
 		<jar jarfile="${tablet-resources.jar}">
 			<zipfileset dir="${res}" prefix="res"/>
+			<zipfileset dir="installer/licence" prefix="installer/licence"/>
 		</jar>
 
 		<jar jarfile="${tablet.jar}">

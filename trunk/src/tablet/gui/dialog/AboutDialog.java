@@ -5,7 +5,9 @@ package tablet.gui.dialog;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import javax.swing.*;
+import javax.swing.event.*;
 
 import tablet.gui.*;
 
@@ -15,7 +17,9 @@ public class AboutDialog extends JDialog implements ActionListener
 {
 	private JButton bClose;
 
-	private AboutPanelNB nbPanel;
+	private AboutPanelNB nbPanel = new AboutPanelNB();
+	private AboutLicencePanelNB licencePanel = new AboutLicencePanelNB();
+	AvatarPanel avatars = new AvatarPanel();
 
 	public AboutDialog()
 	{
@@ -25,13 +29,10 @@ public class AboutDialog extends JDialog implements ActionListener
 			true
 		);
 
-		nbPanel = new AboutPanelNB();
-
-		AvatarPanel avatars = new AvatarPanel();
-
 		JTabbedPane tabs = new JTabbedPane();
 		tabs.add(RB.getString("gui.dialog.AboutDialog.tab1"), nbPanel);
-		tabs.add(RB.format("gui.dialog.AboutDialog.tab2", "\u0026"), avatars);
+		tabs.add(RB.getString("gui.dialog.AboutDialog.tab2"), licencePanel);
+		tabs.add(RB.format("gui.dialog.AboutDialog.tab3", "\u0026"), avatars);
 
 		add(tabs);
 		add(createButtons(), BorderLayout.SOUTH);
