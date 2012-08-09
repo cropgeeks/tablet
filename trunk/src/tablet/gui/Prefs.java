@@ -23,7 +23,7 @@ public class Prefs extends XMLPreferences
 		1987200000L); // First appearance after 7 days (now-23 days)
 
 	// The local working directory for disk caching
-	public static String cacheDir =
+	public static String cacheFolder =
 		SystemUtils.getTempUserDirectory("scri-tablet").getPath();
 
 	// When to check for updates

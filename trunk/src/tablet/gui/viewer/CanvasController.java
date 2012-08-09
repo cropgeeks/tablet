@@ -11,7 +11,7 @@ import javax.swing.event.*;
 import tablet.gui.*;
 import tablet.gui.ribbon.*;
 
-public class CanvasController extends JPanel //implements ChangeListener
+public class CanvasController extends JPanel implements ChangeListener
 {
 	private AssemblyPanel aPanel;
 	private ConsensusCanvas consensusCanvas;
@@ -32,7 +32,7 @@ public class CanvasController extends JPanel //implements ChangeListener
 		scaleCanvas = aPanel.scaleCanvas;
 
 		viewport = sp.getViewport();
-//		viewport.addChangeListener(this);
+		viewport.addChangeListener(this);
 		hBar = sp.getHorizontalScrollBar();
 		vBar = sp.getVerticalScrollBar();
 
@@ -45,10 +45,10 @@ public class CanvasController extends JPanel //implements ChangeListener
 	JScrollBar getVBar()
 		{ return vBar; }
 
-//	public void stateChanged(ChangeEvent e)
-//	{
-//		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
-//	}
+	public void stateChanged(ChangeEvent e)
+	{
+		readsCanvas.computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
+	}
 
 	private void setScrollbarAdjustmentValues(int xIncrement, int yIncrement)
 	{

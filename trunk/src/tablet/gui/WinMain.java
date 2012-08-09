@@ -361,8 +361,8 @@ public class WinMain extends JRibbonFrame
 
 	public void validateCacheFolder()
 	{
-		new File(Prefs.cacheDir).mkdirs();
-		File test = new File(Prefs.cacheDir, "Tablet-"+ SystemUtils.createGUID(24) + ".cache");
+		new File(Prefs.cacheFolder).mkdirs();
+		File test = new File(Prefs.cacheFolder, "Tablet-"+ SystemUtils.createGUID(24) + ".cache");
 		test.deleteOnExit();
 
 		try
@@ -380,7 +380,7 @@ public class WinMain extends JRibbonFrame
 
 	private void cacheInvalid(IOException e)
 	{
-		String msg = RB.format("gui.WinMain.cacheError", Prefs.cacheDir, e);
+		String msg = RB.format("gui.WinMain.cacheError", Prefs.cacheFolder, e);
 
 		TaskDialog.showOpenLog(RB.format("gui.ContigsPanel.saveReads.exception",
 			msg), Tablet.getLogFile());

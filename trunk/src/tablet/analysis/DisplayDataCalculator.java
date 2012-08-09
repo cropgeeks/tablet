@@ -52,7 +52,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 			// The padded->unpadded mapping array...
 			if (Prefs.cacheMappings && length > 1000000)
 			{
-				File cache = new File(Prefs.cacheDir, "Tablet-" + assembly.getCacheID() + ".paddedmap");
+				File cache = new File(Prefs.cacheFolder, "Tablet-" + assembly.getCacheID() + ".paddedmap");
 				paddedToUnpadded = new ArrayIntFileCache(cache);
 			}
 			else
@@ -61,7 +61,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 			// The unpadded->padded mapping array...
 			if (Prefs.cacheMappings && length > 1000000)
 			{
-				File cache = new File(Prefs.cacheDir, "Tablet-" + assembly.getCacheID() + ".unpaddedmap");
+				File cache = new File(Prefs.cacheFolder, "Tablet-" + assembly.getCacheID() + ".unpaddedmap");
 				unpaddedToPadded = new ArrayIntFileCache(cache);
 			}
 			else

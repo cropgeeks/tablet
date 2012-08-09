@@ -53,7 +53,7 @@ class GeneralTabNB extends JPanel implements ActionListener
         RB.setText(cacheLabel, "gui.dialog.prefs.NBGeneralPanel.cacheLabel");
         RB.setText(bBrowse, "gui.text.browse");
 
-        cacheField.setText(Prefs.cacheDir);
+        cacheField.setText(Prefs.cacheFolder);
         bBrowse.addActionListener(this);
 	}
 
@@ -77,7 +77,7 @@ class GeneralTabNB extends JPanel implements ActionListener
 		}
 
 		Prefs.guiUpdateSchedule = updateCombo.getSelectedIndex();
-		Prefs.cacheDir = cacheField.getText();
+		Prefs.cacheFolder = cacheField.getText();
 	}
 
 	public void actionPerformed(ActionEvent e)
