@@ -227,31 +227,34 @@ public class Feature implements Comparable<Feature>
 	// A collection of 216 "web safe" colors
 	private static class WebsafePalette
 	{
-		private static Color[] colors;
+		private static ArrayList<Color> colors;
 
 		static
 		{
-			int c = 0;
-			colors = new Color[216];
+			colors = new ArrayList<>();
 
 			for (int r = 0; r < 256; r += 51)
 				for (int g = 0; g < 256; g += 51)
 					for (int b = 0; b < 256; b += 51)
 					{
-						colors[c] = new Color(r, g, b);
-						c++;
+						// Skip certain colours that we know are no good. This
+						// blocks out the last two columns (the lighter colours)
+						if (b >= 204)
+							continue;
+
+						colors.add(new Color(r, g, b));
 					}
 		}
 
 		public static int getColorCount()
-			{ return colors.length; }
+			{ return colors.size(); }
 
 		public static Color getColor(int index)
 		{
 			if (index < 0)
 				index *= -1;
 
-			return colors[index % colors.length];
+			return colors.get(index % colors.size());
 		}
 	}
 }
