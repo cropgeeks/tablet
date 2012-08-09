@@ -133,7 +133,7 @@ public class SamtoolsHelper
 		long s = System.currentTimeMillis();
 
 		// Decide where to extract the executable to
-		File cacheDir = new File(Prefs.cacheDir);
+		File cacheDir = new File(Prefs.cacheFolder);
 		File samtools = new File(cacheDir, "Tablet-" + cacheID + "-samtools");
 
 		// Read it from samtools-OS.jar

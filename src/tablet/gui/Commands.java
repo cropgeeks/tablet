@@ -83,7 +83,7 @@ public class Commands
 		AssemblyFile[] files = tabletFile.getFileList();
 
 		AssemblyFileHandler assemblyFileHandler = new AssemblyFileHandler(
-			files, new File(Prefs.cacheDir));
+			files, new File(Prefs.cacheFolder));
 
 
 		String title = RB.getString("gui.Commands.fileOpen.title");

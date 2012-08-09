@@ -281,8 +281,6 @@ public class ReadsCanvas extends JPanel
 		super.paintComponent(graphics);
 		Graphics2D g = (Graphics2D) graphics;
 
-		computeForRedraw(viewport.getExtentSize(), viewport.getViewPosition());
-
 		long s = System.nanoTime();
 
 		// Update the back buffer (if it needs redrawn)
