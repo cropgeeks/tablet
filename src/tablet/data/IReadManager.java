@@ -21,13 +21,6 @@ public interface IReadManager
 
 	public ArrayList<Read> getLine(int line);
 
-	/**
-	 * Returns an array (one element per base) with each element containing a
-	 * reference to the ReadMetaData object at each base, for the given line
-	 * between the points start and end.
-	 */
-	public LineData getLineData(int line, int start, int end);
-
 	public LineData getPixelData(int line, int start, int end, float scale, boolean getMetaData);
 
 	/**

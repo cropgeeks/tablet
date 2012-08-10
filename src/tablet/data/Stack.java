@@ -13,6 +13,7 @@ public class Stack implements IReadManager
 	{
 	}
 
+	@Override
 	public LineData getPixelData(int line, int startBase, int arraySize, float scale, boolean getMetaData)
 	{
 		// Arrays which will eventually make up the LineData object
@@ -52,48 +53,13 @@ public class Stack implements IReadManager
 		stack = reads;
 	}
 
+	@Override
 	public int size()
 	{
 		return stack.size();
 	}
 
-	public LineData getLineData(int line, int start, int end)
-	{
-		Read read = stack.get(line);
-
-		ReadMetaData[] reads = new ReadMetaData[end-start+1];
-		int[] indexes = new int[end-start+1];
-
-		// Tracking index within the data array
-		int dataI = 0;
-		// Tracking index on the start->end scale
-		int index = start;
-
-		int readS = read.s();
-		int readE = read.e();
-
-		ReadMetaData rmd = Assembly.getReadMetaData(read, true);
-
-		// Fill in any blanks between the current position and the start of
-		// this read
-		for (; index <= end && index < readS; index++, dataI++)
-			indexes[dataI] = -1;
-
-		// Fill in any read data
-		for (; index <= end && index <= readE; index++, dataI++)
-		{
-			reads[dataI] = rmd;
-			indexes[dataI] = index-readS;
-		}
-
-		// If no more reads are within the window, fill in any blanks between
-		// the final read and the end of the array
-		for (; index <= end; index++, dataI++)
-			indexes[dataI] = -1;
-
-		return new LineData(indexes, reads, null);
-	}
-
+	@Override
 	public Read getReadAt(int line, int nucleotidePosition)
 	{
 		if (line < 0 || line >= stack.size())
@@ -118,6 +84,7 @@ public class Stack implements IReadManager
 	 * @param read	The read whose lineIndex we are searching for.
 	 * @return mid	The lineIndex.
 	 */
+	@Override
 	public int getLineForRead(Read read)
 	{
 		int high = stack.size()-1;
@@ -157,6 +124,7 @@ public class Stack implements IReadManager
 		return -1;
 	}
 
+	@Override
 	public ArrayList<Read> getReadNames(int startIndex, int endIndex)
 	{
 		ArrayList<Read> tempList = new ArrayList<>();
@@ -168,6 +136,7 @@ public class Stack implements IReadManager
 		return tempList;
 	}
 
+	@Override
 	public ArrayList<Read> getLine(int line)
 	{
 		Read read = stack.get(line);
@@ -176,6 +145,7 @@ public class Stack implements IReadManager
 		return stackLine;
 	}
 
+	@Override
 	public Read[] getPairForLink(int rowIndex, int colIndex)
 		{ return null; }
 }

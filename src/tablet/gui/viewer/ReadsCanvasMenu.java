@@ -400,7 +400,7 @@ class ReadsCanvasMenu implements ActionListener
 
 		ReadMetaData rmd = null;
 
-		if (read != null )
+		if (read != null && read.isNotMateLink())
 		{
 			rmd = Assembly.getReadMetaData(read, false);
 

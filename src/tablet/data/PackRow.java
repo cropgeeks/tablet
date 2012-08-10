@@ -66,20 +66,6 @@ public class PackRow
 		return read;
 	}
 
-	LineData getLineData(int start, int end)
-	{
-		int read = windowBinarySearch(start, end);
-
-		// Search left from this read to find the left-most read that appears in
-		// the window (as the binary search will only find the first read that
-		// appears anywhere in it).
-		for (read = read-1; read >= 0; read--)
-			if (reads.get(read).compareToWindow(start, end) == -1)
-				break;
-
-		return getLineData(read+1, start, end);
-	}
-
 	// startBase = nucleotide base to start at
 	// arraysize = array same size as number of pixels on screen
 	// scale = maps number of nucletides to pixels (eg 0.1 = 10 bases per pixel)
@@ -182,56 +168,6 @@ public class PackRow
 		}
 
 		return new LineData(indexes, rmds, pixReads);
-	}
-
-	protected LineData getLineData(int fromRead, int start, int end)
-	{
-		ReadMetaData[] rmds = new ReadMetaData[end-start+1];
-		int[] indexes = new int[end-start+1];
-
-		// Tracking index within the data array
-		int dataI = 0;
-		// Tracking index on the start->end scale
-		int index = start;
-
-		Read read = null;
-		ReadMetaData rmd = null;
-
-		ListIterator<Read> itor = reads.listIterator(fromRead);
-
-		while (itor.hasNext())
-		{
-			read = itor.next();
-
-			if (read.s() > end)
-				break;
-
-			rmd = Assembly.getReadMetaData(read, true);
-
-			int readS = read.s();
-			int readE = read.e();
-
-
-			// Fill in any bases before the read with blanks
-			for (; index < readS; index++, dataI++)
-				indexes[dataI] = -1;
-
-
-			// Fill in the data for this read
-			for (; index <= end && index <= readE; index++, dataI++)
-			{
-				rmds[dataI] = rmd;
-				indexes[dataI] = index-readS;
-			}
-		}
-
-		// Fill bases between the end of the read and the end of the window with
-		// blanks
-		for (; index <= end; index++, dataI++)
-			indexes[dataI] = -1;
-
-
-		return new LineData(indexes, rmds, null);
 	}
 
 	Read getReadAt(int position)

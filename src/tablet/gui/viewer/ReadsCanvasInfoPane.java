@@ -59,7 +59,7 @@ class ReadsCanvasInfoPane
 	{
 		Read read = rCanvas.reads.getReadAt(lineIndex, rowIndex);
 
-		if (read == null)
+		if (read == null || !read.isNotMateLink())
 			oCanvas.updateRead(-1, -1, -1);
 
 		else
@@ -86,6 +86,9 @@ class ReadsCanvasInfoPane
 
 		// Is there a read under the mouse?
 		readA = rCanvas.reads.getReadAt(lineIndex, rowIndex);
+
+		if (readA instanceof MateLink)
+			readA = null;
 
 		// And if so, does it have a mate?
 		if (readA instanceof MatedRead)
