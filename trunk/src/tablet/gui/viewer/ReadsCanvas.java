@@ -442,6 +442,12 @@ public class ReadsCanvas extends JPanel
 							g.fillRect(x, y, 1, 2);
 						}
 
+						else if (indexes[i] == LineData.PAIRLINK)
+						{
+							g.setColor(new Color(180, 180, 180));
+							g.fillRect(x, y, 1, 2);
+						}
+
 //						if (readArr[i] != null)
 //							g.drawLine(x, y, x, y);
 					}

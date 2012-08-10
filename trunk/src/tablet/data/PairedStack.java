@@ -13,6 +13,7 @@ public class PairedStack implements IReadManager
 {
 	private ArrayList<PairedStackRow> stack = new ArrayList<>();
 
+	@Override
 	public LineData getPixelData(int line, int start, int end, float scale, boolean getMetaData)
 	{
 		PairedStackRow pairedStackRow = stack.get(line);
@@ -20,18 +21,13 @@ public class PairedStack implements IReadManager
 		return pairedStackRow.getPixelData(start, end, scale, getMetaData);
 	}
 
-	public LineData getLineData(int line, int start, int end)
-	{
-		PairedStackRow pairedStackRow = stack.get(line);
-
-		return pairedStackRow.getLineData(start, end);
-	}
-
+	@Override
 	public int size()
 	{
 		return stack.size();
 	}
 
+	@Override
 	public Read getReadAt(int line, int nucleotidePosition)
 	{
 		if (line < 0 || line >= stack.size())
@@ -45,18 +41,20 @@ public class PairedStack implements IReadManager
 	/**
 	 * Get the line of the display the given read can be found on.
 	 */
+	@Override
 	public int getLineForRead(Read read)
 	{
 		for(PairedStackRow pairedStackRow : stack)
 		{
 			Read found = pairedStackRow.getReadAt(read.s());
 
-			if(found != null && found.getID() == read.getID())
+			if (found != null && found.getID() == read.getID())
 				return stack.indexOf(pairedStackRow);
 		}
 		return -1;
 	}
 
+	@Override
 	public ArrayList<Read> getReadNames(int startIndex, int endIndex)
 	{
 		return null;
@@ -67,10 +65,11 @@ public class PairedStack implements IReadManager
 		stack.add(pairedStackRow);
 	}
 
+	@Override
 	public ArrayList<Read> getLine(int line)
 	{
 		ArrayList<Read> reads = new ArrayList<>();
-		for(Read read : stack.get(line).getBothReads())
+		for (Read read : stack.get(line).getBothReads())
 		{
 			if(read != null)
 				reads.add(read);
@@ -78,6 +77,7 @@ public class PairedStack implements IReadManager
 		return reads;
 	}
 
+	@Override
 	public Read[] getPairForLink(int rowIndex, int colIndex)
 	{
 		if (rowIndex >= 0 && rowIndex < stack.size())

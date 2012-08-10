@@ -21,13 +21,6 @@ public class Pack implements IReadManager, Iterable<PackRow>
 	public void trimToSize()
 		{ packRows.trimToSize(); }
 
-	public LineData getLineData(int line, int start, int end)
-	{
-		PackRow packRow = packRows.get(line);
-
-		return packRow.getLineData(start, end);
-	}
-
 	public LineData getPixelData(int line, int start, int end, float scale, boolean getMetaData)
 	{
 		PackRow packRow = packRows.get(line);
