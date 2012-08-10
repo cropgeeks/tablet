@@ -84,7 +84,7 @@ public class CanvasController extends JPanel implements ChangeListener
 		// This call is needed to force the canvas to recalculate its px1,px2
 		// values which might not update if the new data doesn't cause a scroll-
 		// bar event. If they don't update, the scale canvas won't be updated
-//		stateChanged(null);
+		stateChanged(null);
 	}
 
 	void moveToLater(final int rowIndex, final int colIndex, final boolean centre)

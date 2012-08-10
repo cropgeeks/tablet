@@ -103,7 +103,7 @@ public class PairedPackCreator extends SimpleJob
 				// Can we add read's mate? If so add a MateLink as well
 				if (pack.get(i).getPositionE() < read.getMatePos())
 				{
-					MateLink link = new MateLink(-1, pack.get(i).getPositionE()+1);
+					MateLink link = new MateLink(pack.get(i).getPositionE()+1);
 					link.setLength(read.getMatePos()-link.s());
 					pack.get(i).addRead(link);
 				}
@@ -156,7 +156,7 @@ public class PairedPackCreator extends SimpleJob
 				// Can we add read's mate? If so add a MateLink as well
 				if (packRow.getPositionE() < read.getMatePos())
 				{
-					MateLink link = new MateLink(-1, packRow.getPositionE()+1);
+					MateLink link = new MateLink(packRow.getPositionE()+1);
 					link.setLength(read.getMatePos()-link.s());
 					packRow.addRead(link);
 				}

@@ -58,7 +58,7 @@ class ReadShadower implements IOverlayRenderer
 			int base = rCanvas.getBaseForPixel(midPointPixel);
 			Read read = rCanvas.reads.getReadAt(row, base);
 
-			if (read != null)
+			if (read != null && read.isNotMateLink())
 			{
 				int xS = rCanvas.getFirstRenderedPixel(read.s());
 				int xE = rCanvas.getFinalRenderedPixel(read.e());
@@ -95,7 +95,7 @@ class ReadShadower implements IOverlayRenderer
 		{
 			Read read = rCanvas.reads.getReadAt(row, iPosition);
 
-			if (read != null)
+			if (read != null && read.isNotMateLink())
 			{
 				int xS = rCanvas.getFirstRenderedPixel(read.s());
 				int xE = rCanvas.getFinalRenderedPixel(read.e());

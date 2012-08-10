@@ -9,8 +9,8 @@ package tablet.data;
  */
 public class MateLink extends Read
 {
-	public MateLink(int id, int position)
+	public MateLink(int position)
 	{
-		super(id, position);
+		super(-1, position);
 	}
 }

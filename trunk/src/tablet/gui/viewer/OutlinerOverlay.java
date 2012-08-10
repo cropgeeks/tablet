@@ -25,7 +25,7 @@ class OutlinerOverlay implements IOverlayRenderer
 		rCanvas = aPanel.readsCanvas;
 	}
 
-	void setRead(Read read, int colIndex, int lineIndex)
+	void setRead(Read read, int lineIndex)
 	{
 		this.read = read;
 		this.lineIndex = lineIndex;
@@ -74,7 +74,7 @@ class OutlinerOverlay implements IOverlayRenderer
 		}
 
 		// Draw an outline around whatever read is under the mouse
-		if (read != null)
+		if (read != null && read.isNotMateLink())
 		{
 			int xS = rCanvas.getFirstRenderedPixel(read.s());
 			int xE = rCanvas.getFinalRenderedPixel(read.e());
