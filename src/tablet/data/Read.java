@@ -123,4 +123,12 @@ public class Read implements Comparable<Read>
 
 	public void setLength(int length)
 		{ this.length = length; }
+
+	public boolean isNotMateLink()
+	{
+		if (this instanceof MateLink)
+			return false;
+
+		return true;
+	}
 }

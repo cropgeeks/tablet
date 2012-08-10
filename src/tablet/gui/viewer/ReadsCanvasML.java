@@ -67,7 +67,7 @@ class ReadsCanvasML extends MouseInputAdapter
 	public void mouseExited(MouseEvent e)
 	{
 		pairOutliner.setPair(null, null, 0, 0);
-		outliner.setRead(null, 0, 0);
+		outliner.setRead(null, -1);
 		infoPane.setMousePosition(null, -1, -1);
 		nOverlay.setMousePosition(null);
 
@@ -178,7 +178,7 @@ class ReadsCanvasML extends MouseInputAdapter
 
 		// Track the read under the mouse (if any)
 		Read read = rCanvas.reads.getReadAt(yIndex, ntIndex);
-		outliner.setRead(read, ntIndex, yIndex);
+		outliner.setRead(read, yIndex);
 		outlinePair(read, yIndex, ntIndex);
 
 
@@ -193,7 +193,7 @@ class ReadsCanvasML extends MouseInputAdapter
 		pairOutliner.setPair(null, null, 0, 0);
 
 		// If no read is under the mouse, we might be over a link line
-		if (read == null)
+		if (read == null || read instanceof MateLink)
 		{
 			Read[] pair = rCanvas.reads.getPairForLink(yIndex, xIndex);
 

@@ -69,7 +69,7 @@ class ScaledOverviewFactory extends OverviewBufferFactory
 
 				// Then drawing that data (or not)
 				Read read = reads.getReadAt(dataY, dataX);
-				if (read != null)
+				if (read != null && read.isNotMateLink())
 				{
 					ReadMetaData rmd = Assembly.getReadMetaData(read, true);
 

@@ -10,7 +10,7 @@ public class PairedPackRow extends PackRow
 	// startBase = nucleotide base to start at
 	// arraysize = array same size as number of pixels on screen
 	// scale = maps number of nucletides to pixels (eg 0.1 = 10 bases per pixel)
-	protected LineData getPixelData(int startBase, int arraySize, float scale)
+	protected LineData getPixelData(int startBase, int arraySize, float scale, boolean getMetaData)
 	{
 		ReadMetaData[] rmds = new ReadMetaData[arraySize];
 		int[] indexes = new int[arraySize];
@@ -55,7 +55,7 @@ public class PairedPackRow extends PackRow
 					{
 						boolean isLink = (rIndex.read instanceof MateLink);
 
-						if (scale >= 1 && isLink == false)
+						if ((scale >= 1 || getMetaData) && isLink == false)
 							rmds[i] = Assembly.getReadMetaData(rIndex.read, true);
 
 						// If we don't have a mate link fill data as normal

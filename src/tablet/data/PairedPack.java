@@ -13,10 +13,10 @@ public class PairedPack extends Pack
 	public void addPackRow(PairedPackRow packRow)
 	{ packRows.add(packRow); }
 
-	public LineData getPixelData(int line, int start, int end, float scale)
+	public LineData getPixelData(int line, int start, int end, float scale, boolean getMetaData)
 	{
 		PairedPackRow packRow = (PairedPackRow) packRows.get(line);
-		return packRow.getPixelData(start, end, scale);
+		return packRow.getPixelData(start, end, scale, getMetaData);
 	}
 
 	public LineData getLineData(int line, int start, int end)
@@ -33,8 +33,8 @@ public class PairedPack extends Pack
 
 		// Are we over a link-line (test by looking at just one base)
 		LineData lineData = getLineData(rowIndex, colIndex, colIndex);
-        if (lineData.getIndexes()[0] != LineData.PAIRLINK)
-            return null;
+		if (lineData.getIndexes()[0] != LineData.PAIRLINK)
+			return null;
 
 		PairedPackRow packRow = (PairedPackRow) packRows.get(rowIndex);
 

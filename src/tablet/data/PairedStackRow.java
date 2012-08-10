@@ -135,10 +135,10 @@ public class PairedStackRow
 	 */
 	Read getReadAt(int position)
 	{
-		if(readA.s() <= position && readA.e() >= position)
+		if (readA.s() <= position && readA.e() >= position)
 			return readA;
 
-		else if(readB != null && readB != null && readB.s() <= position && readB.e() >= position)
+		else if (readB != null && readB.s() <= position && readB.e() >= position)
 			return readB;
 
 		return null;
