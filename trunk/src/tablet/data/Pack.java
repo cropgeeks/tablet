@@ -9,14 +9,19 @@ public class Pack implements IReadManager, Iterable<PackRow>
 {
 	protected ArrayList<PackRow> packRows = new ArrayList<>();
 
+	public PackRow addNewRow()
+	{
+		PackRow newRow = new PackRow();
+		packRows.add(newRow);
+
+		return newRow;
+	}
+
 	public Iterator<PackRow> iterator()
 		{ return packRows.iterator(); }
 
 	public int size()
 		{ return packRows.size(); }
-
-	public void addPackRow(PackRow packRow)
-		{ packRows.add(packRow); }
 
 	public void trimToSize()
 		{ packRows.trimToSize(); }

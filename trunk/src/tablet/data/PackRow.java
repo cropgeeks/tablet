@@ -20,22 +20,6 @@ public class PackRow
 	public void trimToSize()
 		{ reads.trimToSize(); }
 
-	/**
-	 * Attempts to add the read to this PackRow. It will only be added if it does
-	 * not overlap with any reads already stored in this pack.
-	 */
-	public boolean addRead(Read read)
-	{
-		if (reads.isEmpty() || read.s() > positionE)
-		{
-			reads.add(read);
-			positionE = read.e() + Prefs.visPadReads;
-			return true;
-		}
-
-		return false;
-	}
-
 	protected int windowBinarySearch(int start, int end)
 	{
 		int read = -1;
@@ -216,6 +200,9 @@ public class PackRow
 
 	public int getPositionE()
 		{ return positionE; }
+
+	public void setPositionE(int positionE)
+		{ this.positionE = positionE; }
 
 	// Simple wrapper around a Read and its position within this PackRow
 	protected static class ReadIndex

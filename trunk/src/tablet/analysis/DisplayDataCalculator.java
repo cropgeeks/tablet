@@ -149,11 +149,11 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 	{
 		// If PACK is selected
 		if(Prefs.visPacked && !Prefs.visPaired)
-			packCreator = new PackCreator(contig);
+			packCreator = new PackCreator(contig, false);
 
 		// If PAIRED PACK is selected
 		else if(Prefs.visPacked && Prefs.visPaired)
-			packCreator = new PairedPackCreator(contig, assembly);
+			packCreator = new PackCreator(contig, true);
 
 		// If PAIRED STACK is selected
 		else if(!Prefs.visPacked && Prefs.visPaired)
