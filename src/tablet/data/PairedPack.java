@@ -10,8 +10,14 @@ public class PairedPack extends Pack
 		super();
 	}
 
-	public void addPackRow(PairedPackRow packRow)
-	{ packRows.add(packRow); }
+	@Override
+	public PackRow addNewRow()
+	{
+		PairedPackRow newRow = new PairedPackRow();
+		packRows.add(newRow);
+
+		return newRow;
+	}
 
 	public LineData getPixelData(int line, int start, int end, float scale, boolean getMetaData)
 	{
