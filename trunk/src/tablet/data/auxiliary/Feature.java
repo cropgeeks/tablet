@@ -239,7 +239,7 @@ public class Feature implements Comparable<Feature>
 					{
 						// Skip certain colours that we know are no good. This
 						// blocks out the last two columns (the lighter colours)
-						if (b >= 204)
+						if (b >= 153)
 							continue;
 
 						colors.add(new Color(r, g, b));

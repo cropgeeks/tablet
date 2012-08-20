@@ -84,11 +84,27 @@ class GeneralTabNB extends JPanel implements ActionListener
 	{
 		JFileChooser fc = new JFileChooser();
 		fc.setDialogTitle("");
-		fc.setSelectedFile(new File(cacheField.getText()));
+		fc.setCurrentDirectory(new File(cacheField.getText()));
 		fc.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
 		if (fc.showOpenDialog(Tablet.winMain) == JFileChooser.APPROVE_OPTION)
+		{
+			if (fc.getSelectedFile().listFiles().length > 0)
+			{
+				String[] options = new String[] {
+					RB.getString("gui.text.yes"),
+					RB.getString("gui.text.no") };
+
+				int response = TaskDialog.show(
+					RB.getString("gui.dialog.prefs.NBGeneralPanel.cachePrompt"),
+					TaskDialog.WAR, 1, options);
+
+				if (response != 0)
+					return;
+			}
+
 			cacheField.setText(fc.getSelectedFile().getPath());
+		}
 	}
 
     /** This method is called from within the constructor to

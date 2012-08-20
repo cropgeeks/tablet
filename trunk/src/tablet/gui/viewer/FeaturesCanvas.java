@@ -192,7 +192,7 @@ public class FeaturesCanvas extends TrackingCanvas
 					int cPoint = rCanvas.getFirstRenderedPixel(cutPoint);
 
 					int start = rCanvas.getFirstRenderedPixel(p1);
-					int end = rCanvas.getFinalRenderedPixel(p2-p1);
+					int end = rCanvas.getFinalRenderedPixel(p2);
 
 					if (ntW < 1)
 					{
@@ -201,7 +201,7 @@ public class FeaturesCanvas extends TrackingCanvas
 					}
 
 					g.setPaint(enzymePaint);
-					g.fillRect(start, H/4+5, end, H/4-1);
+					g.fillRect(start, H/4+5, end-start, H/4-1);
 					//g.drawRect(start, H/4+5, end, H/4-1);
 
 					// Draw line over last pixel in previous base and first pixel
@@ -225,15 +225,15 @@ public class FeaturesCanvas extends TrackingCanvas
 					Color cA = new Color(cF.getRed(), cF.getGreen(), cF.getBlue(), 50);
 
 					int start = rCanvas.getFirstRenderedPixel(p1);
-					int end = rCanvas.getFinalRenderedPixel(p2-p1);
+					int end = rCanvas.getFinalRenderedPixel(p2);
 
 					if (ntW < 1)
 						start = rCanvas.getFinalRenderedPixel(p1);
 
 					g.setPaint(cA);
-					g.fillRect(start, H/4+2, end, H/2);
+					g.fillRect(start, H/4+2, end-start, H/2);
 					g.setPaint(cF);
-					g.drawRect(start, H/4+2, end, H/2);
+					g.drawRect(start, H/4+2, end-start, H/2);
 				}
 			}
 
