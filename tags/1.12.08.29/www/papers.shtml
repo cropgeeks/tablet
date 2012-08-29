@@ -1,0 +1,331 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="stylesheet/styles.css" type="text/css">
+
+<title>Papers & Presentations</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.shtml" -->
+
+
+<h2>Papers & Presentations</h2>
+
+
+<p>Please use either of the following two references if you are citing Tablet in your work:</p>
+
+<ul>
+<li>
+Milne, I., Bayer, M., Cardle, L., Shaw, P., Stephen, G., Wright, F. and Marshall, D. 2010.
+<a target="new" href="http://dx.doi.org/10.1093/bioinformatics/btp666">Tablet - next generation sequence assembly visualization.</a>
+<b>Bioinformatics 26(3)</b>, 401-402.
+</li>
+<li>
+Milne, I., Stephen, G., Bayer, M., Cock, P.J.A., Pritchard, L., Cardle, L., Shaw, P.D. and Marshall, D. 2012.
+<a target="new" href="http://dx.doi.org/10.1093/bib/bbs012">Using Tablet for visual exploration of second-generation sequencing data.</a>
+<b>Briefings in Bioinformatics</b>
+</li>
+</ul>
+
+<p>&nbsp;</p>
+
+<p>We have also collated together a list of papers from other authors where Tablet has been mentioned:</p>
+
+<ul>
+<li>
+Abeel, T., et al. 2012,
+<a target="new" href="http://dx.doi.org/10.1093/nar/gkr995">GenomeView: a next-generation genome browser.</a>
+<b>Nucleic Acids Research</b>
+</li>
+</li>
+<li>
+Carver, T., et al. 2012,
+<a target="new" href="http://dx.doi.org/10.1093/bioinformatics/btr703">Artemis: an integrated platform for visualization and analysis of high-throughput sequence-based experimental data.</a>
+<b>Bioinformatics</b>
+</li>
+<li>
+Carver, T., et al. 2012,
+<a target="new" href="http://dx.doi.org/10.1093/bib/bbr073">BamView: visualizing and interpretation of next-generation sequencing read alignments.</a>
+<b>Briefings in Bioinformatics</b>
+</li>
+<li>
+Giampetruzzi, A., et al. 2012,
+<a target="new" href="http://dx.doi.org/10.1016/j.virusres.2011.10.010">A new grapevine virus discovered by deep sequencing of virus- and viroid-derived small RNAs in Cv <i>Pinot gris</i>.</a>
+<b>Virus Research</b>
+</li>
+<li>
+Hammond, S., et al. 2012,
+<a target="new" href="http://dx.doi.org/10.1002/bit.24415">Profiling conserved microRNA expression in recombinant CHO cell lines using illumina sequencing.</a>
+<b>Biotechnology and Bioengineering</b>
+</li>
+<li>
+Kauffman, M.A., et al. 2012,
+<a target="new" href="http://dx.doi.org/10.1007/s11033-012-1471-9">Diagnosis of mitochondrial disorders applying massive pyrosequencing.</a>
+<b>Molecular Biology Reports</b>
+</li>
+<li>
+Lee, H.C., et al. 2012,
+<a target="new" href="http://dx.doi.org/10.1093/bfgp/elr037">Bioinformatics tools and databases for analysis of next-generation sequence data.</a>
+<b>Briefings in Functional Genomics</b>
+</li>
+<li>
+Leprince, A., et al. 2012,
+<a target="new" href="http://dx.doi.org/10.1111/j.1462-2920.2012.02730.x">Random and cyclical deletion of large DNA segments in the genome of <i>Pseudomonas putida</i>.</a>
+<b>Environmental Microbiology</b>
+</li>
+<li>
+Manickavelu, A., et al. 2012,
+<a target="new" href="http://dx.doi.org/10.1093/dnares/dss001">Comprehensive Functional Analyses of Expressed Sequence Tags in Common Wheat (<i>Triticum aestivum</i>).</a>
+<b>DNA Research</b>
+</li>
+<li>
+Messenger, L.A., et al. 2012,
+<a target="new" href="http://dx.doi.org/10.1371/journal.pntd.0001584">Multiple Mitochondrial Introgression Events and Heteroplasmy in <i>Trypanosoma cruzi</i> Revealed by Maxicircle MLST and Next Generation Sequencing.</a>
+<b>PLoS Neglected Tropical Diseases</b>
+</li>
+<li>
+Okonechnikov, K., et al. 2012,
+<a target="new" href="http://dx.doi.org/10.1093/bioinformatics/bts091">Unipro UGENE: a unified bioinformatics toolkit.</a>
+<b>Bioinformatics</b>
+</li>
+<li>
+Popendorf, K. and Sakakibara, Y. 2012,
+<a target="new" href="http://dx.doi.org/10.1093/bioinformatics/bts122">SAMSCOPE: An OpenGL based real-time interactive scale-free SAM viewer.</a>
+<b>Bioinformatics</b>
+</li>
+<li>
+Straub, S.C.K., et al. 2012,
+<a target="new" href="http://dx.doi.org/10.3732/ajb.1100335">Navigating the tip of the genomic iceberg: Next-generation sequencing for plant systematics.</a>
+<b>American Journal of Botany</b>
+</li>
+<li>
+Strickler, S.R., et al. 2012,
+<a target="new" href="http://dx.doi.org/10.3732/ajb.1100292">Designing a transcriptome next-generation sequencing project for a nonmodel plant species.</a>
+<b>American Journal of Botany</b>
+</li>
+<li>
+Thorvaldsdottir, H., et al. 2012,
+<a target="new" href="http://dx.doi.org/10.1093/bib/bbs017">Integrative Genomics Viewer (IGV): high-performance genomics data visualization and exploration.</a>
+<b>Briefings in Bioinformatics</b>
+</li>
+<li>
+Coucheron, D.H., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1007/s00294-011-0338-2">Characterization of mitochondrial mRNAs in codfish reveals unique features compared to mammals.</a>
+<b>Current Genetics</b>
+</li>
+<li>
+Danielsson, M., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1186/1471-2229-11-154">Chemical and transcriptional responses of Norway spruce genotypes with different susceptibility to <i>Heterobasidion</i> spp. infection.</a>
+<b>BMC Plant Biology</b>
+</li>
+<li>
+Forde, B.M., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1186/1475-2859-10-S1-S13">Genome sequences and comparative genomics of two <i>Lactobacillus ruminis</i> strains from the bovine and human intestinal tracts.</a>
+<b>Microbial Cell Factories</b>
+</li>
+<li>
+Gatherer, D., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1073/pnas.1115861108">High-resolution human cytomegalovirus transcriptome.</a>
+<b>Proceedings of the National Academy of Sciences</b>
+</li>
+<li>
+Guida, A., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1186/1471-2164-12-628">Using RNA-seq to determine the transcriptional landscape and the hypoxic response of the pathogenic yeast <i>Candida parapsilosis</i>.</a>
+<b>BMC Genomics</b>
+</li>
+<li>
+Graham, J., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1007/s00122-011-1609-5">Towards an understanding of the nature of resistance to <i>Phytophthora</i> root rot in red raspberry.</a>
+<b>TAG Theoretical and Applied Genetics</b>
+</li>
+<li>
+Hird, S.M., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1111/j.1755-0998.2011.03005.x">PRGmatic: an efficient pipeline for collating genome-enriched second-generation sequencing data using a ‘provisional-reference genome’.</a>
+<b>Molecular Ecology Resources</b>
+</li>
+<li>
+Hoffman, J.I. 2011,
+<a target="new" href="http://dx.doi.org/10.1111/j.1755-0998.2011.02999.x">Gene discovery in the Antarctic fur seal (<i>Arctocephalus gazella</i>) skin transcriptome.</a>
+<b>Molecular Ecology Resources</b>
+</li>
+<li>Hoffman, J.I. and Nichols, H.J. 2011,
+<a target="new" href="http://dx.doi.org/10.1371/journal.pone.0023283">A Novel Approach for Mining Polymorphic Microsatellite Markers <i>In Silico</i>.</a>
+<b>PLoS ONE</b>
+</li>
+<li>
+Hu, B., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1093/bfgp/elr042">Pathogen comparative genomics in the next-generation sequencing era: genome alignments, pangenomics and metagenomics.</a>
+<b>Briefings in Functional Genomics</b>
+</li>
+<li>Jiménez-Gómez, J.M. 2011,
+<a target="new" href="http://dx.doi.org/10.3389/fpls.2011.00077">Next generation quantitative genetics in plants.</a>
+<b>Frontiers in Plant Physiology</b>
+</li>
+<li>
+Jones, D.B., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1016/j.margen.2011.06.007"><i>In silico</i> whole-genome EST analysis reveals 2322 novel microsatellites for the silver-lipped pearl oyster, <i>Pinctada maxima</i>.</a>
+<b>Marine Genomics</b>
+<li>
+Kashiwagi, A. and Yomo, T. 2011,
+<a target="new" href="http://dx.doi.org/10.1371/journal.pgen.1002188">Ongoing Phenotypic and Genomic Changes in Experimental Coevolution of RNA Bacteriophage Qβ and <i>Escherichia coli</i>.</a>
+<b>PLoS Genetics</b>
+</li>
+<li>Lajugie, J. and Bouhassira, E.E. 2011,
+<a target="new" href="http://dx.doi.org/10.1093/bioinformatics/btr309">GenPlay, a multipurpose genome analyzer and browser.</a>
+<b>Bioinformatics</b>
+</li>
+<li>
+L&oacute;pez-Fern&aacute;ndez, H., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1093/nar/gkr439">PileLineGUI: a desktop environment for handling genome position files in next-generation sequencing studies.</a>
+<b>Nucleic Acids Research</b>
+</li>
+<li>
+Magadan-Mompo, S., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1186/1471-2148-11-165">Immunoglobulin heavy chains in medaka (<i>Oryzias latipes</i>).</a>
+<b>BMC Evolutionary Biology</b>
+</li>
+<li>
+Malik, A., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1371/journal.pone.0021227">Transcriptome Sequencing of the Blind Subterranean Mole Rat, <i>Spalax galili</i>: Utility and Potential for the Discovery of Novel Evolutionary Patterns.</a>
+<b>PLoS ONE</b>
+</li>
+<li>McCormack, J.E., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1016/j.ympev.2011.12.007">Applications of next-generation sequencing to phylogeography and phylogenetics.</a>
+<b>Molecular Phylogenetics and Evolution</b>
+</li>
+<li>Minoche, A.E., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1186/gb-2011-12-11-r112">Evaluation of genomic high-throughput sequencing data generated on Illumina HiSeq and Genome Analyzer systems.</a>
+<b>Genome Biology</b>
+</li>
+<li>
+Nakamura, K., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1093/nar/gkr344">Sequence-specific error profile of Illumina sequencers.</a>
+<b>Nucleic Acids Research</b>
+</li>
+<li>
+Pedersen, B., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1093/bioinformatics/btr056">Gobe: an interactive, web-based tool for comparative genomic visualization.</a>
+<b>Bioinformatics</b>
+</li>
+<li>
+Robinson, J.T., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1038/nbt.1754">Integrative genomics viewer.</a>
+<b>Nature Biotechnology</b>
+</li>
+<li>
+Russell, J.R., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1186/1471-2229-11-147">Identification, utilisation and mapping of novel transcriptome-based markers from blackcurrant (<i>Ribes nigrum</i>).</a>
+<b>BMC Plant Biology</b>
+</li>
+<li>
+Schellenberg, J.J., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1128/​AEM.02943-10">Molecular Definition of Vaginal Microbiota in East African Commercial Sex Workers.</a>
+<b>Applied and Environmental Microbiology</b>
+</li>
+<li>
+Son, M.S. and Taylor, R.K. 2011,
+<a target="new" href="http://dx.doi.org/10.1002/9780471729259.mc01e04s20">Preparing DNA libraries for multiplexed paired-end deep sequencing for Illumina GA sequencers.</a>
+<b>Current Protocols in Microbiology</b>
+</li>
+<li>
+Straub, S.C.K., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1186/1471-2164-12-211">Building a model: developing genomic resources for common milkweed (<i>Asclepias syriaca</i>) with low coverage genome sequencing.</a>
+<b>BMC Genomics</b>
+</li>
+<li>Xie, H.M., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1186/1471-2105-12-402">Mitochondrial genome sequence analysis: A custom bioinformatics pipeline substantially improves Affymetrix MitoChip v2.0 call rate and accuracy.</a>
+<b>BMC Bioinformatics</b>
+</li>
+<li>
+Zheng, Y., et al. 2011,
+<a target="new" href="http://dx.doi.org/10.1186/1471-2105-12-453">iAssembler: a package for <i>de novo</i> assembly of Roche-454/Sanger transcriptome sequences.</a>
+<b>BMC Bioinformatics</b>
+</li>
+<li>
+Bonfield, J.K. and Whitwham, A. 2010,
+<a target="new" href="http://dx.doi.org/10.1093/bioinformatics/btq268">Gap5 - editing the billion fragment sequence assembly.</a>
+<b>Bioinformatics</b>
+</li>
+<li>
+Cirulli, E.T., et al. 2010,
+<a target="new" href="http://dx.doi.org/10.1038/nrg2779">Uncovering the roles of rare variants in common disease through whole-genome sequencing.</a>
+<b>Nature Reviews Genetics</b>
+</li>
+<li>
+Costa, V., et al. 2010,
+<a target="new" href="http://dx.doi.org/10.1155/2010/853916">Uncovering the Complexity of Transcriptomes with RNA-Seq.</a>
+<b>Journal of Biomedicine and Biotechnology</b>
+</li>
+<li>
+Fiume, M., et al. 2010,
+<a target="new" href="http://dx.doi.org/10.1093/bioinformatics/btq332">Savant: genome browser for high-throughput sequencing data.</a>
+<b>Bioinformatics</b>
+</li>
+<li>
+Hou, H., et al. 2010,
+<a target="new" href="http://dx.doi.org/10.1093/nar/gkq302">MagicViewer: integrated solution for next-generation sequencing data visualization and genetic variation detection and annotation.</a>
+<b>Nucleic Acids Research</b>
+</li>
+<li>
+Jerlstr&ouml;m-Hultqvist, J., et al. 2010,
+<a target="new" href="http://dx.doi.org/10.1186/1471-2164-11-543">Genome analysis and comparative genomics of a <i>Giardia intestinalis</i> assemblage E isolate.</a>
+<b>BMC Genomics</b>
+</li>
+<li>
+Kimbrel, J.A., et al. 2010,
+<a target="new" href="http://dx.doi.org/10.1186/1471-2164-11-522">An improved, high-quality draft genome sequence of the Germination-Arrest Factor-producing <i>Pseudomonas fluorescens</i> WH6.</a>
+<b>BMC Genomics</b>
+</li>
+<li>
+Kumar, S. and Blaxter, M. 2010,
+<a target="new" href="http://dx.doi.org/10.1186/1471-2164-11-571">Comparing <i>de novo</i> assemblers for 454 transcriptome data.</a>
+<b>BMC Genomics</b>
+</li>
+<li>
+Li, H. and Homer, N. 2010,
+<a target="new" href="http://dx.doi.org/10.1093/bib/bbq015">A survey of sequence alignment algorithms for next-generation sequencing.</a>
+<b>Briefings in Bioinformatics</b>
+</li>
+<li>
+Magi, A., et al. 2010,
+<a target="new" href="http://dx.doi.org/10.3390/genes1020294">Bioinformatics for next generation sequencing data.</a>
+<b>Genes</b>
+</li>
+<li>
+Parkin, I.A.P., et al. 2010,
+<a target="new" href="http://dx.doi.org/10.1139/G10-053">Towards unambiguous transcript mapping in the allotetraploid Brassica napus.</a>
+<b>Genome</b>
+</li>
+<li>
+Paszkiewicz, K. and Studholme, D.J. 2010,
+<a target="new" href="http://dx.doi.org/10.1093/bib/bbq020"><i>De novo</i> assembly of short sequence reads.</a>
+<b>Briefings in Bioinformatics</b>
+</li>
+<li>
+Thakur, V. and Varshney, R.K. 2010,
+<a target="new" href="http://dx.doi.org/10.4172/jcsb.1000053">Challenges and strategies for Next Generation Sequencing (NGS) data analysis.<a>
+<b>Journal of Computer Science and Systems Biology</b>
+</li>
+<li>
+Timmermans, M.J.T.N., et al. 2010,
+<a target="new" href="http://dx.doi.org/10.1093/nar/gkq807">Why barcode? High-throughput multiplex sequencing of mitochondrial genomes for molecular systematics.</a>
+<b>Nucleic Acids Research</b>
+</li>
+<li>
+Zhang, Z., et al. 2010,
+<a target="new" href="http://dx.doi.org/10.1093/nar/gkq538">ZOOM Lite: next-generation sequencing data mapping and visualization software.</a>
+<b>Nucleic Acids Research</b>
+</li>
+
+</ul>
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>

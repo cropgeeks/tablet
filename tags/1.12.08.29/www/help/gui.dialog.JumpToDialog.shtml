@@ -1,0 +1,76 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="../stylesheet/styles.css" type="text/css">
+
+<title>Jump to Base</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.html" -->
+
+
+<h2>Jump to Base</h2>
+
+<p>The <b>Jump to Base</b> dialog is used to quickly jump to a specific base in the assembly. </p>
+
+<p><a href="images/gui.dialog.JumpToDialog.png">
+<img class="capture" src="images/gui.dialog.JumpToDialog2.png" alt="Tablet Screenshot"></a></p>
+
+<p>To jump to a base, enter its number, then perform either a padded, or
+ unpadded jump. Padded jumps count pad characters in the consensus sequence,
+ whereas unpadded jumps ignore any padding. Note that sequences displayed in Tablet
+ always count their first base as position "1" (rather than "0").</p>
+
+<p>The following table provides a short example of mapping between padded and
+unpadded values.</p>
+
+<table>
+ <tr>
+  <td>&nbsp;&nbsp;</td>
+  <td><b>Base</b></td>
+  <td>&nbsp;</td>
+  <td><b>A</b></td>
+  <td><b>C</b></td>
+  <td><b>*</b></td>
+  <td><b>G</b></td>
+  <td><b>T</b></td>
+ </tr>
+ <tr>
+  <td>&nbsp;&nbsp;</td>
+  <td><b>Padded position</b></td>
+  <td>&nbsp;</td>
+  <td>1</td>
+  <td>2</td>
+  <td>3</td>
+  <td>4</td>
+  <td>5</td>
+ </tr>
+ <tr>
+  <td>&nbsp;&nbsp;</td>
+  <td><b>Unpadded position</b></td>
+  <td>&nbsp;</td>
+  <td>1</td>
+  <td>2</td>
+  <td>-</td>
+  <td>3</td>
+  <td>4</td>
+ </tr>
+</table>
+
+<h3>Jumping to a position in another contig</h3>
+
+<p>It is also possible to jump to a base position in a contig other than the
+contig you are currently viewing. To jump to a base in another contig instead of
+simply entering the base position, enter the contig name and the base position
+separated by a colon e.g. <b>Contig1:200</b>.
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>
