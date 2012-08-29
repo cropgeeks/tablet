@@ -23,7 +23,7 @@ generation sequence assemblies and alignments.</p>
 <p><img class="capture" src="images/tablet-main.png" alt="Tablet Screenshot"></p>
 
 <p>Visit the <a href="download.shtml">download page</a> to get the latest version
-of Tablet (1.12.03.26; 26th March 2012). Please note that Tablet is
+of Tablet (1.12.08.29; 29th August 2012). Please note that Tablet is
 <a href="licence.html">licenced</a>.</p>
 
 <p>Please cite: Milne, I, Bayer, M, Cardle, L, Shaw, P, Stephen, G, Wright, F and
@@ -41,7 +41,7 @@ Bioinformatics 26(3), 401-402.</p>
 <li>Paired end visualization support (for SAM/BAM).</li>
 <li>Entire-contig overviews, showing data layout or coverage information.</li>
 <li>Simple install routine via auto-updating graphical installers.</li>
-<li>Support for Windows, Apple Mac OS X, Linux and Solaris, in 32 and 64-bit.</li>
+<li>Support for Windows, Apple Mac OS X and Linux, in 32 and 64-bit.</li>
 </ul>
 
 <p>You can get a full list of recent new additions, changes or bug fixes by

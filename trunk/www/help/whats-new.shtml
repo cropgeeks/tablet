@@ -23,6 +23,26 @@ changes between versions, please see the <a href="http://bioinf.hutton.ac.uk/tab
 subversion change log</a>.</p>
 
 
+<h3>New in 1.12.08.29</h3>
+<ul>
+<li>NEW: Tablet's zoom levels now supports many hundreds of thousands of bases on screen at once (superzoom).</li>
+<li>NEW: Reinstated the option to enable/disable read caching to disk, along with a newer option to not cache data from BAM files unless desired.</li>
+<li>NEW: Read group information is now shown in the tooltip.</li>
+<li>NEW: Added preliminary support for reading assembly information from .tablet files.</li>
+<li>NEW: Tablet will now check that the specified (via header) contig lengths in a sam file match the actual lengths read from the reference file.</li>
+<li>NEW: Saving a contig summary now warns that only the currently loaded BAM window is included in the out (and also gives an option to open the file).</li>
+<li>NEW: Added support for marking Cigar-D events on a feature track.</li>
+<li>NEW: Added support for marking Cigar-N events on a feature track.</li>
+<li>CHG: Complete rewrite of the file tracking code so that all input methods are fully synchronized. Existing MRU lists will be lost though.</li>
+<li>BUG: Starting Tablet without an internet connection (and check for updates enabled) was causing a crash.</li>
+<li>BUG: Mouse navigation via the "green" BAM window arrows was no longer working.</li>
+<li>BUG: Fixed rendering issues with CIGAR-I live highlighting.</li>
+<li>BUG: Fixed an exception with copying read data to the clipboard if the read’s mate was unmapped.</li>
+<li>BUG: Passing in command-line positions (within a contig) resulted in being out by one base.</li>
+<li>BUG: Fixed some issues with certain types of search parameters.</li>
+</ul>
+
+
 <h3>New in 1.12.03.26</h3>
 <ul>
 <li>BUG: Fixed a critical bug that was causing i/o problems with certain types of BAM file.</li>
