@@ -12,7 +12,7 @@ import scri.commons.file.*;
 
 public class ConsensusFileCache extends TabletCache
 {
-	private ArrayList<Index> index = new ArrayList<>();
+	private ArrayList<Index> index = new ArrayList<Index>();
 
 	private Consensus current = null;
 

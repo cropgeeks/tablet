@@ -17,7 +17,7 @@ class AfgFileReader extends TrackableReader
 {
 	private IReadCache readCache;
 	private ReadSQLCache nameCache;
-	private HashMap<Integer, Integer> iids = new HashMap<>();
+	private HashMap<Integer, Integer> iids = new HashMap<Integer, Integer>();
 	private int tmpCacheID = 0;
 
 	private Contig contig;
@@ -168,7 +168,7 @@ class AfgFileReader extends TrackableReader
 		}
 
 		//this contains the positions of the gap characters in this read
-		ArrayList<Integer> gapPositions = new ArrayList<>();
+		ArrayList<Integer> gapPositions = new ArrayList<Integer>();
 		//internal ID for the read, start pos (zero-based), start and end of clear range
 		int tileIID= -1;
 		int offset= -1;

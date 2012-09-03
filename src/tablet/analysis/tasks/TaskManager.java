@@ -30,7 +30,7 @@ public class TaskManager
 		int cores = Runtime.getRuntime().availableProcessors();
 		executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(cores);
 
-		tasks = new ConcurrentHashMap<>();
+		tasks = new ConcurrentHashMap<String, BackgroundTask>();
 	}
 
 	public static int count()

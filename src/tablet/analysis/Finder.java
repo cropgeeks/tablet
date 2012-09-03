@@ -50,7 +50,7 @@ public class Finder extends SimpleJob
 
 		useRegex = Prefs.guiRegexSearching;
 
-		results = new ArrayList<>();
+		results = new ArrayList<SearchResult>();
 
 		CURRENT_TYPE = searchType;
 	}

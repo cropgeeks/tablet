@@ -22,6 +22,11 @@ that have been made to Tablet in recent versions. For full details on all the
 changes between versions, please see the <a href="http://bioinf.hutton.ac.uk/tablet/svn.txt">
 subversion change log</a>.</p>
 
+<h3>New in 1.12.09.03</h3>
+<ul>
+<li>BUG: Command line parameters were not being passed to Tablet on OS X.</li>
+</ul>
+
 
 <h3>New in 1.12.08.29</h3>
 <ul>

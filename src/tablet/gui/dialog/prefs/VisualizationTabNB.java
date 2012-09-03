@@ -33,13 +33,13 @@ class VisualizationTabNB extends JPanel
 		RB.setText(padLabel, "gui.dialog.prefs.NBVisualizationPanel.padLabel");
 		RB.setText(tagCheckbox, "gui.dialog.prefs.NBVisualizationPanel.tagCheckbox");
 
-		dnaModel = new DefaultComboBoxModel<>();
+		dnaModel = new DefaultComboBoxModel<String>();
         dnaModel.addElement("*");
 		dnaModel.addElement("-");
         dnaCombo.setModel(dnaModel);
 		dnaCombo.setSelectedIndex(Prefs.visPadCharType);
 
-		proteinModel = new DefaultComboBoxModel<>();
+		proteinModel = new DefaultComboBoxModel<String>();
         proteinModel.addElement(".");
 		proteinModel.addElement("*");
         proteinCombo.setModel(proteinModel);

@@ -13,7 +13,7 @@ public class VisualContig
 {
 	private Integer lockedBase = null;
 
-	private ArrayList<FeatureTrack> tracks = new ArrayList<>();
+	private ArrayList<FeatureTrack> tracks = new ArrayList<FeatureTrack>();
 
 
 	public void setLockedBase(Integer lockedBase)

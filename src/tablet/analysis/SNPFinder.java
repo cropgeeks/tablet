@@ -48,7 +48,7 @@ public class SNPFinder extends SimpleJob
 			Consensus consensus = contig.getConsensus();
 
 			// Allocate the data array ready for processing
-			data = new ArrayList<>();
+			data = new ArrayList<HashMap<String, Metric>>();
 			for (int i=0; i < consensus.length(); i++)
 				data.add(new HashMap<String, Metric>());
 
@@ -157,7 +157,7 @@ public class SNPFinder extends SimpleJob
 
 	private ArrayList<Metric> getMetrics(int base)
 	{
-		ArrayList<Metric> metrics = new ArrayList<>();
+		ArrayList<Metric> metrics = new ArrayList<Metric>();
 
 		HashMap<String, Metric> hashMap = data.get(base);
 

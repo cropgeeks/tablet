@@ -10,7 +10,7 @@ import tablet.analysis.*;
 
 public class ProteinEnhancedScheme extends ProteinScheme
 {
-	private ArrayList<Stamp> states = new ArrayList<>();
+	private ArrayList<Stamp> states = new ArrayList<Stamp>();
 
 	public ProteinEnhancedScheme(int w, int h)
 	{

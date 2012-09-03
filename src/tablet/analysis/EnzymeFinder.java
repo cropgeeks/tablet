@@ -51,7 +51,7 @@ public class EnzymeFinder extends Finder
 
 	private void setupEnzymeHash()
 	{
-		enzymeHash = new HashMap<>();
+		enzymeHash = new HashMap<String, String>();
 
 		enzymeHash.put("M", "[AC]");
 		enzymeHash.put("R", "[AG]");

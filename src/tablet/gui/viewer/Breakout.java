@@ -12,10 +12,9 @@ import tablet.data.*;
 
 import scri.commons.gui.*;
 
-/*
-class Breakout extends MouseInputAdapter implements IOverlayRenderer, Runnable
+class Breakout //extends MouseInputAdapter implements IOverlayRenderer, Runnable
 {
-	LinkedList<IOverlayRenderer> overlays;
+/*	LinkedList<IOverlayRenderer> overlays;
 	Robot botboy;
 
 	boolean isRunning = false;
@@ -358,5 +357,5 @@ class Breakout extends MouseInputAdapter implements IOverlayRenderer, Runnable
 			catch (InterruptedException e) {}
 		}
 	}
+	*/
 }
-*/

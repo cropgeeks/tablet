@@ -16,7 +16,7 @@ import org.w3c.dom.*;
 public class TabletFileHandler
 {
 	// A list of recently accessed TabletFile objects
-	public static ArrayList<TabletFile> recentFiles = new ArrayList<>();
+	public static ArrayList<TabletFile> recentFiles = new ArrayList<TabletFile>();
 
 	/**
 	 * Skims through the list of recent objects and builds a list of assembly
@@ -26,7 +26,7 @@ public class TabletFileHandler
 	{
 		StringBuilder sb = new StringBuilder();
 		// The hash is used to remove duplicates at the assembly-only level
-		HashMap<String,String> hash = new HashMap<>();
+		HashMap<String,String> hash = new HashMap<String,String>();
 
 		for (TabletFile tabletFile: recentFiles)
 			if (tabletFile.hasAssembly())
@@ -47,7 +47,7 @@ public class TabletFileHandler
 	{
 		StringBuilder sb = new StringBuilder();
 		// The hash is used to remove duplicates at the reference-only level
-		HashMap<String,String> hash = new HashMap<>();
+		HashMap<String,String> hash = new HashMap<String,String>();
 
 		for (TabletFile tabletFile: recentFiles)
 			if (tabletFile.hasReference())

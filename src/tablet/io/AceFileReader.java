@@ -40,7 +40,7 @@ public class AceFileReader extends TrackableReader
 
 	// We maintain a local hashtable of contigs to help with finding a
 	// contig quickly when processing consensus tags
-	private HashMap<String, Contig> contigHash = new HashMap<>();
+	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
 	// Pretty much all the tokenizing we do is based on this one pattern
 	private Pattern p = Pattern.compile("\\s+");

@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Stack implements IReadManager
 {
-	private ArrayList<Read> stack = new ArrayList<>();
+	private ArrayList<Read> stack = new ArrayList<Read>();
 
 	Stack()
 	{
@@ -127,7 +127,7 @@ public class Stack implements IReadManager
 	@Override
 	public ArrayList<Read> getReadNames(int startIndex, int endIndex)
 	{
-		ArrayList<Read> tempList = new ArrayList<>();
+		ArrayList<Read> tempList = new ArrayList<Read>();
 		for(int i=startIndex; i <=endIndex; i++)
 		{
 			tempList.add(stack.get(i));
@@ -140,7 +140,7 @@ public class Stack implements IReadManager
 	public ArrayList<Read> getLine(int line)
 	{
 		Read read = stack.get(line);
-		ArrayList<Read> stackLine = new ArrayList<>();
+		ArrayList<Read> stackLine = new ArrayList<Read>();
 		stackLine.add(read);
 		return stackLine;
 	}

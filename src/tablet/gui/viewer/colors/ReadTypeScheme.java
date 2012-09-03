@@ -11,12 +11,12 @@ import static tablet.data.ReadMetaData.*;
 
 public class ReadTypeScheme extends EnhancedScheme
 {
-	private ArrayList<ColorStamp> unpaired = new ArrayList<>();
-	private ArrayList<ColorStamp> firstInP = new ArrayList<>();
-	private ArrayList<ColorStamp> secndInP = new ArrayList<>();
-	private ArrayList<ColorStamp> orphaned = new ArrayList<>();
-	private ArrayList<ColorStamp> fInPDiff = new ArrayList<>();
-	private ArrayList<ColorStamp> sInPDiff = new ArrayList<>();
+	private ArrayList<ColorStamp> unpaired = new ArrayList<ColorStamp>();
+	private ArrayList<ColorStamp> firstInP = new ArrayList<ColorStamp>();
+	private ArrayList<ColorStamp> secndInP = new ArrayList<ColorStamp>();
+	private ArrayList<ColorStamp> orphaned = new ArrayList<ColorStamp>();
+	private ArrayList<ColorStamp> fInPDiff = new ArrayList<ColorStamp>();
+	private ArrayList<ColorStamp> sInPDiff = new ArrayList<ColorStamp>();
 
 	public ReadTypeScheme(int w, int h)
 	{

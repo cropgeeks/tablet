@@ -47,10 +47,10 @@ public class CigarParser
 
 	private void setup()
 	{
-		insertionMap = new HashMap<>();
-		deletionMap = new HashMap<>();
-		skippedMap = new HashMap<>();
-		featureMaps = new LinkedList<>();
+		insertionMap = new HashMap<String, CigarFeature>();
+		deletionMap = new HashMap<String, CigarFeature>();
+		skippedMap = new HashMap<String, CigarFeature>();
+		featureMaps = new LinkedList<HashMap<String, CigarFeature>>();
 		featureMaps.add(insertionMap);
 		featureMaps.add(deletionMap);
 		featureMaps.add(skippedMap);

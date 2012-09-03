@@ -22,7 +22,7 @@ class FeaturesTableModel extends AbstractTableModel
 	private FeaturesPanel panel;
 	private Contig contig;
 
-	private ArrayList<Feature> features = new ArrayList<>();
+	private ArrayList<Feature> features = new ArrayList<Feature>();
 
 	private String[] columnNames;
 
@@ -48,7 +48,7 @@ class FeaturesTableModel extends AbstractTableModel
 
 	void clear()
 	{
-		features = new ArrayList<>();
+		features = new ArrayList<Feature>();
 
 		fireTableChanged(new TableModelEvent(this));
 	}

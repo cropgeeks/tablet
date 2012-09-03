@@ -16,7 +16,7 @@ public class TabletFile //implements Comparable<TabletFile>
 {
 	public AssemblyFile assembly;
 	public AssemblyFile reference;
-	public ArrayList<AssemblyFile> annotations = new ArrayList<>();
+	public ArrayList<AssemblyFile> annotations = new ArrayList<AssemblyFile>();
 	public String contig;
 	public Integer position;
 
@@ -39,7 +39,7 @@ public class TabletFile //implements Comparable<TabletFile>
 
 	public AssemblyFile[] getFileList()
 	{
-		ArrayList<AssemblyFile> list = new ArrayList<>();
+		ArrayList<AssemblyFile> list = new ArrayList<AssemblyFile>();
 
 		if (assembly != null)
 			list.add(assembly);

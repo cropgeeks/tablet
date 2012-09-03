@@ -29,7 +29,7 @@ public class ReadGroupScheme extends EnhancedScheme
 
 		Color cDisabled = ColorPrefs.get("User.ReadGroupScheme.Disabled");
 
-		statesRG = new ArrayList<>();
+		statesRG = new ArrayList<ArrayList<ColorStamp>>();
 
 		getColourInfos();
 
@@ -46,7 +46,7 @@ public class ReadGroupScheme extends EnhancedScheme
 
 	private void initStates(Color color, int w, int h)
 	{
-		ArrayList<ColorStamp> rgStamps = new ArrayList<>();
+		ArrayList<ColorStamp> rgStamps = new ArrayList<ColorStamp>();
 
 		for (String base: Sequence.getStates())
 		{

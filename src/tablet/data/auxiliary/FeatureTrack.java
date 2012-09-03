@@ -16,7 +16,7 @@ public class FeatureTrack implements Comparator<Feature>
 
 	// Store features in an interval tree so that they can be searched and
 	// overlapping features can be found easily.
-	private IntervalTree<Feature> tree = new IntervalTree<>();
+	private IntervalTree<Feature> tree = new IntervalTree<Feature>();
 
 	public FeatureTrack(String name)
 		{ this.name = name; }

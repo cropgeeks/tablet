@@ -87,7 +87,7 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		else
 		{
 			model = new ContigsTableModel(assembly, controls.table);
-			sorter = new TableRowSorter<>(model);
+			sorter = new TableRowSorter<ContigsTableModel>(model);
 
 			controls.table.setModel(model);
 			controls.table.setRowSorter(sorter);
