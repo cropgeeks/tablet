@@ -1,0 +1,419 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="../stylesheet/styles.css" type="text/css">
+
+<title>What's New</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.html" -->
+
+
+<h2>What's New</h2>
+
+<p>This page describes the additions (NEW), changes (CHG) and bug fixes (BUG)
+that have been made to Tablet in recent versions. For full details on all the
+changes between versions, please see the <a href="http://bioinf.hutton.ac.uk/tablet/svn.txt">
+subversion change log</a>.</p>
+
+<h3>New in 1.12.09.03</h3>
+<ul>
+<li>BUG: Command line parameters were not being passed to Tablet on OS X.</li>
+</ul>
+
+
+<h3>New in 1.12.08.29</h3>
+<ul>
+<li>NEW: Tablet's zoom levels now supports many hundreds of thousands of bases on screen at once (superzoom).</li>
+<li>NEW: Reinstated the option to enable/disable read caching to disk, along with a newer option to not cache data from BAM files unless desired.</li>
+<li>NEW: Read group information is now shown in the tooltip.</li>
+<li>NEW: Added preliminary support for reading assembly information from .tablet files.</li>
+<li>NEW: Tablet will now check that the specified (via header) contig lengths in a sam file match the actual lengths read from the reference file.</li>
+<li>NEW: Saving a contig summary now warns that only the currently loaded BAM window is included in the out (and also gives an option to open the file).</li>
+<li>NEW: Added support for marking Cigar-D events on a feature track.</li>
+<li>NEW: Added support for marking Cigar-N events on a feature track.</li>
+<li>CHG: Complete rewrite of the file tracking code so that all input methods are fully synchronized. Existing MRU lists will be lost though.</li>
+<li>BUG: Starting Tablet without an internet connection (and check for updates enabled) was causing a crash.</li>
+<li>BUG: Mouse navigation via the "green" BAM window arrows was no longer working.</li>
+<li>BUG: Fixed rendering issues with CIGAR-I live highlighting.</li>
+<li>BUG: Fixed an exception with copying read data to the clipboard if the read’s mate was unmapped.</li>
+<li>BUG: Passing in command-line positions (within a contig) resulted in being out by one base.</li>
+<li>BUG: Fixed some issues with certain types of search parameters.</li>
+</ul>
+
+
+<h3>New in 1.12.03.26</h3>
+<ul>
+<li>BUG: Fixed a critical bug that was causing i/o problems with certain types of BAM file.</li>
+</ul>
+
+
+<h3>New in 1.12.02.06</h3>
+<ul>
+<li>NEW: The majority of colours used for the various visualization components are now customizable.</li>
+<li>NEW: Cigar insertions can now be shown with a permanent overlay. This is in place of the previous mouse-over highlight code.</li>
+<li>NEW: Added a snapshot history feature which tracks previously visited points of interest within the current contig.</li>
+<li>NEW: Searching for subsequences now also searches the reverse complement of a sequence.</li>
+<li>NEW: It is now possible to copy features to the clipboard from the features track.</li>
+<li>CHG: Removed the ability to search for subsequences within reads (searching within consensus/reference is still possible).
+<li>BUG: Fixed Ctrl+F shortcut opening up the Read Group tab instead of the Find panel.</li>
+<li>BUG: Fixed keyboard shortcuts only working if their associated ribbon button was on the active tab.</li>
+<li>BUG: Fixed incorrect page left/right functionality in contigs with negative coordinate space.</li>
+<li>BUG: Fixed dialogs disappearing off-screen if the resolution or number of monitors had changed since the last run.</li>
+</ul>
+
+
+<h3>New in 1.11.11.01</h3>
+<ul>
+<li>NEW: All of the tables (in the control panel) can now have their contents copied to the clipboard via right-click menu options.</li>
+<li>NEW: Two new colours are now available with the Read Type scheme. These represent first in pair (mate in different contig) and second in pair (mate in different contig). </li>
+<li>NEW: The portion of reference sequence mapping to a feature can now be copied to the clipboard.</li>
+<li>NEW: Added a new colour scheme that highlights read length.</li>
+<li>NEW: Individual reads can now be outlined by right clicking on them.</li>
+<li>NEW: Added the ability to toggle variant tagging/highlighting on or off for unknown, padded and N bases.</li>
+<li>NEW: Restriction enzyme sites can now be added to the features tracks via automatic inclusion from REBASE.</li>
+<li>NEW: Added the version of samtools used by Tablet to the About Tablet dialog box.</li>
+<li>NEW: Tooltips for features (on the canvas and in the table) now support all their tags.</li>
+<li>NEW: Significantly enhanced the read group support so that all tags (not just sample) are available.</li>
+<li>NEW: Added right-click Colour-by options to the Reads Group table.</li>
+<li>CHG: The Read Group table now displays all read groups (using IDs) along with their platform tag information.</li>
+<li>CHG: The main selections for the active colour scheme have been moved to their own tab within the ribbon bar.</li>
+<li>CHG: Tablet should now use less memory when a large number of features are loaded.</li>
+<li>CHG: BAM files loaded without reference data now display their length in the title label of the ribbon.</li>
+<li>CHG: Replaced the classic scheme with the variants scheme. The new colour scheme is designed to make it very easy to spot bases which differ from the consensus / reference.</li>
+<li>BUG: Dragging GFF files into the interface when the 'warn if existing file open' option was active was showing the message box when it shouldn’t have.</li>
+<li>BUG: Cancelling a BAM-window data load after dragging the BamBar slider resulted in the overlay not being removed from the canvas.</li>
+<li>BUG: Fixed a problem with overlapping features on the GFF tracks not being drawn.</li>
+<li>BUG: Due to a design flaw in Picard, validation stringency wasn’t being set correctly for objects that needed to parse the header.</li>
+<li>BUG: Fixed a problem with reads which had more than one CIGAR insert at the same location losing all but the first insert at that location for the read.</li>
+<li>BUG: Fixed a problem with long file paths causing problems with the combo boxes on OS X.</li>
+<li>BUG: Searching for reads within BAM files wasn't checking if the read was unmapped or not.</li>
+</ul>
+
+
+<h3>New in 1.11.08.10</h3>
+<ul>
+<li>NEW: Added a new colour scheme for displaying Read Groups in SAM and BAM files.</li>
+<li>NEW: Added a new control panel tab for viewing and editing Read Group colours.</li>
+<li>NEW: GFF files now support drag and drop loading.</li>
+<li>NEW: GFF files can now be specified on the command line (or via web start).</li>
+<li>NEW: Reduced the initial detection time for BAM files, which should speed loading.</li>
+<li>NEW: Added a tablet.xml preferences variable which governs the number of insert events a CIGAR-I feature has to relate to before it is included.</li>
+<li>CHG: String values longer than 75 characters in the graphical tooltips are now be truncated.</li>
+<li>CHG: All searches are now case insensitive.</li>
+<li>CHG: The setting for using less-strict BAM validation checks is now on by default.</li>
+<li>BUG: Toggling Show Bases wasn't causing the screen to refresh.</li>
+<li>BUG: Fixed a crash that could occur when searching over consensus sequences.</li>
+<li>BUG: The recent-file tooltips on Linux and OS X weren’t working with paths beginning with "/".</li>
+<li>BUG: RegEx characters included in a BAM file’s name (eg ‘[]’) were stopping Tablet from locating the corresponding BAI file.</li>
+</ul>
+
+
+<h3>New in 1.11.05.03</h3>
+<ul>
+<li>NEW: Consensus sequence data is now cached to disk which should result in less memory being used with large contigs.</li>
+<li>CHG: Improved the mechanism used to search for read names across non-BAM datasets (should be significantly faster).</li>
+<li>CHG: Simplified the Search UI so that all secondary options are check boxes and search type is the only remaining combo box.</li>
+<li>CHG: Changed Tablet's look and feel now that SCRI has become part of The James Hutton Institute.</li>
+<li>BUG: The total read count shown in the contigs panel was suffering from integer overflow with more than 2 billion reads.</li>
+<li>BUG: Fixed an "off by one" bug in the position attribute of the read printer output.</li>
+<li>BUG: Read names with :1 /1 etc postfixes were being truncated by one character prior to the postfix.</li>
+<li>BUG: Fixed various enabled/disabled UI issues.</li>
+<li>BUG: The Find Panel was not allowing reselection (and highlighting) of its results.</li>
+</ul>
+
+
+<h3>New in 1.11.03.14</h3>
+<ul>
+<li>BUG: OS X only. Added a temporary workaround for BAM files not being detected with the latest (1.6.0_24) version of Java due to changes in gzip handling.
+</ul>
+
+
+<h3>New in 1.11.02.18</h3>
+
+<ul>
+<li>NEW: BAM files are now displayed with read count summaries, even before a contig has been viewed, so long as the index file was generated with samtools 0.1.8 or higher.</li>
+<li>NEW: Tablet now uses the samtools executable for some tasks. The Options Dialog allows for an alternative path to be set if the version distributed with Tablet doesn't run.</li>
+<li>NEW: The table column headers are now included in the output from the contig table's copy-to-clipboard option.</li>
+<li>NEW: Tablet now accepts a "view" command-line argument that allows you to specify a contig and position to jump to after loading (view:contigName:position).</li>
+<li>NEW: The Jump To Base Dialog now supports navigating to positions in contigs outwith the current contig.</li>
+<li>NEW: The search code can now ignore pads and 'N's when looking for matches.</li>
+<li>NEW: Added a new option to allow copying just part of a consensus/reference sequence to the clipboard.</li>
+<li>CHG: SAM files containing paired-read data must now be sorted before Tablet will accept them.</li>
+<li>BUG: Fixed array-out-of-bounds exceptions with SAM files containing paired-data.</li>
+<li>BUG: The wrong start position for a read was sometimes shown in search results with BAM files.</li>
+<li>BUG: The wrong name and position was being displayed for out-of-contig mates.</li>
+</ul>
+
+
+<h3>New in 1.11.01.25</h3>
+
+<ul>
+<li>NEW: Various improvements to the pair-matching code should result in much faster loading of paired-end data.</li>
+<li>NEW: Drawing paired-reads that include "link lines" is now faster.</li>
+<li>NEW: Added new right-click options to the main canvas that provides several export-to-disk options for reads.</li>
+<li>NEW: Added a "Visible Reads" tab, that displays a dynamically changing table of all on-screen reads as you navigate around a contig.</li>
+<li>NEW: Added CTRL/CMD mousewheel zooming to the main canvas.</li>
+<li>CHG: Altered the SAM parsing code to better handle files which have been produced by tools which haven't adhered to the SAM specification.</li>
+<li>CHG: Rearranged some of existing options on the main canvas's right-click menu.</li>
+<li>CHG: Changed to a different SQLite binary for use on OS X that allows it to work on all systems again.</li>
+<li>BUG: Fixed some installer problems that were causing issues on Ubuntu Linux.</li>
+</ul>
+
+
+<h3>New in 1.10.10.06</h3>
+
+<ul>
+<li>BUG: OS X only. Temporary fix for loading problems on OS X 10.5.8 due to issues with the SQLite driver. Performance will be lower than normal. 10.6.x seems unaffected.</li>
+</ul>
+
+
+<h3>New in 1.10.09.20</h3>
+
+<ul>
+<li>NEW: Added the ability to search for sequence strings within the consensus / reference.</li>
+<li>BUG: Added fixes for issues where reads in SAM files weren't being paired properly.</li>
+<li>BUG: Fixed a problem with read names that ended :1 or :2 not getting paired.</li>
+</ul>
+
+<h3>New in 1.10.09.10</h3>
+
+<ul>
+<li>NEW: Added support for paired-end data from SAM or BAM input files.</li>
+<li>NEW: Added graphical support for paired-end data via special paired-end packed and stacked views.</li>
+<li>NEW: The information tooltip over reads now displays differently based on normal or paired-end reads.</li>
+<li>NEW: Mouse-over on any paired-end read will also show information on its mate.</li>
+<li>NEW: Added a new colour scheme - Read Type - that paints reads based on type: unpaired, 1st in pair, 2nd in pair, or orphaned.</li>
+<li>NEW: Added right-click mouse options to jump to a read's mate (within same BAM window, different window, or different contig).</li>
+<li>NEW: Right-clicking on two paired reads' link lines gives options to jump to the reads at either end.</li>
+<li>NEW: BAM files can now be loaded without the need to specify a reference file.</li>
+<li>NEW: The Contigs Table now contains custom rendering based on what data is available (important for BAM).</li>
+<li>NEW: GFF features can now be rendered alongside the alignment.</li>
+<li>NEW: GFF features are rendered in a distinct colour per type.</li>
+<li>NEW: Added custom rendering of features if type "SNP" is detected.</li>
+<li>NEW: Added a "Select Tracks" option and dialog to control selection of the visible feature (types) and their order.</li>
+<li>NEW: Added a summary message at the end of importing features that gives information on the numbers imported.</li>
+<li>NEW: Added installer file type association for ace, afg, sam, and bam (for OS X only).</li>
+<li>NEW: Made the (current) 500 results limit on searches into a user-configurable amount (tablet.xml: guiSearchLimit).</li>
+<li>NEW: Added a few more entries to the FAQ.</li>
+<li>NEW: Details on all reads on screen, or all reads crossing the column position under the mouse can now be exported to a file (by right-clicking).</li>
+<li>NEW: CIGAR insertion events are now plotted on screen using the features tracks.</li>
+<li>NEW: Individual CIGAR insertions can be drawn over a read by selecting the insertion on the features track.</li>
+<li>NEW: Enabled proper number format cell rendering on the various display tables.</li>
+<li>NEW: Selecting a read from the Find Reads table will now also highlight it on the overview.</li>
+<li>NEW: Added mouse drag navigation to all reference tracking visual elements (consensus, coverage, scale, etc).</li>
+<li>NEW: Tablet now warns if the reference length expected by a BAM file differs from that of the actual reference imported by the user.</li>
+<li>NEW: Moved the default location for saving prefs information from ~/.tablet.xml to ~/.scri-bioinf/tablet.xml (with old files being automatically moved over if found).</li>
+<li>NEW: Updated the GFF reader to cope with files containing ##FASTA directives.</li>
+<li>CHG: Pack style selection is now performed via a drop down menu rather than separate ribbon buttons.</li>
+<li>CHG: Major changes to the way files are handled, detected and loaded.</li>
+<li>CHG: Only one open/close operation is needed per file now to detect its type (rather than one open/close per possible type).</li>
+<li>CHG: Changed the highlight colours used by the overview window to try and make them work a bit better with all the colour schemes.</li>
+<li>BUG: Fixed unformatted large numbers in OverviewCanvas.</li>
+<li>BUG: Feature types (SNP, INDEL, etc) were still being added even if the feature they belonged to was rejected during the import.</li>
+<li>BUG: The find results wouldn't scroll to the selected contig in the contigs list when highlighting it.</li>
+</ul>
+
+
+<h3>New in 1.10.05.21</h3>
+
+<ul>
+<li>BUG: Fixed a critical bug that was resulting in some contigs hiding reads when in packed mode.</li>
+</ul>
+
+
+<h3>New in 1.10.05.18</h3>
+
+<ul>
+<li>NEW: Implemented a new, hopefully more robust, method of determining the version number for update purposes.</li>
+<li>NEW: Added an option to set Picard's SAMFileReader validation stringency to lenient to suppress SamValidation errors.</li>
+<li>NEW: Added a parse-time option force DNA ambiguity codes to be read as N.</li>
+<li>CHG: Changed the protein translator to treat any base with an N as ok (codon will translate to X) rather than having it skip the base.</li>
+<li>BUG: Fixed a problem copying any of the reverse strand protein translations to the clipboard.</li>
+<li>BUG: Fixed problems relating to Tablet not re-initialising its BAM reader after encountering SamValidation error.</li>
+</ul>
+
+
+<h3>New in 1.10.05.06</h3>
+
+<ul>
+<li>NEW: Added a new colouring scheme based on read direction/orientation.</li>
+<li>NEW: The overview displays can now be "subsetted", forcing them to show only an overview of whatever region you define for them.</li>
+<li>NEW: Variant highlighting (in red) can now be turned on or off for the overviews or popups.</li>
+<li>NEW: Added the ability to search for sequence substrings within reads.</li>
+<li>NEW: Added a new graphical layer that performs "read shadowing", highlighting any reads under the a given column or mouse
+position.</li>
+<li>NEW: Example files (linked to on the web) can now be opened directly from within Tablet.</li>
+<li>NEW: The nucleotide text for each base can now be shown or hidden.</li>
+<li>NEW: Added (optional) support for trimming reads in ACE files based on the QA tags.</li>
+<li>CHG: Redesigned and added additional options to the control ribbon.</li>
+<li>CHG: The ACE parser now ignores base quality information, making it more compatible with badly formatted files.</li>
+<li>BUG: The SAM parser now looks for all possible header tags to determine if a file is SAM or not.</li>
+<li>BUG: Fixed various issues with searching for reads.</li>
+<li>BUG: Fixed some miscellaneous rendering issues when switching between contigs.</li>
+</ul>
+
+
+<h3>New in 1.10.03.04</h3>
+
+<ul>
+<li>NEW: Added support for indexed BAM assemblies.</li>
+<li>NEW: Added a new navigation bar for moving the viewing window around within a larger BAM assembly.</li>
+<li>NEW: Implemented background (multicore) thread support for calculating auxiliary display data, meaning large contigs can now be viewed instantly.</li>
+<li>NEW: Various implementation changes mean less memory is now used for large contigs.</li>
+<li>NEW: The Open Assembly dialog is now significantly quicker at detecting the assembly type.</li>
+<li>NEW: The page left/right controls now hide when the edges of the display are reached.</li>
+<li>NEW: Added options to the Preferences Dialog to enable/disable disk caching (where supported).</li>
+<li>NEW: Loading a very large number of features is now much faster.</li>
+<li>NEW: The bp coordinates (data set/BAM window and current view) are now shown on the overview images.</li>
+<li>CHG: Updated the mismatch code to ignore regions of reads that extend beyond the left or right ends of the consensus.</li>
+<li>BUG: Fixed a problem with files being ignored when passed to Tablet on the command line.</li>
+<li>BUG: Fixed a bug which caused Tablet to not exit correctly when a filter had been applied in the Contigs Table.</li>
+<li>BUG: Fixed multiple issues with AFG parsing related to clr and gap tags.</li>
+<li>BUG: The unpadded read length was no longer being shown in the popup information box.</li>
+</ul>
+
+
+<h3>New in 1.10.02.08</h3>
+
+<ul>
+<li>NEW: Added (experimental) support for BAM, using in-memory only reading for now, NOT indexed support.</li>
+<li>NEW: Support for most CIGAR operations, with the positions of Insertions being tagged as features for now.</li>
+<li>NEW: Displayed consensus sequences now use 8 bytes per base less memory.</li>
+<li>NEW: Added a (prefs-file only) option to disable all disk caching for maximum performance at the expense of memory.</li>
+<li>NEW: The Contigs Table now lists read vs consensus mismatch percentage information.</li>
+<li>CHG: Some miscellaneous changes to cache support to speed up read retrieval.</li>
+<li>BUG: Fixed a memory-leak problem with display-time objects not being removed after closing a contig.</li>
+<li>BUG: Tablet now only deletes the cache files it creates, rather than every file in its cache directory.</li>
+</ul>
+
+
+<h3>New in 1.10.01.28</h3>
+
+<ul>
+<li>NEW: Added a right-click "save a summary of read information (per contig)" option to the contigs table.</li>
+<li>NEW: Tablet can now read from http streams (supported on the command line and the Open Assembly dialog).</li>
+<li>NEW: Tablet can now read from compressed gzip data streams (http or file).</li>
+<li>NEW: Features outside the scope of the current contig are now highlighted in red in the Features Table.</li>
+<li>NEW: Features with a Name= tag in a GFF3 file will now show this name in the Features Table.</li>
+<li>NEW: Added an option to toggle on or off the use of regular expressions in searches.</li>
+<li>CHG: The Importing Assembly dialog now shows its progress in MB/s too.</li>
+<li>CHG: Removed support for consensus tags in ACE files. GFF3 formatted files are now the only way to import features.</li>
+<li>BUG: Loading the same features file twice will no longer result in duplicate entries.</li>
+</ul>
+
+
+<h3>New in 1.09.12.14</h3>
+
+<ul>
+<li>NEW: Added an option to export coverage summary information to a file on disk.</li>
+<li>NEW: Added an explicit cancel option to the progress dialogs (even though closing the dialog did cancel them anyway).</li>
+<li>NEW: Added a right-click "copy-to-clipboard" option for the contigs table data.</li>
+<li>CHG: The Application Menu now contains an "Export" sub menu with multiple items, including the old Export Image option.</li>
+<li>CHG: Tidied up and enhanced Table's file-handling error messages, to ensure file and line number is always given.</li>
+<li>BUG: Fixed a problem with the current contig getting reselected when sorting the contigs table.</li>
+<li>BUG: Fixed an issue with the "Are you sure..." warning messages sometimes appearing multiple times.</li>
+<li>BUG: Fixed several rendering issues with the new stack-based names overlay.</li>
+<li>BUG: Fixed a problem with ACE file parsing when badly formatted consensus tags are present.</li>
+</ul>
+
+
+<h3>New in 1.09.12.08</h3>
+
+<ul>
+<li>NEW: Tablet has now appeared in a Bioinformatics publication so we've moved the version number to 1.xx</li>
+<li>NEW: Packing data on contigs with very high read coverage is now significantly faster.</li>
+<li>NEW: All tables now show tooltips with more readable information about the row under the mouse.</li>
+<li>NEW: The Features table tooltips will show padded *and* unpadded coordinate spaces at the same time, ordered by the "Features are padded" checkbox selection.</li>
+<li>NEW: The Search results (for reads) table is now sortable.</li>
+<li>NEW: Added a link to regular expression help for searching for reads.</li>
+<li>NEW: Added an option to overlay read names onto the display (stacked view only).</li>
+<li>NEW: Additional coverage data is now available as a tooltip when the mouse is over the coverage or coverage overview panels.</li>
+<li>CHG: Tablet now monitors the cache folder location and warns if it is invalid/inaccessible.</li>
+<li>BUG: The Features control panel tab was still showing text when selected.</li>
+<li>BUG: Fixed a problem with MAQ files being incorrectly identified as SAM.</li>
+<li>BUG: Changed the default cache folder location to avoid a problem with it getting locked out on multi-user systems.</li>
+</ul>
+
+
+<h3>New in 0.09.11.25</h3>
+
+<ul>
+<li>NEW: Added support for finding reads by name (across current or all contigs), with graphical pinpointing.</li>
+<li>CHG: The "Contigs Browser" is now the "Control Panel", containing contig, features, and search tabs.</li>
+</ul>
+
+<h3>New in 0.09.11.06</h3>
+
+<ul>
+<li>NEW: Added experimental support for reading SAM assembly files. Note that BAM is not supported yet.</li>
+<li>BUG: Fixed a problem with read data not getting copied to the clipboard.</li>
+</ul>
+
+
+<h3>New in 0.09.11.04</h3>
+
+<ul>
+<li>NEW: The full path to recently accessed assemblies (rather than just their name) is now available via tooltips.</li>
+<li>BUG: The version of Tablet displayed in its title bar was wrong if Tablet was started from a directory other than its own.</li>
+<li>BUG: Fixed some GUI layout issues that were affecting Linux installs.</li>
+</ul>
+
+
+<h3>New in 0.09.10.30</h3>
+
+<ul>
+<li>NEW: Tablet now uses up to 50% less memory per assembly than in previous versions.</li>
+<li>NEW: The Import Assembly dialog has had a complete redesign to make it easier to use.</li>
+<li>NEW: SOAP or MAQ assemblies can now be loaded without having to provide reference or consensus data in an additional file.</li>
+<li>NEW: The location of the (temporary) assembly cache directory can now be specified in the Tablet Options dialog.</li>
+<li>NEW: Tablet pop-up warnings can now be toggled on or off via the Tablet Options dialog.</li>
+<li>NEW: Added Ribbon controls for iterating backwards or forwards through the list of features.</li>
+<li>NEW: Feature positions can now be tagged as either padded or unpadded.</li>
+<li>BUG: Running "tablet &lt;somefile&gt;" from the command line now behaves properly regardless of the directory level used.</li>
+</ul>
+
+
+<h3>New in 0.09.10.02</h3>
+
+<ul>
+<li>BUG: Fixed a parsing error with fasta/fastq files.</li>
+</ul>
+
+
+<h3>New in 0.09.10.01</h3>
+
+<ul>
+<li>NEW: Tablet now prompts before closing or exiting if an assembly is loaded.</li>
+<li>NEW: Added controls to the list of features to allow it to be filtered by type.</li>
+<li>CHG: Made various changes to the installers to improve Linux compatibility and to provide "What's New" information at update time.</li>
+<li>BUG: Fixed an issue with checking for updates that was causing very slow startup times on some systems.</li>
+<li>BUG: Keyboard shortcuts for zooming were not working via the numeric keypad.</li>
+</ul>
+
+
+<h3>New in 0.09.09.11</h3>
+
+<ul>
+<li>CHG: Significant reduction in the time required to pack reads when dealing with large contigs.</li>
+<li>BUG: Fixed a problem with protein translations when the sequence didn't start with known characters.</li>
+<li>BUG: Copy-to-clipboard operations were copying the read orientation incorrectly.</li>
+</ul>
+
+
+<h3>New in 0.09.09.07</h3>
+
+<ul>
+<li>NEW: First public release of Tablet.</li>
+</ul>
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>
