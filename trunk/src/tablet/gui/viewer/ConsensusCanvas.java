@@ -26,7 +26,7 @@ class ConsensusCanvas extends TrackingCanvas
 
 	// A list of renderers that will perform further drawing once the main
 	// canvas has been drawn
-	LinkedList<IOverlayRenderer> overlays = new LinkedList<>();
+	LinkedList<IOverlayRenderer> overlays = new LinkedList<IOverlayRenderer>();
 
 	ConsensusCanvas()
 	{

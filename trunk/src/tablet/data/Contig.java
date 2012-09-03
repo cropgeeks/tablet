@@ -17,7 +17,7 @@ public class Contig
 	private String name;
 	private Consensus consensus;
 
-	private ArrayList<Read> reads = new ArrayList<>();
+	private ArrayList<Read> reads = new ArrayList<Read>();
 
 	private TableData tableData = new TableData();
 
@@ -47,7 +47,7 @@ public class Contig
 	private PairedStack pairedStack;
 
 	// Main set of features associated with this contig
-	private ArrayList<Feature> features = new ArrayList<>();
+	private ArrayList<Feature> features = new ArrayList<Feature>();
 
 	// Supplementary set of features used purely for graphical outlining
 	private ArrayList<VisualOutline> outlines;
@@ -82,7 +82,7 @@ public class Contig
 		this.name = name;
 //		this.complemented = complemented;
 
-		reads = new ArrayList<>(readCount);
+		reads = new ArrayList<Read>(readCount);
 	}
 
 	void setId(int id)
@@ -151,7 +151,7 @@ public class Contig
 	public ArrayList<VisualOutline> getOutlines()
 	{
 		if (outlines == null)
-			outlines = new ArrayList<>();
+			outlines = new ArrayList<VisualOutline>();
 
 		return outlines;
 	}

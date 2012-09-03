@@ -11,7 +11,7 @@ import java.util.*;
  */
 public class PairedStack implements IReadManager
 {
-	private ArrayList<PairedStackRow> stack = new ArrayList<>();
+	private ArrayList<PairedStackRow> stack = new ArrayList<PairedStackRow>();
 
 	@Override
 	public LineData getPixelData(int line, int start, int end, float scale, boolean getMetaData)
@@ -68,7 +68,7 @@ public class PairedStack implements IReadManager
 	@Override
 	public ArrayList<Read> getLine(int line)
 	{
-		ArrayList<Read> reads = new ArrayList<>();
+		ArrayList<Read> reads = new ArrayList<Read>();
 		for (Read read : stack.get(line).getBothReads())
 		{
 			if(read != null)

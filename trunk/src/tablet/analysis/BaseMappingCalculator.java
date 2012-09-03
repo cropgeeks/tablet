@@ -95,8 +95,8 @@ public class BaseMappingCalculator extends BackgroundTask
 
 		Sequence cSeq = c.getSequence();
 
-		ArrayList<Integer> padToUnpad = new ArrayList<>();
-		ArrayList<Integer> unpadToPad = new ArrayList<>();
+		ArrayList<Integer> padToUnpad = new ArrayList<Integer>();
+		ArrayList<Integer> unpadToPad = new ArrayList<Integer>();
 
 		// Loop over the consensus bases
 		for (int baseCount =0; baseCount < length && okToRun; baseCount++)

@@ -30,7 +30,7 @@ public class ReadGroupsPanel extends JPanel implements ActionListener, ListSelec
 	private JMenuItem mClipboardData;
 
 	private JMenu mColor;
-	private ArrayList<JMenuItem> tagItems = new ArrayList<>();
+	private ArrayList<JMenuItem> tagItems = new ArrayList<JMenuItem>();
 
 	ReadGroupsPanel()
 	{

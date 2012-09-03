@@ -19,7 +19,7 @@ class MaqFileReader extends TrackableReader
 
 	private ReferenceFileReader refReader;
 
-	private HashMap<String, Contig> contigHash = new HashMap<>();
+	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
 
 	private int readID = 0;
 

@@ -33,7 +33,7 @@ public class FeaturesCanvas extends TrackingCanvas
 	private Paint cigarPaint;
 	private Paint enzymePaint;
 
-	private ArrayList<ArrayList<Feature>> featuresOnScreen = new ArrayList<>();
+	private ArrayList<ArrayList<Feature>> featuresOnScreen = new ArrayList<ArrayList<Feature>>();
 
 	FeaturesCanvas()
 	{
@@ -108,7 +108,7 @@ public class FeaturesCanvas extends TrackingCanvas
 		int xS = rCanvas.xS + offset;
 		int xE = rCanvas.xE + offset;
 
-		featuresOnScreen = new ArrayList<>();
+		featuresOnScreen = new ArrayList<ArrayList<Feature>>();
 
 		for (int trackNum = 0; trackNum < vContig.getTrackCount(); trackNum++)
 		{
@@ -251,7 +251,7 @@ public class FeaturesCanvas extends TrackingCanvas
 	// on a given track, at a given position.
 	ArrayList<Feature> getFeatures(int track, int pos)
 	{
-		ArrayList<Feature> results = new ArrayList<>();
+		ArrayList<Feature> results = new ArrayList<Feature>();
 
 		for (Feature f : featuresOnScreen.get(track))
 			if (f.getDataPS() <= pos && f.getDataPE() >= pos)

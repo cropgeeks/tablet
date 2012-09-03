@@ -17,7 +17,7 @@ class AboutLicencePanelNB extends JPanel implements ActionListener
 
 		RB.setText(label, "gui.dialog.AboutPanelNB.label");
 
-		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
+		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<String>();
 		model.addElement("Tablet");
 		model.addElement("Flamingo");
 		model.addElement("Rebase");

@@ -45,7 +45,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 	{
 		model = new FeaturesTableModel(this);
 
-		sorter = new TableRowSorter<>(model);
+		sorter = new TableRowSorter<FeaturesTableModel>(model);
 		controls.table.setModel(model);
 		controls.table.setRowSorter(sorter);
 

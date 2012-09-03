@@ -7,7 +7,7 @@ import java.util.*;
 
 public class Pack implements IReadManager, Iterable<PackRow>
 {
-	protected ArrayList<PackRow> packRows = new ArrayList<>();
+	protected ArrayList<PackRow> packRows = new ArrayList<PackRow>();
 
 	public PackRow addNewRow()
 	{

@@ -30,7 +30,7 @@ public class ScannerFrame extends JFrame implements ActionListener
 		nbPanel = new ScannerPanelNB(this);
 
 		model = new ResultsTableModel();
-		sorter = new TableRowSorter<>(model);
+		sorter = new TableRowSorter<ResultsTableModel>(model);
 		nbPanel.table.setModel(model);
 		nbPanel.table.setRowSorter(sorter);
 

@@ -14,7 +14,7 @@ import tablet.gui.*;
  */
 public class PackRow
 {
-	protected ArrayList<Read> reads = new ArrayList<>();
+	protected ArrayList<Read> reads = new ArrayList<Read>();
 	private int positionE;
 
 	public void trimToSize()

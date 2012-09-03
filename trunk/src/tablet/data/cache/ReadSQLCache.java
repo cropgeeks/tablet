@@ -16,7 +16,7 @@ public class ReadSQLCache
 
 	// Statements for getting (g) and inserting (i) data
 	private PreparedStatement ips;
-	private java.util.Stack<PreparedStatement> gpsAll = new java.util.Stack<>();
+	private java.util.Stack<PreparedStatement> gpsAll = new java.util.Stack<PreparedStatement>();
 	private PreparedStatement psGetNameByReadID;
 	private PreparedStatement psGetAllNames;
 	private PreparedStatement psGetReadIDByName;
@@ -155,7 +155,7 @@ public class ReadSQLCache
 			psGetAllNames.setInt(1, startID);
 			psGetAllNames.setInt(2, limit);
 
-			ArrayList<NameWrapper> names = new ArrayList<>(limit);
+			ArrayList<NameWrapper> names = new ArrayList<NameWrapper>(limit);
 			ResultSet rs = psGetAllNames.executeQuery();
 
 			while(rs.next())
@@ -215,7 +215,7 @@ public class ReadSQLCache
 	public ArrayList<Integer> getReadsByName(String name)
 		throws SQLException
 	{
-		ArrayList<Integer> reads = new ArrayList<>();
+		ArrayList<Integer> reads = new ArrayList<Integer>();
 
 		psGetReadIDByName.setString(1, name);
 
