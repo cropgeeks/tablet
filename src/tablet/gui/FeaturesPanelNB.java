@@ -76,7 +76,7 @@ class FeaturesPanelNB extends JPanel
 
 			// Filter by name
 			else if (index == 1)
-				rf = RowFilter.regexFilter(textField.getText(), 0);
+				rf = RowFilter.regexFilter(textField.getText(), 1);
 
 			// Min start position
 			else if (index == 2)
