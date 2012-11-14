@@ -30,12 +30,10 @@ public class SNPFinder extends SimpleJob
 	public void runJob(int jobNum) throws Exception
 	{
 		out = new BufferedWriter(new FileWriter(file));
-
 		for (Contig contig : assembly)
 			maximum += contig.getTableData().readCount;
 
 		SAMFileReader reader = assembly.getBamBam().getBamFileHandler().getBamReader();
-		CigarParser parser = new CigarParser();
 
 		for (Contig contig : assembly)
 		{
@@ -46,6 +44,7 @@ public class SNPFinder extends SimpleJob
 				continue;
 
 			Consensus consensus = contig.getConsensus();
+			CigarParser parser = new CigarParser(contig);
 
 			// Allocate the data array ready for processing
 			data = new ArrayList<HashMap<String, Metric>>();
@@ -65,7 +64,7 @@ public class SNPFinder extends SimpleJob
 
 				try
 				{
-					String seq = parser.parse(record.getReadString(), record.getAlignmentStart() - 1, record.getCigarString(), null);
+					String seq = parser.parse(record.getReadString(), record.getAlignmentStart()-1, record.getCigarString(), null);
 					rmd.setData(new StringBuilder(seq));
 					BasePositionComparator.compare(contig, rmd, record.getAlignmentStart()-1);
 

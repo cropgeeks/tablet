@@ -30,6 +30,8 @@ public class BamFileHandler
 	private boolean okToRun = true;
 	private boolean refLengthsOK = true;
 
+	private CigarParser parser;
+
 	// Stores a hash of @RG (read group) IDs and their associated information
 	private HashMap<String, Short> rgHash = new HashMap<String, Short>();
 
@@ -74,9 +76,9 @@ public class BamFileHandler
 		readID = 0;
 
 		// Reset the read cache for each new block of data
-		if (readCache instanceof ReadFileCache)
-			readCache = ((ReadFileCache)readCache).resetCache();
-		else
+//		if (readCache instanceof ReadFileCache)
+//			readCache = ((ReadFileCache)readCache).resetCache();
+//		else
 			readCache = new ReadMemCache();
 
 		nameCache = nameCache.resetCache();
@@ -84,7 +86,7 @@ public class BamFileHandler
 		readCache.openForWriting();
 		nameCache.openForWriting();
 
-		CigarParser parser = new CigarParser(contig.getName());
+		parser = new CigarParser(contig);
 
 		contig.clearContigData(true);
 
@@ -93,8 +95,14 @@ public class BamFileHandler
 		while(itor.hasNext() && okToRun)
 		{
 			SAMRecord record = itor.next();
+
 			if (!record.getReadUnmappedFlag())
-				createRead(contig, record, parser);
+			{
+				if (isDummyReadFeature(record) == false)
+					createRead(contig, record);
+				else
+					createDummyFeature(record, contig);
+			}
 		}
 
 		itor.close();
@@ -125,7 +133,7 @@ public class BamFileHandler
 			nameCache.indexNames();
 	}
 
-	private void createRead(Contig contig, final SAMRecord record, CigarParser parser) throws Exception
+	private void createRead(Contig contig, final SAMRecord record) throws Exception
 	{
 		int readStartPos = record.getAlignmentStart()-1;
 
@@ -162,8 +170,9 @@ public class BamFileHandler
 		else
 			read = new Read(readID, readStartPos);
 
-		StringBuilder fullRead = new StringBuilder(
-			parser.parse(new String(record.getReadBases()), readStartPos, record.getCigarString(), read));
+		String bases = parser.parse(record.getReadString(), readStartPos, record.getCigarString(), read);
+		StringBuilder fullRead = new StringBuilder(bases);
+
 		rmd.setData(fullRead);
 
 		int uLength = rmd.calculateUnpaddedLength();
@@ -179,6 +188,26 @@ public class BamFileHandler
 
 		readCache.setReadMetaData(rmd);
 		readID++;
+	}
+
+	private void createDummyFeature(SAMRecord record, Contig contig)
+	{
+		if (record.getAttribute("CT") != null)
+		{
+			String ct = record.getAttribute("CT").toString();
+			String[] tagElems = ct.split(";");
+
+			Feature feature = new Feature(tagElems[1], tagElems[1], record.getAlignmentStart()-1, record.getAlignmentEnd()-1);
+			feature.setTags(Arrays.copyOfRange(tagElems, 2, tagElems.length));
+
+			contig.addFeature(feature);
+			feature.verifyType();
+		}
+	}
+
+	private boolean isDummyReadFeature(SAMRecord record)
+	{
+		return record.getReadString().equals("*") && record.getNotPrimaryAlignmentFlag() && record.getReadFailsVendorQualityCheckFlag();
 	}
 
 	public void openBamFile(HashMap<String, Contig> contigHash)

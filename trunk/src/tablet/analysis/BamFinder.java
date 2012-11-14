@@ -22,7 +22,6 @@ public class BamFinder extends Finder
 		super(aPanel, searchTerm, searchAllContigs, searchType);
 
 		reader = aPanel.getAssembly().getBamBam().getBamFileHandler().getBamReader();
-		parser = new CigarParser();
 	}
 
 	@Override
@@ -48,6 +47,8 @@ public class BamFinder extends Finder
 			if (!allContigs && contig != aPanel.getContig())
 				continue;
 
+			parser = new CigarParser(contig);
+
 			SAMRecordIterator itor = reader.queryOverlapping(contig.getName(), 0, 0);
 
 			while (itor.hasNext() && okToRun())
@@ -70,10 +71,9 @@ public class BamFinder extends Finder
 		while (itor.hasNext() && okToRun())
 		{
 			SAMRecord record = itor.next();
-
 			try
 			{
-				String read = parser.parse(record.getReadString(), record.getAlignmentStart() - 1, record.getCigarString(), null);
+				String read = parser.parse(record.getReadString(), record.getAlignmentStart()-1, record.getCigarString(), null);
 				searchSequence(read, record.getAlignmentStart() - 1, record.getReadLength(), contig, record.getReadName(), searchTerm);
 				// Search the reverse complement
 				searchSequence(read, record.getAlignmentStart() - 1, record.getReadLength(), contig, record.getReadName(), reverse);

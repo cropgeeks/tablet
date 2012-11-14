@@ -42,11 +42,6 @@ class SamFileReader extends TrackableReader
 	// Stores a hash of @RG (read group) IDs and their associated information
 	private HashMap<String, Short> rgHash = new HashMap<String, Short>();
 
-
-	SamFileReader()
-	{
-	}
-
 	SamFileReader(IReadCache readCache, ReadSQLCache nameCache)
 	{
 		this.readCache = readCache;
@@ -78,8 +73,6 @@ class SamFileReader extends TrackableReader
 		readReferenceFile();
 
 		in = new BufferedReader(new InputStreamReader(getInputStream(ASBINDEX), "ASCII"));
-
-		cigarParser = new CigarParser();
 
 		readID = 0;
 
@@ -160,46 +153,52 @@ class SamFileReader extends TrackableReader
 
 					if (contig.getReads().size() > 0)
 						isUnsorted = true;
+
+					cigarParser = new CigarParser(contig);
 				}
 
-				cigarParser.setCurrentContigName(contig.getName());
+				if (isDummyFeature(data, flags) == false)
+				{
+					Read read;
 
-				Read read;
+					boolean isPaired = (flags & 0x0001) == 1 ? true : false;
 
-				ReadNameData rnd = new ReadNameData(name);
-				ReadMetaData rmd = new ReadMetaData(complemented);
+					ReadNameData rnd = new ReadNameData(name);
+					ReadMetaData rmd = new ReadMetaData(complemented);
 
-				rmd.setIsPaired((flags & 0x0001) == 1 ? true : false);
+					rmd.setIsPaired(isPaired);
 
-				// Determine the read group this read belongs to (if any)
-				determineReadGroup(tokens, rmd);
+					// Determine the read group this read belongs to (if any)
+					determineReadGroup(tokens, rmd);
 
-				// If paired flag is set setup the pair info
-				if((flags & 0x0001) != 0)
-					read = setupPairInfo(pos, mPos, rnd, iSize, flags, mrnm, chr, rmd);
+					// If paired flag is set setup the pair info
+					if(isPaired)
+						read = setupPairInfo(pos, mPos, rnd, iSize, flags, mrnm, chr, rmd);
+					else
+						read = new Read(readID, pos);
+
+					contig.getReads().add(read);
+
+					String bases = cigarParser.parse(data.toString(), pos, cigar, read);
+					StringBuilder fullRead = new StringBuilder(bases);
+
+					rmd.setData(fullRead);
+
+					rnd.setUnpaddedLength(rmd.calculateUnpaddedLength());
+					rnd.setCigar(cigar);
+					nameCache.setReadNameData(rnd, contig);
+
+					read.setLength(rmd.length());
+
+					// Do base-position comparison...
+					BasePositionComparator.compare(contig, rmd, read.s());
+
+					readCache.setReadMetaData(rmd);
+
+					readID++;
+				}
 				else
-					read = new Read(readID, pos);
-
-				contig.getReads().add(read);
-
-				StringBuilder fullRead = new StringBuilder(cigarParser.parse(
-					data.toString(), pos, cigar, read));
-
-				rmd.setData(fullRead);
-
-				rnd.setUnpaddedLength(rmd.calculateUnpaddedLength());
-				rnd.setCigar(cigar);
-				nameCache.setReadNameData(rnd, contig);
-
-				read.setLength(rmd.length());
-
-				// Do base-position comparison...
-				BasePositionComparator.compare(contig, rmd,
-					read.s());
-
-				readCache.setReadMetaData(rmd);
-
-				readID++;
+					createDummyFeature(tokens, pos, cigar, contig);
 			}
 		}
 
@@ -420,4 +419,31 @@ class SamFileReader extends TrackableReader
 
 	protected boolean refLengthsOK()
 		{ return refLengthsOK; }
+
+	private void createDummyFeature(String[] tokens, int pos, String cigar, Contig contig)
+	{
+		if (tokens.length > 11)
+		{
+			String tagString = tokens[11];
+			String[] tags = tagString.split("\t");
+			String ct = null;
+			for (String s : tags)
+				if (s.startsWith("CT"))
+					ct = s;
+
+			if (ct != null)
+			{
+				String[] tagElems = ct.split(";");
+				Feature feature = new Feature(tagElems[1], tagElems[1], pos, pos + cigarParser.calculateLength(cigar));
+				feature.setTags(Arrays.copyOfRange(tagElems, 2, tagElems.length));
+				contig.addFeature(feature);
+				feature.verifyType();
+			}
+		}
+	}
+
+	private boolean isDummyFeature(String data, int flags)
+	{
+		return data.equals("*") && (flags & 0x0100) != 0 && (flags & 0x0200) != 0;
+	}
 }
