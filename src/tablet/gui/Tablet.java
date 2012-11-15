@@ -173,9 +173,12 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 				{
 					// Create a TabletFile object from the command line args
 					TabletFile tabletFile = TabletFileHandler.createFromFileList(initialFiles);
-					// And also add in any contig:position arguments too
-					tabletFile.contig = contig;
-					tabletFile.position = position;
+					// And also add in any contig:position arguments too (note
+					// that these will override any entires in a .tablet file)
+					if (contig != null)
+						tabletFile.contig = contig;
+					if (position != null)
+						tabletFile.position = position;
 
 					winMain.getCommands().fileOpen(tabletFile);
 				}
