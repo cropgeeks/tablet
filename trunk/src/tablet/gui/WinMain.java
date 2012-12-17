@@ -63,9 +63,6 @@ public class WinMain extends JRibbonFrame
 
 		ToolTipManager.sharedInstance().setDismissDelay(8000);
 
-		// Work out the current screen's width and height
-		int scrnW = SwingUtils.getVirtualScreenDimension().width;
-		int scrnH = SwingUtils.getVirtualScreenDimension().height;
 
 		// Determine where on screen to display
 		SwingUtils.positionWindow(
