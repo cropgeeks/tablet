@@ -361,10 +361,10 @@ class AfgFileReader extends TrackableReader
 		String[] tokens = p.split(qualScores.trim());
 		byte[] bq = new byte[consensus.length()];
 
-		for (int t = 0, i = 0; t < tokens.length; t++, i++)
-		{
-			bq[i] = Byte.parseByte(tokens[t]);
-		}
+//		for (int t = 0, i = 0; t < tokens.length; t++, i++)
+//		{
+//			bq[i] = Byte.parseByte(tokens[t]);
+//		}
 
 //		consensus.setBaseQualities(bq);
 	}

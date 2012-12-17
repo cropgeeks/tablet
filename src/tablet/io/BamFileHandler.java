@@ -76,9 +76,9 @@ public class BamFileHandler
 		readID = 0;
 
 		// Reset the read cache for each new block of data
-//		if (readCache instanceof ReadFileCache)
-//			readCache = ((ReadFileCache)readCache).resetCache();
-//		else
+		if (readCache instanceof ReadFileCache)
+			readCache = ((ReadFileCache)readCache).resetCache();
+		else
 			readCache = new ReadMemCache();
 
 		nameCache = nameCache.resetCache();
