@@ -53,6 +53,13 @@ public class VisibleReadsGrabberThread extends Thread
 		if (killMe)
 			return;
 
+		ArrayList<Read> reads = findVisibleReads();
+
+		Tablet.winMain.getReadsPanel().setTableModel(reads);
+	}
+
+	private ArrayList<Read> findVisibleReads()
+	{
 		ArrayList<Read> reads = new ArrayList<Read>();
 
 		for(int i=yS; i <= yE && i < manager.size(); i++)
@@ -60,10 +67,14 @@ public class VisibleReadsGrabberThread extends Thread
 			ArrayList<Read> line = manager.getLine(i);
 
 			for(int j=findStartRead(line); j < line.size() && line.get(j).s() < xE; j++)
-				reads.add(line.get(j));
+			{
+				Read found = line.get(j);
+				if (found instanceof MateLink == false)
+					reads.add(line.get(j));
+			}
 		}
-
-		Tablet.winMain.getReadsPanel().setTableModel(reads);
+		
+		return reads;
 	}
 
 	/**
