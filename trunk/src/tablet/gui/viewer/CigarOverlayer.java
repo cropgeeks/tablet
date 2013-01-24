@@ -90,9 +90,10 @@ public class CigarOverlayer extends AlphaOverlay
 			for (int row = yS; row <= yE; row++)
 			{
 				Read read = rCanvas.reads.getReadAt(row, base);
+				Read r2 = rCanvas.reads.getReadAt(row, base+1);
 
 				for(CigarEvent event : ((CigarFeature)feature).getEvents())
-					if(event.getRead().equals(read))
+					if(event.getRead().equals(read) || event.getRead().equals(r2))
 						g.drawRect(start, row*rCanvas.ntH, length, rCanvas.readH-1);
 			}
 		}

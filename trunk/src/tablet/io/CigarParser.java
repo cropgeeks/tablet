@@ -218,12 +218,23 @@ public class CigarParser
 	// adds a new feature to the map.
 	private void addCigarEventToMap(HashMap<String, CigarFeature> map, String type, int length, CigarEvent event, int position)
 	{
-		String key = contig.getName() + "Tablet-Separator" + position + "-" + length;
+		String key;
 		CigarFeature feature;
 		if (event instanceof CigarInsertEvent)
+		{
+			// Don't use length as part of key for Cigar-I as you can have many
+			// different events at the same position, so they need to be bound
+			// up in the feature at that position. This isn't the case for
+			// Cigar-D where different events are guaranteed to be in different
+			// features.
+			key = contig.getName() + "Tablet-Separator" + position;
 			feature = new CigarFeature(type, "", position-1, position);
+		}
 		else
+		{
+			key = contig.getName() + "Tablet-Separator" + position + "-" + length;
 			feature = new CigarFeature(type, "", position, position + length - 1);
+		}
 
 		// If a map contains a key, get and update the corresponding value. Otherwise
 		// add this key and new value to the map. Method created to minimise repetition
