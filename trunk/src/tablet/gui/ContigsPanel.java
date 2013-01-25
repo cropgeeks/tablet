@@ -74,6 +74,10 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 	{
 		setNullContig();
 
+		// Need to clear the filter before resetting the rest of the table,
+		// otherwise you get a NullPointerException
+		controls.clearFilter();
+
 		if (assembly == null)
 		{
 			// This is done to ensure complete removal of all references that
@@ -109,7 +113,6 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 
 		ctrlTabs.setSelectedIndex(0);
 
-		controls.clearFilter();
 		controls.setEnabledState(assembly != null);
 
 		findPanel.setAssembly(assembly);
