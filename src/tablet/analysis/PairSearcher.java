@@ -24,6 +24,9 @@ public class PairSearcher
 	public Read search(MatedRead read)
 		throws Exception
 	{
+		if (read.isMateContig() == false)
+			return null;
+
 		String name = Assembly.getReadName(read);
 
 		ArrayList<Integer> potentialMates = Assembly.getReadsByName(name);
