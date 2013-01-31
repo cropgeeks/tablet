@@ -4,7 +4,6 @@
 package tablet.gui;
 
 import java.awt.*;
-import java.awt.datatransfer.*;
 import java.awt.event.*;
 import java.io.*;
 import javax.swing.*;
@@ -133,16 +132,22 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		if (e.getValueIsAdjusting())
 			return;
 
-		Actions.openedNoContigSelected();
-		TaskManager.cancelAll();
-
 		int row = controls.table.getSelectedRow();
 
+		// 31/01/2013 Originally Actions.openedNoContigSelected and
+		// TaskManager.cancelAll happened outside of the if statements, but this
+		// method also gets called on a table row sort, where we don't want
+		// those methods to be called.
+
+		// Contig de-selection
 		if (row == -1)
 		{
+			Actions.openedNoContigSelected();
+			TaskManager.cancelAll();
 			setNullContig();
 			prevContig = null;
 		}
+		// Check for selection of a new contig
 		else
 		{
 			// Convert from view->model (deals with user-sorted table)
@@ -150,8 +155,11 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 
 			// Then pull the contig out of the model and set...
 			Contig contig = (Contig) model.getValueAt(row, 0);
+
 			if(contig != prevContig)
 			{
+				Actions.openedNoContigSelected();
+				TaskManager.cancelAll();
 				setDisplayedContig(contig);
 				prevContig = contig;
 			}
