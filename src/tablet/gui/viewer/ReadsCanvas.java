@@ -139,10 +139,13 @@ public class ReadsCanvas extends JPanel
 		// Clone the current center point (in case it gets regenerated during
 		// this method's runtime)
 		Point p1 = new Point(pCenter.x, pCenter.y);
+		System.out.println("p1: " + p1);
 		// Remember the current (about to be old) canvas w/h before we start
 		int oldCanvasW = canvasW;
-		int oldCanvasH = canvasH;
-
+		// Fix for issue #169 where tablet would fail to display reads. The same
+		// fix could apply to oldCanvasW but I don't think it's possibe for
+		// that variable to be 0.
+		int oldCanvasH = canvasH == 0 ? 1 : canvasH;
 
 		// Notch on the slider where one base equals one pixel
 		int one2one = 8;
@@ -242,7 +245,6 @@ public class ReadsCanvas extends JPanel
 
 		pY1 = viewPosition.y;
 		pY2 = pY1 + viewSize.height - 1;
-
 
 		// Track the center of the view
 		int pCenterX = pX1 + ((pX2-pX1+1)/2);
