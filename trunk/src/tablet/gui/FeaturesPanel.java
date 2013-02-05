@@ -43,7 +43,7 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 
 	private void createTableModel()
 	{
-		model = new FeaturesTableModel(this);
+		model = new FeaturesTableModel();
 
 		sorter = new TableRowSorter<FeaturesTableModel>(model);
 		controls.table.setModel(model);
@@ -126,6 +126,22 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 
 		aPanel.moveToPosition(-1, start, true);
 		new ColumnHighlighter(aPanel, start, end);
+
+		fixBamWindowChange(row, feature);
+	}
+
+	// Ensures the correct row is selected after a bam window change. Due to
+	// addition and removal of CIGAR features, the index of a feature in the
+	// table can change on a bam window change.
+	private void fixBamWindowChange(int modelIndex, Feature feature)
+	{
+		if (model.getFeature(modelIndex) != feature)
+			modelIndex = model.indexOf(feature);
+
+		// Convert our model index to a view index
+		int viewIndex = controls.table.convertRowIndexToView(modelIndex);
+		System.out.println("viewIndex: " + viewIndex);
+		controls.table.setRowSelectionInterval(viewIndex, viewIndex);
 	}
 
 	void setTableFilter(RowFilter<FeaturesTableModel, Object> rf)
