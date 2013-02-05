@@ -139,7 +139,6 @@ public class ReadsCanvas extends JPanel
 		// Clone the current center point (in case it gets regenerated during
 		// this method's runtime)
 		Point p1 = new Point(pCenter.x, pCenter.y);
-		System.out.println("p1: " + p1);
 		// Remember the current (about to be old) canvas w/h before we start
 		int oldCanvasW = canvasW;
 		// Fix for issue #169 where tablet would fail to display reads. The same

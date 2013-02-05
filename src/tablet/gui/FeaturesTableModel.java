@@ -19,17 +19,14 @@ import scri.commons.gui.*;
  */
 class FeaturesTableModel extends AbstractTableModel
 {
-	private FeaturesPanel panel;
 	private Contig contig;
 
 	private ArrayList<Feature> features = new ArrayList<Feature>();
 
 	private String[] columnNames;
 
-	FeaturesTableModel(FeaturesPanel panel)
+	FeaturesTableModel()
 	{
-		this.panel = panel;
-
 		String col1 = RB.getString("gui.FeaturesTableModel.col1");
 		String col2 = RB.getString("gui.FeaturesTableModel.col2");
 		String col3 = RB.getString("gui.FeaturesTableModel.col3");
@@ -91,6 +88,11 @@ class FeaturesTableModel extends AbstractTableModel
 
 	Feature getFeature(int row)
 		{ return features.get(row); }
+
+	int indexOf(Feature feature)
+	{
+		return features.indexOf(feature);
+	}
 
 	private Contig getContig()
 		{ return contig; }
