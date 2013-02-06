@@ -107,7 +107,7 @@ public class CigarParser
 					builder.append(addSequence('?', length));
 					break;
 				case 'I':
-					addCigarEventToMap(insertionMap, "CIGAR-I", length, new CigarInsertEvent(read, bases), position);
+					addCigarEventToMap(insertionMap, "CIGAR-I", length, new CigarInsertEvent(read, bases.substring(readIndex, readIndex+length)), position);
 					readIndex += length;
 					break;
 				case 'D':

@@ -197,7 +197,10 @@ public class BamFileHandler
 			String ct = record.getAttribute("CT").toString();
 			String[] tagElems = ct.split(";");
 
-			Feature feature = new Feature(tagElems[1], tagElems[1], record.getAlignmentStart()-1, record.getAlignmentEnd()-1);
+			int pos = record.getAlignmentStart()-1;
+			int length = parser.calculateLength(record.getCigarString());
+
+			Feature feature = new Feature(tagElems[1], tagElems[1], pos, pos + length);
 			feature.setTags(Arrays.copyOfRange(tagElems, 2, tagElems.length));
 
 			contig.addFeature(feature);
