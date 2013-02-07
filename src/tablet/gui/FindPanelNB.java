@@ -23,7 +23,6 @@ public class FindPanelNB extends javax.swing.JPanel
 
 		// Setup the various visual components and fill with the correct data / options
 		searchTypeCombo.addItem(RB.getString("gui.NBFindPanelControls.findLabel1"));
-//		searchTypeCombo.addItem(RB.getString("gui.NBFindPanelControls.findLabel2"));
 		searchTypeCombo.addItem(RB.getString("gui.NBFindPanelControls.findInConsensus"));
 		searchTypeCombo.setSelectedIndex(Prefs.guiSearchType);
 		searchTypeCombo.addActionListener(panel);
