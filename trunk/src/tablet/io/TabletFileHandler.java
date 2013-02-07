@@ -6,7 +6,9 @@ package tablet.io;
 import java.io.*;
 import java.util.*;
 import javax.xml.parsers.*;
-import javax.xml.xpath.*;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.*;
+import javax.xml.transform.stream.*;
 import org.w3c.dom.*;
 
 /**
@@ -223,54 +225,65 @@ public class TabletFileHandler
 	{
 		try
 		{
-			BufferedWriter out = new BufferedWriter(new FileWriter(file));
+			// Create an XML document from our recent files list
+			Document doc = createXMLDoc();
+			DOMSource documentSource = new DOMSource(doc);
 
-			out.write("<tablet-mru>");
-			out.newLine();
+			// Setup transformer so that it indents our XML file correctly
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "4");
 
-			for (TabletFile tabletFile: recentFiles)
-			{
-				out.write("\t<tablet>");
-				out.newLine();
-
-				if (tabletFile.assembly != null)
-				{
-					out.write("\t\t<assembly>" + tabletFile.assembly.getPath() + "</assembly>");
-					out.newLine();
-				}
-				if (tabletFile.reference != null)
-				{
-					out.write("\t\t<reference>" + tabletFile.reference.getPath() + "</reference>");
-					out.newLine();
-				}
-				for (AssemblyFile annotation: tabletFile.annotations)
-				{
-					out.write("\t\t<annotation>" + annotation.getPath() + "</annotation>");
-					out.newLine();
-				}
-				if (tabletFile.contig != null)
-				{
-					out.write("\t\t<contig>" + tabletFile.contig + "</contig>");
-					out.newLine();
-				}
-				if (tabletFile.position != null)
-				{
-					out.write("\t\t<position>" + tabletFile.position + "</position>");
-					out.newLine();
-				}
-
-				out.write("\t</tablet>");
-				out.newLine();
-			}
-
-			out.write("</tablet-mru>");
-			out.newLine();
-
-			out.close();
+			// Save our document to file using by transforming the document into
+			// a stream result.
+			StreamResult result = new StreamResult(file);
+			transformer.transform(documentSource, result);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
+	}
+
+	private static Document createXMLDoc()
+		throws DOMException, ParserConfigurationException
+	{
+		DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = docFactory.newDocumentBuilder();
+		Document doc = builder.newDocument();
+		Element root = doc.createElement("tablet-mru");
+		doc.appendChild(root);
+
+		for (TabletFile tabletFile: recentFiles)
+		{
+			Element tablet = doc.createElement("tablet");
+			root.appendChild(tablet);
+
+			if (tabletFile.assembly != null)
+				tablet.appendChild(makeTabletElement(doc, "assembly", tabletFile.assembly.getPath()));
+
+			if (tabletFile.reference != null)
+				tablet.appendChild(makeTabletElement(doc, "reference", tabletFile.reference.getPath()));
+
+			for (AssemblyFile annotation: tabletFile.annotations)
+				tablet.appendChild(makeTabletElement(doc, "annotation", annotation.getPath()));
+
+			if (tabletFile.contig != null)
+				tablet.appendChild(makeTabletElement(doc, "contig", tabletFile.contig));
+
+			if (tabletFile.position != null)
+				tablet.appendChild(makeTabletElement(doc, "reference", tabletFile.position.toString()));
+		}
+
+		return doc;
+	}
+
+	private static Element makeTabletElement(Document doc, String tag, String content)
+	{
+		Element element = doc.createElement(tag);
+		element.appendChild(doc.createTextNode(content));
+
+		return element;
 	}
 }
