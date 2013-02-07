@@ -104,17 +104,6 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 			if(r != null)
 				highlightRead(r, contig.getReadManager(), r.s(), r.e());
 		}
-		// If we are searching for read subsequences
-//		else
-//		{
-//			int sPos = (Integer)tableModel.getValueAt(row, 4)-1;
-//			int ePos = (Integer)tableModel.getValueAt(row, 5)-1;
-//
-//			Read r = getRead(pos, (String)tableModel.getValueAt(row, 0));
-//
-//			if(r != null)
-//				highlightRead(r, contig.getReadManager(), sPos, ePos);
-//		}
 	}
 
 	String getTableToolTip(MouseEvent e)
@@ -144,7 +133,6 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 				tableModel.getValueAt(row, 2),
 				tableModel.getValueAt(row, 3));
 		}
-
 	}
 
 	// Ensure the correct contig is selected in the contigs table.
@@ -264,11 +252,6 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 		{
 			title = RB.getString("gui.NBFindPanelControls.progressReadsTitle");
 			label = RB.getString("gui.NBFindPanelControls.progressReadsLabel");
-		}
-		else if (controls.searchTypeCombo.getSelectedIndex() == Finder.READ_SEQUENCE)
-		{
-			title = RB.getString("gui.NBFindPanelControls.progressSubsequenceTitle");
-			label = RB.getString("gui.NBFindPanelControls.progressSubsequenceLabel");
 		}
 		else
 		{
