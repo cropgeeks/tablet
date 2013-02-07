@@ -140,7 +140,6 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 
 		// Convert our model index to a view index
 		int viewIndex = controls.table.convertRowIndexToView(modelIndex);
-		System.out.println("viewIndex: " + viewIndex);
 		controls.table.setRowSelectionInterval(viewIndex, viewIndex);
 	}
 
