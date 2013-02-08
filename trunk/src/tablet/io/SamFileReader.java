@@ -102,6 +102,7 @@ class SamFileReader extends TrackableReader
 			String chr  = tokens[2];
 			int pos = Integer.parseInt(tokens[3]) - 1;
 			String mrnm = tokens[6];
+
 			// Working fix for problem Micha noted
 			int mPos, iSize;
 
@@ -234,15 +235,15 @@ class SamFileReader extends TrackableReader
 
 		rnd.setInsertSize(iSize);
 		// If mate is in same contig its reference can be set as = instead of contig name
-		rnd.setMateContig(mrnm.equals("=") ? mrnm : chr);
+		rnd.setMateContig(mrnm.equals("=") ? chr : mrnm);
 		// If mate reference name equals contig name its mate is in the same contig
-		pr.setIsMateContig(mrnm.equals("="));
+		pr.setIsMateContig(mrnm.equals("=") || mrnm.equals(chr));
 
 		// Parse properly paired, number in pair and mate mapped out from flag field
 		rnd.setIsProperPair((flags & 0x0002) != 0);
 		rmd.setNumberInPair((flags & 0x0040) != 0 ? (byte)1 : 2);
 		rmd.setMateMapped((flags & 0x0008) != 0 ? false : true);
-		rmd.setIsMateContig(mrnm.equals(chr));
+		rmd.setIsMateContig(mrnm.equals("=") || mrnm.equals(chr));
 
 		Assembly.setIsPaired(true);
 
