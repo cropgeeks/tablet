@@ -150,6 +150,9 @@ class SamFileReader extends TrackableReader
 				// Unsorted check...
 				if (contig.getName().equals(currentContig) == false)
 				{
+					if (cigarParser != null)
+						cigarParser.processCigarFeatures();
+
 					currentContig = contig.getName();
 
 					if (contig.getReads().size() > 0)
@@ -204,8 +207,6 @@ class SamFileReader extends TrackableReader
 		}
 
 		in.close();
-
-		processCigarFeatures(cigarParser);
 
 		assembly.setName(files[ASBINDEX].getName());
 		assembly.setHasCigar();
@@ -369,35 +370,6 @@ class SamFileReader extends TrackableReader
 		catch (Exception e)
 		{
 			e.printStackTrace();
-		}
-	}
-
-	private void processCigarFeatures(CigarParser parser)
-		throws Exception
-	{
-		for (HashMap<String, CigarFeature> map : parser.getFeatureMaps())
-			processFeaturesForMap(map, parser);
-
-		for (Contig contig: assembly)
-			Collections.sort(contig.getFeatures());
-	}
-
-	private void processFeaturesForMap(HashMap<String, CigarFeature> map, CigarParser parser)
-	{
-		for (String feature : map.keySet())
-		{
-			String[] featureElements = feature.split("Tablet-Separator");
-			CigarFeature cigarFeature = map.get(feature);
-
-			Contig contig = contigHash.get(featureElements[0]);
-			if (contig != null)
-			{
-				// Only add cigar features with more than a required number
-				// of inserts associated with them
-				if (cigarFeature.getCount() >= Prefs.visCigarInsertMinimum)
-					if (contig.addFeature(cigarFeature))
-						cigarFeature.verifyType();
-			}
 		}
 	}
 

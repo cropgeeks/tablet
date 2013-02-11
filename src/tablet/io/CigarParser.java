@@ -255,7 +255,7 @@ public class CigarParser
 	// Takes the supplied contig and adds the found CigarFeatures to that contig.
 	// TODO: Would ideally find a more logical place to store this functionality
 	// this is the only common point between the BAM and SAM parsers.
-	void processCigarFeatures(Contig contig)
+	void processCigarFeatures()
 	{
 		for (HashMap<String, CigarFeature> map : featureMaps)
 		{
