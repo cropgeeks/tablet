@@ -109,7 +109,7 @@ public class BamFileHandler
 
 		if (okToRun)
 		{
-			parser.processCigarFeatures(contig);
+			parser.processCigarFeatures();
 			Collections.sort(contig.getFeatures());
 		}
 
