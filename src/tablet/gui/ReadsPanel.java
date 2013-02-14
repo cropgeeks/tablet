@@ -13,7 +13,6 @@ import javax.swing.table.*;
 
 import scri.commons.gui.*;
 
-import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.auxiliary.*;
 import tablet.gui.viewer.*;
@@ -131,7 +130,7 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 			String insertSize = (mPos != -1) ? TabletUtils.nf.format(rnd.getInsertSize()) : "";
 			controls.insertSizeLabel.setText(insertSize);
 
-			String matePos = (mPos != -1) ? TabletUtils.nf.format(mPos) : "";
+			String matePos = (mPos != -1) ? TabletUtils.nf.format(mPos+1) : "";
 			controls.matePosLabel.setText(matePos);
 
 			String mateContig = rnd.getMateContig();
@@ -281,51 +280,20 @@ public class ReadsPanel extends JPanel implements ListSelectionListener, ActionL
 		else if (e.getSource() == mFindStart)
 		{
 			Read read = getReadFromTable();
-			highlightReadAtPosition(read, read.s());
+			aPanel.highlightReadStart(read);
 		}
 
 		else if (e.getSource() == mFindEnd)
 		{
 			Read read = getReadFromTable();
-			highlightReadAtPosition(read, read.e());
+			aPanel.highlightReadEnd(read);
 		}
 
 		else if (e.getSource() == mJumpToPair)
 		{
 			Read read = getReadFromTable();
-
-			if (read instanceof MatedRead)
-			{
-				int matePos = ((MatedRead)read).getMatePos();
-				aPanel.moveToPosition(0, matePos, true);
-
-				try
-				{
-					PairSearcher pairSearcher = new PairSearcher(contig);
-					// Must use searchForPair instead of search as DB query
-					// cannot be relied upon once the reads have been sorted
-					final Read found = pairSearcher.searchForPair(Assembly.getReadName(read), matePos);
-					final int lineIndex = contig.getReadManager().getLineForRead(found);
-
-					SwingUtilities.invokeLater(new Runnable() {
-						public void run()
-						{
-							aPanel.moveToPosition(lineIndex, found.s(), true);
-							new ReadHighlighter(aPanel, found, lineIndex);
-						}
-					});
-				}
-				catch(Exception ex) {}
-			}
+			aPanel.jumpToMate(read);
 		}
-	}
-
-	private void highlightReadAtPosition(Read read, int position)
-	{
-		int lineIndex = contig.getReadManager().getLineForRead(read);
-
-		aPanel.moveToPosition(lineIndex, position, true);
-		new ReadHighlighter(aPanel, read, lineIndex);
 	}
 
 	private void displayMenu(MouseEvent e)
