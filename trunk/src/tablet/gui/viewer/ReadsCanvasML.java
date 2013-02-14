@@ -22,7 +22,7 @@ class ReadsCanvasML extends MouseInputAdapter
 	private NavigationOverlay nOverlay;
 
 	// Deals with pop-up menus
-	private ReadsCanvasMenu rCanvasMenu;
+	ReadsCanvasMenu rCanvasMenu;
 
 	private ReadsCanvasInfoPane infoPane;
 	private OutlinerOverlay outliner;

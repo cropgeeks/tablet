@@ -197,18 +197,12 @@ class ReadsCanvasMenu implements ActionListener
 		else if (e.getSource() == mFindStart)
 		{
 			Read read = rCanvas.reads.getReadAt(rowIndex, colIndex);
-			int position = read.s();
-
-			aPanel.moveToPosition(-1, position, true);
-			new ReadHighlighter(aPanel, read, rowIndex);
+			highlightReadStart(read);
 		}
 		else if (e.getSource() == mFindEnd)
 		{
 			Read read = rCanvas.reads.getReadAt(rowIndex, colIndex);
-			int position = read.e();
-
-			aPanel.moveToPosition(-1, position, true);
-			new ReadHighlighter(aPanel, read, rowIndex);
+			highlightReadEnd(read);
 		}
 
 		else if (e.getSource() == mOutlineRead)
@@ -260,50 +254,7 @@ class ReadsCanvasMenu implements ActionListener
 		else if (e.getSource() == mJumpToPair)
 		{
 			Read read = rCanvas.reads.getReadAt(rowIndex, colIndex);
-			ReadNameData readData = Assembly.getReadNameData(read);
-
-			MatedRead pr = (MatedRead)read;
-
-			if(!readData.getMateContig().equals(aPanel.getContig().getName()))
-			{
-				for(Contig contig : aPanel.getAssembly())
-				{
-					if(contig.getName().equals(readData.getMateContig()))
-					{
-						//aPanel.setContig(contig);
-						updateContigsTable(contig);
-						break;
-					}
-				}
-			}
-
-			if(pr.getMatePos() != -1)
-			{
-				try
-				{
-					aPanel.moveToPosition(0, pr.getMatePos(), true);
-
-					PairSearcher pairSearcher = new PairSearcher(rCanvas.contig);
-
-					// Must use searchForPair instead of search as DB query
-					// cannot be relied upon once the reads have been sorted
-					final Read r = pairSearcher.searchForPair(Assembly.getReadName(read), pr.getMatePos());
-
-					final int lineIndex = rCanvas.reads.getLineForRead(r);
-
-					SwingUtilities.invokeLater(new Runnable() {
-						public void run()
-						{
-							aPanel.moveToPosition(lineIndex, r.s(), true);
-							new ReadHighlighter(aPanel, r, lineIndex);
-						}
-					 });
-				}
-				catch(Exception ex)
-				{
-
-				}
-			}
+			jumpToMate(read);
 		}
 
 		// From a link line, jump to the read on its LHS
@@ -416,16 +367,69 @@ class ReadsCanvasMenu implements ActionListener
 		menu.show(e.getComponent(), e.getX(), e.getY());
 	}
 
-	/**
-	 * Update the contigs table such that the correct contig is selected.
-	 *
-	 * @param contig
-	 */
-	public void updateContigsTable(Contig contig)
+	public void highlightReadStart(Read read)
+	{
+		aPanel.highlightReadStart(read);
+	}
+
+	public void highlightReadEnd(Read read)
+	{
+		aPanel.highlightReadEnd(read);
+	}
+
+	public void jumpToMate(Read read)
+	{
+		ReadNameData readData = Assembly.getReadNameData(read);
+		mateJumpChangeContig(readData);
+
+		MatedRead pr = (MatedRead)read;
+
+		if(pr.getMatePos() != -1)
+		{
+			try
+			{
+				final Read r = getMateRead(pr, readData);
+				final int lineIndex = aPanel.getContig().getReadManager().getLineForRead(r);
+
+				SwingUtilities.invokeLater(new Runnable() {
+					public void run()
+					{
+						aPanel.moveToPosition(lineIndex, r.s(), true);
+						new ReadHighlighter(aPanel, r, lineIndex);
+					}
+				 });
+			}
+			catch(Exception ex)
+			{
+				ex.printStackTrace();
+			}
+		}
+	}
+
+	private void mateJumpChangeContig(ReadNameData readData)
+	{
+		String mateContig = readData.getMateContig();
+
+		if(mateContig.equals(aPanel.getContig().getName()))
+			return;
+
+		for(Contig contig : aPanel.getAssembly())
+		{
+			if(contig.getName().equals(mateContig))
+			{
+				mateJumpUpdateContigsTable(contig);
+				break;
+			}
+		}
+	}
+
+	// Update the contigs table such that the correct contig is selected.
+	public void mateJumpUpdateContigsTable(Contig contig)
 	{
 		ContigsPanel cPanel = Tablet.winMain.getContigsPanel();
 		boolean foundInTable = false;
-		for(int i=0; i < cPanel.getTable().getRowCount(); i++)
+
+		for (int i=0; i < cPanel.getTable().getRowCount(); i++)
 		{
 			if(cPanel.getTable().getValueAt(i, 0).equals(contig))
 			{
@@ -439,5 +443,29 @@ class ReadsCanvasMenu implements ActionListener
 
 		if (!foundInTable)
 			cPanel.setDisplayedContig(contig);
+	}
+
+	private Read getMateRead(MatedRead pr, ReadNameData readData)
+		throws Exception
+	{
+		final Read r;
+		// The first case (that of SAM, or where the mate is in the
+		// current BAM window) can simply call getMate on the read
+		// to get a reference to the read we're looking for
+		if (pr.getMate() != null)
+			r = pr.getMate();
+
+		// Otherwise we have to move to the position of the mate to
+		// load in the reads in that region of the contig, then use
+		// our auxiliary searching code to find the read in the
+		// newly loaded bam window
+		else
+		{
+			aPanel.moveToPosition(0, pr.getMatePos(), true);
+			PairSearcher pairSearcher = new PairSearcher(rCanvas.contig);
+			r = pairSearcher.searchForPair(readData.getName(), pr.getMatePos());
+		}
+
+		return r;
 	}
 }

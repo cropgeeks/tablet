@@ -376,11 +376,32 @@ public class AssemblyPanel extends JPanel
 		new ColumnHighlighter(this, index, index);
 	}
 
+	public void highlightReadStart(Read read)
+	{
+		highlightReadAtPosition(read, read.s());
+	}
+
+	public void highlightReadEnd(Read read)
+	{
+		highlightReadAtPosition(read, read.e());
+	}
+
+	private void highlightReadAtPosition(Read read, int position)
+	{
+		moveToPosition(-1, position, true);
+		int lineIndex = contig.getReadManager().getLineForRead(read);
+		new ReadHighlighter(this, read, lineIndex);
+	}
+
+	public void jumpToMate(Read read)
+	{
+		readsCanvas.readsCanvasML.rCanvasMenu.jumpToMate(read);
+	}
+
 	public VisualContig getVisualContig()
 	{
 		return visualAssembly.getVisualContigs().get(contig);
 	}
-
 
 	// Methods called by Ribbon controls to interact with the display
 
