@@ -1,10 +1,12 @@
 <project name="Tablet" default="compile" basedir=".">
 
+	<property file="build.properties" />
+
 	<property name="src"       location="src"/>
 	<property name="lib"       location="lib"/>
 	<property name="res"       location="res"/>
-	<property name="lib-devel" location="lib-devel"/>
-	<property name="webstart" location="webstart"/>
+	<property name="tmp"       location="tmp"/>
+	<property name="lib-devel" location="lib-devel"/>	
 	<property name="classes"   location="classes"/>
 
 	<property name="tablet.jar" value="${lib}/tablet.jar"/>
@@ -30,7 +32,7 @@
 	</target>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${classes}" source="6" target="6" debug="true" includeantruntime="false">
+		<javac srcdir="${src}" destdir="${classes}" source="7" target="7" debug="true" includeantruntime="false">
 			<compilerarg value="-Xlint:-options"/>
 			<classpath refid="project.classpath"/>
 			<exclude name="**/package-info.java"/>
@@ -91,10 +93,6 @@
 	</target>
 
 	<target name="install4j" depends="getversion, jar">
-		<input message="Enter the private key password for signing:" addproperty="password">
-    		<handler classname="org.apache.tools.ant.input.SecureInputHandler"/>
-		</input>
-
 		<taskdef name="install4j"
 			classname="com.install4j.Install4JTask"
 			classpath="C:\Program Files\Install4j\bin\ant.jar"/>
@@ -107,8 +105,8 @@
 
 		<install4j projectfile="installer/tablet.install4j"
 		           release="${i4j.version}"
-		           winKeystorePassword="${password}"
-		           macKeystorePassword="${password}"/>
+		           winKeystorePassword="${keystore.password}"
+		           macKeystorePassword="${keystore.password}"/>
 	</target>
 
 	<target name="javadoc">
@@ -127,28 +125,25 @@
 	</target>
 
 	<target name="jnlp" depends="getversion, jar">
-		<input message="Enter the private key password for signing:" addproperty="storepass">
-    		<handler classname="org.apache.tools.ant.input.SecureInputHandler" />
-		</input>
-		<mkdir dir="${webstart}"/>
-		<copy todir="${webstart}">
+		<mkdir dir="${tmp}"/>
+		<copy todir="${tmp}">
 			<fileset dir="${lib}">
 				<include name="**/*.jar"/>
 			</fileset>
 		</copy>
-		<signjar alias="jhi" storepass="${storepass}"
+		<signjar alias="jhi" storepass="${keystore.password}"
 			preservelastmodified="true" lazy="true"
 			tsaurl="http://timestamp.globalsign.com/scripts/timstamp.dll">
-			<fileset dir="${webstart}">
+			<fileset dir="${tmp}">
 				<include name="**/*.jar"/>
 			</fileset>
 		</signjar>
 		<copy todir="\\bioinf\root\var\www\html\tablet\webstart">
-			<fileset dir="${webstart}">
+			<fileset dir="${tmp}">
 				<include name="**/*.jar"/>
 			</fileset>
 		</copy>
-		<delete dir="${webstart}"/>
+		<delete dir="${tmp}"/>
 	</target>
 
 </project>
