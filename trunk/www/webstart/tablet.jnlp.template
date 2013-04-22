@@ -9,7 +9,7 @@
 		<icon href="tablet.png" width="64" height="64" kind="default"/>
 	</information>
 	<resources>
-		<java version="1.6+" java-vm-args="@JAVA_VM_ARGS@"/>
+		<java version="1.7+" java-vm-args="@JAVA_VM_ARGS@"/>
 		<jar href="flamingo.jar"/>
 		<jar href="i4jruntime.jar"/>
 		<jar href="osxadapter.jar"/>
