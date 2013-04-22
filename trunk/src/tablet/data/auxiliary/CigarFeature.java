@@ -1,3 +1,6 @@
+// Copyright 2009-2013 Information & Computational Sciences, JHI. All rights
+// reserved. Use is subject to the accompanying licence terms.
+
 package tablet.data.auxiliary;
 
 import java.util.*;
