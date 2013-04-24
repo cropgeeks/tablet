@@ -54,6 +54,25 @@ public class Consensus //extends Sequence
 	public void setBaseQualities(byte[] bq)
 		{ /*this.bq = bq;*/ }
 
+	public static ConsensusFileCache getCache()
+	{
+		return cache;
+	}
+
+	// Returns the offset (into the cache file) where this consensus's data is
+	public long getCacheOffset()
+	{
+		return cache.getOffset(cacheID);
+	}
+
+	public void setCacheOffset(int cacheID, long offset, int length)
+	{
+		this.cacheID = cacheID;
+		this.length = length;
+
+		cache.addIndexEntry(offset, length);
+	}
+
 	/**
 	 * Returns true if this consensus sequence contains quality scores for its
 	 * bases.
