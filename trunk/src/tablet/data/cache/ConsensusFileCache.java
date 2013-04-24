@@ -7,11 +7,15 @@ import java.io.*;
 import java.util.*;
 
 import tablet.data.*;
+import tablet.io.*;
 
 import scri.commons.file.*;
 
 public class ConsensusFileCache extends TabletCache
 {
+	// This file contains a list of known cached reference files
+	private static File lookupFile;
+
 	private ArrayList<Index> index = new ArrayList<Index>();
 
 	private Consensus current = null;
@@ -32,8 +36,6 @@ public class ConsensusFileCache extends TabletCache
 	public ConsensusFileCache(File cacheFile)
 	{
 		this.cacheFile = cacheFile;
-
-		cacheFile.deleteOnExit();
 	}
 
 	@Override
@@ -67,6 +69,18 @@ public class ConsensusFileCache extends TabletCache
 
 		// And return what will be the ID for the next sequence to be stored
 		return index.size()-1;
+	}
+
+	/**
+	 * Adds a new index entry - this will be called when reloading a previously
+	 * cached reference file and we're just rebuilding the index in memory.
+	 */
+	public void addIndexEntry(long offset, int length)
+	{
+		Index i = new Index(offset);
+		i.length = length;
+
+		index.add(i);
 	}
 
 	/**
@@ -143,6 +157,64 @@ public class ConsensusFileCache extends TabletCache
 		sequence.setRawData(data);
 
 		return sequence;
+	}
+
+	public File getCacheFile()
+		{ return cacheFile; }
+
+	public long getOffset(int cacheID)
+		{ return index.get(cacheID).offset; }
+
+	public static void setIndexFile(File file)
+		{ lookupFile = file; }
+
+	public static File getExistingIndex(AssemblyFile refFile)
+	{
+		try
+		{
+			Properties props = new Properties();
+			props.loadFromXML(new FileInputStream(lookupFile));
+
+			if (props.containsKey(refFile.getPath()))
+			{
+				File indexFile = new File(props.getProperty(refFile.getPath()));
+
+				if (indexFile.exists())
+					return indexFile;
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	// Updates the existing list of index files with details for a new entry
+	public static void updateIndexList(AssemblyFile refFile, File indexFile)
+	{
+		Properties props = new Properties();
+
+		try
+		{
+			// Load it...
+			props.loadFromXML(new FileInputStream(lookupFile));
+		}
+		catch (Exception e) {}
+
+		try
+		{
+			// Update it...
+			props.put(refFile.getPath(), indexFile.getPath());
+
+			// Save it...
+			props.storeToXML(new FileOutputStream(lookupFile), "");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	// Represents an "index" to an entry in the cache, storing information on

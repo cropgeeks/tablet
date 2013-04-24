@@ -7,6 +7,7 @@ import java.io.*;
 import java.util.*;
 
 import tablet.data.*;
+import tablet.data.cache.*;
 import static tablet.io.AssemblyFile.*;
 
 /**
@@ -33,13 +34,80 @@ class ReferenceFileReader
 	void readReferenceFile(TrackableReader reader, AssemblyFile file)
 		throws Exception
 	{
-		if (file.getType() == AssemblyFile.FASTA)
-			readFastaFile(reader);
+		File index = ConsensusFileCache.getExistingIndex(file);
 
-		else if (file.getType() == AssemblyFile.FASTQ)
-			readFastqFile(reader);
+		if (index != null)
+			readIndex(index);
+
+		else
+		{
+			if (file.getType() == AssemblyFile.FASTA)
+				readFastaFile(reader);
+
+			else if (file.getType() == AssemblyFile.FASTQ)
+				readFastqFile(reader);
+
+			if (reader.okToRun())
+				saveIndex(file);
+		}
 	}
 
+	private void readIndex(File file)
+		throws Exception
+	{
+		BufferedReader in = new BufferedReader(new FileReader(file));
+
+		// The first line gives the path to the actual cache file
+		String str = in.readLine();
+		File cacheFile = new File(str);
+		Consensus.prepareCache(cacheFile);
+		Consensus.getCache().openForReading();
+
+		// Now read in the index data and initialise each contig+consensus
+		str = in.readLine();
+		while (str != null)
+		{
+			String name = str;
+			long offset = Long.parseLong(in.readLine());
+			int length = Integer.parseInt(in.readLine());
+
+			Contig contig = new Contig(name, true, 0);
+			contigHash.put(name, contig);
+
+			Consensus consensus = new Consensus();
+			consensus.setCacheOffset(assembly.size(), offset, length);
+			contig.setConsensus(consensus);
+			assembly.addContig(contig);
+
+			str = in.readLine();
+		}
+
+		in.close();
+	}
+
+	// Saves a *.refs.index for this the current cached copy of the reference
+	// sequence. The file writes 3 lines at a time: the contig's name, its
+	// offset within the cache, and its length (in bytes). The first line is a
+	// special case and contains the full path to the actual cache
+	private void saveIndex(AssemblyFile rFile)
+		throws Exception
+	{
+		File cacheFile = Consensus.getCache().getCacheFile();
+		File indexFile = new File(cacheFile.getParent(), cacheFile.getName() + ".index");
+
+		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(indexFile)));
+		out.println(cacheFile.getPath());
+
+		for (Contig contig: assembly)
+		{
+			out.println(contig.getName());
+			out.println(contig.getConsensus().getCacheOffset());
+			out.println(contig.getConsensus().length());
+		}
+		out.close();
+
+		Consensus.getCache().updateIndexList(rFile, indexFile);
+	}
 
 	private void readFastaFile(TrackableReader reader)
 		throws Exception

@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 
+import tablet.data.cache.*;
 import tablet.gui.dialog.*;
 import tablet.gui.ribbon.*;
 import tablet.gui.viewer.colors.*;
@@ -202,7 +203,10 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		// Attempt to remove any temp files that were in use
 		winMain.closeAssembly();
 
-		FileUtils.emptyDirectory(new File(Prefs.cacheFolder), true);
+		// Clear the cache
+		for (File file: new File(Prefs.cacheFolder).listFiles())
+			if (file.getName().contains(".refs") == false)
+				file.delete();
 
 		Prefs.isFirstRun = false;
 		prefs.savePreferences(prefsFile, Prefs.class);
@@ -252,6 +256,9 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 		// Color-prefs file
 		ColorPrefs.setFile(new File(fldr, "tablet-colors.xml"));
+
+		// Cached reference file
+		ConsensusFileCache.setIndexFile(new File(fldr, "tablet-refs.xml"));
 
 		// This is the file we really want
 		File file = new File(fldr, "tablet.xml");
