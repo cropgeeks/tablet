@@ -59,6 +59,7 @@
                       <Component id="checkBamValidation" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="cacheReads" alignment="0" min="-2" max="-2" attributes="0"/>
                       <Component id="neverCacheBAM" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="checkDeleteRefCache" alignment="0" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
@@ -77,6 +78,8 @@
                   <Component id="cacheReads" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="neverCacheBAM" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
+                  <Component id="checkDeleteRefCache" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="32767" attributes="0"/>
               </Group>
           </Group>
@@ -106,6 +109,11 @@
         <Component class="javax.swing.JCheckBox" name="neverCacheBAM">
           <Properties>
             <Property name="text" type="java.lang.String" value="Bypass read disk caching for BAM files"/>
+          </Properties>
+        </Component>
+        <Component class="javax.swing.JCheckBox" name="checkDeleteRefCache">
+          <Properties>
+            <Property name="text" type="java.lang.String" value="Delete cached copies of reference data when Tablet exits"/>
           </Properties>
         </Component>
       </SubComponents>

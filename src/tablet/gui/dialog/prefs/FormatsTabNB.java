@@ -28,6 +28,7 @@ class FormatsTabNB extends JPanel implements ActionListener
 		RB.setText(checkBamValidation, "gui.dialog.prefs.NBFormatsPanel.checkBamValidation");
 		RB.setText(cacheReads, "gui.dialog.prefs.NBFormatsPanel.cacheReads");
 		RB.setText(neverCacheBAM, "gui.dialog.prefs.NBFormatsPanel.neverCacheBAM");
+		RB.setText(checkDeleteRefCache, "gui.dialog.prefs.NBFormatsPanel.checkDeleteRefCache");
 
 		panel2.setBorder(BorderFactory.createTitledBorder(RB.getString("gui.dialog.prefs.NBFormatsPanel.panel2Title")));
 		RB.setText(stLabel1, "gui.dialog.prefs.NBFormatsPanel.stLabel1");
@@ -40,6 +41,7 @@ class FormatsTabNB extends JPanel implements ActionListener
 		checkBamValidation.setSelected(Prefs.ioBamValidationIsLenient);
 		cacheReads.setSelected(Prefs.ioCacheReads);
 		neverCacheBAM.setSelected(Prefs.ioNeverCacheBAM);
+		checkDeleteRefCache.setSelected(Prefs.ioDeleteRefCache);
 		checkStates();
 
 		bBrowse.addActionListener(this);
@@ -58,6 +60,7 @@ class FormatsTabNB extends JPanel implements ActionListener
 		Prefs.ioBamValidationIsLenient = checkBamValidation.isSelected();
 		Prefs.ioCacheReads = cacheReads.isSelected();
 		Prefs.ioNeverCacheBAM = neverCacheBAM.isSelected();
+		Prefs.ioDeleteRefCache = checkDeleteRefCache.isSelected();
 
 		Prefs.ioSamtoolsPath = stPath.getText();
 	}
@@ -94,6 +97,7 @@ class FormatsTabNB extends JPanel implements ActionListener
         checkBamValidation = new javax.swing.JCheckBox();
         cacheReads = new javax.swing.JCheckBox();
         neverCacheBAM = new javax.swing.JCheckBox();
+        checkDeleteRefCache = new javax.swing.JCheckBox();
         panel2 = new javax.swing.JPanel();
         stLabel1 = new javax.swing.JLabel();
         stPath = new javax.swing.JTextField();
@@ -112,6 +116,8 @@ class FormatsTabNB extends JPanel implements ActionListener
 
         neverCacheBAM.setText("Bypass read disk caching for BAM files");
 
+        checkDeleteRefCache.setText("Delete cached copies of reference data when Tablet exits");
+
         javax.swing.GroupLayout panel1Layout = new javax.swing.GroupLayout(panel1);
         panel1.setLayout(panel1Layout);
         panel1Layout.setHorizontalGroup(
@@ -123,7 +129,8 @@ class FormatsTabNB extends JPanel implements ActionListener
                     .addComponent(checkAceQA)
                     .addComponent(checkBamValidation)
                     .addComponent(cacheReads)
-                    .addComponent(neverCacheBAM))
+                    .addComponent(neverCacheBAM)
+                    .addComponent(checkDeleteRefCache))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         panel1Layout.setVerticalGroup(
@@ -139,6 +146,8 @@ class FormatsTabNB extends JPanel implements ActionListener
                 .addComponent(cacheReads)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(neverCacheBAM)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(checkDeleteRefCache)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -208,6 +217,7 @@ class FormatsTabNB extends JPanel implements ActionListener
     private javax.swing.JCheckBox checkAceQA;
     private javax.swing.JCheckBox checkAmbiguousToN;
     private javax.swing.JCheckBox checkBamValidation;
+    private javax.swing.JCheckBox checkDeleteRefCache;
     private javax.swing.JCheckBox neverCacheBAM;
     private javax.swing.JPanel panel1;
     private javax.swing.JPanel panel2;
