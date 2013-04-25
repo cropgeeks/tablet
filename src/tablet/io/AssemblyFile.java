@@ -139,6 +139,18 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 		catch (Exception e) { return false; }
 	}
 
+	/**
+	 * Returns the last modified time of the file (if it *is* a file, otherwise
+	 * it just returns 0 for a URL file).
+	 */
+	public long modified()
+	{
+		if (isURL())
+			return 0;
+
+		return file.lastModified();
+	}
+
 	// Returns the main input stream for this file
 	InputStream getInputStream()
 		throws Exception

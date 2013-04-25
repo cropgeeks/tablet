@@ -177,9 +177,15 @@ public class ConsensusFileCache extends TabletCache
 
 			if (props.containsKey(refFile.getPath()))
 			{
-				File indexFile = new File(props.getProperty(refFile.getPath()));
+				String val = props.getProperty(refFile.getPath());
 
-				if (indexFile.exists())
+				// Path to the original reference file
+				File indexFile = new File(val.split("\t")[0]);
+				// Tracked size of the file when it was originally cached
+				long modified = Long.parseLong(val.split("\t")[1]);
+
+				// Only return if it exists and its size is still the same
+				if (indexFile.exists() && refFile.modified() == modified)
 					return indexFile;
 			}
 		}
@@ -206,7 +212,9 @@ public class ConsensusFileCache extends TabletCache
 		try
 		{
 			// Update it...
-			props.put(refFile.getPath(), indexFile.getPath());
+			String key = refFile.getPath();
+			String val = indexFile.getPath() + "\t" + refFile.modified();
+			props.put(key, val);
 
 			// Save it...
 			props.storeToXML(new FileOutputStream(lookupFile), "");

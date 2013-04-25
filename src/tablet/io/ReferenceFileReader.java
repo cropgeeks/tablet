@@ -93,7 +93,7 @@ class ReferenceFileReader
 		throws Exception
 	{
 		File cacheFile = Consensus.getCache().getCacheFile();
-		File indexFile = new File(cacheFile.getParent(), cacheFile.getName() + ".index");
+		File indexFile = new File(cacheFile.getParent(), cacheFile.getName() + "ndx");
 
 		PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(indexFile)));
 		out.println(cacheFile.getPath());
