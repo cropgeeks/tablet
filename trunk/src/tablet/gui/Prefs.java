@@ -148,6 +148,7 @@ public class Prefs extends XMLPreferences
 	public static boolean ioCacheReads = true;
 	public static boolean ioNeverCacheBAM = true;
 	public static boolean cacheMappings = true;
+	public static boolean ioDeleteRefCache = false;
 
 	// Bam assembly options
 	public static int bamSize = 25000;

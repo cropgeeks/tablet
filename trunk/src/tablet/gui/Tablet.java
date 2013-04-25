@@ -205,7 +205,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 		// Clear the cache
 		for (File file: new File(Prefs.cacheFolder).listFiles())
-			if (file.getName().contains(".refs") == false)
+			if (Prefs.ioDeleteRefCache || !file.getName().contains(".refs"))
 				file.delete();
 
 		Prefs.isFirstRun = false;
