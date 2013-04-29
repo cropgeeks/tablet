@@ -18,18 +18,22 @@
 <h2>Papers & Presentations</h2>
 
 
-<p>Please use either of the following two references if you are citing Tablet in your work:</p>
+<p>Please use the following reference if you are citing Tablet in your work:</p>
 
+<ul>
+<li>
+Milne, I., Stephen, G., Bayer, M., Cock, P.J.A., Pritchard, L., Cardle, L., Shaw, P.D. and Marshall, D. 2013.
+<a target="new" href="http://dx.doi.org/10.1093/bib/bbs012">Using Tablet for visual exploration of second-generation sequencing data.</a>
+<b>Briefings in Bioinformatics 14(2)</b>, 193-202.
+</li>
+</ul>
+
+<p>Other papers on Tablet:
 <ul>
 <li>
 Milne, I., Bayer, M., Cardle, L., Shaw, P., Stephen, G., Wright, F. and Marshall, D. 2010.
 <a target="new" href="http://dx.doi.org/10.1093/bioinformatics/btp666">Tablet - next generation sequence assembly visualization.</a>
 <b>Bioinformatics 26(3)</b>, 401-402.
-</li>
-<li>
-Milne, I., Stephen, G., Bayer, M., Cock, P.J.A., Pritchard, L., Cardle, L., Shaw, P.D. and Marshall, D. 2012.
-<a target="new" href="http://dx.doi.org/10.1093/bib/bbs012">Using Tablet for visual exploration of second-generation sequencing data.</a>
-<b>Briefings in Bioinformatics</b>
 </li>
 </ul>
 

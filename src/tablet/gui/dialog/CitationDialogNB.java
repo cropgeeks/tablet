@@ -60,7 +60,7 @@ public class CitationDialogNB extends javax.swing.JPanel implements ActionListen
 		}
 
 		else if (e.getSource() == link3)
-			TabletUtils.visitURL("http://bioinformatics.oxfordjournals.org/content/26/3/401");
+			TabletUtils.visitURL("http://dx.doi.org/10.1093/bib/bbs012");
 	}
 
     /** This method is called from within the constructor to
@@ -81,20 +81,20 @@ public class CitationDialogNB extends javax.swing.JPanel implements ActionListen
         setMinimumSize(new java.awt.Dimension(790, 449));
         setPreferredSize(new java.awt.Dimension(790, 449));
 
-        jLabel1.setFont(new java.awt.Font("Calibri", 1, 18));
+        jLabel1.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Citing Tablet");
 
-        jLabel2.setFont(new java.awt.Font("Calibri", 0, 16));
+        jLabel2.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
         jLabel2.setText("<html>The continued development of Tablet is dependent on the recognition of our efforts in maintaining and extending the software. If you use Tablet in your research we would appreciate you citing the following paper:</html>");
         jLabel2.setVerticalAlignment(javax.swing.SwingConstants.TOP);
 
-        jLabel3.setFont(new java.awt.Font("Calibri", 0, 16));
-        jLabel3.setText("<html>Milne I, et al. 2010. <em>Bioinformatics</em> 26(3) 401-402.</html>");
+        jLabel3.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
+        jLabel3.setText("<html>Milne I, et al. 2013. <em>Briefings in Bioinformatics</em> 14(2) 193-202.</html>");
 
         link3.setForeground(new java.awt.Color(68, 106, 156));
-        link3.setText("Tablet - next generation sequence assembly visualization");
-        link3.setFont(new java.awt.Font("Calibri", 0, 16));
+        link3.setText("Using Tablet for visual exploration of second-generation sequencing data");
+        link3.setFont(new java.awt.Font("Calibri", 0, 16)); // NOI18N
 
         link1.setForeground(new java.awt.Color(68, 106, 156));
         link1.setText("You can close this window in 10 seconds");
@@ -113,7 +113,7 @@ public class CitationDialogNB extends javax.swing.JPanel implements ActionListen
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jLabel1)
                         .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 452, Short.MAX_VALUE)))
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
