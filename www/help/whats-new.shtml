@@ -22,6 +22,12 @@ that have been made to Tablet in recent versions. For full details on all the
 changes between versions, please see the <a href="http://bioinf.hutton.ac.uk/tablet/svn.txt">
 subversion change log</a>.</p>
 
+<h3>New in 1.13.05.02</h3>
+<ul>
+<li>NEW: Tablet will now cache and reuse reference files, making subsequent accesses faster.</li>
+</ul>
+
+
 <h3>New in 1.13.04.22</h3>
 <ul>
 <li>NEW: Experimentally shifted the bundled runtime to Java 7 for OS X and Linux (Windows builds have used it for some time).</li>
