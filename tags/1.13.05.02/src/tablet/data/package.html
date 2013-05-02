@@ -1,0 +1,18 @@
+<body>
+
+<p>The tablet.data package contains classes that are used for the storage of
+assembly information. This package is mainly data classes with a few methods
+in some classes that perform simple processing, such as sorting or searching for
+data.</p>
+
+<p>The overall data structure for Tablet starts with an assembly. An assembly
+holds a list of contigs. Within each contig there is a consensus sequence and a
+list of reads and a list of features. Both the classes for consensus and read
+extend from Sequence which is an abstract base class for storing DNA data.</p>
+
+<p>Note that "consensus space" within tablet is zero-indexed; that is the
+consensus sequence's first base is at position zero. Reads are aligned against
+this consensus and may have bases that extend to the left of this position (and
+are therefore negative) or to the right of the consensus's final base.</p>
+
+</body>
