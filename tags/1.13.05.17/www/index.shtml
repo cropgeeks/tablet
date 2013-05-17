@@ -1,0 +1,56 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="stylesheet/styles.css" type="text/css">
+
+<title>Tablet - Next Generation Sequence Assembly Visualization</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.shtml" -->
+
+
+<h2>Tablet - Next Generation Sequence Assembly Visualization</h2>
+
+<p>Tablet is a lightweight, high-performance graphical viewer for next
+generation sequence assemblies and alignments.</p>
+
+<p><img class="capture" src="images/tablet-main.png" alt="Tablet Screenshot"></p>
+
+<p>Visit the <a href="download.shtml">download page</a> to get the latest version
+of Tablet (1.13.05.17; 17th May 2013). Please note that Tablet is
+<a href="licence.html">licenced</a>.</p>
+
+<p>Please cite: Milne I, Stephen G, Bayer M, Cock PJA, Pritchard L, Cardle L, Shaw PD and Marshall D. 2013.
+<a target="new" href="http://dx.doi.org/10.1093/bib/bbs012">Using Tablet for visual exploration of second-generation sequencing data.</a>
+Briefings in Bioinformatics 14(2), 193-202.</p>
+
+<p>Tablet features:</p>
+
+<ul>
+<li>High-performance visualization and data navigation.</li>
+<li>Display of reads in both packed and stacked formats.</li>
+<li>File format support for ACE, AFG, MAQ, SOAP2, SAM, BAM, FASTA, FASTQ, and GFF3.</li>
+<li>Import GFF3 features and quickly find/highlight/display them.</li>
+<li>Search and locate reads by name or subsequence across entire data sets.</li>
+<li>Paired end visualization support (for SAM/BAM).</li>
+<li>Entire-contig overviews, showing data layout or coverage information.</li>
+<li>Simple install routine via auto-updating graphical installers.</li>
+<li>Support for Windows, Apple Mac OS X and Linux, in 32 and 64-bit.</li>
+</ul>
+
+<p>You can get a full list of recent new additions, changes or bug fixes by
+reading through the <a href="help/whats-new.shtml">What's New</a> list.</p>
+
+
+
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>
