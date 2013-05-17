@@ -206,6 +206,11 @@ class SamFileReader extends TrackableReader
 			}
 		}
 
+		// If this is the last (or there is only one) contig CIGAR features
+		// won't have been processed yet.
+		if (cigarParser != null)
+			cigarParser.processCigarFeatures();
+
 		in.close();
 
 		assembly.setName(files[ASBINDEX].getName());
