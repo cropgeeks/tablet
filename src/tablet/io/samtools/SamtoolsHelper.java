@@ -38,7 +38,7 @@ public class SamtoolsHelper
 			ProcessBuilder pb = new ProcessBuilder(samtools.getPath(),
 				"idxstats", bamFile.getPath());
 
-			pb.directory(new File(baiFile.getFile().getParent()));
+			pb.directory(new File(baiFile.getFile().getAbsoluteFile().getParent()));
 			pb.redirectErrorStream(true);
 
 			Process proc = pb.start();
