@@ -63,7 +63,7 @@ public class CigarOverlayer extends AlphaOverlay
 
 	private ArrayList<Feature> getTrackByName(VisualContig vContig, String name, int xS, int xE)
 	{
-		ArrayList<Feature> features = new ArrayList<Feature>();
+		ArrayList<Feature> features = new ArrayList<>();
 
 		for (int i=0; i < vContig.getTrackCount(); i++)
 		{

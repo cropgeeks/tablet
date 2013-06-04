@@ -17,7 +17,7 @@ public class Contig
 	private String name;
 	private Consensus consensus;
 
-	private ArrayList<Read> reads = new ArrayList<Read>();
+	private ArrayList<Read> reads = new ArrayList<>();
 
 	private TableData tableData = new TableData();
 
@@ -47,7 +47,7 @@ public class Contig
 	private PairedStack pairedStack;
 
 	// Main set of features associated with this contig
-	private ArrayList<Feature> features = new ArrayList<Feature>();
+	private ArrayList<Feature> features = new ArrayList<>();
 
 	// Supplementary set of features used purely for graphical outlining
 	private ArrayList<VisualOutline> outlines;

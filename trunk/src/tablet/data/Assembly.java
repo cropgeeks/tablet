@@ -23,13 +23,13 @@ public class Assembly implements Iterable<Contig>
 	private static IReadCache cache;
 	private static ReadSQLCache nameCache;
 
-	private ArrayList<Contig> contigs = new ArrayList<Contig>();
+	private ArrayList<Contig> contigs = new ArrayList<>();
 
 	private BamBam bambam;
 	private static boolean hasCigar;
 	private static boolean isPaired = false;
 
-	private static ArrayList<ReadGroup> readGroups = new ArrayList<ReadGroup>();
+	private static ArrayList<ReadGroup> readGroups = new ArrayList<>();
 
 	/** Constructs a new, empty assembly. */
 	public Assembly(String cacheID)

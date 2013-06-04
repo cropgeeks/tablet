@@ -19,7 +19,7 @@ public class IOHandler
 	AceFileWriter writer;
 	//List to temporarily store read data until it can be written in its correct
 	//place in the ACE file.
-	ArrayList<String[]> tempList = new ArrayList<String[]>();
+	ArrayList<String[]> tempList = new ArrayList<>();
 
 	int contigs;;
 	float fileSize;

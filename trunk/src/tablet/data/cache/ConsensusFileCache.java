@@ -16,7 +16,7 @@ public class ConsensusFileCache extends TabletCache
 	// This file contains a list of known cached reference files
 	private static File lookupFile;
 
-	private ArrayList<Index> index = new ArrayList<Index>();
+	private ArrayList<Index> index = new ArrayList<>();
 
 	private Consensus current = null;
 

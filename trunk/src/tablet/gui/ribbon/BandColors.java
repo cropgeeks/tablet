@@ -49,7 +49,7 @@ public class BandColors extends JRibbonBand implements ActionListener
 
 	private void createRibbonGallery()
 	{
-		List<JCommandToggleButton> styleButtons = new ArrayList<JCommandToggleButton>();
+		List<JCommandToggleButton> styleButtons = new ArrayList<>();
 
 		// Standard ("enhanced") colour scheme button
 		boolean standardOn = Prefs.visColorScheme == ReadScheme.STANDARD;
@@ -188,13 +188,13 @@ public class BandColors extends JRibbonBand implements ActionListener
 
 
 		// Set up the ribbon gallery (gawd knows what this code is doing)
-		Map<RibbonElementPriority, Integer> counts = new HashMap<RibbonElementPriority, Integer>();
+		Map<RibbonElementPriority, Integer> counts = new HashMap<>();
 		counts.put(RibbonElementPriority.LOW, 6);
 		counts.put(RibbonElementPriority.MEDIUM, 6);
 		counts.put(RibbonElementPriority.TOP, 6);
 
 		List<StringValuePair<List<JCommandToggleButton>>> galleryButtons =
-			new ArrayList<StringValuePair<List<JCommandToggleButton>>>();
+			new ArrayList<>();
 
 		addCommandButton(bAtAllZooms, RibbonElementPriority.TOP);
 		addCommandButton(bColors, RibbonElementPriority.TOP);

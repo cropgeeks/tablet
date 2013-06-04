@@ -21,7 +21,7 @@ class FeaturesTableModel extends AbstractTableModel
 {
 	private Contig contig;
 
-	private ArrayList<Feature> features = new ArrayList<Feature>();
+	private ArrayList<Feature> features = new ArrayList<>();
 
 	private String[] columnNames;
 

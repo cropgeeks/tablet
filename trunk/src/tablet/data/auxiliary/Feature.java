@@ -24,11 +24,11 @@ public class Feature implements Comparable<Feature>
 
 	// Tracks all known GFF types for the current data set. The hash is cleared
 	// by Assembly's constructor whenever new data is imported/loaded.
-	public static HashMap<String, String> types = new HashMap<String, String>();
+	public static HashMap<String, String> types = new HashMap<>();
 	// Tracks the order for the GFF types
-	public static ArrayList<VisibleFeature> order = new ArrayList<VisibleFeature>();
+	public static ArrayList<VisibleFeature> order = new ArrayList<>();
 	// And their colours
-	public static HashMap<String, Color> colors = new HashMap<String, Color>();
+	public static HashMap<String, Color> colors = new HashMap<>();
 
 	// The GFF3 type of the feature
 	protected String gffType;
