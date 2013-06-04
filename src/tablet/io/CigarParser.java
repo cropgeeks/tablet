@@ -57,8 +57,8 @@ public class CigarParser
 		// two equally lengthed ArrayLists of Integers (for operation lengths)
 		// and Characters (for operation types).
 		String noString = "";
-		ArrayList<Integer> lengths = new ArrayList<Integer>();
-		ArrayList<Character> chars = new ArrayList<Character>();
+		ArrayList<Integer> lengths = new ArrayList<>();
+		ArrayList<Character> chars = new ArrayList<>();
 
 		for (char cigChar : cigar.toCharArray())
 		{

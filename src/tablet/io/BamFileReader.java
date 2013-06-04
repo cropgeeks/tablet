@@ -22,7 +22,7 @@ public class BamFileReader extends TrackableReader
 	private String cacheid;
 
 	private ReferenceFileReader refReader;
-	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
+	private HashMap<String, Contig> contigHash = new HashMap<>();
 
 	// We need (eventually) the bam file itself, its index, and reference data
 	private AssemblyFile bamFile;

@@ -16,7 +16,7 @@ import tablet.analysis.Finder.*;
  */
 public class FindTableModel extends AbstractTableModel
 {
-	private ArrayList<SearchResult> results = new ArrayList<SearchResult>();
+	private ArrayList<SearchResult> results = new ArrayList<>();
 	private String[] columnNames = new String[0];
 
 	void clear()

@@ -13,7 +13,7 @@ import tablet.data.*;
 
 class ReadsTableModel extends AbstractTableModel
 {
-	private List<Read> reads = new ArrayList<Read>();
+	private List<Read> reads = new ArrayList<>();
 	private String[] columnNames;
 
 	ReadsTableModel()

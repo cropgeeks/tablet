@@ -25,7 +25,7 @@ class SamFileReader extends TrackableReader
 	private ReferenceFileReader refReader;
 	private CigarParser cigarParser;
 
-	private HashMap<String, Contig> contigHash = new HashMap<String, Contig>();
+	private HashMap<String, Contig> contigHash = new HashMap<>();
 
 	// Contig currently being processed. Used to detect unsorted data.
 	private String currentContig = "";
@@ -38,9 +38,9 @@ class SamFileReader extends TrackableReader
 	private boolean indexingCache = false;
 
 	// Stores a list of @RG (read group) records as they are found
-	private ArrayList<ReadGroup> readGroups = new ArrayList<ReadGroup>();
+	private ArrayList<ReadGroup> readGroups = new ArrayList<>();
 	// Stores a hash of @RG (read group) IDs and their associated information
-	private HashMap<String, Short> rgHash = new HashMap<String, Short>();
+	private HashMap<String, Short> rgHash = new HashMap<>();
 
 	SamFileReader(IReadCache readCache, ReadSQLCache nameCache)
 	{

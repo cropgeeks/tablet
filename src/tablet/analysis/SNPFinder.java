@@ -156,7 +156,7 @@ public class SNPFinder extends SimpleJob
 
 	private ArrayList<Metric> getMetrics(int base)
 	{
-		ArrayList<Metric> metrics = new ArrayList<Metric>();
+		ArrayList<Metric> metrics = new ArrayList<>();
 
 		HashMap<String, Metric> hashMap = data.get(base);
 

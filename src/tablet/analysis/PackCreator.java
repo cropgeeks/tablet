@@ -23,7 +23,7 @@ public class PackCreator extends SimpleJob
 	// Tracks reads that overlap as they are the only ones were it is tricky to
 	// determine if a read has already been added or not when dealing with a
 	// mate later in the loop iteration
-	private HashMap<Integer,Integer> overlaps = new HashMap<Integer,Integer>();
+	private HashMap<Integer,Integer> overlaps = new HashMap<>();
 
 	private int overlapCount = 0;
 	private int addedCount = 0;

@@ -9,7 +9,7 @@ import java.util.*;
 
 public class ColorPrefs
 {
-	private static HashMap<String,Color> colors = new HashMap<String,Color>();
+	private static HashMap<String,Color> colors = new HashMap<>();
 
 	private static File file;
 	private static Properties p = new Properties();
@@ -37,7 +37,7 @@ public class ColorPrefs
 	public static void resetUserColors()
 	{
 		// Search (and clear) all colours beginning with "User." from the hash
-		ArrayList<String> toRemove = new ArrayList<String>();
+		ArrayList<String> toRemove = new ArrayList<>();
 		for (String key: colors.keySet())
 			if (key.startsWith("User."))
 				toRemove.add(key);

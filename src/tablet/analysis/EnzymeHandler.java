@@ -17,7 +17,7 @@ import tablet.gui.viewer.*;
 public class EnzymeHandler implements ITaskListener
 {
 	private ArrayList<EnzymeFeature> features;
-	private static ArrayList<RestrictionEnzyme> enzymes = new ArrayList<RestrictionEnzyme>();
+	private static ArrayList<RestrictionEnzyme> enzymes = new ArrayList<>();
 
 	private Contig contig;
 

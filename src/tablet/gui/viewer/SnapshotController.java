@@ -12,7 +12,7 @@ import tablet.gui.viewer.SnapshotGrabber.*;
 public class SnapshotController
 {
 	AssemblyPanel aPanel;
-	ArrayList<Snapshot> snaps = new ArrayList<Snapshot>();
+	ArrayList<Snapshot> snaps = new ArrayList<>();
 	int snapPtr = -1;
 
 	public SnapshotController(AssemblyPanel aPanel)

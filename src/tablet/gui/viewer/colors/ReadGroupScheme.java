@@ -46,7 +46,7 @@ public class ReadGroupScheme extends EnhancedScheme
 
 	private void initStates(Color color, int w, int h)
 	{
-		ArrayList<ColorStamp> rgStamps = new ArrayList<ColorStamp>();
+		ArrayList<ColorStamp> rgStamps = new ArrayList<>();
 
 		for (String base: Sequence.getStates())
 		{

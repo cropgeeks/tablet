@@ -60,7 +60,7 @@ public class VisibleReadsGrabberThread extends Thread
 
 	private ArrayList<Read> findVisibleReads()
 	{
-		ArrayList<Read> reads = new ArrayList<Read>();
+		ArrayList<Read> reads = new ArrayList<>();
 
 		for(int i=yS; i <= yE && i < manager.size(); i++)
 		{
@@ -73,7 +73,7 @@ public class VisibleReadsGrabberThread extends Thread
 					reads.add(line.get(j));
 			}
 		}
-		
+
 		return reads;
 	}
 

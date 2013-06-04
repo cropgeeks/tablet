@@ -15,7 +15,7 @@ import scri.commons.gui.*;
 class WinMainStatusBar extends JPanel implements ActionListener
 {
 	private JLabel tipsLabel, helpLabel, threadLabel;
-	private ArrayList<String> helpHints = new ArrayList<String>();
+	private ArrayList<String> helpHints = new ArrayList<>();
 
 	private int bgColor;
 
