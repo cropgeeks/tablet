@@ -144,6 +144,10 @@ class ReadsCanvasInfoPane
 				TabletUtils.nf.format(read.length()),
 				TabletUtils.nf.format(rnd.getUnpaddedLength()));
 
+		int mm = rmd.getMismatches();
+		box.lengthData += " (" + mm + " "
+			+ (mm == 1 ? RB.getString("gui.viewer.ReadsCanvasInfoPane.mismatch1") : RB.getString("gui.viewer.ReadsCanvasInfoPane.mismatch0")) + ")";
+
 		// Cigar
 		if (Assembly.hasCigar())
 			box.cigar = RB.format("gui.viewer.ReadsCanvasInfoPane.cigar", truncate(rnd.getCigar()));

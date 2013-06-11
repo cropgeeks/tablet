@@ -88,6 +88,17 @@ public class ReadMetaData extends Sequence
 		return isPaired;
 	}
 
+	public int getMismatches()
+	{
+		int count = 0;
+
+		for (int i = 0; i < length; i++)
+			if (getStateAt(i) % 2 == 1)
+				count++;
+
+		return count;
+	}
+
 	public void setIsPaired(boolean isPaired)
 	{
 		this.isPaired = isPaired;
