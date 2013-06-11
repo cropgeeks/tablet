@@ -6,6 +6,8 @@ package tablet.gui;
 import java.awt.*;
 import javax.swing.*;
 
+import scri.commons.gui.*;
+
 class Nimbus
 {
 	private static final Color BACKGROUND = new Color(240, 240, 240);
@@ -19,16 +21,19 @@ class Nimbus
 		UIManager.put("control", BACKGROUND);
 
 		// TODO: imilne 04/SEP/2009 - No longer working since JRE 1.6.0_u13
-		UIManager.put("defaultFont", FONT);
-		UIManager.put("Label[Enabled].font", FONT);
-		UIManager.put("Table[Enabled].font", FONT);
-		UIManager.put("TableHeader[Enabled].font", FONT);
-		UIManager.put("TabbedPane[Enabled].font", FONT);
-		UIManager.put("ComboBox[Enabled].font", FONT);
-		UIManager.put("Button[Enabled].font", FONT);
-		UIManager.put("ToggleButton[Enabled].font", FONT);
-		UIManager.put("TextField[Enabled].font", FONT);
-		UIManager.put("CheckBox[Enabled].font", FONT);
+		if (SystemUtils.isWindows())
+		{
+			UIManager.put("defaultFont", FONT);
+			UIManager.put("Label[Enabled].font", FONT);
+			UIManager.put("Table[Enabled].font", FONT);
+			UIManager.put("TableHeader[Enabled].font", FONT);
+			UIManager.put("TabbedPane[Enabled].font", FONT);
+			UIManager.put("ComboBox[Enabled].font", FONT);
+			UIManager.put("Button[Enabled].font", FONT);
+			UIManager.put("ToggleButton[Enabled].font", FONT);
+			UIManager.put("TextField[Enabled].font", FONT);
+			UIManager.put("CheckBox[Enabled].font", FONT);
+		}
 
 		for (UIManager.LookAndFeelInfo laf : UIManager.getInstalledLookAndFeels())
 			if (laf.getName().equals("Nimbus"))

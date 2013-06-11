@@ -116,32 +116,35 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 	{
 		try
 		{
-			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+//			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
 
-			if (SystemUtils.isWindows())
-			{
-				// Overrides the JOptionPane dialogs with better icons
-				UIManager.put("OptionPane.errorIcon", Icons.getIcon("WINERROR"));
-				UIManager.put("OptionPane.informationIcon", Icons.getIcon("WININFORMATION"));
-				UIManager.put("OptionPane.warningIcon", Icons.getIcon("WINWARNING"));
-				UIManager.put("OptionPane.questionIcon", Icons.getIcon("WINQUESTION"));
-			}
-
-			// Keep Apple happy...
-			if (SystemUtils.isMacOS())
-			{
-				handleOSXStupidities();
-				winKey = RB.getString("gui.text.cmnd");
-			}
-
-			// And use Nimbus for all non-Apple systems
-			else
-			{
-				Nimbus.customizeNimbus();
-				winKey = RB.getString("gui.text.ctrl");
-			}
+			Nimbus.customizeNimbus();
 		}
 		catch (Exception e) {}
+
+		if (SystemUtils.isWindows())
+		{
+			// Overrides the JOptionPane dialogs with better icons
+			UIManager.put("OptionPane.errorIcon", Icons.getIcon("WINERROR"));
+			UIManager.put("OptionPane.informationIcon", Icons.getIcon("WININFORMATION"));
+			UIManager.put("OptionPane.warningIcon", Icons.getIcon("WINWARNING"));
+			UIManager.put("OptionPane.questionIcon", Icons.getIcon("WINQUESTION"));
+		}
+
+		// Keep Apple happy...
+		if (SystemUtils.isMacOS())
+		{
+			handleOSXStupidities();
+			winKey = RB.getString("gui.text.cmnd");
+		}
+
+		// And use Nimbus for all non-Apple systems
+		else
+		{
+//			Nimbus.customizeNimbus();
+			winKey = RB.getString("gui.text.ctrl");
+		}
+
 
 		Thread.setDefaultUncaughtExceptionHandler(this);
 
