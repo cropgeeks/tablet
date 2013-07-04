@@ -54,6 +54,26 @@ public class Install4j
 
 	private static void checkForUpdate()
 	{
+		// Skip situations without write access to the install dir?
+		ApplicationRegistry.ApplicationInfo[] info = ApplicationRegistry.getApplicationInfoById("9483-2571-4596-9336");
+		try
+		{
+			File f = new File(info[0].getInstallationDirectory(), "tablet.test");
+			System.out.print("Testing write access to " + f);
+
+			BufferedWriter out = new BufferedWriter(new FileWriter(f));
+			out.close();
+			f.delete();
+
+			System.out.println(" - success");
+		}
+		catch (Exception e)
+		{
+			System.out.println(" - failed");
+			return;
+		}
+
+
 		try
 		{
 			switch (Prefs.guiUpdateSchedule)
