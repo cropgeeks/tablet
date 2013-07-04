@@ -48,7 +48,7 @@ for your operating system. Tablet is currently available for:</p>
 	<td><img src="images/icon_osx.gif" alt="OS X"></td>
 	<td>
 		<a href="installers/tablet_macos_1_13_05_17.dmg"
-		  onClick="javascript: pageTracker._trackPageview('/installers/macosx_x86');">Apple Mac OS X</a>
+		  onClick="javascript: pageTracker._trackPageview('/installers/macosx_x86');">Mac OS X</a> (note requirements below)
 	</td>
 </tr>
 
@@ -65,6 +65,12 @@ but if you have any problems, don't hesitate to contact us at
 <p>Tablet is developed on Windows 7, and gets additional regular testing on Mac OS X and Centos.</p>
 
 
+<h3>Archived Versions</h3>
+
+<p>You can download a limited selection of older copies of Tablet from our <a href="installers/archive/?C=M;O=D">archive</a>. If you do need to
+return to an older version (for whatever reason), please let us know why.</p>
+
+
 <h3>Additional downloads</h3>
 
 <ul>
@@ -72,6 +78,12 @@ but if you have any problems, don't hesitate to contact us at
 Provided by Zach Foster and Aaron Liston, Department of Botany & Plant Pathology, Oregon State University.</li>
 </ul>
 
+
+<h3>OS X Requirements</h3>
+
+<p>Tablet relies on Java 7 which is only officially supported on OS X 10.7.3 or later, however you may still be able to run it on earlier
+versions. We bundle Tablet with an appropriate Java runtime so you shouldn't have any problems starting it, but we have had at least one
+report of various degrees of graphical corruption when running it on older OS X versions.</p>
 
 <!--#include virtual="footer.html" -->
 
