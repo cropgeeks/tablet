@@ -379,7 +379,6 @@ public class WinMain extends JRibbonFrame
 	{
 		String msg = RB.format("gui.WinMain.cacheError", Prefs.cacheFolder, e);
 
-		TaskDialog.showOpenLog(RB.format("gui.ContigsPanel.saveReads.exception",
-			msg), Tablet.getLogFile());
+		TaskDialog.showOpenLog(msg, Tablet.getLogFile());
 	}
 }

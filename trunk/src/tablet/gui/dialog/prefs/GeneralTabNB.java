@@ -83,7 +83,9 @@ class GeneralTabNB extends JPanel implements ActionListener
 		}
 
 		Prefs.guiUpdateSchedule = updateCombo.getSelectedIndex();
-		Prefs.cacheFolder = cacheField.getText();
+
+		if (cacheField.getText().length() > 0)
+			Prefs.cacheFolder = cacheField.getText();
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -141,15 +143,23 @@ class GeneralTabNB extends JPanel implements ActionListener
 
 	private String getCacheDirSize()
 	{
-		String cacheFolder = Prefs.cacheFolder;
-		File folder = new File(cacheFolder);
-		float size = 0;
-		for (File file : folder.listFiles())
-			size += file.length();
+		try {
+			String cacheFolder = Prefs.cacheFolder;
+			File folder = new File(cacheFolder);
+			float size = 0;
+			for (File file : folder.listFiles())
+				size += file.length();
 
-		String sizeString = getStringForSize(size);
+			String sizeString = getStringForSize(size);
 
-		return sizeString;
+			return sizeString;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+
+			return "0.00 MB";
+		}
 	}
 
 	private String getStringForSize(float size)
@@ -170,7 +180,7 @@ class GeneralTabNB extends JPanel implements ActionListener
 			sizeString = nf.format(size / MB) + " MB";
 		else
 			sizeString = nf.format(size / GB) + "GB";
-		
+
 		return sizeString;
 	}
 
