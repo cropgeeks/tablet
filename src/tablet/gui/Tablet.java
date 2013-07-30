@@ -207,9 +207,16 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		winMain.closeAssembly();
 
 		// Clear the cache
-		for (File file: new File(Prefs.cacheFolder).listFiles())
-			if (Prefs.ioDeleteRefCache || !file.getName().contains(".refs"))
-				file.delete();
+		try
+		{
+			for (File file: new File(Prefs.cacheFolder).listFiles())
+				if (Prefs.ioDeleteRefCache || !file.getName().contains(".refs"))
+					file.delete();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
 
 		Prefs.isFirstRun = false;
 		prefs.savePreferences(prefsFile, Prefs.class);
