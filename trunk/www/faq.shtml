@@ -96,7 +96,7 @@ opening a Terminal window, and typing:<br>
 <p>&nbsp;</p>
 
 <p><b>Does Tablet support launching via Java Web Start?</b></p>
-<p>Yes. Tablet can be run via Java Web Start by visiting 
+<p>Yes. Tablet can be run via Java Web Start (Java 7 required) by visiting 
 <a href="http://bioinf.hutton.ac.uk/tablet/webstart/tablet.jnlp">http://bioinf.hutton.ac.uk/tablet/webstart/tablet.jnlp</a>.</p>
 <p>This will launch Tablet with its default settings, allocating 1024MB of memory for use. You can
 change this setting by including the argument<br>
@@ -105,9 +105,7 @@ change this setting by including the argument<br>
 <pre>  ...tablet.jnlp?argument=http://bioinf.hutton.ac.uk/tablet/sample-data/brassica.ace.gz</pre></p>
 <p>If you need two files (eg reference and assembly), then it would be<br>
 <pre>  ...tablet.jnlp?argument=http://server/file1&argument=http://server/file2</pre></p>
-<p>You can combine all of the above too. The order doesn't matter - just separate arguments with &.
-Tablet requires at least Java 1.6 although we recommend using Java 1.7 to avoid issues with
-the Nimbus look and feel on Windows and Linux.</p>
+<p>You can combine all of the above too. The order doesn't matter - just separate arguments with &.</p>
 
 <!--#include virtual="footer.html" -->
 
