@@ -1,0 +1,29 @@
+<!-- Tablet Web Start JNLP (Generated @DATE@) -->
+
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="7.0+" codebase="http://bioinf.hutton.ac.uk/tablet/webstart">
+	<information>
+		<title>Tablet</title>
+		<vendor>The James Hutton Institute</vendor>
+		<homepage href="http://bioinf.hutton.ac.uk/tablet"/>
+		<icon href="tablet.png" width="64" height="64" kind="default"/>
+	</information>
+	<resources>
+		<java version="1.7+" java-vm-args="@JAVA_VM_ARGS@"/>
+		<jar href="flamingo.jar"/>
+		<jar href="i4jruntime.jar"/>
+		<jar href="osxadapter.jar"/>
+		<jar href="picard.jar"/>
+		<jar href="samtools-all.jar"/>
+		<jar href="scri-commons.jar"/>
+		<jar href="sqlite-jdbc-3.6.19.jar"/>
+		<jar href="tablet.jar"/>
+		<jar href="tablet-resources.jar"/>
+	</resources>
+	<application-desc main-class="tablet.gui.Tablet">
+		@ARGUMENTS@
+	</application-desc>
+	<security>
+		<all-permissions/>
+	</security>
+</jnlp>
