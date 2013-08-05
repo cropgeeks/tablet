@@ -4,7 +4,9 @@
 package tablet.gui;
 
 import java.awt.*;
+import java.awt.event.*;
 import javax.swing.*;
+import javax.swing.text.*;
 
 import scri.commons.gui.*;
 
@@ -45,5 +47,24 @@ class Nimbus
 		UIManager.put("nimbusOrange", new Color(51, 98, 140));
 //		UIManager.put("nimbusOrange", new Color(57, 105, 138));
 //		UIManager.put("nimbusOrange", new Color(115, 164, 209));
+
+
+		// Reset non-Aqua look and feels to use CMD+C/X/V rather than CTRL for copy/paste stuff
+		if (SystemUtils.isMacOS())
+		{
+			System.out.println("Setting OS X keyboard shortcuts");
+
+			InputMap textField = (InputMap) UIManager.get("TextField.focusInputMap");
+			textField.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
+			textField.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
+			textField.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
+			textField.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.META_DOWN_MASK), DefaultEditorKit.selectAllAction);
+
+			InputMap textArea = (InputMap) UIManager.get("TextArea.focusInputMap");
+			textArea.put(KeyStroke.getKeyStroke(KeyEvent.VK_C, KeyEvent.META_DOWN_MASK), DefaultEditorKit.copyAction);
+			textArea.put(KeyStroke.getKeyStroke(KeyEvent.VK_V, KeyEvent.META_DOWN_MASK), DefaultEditorKit.pasteAction);
+			textArea.put(KeyStroke.getKeyStroke(KeyEvent.VK_X, KeyEvent.META_DOWN_MASK), DefaultEditorKit.cutAction);
+			textArea.put(KeyStroke.getKeyStroke(KeyEvent.VK_A, KeyEvent.META_DOWN_MASK), DefaultEditorKit.selectAllAction);
+		}
 	}
 }
