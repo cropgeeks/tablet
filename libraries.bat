@@ -4,7 +4,6 @@ SET lib=lib
 
 SET avcp=%lib%\
 SET avcp=%avcp%;%lib%\flamingo.jar
-SET avcp=%avcp%;%lib%\i4jruntime.jar
 SET avcp=%avcp%;%lib%\picard.jar
 SET avcp=%avcp%;%lib%\samtools-all.jar
 SET avcp=%avcp%;%lib%\scri-commons.jar

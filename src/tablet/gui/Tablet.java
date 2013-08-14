@@ -65,9 +65,21 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 		parseCommandLineArguments(args);
 
-		Install4j.doStartUpCheck();
+		install4j();
 
 		new Tablet();
+	}
+
+	// Sets up the install4j environment to check for updates
+	private static void install4j()
+	{
+		Install4j i4j = new Install4j("9483-2571-4596-9336", "65");
+
+		i4j.setUser(Prefs.guiUpdateSchedule, Prefs.tabletID, Prefs.rating);
+		i4j.setURLs("http://bioinf.hutton.ac.uk/tablet/installers/updates.xml",
+				    "http://bioinf.hutton.ac.uk/tablet/logs/tablet.pl");
+
+		i4j.doStartUpCheck();
 	}
 
 	private static void parseCommandLineArguments(String[] args) throws NumberFormatException
