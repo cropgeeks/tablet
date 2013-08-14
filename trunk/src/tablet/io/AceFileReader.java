@@ -270,8 +270,8 @@ public class AceFileReader extends TrackableReader
 		// QA <qual clipping start> <qual clipping end> <align clipping start> <align clipping end>
 		String[] QA = p.split(str);
 
-		qa_start = Integer.parseInt(QA[1]) - 1;
-		qa_end = Integer.parseInt(QA[2]) - 1;
+//		qa_start = Integer.parseInt(QA[1]) - 1;
+//		qa_end = Integer.parseInt(QA[2]) - 1;
 
 //		int al_start = Integer.parseInt(QA[3]);
 //		int al_end = Integer.parseInt(QA[4]);

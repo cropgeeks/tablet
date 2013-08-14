@@ -6,7 +6,7 @@
 	<property name="lib"       location="lib"/>
 	<property name="res"       location="res"/>
 	<property name="tmp"       location="tmp"/>
-	<property name="lib-devel" location="lib-devel"/>	
+	<property name="lib-devel" location="lib-devel"/>
 	<property name="classes"   location="classes"/>
 
 	<property name="tablet.jar" value="${lib}/tablet.jar"/>
@@ -68,7 +68,6 @@
 				<attribute name="Main-Class" value="tablet.gui.Tablet"/>
 				<attribute name="Class-Path"
 					value="flamingo.jar
-						i4jruntime.jar
 						osxadapter.jar
 						scri-commons.jar
 						picard.jar
