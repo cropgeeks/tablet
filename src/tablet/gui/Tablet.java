@@ -47,7 +47,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		// - see: http://www.allaboutbalance.com/articles/disableprefs
 //		System.setProperty("java.util.prefs.PreferencesFactory", "scri.commons.gui.DisabledPreferencesFactory");
 
-		System.out.println("Tablet " + Install4j.getVersion() + " on "
+		System.out.println("Tablet " + Install4j.getVersion(Tablet.class) + " on "
 			+ System.getProperty("os.name")	+ " (" + System.getProperty("os.arch") + ")");
 		System.out.println("Using " + prefsFile);
 
@@ -79,7 +79,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		i4j.setURLs("http://bioinf.hutton.ac.uk/tablet/installers/updates.xml",
 				    "http://bioinf.hutton.ac.uk/tablet/logs/tablet.pl");
 
-		i4j.doStartUpCheck();
+		i4j.doStartUpCheck(Tablet.class);
 	}
 
 	private static void parseCommandLineArguments(String[] args) throws NumberFormatException
