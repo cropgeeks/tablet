@@ -72,7 +72,8 @@
 						scri-commons.jar
 						picard.jar
 						samtools-all.jar
-						samtools-linux.jar
+						samtools-linux32.jar
+						samtools-linux64.jar
 						samtools-macos.jar
 						samtools-windows.jar
 						sqlite-jdbc-3.6.19.jar
