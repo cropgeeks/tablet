@@ -142,8 +142,14 @@ public class SamtoolsHelper
 			path = "/windows/samtools.exe";
 		else if (SystemUtils.isMacOS())
 			path = "/macos/samtools";
+
 		else if (SystemUtils.isLinux())
-			path = "/linux/samtools";
+		{
+			if (SystemUtils.isCurrentLinuxJava64Bit())
+				path = "/linux64/samtools";
+			else
+				path = "/linux32/samtools";
+		}
 
 		InputStream src = SamtoolsHelper.class.getResource(path).openStream();
 		FileOutputStream out = new FileOutputStream(samtools);
