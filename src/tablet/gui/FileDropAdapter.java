@@ -7,6 +7,8 @@ import java.awt.datatransfer.*;
 import java.awt.dnd.*;
 import java.util.*;
 
+import javax.swing.*;
+
 import tablet.io.*;
 
 class FileDropAdapter extends DropTargetAdapter
@@ -34,14 +36,24 @@ class FileDropAdapter extends DropTargetAdapter
 				{
 					List<?> list = (List<?>) t.getTransferData(dataFlavors[i]);
 
-					String[] filenames = new String[list.size()];
+					final String[] filenames = new String[list.size()];
 					for (int fn = 0; fn < filenames.length; fn++)
 						filenames[fn] = list.get(fn).toString();
 
-					// Parse the list of filenames and turn them into a usable
-					// TabletFile object that encapsulates this information
-					TabletFile tabletFile = TabletFileHandler.createFromFileList(filenames);
-					winMain.getCommands().fileOpen(tabletFile);
+					// We thread this off, so that Windows doesn't hang after a
+					// drag n drop from Explorer while Tablet actually loads
+					// the data
+					Runnable r = new Runnable() {
+						public void run()
+						{
+							// Parse the list of filenames and turn them into a usable
+							// TabletFile object that encapsulates this information
+							TabletFile tabletFile = TabletFileHandler.createFromFileList(filenames);
+							winMain.getCommands().fileOpen(tabletFile);
+						}
+					};
+
+					SwingUtilities.invokeLater(r);
 
 					dtde.dropComplete(true);
 					return;
