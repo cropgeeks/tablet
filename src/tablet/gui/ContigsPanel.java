@@ -6,6 +6,8 @@ package tablet.gui;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
+import java.text.*;
+import java.util.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.filechooser.*;
@@ -14,6 +16,7 @@ import javax.swing.table.*;
 import tablet.analysis.*;
 import tablet.analysis.tasks.*;
 import tablet.data.*;
+import tablet.gui.dialog.*;
 import tablet.gui.viewer.*;
 
 import scri.commons.gui.*;
@@ -101,14 +104,24 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		String title = RB.format("gui.ContigsPanel.title", controls.table.getRowCount());
 		controls.contigsLabel.setText(title);
 
+		DecimalFormat df = new DecimalFormat();
+		df.setMaximumFractionDigits(2);
+
 		long count = calculateTotalReadCount();
-		String readCount = RB.format("gui.ContigsPanel.readCount", count);
-		controls.readCountLabel.setText(readCount);
-		if(controls.table.getRowCount() != 0)
-		{
-			String averageReadCount = RB.format("gui.ContigsPanel.readCount.tooltip", (count/controls.table.getRowCount()));
-			controls.readCountLabel.setToolTipText(averageReadCount);
-		}
+		String countText;
+		if (count < 1000)
+			countText =  RB.format("gui.ContigsPanel.readCount", df.format(count));
+		else if (count < 1000000)
+			countText = RB.format("gui.ContigsPanel.readCount.thousand", df.format(count / 1000f));
+		else if (count < 1000000000)
+			countText = RB.format("gui.ContigsPanel.readCount.million", df.format(count / 1000000f));
+		else
+			countText = RB.format("gui.ContigsPanel.readCount.billion", df.format(count / 1000000000f));
+
+		controls.totalReadsLabel.setText(countText);
+		
+		String toolTip = RB.format("gui.ContigsPanel.readCount.tooltip", df.format(count));
+		controls.totalReadsLabel.setToolTipText(toolTip);
 
 		ctrlTabs.setSelectedIndex(0);
 
@@ -247,6 +260,34 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 	public JTable getTable()
 	{
 		return controls.table;
+	}
+
+	void showStatsDialog()
+	{
+		// Generate a descending order list of contig lengths
+		ArrayList<Integer> contigLengths = new ArrayList<>();
+		for (int row = 0; row < controls.table.getRowCount(); row++)
+		{
+			int len = (Integer) controls.table.getValueAt(row, 1);
+			contigLengths.add(len);
+		}
+		Collections.sort(contigLengths, Collections.reverseOrder());
+
+		// Generate a list of read counts per contig
+		ArrayList<Integer> readCounts = new ArrayList<>();
+		for (int row = 0; row < controls.table.getRowCount(); row++)
+		{
+			int readCount = (Integer) controls.table.getValueAt(row, 2);
+			readCounts.add(readCount);
+		}
+
+		// Update the statistics for the current assembly
+		Assembly assembly = aPanel.getAssembly();
+		AssemblySummary stats = assembly.getAssemblyStatistics();
+		stats.calculateStatistics(contigLengths, readCounts);
+
+		// Display the stats dialog
+		new SummaryStatsDialog(stats);
 	}
 
 	String getTableToolTip(MouseEvent e)

@@ -108,7 +108,11 @@ public class Commands
 		}
 
 		TabletFileHandler.addAsMostRecent(tabletFile);
-		winMain.setAssembly(assemblyFileHandler.getAssembly());
+		Assembly assembly = assemblyFileHandler.getAssembly();
+		winMain.setAssembly(assembly);
+
+		assembly.getAssemblyStatistics().setAssembly(tabletFile.assembly);
+		assembly.getAssemblyStatistics().setReference(tabletFile.reference);
 
 
 		// Pop up a warning if the ref lengths don't match
