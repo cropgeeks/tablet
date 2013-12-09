@@ -31,6 +31,8 @@ public class Assembly implements Iterable<Contig>
 
 	private static ArrayList<ReadGroup> readGroups = new ArrayList<>();
 
+	private AssemblySummary statistics = new AssemblySummary();
+
 	/** Constructs a new, empty assembly. */
 	public Assembly(String cacheID)
 	{
@@ -191,4 +193,7 @@ public class Assembly implements Iterable<Contig>
 
 	public void setReadGroups(ArrayList<ReadGroup> readGroups)
 		{ Assembly.readGroups = readGroups;	}
+
+	public AssemblySummary getAssemblyStatistics()
+		{ return statistics; }
 }

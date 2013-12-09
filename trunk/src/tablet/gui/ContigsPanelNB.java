@@ -39,14 +39,22 @@ class ContigsPanelNB extends JPanel implements ActionListener, DocumentListener
 		table.getTableHeader().setReorderingAllowed(false);
 		table.getSelectionModel().setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getSelectionModel().addListSelectionListener(panel);
+
+		statsLabel.addActionListener(this);
 	}
 
 	public void actionPerformed(ActionEvent e)
 	{
-		Prefs.guiContigsFilter = combo.getSelectedIndex();
+		if (e.getSource() == combo)
+		{
+			Prefs.guiContigsFilter = combo.getSelectedIndex();
 
-		textField.setText("");
-		textField.requestFocus();
+			textField.setText("");
+			textField.requestFocus();
+		}
+
+		else if (e.getSource() == statsLabel)
+			panel.showStatsDialog();
 	}
 
 	void clearFilter()
@@ -144,7 +152,8 @@ class ContigsPanelNB extends JPanel implements ActionListener, DocumentListener
 		combo.setEnabled(state);
 		textField.setEnabled(state);
 		contigsLabel.setEnabled(state);
-		readCountLabel.setEnabled(state);
+		totalReadsLabel.setEnabled(state);
+		statsLabel.setEnabled(state);
 	}
 
 	private JTable createTable()
@@ -171,7 +180,8 @@ class ContigsPanelNB extends JPanel implements ActionListener, DocumentListener
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         combo = new javax.swing.JComboBox<String>();
         textField = new javax.swing.JTextField();
@@ -179,16 +189,19 @@ class ContigsPanelNB extends JPanel implements ActionListener, DocumentListener
         jScrollPane1 = new javax.swing.JScrollPane();
         table = createTable();
         contigsLabel = new javax.swing.JLabel();
-        readCountLabel = new javax.swing.JLabel();
+        statsLabel = new scri.commons.gui.matisse.HyperLinkLabel();
+        totalReadsLabel = new javax.swing.JLabel();
 
         filterLabel.setLabelFor(combo);
         filterLabel.setText("Filter by:");
 
         table.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
+            new Object [][]
+            {
 
             },
-            new String [] {
+            new String []
+            {
 
             }
         ));
@@ -196,22 +209,24 @@ class ContigsPanelNB extends JPanel implements ActionListener, DocumentListener
 
         contigsLabel.setText("Contigs: 0");
 
-        readCountLabel.setText("0 total reads");
+        statsLabel.setText("(more)");
+
+        totalReadsLabel.setText("0 reads");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(contigsLabel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 254, Short.MAX_VALUE)
-                .addComponent(readCountLabel)
-                .addContainerGap())
             .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 384, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(contigsLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(totalReadsLabel)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(statsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(filterLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -223,9 +238,11 @@ class ContigsPanelNB extends JPanel implements ActionListener, DocumentListener
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(contigsLabel)
-                    .addComponent(readCountLabel))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(statsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(totalReadsLabel)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -244,9 +261,10 @@ class ContigsPanelNB extends JPanel implements ActionListener, DocumentListener
     public javax.swing.JLabel contigsLabel;
     private javax.swing.JLabel filterLabel;
     private javax.swing.JScrollPane jScrollPane1;
-    javax.swing.JLabel readCountLabel;
+    scri.commons.gui.matisse.HyperLinkLabel statsLabel;
     public javax.swing.JTable table;
     private javax.swing.JTextField textField;
+    javax.swing.JLabel totalReadsLabel;
     // End of variables declaration//GEN-END:variables
 
 }
