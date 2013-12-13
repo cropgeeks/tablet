@@ -322,6 +322,16 @@ public class Contig
 		return false;
 	}
 
+	public void clearCigarFeatures()
+	{
+		ArrayList<Feature> toRemove = new ArrayList<>();
+		for (Feature f : features)
+			if (f instanceof CigarFeature)
+				toRemove.add(f);
+		
+		features.removeAll(toRemove);
+}
+
 	// Stores a count of the number of reads that exist in the cache BEFORE you
 	// get to the first read for this contig. This number is basically the ID of
 	// the first read in this contig (before any sorting has been done).

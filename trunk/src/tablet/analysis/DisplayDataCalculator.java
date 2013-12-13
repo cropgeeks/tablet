@@ -75,6 +75,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 		if (assembly.getBamBam() != null)
 		{
 			status = 1;
+			contig.clearCigarFeatures();
 			assembly.getBamBam().loadDataBlock(contig);
 		}
 
