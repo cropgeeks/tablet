@@ -17,7 +17,7 @@
 
 <h2>Download Tablet</h2>
 
-<p>The most recent release of Tablet is <b>1.13.07.31</b> (31st July 2013). View the
+<p>The most recent release of Tablet is <b>1.13.12.13</b> (13th December 2013). View the
 <a href="help/whats-new.shtml">release notes</a> to see what's new.</p>
 
 <p>Please use the links below to download the Tablet installer most suitable
@@ -28,9 +28,9 @@ for your operating system. Tablet is currently available for:</p>
 	<td>&nbsp;&nbsp;&nbsp;</td>
 	<td><img src="images/icon_windows.gif" alt="Windows"></td>
 	<td>
-		<a href="installers/tablet_windows_x86_1_13_07_31.exe"
+		<a href="installers/tablet_windows_x86_1_13_12_13.exe"
 		  onClick="javascript: pageTracker._trackPageview('/installers/windows_x86');">Windows (32 bit)</a> or
-		<a href="installers/tablet_windows_x64_1_13_07_31.exe"
+		<a href="installers/tablet_windows_x64_1_13_12_13.exe"
 		  onClick="javascript: pageTracker._trackPageview('/installers/windows_x64');">Windows (64 bit)</a>
 	</td>
 </tr>
@@ -38,9 +38,9 @@ for your operating system. Tablet is currently available for:</p>
 	<td>&nbsp;&nbsp;&nbsp;</td>
 	<td><img src="images/icon_linux.gif" alt="Linux"></td>
 	<td>
-		<a href="installers/tablet_linux_x86_1_13_07_31.sh"
+		<a href="installers/tablet_linux_x86_1_13_12_13.sh"
 		  onClick="javascript: pageTracker._trackPageview('/installers/linux_x86');">Linux (32 bit)</a> or
-		<a href="installers/tablet_linux_x64_1_13_07_31.sh"
+		<a href="installers/tablet_linux_x64_1_13_12_13.sh"
 		  onClick="javascript: pageTracker._trackPageview('/installers/linux_x64');">Linux (64 bit)</a>
 	</td>
 </tr>
@@ -48,7 +48,7 @@ for your operating system. Tablet is currently available for:</p>
 	<td>&nbsp;&nbsp;&nbsp;</td>
 	<td><img src="images/icon_osx.gif" alt="OS X"></td>
 	<td>
-		<a href="installers/tablet_macos_1_13_08_05.dmg"
+		<a href="installers/tablet_macos_1_13_12_13.dmg"
 		  onClick="javascript: pageTracker._trackPageview('/installers/macosx_x86');">Mac OS X</a> (note requirements below)
 	</td>
 </tr>
