@@ -5,8 +5,6 @@ package tablet.io;
 
 import java.io.*;
 import java.util.*;
-import javax.xml.parsers.*;
-import org.w3c.dom.*;
 
 /**
  * Represents a .tablet file, that is a simple xml wrapper around actual

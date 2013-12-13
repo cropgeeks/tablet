@@ -22,6 +22,17 @@ that have been made to Tablet in recent versions. For full details on all the
 changes between versions, please see the <a href="http://bioinf.hutton.ac.uk/tablet/svn.txt">
 subversion change log</a>.</p>
 
+<h3>New in 1.13.12.13</h3>
+<ul>
+<li>NEW: Added a new Assembly Summary dialog which can be launched from the "More" link above the Contigs listing.</li>
+<li>NEW: Threaded off drag and drop file loading so that Windows Explorer no longer appears to hang after performing the drop.</li>
+<li>BUG: Tablet's embedded samtools no longer worked with 64 bit Centos 6.</li>
+<li>BUG: JNLP launched Tablet (on OS X) wasn't loading BAM files correctly.</li>
+<li>BUG: Streaming BAM files when running under web start was failing.</li>
+<li>BUG: Altering the BAM window size or moving the BAM window didn't update the features table.</li>
+</ul>
+
+
 <h3>New in 1.13.08.05</h3>
 <ul>
 <li>BUG: Fixed an issue with copy/paste keyboard shortcuts on OS X.</li>
