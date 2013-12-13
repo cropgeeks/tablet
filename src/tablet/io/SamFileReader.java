@@ -158,7 +158,7 @@ class SamFileReader extends TrackableReader
 					if (contig.getReads().size() > 0)
 						isUnsorted = true;
 
-					cigarParser = new CigarParser(contig);
+					cigarParser = new CigarParser(contig, assembly);
 				}
 
 				if (isDummyFeature(data, flags) == false)

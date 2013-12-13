@@ -17,7 +17,7 @@ public class CigarParserTest extends TestCase
 	public void testCigar()
 		throws Exception
 	{
-		CigarParser parser = new CigarParser(new Contig("Test"));
+		CigarParser parser = new CigarParser(new Contig("Test"), new Assembly("test"));
 
 		String read = parser.parse("TTAGATAAAGGATACTG", 7, "8M2I4M1D3M", null);
 		System.out.println("TEMP = " + read);

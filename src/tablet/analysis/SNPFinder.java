@@ -44,7 +44,7 @@ public class SNPFinder extends SimpleJob
 				continue;
 
 			Consensus consensus = contig.getConsensus();
-			CigarParser parser = new CigarParser(contig);
+			CigarParser parser = new CigarParser(contig, assembly);
 
 			// Allocate the data array ready for processing
 			data = new ArrayList<HashMap<String, Metric>>();

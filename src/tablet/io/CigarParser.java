@@ -18,6 +18,7 @@ public class CigarParser
 {
 	private Contig contig;
 	private String consensus;
+	private Assembly assembly;
 
 	private HashMap<String, CigarFeature> insertionMap;
 	private HashMap<String, CigarFeature> deletionMap;
@@ -29,9 +30,11 @@ public class CigarParser
 	 * which is required to build up read strings where the SEQ field of the read
 	 * in the BAM file contains '=' characters and when the SEQ field == *.
 	 */
-	public CigarParser(Contig contig)
+	public CigarParser(Contig contig, Assembly assembly)
 	{
 		this.contig = contig;
+		this.assembly = assembly;
+
 		contig.getConsensus().getSequence();
 		if (contig.getConsensus() != null)
 			this.consensus = contig.getConsensus().toString();
@@ -263,11 +266,24 @@ public class CigarParser
 			{
 				CigarFeature cigarFeature = map.get(feature);
 
-				if (cigarFeature.getCount() >= Prefs.visCigarInsertMinimum)
+				if (isFeatureVisible(cigarFeature))
 					if (contig.addFeature(cigarFeature))
 						cigarFeature.verifyType();
 			}
 		}
+	}
+
+	private boolean isFeatureVisible(CigarFeature feature)
+	{
+		int contigS = assembly.getBamBam().getS();
+		int contigE = assembly.getBamBam().getE();
+		int featureS = feature.getVisualPS();
+		int featureE = feature.getVisualPE();
+
+		boolean inWindow = featureS >= contigS && featureE <= contigE;
+		boolean significant = feature.getCount() >= Prefs.visCigarInsertMinimum;
+
+		return significant && inWindow;
 	}
 
 	// Calculates the length of a read from its CIGAR string. Can be used in

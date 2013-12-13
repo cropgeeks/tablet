@@ -86,7 +86,7 @@ public class BamFileHandler
 		readCache.openForWriting();
 		nameCache.openForWriting();
 
-		parser = new CigarParser(contig);
+		parser = new CigarParser(contig, assembly);
 
 		contig.clearContigData(true);
 
