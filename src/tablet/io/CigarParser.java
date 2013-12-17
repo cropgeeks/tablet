@@ -275,15 +275,22 @@ public class CigarParser
 
 	private boolean isFeatureVisible(CigarFeature feature)
 	{
-		int contigS = assembly.getBamBam().getS();
-		int contigE = assembly.getBamBam().getE();
-		int featureS = feature.getVisualPS();
-		int featureE = feature.getVisualPE();
-
-		boolean inWindow = featureS >= contigS && featureE <= contigE;
 		boolean significant = feature.getCount() >= Prefs.visCigarInsertMinimum;
 
-		return significant && inWindow;
+		// Ensure only features in the current bam window are added for bam files
+		if (assembly.getBamBam() != null)
+		{
+			int contigS = assembly.getBamBam().getS();
+			int contigE = assembly.getBamBam().getE();
+			int featureS = feature.getVisualPS();
+			int featureE = feature.getVisualPE();
+
+			boolean inWindow = featureS >= contigS && featureE <= contigE;
+
+			return significant && inWindow;
+		}
+
+		return significant;
 	}
 
 	// Calculates the length of a read from its CIGAR string. Can be used in
