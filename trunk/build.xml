@@ -58,6 +58,9 @@
 		<jar jarfile="${tablet-resources.jar}">
 			<zipfileset dir="${res}" prefix="res"/>
 			<zipfileset dir="installer/licence" prefix="installer/licence"/>
+			<manifest>
+				<attribute name="Permissions" value="all-permissions"/>
+			</manifest>
 		</jar>
 
 		<jar jarfile="${tablet.jar}">
@@ -84,6 +87,9 @@
 						sqlite-jdbc-3.6.19-win64.jar
 						tablet-resources.jar"/>
 				<attribute name="Implementation-Version" value="${i4j.version}"/>
+				<attribute name="Application-Name" value="Tablet"/>
+				<attribute name="Permissions" value="all-permissions"/>
+				<attribute name="Codebase" value="*.hutton.ac.uk"/>
 			</manifest>
 		</jar>
 	</target>

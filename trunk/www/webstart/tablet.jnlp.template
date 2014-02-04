@@ -1,7 +1,7 @@
 <!-- Tablet Web Start JNLP (Generated @DATE@) -->
 
 <?xml version="1.0" encoding="utf-8"?>
-<jnlp spec="7.0+" codebase="http://bioinf.hutton.ac.uk/tablet/webstart">
+<jnlp spec="7.0+" codebase="http://bioinf.hutton.ac.uk/tablet/webstart" href="tablet.jnlp">
 	<information>
 		<title>Tablet</title>
 		<vendor>The James Hutton Institute</vendor>
@@ -11,7 +11,6 @@
 	<resources>
 		<java version="1.7+" java-vm-args="@JAVA_VM_ARGS@"/>
 		<jar href="flamingo.jar"/>
-		<jar href="i4jruntime.jar"/>
 		<jar href="osxadapter.jar"/>
 		<jar href="picard.jar"/>
 		<jar href="samtools-all.jar"/>
