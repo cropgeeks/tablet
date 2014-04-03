@@ -64,7 +64,7 @@ public class Commands
 			if (openAssembly(tabletFile) == false)
 				return;
 
-		// Attempt to open any GFF files (if an assembly is loaded)
+		// Attempt to open any FEATURE files (if an assembly is loaded)
 		if (winMain.getAssemblyPanel().getAssembly() != null)
 			for (AssemblyFile annotation: tabletFile.annotations)
 				importFeatures(annotation.getPath(), !tabletFile.hasAssembly());
@@ -138,17 +138,33 @@ public class Commands
 		{
 			FileNameExtensionFilter[] filters = new FileNameExtensionFilter[] {
 				new FileNameExtensionFilter(RB.getString("gui.text.formats.gff"), "gff", "gff3"),
+				new FileNameExtensionFilter(RB.getString("gui.text.formats.bed"), "bed", "bed"),
 				new FileNameExtensionFilter(RB.getString("gui.text.formats.txt"), "txt") };
 
 			filename = TabletUtils.getOpenFilename(RB.getString(
-				"gui.Commands.importFeatures.openDialog"), null, filters, 0);
+				"gui.Commands.importFeatures.openDialog"), null, filters, -1);
 
 			if (filename == null)
 				return;
 		}
 
 		Assembly assembly = winMain.getAssemblyPanel().getAssembly();
-		GFF3Reader reader = new GFF3Reader(filename, assembly);
+
+		// Create a wrapper around the input file
+		AssemblyFile features = new AssemblyFile(filename);
+		features.canDetermineType();
+
+		// And then decide what reader to use based on its type
+		FeatureReader reader = null;
+		switch (features.getType())
+		{
+			case AssemblyFile.BED:
+				reader = new BedReader(filename, assembly); break;
+
+			default: // GFF3
+				reader = new GFF3Reader(filename, assembly); break;
+		}
+
 
 		String title = RB.getString("gui.Commands.importFeatures.title");
 		String label = RB.getString("gui.Commands.importFeatures.label");

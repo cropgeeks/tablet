@@ -11,45 +11,11 @@ import tablet.data.*;
 import tablet.data.auxiliary.*;
 import static tablet.io.ReadException.*;
 
-public class GFF3Reader extends TrackableReader
+public class GFF3Reader extends FeatureReader
 {
-	private int cRead, cAdded;
-
-	// Stores a list of features per contig (as they are found)
-	private HashMap<String, ArrayList<Feature>> contigs;
-
 	public GFF3Reader(String filename, Assembly assembly)
 	{
-		AssemblyFile[] files = { new AssemblyFile(filename) };
-		setInputs(files, assembly);
-
-		contigs = new HashMap<String, ArrayList<Feature>>();
-	}
-
-	public boolean canRead()
-		throws Exception
-	{
-		// Read and check for the header
-		in = new BufferedReader(new InputStreamReader(getInputStream(0)));
-		str = readLine();
-
-		boolean isGFF3File = false;
-
-		if (str != null && str.trim().toLowerCase().startsWith("##gff-version"))
-		{
-			try
-			{
-				// Deals with "##gff-version3" "##gff-version 3" etc
-				if (Integer.parseInt(str.substring(13).trim()) == 3)
-					isGFF3File = true;
-			}
-			catch (Exception e) {}
-		}
-
-		in.close();
-		is.close();
-
-		return isGFF3File;
+		super(filename, assembly);
 	}
 
 	public void runJob(int jobIndex)
@@ -126,46 +92,4 @@ public class GFF3Reader extends TrackableReader
 		getFeatures(contigName).add(f);
 		cRead++;
 	}
-
-	// Searches and returns an existing list of features (for a contig). If a
-	// list can't be found, then a new one is created (added to the hashtable)
-	// and then returned.
-	private ArrayList<Feature> getFeatures(String contigName)
-	{
-		ArrayList<Feature> list = contigs.get(contigName);
-
-		if (list == null)
-		{
-			list = new ArrayList<Feature>();
-			contigs.put(contigName, list);
-		}
-
-		return list;
-	}
-
-	private void assignFeatures()
-	{
-		for (Contig contig: assembly)
-		{
-			ArrayList<Feature> newFeatures = contigs.get(contig.getName());
-
-			if (newFeatures == null)
-				continue;
-
-			for (Feature feature : newFeatures)
-				if (contig.addFeature(feature))
-				{
-					feature.verifyType();
-					cAdded++;
-				}
-
-			Collections.sort(contig.getFeatures());
-		}
-	}
-
-	public int getFeaturesAdded()
-		{ return cAdded; }
-
-	public int getFeaturesRead()
-		{ return cRead; }
 }

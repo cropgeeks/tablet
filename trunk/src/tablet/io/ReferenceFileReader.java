@@ -25,12 +25,6 @@ class ReferenceFileReader
 		this.contigHash = contigHash;
 	}
 
-	boolean canRead(AssemblyFile file)
-		throws Exception
-	{
-		return (file.getType() == FASTA || file.getType() == FASTQ);
-	}
-
 	void readReferenceFile(TrackableReader reader, AssemblyFile file)
 		throws Exception
 	{

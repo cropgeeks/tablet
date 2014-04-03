@@ -26,6 +26,7 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 	public static final int FASTA   = 20;
 	public static final int FASTQ   = 21;
 	public static final int GFF3    = 40;
+	public static final int BED     = 41;
 
 	public static final int TABLET  = 100;
 
@@ -80,7 +81,7 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 
 	public boolean isAnnotationFile()
 	{
-		return type == GFF3;
+		return type == GFF3 || type == BED;
 	}
 
 	public String getName()
@@ -254,6 +255,8 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 					type = FASTQ;
 				else if (isGff3(str))
 					type = GFF3;
+				else if (isBed(str))
+					type = BED;
 			}
 
 /*			if (type == UNKNOWN)
@@ -363,6 +366,26 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 			}
 			catch (Exception e) {}
 		}
+
+		return false;
+	}
+
+	private boolean isBed(String str)
+	{
+		// The file *may* starts with a "track " comment
+		if (str.trim().toLowerCase().startsWith("track "))
+			return true;
+
+		// Failing that, if the 2nd and 3rd columns are numbers, then it could
+		// be a bed file
+		try
+		{
+			String[] tokens = str.split("\t");
+			Integer.parseInt(tokens[1]);
+			Integer.parseInt(tokens[2]);
+			return true;
+		}
+		catch (Exception e) {}
 
 		return false;
 	}

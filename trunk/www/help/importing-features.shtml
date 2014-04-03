@@ -18,7 +18,8 @@
 <h2>Importing Features</h2>
 
 <p>Select <b>Import Features</b> from the <a href="ribbon.shtml">Ribbon Bar</a>
-to import a <a href="http://www.sequenceontology.org/gff3.shtml">GFF3 formatted</a>
+to import a <a href="http://www.sequenceontology.org/gff3.shtml">GFF3</a> or
+<a href="http://www.ensembl.org/info/website/upload/bed.html">BED</a> formatted
 file containing additional feature information that
 you want to associated with an assembly.
 
@@ -48,8 +49,9 @@ tracks for the first three feature types found.</p>
 <p>The active tracks can be enabled, disabled, or reordered using the <b>Select
 Tracks</b> option located within the Features tab.</p>
 
-<p>Each unique type of feature (eg, SNP, INDEL, etc) as defined in the GFF file
-will be rendered using a distinct colour.</p>
+<p>Each unique type of feature (eg, SNP, INDEL, etc) as defined in the file
+will be rendered using a distinct colour. This uses GFF3 types or BED tracks to
+determine what goes where.</p>
 
 <p>Please note that this functionality is still experimental, and is subject to
 change. Tablet currently makes no attempt to link features, or to separate
