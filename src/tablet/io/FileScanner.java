@@ -130,6 +130,7 @@ class FileScanner extends SimpleJob
 			case FASTA: return "FASTA";
 			case FASTQ: return "FASTQ";
 			case GFF3:  return "GFF3";
+			case BED:   return "BED";
 
 			default: return null;
 		}
