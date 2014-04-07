@@ -1,6 +1,7 @@
 package tablet.data;
 
 import java.util.*;
+import scri.commons.gui.RB;
 
 import tablet.gui.TabletUtils;
 import tablet.io.*;
@@ -103,18 +104,23 @@ public class AssemblySummary
 
 	public String getReferenceName()
 	{
-		return reference == null ? "" : reference.getName();
+		return reference == null ? RB.getString("gui.dialog.SummaryStatsDialog.table.noRef") : reference.getName();
 	}
 
 	public String getReferenceSize()
 	{
-		if (reference == null)
-			return "";
+		if (reference != null)
+		{
+			long len = reference.length();
 
-		float len = reference.getFile().length();
-		String lengthString = makeLengthString(len);
+			if (len == 0)
+				return RB.getString("gui.dialog.SummaryStatsDialog.table.unknown");
 
-		return lengthString;
+			String lengthString = makeLengthString(len);
+			return lengthString;
+		}
+
+		return "";
 	}
 
 	public void setReference(AssemblyFile reference)
@@ -129,9 +135,13 @@ public class AssemblySummary
 
 	public String getAssemblySize()
 	{
-		float len = assembly.getFile().length();
+		long len = assembly.length();
+
+		if (len == 0)
+			return RB.getString("gui.dialog.SummaryStatsDialog.table.unknown");
+
 		String lengthString = makeLengthString(len);
-		return assembly == null ? "" : lengthString;
+		return lengthString;
 	}
 
 	public void setAssembly(AssemblyFile assembly)
@@ -139,7 +149,7 @@ public class AssemblySummary
 		this.assembly = assembly;
 	}
 
-	private String makeLengthString(float len)
+	private String makeLengthString(long len)
 	{
 		String lengthString;
 		if (len > 1024*1024*1024)
