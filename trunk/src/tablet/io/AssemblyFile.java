@@ -8,7 +8,6 @@ import java.net.*;
 
 import tablet.io.samtools.*;
 
-import net.sf.samtools.*;
 
 /**
  * Class that represents an assembly file, that may be a traditional file on
@@ -108,7 +107,7 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 		}
 	}
 
-	long length()
+	public long length()
 	{
 		if (file != null)
 			return file.length();
@@ -195,7 +194,7 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 		return url;
 	}
 
-	boolean isURL()
+	public boolean isURL()
 	{
 		return url != null;
 	}
