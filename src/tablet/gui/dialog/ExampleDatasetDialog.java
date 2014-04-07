@@ -83,12 +83,17 @@ public class ExampleDatasetDialog extends JDialog implements ActionListener
 	{
 		DefaultComboBoxModel<String> model = new DefaultComboBoxModel<>();
 
+		// Get the keys and sort them
+		String[] sortedKeys = new String[properties.size()];
 		Enumeration<Object> e = properties.keys();
+		int i = 0;
 		while(e.hasMoreElements())
-		{
-			String key = (String) e.nextElement();
+			sortedKeys[i++] = (String)e.nextElement();
+
+		Arrays.sort(sortedKeys);
+		for (String key: sortedKeys)
 			model.addElement(key);
-		}
+
 
 		panel.datasetCombo.setModel(model);
 
