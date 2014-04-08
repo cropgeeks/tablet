@@ -161,6 +161,9 @@ public class Commands
 			case AssemblyFile.BED:
 				reader = new BedReader(filename, assembly); break;
 
+			case AssemblyFile.VCF:
+					reader = new VcfReader(filename, assembly); break;
+
 			default: // GFF3
 				reader = new GFF3Reader(filename, assembly); break;
 		}
