@@ -130,7 +130,7 @@ public class FeaturesCanvas extends TrackingCanvas
 				int p2 = f.getVisualPE();
 
 				// Paint a SNP as a triangle, pointing down at the position
-				if (f.getGFFType().equals("SNP"))
+				if (f.getGFFType().toUpperCase().equals("SNP"))
 				{
 					int start = rCanvas.getFirstRenderedPixel(p1);
 					int w = rCanvas.getFinalRenderedPixel(p2) - rCanvas.getFirstRenderedPixel(p1);
