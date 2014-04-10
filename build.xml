@@ -144,7 +144,7 @@
 				<include name="**/*.jar"/>
 			</fileset>
 		</signjar>
-		<copy todir="\\bioinf\root\var\www\html\tablet\webstart">
+		<copy todir="\\ics\root\var\www\sites\bioinf.hutton.ac.uk\html\tablet\webstart">
 			<fileset dir="${tmp}">
 				<include name="**/*.jar"/>
 			</fileset>
