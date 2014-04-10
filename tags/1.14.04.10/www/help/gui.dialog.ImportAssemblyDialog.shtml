@@ -1,0 +1,124 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="stylesheet/styles.css" type="text/css">
+
+<title>Open Assembly</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.html" -->
+
+
+<h2>Open Assembly</h2>
+
+<p>The <b>Open Assembly</b> dialog is used to load assemblies into Tablet for viewing.</p>
+
+<p>Access the dialog by selecting either <b>Open Assembly</b> from the <b>Data</b>
+tab of the <a href="ribbon.shtml">Ribbon Bar</a> or by selecting <b>Open</b>
+from the <a href="application-menu.shtml">Application Menu</a>.</p>
+
+<p><a href="images/gui.dialog.ImportAssemblyDialog.png">
+<img class="capture" src="images/gui.dialog.ImportAssemblyDialog2.png" alt="Tablet Screenshot"></a></p>
+
+<p>Tablet can currently view assemblies/alignments which are stored in the ACE,
+AFG, MAQ, SOAP, SAM or BAM file formats, with accompanying reference/consensus data (if needed)
+being read from either FASTA or FASTQ files. Support for SAM and BAM is still
+experimental (see notes on CIGAR parsing).</p>
+
+<p>The <b>Primary assembly file</b> refers to the main file containing your assembly
+or alignment data. The <b>Reference/consensus file</b> refers to any additional
+reference file that contains reference/consensus data and is needed with assembly
+formats that do not include this data in the primary file (such as SAM, BAM,
+MAQ, and SOAP). This additional data is not needed by Tablet, but it is advisable
+to include it if you have it, otherwise Tablet cannot provide a visualization of
+the reference/consensus sequence within each contig.</p>
+
+<p>Tablet can load files locally from disk, or remotely from a web server. The
+files can either be uncompressed or compressed with gzip. (BAM files are
+already compressed, and should be provided as is).</p>
+
+<h3>Importing ACE files</h3>
+
+<p>An ACE formatted file includes information on each contig, its consensus
+sequence, and the reads that are aligned against it. A single ACE file provides
+all the information that Tablet requires.</p>
+
+
+<h3>Importing AFG files</h3>
+
+<p>An AFG formatted file includes information on each contig, its consensus
+sequence, and the reads that are aligned against it. A single AFG file provides
+all the information that Tablet requires.</p>
+
+
+<h3>Importing MAQ files</h3>
+
+<p>The MAQ assembler ultimately generates a binary-formatted map file (with a
+.map extension). To be readable by Tablet, this file must be converted into
+two separate text-based files - one containing the read information, and another
+that contains the contig/consensus information.</p>
+
+<p><b>To create the primary assembly file:</b><br>
+Using the command line MAQ assembler tools, run: <i>maq mapview input.map > output.txt</i>.
+This file must be provided to Tablet.</p>
+
+<p><b>To create the reference/consensus file:</b><br>
+Using the command line MAQ assembler tools, run: <i>maq cns2fq input.cns > output.fastq</i>.
+This generates a reference file in FASTQ format. Alternatively, if you have the
+original reference sequences in a FASTA formatted file, simply use this file instead.
+In either case, this file is optional.</p>
+
+
+<h3>Importing SOAPAligner output</h3>
+
+<p>The output from the SOAPAligner mapping tool is a text-based alignment file that
+includes the read data only. A separate FASTA formatted file containing the reference
+sequence(s) can be provided separately but this is optional. SOAPDenovo output is
+currently not supported.</p>
+
+
+<h3>Importing SAM files</h3>
+
+<p>Tablet will attempt to load a text-based .sam file, with or without SAM
+headers. A SAM file does not include reference/consensus information, so if it
+is to be included, it must be provided in a separate fasta/fastq file.</p>
+
+<p>When processing the CIGAR information from a SAM file, Tablet will create a
+list of features (that will be shown in the Features Table) for each CIGAR
+"insertion" that is found. Each feature gives the position of the insertion and
+the number of reads that have an insertion at that position.</p>
+
+<h3>Importing BAM files</h3>
+
+<p>Tablet supports BAM in its native (indexed) format. It is important to note that
+the BAM file must be sorted and indexed, with an associated .bai file located
+in the same directory as the .bam file (named either &lt;assembly_name&gt;.bam.bai or
+&lt;assembly_name&gt;.bai).
+</p>
+
+<p>When processing the CIGAR information from a BAM file, Tablet will create a
+list of features (that will be shown in the Features Table) for each CIGAR
+"insertion" that is found. Each feature gives the position of the insertion and
+the number of reads that have an insertion at that position.</p>
+
+<h3>Importing example data</h3>
+
+The "Unsure how to get started? Click here to open an assembly." link
+brings up the dialog to load example datasets. This contains a drop down menu which
+allows for selection between the various example datasets available. Below the drop
+down menu is a description of the currently selected example dataset. To open a dataset
+select it from the drop down menu and click the "Open" button.
+
+<p><a href="images/gui.dialog.ImportAssemblyDialog.exampledataset.png">
+<img class="capture" src="images/gui.dialog.ImportAssemblyDialog.exampledataset2.png" alt="Tablet Screenshot"></a></p>
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>
