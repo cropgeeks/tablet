@@ -321,6 +321,8 @@ public class WinMain extends JRibbonFrame
 		assemblyPanel.setAssembly(null);
 
 		Actions.closed();
+
+		setTitle(RB.getString("gui.WinMain.title") + " - " + Install4j.VERSION);
 	}
 
 	// Creates and registers a timer for monitoring memory usage
