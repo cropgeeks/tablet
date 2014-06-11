@@ -27,6 +27,7 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 	public static final int GFF3    = 40;
 	public static final int BED     = 41;
 	public static final int VCF		= 42;
+	public static final int GTF		= 43;
 
 	public static final int TABLET  = 100;
 
@@ -81,7 +82,7 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 
 	public boolean isAnnotationFile()
 	{
-		return type == GFF3 || type == BED || type == VCF;
+		return type == GFF3 || type == BED || type == VCF || type == GTF;
 	}
 
 	public String getName()
@@ -247,6 +248,8 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 					type = BAM;
 				else if (isMaq(str))
 					type = MAQ;
+				else if (isGtf(str))
+					type = GTF;
 				else if (isSoap(str))
 					type = SOAP;
 				else if (isFasta(str))
@@ -395,6 +398,11 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 	private boolean isVcf(String str)
 	{
 		return str.trim().toLowerCase().startsWith("##fileformat=vcf");
+	}
+
+	private boolean isGtf(String str)
+	{
+		return str.split("\t")[8].toLowerCase().startsWith("gene_id");
 	}
 
 	// Attempts to read the first 2048 bytes of the file, converting the stream
