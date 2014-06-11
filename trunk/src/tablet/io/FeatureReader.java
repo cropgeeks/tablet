@@ -3,13 +3,10 @@
 
 package tablet.io;
 
-import java.io.*;
-import java.net.*;
 import java.util.*;
 
 import tablet.data.*;
 import tablet.data.auxiliary.*;
-import static tablet.io.ReadException.*;
 
 public abstract class FeatureReader extends TrackableReader
 {
