@@ -406,7 +406,7 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 		if (tokens.length < 9)
 			return false;
 		else
-			return str.split("\t")[8].toLowerCase().startsWith("gene_id");
+			return str.split("\t")[8].toLowerCase().trim().startsWith("gene_id");
 	}
 
 	// Attempts to read the first 2048 bytes of the file, converting the stream

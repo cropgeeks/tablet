@@ -51,7 +51,7 @@ public class GtfReader extends FeatureReader
 		// The geneId is a mandatory part of the GTF format and is stored in the
 		// atrribute list
 		String[] attrs = tokens[8].split(";");
-		String geneId = attrs[0].trim().substring("gene_id".length()).trim();
+		String geneId = attrs[0].trim().substring("gene_id".length()).trim().replaceAll("\"", "");
 
 		// Make the tags string make a little more sense by indtifying the values
 		// we've added
