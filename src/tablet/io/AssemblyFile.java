@@ -402,7 +402,11 @@ public class AssemblyFile implements Comparable<AssemblyFile>
 
 	private boolean isGtf(String str)
 	{
-		return str.split("\t")[8].toLowerCase().startsWith("gene_id");
+		String[] tokens = str.split("\t");
+		if (tokens.length < 9)
+			return false;
+		else
+			return str.split("\t")[8].toLowerCase().startsWith("gene_id");
 	}
 
 	// Attempts to read the first 2048 bytes of the file, converting the stream
