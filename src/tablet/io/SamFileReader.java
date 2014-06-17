@@ -10,7 +10,6 @@ import tablet.analysis.*;
 import tablet.data.*;
 import tablet.data.auxiliary.*;
 import tablet.data.cache.*;
-import tablet.gui.*;
 
 import scri.commons.gui.*;
 
@@ -165,7 +164,7 @@ class SamFileReader extends TrackableReader
 				{
 					Read read;
 
-					boolean isPaired = (flags & 0x0001) == 1 ? true : false;
+					boolean isPaired = (flags & 0x0001) == 1;
 
 					ReadNameData rnd = new ReadNameData(name);
 					ReadMetaData rmd = new ReadMetaData(complemented);
@@ -183,7 +182,7 @@ class SamFileReader extends TrackableReader
 
 					contig.getReads().add(read);
 
-					String bases = cigarParser.parse(data.toString(), pos, cigar, read);
+					String bases = cigarParser.parse(data, pos, cigar, read);
 					StringBuilder fullRead = new StringBuilder(bases);
 
 					rmd.setData(fullRead);
@@ -248,7 +247,7 @@ class SamFileReader extends TrackableReader
 		// Parse properly paired, number in pair and mate mapped out from flag field
 		rnd.setIsProperPair((flags & 0x0002) != 0);
 		rmd.setNumberInPair((flags & 0x0040) != 0 ? (byte)1 : 2);
-		rmd.setMateMapped((flags & 0x0008) != 0 ? false : true);
+		rmd.setMateMapped(((flags & 0x0008) == 0));
 		rmd.setIsMateContig(mrnm.equals("=") || mrnm.equals(chr));
 
 		Assembly.setIsPaired(true);
@@ -395,6 +394,7 @@ class SamFileReader extends TrackableReader
 		indexingCache = true;
 	}
 
+	@Override
 	protected boolean refLengthsOK()
 		{ return refLengthsOK; }
 
