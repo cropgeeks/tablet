@@ -89,25 +89,25 @@ public class CigarParser
 	// by carrying out the operations specified by the CIGAR string.
 	// For out purposes we ignore the CIGAR H and P operations as they don't
 	// affect the bases of our read.
-	private String parseCigar(ArrayList<Integer> lengths, ArrayList<Character> chars, int position, Read read, String bases)
+	private String parseCigar(ArrayList<Integer> lengths, ArrayList<Character> chars, int readStart, Read read, String bases)
 	{
 		StringBuilder builder = new StringBuilder();
 		int readIndex = 0;
+		int position = readStart;
 
 		for (int i=0; i < chars.size(); i++)
 		{
 			int length = lengths.get(i);
 			switch (chars.get(i))
 			{
-				// In the normal case M and = boil down to the same case
+				// In the normal case M, = and X boil down to the same case so
+				// we deliberately fall through cases M and = to case X.
 				case 'M':
 				case '=':
+				case 'X':
 					builder.append(processMatchOrMismatch(bases.substring(readIndex, readIndex+length), position));
 					position += length;
 					readIndex += length;
-					break;
-				case 'X':
-					builder.append(addSequence('?', length));
 					break;
 				case 'I':
 					addCigarEventToMap(insertionMap, "CIGAR-I", length, new CigarInsertEvent(read, bases.substring(readIndex, readIndex+length)), position);
@@ -136,9 +136,10 @@ public class CigarParser
 	// reference (where the CIGAR operations allow for that) or markup the bases
 	// as unknown.
 	// Don't need CIGAR S, P, H in case of missing SEQ.
-	private String parseMissingSeq(ArrayList<Integer> lengths, ArrayList<Character> chars, int position, Read read)
+	private String parseMissingSeq(ArrayList<Integer> lengths, ArrayList<Character> chars, int readStart, Read read)
 	{
 		StringBuilder missing = new StringBuilder();
+		int position = readStart;
 
 		for (int index=0; index < chars.size(); index++)
 		{
