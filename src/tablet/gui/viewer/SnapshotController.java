@@ -11,9 +11,9 @@ import tablet.gui.viewer.SnapshotGrabber.*;
 
 public class SnapshotController
 {
-	AssemblyPanel aPanel;
-	ArrayList<Snapshot> snaps = new ArrayList<>();
-	int snapPtr = -1;
+	private AssemblyPanel aPanel;
+	private ArrayList<Snapshot> snaps = new ArrayList<>();
+	private int snapPtr = -1;
 
 	public SnapshotController(AssemblyPanel aPanel)
 	{
@@ -61,6 +61,17 @@ public class SnapshotController
 	private void moveToSnapshot(int snapPtr)
 	{
 		Snapshot snapshot = snaps.get(snapPtr);
+
+		// Only update the display data if we need to change the packing mode
+		if (Prefs.visPacked != snapshot.getPacked() || Prefs.visPaired != snapshot.getPaired())
+		{
+			Prefs.visPacked = snapshot.getPacked();
+			Prefs.visPaired = snapshot.getPaired();
+			Actions.overlayReadNames.setEnabled(Prefs.visPacked == false && Prefs.visPaired == false);
+
+			aPanel.updateDisplayData(false);
+			aPanel.forceRedraw();
+		}
 
 		BandAdjust.setZoom(snapshot.getZoom());
 		aPanel.moveToPosition(snapshot.getY(), snapshot.getX(), false);
