@@ -76,6 +76,13 @@ public class ColorPrefs
 		initColor("User.ReadTypeScheme.FInPDiff", new Color(255, 255, 120));
 		initColor("User.ReadTypeScheme.SInPDiff", new Color(255, 120, 255));
 
+		// CONCORDANCE scheme
+		initColor("User.ConcordanceScheme.Read1Forward", new Color(120, 255, 120));
+		initColor("User.ConcordanceScheme.Read1Reverse", new Color(255, 120, 120));
+		initColor("User.ConcordanceScheme.Read2Forward", new Color(255, 120, 120).darker());
+		initColor("User.ConcordanceScheme.Read2Reverse", new Color(120, 255, 120).darker());
+		initColor("User.ConcordanceScheme.Orphaned", Color.lightGray);
+
 		// READ GROUP scheme
 		initColor("User.ReadGroupScheme.Disabled", Color.LIGHT_GRAY);
 

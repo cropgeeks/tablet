@@ -29,7 +29,7 @@ public class BandLayout extends JRibbonBand implements ActionListener
 	// Button for the Color Schemes and its drop-down menu options
 	private JCommandButton bColorScheme;
 	private JCheckBoxMenuItem mEnhanced, mDirection, mReadType, mReadGroup;
-	private JCheckBoxMenuItem mReadLength, mVariants;
+	private JCheckBoxMenuItem mReadLength, mConcordance, mVariants;
 	private JCheckBoxMenuItem mAtAllZooms;
 	private JMenuItem mCustomize;
 
@@ -174,6 +174,8 @@ public class BandLayout extends JRibbonBand implements ActionListener
 			BandColors.bDirection.doActionClick();
 		else if (e.getSource() == mReadType)
 			BandColors.bReadType.doActionClick();
+		else if (e.getSource() == mConcordance)
+			BandColors.bConcordance.doActionClick();
 		else if (e.getSource() == mReadGroup)
 			BandColors.bReadGroup.doActionClick();
 		else if (e.getSource() == mReadLength)
@@ -228,6 +230,9 @@ public class BandLayout extends JRibbonBand implements ActionListener
 		mReadType = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandColors.bReadType"));
 		mReadType.addActionListener(this);
 
+		mConcordance = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandColors.bConcordance"));
+		mConcordance.addActionListener(this);
+
 		mReadGroup = new JCheckBoxMenuItem(RB.getString("gui.ribbon.BandColors.bReadGroup"));
 		mReadGroup.addActionListener(this);
 
@@ -248,6 +253,7 @@ public class BandLayout extends JRibbonBand implements ActionListener
 		colorMenu.add(mReadType);
 		colorMenu.add(mReadGroup);
 		colorMenu.add(mReadLength);
+		colorMenu.add(mConcordance);
 		colorMenu.add(mVariants);
 		colorMenu.addSeparator();
 		colorMenu.add(mAtAllZooms);
@@ -260,6 +266,7 @@ public class BandLayout extends JRibbonBand implements ActionListener
 		mEnhanced.setSelected(Prefs.visColorScheme == ReadScheme.STANDARD);
 		mDirection.setSelected(Prefs.visColorScheme == ReadScheme.DIRECTION);
 		mReadType.setSelected(Prefs.visColorScheme == ReadScheme.READTYPE);
+		mConcordance.setSelected(Prefs.visColorScheme == ReadScheme.CONCORDANCE);
 		mReadGroup.setSelected(Prefs.visColorScheme == ReadScheme.READGROUP);
 		mReadLength.setSelected(Prefs.visColorScheme == ReadScheme.READLENGTH);
 		mVariants.setSelected(Prefs.visColorScheme == ReadScheme.VARIANTS);

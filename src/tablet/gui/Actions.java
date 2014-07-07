@@ -33,6 +33,7 @@ public class Actions
 	public static ActionToggleButtonModel colorsStandard;
 	public static ActionToggleButtonModel colorsDirection;
 	public static ActionToggleButtonModel colorsReadType;
+	public static ActionToggleButtonModel colorsConcordance;
 	public static ActionToggleButtonModel colorsReadGroup;
 	public static ActionToggleButtonModel colorsReadLength;
 	public static ActionToggleButtonModel colorsVariants;
@@ -96,6 +97,7 @@ public class Actions
 		colorsStandard.setEnabled(false);
 		colorsDirection.setEnabled(false);
 		colorsReadType.setEnabled(false);
+		colorsConcordance.setEnabled(false);
 		colorsReadGroup.setEnabled(false);
 		colorsReadLength.setEnabled(false);
 		colorsVariants.setEnabled(false);
@@ -159,6 +161,7 @@ public class Actions
 		colorsStandard.setEnabled(false);
 		colorsDirection.setEnabled(false);
 		colorsReadType.setEnabled(false);
+		colorsConcordance.setEnabled(false);
 		colorsReadGroup.setEnabled(false);
 		colorsReadLength.setEnabled(false);
 		colorsVariants.setEnabled(false);
@@ -222,6 +225,7 @@ public class Actions
 		colorsStandard.setEnabled(true);
 		colorsDirection.setEnabled(true);
 		colorsReadType.setEnabled(true);
+		colorsConcordance.setEnabled(true);
 		colorsReadGroup.setEnabled(true);
 		colorsReadLength.setEnabled(true);
 		colorsVariants.setEnabled(true);
