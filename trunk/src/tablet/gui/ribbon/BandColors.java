@@ -26,11 +26,12 @@ public class BandColors extends JRibbonBand implements ActionListener
 	static JCommandToggleButton bStandard;
 	static JCommandToggleButton bDirection;
 	static JCommandToggleButton bReadType;
+	static JCommandToggleButton bConcordance;
 	static JCommandToggleButton bReadGroup;
 	static JCommandToggleButton bReadLength;
 	static JCommandToggleButton bVariants;
-	static JCommandToggleButton bAtAllZooms;
 
+	static JCommandToggleButton bAtAllZooms;
 	private JCommandButton bColors;
 
 	private StyleListener styleListener = new StyleListener();
@@ -122,6 +123,7 @@ public class BandColors extends JRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.BandColors.bReadGroup.richtip")));
 		styleButtons.add(bReadGroup);
 
+
 		// Read length colour scheme button
 		boolean readLengthOn = Prefs.visColorScheme == ReadScheme.READLENGTH;
 
@@ -138,6 +140,24 @@ public class BandColors extends JRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.BandColors.bReadLength.tooltip"),
 			RB.getString("gui.ribbon.BandColors.bReadLength.richtip")));
 		styleButtons.add(bReadLength);
+
+
+		// Paired/mated read concordance colour scheme button
+		boolean readConcordanceOn = Prefs.visColorScheme == ReadScheme.CONCORDANCE;
+
+		bConcordance = new JCommandToggleButton(
+			RB.getString("gui.ribbon.BandColors.bConcordance"),
+			RibbonController.getIcon("READCONCORDANCE32", 32));
+		Actions.colorsConcordance = new ActionToggleButtonModel(false);
+		Actions.colorsConcordance.setSelected(readConcordanceOn);
+		Actions.colorsConcordance.addActionListener(this);
+		bConcordance.setActionModel(Actions.colorsConcordance);
+		bConcordance.setActionKeyTip("C");
+		bConcordance.addMouseListener(styleListener);
+		bConcordance.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.BandColors.bConcordance.tooltip"),
+			RB.getString("gui.ribbon.BandColors.bConcordance.richtip")));
+		styleButtons.add(bConcordance);
 
 
 		// Variants colour scheme button
@@ -189,9 +209,9 @@ public class BandColors extends JRibbonBand implements ActionListener
 
 		// Set up the ribbon gallery (gawd knows what this code is doing)
 		Map<RibbonElementPriority, Integer> counts = new HashMap<>();
-		counts.put(RibbonElementPriority.LOW, 6);
-		counts.put(RibbonElementPriority.MEDIUM, 6);
-		counts.put(RibbonElementPriority.TOP, 6);
+		counts.put(RibbonElementPriority.LOW, 7);
+		counts.put(RibbonElementPriority.MEDIUM, 7);
+		counts.put(RibbonElementPriority.TOP, 7);
 
 		List<StringValuePair<List<JCommandToggleButton>>> galleryButtons =
 			new ArrayList<>();
@@ -201,7 +221,7 @@ public class BandColors extends JRibbonBand implements ActionListener
 		galleryButtons.add(
 			new StringValuePair<List<JCommandToggleButton>>(null, styleButtons));
 		addRibbonGallery(
-			"Style", galleryButtons, counts, 6, 2, RibbonElementPriority.TOP);
+			"Style", galleryButtons, counts, 7, 2, RibbonElementPriority.TOP);
 	}
 
 	// The listeners for the "live preview" styles track the previous style so
@@ -234,6 +254,15 @@ public class BandColors extends JRibbonBand implements ActionListener
 
 			// BUG: Workaround for API allowing toggle groups to be unselected
 			Actions.colorsReadType.setSelected(true);
+		}
+
+		else if (e.getSource() == Actions.colorsConcordance)
+		{
+			setColorScheme(ReadScheme.CONCORDANCE);
+			styleListener.previousScheme = ReadScheme.CONCORDANCE;
+
+			// BUG: Workaround for API allowing toggle groups to be unselected
+			Actions.colorsConcordance.setSelected(true);
 		}
 
 		else if (e.getSource() == Actions.colorsReadGroup)
@@ -305,6 +334,10 @@ public class BandColors extends JRibbonBand implements ActionListener
 			else if (e.getSource() == bReadType && Actions.colorsReadType.isEnabled() &&
 				previousScheme != ReadScheme.READTYPE)
 				setColorScheme(ReadScheme.READTYPE);
+
+			else if (e.getSource() == bConcordance && Actions.colorsConcordance.isEnabled() &&
+				previousScheme != ReadScheme.CONCORDANCE)
+				setColorScheme(ReadScheme.CONCORDANCE);
 
 			else if (e.getSource() == bReadGroup && Actions.colorsReadGroup.isEnabled() &&
 				previousScheme != ReadScheme.READGROUP)
