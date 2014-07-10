@@ -29,8 +29,8 @@ public class ReadConcordanceScheme extends EnhancedScheme
 
 		Color c_read1F = ColorPrefs.get("User.ConcordanceScheme.Read1Forward");
 		Color c_read1R = ColorPrefs.get("User.ConcordanceScheme.Read1Reverse");
-		Color c_read2R = ColorPrefs.get("User.ConcordanceScheme.Read2Forward");
-		Color c_read2F = ColorPrefs.get("User.ConcordanceScheme.Read2Reverse");
+		Color c_read2F = ColorPrefs.get("User.ConcordanceScheme.Read2Forward");
+		Color c_read2R = ColorPrefs.get("User.ConcordanceScheme.Read2Reverse");
 		Color c_oprhps = ColorPrefs.get("User.ConcordanceScheme.Orphaned");
 
 		initStates(read1F, c_read1F, w, h);
