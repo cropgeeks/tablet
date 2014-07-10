@@ -23,6 +23,7 @@ public class CitationDialog extends JDialog implements ActionListener
 		);
 
 		add(panel = new CitationDialogNB());
+		addMouseHandler();
 
 		timer = new Timer(1000, this);
 		timer.setInitialDelay(1000);
@@ -51,5 +52,16 @@ public class CitationDialog extends JDialog implements ActionListener
 			panel.link1.setText("Click here to close this window");
 			setDefaultCloseOperation(HIDE_ON_CLOSE);
 		}
+	}
+
+	private void addMouseHandler()
+	{
+		addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e)
+			{
+				if (e.isControlDown() && e.getClickCount() == 2)
+					setVisible(false);
+			}
+		});
 	}
 }
