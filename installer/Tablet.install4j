@@ -1508,7 +1508,7 @@ if (wizardContext != null) {
       <excludedComponents />
       <includedDownloadableComponents />
     </windows>
-    <windows name="Windows x64" id="262" customizedId="" mediaFileName="${compiler:sys.shortName}_windows_x64_${compiler:sys.version}" installDir="Tablet" overridePrincipalLanguage="false" jreBitType="64" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="windows-amd64-1.7.0_51" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
+    <windows name="Windows x64" id="262" customizedId="" mediaFileName="${compiler:sys.shortName}_windows_x64_${compiler:sys.version}" installDir="Tablet" overridePrincipalLanguage="false" jreBitType="64" runPostProcessor="false" postProcessor="" failOnPostProcessorError="false" useLegacyMediaFileIds="false" legacyMediaFileIds="" includedJRE="windows-amd64-1.8.0_05" manualJREEntry="false" bundleType="1" jreURL="" jreShared="false" directDownload="false" installOnlyIfNecessary="false" customInstallBaseDir="" contentFilesType="1" downloadURL="" verifyIntegrity="true">
       <excludedLaunchers />
       <excludedBeans>
         <bean refId="267" />

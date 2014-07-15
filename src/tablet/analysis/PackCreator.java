@@ -15,17 +15,15 @@ import scri.commons.gui.*;
  */
 public class PackCreator extends SimpleJob
 {
+	private static final int ALREADY_ADDED = 0;
+	private static final int ADD_ON_ITS_OWN = 1;
+	private static final int ADD_AS_A_PAIR = 2;
+
 	private Contig contig;
 	private boolean isPairedPack;
 	private Pack pack;
 	private int startPos, rowIndex;
 
-	// Tracks reads that overlap as they are the only ones were it is tricky to
-	// determine if a read has already been added or not when dealing with a
-	// mate later in the loop iteration
-	private HashMap<Integer,Integer> overlaps = new HashMap<>();
-
-	private int overlapCount = 0;
 	private int addedCount = 0;
 
 	public PackCreator(Contig contig, boolean isPairedPack)
@@ -57,19 +55,14 @@ public class PackCreator extends SimpleJob
 			switch (readType(read))
 			{
 				// Add just one read
-				case 1: addRead(read);
-						startPos = read.s();
-						break;
-
-				// Add both reads, but only ever track the start of the first
-				case 2: addRead(read);
-						startPos = read.s();
-						addRead(((MatedRead)read).getMate());
+				case ADD_ON_ITS_OWN:
+						addRead(read);
 						startPos = read.s();
 						break;
 
 				// Add both reads, all on one line
-				case 3: addRead(new LinkedReads(read));
+				case ADD_AS_A_PAIR:
+						addRead(new LinkedReads(read));
 						startPos = read.s();
 						break;
 			}
@@ -91,52 +84,39 @@ public class PackCreator extends SimpleJob
 		System.out.println("Packed data in " + (e-s) + "ms");
 
 		System.out.println("  Total reads packed: " + addedCount);
-		System.out.println("  Overlapping pairs:  " + overlapCount);
 	}
 
 	// This method returns one of four values:
 	//  0 - if the read is the 2nd read in a pair, and therefore has already
 	//      been added in a previous pass
 	//  1 - if the read should be added on its own
-	//  2 - if the read has a pair, but they overlap
-	//  3 - if the read has a pair, and they can be added on the same line
+	//  2 - if the read has a pair, and they can be added on the same line
 	private int readType(Read read)
 	{
 		// If we're only making a "normal" pack, or this read isn't even a
 		// MatedRead, then just return 1 because we'll be adding it on its own
 		if (isPairedPack == false || read instanceof MatedRead == false)
-			return 1;
+			return ADD_ON_ITS_OWN;
 
 		MatedRead read1 = (MatedRead) read;
 
 		// If the read doesn't have a mate assigned (out of contig, bam window
 		// or singleton), then add it on its own
 		if (read1.getMate() == null)
-			return 1;
+			return ADD_ON_ITS_OWN;
 
 		MatedRead read2 = read1.getMate();
 
-		// If the read's start is AFTER its mate, then it will already be packed
-		if (read1.s() > read2.s())
-			return 0;
-
 		// If the reads overlap, then add them separately
 		if (read1.s() <= read2.e() && read1.e() >= read2.s())
-		{
-			// But only if they haven't already been packed
-			if (overlaps.containsKey(read1.getID()) || overlaps.containsKey(read2.getID()))
-				return 0;
+			return ADD_ON_ITS_OWN;
 
-			overlaps.put(read1.getID(), 0);
-			overlaps.put(read2.getID(), 0);
-
-			overlapCount++;
-
-			return 2;
-		}
+		// If the read's start is AFTER its mate, then it will already be packed
+		if (read1.s() > read2.s())
+			return ALREADY_ADDED;
 
 		// Otherwise, add them all on the same line (with a link)
-		return 3;
+		return ADD_AS_A_PAIR;
 	}
 
 	private void addRead(Read read)
