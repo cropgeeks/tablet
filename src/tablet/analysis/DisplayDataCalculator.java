@@ -22,7 +22,8 @@ import scri.commons.gui.*;
  */
 public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 {
-	private boolean doAll;
+	private boolean doAll, doLoad;
+
 	private Assembly assembly;
 	private Contig contig;
 
@@ -35,14 +36,20 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 	private IArrayIntCache unpaddedToPadded;
 
 	private int status = 0;
+	private static final int LOADING = 1;
+	private static final int INDEXING = 2;
+	private static final int COVERAGE = 3;
+	private static final int PAIRING = 4;
+	private static final int PACKING = 5;
 
 	private EnzymeHandler enzymeCalc = new EnzymeHandler();
 
-	public DisplayDataCalculator(Assembly assembly, Contig contig, boolean doAll)
+	public DisplayDataCalculator(Assembly assembly, Contig contig, boolean doAll, boolean doLoad)
 	{
 		this.assembly = assembly;
 		this.contig = contig;
 		this.doAll = doAll;
+		this.doLoad = doLoad;
 
 		if (doAll)
 		{
@@ -72,11 +79,14 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 	public void runJob(int jobIndex)
 		throws Exception
 	{
-		if (assembly.getBamBam() != null)
+		if (assembly.getBamBam() != null && doLoad)
 		{
-			status = 1;
+			status = LOADING;
 			contig.clearCigarFeatures();
 			assembly.getBamBam().loadDataBlock(contig);
+
+			status = INDEXING;
+			assembly.getBamBam().indexNames();
 		}
 
 		// TODO: Technically, these jobs could be run in parallel but it's
@@ -97,9 +107,9 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 			TaskManager.submit("BaseMappingCalculator", bm);
 		}
 
-		if (okToRun)
+		if (okToRun && doLoad)
 		{
-			status = 2;
+			status = COVERAGE;
 
 			// Compute per-base coverage across the contig
 			cc = new CoverageCalculator(contig);
@@ -112,16 +122,16 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 			DisplayData.setAveragePercentage(cc.getAveragePercentage());
 		}
 
-		if(okToRun && Assembly.isPaired())
+		if (okToRun && Assembly.isPaired() && doLoad)
 		{
 			maximum = contig.getReads().size();
-			status = 3;
+			status = PAIRING;
 			long s = System.currentTimeMillis();
 			pairReads();
 			System.out.println("Paired reads in: " + (System.currentTimeMillis()-s));
 		}
 
-		if (okToRun)
+		if (okToRun && doLoad)
 		{
 			// Sort the reads into order
 			System.out.print("Sorting...");
@@ -136,10 +146,10 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 
 		if (okToRun)
 		{
-			status = 4;
+			status = PACKING;
 			packCreator = setupPackCreator();
 
-			if(packCreator != null)
+			if (packCreator != null)
 				packCreator.runJob(0);
 		}
 
@@ -204,7 +214,6 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 			progress++;
 
 		}
-
 	}
 
 	public void cancelJob()
@@ -222,7 +231,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 
 	public int getMaximum()
 	{
-		if (status == 4 && packCreator != null)
+		if (status == PACKING && packCreator != null)
 			maximum = packCreator.getMaximum();
 
 		return maximum;
@@ -230,7 +239,7 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 
 	public int getValue()
 	{
-		if (status == 4 && packCreator != null)
+		if (status == PACKING && packCreator != null)
 			progress = packCreator.getValue();
 
 		return progress;
@@ -240,14 +249,20 @@ public class DisplayDataCalculator extends SimpleJob implements ITaskListener
 	{
 		switch (status)
 		{
-			case 1: return
+			case LOADING: return
 				RB.format("analysis.DisplayDataCalculator.bamming",
 				contig.readCount());
-			case 2: return
+
+			case INDEXING: return
+				RB.getString("analysis.DisplayDataCalculator.indexNames");
+
+			case COVERAGE: return
 				RB.getString("analysis.DisplayDataCalculator.coverage");
-			case 3: return
-					RB.format("analysis.DisplayDataCalculator.pairing", progress);
-			case 4: return
+
+			case PAIRING: return
+				RB.format("analysis.DisplayDataCalculator.pairing", progress);
+
+			case PACKING: return
 				packCreator.getMessage();
 
 			default:

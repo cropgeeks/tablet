@@ -62,6 +62,12 @@ public class BamBam
 		bamHandler.loadDataBlock(contig, s, e);
 	}
 
+	public void indexNames()
+		throws Exception
+	{
+		bamHandler.indexNames();
+	}
+
 	/**
 	 * @return the s
 	 */

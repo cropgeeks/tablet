@@ -128,8 +128,12 @@ public class BamFileHandler
 //			Collections.sort(contig.getReads());
 			contig.calculateOffsets(assembly);
 		}
+	}
 
-		if (Assembly.isPaired())
+	public void indexNames()
+		throws Exception
+	{
+		if (okToRun && Assembly.isPaired())
 			nameCache.indexNames();
 	}
 
