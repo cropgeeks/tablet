@@ -235,7 +235,7 @@ public class RestrictionEnzymeDialog extends JDialog implements ActionListener
 		panel.enzymeTable.clearSelection();
 
 		// Kick the DDC
-		aPanel.updateDisplayData(false);
+		aPanel.forceRedraw();
 	}
 
 	@Override

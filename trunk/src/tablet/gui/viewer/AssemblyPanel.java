@@ -192,7 +192,7 @@ public class AssemblyPanel extends JPanel
 			snapController.reset();
 		}
 
-		if (contig != null && ((setContigOK = updateDisplayData(true)) == false))
+		if (contig != null && ((setContigOK = updateDisplayData(true, true)) == false))
 		{
 			clearContig();
 			contig = null;
@@ -270,13 +270,14 @@ public class AssemblyPanel extends JPanel
 		coverageCanvas.setVisible(!Prefs.guiHideCoverage);
 	}
 
-	public boolean updateDisplayData(boolean doAll)
+	public boolean updateDisplayData(boolean doAll, boolean doLoad)
 	{
 		String title = RB.getString("gui.viewer.assemblyPanel.progressDialog.title");
 		String label = RB.getString("gui.viewer.assemblyPanel.progressDialog.label");
 
 		// Run the job...
-		DisplayDataCalculator ddc = new DisplayDataCalculator(assembly, contig, doAll);
+		DisplayDataCalculator ddc = new DisplayDataCalculator(assembly, contig, doAll, doLoad);
+
 		ProgressDialog dialog = new ProgressDialog(ddc, title, label, Tablet.winMain);
 		if (dialog.getResult() != ProgressDialog.JOB_COMPLETED)
 		{
@@ -290,6 +291,9 @@ public class AssemblyPanel extends JPanel
 
 			return false;
 		}
+
+		// Reset any view history at this time
+		snapController.reset();
 
 		return true;
 	}
@@ -323,7 +327,7 @@ public class AssemblyPanel extends JPanel
 	{
 		DisplayData.clearDisplayData(false);
 
-		if (updateDisplayData(false) == false)
+		if (updateDisplayData(false, true) == false)
 		{
 			winMain.getContigsPanel().setNullContig();
 			return false;

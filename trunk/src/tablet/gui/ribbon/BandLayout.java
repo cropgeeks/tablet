@@ -121,7 +121,7 @@ public class BandLayout extends JRibbonBand implements ActionListener
 			Prefs.visPaired = false;
 			Actions.overlayReadNames.setEnabled(false);
 
-			winMain.getAssemblyPanel().updateDisplayData(false);
+			winMain.getAssemblyPanel().updateDisplayData(false, false);
 			winMain.getAssemblyPanel().forceRedraw();
 		}
 
@@ -131,7 +131,7 @@ public class BandLayout extends JRibbonBand implements ActionListener
 			Prefs.visPaired = false;
 			Actions.overlayReadNames.setEnabled(true);
 
-			winMain.getAssemblyPanel().updateDisplayData(false);
+			winMain.getAssemblyPanel().updateDisplayData(false, false);
 			winMain.getAssemblyPanel().forceRedraw();
 		}
 
@@ -141,7 +141,7 @@ public class BandLayout extends JRibbonBand implements ActionListener
 			Prefs.visPaired = true;
 			Actions.overlayReadNames.setEnabled(false);
 
-			winMain.getAssemblyPanel().updateDisplayData(false);
+			winMain.getAssemblyPanel().updateDisplayData(false, false);
 			winMain.getAssemblyPanel().forceRedraw();
 		}
 
@@ -151,7 +151,7 @@ public class BandLayout extends JRibbonBand implements ActionListener
 			Prefs.visPaired = true;
 			Actions.overlayReadNames.setEnabled(false);
 
-			winMain.getAssemblyPanel().updateDisplayData(false);
+			winMain.getAssemblyPanel().updateDisplayData(false, false);
 			winMain.getAssemblyPanel().forceRedraw();
 		}
 
