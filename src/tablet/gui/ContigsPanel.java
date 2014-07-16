@@ -61,15 +61,18 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 	void setReadGroupsPanel(ReadGroupsPanel readGroupsPanel)
 		{ this.readGroupsPanel = readGroupsPanel; }
 
-	String getTitle(int count)
+	String getTitle(int count, int total)
 	{
-		return RB.format("gui.ContigsPanel.title", count);
+		return count == total ? RB.format("gui.ContigsPanel.title", count) :
+			RB.format("gui.ContigsPanel.titleFiltered", count, total);
 	}
 
 	void setTableFilter(RowFilter<ContigsTableModel, Object> rf)
 	{
 		sorter.setRowFilter(rf);
-		controls.contigsLabel.setText(getTitle(controls.table.getRowCount()));
+		controls.contigsLabel.setText(getTitle(controls.table.getRowCount(), model.getRowCount()));
+
+		controls.totalReadsLabel.setText(getReadCount());
 	}
 
 	void setAssembly(Assembly assembly)
@@ -100,28 +103,13 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		}
 
 
-
-		String title = RB.format("gui.ContigsPanel.title", controls.table.getRowCount());
+		int totalContigs = model == null ? 0 : model.getRowCount();
+		String title = RB.format("gui.ContigsPanel.title", controls.table.getRowCount(), totalContigs);
 		controls.contigsLabel.setText(title);
 
-		DecimalFormat df = new DecimalFormat();
-		df.setMaximumFractionDigits(2);
-
-		long count = calculateTotalReadCount();
-		String countText;
-		if (count < 1000)
-			countText =  RB.format("gui.ContigsPanel.readCount", df.format(count));
-		else if (count < 1000000)
-			countText = RB.format("gui.ContigsPanel.readCount.thousand", df.format(count / 1000f));
-		else if (count < 1000000000)
-			countText = RB.format("gui.ContigsPanel.readCount.million", df.format(count / 1000000f));
-		else
-			countText = RB.format("gui.ContigsPanel.readCount.billion", df.format(count / 1000000000f));
-
-		controls.totalReadsLabel.setText(countText);
-		
-		String toolTip = RB.format("gui.ContigsPanel.readCount.tooltip", df.format(count));
-		controls.totalReadsLabel.setToolTipText(toolTip);
+		String readsLabel = getReadCount();
+		controls.totalReadsLabel.setText(readsLabel);
+		controls.totalReadsLabel.setToolTipText(readsLabel);
 
 		ctrlTabs.setSelectedIndex(0);
 
@@ -130,14 +118,54 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 		findPanel.setAssembly(assembly);
 	}
 
-	private long calculateTotalReadCount()
+	private long calculateCurrentReadCount()
 	{
 		long readCount = 0;
 		for (int row = 0; row < controls.table.getRowCount(); row++)
-		{
 			readCount += (Integer)controls.table.getValueAt(row, 2);
-		}
+
 		return readCount;
+	}
+
+	private long calculateTotalReadCount()
+	{
+		long readCount = 0;
+		if (model != null)
+			for (int row = 0; row < model.getRowCount(); row++)
+				readCount += (Integer)model.getValueAt(row, 2);
+
+		return readCount;
+	}
+
+	private String getReadCount()
+	{
+		long count = calculateCurrentReadCount();
+		String countText = formatReadCountString(count);
+
+		long total = calculateTotalReadCount();
+		String totalText = formatReadCountString(total);
+
+		return countText.equals(totalText) ? RB.format("gui.ContigsPanel.readCount.reads", totalText) :
+			RB.format("gui.ContigsPanel.readCount.readsFiltered", countText, totalText);
+	}
+
+	private String formatReadCountString(long readCount)
+	{
+		DecimalFormat df = new DecimalFormat();
+		df.setMaximumFractionDigits(2);
+
+		String countText;
+
+		if (readCount < 1000)
+			countText =  RB.format("gui.ContigsPanel.readCount", df.format(readCount));
+		else if (readCount < 1000000)
+			countText = RB.format("gui.ContigsPanel.readCount.thousand", df.format(readCount / 1000f));
+		else if (readCount < 1000000000)
+			countText = RB.format("gui.ContigsPanel.readCount.million", df.format(readCount / 1000000f));
+		else
+			countText = RB.format("gui.ContigsPanel.readCount.billion", df.format(readCount / 1000000000f));
+
+		return countText;
 	}
 
 	public void valueChanged(ListSelectionEvent e)
@@ -266,18 +294,18 @@ public class ContigsPanel extends JPanel implements ListSelectionListener
 	{
 		// Generate a descending order list of contig lengths
 		ArrayList<Integer> contigLengths = new ArrayList<>();
-		for (int row = 0; row < controls.table.getRowCount(); row++)
+		for (int row = 0; row < model.getRowCount(); row++)
 		{
-			int len = (Integer) controls.table.getValueAt(row, 1);
+			int len = (Integer) model.getValueAt(row, 1);
 			contigLengths.add(len);
 		}
 		Collections.sort(contigLengths, Collections.reverseOrder());
 
 		// Generate a list of read counts per contig
 		ArrayList<Integer> readCounts = new ArrayList<>();
-		for (int row = 0; row < controls.table.getRowCount(); row++)
+		for (int row = 0; row < model.getRowCount(); row++)
 		{
-			int readCount = (Integer) controls.table.getValueAt(row, 2);
+			int readCount = (Integer) model.getValueAt(row, 2);
 			readCounts.add(readCount);
 		}
 
