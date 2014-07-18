@@ -1,4 +1,4 @@
-// Copyright 2009-2013 Information & Computational Sciences, JHI. All rights
+// Copyright 2009-2014 Information & Computational Sciences, JHI. All rights
 // reserved. Use is subject to the accompanying licence terms.
 
 package tablet.gui.viewer.colors;
