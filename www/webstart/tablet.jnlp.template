@@ -5,7 +5,7 @@
 	<information>
 		<title>Tablet</title>
 		<vendor>The James Hutton Institute</vendor>
-		<homepage href="http://bioinf.hutton.ac.uk/tablet"/>
+		<homepage href="http://ics.hutton.ac.uk/tablet"/>
 		<icon href="tablet.png" width="64" height="64" kind="default"/>
 	</information>
 	<resources>
