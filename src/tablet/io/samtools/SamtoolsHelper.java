@@ -38,7 +38,11 @@ public class SamtoolsHelper
 			ProcessBuilder pb = new ProcessBuilder(samtools.getPath(),
 				"idxstats", bamFile.getPath());
 
-			pb.directory(new File(baiFile.getFile().getAbsoluteFile().getParent()));
+			// 21/07/2014 - BUG: If a relative path is being used, then setting
+			// the working directory to where the file is breaks, as samtools
+			// then goes looking for the file using a relative path from where
+			// it actually is!
+//			pb.directory(new File(baiFile.getFile().getAbsoluteFile().getParent()));
 			pb.redirectErrorStream(true);
 
 			Process proc = pb.start();
@@ -88,6 +92,8 @@ public class SamtoolsHelper
 
 		protected void processLine(String line)
 		{
+			System.out.println(line);
+
 			try
 			{
 				String[] tokens = line.split("\t");
