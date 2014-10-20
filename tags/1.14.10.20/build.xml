@@ -1,0 +1,150 @@
+<project name="Tablet" default="compile" basedir=".">
+
+	<property file="build.properties" />
+
+	<property name="src"       location="src"/>
+	<property name="lib"       location="lib"/>
+	<property name="res"       location="res"/>
+	<property name="tmp"       location="tmp"/>
+	<property name="lib-devel" location="lib-devel"/>
+	<property name="classes"   location="classes"/>
+
+	<property name="tablet.jar" value="${lib}/tablet.jar"/>
+	<property name="tablet-resources.jar" value="${lib}/tablet-resources.jar"/>
+
+	<target name="init">
+	</target>
+
+	<path id="project.classpath">
+		<pathelement path="${classes}"/>
+		<fileset dir="${lib}">
+			<exclude name="*.txt"/>
+		</fileset>
+		<fileset dir="${lib-devel}"/>
+	</path>
+
+	<target name="clean">
+		<delete includeemptydirs="true">
+			<fileset dir="${classes}" includes="**/*"/>
+			<fileset file="${tablet.jar}"/>
+			<fileset file="${tablet-resources.jar}"/>
+		</delete>
+	</target>
+
+	<target name="compile" depends="init">
+		<javac srcdir="${src}" destdir="${classes}" source="7" target="7" debug="true" includeantruntime="false">
+			<compilerarg value="-Xlint:-options"/>
+			<classpath refid="project.classpath"/>
+			<exclude name="**/package-info.java"/>
+		</javac>
+	</target>
+
+	<target name="test" depends="compile">
+		<junit printsummary="on" haltonerror="true" haltonfailure="true" dir="." fork="true">
+			<jvmarg value="-Xmx1024m"/>
+			<classpath refid="project.classpath"/>
+			<formatter type="plain" usefile="false"/>
+			<batchtest>
+				<fileset dir="${classes}" includes="**/*Test.class"/>
+			</batchtest>
+		</junit>
+	</target>
+
+	<target name="jar" depends="clean, compile">
+		<condition property="i4j.version" value="x.xx.xx.xx">
+			<equals arg1="${i4j.version}" arg2="${i4j.version}"/>
+		</condition>
+
+		<jar jarfile="${tablet-resources.jar}">
+			<zipfileset dir="${res}" prefix="res"/>
+			<zipfileset dir="installer/licence" prefix="installer/licence"/>
+			<manifest>
+				<attribute name="Permissions" value="all-permissions"/>
+			</manifest>
+		</jar>
+
+		<jar jarfile="${tablet.jar}">
+			<fileset dir="${classes}">
+				<exclude name="**/*Test.class"/>
+			</fileset>
+			<manifest>
+				<attribute name="Main-Class" value="tablet.gui.Tablet"/>
+				<attribute name="Class-Path"
+					value="flamingo.jar
+						osxadapter.jar
+						scri-commons.jar
+						picard.jar
+						samtools-all.jar
+						samtools-linux32.jar
+						samtools-linux64.jar
+						samtools-macos.jar
+						samtools-windows.jar
+						sqlite-jdbc-3.7.2.jar
+						tablet-resources.jar"/>
+				<attribute name="Implementation-Version" value="${i4j.version}"/>
+				<attribute name="Application-Name" value="Tablet"/>
+				<attribute name="Permissions" value="all-permissions"/>
+				<attribute name="Codebase" value="*.hutton.ac.uk"/>
+			</manifest>
+		</jar>
+	</target>
+
+	<target name="getversion">
+		<input message="Enter the version number:" addproperty="i4j.version"/>
+	</target>
+
+	<target name="install4j" depends="getversion, jar">
+		<taskdef name="install4j"
+			classname="com.install4j.Install4JTask"
+			classpath="C:\Program Files\Install4j\bin\ant.jar"/>
+
+		<delete>
+			<fileset dir="installer" includes="**/*.exe"/>
+			<fileset dir="installer" includes="**/*.sh"/>
+			<fileset dir="installer" includes="**/*.dmg"/>
+		</delete>
+
+		<install4j projectfile="installer/tablet.install4j"
+		           release="${i4j.version}"
+		           winKeystorePassword="${keystore.password}"
+		           macKeystorePassword="${keystore.password}"/>
+	</target>
+
+	<target name="javadoc">
+		<javadoc destdir="docs/api" author="true" version="true" use="true">
+			<fileset dir="${src}" defaultexcludes="yes">
+				<include name="**/*.java"/>
+			</fileset>
+			<classpath refid="project.classpath"/>
+		</javadoc>
+	</target>
+
+	<target name="run" depends="jar">
+		<java jar="${tablet.jar}">
+			<jvmarg value="-Xmx1024m"/>
+		</java>
+	</target>
+
+	<target name="jnlp" depends="getversion, jar">
+		<mkdir dir="${tmp}"/>
+		<copy todir="${tmp}">
+			<fileset dir="${lib}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</copy>
+		<signjar alias="jhi" storepass="${keystore.password}"
+			preservelastmodified="true" lazy="true"
+			tsaurl="http://timestamp.globalsign.com/scripts/timstamp.dll">
+			<fileset dir="${tmp}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</signjar>
+		<copy todir="\\ics\root\var\www\sites\bioinf.hutton.ac.uk\html\tablet\webstart">
+			<fileset dir="${tmp}">
+				<include name="**/*.jar"/>
+			</fileset>
+		</copy>
+		<delete dir="${tmp}"/>
+	</target>
+
+</project>
