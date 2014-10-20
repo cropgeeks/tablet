@@ -92,8 +92,6 @@ public class SamtoolsHelper
 
 		protected void processLine(String line)
 		{
-			System.out.println(line);
-
 			try
 			{
 				String[] tokens = line.split("\t");
