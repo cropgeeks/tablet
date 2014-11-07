@@ -1,0 +1,92 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="stylesheet/styles.css" type="text/css">
+
+<title>Download Tablet</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.shtml" -->
+
+
+<h2>Download Tablet</h2>
+
+<p>The most recent release of Tablet is <b>1.13.12.17</b> (17th December 2013). View the
+<a href="help/whats-new.shtml">release notes</a> to see what's new.</p>
+
+<p>Please use the links below to download the Tablet installer most suitable
+for your operating system. Tablet is currently available for:</p>
+
+<table border="0">
+<tr>
+	<td>&nbsp;&nbsp;&nbsp;</td>
+	<td><img src="images/icon_windows.gif" alt="Windows"></td>
+	<td>
+		<a href="installers/tablet_windows_x86_1_13_12_17.exe"
+		  onClick="javascript: pageTracker._trackPageview('/installers/windows_x86');">Windows (32 bit)</a> or
+		<a href="installers/tablet_windows_x64_1_13_12_17.exe"
+		  onClick="javascript: pageTracker._trackPageview('/installers/windows_x64');">Windows (64 bit)</a>
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;&nbsp;&nbsp;</td>
+	<td><img src="images/icon_linux.gif" alt="Linux"></td>
+	<td>
+		<a href="installers/tablet_linux_x86_1_13_12_17.sh"
+		  onClick="javascript: pageTracker._trackPageview('/installers/linux_x86');">Linux (32 bit)</a> or
+		<a href="installers/tablet_linux_x64_1_13_12_17.sh"
+		  onClick="javascript: pageTracker._trackPageview('/installers/linux_x64');">Linux (64 bit)</a>
+	</td>
+</tr>
+<tr>
+	<td>&nbsp;&nbsp;&nbsp;</td>
+	<td><img src="images/icon_osx.gif" alt="OS X"></td>
+	<td>
+		<a href="installers/tablet_macos_1_13_12_17.dmg"
+		  onClick="javascript: pageTracker._trackPageview('/installers/macosx_x86');">Mac OS X</a> (note requirements below)
+	</td>
+</tr>
+
+</table>
+
+<p>A <b>Java Web Start</b> version of Tablet also exists. Instructions for using it can be
+found in the <a href="faq.shtml">Tablet FAQ</a>.</p>
+
+<p>Follow the instructions provided by the graphical installer to install Tablet.
+Note that Tablet should not require administrator privileges to install or run,
+but if you have any problems, don't hesitate to contact us at
+<a href="mailto:tablet@hutton.ac.uk">tablet@hutton.ac.uk</a>.
+
+<p>Tablet is developed on Windows 7, and gets additional regular testing on Mac OS X and Centos.</p>
+
+
+<h3>Archived Versions</h3>
+
+<p>You can download a limited selection of older copies of Tablet from our <a href="installers/archive/?C=M;O=D">archive</a>. If you do need to
+return to an older version (for whatever reason), please let us know why.</p>
+
+
+<h3>Additional downloads</h3>
+
+<ul>
+<li><a href="additional/coveragestats.py">coveragestats.py</a> - python script that summarizes the coverage export file from Tablet.
+Provided by Zach Foster and Aaron Liston, Department of Botany & Plant Pathology, Oregon State University.</li>
+</ul>
+
+
+<h3>OS X Requirements</h3>
+
+<p>Tablet relies on Java 7 which is only officially supported on OS X 10.7.3 or later, however you may still be able to run it on earlier
+versions. We bundle Tablet with an appropriate Java runtime so you shouldn't have any problems starting it, but we have had at least one
+report of various degrees of graphical corruption when running it on older OS X versions.</p>
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>

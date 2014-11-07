@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="stylesheet/styles.css" type="text/css">
+
+<title>Searching</title>
+
+</head>
+<body>
+
+<!--#include virtual="header.html" -->
+
+<h2>Searching for reads</h2>
+
+<p>To search for reads by name, open the search panel and select <b>Search for reads
+by name</b> from the first drop down list. The second drop down list determines
+whether or not the search will look through all contigs for matches, or just the
+currently loaded contig. Enter your search term in the combo box - this combo
+box stores your previous search terms, so it is easy to select a previous search
+- then click the search button. The table below the controls should fill in with
+any results. Click on a result to have that read highlighted in the main display.</p>
+
+<h3>Regular expressions</h3>
+<p>When searching for reads by name it is possible to specify that the search
+should use java regular expressions. When regular expressions aren't being used
+the search will only find results that match the search term exactly. When regular
+expressions are being used the search is attempting to match read names to the 
+regular expression provided in the search combo box. As a simple example imagine
+some reads are prefixed with an identifier. To find all the reads prefixed with
+that identifier you would enter "prefix.*" (without the quotes) into the search
+box and carry out the search. Further details on the regular expression syntax used
+by Table can be found
+<a href="http://download.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#sum">here.</a>
+</p>
+
+<h2>Searching for subsequences</h2>
+
+<p>To search for subsequences of nucleotide data within either the reads, or the
+consensus / reference sequence select either <b>Search for subsequences</b> or
+<b>Search in consensus / reference</b> from the first drop down list. The second
+drop down list determines whether or not the search will look through all contigs
+for matches, or just the currently loaded contig. Enter your search term into the
+combo box and click the search button. Once the search is complete the table below
+will fill in with the results. Click on a result to jump to and highlight the
+subsequence in the read or consensus / reference.</p>
+
+<h3>Skipping pads</h3>
+<p>When searching for subsequences the option to <b>Ignore pads when searching</b>
+is available. This means that pads in the nucleotide sequences will be ignored
+when trying to match against the search string. Ns are also skipped when this option
+is selected, this means that for example the search term ACGT will match the following
+sequences:</p>
+<table>
+ <tr>
+  <td><b>A</b></td>
+  <td><b>C</b></td>
+  <td><b>G</b></td>
+  <td><b>T</b></td>
+ </tr>
+ <tr>
+  <td><b>A</b></td>
+  <td><b>C</b></td>
+  <td><b>*</b></td>
+  <td><b>G</b></td>
+  <td><b>T</b></td>
+ </tr>
+ <tr>
+  <td><b>A</b></td>
+  <td><b>C</b></td>
+  <td><b>*</b></td>
+  <td><b>*</b></td>
+  <td><b>*</b></td>
+  <td><b>*</b></td>
+  <td><b>G</b></td>
+  <td><b>T</b></td>
+ </tr>
+ <tr>
+  <td><b>A</b></td>
+  <td><b>C</b></td>
+  <td><b>N</b></td>
+  <td><b>G</b></td>
+  <td><b>T</b></td>
+ </tr>
+</table>
+
+
+<!--#include virtual="footer.html" -->
+
+</body>
+</html>
