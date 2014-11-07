@@ -15,7 +15,7 @@
 		<jar href="picard.jar"/>
 		<jar href="samtools-all.jar"/>
 		<jar href="scri-commons.jar"/>
-		<jar href="sqlite-jdbc-3.7.2.jar"/>
+		<jar href="sqlite-jdbc-3.8.6.jar"/>
 		<jar href="tablet.jar"/>
 		<jar href="tablet-resources.jar"/>
 	</resources>

@@ -79,7 +79,7 @@
 						samtools-linux64.jar
 						samtools-macos.jar
 						samtools-windows.jar
-						sqlite-jdbc-3.7.2.jar
+						sqlite-jdbc-3.8.6.jar
 						tablet-resources.jar"/>
 				<attribute name="Implementation-Version" value="${i4j.version}"/>
 				<attribute name="Application-Name" value="Tablet"/>
