@@ -123,6 +123,7 @@ class ReadsCanvasML extends MouseInputAdapter
 	{
 		int shortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
 
+
 		// CTRL/CMD down: do canvas zooming
 		if (e.getModifiers() == shortcut)
 		{
@@ -134,7 +135,22 @@ class ReadsCanvasML extends MouseInputAdapter
 				BandAdjust.zoomOut(units);
 		}
 
-		// Otherwise, do canvas scrolling
+		// Scroll horizontally if SHIFT is held down
+		else if (e.isShiftDown())
+		{
+			CanvasController controller = aPanel.getController();
+			JScrollBar sBar = controller.getHBar();
+
+			if (sBar != null)
+			{
+				int value = sBar.getValue();
+				int units = 5 * sBar.getUnitIncrement();
+
+				sBar.setValue(value + (e.getWheelRotation() * units));
+			}
+		}
+
+		// Otherwise, do vertical scrolling if vBar on; if not, do horizontal
 		else
 		{
 			CanvasController controller = aPanel.getController();
@@ -147,11 +163,10 @@ class ReadsCanvasML extends MouseInputAdapter
 
 			if (sBar != null)
 			{
-				int notches = e.getWheelRotation();
 				int value = sBar.getValue();
 				int units = 5 * sBar.getUnitIncrement();
 
-				sBar.setValue(value + (notches * units));
+				sBar.setValue(value + (e.getWheelRotation() * units));
 			}
 		}
 	}
