@@ -54,15 +54,15 @@ public class ImportAssemblyDialog extends JDialog
 
 	private JPanel createButtons()
 	{
-		bOpen = SwingUtils.getButton(RB.getString("gui.text.open"));
+		bOpen = new JButton(RB.getString("gui.text.open"));
 		bOpen.addActionListener(this);
-		bCancel = SwingUtils.getButton(RB.getString("gui.text.cancel"));
+		bCancel = new JButton(RB.getString("gui.text.cancel"));
 		bCancel.addActionListener(this);
-		bHelp = SwingUtils.getButton(RB.getString("gui.text.help"));
+		bHelp = new JButton(RB.getString("gui.text.help"));
 		RB.setText(bHelp, "gui.text.help");
 		TabletUtils.setHelp(bHelp, "gui.dialog.ImportAssemblyDialog");
 
-		JPanel p1 = TabletUtils.getButtonPanel();
+		JPanel p1 = new DialogPanel();
 		p1.add(bOpen);
 		p1.add(bCancel);
 		p1.add(bHelp);

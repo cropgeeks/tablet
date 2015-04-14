@@ -14,6 +14,7 @@ import tablet.gui.*;
 import tablet.gui.viewer.*;
 
 import scri.commons.gui.*;
+import scri.commons.gui.matisse.*;
 
 public class JumpToDialog extends JDialog
 	implements ActionListener, DocumentListener
@@ -82,13 +83,13 @@ public class JumpToDialog extends JDialog
 
 	private JPanel createButtons()
 	{
-		bClose = SwingUtils.getButton(RB.getString("gui.text.close"));
+		bClose = new JButton(RB.getString("gui.text.close"));
 		bClose.addActionListener(this);
-		bHelp = SwingUtils.getButton(RB.getString("gui.text.help"));
+		bHelp = new JButton(RB.getString("gui.text.help"));
 		RB.setText(bHelp, "gui.text.help");
 		TabletUtils.setHelp(bHelp, "gui.dialog.JumpToDialog");
 
-		JPanel p1 = TabletUtils.getButtonPanel();
+		JPanel p1 = new DialogPanel();
 		p1.add(bClose);
 		p1.add(bHelp);
 

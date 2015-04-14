@@ -7,10 +7,11 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import scri.commons.gui.*;
-
 import tablet.gui.*;
 import tablet.gui.viewer.*;
+
+import scri.commons.gui.*;
+import scri.commons.gui.matisse.*;
 
 public class SubsetOverviewDialog extends JDialog implements ActionListener
 {
@@ -55,14 +56,14 @@ public class SubsetOverviewDialog extends JDialog implements ActionListener
 	 */
 	private JPanel createButtons()
 	{
-		bClose = SwingUtils.getButton(RB.getString("gui.text.cancel"));
+		bClose = new JButton(RB.getString("gui.text.cancel"));
 		bClose.addActionListener(this);
-		bOK = SwingUtils.getButton(RB.getString("gui.text.ok"));
+		bOK = new JButton(RB.getString("gui.text.ok"));
 		bOK.addActionListener(this);
-		bHelp = SwingUtils.getButton(RB.getString("gui.text.help"));
+		bHelp = new JButton(RB.getString("gui.text.help"));
 		bHelp.addActionListener(this);
 
-		JPanel p1 = TabletUtils.getButtonPanel();
+		JPanel p1 = new DialogPanel();
 		p1.add(bOK);
 		p1.add(bClose);
 		p1.add(bHelp);

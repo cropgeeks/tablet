@@ -17,6 +17,7 @@ import tablet.gui.*;
 import tablet.gui.viewer.*;
 
 import scri.commons.gui.*;
+import scri.commons.gui.matisse.*;
 
 public class RestrictionEnzymeDialog extends JDialog implements ActionListener
 {
@@ -75,13 +76,13 @@ public class RestrictionEnzymeDialog extends JDialog implements ActionListener
 
 	private JPanel createButtons()
 	{
-		bCancel = SwingUtils.getButton(RB.getString("gui.text.cancel"));
+		bCancel = new JButton(RB.getString("gui.text.cancel"));
 		bCancel.addActionListener(this);
 
-		bSelect = SwingUtils.getButton(RB.getString("gui.dialog.RestrictionEnzymeDialog.select"));
+		bSelect = new JButton(RB.getString("gui.dialog.RestrictionEnzymeDialog.select"));
 		bSelect.addActionListener(this);
 
-		JPanel p1 = TabletUtils.getButtonPanel();
+		JPanel p1 = new DialogPanel();
 		p1.add(bSelect);
 		p1.add(bCancel);
 

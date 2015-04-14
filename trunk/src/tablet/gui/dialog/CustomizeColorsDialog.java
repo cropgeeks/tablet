@@ -7,11 +7,12 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
-import scri.commons.gui.*;
-
 import tablet.gui.*;
 import tablet.gui.viewer.*;
 import tablet.gui.viewer.colors.*;
+
+import scri.commons.gui.*;
+import scri.commons.gui.matisse.*;
 
 public class CustomizeColorsDialog extends JDialog implements ActionListener
 {
@@ -48,14 +49,14 @@ public class CustomizeColorsDialog extends JDialog implements ActionListener
 	 */
 	private JPanel createButtons()
 	{
-		bClose = SwingUtils.getButton(RB.getString("gui.text.close"));
+		bClose = new JButton(RB.getString("gui.text.close"));
 		bClose.addActionListener(this);
-		bReset = SwingUtils.getButton(RB.getString("gui.text.default"));
+		bReset = new JButton(RB.getString("gui.text.default"));
 		bReset.addActionListener(this);
-		bHelp = SwingUtils.getButton(RB.getString("gui.text.help"));
+		bHelp = new JButton(RB.getString("gui.text.help"));
 		bHelp.addActionListener(this);
 
-		JPanel p1 = TabletUtils.getButtonPanel();
+		JPanel p1 = new DialogPanel();
 		p1.add(bClose);
 		p1.add(bReset);
 //		p1.add(bHelp);
