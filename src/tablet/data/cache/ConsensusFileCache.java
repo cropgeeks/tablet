@@ -9,7 +9,7 @@ import java.util.*;
 import tablet.data.*;
 import tablet.io.*;
 
-import scri.commons.file.*;
+import scri.commons.io.*;
 
 public class ConsensusFileCache extends TabletCache
 {
