@@ -6,7 +6,7 @@ package tablet.data.cache;
 import java.io.*;
 import java.util.concurrent.*;
 
-import scri.commons.file.*;
+import scri.commons.io.*;
 
 public abstract class TabletCache
 {

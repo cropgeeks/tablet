@@ -16,7 +16,7 @@ import tablet.gui.viewer.colors.*;
 import tablet.io.*;
 
 import scri.commons.gui.*;
-import scri.commons.file.*;
+import scri.commons.io.*;
 
 import apple.dts.samplecode.osxadapter.*;
 
