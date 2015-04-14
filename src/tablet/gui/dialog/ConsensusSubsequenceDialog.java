@@ -9,11 +9,12 @@ import java.awt.event.*;
 import java.awt.Toolkit;
 import javax.swing.*;
 
-import scri.commons.gui.*;
-
 import tablet.data.*;
 import tablet.gui.*;
 import tablet.gui.viewer.*;
+
+import scri.commons.gui.*;
+import scri.commons.gui.matisse.*;
 
 public class ConsensusSubsequenceDialog extends JDialog implements ActionListener
 {
@@ -58,24 +59,24 @@ public class ConsensusSubsequenceDialog extends JDialog implements ActionListene
 
 		int vE = contig.getVisualEnd() + 1;
 		int end = contig.getConsensus().length() > vE ? vE : contig.getConsensus().length();
-		
+
 		controls.spinnerStartBase.setModel(new SpinnerNumberModel(start, start, end, 1));
 		controls.spinnerEndBase.setModel(new SpinnerNumberModel(end, start, end, 1));
 	}
 
 	private JPanel createButtons()
 	{
-		bCancel = SwingUtils.getButton(RB.getString("gui.text.cancel"));
+		bCancel = new JButton(RB.getString("gui.text.cancel"));
 		bCancel.addActionListener(this);
 
-		bCopy = SwingUtils.getButton(RB.getString("gui.dialog.ConsensusSubsequenceDialog"));
+		bCopy = new JButton(RB.getString("gui.dialog.ConsensusSubsequenceDialog"));
 		bCopy.addActionListener(this);
 
-		bHelp = SwingUtils.getButton(RB.getString("gui.text.help"));
+		bHelp = new JButton(RB.getString("gui.text.help"));
 		RB.setText(bHelp, "gui.text.help");
 		TabletUtils.setHelp(bHelp, "gui.dialog.ConsensusSubsequenceDialog");
-		
-		JPanel p1 = TabletUtils.getButtonPanel();
+
+		JPanel p1 = new DialogPanel();
 		p1.add(bCopy);
 		p1.add(bCancel);
 		p1.add(bHelp);

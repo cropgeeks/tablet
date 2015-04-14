@@ -9,10 +9,11 @@ import java.net.URL;
 import java.util.*;
 import javax.swing.*;
 
-import scri.commons.gui.*;
-
 import tablet.gui.*;
 import tablet.io.*;
+
+import scri.commons.gui.*;
+import scri.commons.gui.matisse.*;
 
 public class ExampleDatasetDialog extends JDialog implements ActionListener
 {
@@ -64,12 +65,12 @@ public class ExampleDatasetDialog extends JDialog implements ActionListener
 	 */
 	private JPanel createButtons()
 	{
-		bClose = SwingUtils.getButton(RB.getString("gui.text.cancel"));
+		bClose = new JButton(RB.getString("gui.text.cancel"));
 		bClose.addActionListener(this);
-		bLoad = SwingUtils.getButton(RB.getString("gui.text.open"));
+		bLoad = new JButton(RB.getString("gui.text.open"));
 		bLoad.addActionListener(this);
 
-		JPanel p1 = TabletUtils.getButtonPanel();
+		JPanel p1 = new DialogPanel();
 		p1.add(bLoad);
 		p1.add(bClose);
 

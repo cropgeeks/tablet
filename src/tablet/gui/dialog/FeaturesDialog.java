@@ -10,6 +10,7 @@ import javax.swing.*;
 import tablet.gui.*;
 
 import scri.commons.gui.*;
+import scri.commons.gui.matisse.*;
 
 public class FeaturesDialog extends JDialog implements ActionListener
 {
@@ -44,15 +45,15 @@ public class FeaturesDialog extends JDialog implements ActionListener
 
 	private JPanel createButtons()
 	{
-		bOK = SwingUtils.getButton(RB.getString("gui.text.ok"));
+		bOK = new JButton(RB.getString("gui.text.ok"));
 		bOK.addActionListener(this);
-		bCancel = SwingUtils.getButton(RB.getString("gui.text.cancel"));
+		bCancel = new JButton(RB.getString("gui.text.cancel"));
 		bCancel.addActionListener(this);
-		bHelp = SwingUtils.getButton(RB.getString("gui.text.help"));
+		bHelp = new JButton(RB.getString("gui.text.help"));
 		RB.setText(bHelp, "gui.text.help");
 		TabletUtils.setHelp(bHelp, "importing-features");
 
-		JPanel p1 = TabletUtils.getButtonPanel();
+		JPanel p1 = new DialogPanel();
 		p1.add(bOK);
 		p1.add(bCancel);
 		p1.add(bHelp);

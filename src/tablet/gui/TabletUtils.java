@@ -26,17 +26,6 @@ public class TabletUtils
 	public static Color red1 = new Color(169, 46, 34);
 	public static Color red2 = new Color(255, 170, 170);
 
-	public static JPanel getButtonPanel()
-	{
-		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
-
-		p1.setBorder(BorderFactory.createCompoundBorder(
-			BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(219, 219, 219)),
-			BorderFactory.createEmptyBorder(10, 0, 10, 5)));
-
-		return p1;
-	}
-
 	/**
 	 * Registers a button to display Tablet help on the specified topic. Will
 	 * make both the button's actionListener and a keypress of F1 take Tablet
