@@ -12,6 +12,7 @@ import tablet.gui.viewer.colors.*;
 import tablet.io.*;
 
 import scri.commons.gui.*;
+import scri.commons.io.*;
 
 public class Prefs extends XMLPreferences
 {
@@ -24,7 +25,7 @@ public class Prefs extends XMLPreferences
 
 	// The local working directory for disk caching
 	public static String cacheFolder =
-		SystemUtils.getTempUserDirectory("scri-tablet").getPath();
+		FileUtils.getTempUserDirectory("scri-tablet").getPath();
 
 	// When to check for updates
 	public static int guiUpdateSchedule = Install4j.STARTUP;
