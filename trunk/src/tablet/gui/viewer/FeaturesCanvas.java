@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.geom.*;
 import static java.awt.RenderingHints.*;
 import java.util.*;
+import java.util.stream.*;
 
 import tablet.analysis.*;
 import tablet.data.*;
@@ -129,111 +130,25 @@ public class FeaturesCanvas extends TrackingCanvas
 				int p1 = f.getVisualPS();
 				int p2 = f.getVisualPE();
 
-				// Paint a SNP as a triangle, pointing down at the position
-				if (f.getGFFType().toUpperCase().equals("SNP"))
+				String featureType = f.getGFFType().toUpperCase();
+
+				switch (featureType)
 				{
-					int start = rCanvas.getFirstRenderedPixel(p1);
-					int w = rCanvas.getFinalRenderedPixel(p2) - rCanvas.getFirstRenderedPixel(p1);
+					case Feature.SNP:
+						drawSnp(g, ntW, p1, p2);
+						break;
+					case Feature.CIGAR_I:
+						drawCigarI(g, ntW, p1, p2);
+						break;
+					case Feature.CIGAR_LEFT_CLIP:
+						drawCigarLeftClip(g, ntW, p1, p2);
+						break;
+					case Feature.CIGAR_RIGHT_CLIP:
+						drawCigarRightClip(g, ntW, p1, p2);
+						break;
 
-					if (ntW < 1)
-						start = rCanvas.getFinalRenderedPixel(p1);
-
-					if (ntW <= 1)
-						w = 1;
-
-					g.translate(start, 0);
-
-					Path2D.Double path = new Path2D.Double();
-					path.moveTo(0, H/4);
-					path.lineTo(w, H/4);
-					path.lineTo(w/2, H-H/4);
-					path.closePath();
-
-					g.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
-					g.setPaint(snpPaint);
-					g.fill(path);
-					g.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_OFF);
-
-					g.translate(-start, 0);
-				}
-
-				// Paint a cigar_insertion feature as an "I" bar
-				else if (f.getGFFType().equals("CIGAR-I"))
-				{
-					g.setPaint(cigarPaint);
-					int start = rCanvas.getFirstRenderedPixel(p1);
-					int end = rCanvas.getFinalRenderedPixel(p2);
-					int middle = start + ((end - start) / 2);
-					int centWidth = 2;
-
-					if (ntW < 1)
-					{
-						start = rCanvas.getFinalRenderedPixel(p1);
-						middle = start;
-						centWidth = 1;
-					}
-
-					int above = H/4 + 2;
-					int below = H-4;
-
-					// Top horizontal bar
-					g.drawLine(start, above, end, above);
-					// Vertical bar
-					g.fillRect(middle, H/4+2, centWidth, below-above);
-					// Bottom horizontal bar
-					g.drawLine(start, below, end, below);
-				}
-
-				else if (EnzymeFeature.getEnzymes().contains(f.getGFFType()))
-				{
-					EnzymeFeature enzyme = (EnzymeFeature)f;
-					int cutPoint = p1+enzyme.getCutPoint();
-
-					int cPoint = rCanvas.getFirstRenderedPixel(cutPoint);
-
-					int start = rCanvas.getFirstRenderedPixel(p1);
-					int end = rCanvas.getFinalRenderedPixel(p2);
-
-					if (ntW < 1)
-					{
-						cPoint = rCanvas.getFinalRenderedPixel(cutPoint);
-						start = rCanvas.getFinalRenderedPixel(p1);
-					}
-
-					g.setPaint(enzymePaint);
-					g.fillRect(start, H/4+5, end-start, H/4-1);
-					//g.drawRect(start, H/4+5, end, H/4-1);
-
-					// Draw line over last pixel in previous base and first pixel
-					// in next base
-					if (enzyme.getCutPoint() != -1)
-					{
-						g.setStroke(new BasicStroke(2));
-						if (ntW < 1)
-							g.setStroke(new BasicStroke(1));
-						g.drawLine(cPoint, H/4+2, cPoint, H-3);
-						g.setStroke(solid);
-					}
-				}
-
-				// All other features are rendered as rectangles from p1 to p2
-				else
-				{
-					// Full color
-					Color cF = Feature.colors.get(f.getGFFType());
-					// Alpha version
-					Color cA = new Color(cF.getRed(), cF.getGreen(), cF.getBlue(), 50);
-
-					int start = rCanvas.getFirstRenderedPixel(p1);
-					int end = rCanvas.getFinalRenderedPixel(p2);
-
-					if (ntW < 1)
-						start = rCanvas.getFinalRenderedPixel(p1);
-
-					g.setPaint(cA);
-					g.fillRect(start, H/4+2, end-start, H/2);
-					g.setPaint(cF);
-					g.drawRect(start, H/4+2, end-start, H/2);
+					default:
+						drawGenericFeature(g, ntW, f, p1, p2);
 				}
 			}
 
@@ -247,16 +162,167 @@ public class FeaturesCanvas extends TrackingCanvas
 //		System.out.println("FeaturesCanvas: " + (e-s) + "ms");
 	}
 
+	private void drawSnp(Graphics2D g, float ntW, int p1, int p2)
+	{
+		int start = rCanvas.getFirstRenderedPixel(p1);
+		int w = rCanvas.getFinalRenderedPixel(p2) - rCanvas.getFirstRenderedPixel(p1);
+
+		if (ntW < 1)
+			start = rCanvas.getFinalRenderedPixel(p1);
+
+		if (ntW <= 1)
+			w = 1;
+
+		g.translate(start, 0);
+
+		Path2D.Double path = new Path2D.Double();
+		path.moveTo(0, H/4);
+		path.lineTo(w, H/4);
+		path.lineTo(w/2, H-H/4);
+		path.closePath();
+
+		g.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_ON);
+		g.setPaint(snpPaint);
+		g.fill(path);
+		g.setRenderingHint(KEY_ANTIALIASING, VALUE_ANTIALIAS_OFF);
+
+		g.translate(-start, 0);
+	}
+
+	private void drawCigarI(Graphics2D g, float ntW, int p1, int p2)
+	{
+		g.setPaint(cigarPaint);
+		int start = rCanvas.getFirstRenderedPixel(p1);
+		int end = rCanvas.getFinalRenderedPixel(p2);
+		int middle = start + ((end - start) / 2);
+		int centWidth = 2;
+
+		if (ntW < 1)
+		{
+			start = rCanvas.getFinalRenderedPixel(p1);
+			middle = start;
+			centWidth = 1;
+		}
+
+		int above = H/4 + 2;
+		int below = H-4;
+
+		// Top horizontal bar
+		g.drawLine(start, above, end, above);
+		// Vertical bar
+		g.fillRect(middle, H/4+2, centWidth, below-above);
+		// Bottom horizontal bar
+		g.drawLine(start, below, end, below);
+	}
+
+	private void drawCigarLeftClip(Graphics2D g, float ntW, int p1, int p2)
+	{
+		g.setPaint(cigarPaint);
+
+		int start = rCanvas.getFirstRenderedPixel(p1);
+		int end = rCanvas.getFinalRenderedPixel(p2);
+		int centWidth = 2;
+
+		if (ntW < 1)
+		{
+			start = rCanvas.getFinalRenderedPixel(p1);
+			centWidth = 1;
+		}
+
+		int above = H/4 + 2;
+		int below = H-4;
+
+		// Top horizontal bar
+		g.drawLine(start, above, end, above);
+		// Vertical bar
+		g.fillRect(start, H/4+2, centWidth, below-above);
+		// Bottom horizontal bar
+		g.drawLine(start, below, end, below);
+	}
+
+	private void drawCigarRightClip(Graphics2D g, float ntW, int p1, int p2)
+	{
+		g.setPaint(cigarPaint);
+
+		int start = rCanvas.getFirstRenderedPixel(p1);
+		int end = rCanvas.getFinalRenderedPixel(p2);
+		int centWidth = 2;
+
+		if (ntW < 1)
+		{
+			start = rCanvas.getFinalRenderedPixel(p1);
+			centWidth = 1;
+		}
+
+		int above = H/4 + 2;
+		int below = H-4;
+
+		// Top horizontal bar
+		g.drawLine(start, above, end, above);
+		// Vertical bar
+		g.fillRect(end-1, H/4+2, centWidth, below-above);
+		// Bottom horizontal bar
+		g.drawLine(start, below, end, below);
+	}
+
+	private void drawEnzymeFeature(Graphics2D g, float ntW, EnzymeFeature f, int p1, int p2)
+	{
+		EnzymeFeature enzyme = f;
+		int cutPoint = p1+enzyme.getCutPoint();
+
+		int cPoint = rCanvas.getFirstRenderedPixel(cutPoint);
+
+		int start = rCanvas.getFirstRenderedPixel(p1);
+		int end = rCanvas.getFinalRenderedPixel(p2);
+
+		if (ntW < 1)
+		{
+			cPoint = rCanvas.getFinalRenderedPixel(cutPoint);
+			start = rCanvas.getFinalRenderedPixel(p1);
+		}
+
+		g.setPaint(enzymePaint);
+		g.fillRect(start, H/4+5, end-start, H/4-1);
+		//g.drawRect(start, H/4+5, end, H/4-1);
+
+		// Draw line over last pixel in previous base and first pixel
+		// in next base
+		if (enzyme.getCutPoint() != -1)
+		{
+			g.setStroke(new BasicStroke(2));
+			if (ntW < 1)
+				g.setStroke(new BasicStroke(1));
+			g.drawLine(cPoint, H/4+2, cPoint, H-3);
+			g.setStroke(solid);
+		}
+	}
+
+	private void drawGenericFeature(Graphics2D g, float ntW, Feature f, int p1, int p2)
+	{
+		// Full color
+		Color cF = Feature.colors.get(f.getGFFType());
+		// Alpha version
+		Color cA = new Color(cF.getRed(), cF.getGreen(), cF.getBlue(), 50);
+
+		int start = rCanvas.getFirstRenderedPixel(p1);
+		int end = rCanvas.getFinalRenderedPixel(p2);
+
+		if (ntW < 1)
+			start = rCanvas.getFinalRenderedPixel(p1);
+
+		g.setPaint(cA);
+		g.fillRect(start, H/4+2, end-start, H/2);
+		g.setPaint(cF);
+		g.drawRect(start, H/4+2, end-start, H/2);
+	}
+
 	// Used by the mouse handling code in FeaturesCanvasML. Returns the features
 	// on a given track, at a given position.
 	ArrayList<Feature> getFeatures(int track, int pos)
 	{
-		ArrayList<Feature> results = new ArrayList<>();
-
-		for (Feature f : featuresOnScreen.get(track))
-			if (f.getDataPS() <= pos && f.getDataPE() >= pos)
-				results.add(f);
-
-		return results;
+		return featuresOnScreen.get(track)
+				.stream()
+				.filter(f -> f.getDataPS() <= pos && f.getDataPE() >= pos)
+				.collect(Collectors.toCollection(ArrayList::new));
 	}
 }

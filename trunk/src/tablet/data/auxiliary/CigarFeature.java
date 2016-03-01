@@ -9,9 +9,9 @@ public class CigarFeature extends Feature
 {
 	private ArrayList<CigarEvent> events;
 
-	public CigarFeature(String gffType, String name, int p1, int p2)
+	public CigarFeature(String gffType, int p1, int p2)
 	{
-		super(gffType, name, p1, p2);
+		super(gffType, "", p1, p2);
 		events = new ArrayList<CigarEvent>();
 	}
 
@@ -20,7 +20,7 @@ public class CigarFeature extends Feature
 		events.add(event);
 	}
 
-	public int getCount()
+	public int count()
 	{
 		return events.size();
 	}

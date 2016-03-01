@@ -429,19 +429,21 @@ public class AssemblyPanel extends JPanel
 
 	public void toggleCigarOverlayer()
 	{
-		// Start fade out animation for overlay
+		// Start fade in animation for overlay
 		if(Prefs.visCigarOverlayVisible)
 		{
-			cigarIOverlayer = new CigarOverlayer(this, false);
+			cigarIOverlayer = new CigarOverlayer(this);
 			cigarIOverlayer.start();
+			readsCanvas.overlays.addFirst(cigarIOverlayer);
+			readsCanvas.repaint();
 		}
-		// Start fade in animation for overlay
+		// Start fade out animation for overlay
 		else
 		{
 			if (cigarIOverlayer != null)
 			{
-				cigarIOverlayer = new CigarOverlayer(this, true);
-				cigarIOverlayer.start();
+				readsCanvas.overlays.remove(cigarIOverlayer);
+				readsCanvas.repaint();
 			}
 		}
 	}
@@ -459,9 +461,6 @@ public class AssemblyPanel extends JPanel
 
 		return cigarIHighlighter;
 	}
-
-	public void setCigarIHighlighter(CigarIHighlighter cigarIHighlighter)
-		{ this.cigarIHighlighter = cigarIHighlighter; }
 
 	public ReadsCanvas getReadsCanvas()
 	{

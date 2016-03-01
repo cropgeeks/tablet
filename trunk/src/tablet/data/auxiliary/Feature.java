@@ -7,6 +7,8 @@ import java.awt.*;
 import java.net.*;
 import java.util.*;
 
+import tablet.gui.*;
+
 /**
  * A feature is a region of interest from point pS to pE (inclusive) in
  * consensus space (including offset positions). However, a feature can also be
@@ -19,6 +21,13 @@ import java.util.*;
  */
 public class Feature implements Comparable<Feature>
 {
+	public static final String SNP = "SNP";
+	public static final String CIGAR_I = "CIGAR-I";
+	public static final String CIGAR_D = "CIGAR-D";
+	public static final String CIGAR_SKIPPED = "CIGAR-N";
+	public static final String CIGAR_LEFT_CLIP = "CIGAR-LEFT-CLIP";
+	public static final String CIGAR_RIGHT_CLIP = "CIGAR-RIGHT-CLIP";
+
 	// True if features are to use padded coordinates, false if unpadded
 	public static boolean ISPADDED = true;
 
@@ -48,13 +57,6 @@ public class Feature implements Comparable<Feature>
 	protected int u2pE;
 	protected boolean u2pEDefined;
 
-
-	// Used by FeatureTrack to quickly make dummy features to aid in searching
-	Feature(int pS, int pE)
-	{
-		this.pS = pS;
-		this.pE = pE;
-	}
 
 	public Feature(String gffType, String name, int pS, int pE)
 	{
@@ -105,7 +107,7 @@ public class Feature implements Comparable<Feature>
 		if (types.get(gffType) == null)
 		{
 			// Auto-add the first three types so that they will be visible
-			boolean visible = types.size() < 3 || gffType.equals("CIGAR-I");
+			boolean visible = types.size() < 3 || autoAddCigar();
 
 			types.put(gffType, gffType);
 			order.add(new VisibleFeature(gffType, visible));
@@ -256,5 +258,12 @@ public class Feature implements Comparable<Feature>
 
 			return colors.get(index % colors.size());
 		}
+	}
+
+	// Checks to see whether or not we should automatically create feature tracks for CIGAR features in BAM / SAM files
+	private boolean autoAddCigar()
+	{
+		return Prefs.visAutoCreateCigarTracks && gffType.equals(CIGAR_I) || gffType.equals(CIGAR_D)
+			|| gffType.equals(CIGAR_LEFT_CLIP) || gffType.equals(CIGAR_RIGHT_CLIP);
 	}
 }

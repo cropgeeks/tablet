@@ -23,6 +23,7 @@ class SamFileReader extends TrackableReader
 
 	private ReferenceFileReader refReader;
 	private CigarParser cigarParser;
+	private CigarFeatureParser cigarFeatureParser;
 
 	private HashMap<String, Contig> contigHash = new HashMap<>();
 
@@ -149,15 +150,16 @@ class SamFileReader extends TrackableReader
 				// Unsorted check...
 				if (contig.getName().equals(currentContig) == false)
 				{
-					if (cigarParser != null)
-						cigarParser.processCigarFeatures();
+					if (cigarFeatureParser != null)
+						cigarFeatureParser.processCigarFeatures();
 
 					currentContig = contig.getName();
 
 					if (contig.getReads().size() > 0)
 						isUnsorted = true;
 
-					cigarParser = new CigarParser(contig, assembly);
+					cigarParser = new CigarParser(contig);
+					cigarFeatureParser = new CigarFeatureParser(contig);
 				}
 
 				if (isDummyFeature(data, flags) == false)
@@ -181,6 +183,8 @@ class SamFileReader extends TrackableReader
 						read = new Read(readID, pos);
 
 					contig.getReads().add(read);
+
+					cigarFeatureParser.parseFeatures(data, pos, cigar, read);
 
 					String bases = cigarParser.parse(data, pos, cigar, read);
 					StringBuilder fullRead = new StringBuilder(bases);
@@ -208,7 +212,7 @@ class SamFileReader extends TrackableReader
 		// If this is the last (or there is only one) contig CIGAR features
 		// won't have been processed yet.
 		if (cigarParser != null)
-			cigarParser.processCigarFeatures();
+			cigarFeatureParser.processCigarFeatures();
 
 		in.close();
 
@@ -412,7 +416,7 @@ class SamFileReader extends TrackableReader
 			if (ct != null)
 			{
 				String[] tagElems = ct.split(";");
-				Feature feature = new Feature(tagElems[1], tagElems[1], pos, pos + cigarParser.calculateLength(cigar));
+				Feature feature = new Feature(tagElems[1], tagElems[1], pos, pos + new Cigar(cigar).calculateLength());
 				feature.setTags(Arrays.copyOfRange(tagElems, 2, tagElems.length));
 				contig.addFeature(feature);
 				feature.verifyType();
