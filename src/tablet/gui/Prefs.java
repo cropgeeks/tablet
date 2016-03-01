@@ -141,6 +141,8 @@ public class Prefs extends XMLPreferences
 
 	public static int visCigarInsertMinimum = 10;
 
+	public static boolean visAutoCreateCigarTracks = true;
+
 	// Should the CoveragePrinter class write values for consensus bases that
 	// are padded?
 	public static boolean printPads = true;

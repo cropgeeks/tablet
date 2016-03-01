@@ -171,7 +171,26 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 		int p1 = feature.getDataPS();
 		int p2 = feature.getDataPE();
 
-		if (feature instanceof CigarFeature == false)
+		if(feature instanceof CigarFeature)
+		{
+			int count = ((CigarFeature)feature).count();
+
+			if (Prefs.guiFeaturesArePadded)
+			{
+				return RB.format("gui.FeaturesPanel.tooltip.padded.cigarFeature",
+					feature.getGFFType(),
+					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
+					DisplayData.getUnpadded(p1), DisplayData.getUnpadded(p2), count);
+			}
+			else
+			{
+				return RB.format("gui.FeaturesPanel.tooltip.unpadded.cigarFeature",
+					feature.getGFFType(),
+					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
+					DisplayData.getPadded(p1), DisplayData.getPadded(p2), count);
+			}
+		}
+		else
 		{
 			if (Prefs.guiFeaturesArePadded)
 			{
@@ -190,27 +209,6 @@ public class FeaturesPanel extends JPanel implements ListSelectionListener
 					feature.getTagsAsHTMLString());
 			}
 		}
-		else if(feature instanceof CigarFeature)
-		{
-			int count = ((CigarFeature)feature).getCount();
-
-			if (Prefs.guiFeaturesArePadded)
-			{
-				return RB.format("gui.FeaturesPanel.tooltip.padded.cigarFeature",
-					feature.getGFFType(),
-					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
-					DisplayData.getUnpadded(p1), DisplayData.getUnpadded(p2), count);
-			}
-			else
-			{
-				return RB.format("gui.FeaturesPanel.tooltip.unpadded.cigarFeature",
-					feature.getGFFType(),
-					TabletUtils.nf.format(p1+1), TabletUtils.nf.format(p2+1),
-					DisplayData.getPadded(p1), DisplayData.getPadded(p2), count);
-			}
-		}
-
-		return "";
 	}
 
 	public void editFeatures()

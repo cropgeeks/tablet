@@ -182,7 +182,7 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 
 		if (f instanceof CigarFeature)
 		{
-			int count = ((CigarFeature)f).getCount();
+			int count = ((CigarFeature)f).count();
 
 			if (f instanceof CigarFeature)
 				str.append(RB.format("gui.viewer.FeaturesCanvasML.copyFeature.insertCount", count));
@@ -246,7 +246,7 @@ class FeaturesCanvasML extends MouseInputAdapter implements ActionListener
 
 	private void getCigarTooltip(CigarFeature f, int pS, int pE)
 	{
-		int count = f.getCount();
+		int count = f.count();
 		if (Prefs.guiFeaturesArePadded)
 		{
 			fCanvas.setToolTipText(RB.format("gui.viewer.FeaturesCanvasML.tooltip.padded.cigarFeature",

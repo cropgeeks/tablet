@@ -24,7 +24,7 @@ public class CigarIHighlighter extends AlphaOverlay
 
 	public void render(Graphics2D g)
 	{
-		if(insertBase == null)
+		if(insertBase == null || cigarFeature == null)
 			return;
 
 		g.setPaint(new Color(0, 0, 0, alphaEffect));
@@ -36,9 +36,6 @@ public class CigarIHighlighter extends AlphaOverlay
 		int readH = rCanvas.readH;
 		int pX2Max = rCanvas.pX2Max;
 
-		if (cigarFeature == null)
-			return;
-
 		for (int row = yS; row <= yE; row++)
 		{
 			Read read = rCanvas.reads.getReadAt(row, insertBase);
@@ -46,16 +43,15 @@ public class CigarIHighlighter extends AlphaOverlay
 			if (read == null)
 				g.fillRect(pX1, row*ntH, pX2Max-pX1+1, ntH);
 
-			if (read != null)
+			else
 			{
 				boolean requiresPaint = true;
 				for(CigarEvent insert : cigarFeature.getEvents())
 				{
 					if(insert.getRead().equals(read))
 					{
-						int x1 = pX1;
-						int w1 = rCanvas.getFirstRenderedPixel(read.s()) - x1;
-						g.fillRect(x1, row * ntH, w1, readH);
+						int w1 = rCanvas.getFirstRenderedPixel(read.s()) - pX1;
+						g.fillRect(pX1, row * ntH, w1, readH);
 
 						int x2 = rCanvas.getFirstRenderedPixel(read.e()+1);
 						int w2 = pX2Max -x2;
@@ -68,7 +64,7 @@ public class CigarIHighlighter extends AlphaOverlay
 					}
 				}
 
-				if(requiresPaint == true)
+				if(requiresPaint)
 					g.fillRect(pX1, row*ntH, pX2Max-pX1+1, ntH);
 			}
 		}

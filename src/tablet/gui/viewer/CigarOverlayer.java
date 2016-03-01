@@ -13,23 +13,18 @@ import tablet.gui.Prefs;
 
 public class CigarOverlayer extends AlphaOverlay
 {
-	boolean hidden;
-
 	private Color cigarColor;
 	private Color vibrant;
 
-	public CigarOverlayer(AssemblyPanel aPanel, boolean hidden)
+	public CigarOverlayer(AssemblyPanel aPanel)
 	{
 		super(aPanel);
-
-		this.hidden = hidden;
 
 		//if we're already animating cancel that animation and replace it with
 		//this new one
 		if (previous != null)
 		{
 			previous.interrupt();
-			rCanvas.overlays.remove(previous);
 		}
 		previous = this;
 
@@ -51,12 +46,20 @@ public class CigarOverlayer extends AlphaOverlay
 		// Set the outline width based on the zoom level
 		g.setStroke(calculateStroke(Prefs.visReadsZoomLevel, oldStroke));
 
-		ArrayList<Feature> cigarI = getTrackByName(vContig, "CIGAR-I", xS, xE);
+		ArrayList<Feature> cigarI = getTrackByName(vContig, Feature.CIGAR_I, xS, xE);
 		renderCigar(cigarI, g);
 
-		ArrayList<Feature> cigarD = getTrackByName(vContig, "CIGAR-D", xS, xE);
+		ArrayList<Feature> cigarD = getTrackByName(vContig, Feature.CIGAR_D, xS, xE);
 		g.setPaint(Color.BLUE);
 		renderCigar(cigarD, g);
+
+		ArrayList<Feature> cigarLeftClip = getTrackByName(vContig, Feature.CIGAR_LEFT_CLIP, xS, xE);
+		g.setPaint(currentColor(Prefs.visReadsZoomLevel));
+		renderCigarClip(cigarLeftClip, Feature.CIGAR_LEFT_CLIP, g);
+
+		ArrayList<Feature> cigarRightClip = getTrackByName(vContig, Feature.CIGAR_RIGHT_CLIP, xS, xE);
+		g.setPaint(currentColor(Prefs.visReadsZoomLevel));
+		renderCigarClip(cigarRightClip, Feature.CIGAR_RIGHT_CLIP, g);
 
 		g.setStroke(oldStroke);
 	}
@@ -92,9 +95,61 @@ public class CigarOverlayer extends AlphaOverlay
 				Read read = rCanvas.reads.getReadAt(row, base);
 				Read r2 = rCanvas.reads.getReadAt(row, base+1);
 
-				for(CigarEvent event : ((CigarFeature)feature).getEvents())
-					if(event.getRead().equals(read) || event.getRead().equals(r2))
-						g.drawRect(start, row*rCanvas.ntH, length, rCanvas.readH-1);
+//				((CigarFeature)feature).getEvents().stream()
+//					.filter(e -> e.getRead().equals(read) || e.getRead().equals(r2))
+//					.forEach(e -> g.drawRect(start, row*rCanvas.ntH, length, rCanvas.readH-1));
+
+				renderCigarForFeature((CigarFeature)feature, read, r2, g, start, row*rCanvas.ntH, length, rCanvas.readH-1);
+			}
+		}
+	}
+
+	private void renderCigarForFeature(CigarFeature feature, Read r1, Read r2, Graphics2D g, int x, int y, int width, int height)
+	{
+		feature.getEvents().stream()
+			.filter(e -> e.getRead().equals(r1) || e.getRead().equals(r2))
+			.forEach(e -> g.drawRect(x, y, width, height));
+	}
+
+	private void renderCigarClip(ArrayList<Feature> features, String eventName, Graphics2D g)
+	{
+		for (Feature feature : features)
+		{
+			int base = feature.getVisualPS();
+
+			int start = rCanvas.getFirstRenderedPixel(base);
+			int end = rCanvas.getFinalRenderedPixel(feature.getVisualPE());
+			int barWidth = 2;
+
+			if (rCanvas.ntW < 1)
+			{
+				start = rCanvas.getFinalRenderedPixel(start);
+				barWidth = 1;
+			}
+
+			int yS = rCanvas.pY1 / rCanvas.ntH;
+			int yE = rCanvas.pY2 / rCanvas.ntH;
+
+			for (int row = yS; row <= yE; row++)
+			{
+				Read read = rCanvas.reads.getReadAt(row, base);
+				Read r2 = rCanvas.reads.getReadAt(row, base+1);
+
+				for (CigarEvent event : ((CigarFeature)feature).getEvents())
+				{
+					if (event.getRead().equals(read) || event.getRead().equals(r2))
+					{
+						// Top horizontal bar
+						g.drawLine(start+1, row * rCanvas.ntH, end, row * rCanvas.ntH);
+						// Vertical bar
+						if (eventName.equals(Feature.CIGAR_LEFT_CLIP))
+							g.fillRect(start, row * rCanvas.ntH, barWidth, rCanvas.readH - 1);
+						else if (eventName.equals(Feature.CIGAR_RIGHT_CLIP))
+							g.fillRect(end, row * rCanvas.ntH, barWidth, rCanvas.readH - 1);
+						// Bottom horizontal bar
+						g.drawLine(start+1, row * rCanvas.ntH + rCanvas.readH - 1, end, row * rCanvas.ntH + rCanvas.readH - 1);
+					}
+				}
 			}
 		}
 	}
@@ -102,15 +157,11 @@ public class CigarOverlayer extends AlphaOverlay
 	@Override
 	public void run()
 	{
-		rCanvas.overlays.addFirst(this);
 
 		for (int i = 1; i <= 40 && isOK; i++)
 		{
 			// 40 * 5 = 200 (the desired ending alpha)
-			if(!hidden)
-				alphaEffect = (0 + (i * 5));
-			else
-				alphaEffect = (200 - (i * 5));
+			alphaEffect = (0 + (i * 5));
 
 			updateAlphas();
 
@@ -119,12 +170,6 @@ public class CigarOverlayer extends AlphaOverlay
 			// 25 * 40 = 1000 (1 second)
 			try { Thread.sleep(25); }
 			catch (InterruptedException e) { isOK = false; }
-		}
-
-		if(hidden)
-		{
-			rCanvas.overlays.remove(this);
-			rCanvas.repaint();
 		}
 
 		defaultColors();

@@ -31,6 +31,7 @@ public class BamFileHandler
 	private boolean refLengthsOK = true;
 
 	private CigarParser parser;
+	private CigarFeatureParser featureParser;
 
 	// Stores a hash of @RG (read group) IDs and their associated information
 	private HashMap<String, Short> rgHash = new HashMap<>();
@@ -86,7 +87,8 @@ public class BamFileHandler
 		readCache.openForWriting();
 		nameCache.openForWriting();
 
-		parser = new CigarParser(contig, assembly);
+		parser = new CigarParser(contig);
+		featureParser = new CigarFeatureParser(contig);
 
 		contig.clearContigData(true);
 
@@ -99,7 +101,11 @@ public class BamFileHandler
 			if (!record.getReadUnmappedFlag())
 			{
 				if (isDummyReadFeature(record) == false)
-					createRead(contig, record);
+				{
+					Read read = createRead(contig, record);
+
+					featureParser.parseFeatures(record.getReadString(), read.s(), record.getCigarString(), read);
+				}
 				else
 					createDummyFeature(record, contig);
 			}
@@ -109,7 +115,7 @@ public class BamFileHandler
 
 		if (okToRun)
 		{
-			parser.processCigarFeatures();
+			featureParser.processCigarFeatures();
 			Collections.sort(contig.getFeatures());
 		}
 
@@ -137,7 +143,7 @@ public class BamFileHandler
 			nameCache.indexNames();
 	}
 
-	private void createRead(Contig contig, final SAMRecord record) throws Exception
+	private Read createRead(Contig contig, final SAMRecord record) throws Exception
 	{
 		int readStartPos = record.getAlignmentStart()-1;
 
@@ -192,6 +198,8 @@ public class BamFileHandler
 
 		readCache.setReadMetaData(rmd);
 		readID++;
+
+		return read;
 	}
 
 	private void createDummyFeature(SAMRecord record, Contig contig)
@@ -202,7 +210,7 @@ public class BamFileHandler
 			String[] tagElems = ct.split(";");
 
 			int pos = record.getAlignmentStart()-1;
-			int length = parser.calculateLength(record.getCigarString());
+			int length = new Cigar(record.getCigarString()).calculateLength();
 
 			Feature feature = new Feature(tagElems[1], tagElems[1], pos, pos + length);
 			feature.setTags(Arrays.copyOfRange(tagElems, 2, tagElems.length));

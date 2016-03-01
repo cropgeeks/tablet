@@ -32,7 +32,7 @@
 	</target>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${classes}" source="7" target="7" debug="true" includeantruntime="false">
+		<javac srcdir="${src}" destdir="${classes}" source="8" target="8" debug="true" includeantruntime="false">
 			<compilerarg value="-Xlint:-options"/>
 			<classpath refid="project.classpath"/>
 			<exclude name="**/package-info.java"/>

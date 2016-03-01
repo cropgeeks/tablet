@@ -234,28 +234,25 @@ class ReadsCanvasInfoPane
 
 	void getInsertedBases(Read read, BoxData box)
 	{
-		// TODO
 		if(aPanel.getVisualContig().getTrackCount() <= 0)
 			return;
 
 		ArrayList<Feature> features = aPanel.getVisualContig().getTrack(0).getFeatures(read.s(), read.e());
-		for (Feature feature : features)
-		{
-			if (!(feature.getGFFType().equals("CIGAR-I")))
-				continue;
 
-			CigarFeature cigarFeature = (CigarFeature) feature;
-			for (CigarEvent insert : cigarFeature.getEvents())
+		features.stream()
+			.filter(f -> f instanceof CigarFeature)
+			.map(f -> (CigarFeature) f)
+			.flatMap(f -> f.getEvents().stream())
+			.filter(e -> e instanceof CigarInsertEvent)
+			.map(e -> (CigarInsertEvent) e)
+			.filter(e -> e.getRead().equals(read))
+			.forEach(e ->
 			{
-				if (insert.getRead().equals(read))
-				{
-					if (box.insertedBases == null)
-						box.insertedBases = ((CigarInsertEvent)insert).getInsertedBases();
-					else
-						box.insertedBases += " - " + ((CigarInsertEvent)insert).getInsertedBases();
-				}
-			}
-		}
+				if (box.insertedBases == null)
+					box.insertedBases = e.getInsertedBases();
+				else
+					box.insertedBases += " - " + e.getInsertedBases();
+			});
 
 		if (box.insertedBases != null)
 		{
