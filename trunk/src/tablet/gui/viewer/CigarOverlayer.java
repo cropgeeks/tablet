@@ -95,10 +95,6 @@ public class CigarOverlayer extends AlphaOverlay
 				Read read = rCanvas.reads.getReadAt(row, base);
 				Read r2 = rCanvas.reads.getReadAt(row, base+1);
 
-//				((CigarFeature)feature).getEvents().stream()
-//					.filter(e -> e.getRead().equals(read) || e.getRead().equals(r2))
-//					.forEach(e -> g.drawRect(start, row*rCanvas.ntH, length, rCanvas.readH-1));
-
 				renderCigarForFeature((CigarFeature)feature, read, r2, g, start, row*rCanvas.ntH, length, rCanvas.readH-1);
 			}
 		}
@@ -123,7 +119,7 @@ public class CigarOverlayer extends AlphaOverlay
 
 			if (rCanvas.ntW < 1)
 			{
-				start = rCanvas.getFinalRenderedPixel(start);
+				start = rCanvas.getFinalRenderedPixel(base);
 				barWidth = 1;
 			}
 

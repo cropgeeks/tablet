@@ -47,7 +47,8 @@ public class CigarFeatureParser
 					readIndex += length;
 					break;
 				case Cigar.INSERTION:
-					addCigarInsertFeatureToMap(Feature.CIGAR_I, read, bases.substring(readIndex, readIndex+length), position);
+					String insert = getInsertedSequence(bases, readIndex, length);
+					addCigarInsertFeatureToMap(Feature.CIGAR_I, read, insert, position);
 					readIndex += length;
 					break;
 				case Cigar.DELETION:
@@ -67,6 +68,16 @@ public class CigarFeatureParser
 					break;
 			}
 		}
+	}
+
+	// Either gets the inserted bases from the read sequence, or if the read
+	// sequence hasn't been provided, inserts the appropriate number of '?' bases
+	private String getInsertedSequence(String bases, int readIndex, int length)
+	{
+		if (bases == null || bases.isEmpty() || bases.equals("*"))
+			return String.join("", Collections.nCopies(length, "?"));
+
+		return bases.substring(readIndex, readIndex+length);
 	}
 
 	private void addClipEvent(int position, int readStart, Read read)
