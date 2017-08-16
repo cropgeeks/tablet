@@ -4,7 +4,6 @@
 package tablet.gui.ribbon;
 
 import java.awt.event.*;
-import javax.swing.*;
 
 import tablet.gui.*;
 
@@ -140,10 +139,10 @@ public class BandOverlays extends JRibbonBand implements ActionListener
 		bHideCigarOverlayer = new JCommandToggleButton(
 			RB.getString("gui.ribbon.BandOverlays.bShowCigarOverlayer"),
 			RibbonController.getIcon("CIGAROVERLAY", 16));
-		Actions.overlayShowCigarInsertions = new ActionToggleButtonModel(false);
-		Actions.overlayShowCigarInsertions.setSelected(Prefs.visCigarOverlayVisible);
-		Actions.overlayShowCigarInsertions.addActionListener(this);
-		bHideCigarOverlayer.setActionModel(Actions.overlayShowCigarInsertions);
+		Actions.overlayShowCigar = new ActionToggleButtonModel(false);
+		Actions.overlayShowCigar.setSelected(Prefs.visCigarOverlayVisible);
+		Actions.overlayShowCigar.addActionListener(this);
+		bHideCigarOverlayer.setActionModel(Actions.overlayShowCigar);
 		bHideCigarOverlayer.setActionKeyTip("HC");
 		bHideCigarOverlayer.setActionRichTooltip(new RichTooltip(
 			RB.getString("gui.ribbon.BandOverlays.bShowCigarOverlayer.tooltip"),
@@ -175,7 +174,7 @@ public class BandOverlays extends JRibbonBand implements ActionListener
 		else if (e.getSource() == Actions.overlayShadowingCustom)
 			actionShadowingCustom();
 
-		else if (e.getSource() == Actions.overlayShowCigarInsertions)
+		else if (e.getSource() == Actions.overlayShowCigar)
 		{
 			Prefs.visCigarOverlayVisible = !Prefs.visCigarOverlayVisible;
 			winMain.getAssemblyPanel().toggleCigarOverlayer();

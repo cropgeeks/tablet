@@ -33,6 +33,9 @@ public class CigarOverlayer extends AlphaOverlay
 
 	public void render(Graphics2D g)
 	{
+		if (rCanvas.ntW < 1)
+			return;
+
 		VisualContig vContig = aPanel.getVisualContig();
 
 		int xS = rCanvas.getBaseForPixel(rCanvas.pX1);
