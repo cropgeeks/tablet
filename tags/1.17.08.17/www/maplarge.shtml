@@ -1,0 +1,66 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<html>
+<head>
+<meta http-equiv="Content-Language" content="en-gb">
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<link rel="stylesheet" href="stylesheet/styles.css" type="text/css">
+
+<script src="http://maps.google.com/maps?file=api&amp;v=2&amp;sensor=false&amp;key=ABQIAAAAv9zvmVYjTBVzQ2GkXfNXAxR6qf4EZP8XzE6xJ0BkuQiGYYlsEBTU-5gTrIvEw_gDqkwUN0Qb9OYAFA"
+      type="text/javascript"></script>
+
+<script type="text/javascript">
+
+    //<![CDATA[
+
+	function load()
+	{
+		if (GBrowserIsCompatible())
+		{
+			var map = new GMap2(document.getElementById("map"));
+			map.setCenter(new GLatLng(35, 5), 2);
+			map.enableScrollWheelZoom();
+			map.setMapType(G_HYBRID_MAP);
+
+			var mapControl = new GMapTypeControl();
+			map.addControl(mapControl);
+			map.addControl(new GLargeMapControl());
+
+			var Icon = new GIcon();
+      		Icon.image = "images/mapmarker.png";
+      		Icon.iconSize = new GSize(12, 12);
+      		Icon.iconAnchor = new GPoint(6, 6);
+      		Icon.infoWindowAnchor = new GPoint(6, 6);
+
+			GDownloadUrl("map.xml", function(data, responseCode)
+			{
+				var xml = GXml.parse(data);
+				var markers = xml.documentElement.getElementsByTagName("marker");
+				for (var i = 0; i < markers.length; i++)
+				{
+					var point = new GLatLng(
+						parseFloat(markers[i].getAttribute("lat")),
+						parseFloat(markers[i].getAttribute("lng")));
+
+					markerOptions = { title: markers[i].getAttribute("title"), icon: Icon };
+
+					map.addOverlay(new GMarker(point, markerOptions));
+				}
+			});
+		}
+	}
+
+    //]]>
+    </script>
+
+<title>Tablet - World Map</title>
+
+</head>
+<body onload="load()" onunload="GUnload()">
+
+<center><div id="map" style="width: 1400px; height: 800px"></div></center>
+
+
+</body>
+</html>
