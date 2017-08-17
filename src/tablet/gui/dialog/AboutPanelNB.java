@@ -61,7 +61,7 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		if (e.getSource() == webLabel)
-			TabletUtils.visitURL("http://bioinf.hutton.ac.uk/tablet");
+			TabletUtils.visitURL("https://ics.hutton.ac.uk/tablet");
 	}
 
     /** This method is called from within the constructor to
@@ -71,7 +71,8 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
+    private void initComponents()
+    {
 
         p2 = new javax.swing.JPanel();
         idLabel = new javax.swing.JLabel();
@@ -95,7 +96,7 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
 
         copyrightLabel.setText("Copyright (C) 2009, Plant Bioinformatics Group, JHI");
 
-        versionLabel.setFont(new java.awt.Font("Tahoma", 1, 18));
+        versionLabel.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         versionLabel.setText("Tablet - x.xx.xx.xx");
 
         javaLabel.setForeground(java.awt.Color.gray);
@@ -107,7 +108,7 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
         samtoolsLabel.setForeground(java.awt.Color.gray);
         samtoolsLabel.setText("Samtools version:");
 
-        webLabel.setText("http://bioinf.hutton.ac.uk/tablet");
+        webLabel.setText("https://ics.hutton.ac.uk/tablet");
 
         scriIcon.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         scriIcon.setText("SCRI LOGO");
@@ -119,6 +120,7 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
             .addGroup(p2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(p2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(memLabel)
                     .addGroup(p2Layout.createSequentialGroup()
                         .addGroup(p2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(versionLabel)
@@ -126,14 +128,13 @@ class AboutPanelNB extends javax.swing.JPanel implements ActionListener
                             .addComponent(copyrightLabel)
                             .addComponent(nameLabel)
                             .addComponent(javaLabel)
-                            .addComponent(scriIcon, javax.swing.GroupLayout.DEFAULT_SIZE, 393, Short.MAX_VALUE)
+                            .addComponent(scriIcon, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(localeLabel)
-                            .addComponent(idLabel))
-                        .addContainerGap())
-                    .addComponent(memLabel)
-                    .addGroup(p2Layout.createSequentialGroup()
-                        .addComponent(samtoolsLabel)
-                        .addContainerGap(318, Short.MAX_VALUE))))
+                            .addComponent(idLabel)
+                            .addGroup(p2Layout.createSequentialGroup()
+                                .addComponent(samtoolsLabel)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())))
         );
         p2Layout.setVerticalGroup(
             p2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
