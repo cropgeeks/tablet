@@ -779,7 +779,7 @@
                   <java class="java.beans.XMLDecoder">
                     <object class="com.install4j.runtime.beans.actions.update.CheckForUpdateAction">
                       <void property="url">
-                        <string>http://bioinf.hutton.ac.uk/tablet/installers/updates.xml</string>
+                        <string>https://ics.hutton.ac.uk/resources/tablet/installers/updates.xml</string>
                       </void>
                       <void property="variable">
                         <string>updateDescriptor</string>
