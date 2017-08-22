@@ -13,8 +13,8 @@ import tablet.data.cache.*;
 
 import scri.commons.gui.*;
 
-import net.sf.samtools.*;
-import static net.sf.samtools.SAMReadGroupRecord.*;
+import htsjdk.samtools.*;
+import static htsjdk.samtools.SAMReadGroupRecord.*;
 
 class SamFileReader extends TrackableReader
 {

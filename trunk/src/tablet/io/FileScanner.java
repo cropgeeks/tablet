@@ -10,7 +10,7 @@ import static tablet.io.AssemblyFile.*;
 
 import scri.commons.gui.*;
 
-import net.sf.samtools.*;
+import htsjdk.samtools.*;
 
 class FileScanner extends SimpleJob
 {
@@ -72,8 +72,7 @@ class FileScanner extends SimpleJob
 	void scanBAM()
 		throws Exception
 	{
-		SAMFileReader bamReader = new SAMFileReader(aFile.getFile());
-		bamReader.setValidationStringency(SAMFileReader.ValidationStringency.LENIENT);
+		SamReader bamReader = SamReaderFactory.make().validationStringency(ValidationStringency.LENIENT).open(aFile.getFile());
 
 		// Count the contigs
 		contigCount = 0;

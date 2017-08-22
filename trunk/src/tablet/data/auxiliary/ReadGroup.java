@@ -3,8 +3,8 @@
 
 package tablet.data.auxiliary;
 
-import net.sf.samtools.*;
-import static net.sf.samtools.SAMReadGroupRecord.*;
+import htsjdk.samtools.*;
+import static htsjdk.samtools.SAMReadGroupRecord.*;
 
 // Provides a wrapper around the Samtools/Picard SAMReadGroupRecord class, so
 // that simple getXXX() methods can be called that always return valid strings,

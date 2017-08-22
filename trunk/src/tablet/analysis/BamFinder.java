@@ -3,17 +3,17 @@
 
 package tablet.analysis;
 
-import net.sf.samtools.*;
-
 import tablet.data.*;
 import tablet.gui.viewer.*;
+
+import htsjdk.samtools.*;
 
 /**
  * Class for searching for reads in BAM files.
  */
 public class BamFinder extends Finder
 {
-	private SAMFileReader reader;
+	private SamReader reader;
 
 	public BamFinder(AssemblyPanel aPanel, String searchTerm, boolean searchAllContigs, int searchType) throws Exception
 	{
