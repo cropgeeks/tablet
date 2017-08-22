@@ -12,7 +12,8 @@ import tablet.data.auxiliary.*;
 import tablet.gui.*;
 import tablet.io.samtools.*;
 
-import net.sf.samtools.*;
+import htsjdk.samtools.*;
+import htsjdk.samtools.seekablestream.*;
 
 import scri.commons.gui.*;
 
@@ -22,8 +23,9 @@ public class BamFileHandler
 
 	private IReadCache readCache;
 	private ReadSQLCache nameCache;
-	private AssemblyFile bamFile, baiFile;
-	private SAMFileReader bamReader;
+	private AssemblyFile bamFile;
+	private AssemblyFile baiFile;
+	private SamReader bamReader;
 	private Assembly assembly;
 	private int readID;
 
@@ -228,17 +230,21 @@ public class BamFileHandler
 	public void openBamFile(HashMap<String, Contig> contigHash)
 		throws Exception
 	{
-		if (VALIDATION_LENIENT)
-			SAMFileReader.setDefaultValidationStringency(SAMFileReader.ValidationStringency.LENIENT);
+		ValidationStringency validationStringency = VALIDATION_LENIENT ? ValidationStringency.LENIENT : ValidationStringency.DEFAULT_STRINGENCY;
 
 		if (bamFile.isURL())
-			bamReader = new SAMFileReader(bamFile.getURL(), baiFile.getFile(), false);
+		{
+			final SamInputResource resource = SamInputResource.of(bamFile.getURL()).index(baiFile.getFile());
+			bamReader = SamReaderFactory.make()
+				.validationStringency(validationStringency)
+				.open(resource);
+		}
 		else
-			bamReader = new SAMFileReader(bamFile.getFile(), baiFile.getFile());
-
-//		if (VALIDATION_LENIENT)
-//			bamReader.setValidationStringency(SAMFileReader.ValidationStringency.LENIENT);
-
+		{
+			bamReader = SamReaderFactory.make()
+				.validationStringency(validationStringency)
+				.open(bamFile.getFile());
+		}
 
 		// contigHash will be non-null on first open, so add information on any
 		// contigs that weren't in the reference file but are in the BAM file
@@ -314,7 +320,7 @@ public class BamFileHandler
 		}
 	}
 
-	public SAMFileReader getBamReader()
+	public SamReader getBamReader()
 		{ return bamReader; }
 
 	boolean refLengthsOK()

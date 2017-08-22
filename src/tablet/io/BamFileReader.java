@@ -12,8 +12,6 @@ import tablet.data.cache.*;
 
 import scri.commons.gui.*;
 
-import net.sf.samtools.*;
-
 public class BamFileReader extends TrackableReader
 {
 	private IReadCache readCache;

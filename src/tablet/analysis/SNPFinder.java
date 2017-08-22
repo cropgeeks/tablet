@@ -11,7 +11,7 @@ import tablet.io.*;
 
 import scri.commons.gui.*;
 
-import net.sf.samtools.*;
+import htsjdk.samtools.*;
 
 public class SNPFinder extends SimpleJob
 {
@@ -33,7 +33,7 @@ public class SNPFinder extends SimpleJob
 		for (Contig contig : assembly)
 			maximum += contig.getTableData().readCount;
 
-		SAMFileReader reader = assembly.getBamBam().getBamFileHandler().getBamReader();
+		SamReader reader = assembly.getBamBam().getBamFileHandler().getBamReader();
 
 		for (Contig contig : assembly)
 		{
