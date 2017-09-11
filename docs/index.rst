@@ -41,5 +41,6 @@ For more information on Tablet, or to download the application, please visit the
    :caption: Miscellaneous topics
 
    command_line_options
+   tablet_xml
    allocating_memory
    tips_and_shortcuts
