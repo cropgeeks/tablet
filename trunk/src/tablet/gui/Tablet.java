@@ -261,7 +261,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 
 				int response = TaskDialog.show(msg, TaskDialog.ERR, 0, options);
 				if (response == 0)
-					TabletUtils.visitURL("http://bioinf.hutton.ac.uk/tablet/help/memory.shtml");
+					TabletUtils.visitURL("http://tablet.hutton.ac.uk/en/latest/allocating_memory.html");
 
 				System.exit(1);
 			}

@@ -33,7 +33,7 @@ public class TabletUtils
 	 */
 	public static void setHelp(final JButton button, String topic)
 	{
-		final String html = "http://bioinf.hutton.ac.uk/tablet/help/" + topic + ".shtml";
+		final String html = "http://tablet.hutton.ac.uk/en/latest/" + topic;
 
 		button.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

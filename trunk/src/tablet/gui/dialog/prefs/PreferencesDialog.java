@@ -72,7 +72,7 @@ public class PreferencesDialog extends JDialog implements ActionListener
 		bCancel.addActionListener(this);
 		bHelp = new JButton(RB.getString("gui.text.help"));
 		RB.setText(bHelp, "gui.text.help");
-		TabletUtils.setHelp(bHelp, "gui.dialog.prefs.PreferencesDialog");
+		TabletUtils.setHelp(bHelp, "tablet_options.html");
 
 		JPanel p1 = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 0));
 		p1.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 5));

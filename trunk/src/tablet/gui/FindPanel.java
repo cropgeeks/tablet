@@ -276,7 +276,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 
 		// TODO: This should be a link to a section of Tablet help
 		else if(e.getSource() == controls.helpLabel)
-			TabletUtils.visitURL("http://java.sun.com/javase/7/docs/api/java/util/regex/Pattern.html#sum");
+			TabletUtils.visitURL("http://docs.oracle.com/javase/8/docs/api/java/util/regex/Pattern.html#sum");
 
 		else if (e.getSource() == controls.checkUseRegex)
 			Prefs.guiRegexSearching = controls.checkUseRegex.isSelected();
