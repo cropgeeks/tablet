@@ -86,7 +86,7 @@ public class RibbonController
 			public void actionPerformed(ActionEvent e)
 			{
 				JButton bHelp = new JButton();
-				TabletUtils.setHelp(bHelp, "index");
+				TabletUtils.setHelp(bHelp, "");
 				bHelp.doClick();
 			}
 		});

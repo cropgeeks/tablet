@@ -87,7 +87,7 @@ public class JumpToDialog extends JDialog
 		bClose.addActionListener(this);
 		bHelp = new JButton(RB.getString("gui.text.help"));
 		RB.setText(bHelp, "gui.text.help");
-		TabletUtils.setHelp(bHelp, "gui.dialog.JumpToDialog");
+		TabletUtils.setHelp(bHelp, "jump_to_base.html");
 
 		JPanel p1 = new DialogPanel();
 		p1.add(bClose);

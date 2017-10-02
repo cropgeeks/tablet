@@ -53,7 +53,7 @@ public class BamWindowDialog extends JDialog implements ActionListener
 		bCancel.addActionListener(this);
 		bHelp = new JButton(RB.getString("gui.text.help"));
 		RB.setText(bHelp, "gui.text.help");
-		TabletUtils.setHelp(bHelp, "gui.dialog.BamWindowSize");
+		TabletUtils.setHelp(bHelp, "adjust_bam_window_size.html");
 
 		JPanel p1 = new DialogPanel();
 		p1.add(bOK);

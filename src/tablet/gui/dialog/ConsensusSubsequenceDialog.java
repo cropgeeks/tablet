@@ -74,12 +74,12 @@ public class ConsensusSubsequenceDialog extends JDialog implements ActionListene
 
 		bHelp = new JButton(RB.getString("gui.text.help"));
 		RB.setText(bHelp, "gui.text.help");
-		TabletUtils.setHelp(bHelp, "gui.dialog.ConsensusSubsequenceDialog");
+//		TabletUtils.setHelp(bHelp, "gui.dialog.ConsensusSubsequenceDialog");
 
 		JPanel p1 = new DialogPanel();
 		p1.add(bCopy);
 		p1.add(bCancel);
-		p1.add(bHelp);
+//		p1.add(bHelp);
 
 		return p1;
 	}

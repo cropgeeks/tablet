@@ -60,7 +60,7 @@ public class ImportAssemblyDialog extends JDialog
 		bCancel.addActionListener(this);
 		bHelp = new JButton(RB.getString("gui.text.help"));
 		RB.setText(bHelp, "gui.text.help");
-		TabletUtils.setHelp(bHelp, "gui.dialog.ImportAssemblyDialog");
+		TabletUtils.setHelp(bHelp, "open_assembly.html");
 
 		JPanel p1 = new DialogPanel();
 		p1.add(bOpen);
