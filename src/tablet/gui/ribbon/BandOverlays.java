@@ -29,6 +29,7 @@ public class BandOverlays extends JRibbonBand implements ActionListener
 	private JCommandToggleButton bShadowingCustom;
 
 	private JCommandToggleButton bHideCigarOverlayer;
+	private JCommandToggleButton bNeverFadeOverlays;
 
 	BandOverlays(WinMain winMain)
 	{
@@ -149,6 +150,21 @@ public class BandOverlays extends JRibbonBand implements ActionListener
 			RB.getString("gui.ribbon.BandOverlays.bShowCigarOverlayer.richtip")));
 
 		addCommandButton(bHideCigarOverlayer, RibbonElementPriority.MEDIUM);
+
+
+		bNeverFadeOverlays = new JCommandToggleButton(
+			RB.getString("gui.ribbon.BandOverlays.bNeverFadeOverlays"),
+			RibbonController.getIcon("STICKYHIGHLIGHTS", 16));
+		Actions.overlayNeverFade = new ActionToggleButtonModel(false);
+		Actions.overlayNeverFade.setSelected(Prefs.visNeverFadeOverlays);
+		Actions.overlayNeverFade.addActionListener(this);
+		bNeverFadeOverlays.setActionModel(Actions.overlayNeverFade);
+		bNeverFadeOverlays.setActionKeyTip("HF");
+		bNeverFadeOverlays.setActionRichTooltip(new RichTooltip(
+			RB.getString("gui.ribbon.BandOverlays.bNeverFadeOverlays.tooltip"),
+			RB.getString("gui.ribbon.BandOverlays.bNeverFadeOverlays.richtip")));
+
+		addCommandButton(bNeverFadeOverlays, RibbonElementPriority.MEDIUM);
 	}
 
 	public void actionPerformed(ActionEvent e)
@@ -179,6 +195,9 @@ public class BandOverlays extends JRibbonBand implements ActionListener
 			Prefs.visCigarOverlayVisible = !Prefs.visCigarOverlayVisible;
 			winMain.getAssemblyPanel().toggleCigarOverlayer();
 		}
+
+		else if (e.getSource() == Actions.overlayNeverFade)
+			winMain.getAssemblyPanel().toggleFadingOverlays();
 	}
 
 	public void actionShadowingOff()

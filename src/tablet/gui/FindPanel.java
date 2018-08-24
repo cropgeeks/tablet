@@ -26,6 +26,8 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 	private Finder finder;
 	private TableRowSorter<AbstractTableModel> sorter;
 
+	public ConsensusHighlighter ch;
+
 	private JMenuItem mClipboard;
 
 	public FindPanel(AssemblyPanel aPanel, WinMain winMain)
@@ -169,7 +171,7 @@ public class FindPanel extends JPanel implements ListSelectionListener, ActionLi
 	private void highlightReference(final int pos, final int length)
 	{
 		aPanel.moveToPosition(0, pos, true);
-		new ConsensusHighlighter(aPanel, pos, length);
+		ch = new ConsensusHighlighter(aPanel, pos, length);
 	}
 
 	public void resetFinder()

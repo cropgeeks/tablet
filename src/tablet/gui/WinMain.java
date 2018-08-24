@@ -92,6 +92,7 @@ public class WinMain extends JRibbonFrame
 		contigsPanel.setFindPanel(findPanel);
 		contigsPanel.setReadsPanel(readsPanel);
 		contigsPanel.setReadGroupsPanel(readGroupsPanel);
+		assemblyPanel.setFindPanel(findPanel);
 
 		FileDropAdapter dropAdapter = new FileDropAdapter(this);
 		setDropTarget(new DropTarget(this, dropAdapter));

@@ -124,6 +124,10 @@ public class ReadsCanvas extends JPanel
 		// removed, otherwise they can't get garbage collected
 		else
 			reads = null;
+
+		// Clear any consensus highlighting
+		if (aPanel.findPanel.ch != null)
+			aPanel.findPanel.ch.interrupt();
 	}
 
 	public Dimension getPreferredSize()

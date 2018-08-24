@@ -3,6 +3,8 @@
 
 package tablet.gui.viewer;
 
+import tablet.gui.*;
+
 /**
  * Abstract base class of any highlighters that modify the alpha overlay value
  * of the main canvas. Because all such highlighters inherit from this class we
@@ -36,9 +38,21 @@ abstract class AlphaOverlay extends Thread implements IOverlayRenderer
 		alphaEffect = 200;
 		rCanvas.repaint();
 
+
 		// Then wait for a while
-		try { Thread.sleep(5000); }
+		try
+		{
+			do
+			{
+				if (Prefs.visNeverFadeOverlays)
+					Thread.sleep(100);
+				else
+					Thread.sleep(5000);
+			}
+			while (Prefs.visNeverFadeOverlays);
+		}
 		catch (InterruptedException e) { isOK = false; }
+
 
 		// Before fading the other lines back to normality
 		for (int i = 1; i <= 40 && isOK; i++)

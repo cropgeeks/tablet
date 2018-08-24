@@ -5,6 +5,7 @@ package tablet.gui.viewer;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import tablet.gui.*;
 
 public class ConsensusHighlighter extends Thread implements IOverlayRenderer
 {
@@ -43,7 +44,17 @@ public class ConsensusHighlighter extends Thread implements IOverlayRenderer
 		cCanvas.repaint();
 
 		// Then wait for a while
-		try { Thread.sleep(5000); }
+		try
+		{
+			do
+			{
+				if (Prefs.visNeverFadeOverlays)
+					Thread.sleep(100);
+				else
+					Thread.sleep(5000);
+			}
+			while (Prefs.visNeverFadeOverlays);
+		}
 		catch (InterruptedException e) { isOK = false; }
 
 		// Before fading the other lines back to normality
@@ -80,5 +91,4 @@ public class ConsensusHighlighter extends Thread implements IOverlayRenderer
 		g.fillRect(0, y1, x1, y2);
 		g.fillRect(x2, 0, width, y2);
 	}
-
 }

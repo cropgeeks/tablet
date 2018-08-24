@@ -30,6 +30,7 @@ public class AssemblyPanel extends JPanel
 	FeaturesCanvas featuresCanvas;
 	BamBamBar bambamBar;
 	ReadsCanvas readsCanvas;
+	FindPanel findPanel;
 
 	private CanvasController controller;
 	private SnapshotController snapController;
@@ -465,5 +466,15 @@ public class AssemblyPanel extends JPanel
 	public ReadsCanvas getReadsCanvas()
 	{
 		return readsCanvas;
+	}
+
+	public void toggleFadingOverlays()
+	{
+		Prefs.visNeverFadeOverlays = !Prefs.visNeverFadeOverlays;
+	}
+
+	public void setFindPanel(FindPanel findPanel)
+	{
+		this.findPanel = findPanel;
 	}
 }
