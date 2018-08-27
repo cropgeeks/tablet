@@ -159,7 +159,7 @@ public class Prefs extends XMLPreferences
 	public static boolean guiHideOverviewPositions = false;
 
 	public static int visReadShadowing = 0;
-	public static boolean visNeverFadeOverlays = true;
+	public static boolean visNeverFadeOverlays = false;
 
 	public static boolean visEnableText = true;
 
