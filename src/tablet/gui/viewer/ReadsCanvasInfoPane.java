@@ -6,6 +6,7 @@ package tablet.gui.viewer;
 import java.awt.*;
 import java.awt.datatransfer.*;
 import java.util.*;
+import java.util.stream.*;
 
 import tablet.data.*;
 import tablet.gui.*;
@@ -261,6 +262,38 @@ class ReadsCanvasInfoPane
 		}
 	}
 
+	String getReadWithInsertedBases(Read read, BoxData box)
+	{
+		StringBuilder readWithInsertions = new StringBuilder();
+		if(aPanel.getVisualContig().getTrackCount() > 0)
+		{
+			// Construct a map of insertions by their position so that we can construct a read string containing the
+			// insertions at their appropriate locations in the read string
+			ArrayList<Feature> features = aPanel.getVisualContig().getTrack(0).getFeatures(read.s(), read.e());
+			TreeMap<Integer, String> insertionMap = new TreeMap<>();
+			for (Feature feature : features)
+			{
+				if (feature instanceof CigarFeature)
+				{
+					ArrayList<CigarEvent> events = ((CigarFeature) feature).getEvents();
+					for (CigarEvent event : events)
+						if (event instanceof CigarInsertEvent && event.getRead().equals(read))
+							insertionMap.put(feature.getVisualPS()-read.s(), ((CigarInsertEvent)event).getInsertedBases());
+				}
+			}
+
+			// Iterate over the read backwards appending a character at a time (and adding the insertions as we go)
+			String readSeq = box.rmd.toString();
+			for (int i=read.length()-1; i >= 0; i--)
+			{
+				if (insertionMap.containsKey(i))
+					readWithInsertions.append(insertionMap.get(i));
+				readWithInsertions.append(readSeq.charAt(i));
+			}
+		}
+		return readWithInsertions.reverse().toString();
+	}
+
 	void copyReadNameToClipboard()
 	{
 		String readName = box.readName;
@@ -290,6 +323,14 @@ class ReadsCanvasInfoPane
 
 		// Produce a FASTA formatted string
 		text.append(TabletUtils.formatFASTA(box.readName, seq));
+		String readWithInsertions = getReadWithInsertedBases(box.read, box);
+		if (readWithInsertions.length() > seq.length())
+		{
+			text.append(lb);
+			text.append("INCLUDING INSERTIONS:");
+			text.append(lb);
+			text.append(TabletUtils.formatFASTA(box.readName, readWithInsertions));
+		}
 
 		StringSelection selection = new StringSelection(text.toString());
 		Toolkit.getDefaultToolkit().getSystemClipboard().setContents(
