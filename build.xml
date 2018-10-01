@@ -94,9 +94,10 @@
 	</target>
 
 	<target name="install4j" depends="getversion, jar">
+		<echo message="${install4j.antpath}"/>
 		<taskdef name="install4j"
 			classname="com.install4j.Install4JTask"
-			classpath="C:\Program Files\Install4j\bin\ant.jar"/>
+			classpath="${install4j.antpath}"/>
 
 		<delete>
 			<fileset dir="installer" includes="**/*.exe"/>
@@ -104,7 +105,7 @@
 			<fileset dir="installer" includes="**/*.dmg"/>
 		</delete>
 
-		<install4j projectfile="installer/tablet.install4j"
+		<install4j projectfile="installer/Tablet.install4j"
 		           release="${i4j.version}"
 		           winKeystorePassword="${keystore.password}"
 		           macKeystorePassword="${keystore.password}"/>
