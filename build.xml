@@ -13,6 +13,7 @@
 	<property name="tablet-resources.jar" value="${lib}/tablet-resources.jar"/>
 
 	<target name="init">
+		<mkdir dir="${classes}"/>
 	</target>
 
 	<path id="project.classpath">
@@ -32,8 +33,9 @@
 	</target>
 
 	<target name="compile" depends="init">
-		<javac srcdir="${src}" destdir="${classes}" source="8" target="8" debug="true" includeantruntime="false">
+		<javac srcdir="${src}" destdir="${classes}" source="11" target="11" debug="true" includeantruntime="false">
 			<compilerarg value="-Xlint:-options"/>
+			<!--<compilerarg value="-Xlint:deprecation"/>-->
 			<classpath refid="project.classpath"/>
 			<exclude name="**/package-info.java"/>
 		</javac>

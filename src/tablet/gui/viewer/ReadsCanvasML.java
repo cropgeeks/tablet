@@ -121,11 +121,11 @@ class ReadsCanvasML extends MouseInputAdapter
 
 	public void mouseWheelMoved(MouseWheelEvent e)
 	{
-		int shortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+		int shortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
 
 
 		// CTRL/CMD down: do canvas zooming
-		if (e.getModifiers() == shortcut)
+		if (e.getModifiersEx() == shortcut)
 		{
 			int units = e.getWheelRotation();
 

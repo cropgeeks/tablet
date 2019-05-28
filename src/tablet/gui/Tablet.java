@@ -32,7 +32,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 	private static String[] initialFiles = null;
 
 	// Returns value for "CTRL" under most OSs, and the "apple" key for OS X
-	public static int menuShortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+	public static int menuShortcut = Toolkit.getDefaultToolkit().getMenuShortcutKeyMaskEx();
 	public static String winKey;
 
 	private static String contig = null;
