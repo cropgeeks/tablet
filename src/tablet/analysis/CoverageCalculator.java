@@ -36,7 +36,7 @@ public class CoverageCalculator extends SimpleJob
 		coverage = new int[contig.getVisualWidth()];
 
 		// Maintains a count of the total number of bases across ALL reads
-		int baseCount = 0;
+		long baseCount = 0;
 		int vS = contig.getVisualStart();
 
 		for (Read read: contig.getReads())
