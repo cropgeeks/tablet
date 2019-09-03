@@ -73,7 +73,6 @@
 				<attribute name="Main-Class" value="tablet.gui.Tablet"/>
 				<attribute name="Class-Path"
 					value="flamingo.jar
-						osxadapter.jar
 						scri-commons.jar
 						htsjdk-2.11.0.jar
 						samtools-all.jar

@@ -4,6 +4,7 @@
 package tablet.gui;
 
 import java.awt.*;
+import java.awt.desktop.*;
 import java.awt.event.*;
 import java.io.*;
 import java.util.*;
@@ -18,9 +19,7 @@ import tablet.io.*;
 import scri.commons.gui.*;
 import scri.commons.io.*;
 
-import apple.dts.samplecode.osxadapter.*;
-
-public class Tablet implements Thread.UncaughtExceptionHandler
+public class Tablet implements Thread.UncaughtExceptionHandler, OpenFilesHandler
 {
 	private static File prefsFile = getPrefsFile();
 	private static File mruFile;
@@ -41,8 +40,6 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 	public static void main(String[] args)
 		throws Exception
 	{
-		// OS X: This has to be set before anything else
-		System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Tablet");
 		// This disables the API preferences, which can cause problems on Linux
 		// - see: http://www.allaboutbalance.com/articles/disableprefs
 //		System.setProperty("java.util.prefs.PreferencesFactory", "scri.commons.gui.DisabledPreferencesFactory");
@@ -297,27 +294,32 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		return file;
 	}
 
+	public static File getLogFile()
+	{
+		try
+		{
+			File root = new File(System.getProperty("user.home"));
+			File folder = new File(root, ".scri-bioinf");
+			File logFile = new File(folder, "tablet.log");
+
+			return logFile;
+		}
+		catch (Throwable e) { return new File(""); }
+	}
+
+
 	// --------------------------------------------------
 	// Methods required for better native support on OS X
 
 	private void handleOSXStupidities()
 	{
-		try
-		{
-			// Register handlers to deal with the System menu about/quit options
-			OSXAdapter.setPreferencesHandler(this,
-				getClass().getDeclaredMethod("osxPreferences", (Class[])null));
-			OSXAdapter.setAboutHandler(this,
-				getClass().getDeclaredMethod("osxAbout", (Class[])null));
-			OSXAdapter.setQuitHandler(this,
-				getClass().getDeclaredMethod("osxShutdown", (Class[])null));
-			OSXAdapter.setFileHandler(this,
-				getClass().getDeclaredMethod("osxOpen", new Class[] { String.class }));
+		Desktop desktop = Desktop.getDesktop();
 
-			// Dock the menu bar at the top of the screen
-			System.setProperty("apple.laf.useScreenMenuBar", "true");
-		}
-		catch (Exception e) {}
+		// Register handlers to deal with the System menu about/quit options
+        desktop.setAboutHandler(e -> osxAbout());
+        desktop.setPreferencesHandler(e -> osxPreferences());
+        desktop.setQuitHandler((e,r) -> osxShutdown());
+		desktop.setOpenFileHandler(this);
 	}
 
 	/** "Preferences" on the OS X system menu. */
@@ -342,14 +344,19 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		return true;
 	}
 
-	public void osxOpen(String path)
+	/** Deal with desktop-double clicking of registered files */
+	public void openFiles(OpenFilesEvent e)
 	{
+		String[] paths = new String[e.getFiles().size()];
+		for (int i = 0; i < paths.length; i++)
+			paths[i] = e.getFiles().get(i).toString();
+
 		// If Tablet is already open, then open the file straight away
 		if (winMain != null && winMain.isVisible())
 		{
 			// TODO: If we have project modified checks, do them here too
 			TabletFile tabletFile =
-				TabletFileHandler.createFromFileList(new String[] { path });
+				TabletFileHandler.createFromFileList(paths);
 			winMain.getCommands().fileOpen(tabletFile);
 		}
 
@@ -357,20 +364,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler
 		else
 		{
 			initialFiles = new String[1];
-			initialFiles[0] = path;
+			initialFiles[0] = paths[0];
 		}
-	}
-
-	public static File getLogFile()
-	{
-		try
-		{
-			File root = new File(System.getProperty("user.home"));
-			File folder = new File(root, ".scri-bioinf");
-			File logFile = new File(folder, "tablet.log");
-
-			return logFile;
-		}
-		catch (Throwable e) { return new File(""); }
 	}
 }
