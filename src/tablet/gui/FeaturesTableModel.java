@@ -31,8 +31,9 @@ class FeaturesTableModel extends AbstractTableModel
 		String col2 = RB.getString("gui.FeaturesTableModel.col2");
 		String col3 = RB.getString("gui.FeaturesTableModel.col3");
 		String col4 = RB.getString("gui.FeaturesTableModel.col4");
+		String col5 = RB.getString("gui.FeaturesTableModel.col5");
 
-		columnNames = new String[] { col1, col2, col3, col4 };
+		columnNames = new String[] { col1, col2, col3, col4, col5 };
 	}
 
 	void setContig(Contig contig)
@@ -81,6 +82,12 @@ class FeaturesTableModel extends AbstractTableModel
 			case 1: return feature.getName();
 			case 2: return feature.getDataPS()+1;  // +1 back into consensus space
 			case 3: return feature.getDataPE()+1;  // +1 back into consensus space
+			case 4: {
+				if (feature.getDataPS() == feature.getDataPE())
+					return DisplayData.getCoverageAt(feature.getDataPS());
+				else
+					return null;
+			}
 		}
 
 		return null;
@@ -104,6 +111,9 @@ class FeaturesTableModel extends AbstractTableModel
 		{
 			super.getTableCellRendererComponent(table, value, isSel, hasFocus,
 				row, column);
+
+			if (value == null)
+				return this;
 
 			Contig contig = ((FeaturesTableModel)table.getModel()).getContig();
 
