@@ -33,7 +33,7 @@ class FeaturesPanelNB extends JPanel
 		RB.setText(linkEdit, "gui.NBFeaturesPanelControls.linkEdit");
 		checkPadded.setToolTipText(RB.getString("gui.NBFeaturesPanelControls.checkPaddedTooltip"));
 
-		for (int i = 0; i < 6; i++)
+		for (int i = 0; i < 8; i++)
 			combo.addItem(RB.getString("gui.NBFeaturesPanelControls.combo" + i));
 
 		combo.setSelectedIndex(Prefs.guiFeaturesFilter);
@@ -104,6 +104,20 @@ class FeaturesPanelNB extends JPanel
 			{
 				int number = Integer.parseInt(textField.getText());
 				rf = RowFilter.numberFilter(ComparisonType.BEFORE, number-1, 3);
+			}
+
+			// Min coverage
+			else if (index == 6)
+			{
+				int number = Integer.parseInt(textField.getText());
+				rf = RowFilter.numberFilter(ComparisonType.AFTER, number-1, 4);
+			}
+
+			// Max coverage
+			else if (index == 7)
+			{
+				int number = Integer.parseInt(textField.getText());
+				rf = RowFilter.numberFilter(ComparisonType.BEFORE, number-1, 4);
 			}
 		}
 		catch (Exception e)
