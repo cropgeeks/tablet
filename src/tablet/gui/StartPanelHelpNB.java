@@ -15,7 +15,7 @@ public class StartPanelHelpNB extends javax.swing.JPanel implements ActionListen
    private HyperLinkLabel[] labels = new HyperLinkLabel[8];
 
 	private static String home =
-		"http://bioinf.hutton.ac.uk/tablet/help";
+		"http://tablet.hutton.ac.uk/";
 
     public StartPanelHelpNB()
 	{

@@ -74,7 +74,7 @@ public class Tablet implements Thread.UncaughtExceptionHandler, OpenFilesHandler
 
 		i4j.setUser(Prefs.guiUpdateSchedule, Prefs.tabletID, Prefs.rating);
 		i4j.setURLs("https://ics.hutton.ac.uk/resources/tablet/installers/updates.xml",
-				    "http://bioinf.hutton.ac.uk/tablet/logs/tablet.pl");
+				    "https://bioinf.hutton.ac.uk/tablet/logs/tablet.pl");
 
 		i4j.doStartUpCheck(Tablet.class);
 	}

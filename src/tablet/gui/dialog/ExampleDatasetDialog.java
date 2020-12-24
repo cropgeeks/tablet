@@ -40,7 +40,7 @@ public class ExampleDatasetDialog extends JDialog implements ActionListener
 		{
 			properties = new Properties();
 			// The folder on the server
-			URL url = new URL("http://bioinf.hutton.ac.uk/tablet/sample-data/exampledata.xml");
+			URL url = new URL("https://bioinf.hutton.ac.uk/tablet/sample-data/exampledata.xml");
 			properties.loadFromXML(url.openStream());
 		}
 		catch(Exception e)

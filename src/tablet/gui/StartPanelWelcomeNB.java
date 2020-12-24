@@ -33,7 +33,7 @@ public class StartPanelWelcomeNB extends javax.swing.JPanel implements ActionLis
 			TabletUtils.sendFeedback();
 
 		else if (e.getSource() == twitterLabel)
-			TabletUtils.visitURL("http://twitter.com/cropgeeks");
+			TabletUtils.visitURL("https://twitter.com/cropgeeks");
 	}
 
     /** This method is called from within the constructor to

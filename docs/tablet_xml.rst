@@ -1,7 +1,7 @@
 Tablet XML
 ==========
 
-Tablet supports Tablet XML files, or .tablet files, for specifying sets of data which can be loaded together. If you have Tablet installed you can double click a .tablet file to launch Tablet with the data specified in that file. Alternatively you can drag and drop a .tablet file onto an already open instance of Tablet to load the associated data, or load data using a .tablet file as the argument to Tablet on the command line. 
+Tablet supports Tablet XML files, or .tablet files, for specifying sets of data which can be loaded together. If you have Tablet installed you can double click a .tablet file to launch Tablet with the data specified in that file. Alternatively you can drag and drop a .tablet file onto an already open instance of Tablet to load the associated data, or load data using a .tablet file as the argument to Tablet on the command line.
 
 .. note::
   There is no way to open a Tablet XML (.tablet) file from within Tablet, other than by dragging and dropping the file onto Tablet.
@@ -16,7 +16,7 @@ Tablet XML files allow you to specify the following elements, an assembly file, 
 
 	.. code-block:: xml
 
-		<assembly>http://bioinf.hutton.ac.uk/tablet/sample-data/book/example4/Example4.bam</assembly>
+		<assembly>https://bioinf.hutton.ac.uk/tablet/sample-data/book/example4/Example4.bam</assembly>
 
 * ``Reference file`` (optional)
 
@@ -24,7 +24,7 @@ Tablet XML files allow you to specify the following elements, an assembly file, 
 
 	.. code-block:: xml
 
-		<reference>http://bioinf.hutton.ac.uk/tablet/sample-data/book/example4/Example4.fasta</reference>
+		<reference>https://bioinf.hutton.ac.uk/tablet/sample-data/book/example4/Example4.fasta</reference>
 
 * ``Annotation file`` (optional)
 
@@ -32,7 +32,7 @@ Tablet XML files allow you to specify the following elements, an assembly file, 
 
 	.. code-block:: xml
 
- 		<annotation>http://bioinf.hutton.ac.uk/tablet/sample-data/book/example4/Example4.gff</annotation>
+ 		<annotation>https://bioinf.hutton.ac.uk/tablet/sample-data/book/example4/Example4.gff</annotation>
 
 * ``Contig`` (optional)
 
@@ -57,13 +57,13 @@ Example
 .. code-block:: xml
 
 	<tablet>
-		<assembly>http://bioinf.hutton.ac.uk/tablet/sample-data/book/example4/Example4.bam</assembly>
-		<reference>http://bioinf.hutton.ac.uk/tablet/sample-data/book/example4/Example4.fasta</reference>
-		<annotation>http://bioinf.hutton.ac.uk/tablet/sample-data/book/example4/Example4.gff</annotation>
+		<assembly>https://bioinf.hutton.ac.uk/tablet/sample-data/book/example4/Example4.bam</assembly>
+		<reference>https://bioinf.hutton.ac.uk/tablet/sample-data/book/example4/Example4.fasta</reference>
+		<annotation>https://bioinf.hutton.ac.uk/tablet/sample-data/book/example4/Example4.gff</annotation>
 		<contig>contig_53395</contig>
 		<position>14000</position>
 	</tablet>
 
 This example file can be downloaded by clicking here_.
 
-.. _here: http://ics.hutton.ac.uk/tablet/sample-data/example4.tablet
+.. _here: https://bioinf.hutton.ac.uk/tablet/sample-data/example4.tablet
