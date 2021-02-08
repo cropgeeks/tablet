@@ -76,7 +76,7 @@ class NavPanel
 
 		huttonLabel.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				TabletUtils.visitURL("http://www.hutton.ac.uk");
+				TabletUtils.visitURL("https://www.hutton.ac.uk");
 			}
 		});
 
