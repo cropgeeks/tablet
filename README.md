@@ -1,3 +1,6 @@
+![GitHub](https://img.shields.io/github/license/cropgeeks/tablet?style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/cropgeeks/tablet?style=flat-square)
+
 # Tablet
 
 Tablet is a lightweight, high-performance graphical viewer for next generation sequence assemblies and alignments.
