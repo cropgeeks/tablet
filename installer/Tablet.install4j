@@ -10,7 +10,7 @@
     <codeSigning macEnabled="true" macPkcs12File="../keys/apple_cert.p12" windowsEnabled="true" windowsKeySource="windows" windowsPkcs12File="../keys/OS201306044993.pfx">
       <windowsKeystoreIdentifier issuer="GlobalSign Extended Validation CodeSigning CA - SHA256 - G3" serial="7a0a38112ef50939be9f2665" subject="The James Hutton Institute" />
     </codeSigning>
-    <jreBundles jdkProviderId="AdoptOpenJDK" release="openjdk11/jdk-11.0.8+10_openj9-0.21.0" />
+    <jreBundles jdkProviderId="AdoptOpenJDK" release="openjdk11/jdk-11.0.10+9" />
   </application>
   <files>
     <mountPoints>
