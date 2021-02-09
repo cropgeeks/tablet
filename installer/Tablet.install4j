@@ -10,7 +10,7 @@
     <codeSigning macEnabled="true" macPkcs12File="../keys/apple_cert.p12" windowsEnabled="true" windowsKeySource="windows" windowsPkcs12File="../keys/OS201306044993.pfx">
       <windowsKeystoreIdentifier issuer="GlobalSign Extended Validation CodeSigning CA - SHA256 - G3" serial="7a0a38112ef50939be9f2665" subject="The James Hutton Institute" />
     </codeSigning>
-    <jreBundles jdkProviderId="AdoptOpenJDK" release="openjdk11/jdk-11.0.10+9_openj9-0.24.0" />
+    <jreBundles jdkProviderId="AdoptOpenJDK" release="openjdk11/jdk-11.0.8+10_openj9-0.21.0" />
   </application>
   <files>
     <mountPoints>
@@ -1237,7 +1237,7 @@ context.goForward(1, true, true);
         <entry location="lib/sqlite-jdbc-3.6.19-win32.jar" />
         <entry location="lib/sqlite-jdbc-3.6.19-win64.jar" />
       </exclude>
-      <jreBundle jreBundleSource="generated" includedJre="macosx-amd64-11.0.3" />
+      <jreBundle jreBundleSource="preCreated" includedJre="macosx-amd64-11.0.3" />
     </macos>
     <unixInstaller name="Linux x64" id="433" mediaFileName="${compiler:sys.shortName}_linux_x64_${compiler:sys.version}" installDir="Tablet">
       <excludedBeans>
