@@ -137,7 +137,13 @@ public class TabletFileHandler
 			NodeList list = doc.getElementsByTagName("tablet");
 			Element eTablet = (Element) list.item(0);
 
-			return readTabletElement(eTablet);
+			// Can we determine a root for this set of data (ie, if passed a
+			// .xml file, where should we load relative paths from)
+			File root = file.getFile();
+			if (root != null)
+				root = root.getParentFile();
+
+			return readTabletElement(eTablet, root);
 		}
 		catch (Exception e)
 		{
@@ -146,7 +152,26 @@ public class TabletFileHandler
 		}
 	}
 
-	private static TabletFile readTabletElement(Element eTablet)
+	// Helper method to try and deal with relative paths being embedded inside
+	// of tablet.xml files - rather than load the file relative to wherever
+	// Tablet's actual CWD is, we want to load it relative to the xml file
+	private static AssemblyFile createFile(String path, File rootFile)
+	{
+		AssemblyFile aFile = new AssemblyFile(path);
+
+		// No root, then just reference the file as is; same if it's a URL
+		if (rootFile == null || aFile.isURL())
+			return aFile;
+
+		// Otherwise, test the given path for absolute/relative format
+		if (new File(path).isAbsolute())
+			return aFile;
+
+		// Only if it's a file, and it's relative do we need to adjust
+		return new AssemblyFile(new File(rootFile, path).getAbsolutePath());
+	}
+
+	private static TabletFile readTabletElement(Element eTablet, File rootFile)
 		throws Exception
 	{
 		TabletFile tabletFile = new TabletFile();
@@ -155,14 +180,14 @@ public class TabletFileHandler
 		if (list.getLength() == 1)
 		{
 			Node node = list.item(0);
-			tabletFile.assembly = new AssemblyFile(node.getTextContent());
+			tabletFile.assembly = createFile(node.getTextContent(), rootFile);
 		}
 
 		list = eTablet.getElementsByTagName("reference");
 		if (list.getLength() == 1)
 		{
 			Node node = list.item(0);
-			tabletFile.reference = new AssemblyFile(node.getTextContent());
+			tabletFile.reference = createFile(node.getTextContent(), rootFile);
 		}
 
 
@@ -170,7 +195,7 @@ public class TabletFileHandler
 		for (int i = 0; i < list.getLength(); i++)
 		{
 			Node node = list.item(i);
-			tabletFile.annotations.add(new AssemblyFile(node.getTextContent()));
+			tabletFile.annotations.add(createFile(node.getTextContent(), rootFile));
 		}
 
 
@@ -209,7 +234,7 @@ public class TabletFileHandler
 			for (int i = 0; i < list.getLength(); i++)
 			{
 				Element eTablet = (Element) list.item(i);
-				TabletFile tabletFile = readTabletElement(eTablet);
+				TabletFile tabletFile = readTabletElement(eTablet, null);
 
 				if (recentFiles.contains(tabletFile) == false)
 					recentFiles.add(tabletFile);
