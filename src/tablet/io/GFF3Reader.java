@@ -38,7 +38,7 @@ public class GFF3Reader extends FeatureReader
 
 			// Split the line into its 9 tokens
 			String[] tokens = str.split("\t");
-			if (tokens.length != 9)
+			if (tokens.length < 8 || tokens.length > 9)
 				throw new ReadException(currentFile(), lineCount, TOKEN_COUNT_WRONG);
 
 			processFeature(tokens);
@@ -62,32 +62,43 @@ public class GFF3Reader extends FeatureReader
 		// characters must be URL encoded. The ending ; won't be there if it's
 		// the last tag in the string
 		String name = "";
-		int index1 = tokens[8].indexOf("Name=");
-		int offset = 5;
-		// If Name can't be found, can we use ID instead
-		if (index1 == -1)
+
+		if (tokens.length == 9)
 		{
-			index1 = tokens[8].indexOf("ID=");
-			offset = 3;
+			int index1 = tokens[8].indexOf("Name=");
+			int offset = 5;
+			// If Name can't be found, can we use ID instead
+			if (index1 == -1)
+			{
+				index1 = tokens[8].indexOf("ID=");
+				offset = 3;
+			}
+
+			if (index1 != -1)
+			{
+				int index2 = tokens[8].indexOf(";", index1);
+				if (index2 != -1)
+					name = tokens[8].substring(index1+offset, index2);
+				else
+					name = tokens[8].substring(index1+offset);
+
+				name = URLDecoder.decode(name, "UTF-8");
+			}
 		}
-
-		if (index1 != -1)
+		else if (tokens.length == 8)
 		{
-			int index2 = tokens[8].indexOf(";", index1);
-			if (index2 != -1)
-				name = tokens[8].substring(index1+offset, index2);
-			else
-				name = tokens[8].substring(index1+offset);
-
-			name = URLDecoder.decode(name, "UTF-8");
+			name = new String(tokens[2]);
 		}
 
 		String gffType = new String(tokens[2].toUpperCase());
 		Feature f = new Feature(gffType, name, start-1, end-1);
 
 		// Can we split the tags
-		String[] tags = tokens[8].split(";");
-		f.setTags(tags);
+		if (tokens.length == 9)
+		{
+			String[] tags = tokens[8].split(";");
+			f.setTags(tags);
+		}
 
 		getFeatures(contigName).add(f);
 		cRead++;
